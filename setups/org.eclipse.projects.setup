@@ -326,9 +326,6 @@
           <annotation
               source="http://www.eclipse.org/oomph/setup/MatchChoice"/>
         </choice>
-        <choice
-            value="git://git.eclipse.org/gitroot/@{remoteURI}"
-            label="Git (read-only, anonymous, direct)"/>
         <description>Choose from the available Git URIs</description>
       </setupTask>
     </setupTask>
@@ -370,9 +367,6 @@
         <choice
             value="http://git.eclipse.org/gitroot/@{remoteURI}.git"
             label="HTTP (read-only, anonymous, direct)"/>
-        <choice
-            value="git://git.eclipse.org/gitroot/@{remoteURI}"
-            label="Git (read-only, anonymous, direct)"/>
         <description>Choose from the available Git URIs</description>
       </setupTask>
     </setupTask>
@@ -414,9 +408,6 @@
           <annotation
               source="http://www.eclipse.org/oomph/setup/MatchChoice"/>
         </choice>
-        <choice
-            value="git://git.eclipse.org/gitroot/@{remoteURI}"
-            label="Git (read-only, anonymous, direct)"/>
         <description>Choose from the available Git URIs</description>
       </setupTask>
     </setupTask>
@@ -436,15 +427,20 @@
     <setupTask
         xsi:type="setup:VariableTask"
         name="eclipse.latest.p2"
-        value="http://download.eclipse.org/eclipse/updates/4.21-I-builds"
-        label="Eclipse Latest I-Build p2 Repository - 4.21">
+        value="http://download.eclipse.org/eclipse/updates/4.22-I-builds"
+        label="Eclipse Latest I-Build p2 Repository - 4.22">
       <description>The update site of the latest Eclipse project's builds, typically an I-Build for the next release</description>
     </setupTask>
     <setupTask
         xsi:type="setup:VariableTask"
+        name="eclipse.4.21.release.p2"
+        value="http://download.eclipse.org/eclipse/updates/4.21/R-4.21-202109060500"
+        label="Eclipse 4.21 Release p2 Repository"/>
+    <setupTask
+        xsi:type="setup:VariableTask"
         name="eclipse.latest.release.p2"
-        value="http://download.eclipse.org/eclipse/updates/4.20/R-4.20-202106111600"
-        label="Eclipse Latest Release p2 Repository - 4.20">
+        value="${eclipse.4.21.release.p2}"
+        label="Eclipse Latest Release p2 Repository - 4.21">
       <description>The update site of the latest released Eclipse project's builds, always an R-Build for the most recent release</description>
     </setupTask>
     <setupTask
@@ -455,6 +451,9 @@
         label="Target Platform">
       <annotation
           source="http://www.eclipse.org/oomph/setup/GlobalVariable"/>
+      <choice
+          value="2021-12"
+          label="Eclipse 2021-12 - 4.22"/>
       <choice
           value="2021-09"
           label="Eclipse 2021-09 - 4.21"/>
@@ -532,7 +531,7 @@
     <setupTask
         xsi:type="setup:VariableTask"
         name="eclipse.target.platform.latest"
-        value="2021-09"
+        value="2021-12"
         storageURI="scope://Workspace"
         label="Target Platform Latest">
       <annotation
@@ -542,7 +541,7 @@
     <setupTask
         xsi:type="setup:VariableTask"
         name="eclipse.target.platform.latest.released"
-        value="2021-06"
+        value="2021-09"
         storageURI="scope://Workspace"
         label="Target Platform Latest Released">
       <annotation
@@ -557,6 +556,9 @@
         label="API Baseline Target Platform">
       <annotation
           source="http://www.eclipse.org/oomph/setup/GlobalVariable"/>
+      <choice
+          value="2021-09"
+          label="Eclipse 2021-09 - 4.21"/>
       <choice
           value="2021-06"
           label="Eclipse 2021-06 - 4.20"/>
@@ -631,7 +633,7 @@
     <setupTask
         xsi:type="setup:VariableTask"
         name="eclipse.api.baseline.target.platform.latest.released"
-        value="2021-06"
+        value="2021-09"
         storageURI="scope://Workspace"
         label="Target Platform Latest Released">
       <annotation
@@ -705,9 +707,14 @@
       <repositoryList
           name="None"/>
       <repositoryList
+          name="2021-12">
+        <repository
+            url="http://download.eclipse.org/eclipse/updates/4.22-I-builds"/>
+      </repositoryList>
+      <repositoryList
           name="2021-09">
         <repository
-            url="http://download.eclipse.org/eclipse/updates/4.21-I-builds"/>
+            url="${eclipse.4.21.release.p2}"/>
       </repositoryList>
       <repositoryList
           name="2021-06">
@@ -836,6 +843,11 @@
           name="2021-06">
         <repository
             url="http://download.eclipse.org/eclipse/updates/4.20/R-4.20-202106111600"/>
+      </repositoryList>
+      <repositoryList
+          name="2021-09">
+        <repository
+            url="${eclipse.4.21.release.p2}"/>
       </repositoryList>
       <repositoryList
           name="2021-03">

@@ -11,7 +11,7 @@
       source="http://www.eclipse.org/oomph/setup/BrandingInfo">
     <detail
         key="notificationURI">
-      <value>https://www.eclipse.org/setups/donate/?scope=${scope}&amp;campaign=2021-06</value>
+      <value>https://www.eclipse.org/setups/donate/?scope=${scope}&amp;campaign=2021-09</value>
     </detail>
     <detail
         key="notificationLabel">
@@ -45,7 +45,7 @@
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/2021-09/rc1</value>
+        <value>https://www.eclipse.org/downloads/packages/release/2021-09/r</value>
       </detail>
       <detail
           key="shortcut">
@@ -86,20 +86,20 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.21.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/2021-09/202109031000">
+          url="http://download.eclipse.org/releases/2021-09/202109151000">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
     </setupTask>
   </version>
   <version name="latest.released"
-      label="Latest Release (2021-06)"
+      label="Latest Release (2021-09)"
       requiredJavaVersion="11">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/2021-06/r</value>
+        <value>https://www.eclipse.org/downloads/packages/release/2021-09/r</value>
       </detail>
       <detail
           key="shortcut">
@@ -108,7 +108,7 @@
     </annotation>
     <setupTask
         xsi:type="setup.p2:P2Task"
-        label="Eclipse Eierlegende Wollmilchsau (2021-06)">
+        label="Eclipse Eierlegende Wollmilchsau (2021-09)">
       <requirement
           name="Application Development Frameworks"/>
       <requirement
@@ -138,9 +138,9 @@
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
       <requirement
           name="org.eclipse.platform.ide"
-          versionRange="[4.20.0,5.0.0)"/>
+          versionRange="[4.21.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/2021-06/202106161001">
+          url="http://download.eclipse.org/releases/2021-09/202109151000">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
@@ -152,8 +152,12 @@
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
+          key="status">
+        <value>current</value>
+      </detail>
+      <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/2021-09/rc1</value>
+        <value>https://www.eclipse.org/downloads/packages/release/2021-09/r</value>
       </detail>
       <detail
           key="shortcut">
@@ -194,7 +198,7 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.21.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/2021-09/202109031000">
+          url="http://download.eclipse.org/releases/2021-09/202109151000">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
@@ -207,7 +211,7 @@
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="status">
-        <value>current</value>
+        <value>outdated</value>
       </detail>
       <detail
           key="siteURI">
@@ -1092,7 +1096,7 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.6.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/neon/201703231000">
+          url="http://download.eclipse.org/releases/neon/201705151400">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
