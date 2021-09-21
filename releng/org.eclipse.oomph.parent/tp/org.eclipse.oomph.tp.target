@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.8"?>
-<target name="Generated from Oomph" sequenceNumber="76">
+<target name="Generated from Oomph" sequenceNumber="77">
   <locations>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
       <unit id="javaewah" version="0.0.0"/>
@@ -21,7 +21,7 @@
       <unit id="org.eclipse.swtbot.generator" version="0.0.0"/>
       <unit id="org.eclipse.userstorage.oauth" version="0.0.0"/>
       <unit id="org.eclipse.userstorage.tests" version="0.0.0"/>
-      <repository location="http://download.eclipse.org/eclipse/updates/4.21/R-4.21-202109060500"/>
+      <repository location="http://download.eclipse.org/eclipse/updates/4.22-I-builds"/>
       <repository location="http://download.eclipse.org/egit/updates"/>
       <repository location="http://download.eclipse.org/justj/jres/16/updates/release/16.0.2"/>
       <repository location="http://download.eclipse.org/modeling/emf/emf/builds/milestone/latest"/>
