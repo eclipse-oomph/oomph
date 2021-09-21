@@ -51,7 +51,7 @@ public class P2IndexImpl implements P2Index
 {
   public static final P2IndexImpl INSTANCE = new P2IndexImpl();
 
-  private static final String INDEX_BASE = "http://download.eclipse.org/oomph/index/"; //$NON-NLS-1$
+  private static final String INDEX_BASE = "https://download.eclipse.org/oomph/index/"; //$NON-NLS-1$
 
   private long timeStamp;
 
