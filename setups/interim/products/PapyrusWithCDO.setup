@@ -61,11 +61,11 @@
     <setupTask
         xsi:type="setup.p2:P2Task">
       <repository
-          url="http://download.eclipse.org/releases/mars"/>
+          url="https://download.eclipse.org/releases/mars"/>
       <repository
-          url="http://download.eclipse.org/modeling/mdt/papyrus/updates/nightly/neon"/>
+          url="https://download.eclipse.org/modeling/mdt/papyrus/updates/nightly/neon"/>
       <repository
-          url="http://download.eclipse.org/modeling/emf/cdo/updates/integration"/>
+          url="https://download.eclipse.org/modeling/emf/cdo/updates/integration"/>
     </setupTask>
   </version>
   <version name="mars"
@@ -74,11 +74,11 @@
     <setupTask
         xsi:type="setup.p2:P2Task">
       <repository
-          url="http://download.eclipse.org/releases/mars"/>
+          url="https://download.eclipse.org/releases/mars"/>
       <repository
-          url="http://download.eclipse.org/modeling/mdt/papyrus/updates/nightly/mars"/>
+          url="https://download.eclipse.org/modeling/mdt/papyrus/updates/nightly/mars"/>
       <repository
-          url="http://download.eclipse.org/modeling/emf/cdo/updates/maintenance"/>
+          url="https://download.eclipse.org/modeling/emf/cdo/updates/maintenance"/>
     </setupTask>
   </version>
   <description>Papyrus IDE with CDO Model Repository extension.</description>

@@ -484,11 +484,11 @@
       <children
           xmi:id="/setups/org.eclipse.products.setup#//@setupTasks.1/@repositories.1"
           image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-          label="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201410130308">
+          label="https://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201410130308">
         <properties
             key="URL"
             valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-            value="http://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201410130308"/>
+            value="https://download.eclipse.org/modeling/emf/emf/updates/2.10.x/core/S201410130308"/>
         <properties
             key="Type"
             valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -679,11 +679,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.dsl']/@versions[name='latest']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/mars">
+              label="https://download.eclipse.org/technology/epp/packages/mars">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/mars"/>
+                value="https://download.eclipse.org/technology/epp/packages/mars"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -692,11 +692,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.dsl']/@versions[name='latest']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/mars/201410031000">
+              label="https://download.eclipse.org/releases/mars/201410031000">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/mars/201410031000"/>
+                value="https://download.eclipse.org/releases/mars/201410031000"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -900,11 +900,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.dsl']/@versions[name='latest.released']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/luna">
+              label="https://download.eclipse.org/technology/epp/packages/luna">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/luna"/>
+                value="https://download.eclipse.org/technology/epp/packages/luna"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -913,11 +913,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.dsl']/@versions[name='latest.released']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/luna/201409261001">
+              label="https://download.eclipse.org/releases/luna/201409261001">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/luna/201409261001"/>
+                value="https://download.eclipse.org/releases/luna/201409261001"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -1121,11 +1121,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.dsl']/@versions[name='mars']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/mars">
+              label="https://download.eclipse.org/technology/epp/packages/mars">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/mars"/>
+                value="https://download.eclipse.org/technology/epp/packages/mars"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -1134,11 +1134,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.dsl']/@versions[name='mars']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/mars/201410031000">
+              label="https://download.eclipse.org/releases/mars/201410031000">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/mars/201410031000"/>
+                value="https://download.eclipse.org/releases/mars/201410031000"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -1342,11 +1342,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.dsl']/@versions[name='luna']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/luna">
+              label="https://download.eclipse.org/technology/epp/packages/luna">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/luna"/>
+                value="https://download.eclipse.org/technology/epp/packages/luna"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -1355,11 +1355,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.dsl']/@versions[name='luna']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/luna/201409261001">
+              label="https://download.eclipse.org/releases/luna/201409261001">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/luna/201409261001"/>
+                value="https://download.eclipse.org/releases/luna/201409261001"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -1563,11 +1563,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.dsl']/@versions[name='kepler']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/kepler">
+              label="https://download.eclipse.org/technology/epp/packages/kepler">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/kepler"/>
+                value="https://download.eclipse.org/technology/epp/packages/kepler"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -1576,11 +1576,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.dsl']/@versions[name='kepler']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/kepler/201402280900">
+              label="https://download.eclipse.org/releases/kepler/201402280900">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/kepler/201402280900"/>
+                value="https://download.eclipse.org/releases/kepler/201402280900"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -1784,11 +1784,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.dsl']/@versions[name='juno']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/juno">
+              label="https://download.eclipse.org/technology/epp/packages/juno">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/juno"/>
+                value="https://download.eclipse.org/technology/epp/packages/juno"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -1797,11 +1797,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.dsl']/@versions[name='juno']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/juno/201303010900">
+              label="https://download.eclipse.org/releases/juno/201303010900">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/juno/201303010900"/>
+                value="https://download.eclipse.org/releases/juno/201303010900"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -2026,11 +2026,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.automotive']/@versions[name='latest']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/mars">
+              label="https://download.eclipse.org/technology/epp/packages/mars">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/mars"/>
+                value="https://download.eclipse.org/technology/epp/packages/mars"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -2039,11 +2039,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.automotive']/@versions[name='latest']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/mars/201410031000">
+              label="https://download.eclipse.org/releases/mars/201410031000">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/mars/201410031000"/>
+                value="https://download.eclipse.org/releases/mars/201410031000"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -2247,11 +2247,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.automotive']/@versions[name='latest.released']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/luna">
+              label="https://download.eclipse.org/technology/epp/packages/luna">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/luna"/>
+                value="https://download.eclipse.org/technology/epp/packages/luna"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -2260,11 +2260,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.automotive']/@versions[name='latest.released']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/luna/201409261001">
+              label="https://download.eclipse.org/releases/luna/201409261001">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/luna/201409261001"/>
+                value="https://download.eclipse.org/releases/luna/201409261001"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -2468,11 +2468,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.automotive']/@versions[name='mars']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/mars">
+              label="https://download.eclipse.org/technology/epp/packages/mars">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/mars"/>
+                value="https://download.eclipse.org/technology/epp/packages/mars"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -2481,11 +2481,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.automotive']/@versions[name='mars']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/mars/201410031000">
+              label="https://download.eclipse.org/releases/mars/201410031000">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/mars/201410031000"/>
+                value="https://download.eclipse.org/releases/mars/201410031000"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -2689,11 +2689,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.automotive']/@versions[name='luna']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/luna">
+              label="https://download.eclipse.org/technology/epp/packages/luna">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/luna"/>
+                value="https://download.eclipse.org/technology/epp/packages/luna"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -2702,11 +2702,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.automotive']/@versions[name='luna']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/luna/201409261001">
+              label="https://download.eclipse.org/releases/luna/201409261001">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/luna/201409261001"/>
+                value="https://download.eclipse.org/releases/luna/201409261001"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -2910,11 +2910,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.automotive']/@versions[name='kepler']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/kepler">
+              label="https://download.eclipse.org/technology/epp/packages/kepler">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/kepler"/>
+                value="https://download.eclipse.org/technology/epp/packages/kepler"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -2923,11 +2923,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.automotive']/@versions[name='kepler']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/kepler/201402280900">
+              label="https://download.eclipse.org/releases/kepler/201402280900">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/kepler/201402280900"/>
+                value="https://download.eclipse.org/releases/kepler/201402280900"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -3131,11 +3131,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.automotive']/@versions[name='juno']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/juno">
+              label="https://download.eclipse.org/technology/epp/packages/juno">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/juno"/>
+                value="https://download.eclipse.org/technology/epp/packages/juno"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -3144,11 +3144,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.automotive']/@versions[name='juno']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/juno/201303010900">
+              label="https://download.eclipse.org/releases/juno/201303010900">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/juno/201303010900"/>
+                value="https://download.eclipse.org/releases/juno/201303010900"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -3323,11 +3323,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.cpp']/@versions[name='latest']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/mars">
+              label="https://download.eclipse.org/technology/epp/packages/mars">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/mars"/>
+                value="https://download.eclipse.org/technology/epp/packages/mars"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -3336,11 +3336,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.cpp']/@versions[name='latest']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/mars/201410031000">
+              label="https://download.eclipse.org/releases/mars/201410031000">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/mars/201410031000"/>
+                value="https://download.eclipse.org/releases/mars/201410031000"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -3494,11 +3494,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.cpp']/@versions[name='latest.released']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/luna">
+              label="https://download.eclipse.org/technology/epp/packages/luna">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/luna"/>
+                value="https://download.eclipse.org/technology/epp/packages/luna"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -3507,11 +3507,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.cpp']/@versions[name='latest.released']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/luna/201409261001">
+              label="https://download.eclipse.org/releases/luna/201409261001">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/luna/201409261001"/>
+                value="https://download.eclipse.org/releases/luna/201409261001"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -3665,11 +3665,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.cpp']/@versions[name='mars']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/mars">
+              label="https://download.eclipse.org/technology/epp/packages/mars">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/mars"/>
+                value="https://download.eclipse.org/technology/epp/packages/mars"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -3678,11 +3678,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.cpp']/@versions[name='mars']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/mars/201410031000">
+              label="https://download.eclipse.org/releases/mars/201410031000">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/mars/201410031000"/>
+                value="https://download.eclipse.org/releases/mars/201410031000"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -3836,11 +3836,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.cpp']/@versions[name='luna']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/luna">
+              label="https://download.eclipse.org/technology/epp/packages/luna">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/luna"/>
+                value="https://download.eclipse.org/technology/epp/packages/luna"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -3849,11 +3849,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.cpp']/@versions[name='luna']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/luna/201409261001">
+              label="https://download.eclipse.org/releases/luna/201409261001">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/luna/201409261001"/>
+                value="https://download.eclipse.org/releases/luna/201409261001"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -4007,11 +4007,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.cpp']/@versions[name='kepler']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/kepler">
+              label="https://download.eclipse.org/technology/epp/packages/kepler">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/kepler"/>
+                value="https://download.eclipse.org/technology/epp/packages/kepler"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -4020,11 +4020,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.cpp']/@versions[name='kepler']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/kepler/201402280900">
+              label="https://download.eclipse.org/releases/kepler/201402280900">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/kepler/201402280900"/>
+                value="https://download.eclipse.org/releases/kepler/201402280900"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -4178,11 +4178,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.cpp']/@versions[name='juno']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/juno">
+              label="https://download.eclipse.org/technology/epp/packages/juno">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/juno"/>
+                value="https://download.eclipse.org/technology/epp/packages/juno"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -4191,11 +4191,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.cpp']/@versions[name='juno']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/juno/201303010900">
+              label="https://download.eclipse.org/releases/juno/201303010900">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/juno/201303010900"/>
+                value="https://download.eclipse.org/releases/juno/201303010900"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -4420,11 +4420,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.committers']/@versions[name='latest']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/mars">
+              label="https://download.eclipse.org/technology/epp/packages/mars">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/mars"/>
+                value="https://download.eclipse.org/technology/epp/packages/mars"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -4433,11 +4433,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.committers']/@versions[name='latest']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/mars/201410031000">
+              label="https://download.eclipse.org/releases/mars/201410031000">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/mars/201410031000"/>
+                value="https://download.eclipse.org/releases/mars/201410031000"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -4641,11 +4641,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.committers']/@versions[name='mars']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/mars">
+              label="https://download.eclipse.org/technology/epp/packages/mars">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/mars"/>
+                value="https://download.eclipse.org/technology/epp/packages/mars"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -4654,11 +4654,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.committers']/@versions[name='mars']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/mars/201410031000">
+              label="https://download.eclipse.org/releases/mars/201410031000">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/mars/201410031000"/>
+                value="https://download.eclipse.org/releases/mars/201410031000"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -4858,11 +4858,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.java']/@versions[name='latest']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/mars">
+              label="https://download.eclipse.org/technology/epp/packages/mars">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/mars"/>
+                value="https://download.eclipse.org/technology/epp/packages/mars"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -4871,11 +4871,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.java']/@versions[name='latest']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/mars/201410031000">
+              label="https://download.eclipse.org/releases/mars/201410031000">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/mars/201410031000"/>
+                value="https://download.eclipse.org/releases/mars/201410031000"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -5054,11 +5054,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.java']/@versions[name='latest.released']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/luna">
+              label="https://download.eclipse.org/technology/epp/packages/luna">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/luna"/>
+                value="https://download.eclipse.org/technology/epp/packages/luna"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -5067,11 +5067,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.java']/@versions[name='latest.released']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/luna/201409261001">
+              label="https://download.eclipse.org/releases/luna/201409261001">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/luna/201409261001"/>
+                value="https://download.eclipse.org/releases/luna/201409261001"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -5250,11 +5250,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.java']/@versions[name='mars']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/mars">
+              label="https://download.eclipse.org/technology/epp/packages/mars">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/mars"/>
+                value="https://download.eclipse.org/technology/epp/packages/mars"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -5263,11 +5263,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.java']/@versions[name='mars']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/mars/201410031000">
+              label="https://download.eclipse.org/releases/mars/201410031000">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/mars/201410031000"/>
+                value="https://download.eclipse.org/releases/mars/201410031000"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -5446,11 +5446,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.java']/@versions[name='luna']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/luna">
+              label="https://download.eclipse.org/technology/epp/packages/luna">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/luna"/>
+                value="https://download.eclipse.org/technology/epp/packages/luna"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -5459,11 +5459,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.java']/@versions[name='luna']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/luna/201409261001">
+              label="https://download.eclipse.org/releases/luna/201409261001">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/luna/201409261001"/>
+                value="https://download.eclipse.org/releases/luna/201409261001"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -5642,11 +5642,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.java']/@versions[name='kepler']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/kepler">
+              label="https://download.eclipse.org/technology/epp/packages/kepler">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/kepler"/>
+                value="https://download.eclipse.org/technology/epp/packages/kepler"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -5655,11 +5655,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.java']/@versions[name='kepler']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/kepler/201402280900">
+              label="https://download.eclipse.org/releases/kepler/201402280900">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/kepler/201402280900"/>
+                value="https://download.eclipse.org/releases/kepler/201402280900"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -5838,11 +5838,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.java']/@versions[name='juno']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/juno">
+              label="https://download.eclipse.org/technology/epp/packages/juno">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/juno"/>
+                value="https://download.eclipse.org/technology/epp/packages/juno"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -5851,11 +5851,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.java']/@versions[name='juno']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/juno/201303010900">
+              label="https://download.eclipse.org/releases/juno/201303010900">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/juno/201303010900"/>
+                value="https://download.eclipse.org/releases/juno/201303010900"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -6080,11 +6080,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.jee']/@versions[name='latest']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/mars">
+              label="https://download.eclipse.org/technology/epp/packages/mars">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/mars"/>
+                value="https://download.eclipse.org/technology/epp/packages/mars"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -6093,11 +6093,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.jee']/@versions[name='latest']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/mars/201410031000">
+              label="https://download.eclipse.org/releases/mars/201410031000">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/mars/201410031000"/>
+                value="https://download.eclipse.org/releases/mars/201410031000"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -6301,11 +6301,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.jee']/@versions[name='latest.released']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/luna">
+              label="https://download.eclipse.org/technology/epp/packages/luna">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/luna"/>
+                value="https://download.eclipse.org/technology/epp/packages/luna"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -6314,11 +6314,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.jee']/@versions[name='latest.released']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/luna/201409261001">
+              label="https://download.eclipse.org/releases/luna/201409261001">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/luna/201409261001"/>
+                value="https://download.eclipse.org/releases/luna/201409261001"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -6522,11 +6522,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.jee']/@versions[name='mars']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/mars">
+              label="https://download.eclipse.org/technology/epp/packages/mars">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/mars"/>
+                value="https://download.eclipse.org/technology/epp/packages/mars"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -6535,11 +6535,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.jee']/@versions[name='mars']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/mars/201410031000">
+              label="https://download.eclipse.org/releases/mars/201410031000">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/mars/201410031000"/>
+                value="https://download.eclipse.org/releases/mars/201410031000"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -6743,11 +6743,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.jee']/@versions[name='luna']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/luna">
+              label="https://download.eclipse.org/technology/epp/packages/luna">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/luna"/>
+                value="https://download.eclipse.org/technology/epp/packages/luna"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -6756,11 +6756,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.jee']/@versions[name='luna']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/luna/201409261001">
+              label="https://download.eclipse.org/releases/luna/201409261001">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/luna/201409261001"/>
+                value="https://download.eclipse.org/releases/luna/201409261001"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -6964,11 +6964,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.jee']/@versions[name='kepler']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/kepler">
+              label="https://download.eclipse.org/technology/epp/packages/kepler">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/kepler"/>
+                value="https://download.eclipse.org/technology/epp/packages/kepler"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -6977,11 +6977,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.jee']/@versions[name='kepler']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/kepler/201402280900">
+              label="https://download.eclipse.org/releases/kepler/201402280900">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/kepler/201402280900"/>
+                value="https://download.eclipse.org/releases/kepler/201402280900"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -7185,11 +7185,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.jee']/@versions[name='juno']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/juno">
+              label="https://download.eclipse.org/technology/epp/packages/juno">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/juno"/>
+                value="https://download.eclipse.org/technology/epp/packages/juno"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -7198,11 +7198,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.jee']/@versions[name='juno']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/juno/201303010900">
+              label="https://download.eclipse.org/releases/juno/201303010900">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/juno/201303010900"/>
+                value="https://download.eclipse.org/releases/juno/201303010900"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -7427,11 +7427,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.reporting']/@versions[name='latest']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/mars">
+              label="https://download.eclipse.org/technology/epp/packages/mars">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/mars"/>
+                value="https://download.eclipse.org/technology/epp/packages/mars"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -7440,11 +7440,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.reporting']/@versions[name='latest']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/mars/201410031000">
+              label="https://download.eclipse.org/releases/mars/201410031000">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/mars/201410031000"/>
+                value="https://download.eclipse.org/releases/mars/201410031000"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -7648,11 +7648,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.reporting']/@versions[name='latest.released']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/luna">
+              label="https://download.eclipse.org/technology/epp/packages/luna">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/luna"/>
+                value="https://download.eclipse.org/technology/epp/packages/luna"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -7661,11 +7661,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.reporting']/@versions[name='latest.released']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/luna/201409261001">
+              label="https://download.eclipse.org/releases/luna/201409261001">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/luna/201409261001"/>
+                value="https://download.eclipse.org/releases/luna/201409261001"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -7869,11 +7869,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.reporting']/@versions[name='mars']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/mars">
+              label="https://download.eclipse.org/technology/epp/packages/mars">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/mars"/>
+                value="https://download.eclipse.org/technology/epp/packages/mars"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -7882,11 +7882,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.reporting']/@versions[name='mars']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/mars/201410031000">
+              label="https://download.eclipse.org/releases/mars/201410031000">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/mars/201410031000"/>
+                value="https://download.eclipse.org/releases/mars/201410031000"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -8090,11 +8090,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.reporting']/@versions[name='luna']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/luna">
+              label="https://download.eclipse.org/technology/epp/packages/luna">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/luna"/>
+                value="https://download.eclipse.org/technology/epp/packages/luna"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -8103,11 +8103,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.reporting']/@versions[name='luna']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/luna/201409261001">
+              label="https://download.eclipse.org/releases/luna/201409261001">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/luna/201409261001"/>
+                value="https://download.eclipse.org/releases/luna/201409261001"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -8311,11 +8311,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.reporting']/@versions[name='kepler']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/kepler">
+              label="https://download.eclipse.org/technology/epp/packages/kepler">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/kepler"/>
+                value="https://download.eclipse.org/technology/epp/packages/kepler"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -8324,11 +8324,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.reporting']/@versions[name='kepler']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/kepler/201402280900">
+              label="https://download.eclipse.org/releases/kepler/201402280900">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/kepler/201402280900"/>
+                value="https://download.eclipse.org/releases/kepler/201402280900"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -8532,11 +8532,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.reporting']/@versions[name='juno']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/juno">
+              label="https://download.eclipse.org/technology/epp/packages/juno">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/juno"/>
+                value="https://download.eclipse.org/technology/epp/packages/juno"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -8545,11 +8545,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.reporting']/@versions[name='juno']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/juno/201303010900">
+              label="https://download.eclipse.org/releases/juno/201303010900">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/juno/201303010900"/>
+                value="https://download.eclipse.org/releases/juno/201303010900"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -8724,11 +8724,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.php']/@versions[name='latest']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/mars">
+              label="https://download.eclipse.org/technology/epp/packages/mars">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/mars"/>
+                value="https://download.eclipse.org/technology/epp/packages/mars"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -8737,11 +8737,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.php']/@versions[name='latest']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/mars/201410031000">
+              label="https://download.eclipse.org/releases/mars/201410031000">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/mars/201410031000"/>
+                value="https://download.eclipse.org/releases/mars/201410031000"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -8895,11 +8895,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.php']/@versions[name='latest.released']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/luna">
+              label="https://download.eclipse.org/technology/epp/packages/luna">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/luna"/>
+                value="https://download.eclipse.org/technology/epp/packages/luna"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -8908,11 +8908,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.php']/@versions[name='latest.released']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/luna/201409261001">
+              label="https://download.eclipse.org/releases/luna/201409261001">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/luna/201409261001"/>
+                value="https://download.eclipse.org/releases/luna/201409261001"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -9066,11 +9066,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.php']/@versions[name='mars']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/mars">
+              label="https://download.eclipse.org/technology/epp/packages/mars">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/mars"/>
+                value="https://download.eclipse.org/technology/epp/packages/mars"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -9079,11 +9079,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.php']/@versions[name='mars']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/mars/201410031000">
+              label="https://download.eclipse.org/releases/mars/201410031000">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/mars/201410031000"/>
+                value="https://download.eclipse.org/releases/mars/201410031000"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -9237,11 +9237,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.php']/@versions[name='luna']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/luna">
+              label="https://download.eclipse.org/technology/epp/packages/luna">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/luna"/>
+                value="https://download.eclipse.org/technology/epp/packages/luna"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -9250,11 +9250,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.php']/@versions[name='luna']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/luna/201409261001">
+              label="https://download.eclipse.org/releases/luna/201409261001">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/luna/201409261001"/>
+                value="https://download.eclipse.org/releases/luna/201409261001"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -9479,11 +9479,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.modeling']/@versions[name='latest']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/mars">
+              label="https://download.eclipse.org/technology/epp/packages/mars">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/mars"/>
+                value="https://download.eclipse.org/technology/epp/packages/mars"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -9492,11 +9492,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.modeling']/@versions[name='latest']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/mars/201410031000">
+              label="https://download.eclipse.org/releases/mars/201410031000">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/mars/201410031000"/>
+                value="https://download.eclipse.org/releases/mars/201410031000"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -9700,11 +9700,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.modeling']/@versions[name='latest.released']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/luna">
+              label="https://download.eclipse.org/technology/epp/packages/luna">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/luna"/>
+                value="https://download.eclipse.org/technology/epp/packages/luna"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -9713,11 +9713,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.modeling']/@versions[name='latest.released']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/luna/201409261001">
+              label="https://download.eclipse.org/releases/luna/201409261001">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/luna/201409261001"/>
+                value="https://download.eclipse.org/releases/luna/201409261001"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -9921,11 +9921,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.modeling']/@versions[name='mars']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/mars">
+              label="https://download.eclipse.org/technology/epp/packages/mars">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/mars"/>
+                value="https://download.eclipse.org/technology/epp/packages/mars"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -9934,11 +9934,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.modeling']/@versions[name='mars']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/mars/201410031000">
+              label="https://download.eclipse.org/releases/mars/201410031000">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/mars/201410031000"/>
+                value="https://download.eclipse.org/releases/mars/201410031000"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -10142,11 +10142,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.modeling']/@versions[name='luna']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/luna">
+              label="https://download.eclipse.org/technology/epp/packages/luna">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/luna"/>
+                value="https://download.eclipse.org/technology/epp/packages/luna"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -10155,11 +10155,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.modeling']/@versions[name='luna']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/luna/201409261001">
+              label="https://download.eclipse.org/releases/luna/201409261001">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/luna/201409261001"/>
+                value="https://download.eclipse.org/releases/luna/201409261001"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -10363,11 +10363,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.modeling']/@versions[name='kepler']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/kepler">
+              label="https://download.eclipse.org/technology/epp/packages/kepler">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/kepler"/>
+                value="https://download.eclipse.org/technology/epp/packages/kepler"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -10376,11 +10376,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.modeling']/@versions[name='kepler']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/kepler/201402280900">
+              label="https://download.eclipse.org/releases/kepler/201402280900">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/kepler/201402280900"/>
+                value="https://download.eclipse.org/releases/kepler/201402280900"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -10584,11 +10584,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.modeling']/@versions[name='juno']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/juno">
+              label="https://download.eclipse.org/technology/epp/packages/juno">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/juno"/>
+                value="https://download.eclipse.org/technology/epp/packages/juno"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -10597,11 +10597,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.modeling']/@versions[name='juno']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/juno/201303010900">
+              label="https://download.eclipse.org/releases/juno/201303010900">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/juno/201303010900"/>
+                value="https://download.eclipse.org/releases/juno/201303010900"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -10826,11 +10826,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.standard']/@versions[name='latest']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/mars">
+              label="https://download.eclipse.org/technology/epp/packages/mars">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/mars"/>
+                value="https://download.eclipse.org/technology/epp/packages/mars"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -10839,11 +10839,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.standard']/@versions[name='latest']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/mars/201410031000">
+              label="https://download.eclipse.org/releases/mars/201410031000">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/mars/201410031000"/>
+                value="https://download.eclipse.org/releases/mars/201410031000"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -11047,11 +11047,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.standard']/@versions[name='latest.released']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/luna">
+              label="https://download.eclipse.org/technology/epp/packages/luna">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/luna"/>
+                value="https://download.eclipse.org/technology/epp/packages/luna"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -11060,11 +11060,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.standard']/@versions[name='latest.released']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/luna/201409261001">
+              label="https://download.eclipse.org/releases/luna/201409261001">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/luna/201409261001"/>
+                value="https://download.eclipse.org/releases/luna/201409261001"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -11268,11 +11268,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.standard']/@versions[name='mars']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/mars">
+              label="https://download.eclipse.org/technology/epp/packages/mars">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/mars"/>
+                value="https://download.eclipse.org/technology/epp/packages/mars"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -11281,11 +11281,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.standard']/@versions[name='mars']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/mars/201410031000">
+              label="https://download.eclipse.org/releases/mars/201410031000">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/mars/201410031000"/>
+                value="https://download.eclipse.org/releases/mars/201410031000"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -11489,11 +11489,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.standard']/@versions[name='luna']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/luna">
+              label="https://download.eclipse.org/technology/epp/packages/luna">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/luna"/>
+                value="https://download.eclipse.org/technology/epp/packages/luna"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -11502,11 +11502,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.standard']/@versions[name='luna']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/luna/201409261001">
+              label="https://download.eclipse.org/releases/luna/201409261001">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/luna/201409261001"/>
+                value="https://download.eclipse.org/releases/luna/201409261001"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -11710,11 +11710,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.standard']/@versions[name='kepler']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/kepler">
+              label="https://download.eclipse.org/technology/epp/packages/kepler">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/kepler"/>
+                value="https://download.eclipse.org/technology/epp/packages/kepler"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -11723,11 +11723,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.standard']/@versions[name='kepler']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/kepler/201402280900">
+              label="https://download.eclipse.org/releases/kepler/201402280900">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/kepler/201402280900"/>
+                value="https://download.eclipse.org/releases/kepler/201402280900"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -11902,11 +11902,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.parallel']/@versions[name='latest']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/mars">
+              label="https://download.eclipse.org/technology/epp/packages/mars">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/mars"/>
+                value="https://download.eclipse.org/technology/epp/packages/mars"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -11915,11 +11915,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.parallel']/@versions[name='latest']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/mars/201410031000">
+              label="https://download.eclipse.org/releases/mars/201410031000">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/mars/201410031000"/>
+                value="https://download.eclipse.org/releases/mars/201410031000"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -12073,11 +12073,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.parallel']/@versions[name='latest.released']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/luna">
+              label="https://download.eclipse.org/technology/epp/packages/luna">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/luna"/>
+                value="https://download.eclipse.org/technology/epp/packages/luna"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -12086,11 +12086,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.parallel']/@versions[name='latest.released']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/luna/201409261001">
+              label="https://download.eclipse.org/releases/luna/201409261001">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/luna/201409261001"/>
+                value="https://download.eclipse.org/releases/luna/201409261001"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -12244,11 +12244,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.parallel']/@versions[name='mars']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/mars">
+              label="https://download.eclipse.org/technology/epp/packages/mars">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/mars"/>
+                value="https://download.eclipse.org/technology/epp/packages/mars"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -12257,11 +12257,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.parallel']/@versions[name='mars']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/mars/201410031000">
+              label="https://download.eclipse.org/releases/mars/201410031000">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/mars/201410031000"/>
+                value="https://download.eclipse.org/releases/mars/201410031000"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -12415,11 +12415,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.parallel']/@versions[name='luna']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/luna">
+              label="https://download.eclipse.org/technology/epp/packages/luna">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/luna"/>
+                value="https://download.eclipse.org/technology/epp/packages/luna"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -12428,11 +12428,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.parallel']/@versions[name='luna']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/luna/201409261001">
+              label="https://download.eclipse.org/releases/luna/201409261001">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/luna/201409261001"/>
+                value="https://download.eclipse.org/releases/luna/201409261001"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -12586,11 +12586,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.parallel']/@versions[name='kepler']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/kepler">
+              label="https://download.eclipse.org/technology/epp/packages/kepler">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/kepler"/>
+                value="https://download.eclipse.org/technology/epp/packages/kepler"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -12599,11 +12599,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.parallel']/@versions[name='kepler']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/kepler/201402280900">
+              label="https://download.eclipse.org/releases/kepler/201402280900">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/kepler/201402280900"/>
+                value="https://download.eclipse.org/releases/kepler/201402280900"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -12757,11 +12757,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.parallel']/@versions[name='juno']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/juno">
+              label="https://download.eclipse.org/technology/epp/packages/juno">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/juno"/>
+                value="https://download.eclipse.org/technology/epp/packages/juno"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -12770,11 +12770,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.parallel']/@versions[name='juno']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/juno/201303010900">
+              label="https://download.eclipse.org/releases/juno/201303010900">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/juno/201303010900"/>
+                value="https://download.eclipse.org/releases/juno/201303010900"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -12999,11 +12999,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.rcp']/@versions[name='latest']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/mars">
+              label="https://download.eclipse.org/technology/epp/packages/mars">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/mars"/>
+                value="https://download.eclipse.org/technology/epp/packages/mars"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -13012,11 +13012,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.rcp']/@versions[name='latest']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/mars/201410031000">
+              label="https://download.eclipse.org/releases/mars/201410031000">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/mars/201410031000"/>
+                value="https://download.eclipse.org/releases/mars/201410031000"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -13220,11 +13220,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.rcp']/@versions[name='latest.released']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/luna">
+              label="https://download.eclipse.org/technology/epp/packages/luna">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/luna"/>
+                value="https://download.eclipse.org/technology/epp/packages/luna"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -13233,11 +13233,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.rcp']/@versions[name='latest.released']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/luna/201409261001">
+              label="https://download.eclipse.org/releases/luna/201409261001">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/luna/201409261001"/>
+                value="https://download.eclipse.org/releases/luna/201409261001"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -13441,11 +13441,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.rcp']/@versions[name='mars']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/mars">
+              label="https://download.eclipse.org/technology/epp/packages/mars">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/mars"/>
+                value="https://download.eclipse.org/technology/epp/packages/mars"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -13454,11 +13454,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.rcp']/@versions[name='mars']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/mars/201410031000">
+              label="https://download.eclipse.org/releases/mars/201410031000">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/mars/201410031000"/>
+                value="https://download.eclipse.org/releases/mars/201410031000"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -13662,11 +13662,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.rcp']/@versions[name='luna']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/luna">
+              label="https://download.eclipse.org/technology/epp/packages/luna">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/luna"/>
+                value="https://download.eclipse.org/technology/epp/packages/luna"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -13675,11 +13675,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.rcp']/@versions[name='luna']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/luna/201409261001">
+              label="https://download.eclipse.org/releases/luna/201409261001">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/luna/201409261001"/>
+                value="https://download.eclipse.org/releases/luna/201409261001"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -13883,11 +13883,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.rcp']/@versions[name='kepler']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/kepler">
+              label="https://download.eclipse.org/technology/epp/packages/kepler">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/kepler"/>
+                value="https://download.eclipse.org/technology/epp/packages/kepler"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -13896,11 +13896,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.rcp']/@versions[name='kepler']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/kepler/201402280900">
+              label="https://download.eclipse.org/releases/kepler/201402280900">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/kepler/201402280900"/>
+                value="https://download.eclipse.org/releases/kepler/201402280900"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -14104,11 +14104,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.rcp']/@versions[name='juno']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/juno">
+              label="https://download.eclipse.org/technology/epp/packages/juno">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/juno"/>
+                value="https://download.eclipse.org/technology/epp/packages/juno"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -14117,11 +14117,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.rcp']/@versions[name='juno']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/juno/201303010900">
+              label="https://download.eclipse.org/releases/juno/201303010900">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/juno/201303010900"/>
+                value="https://download.eclipse.org/releases/juno/201303010900"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -14346,11 +14346,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.scout']/@versions[name='latest']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/mars">
+              label="https://download.eclipse.org/technology/epp/packages/mars">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/mars"/>
+                value="https://download.eclipse.org/technology/epp/packages/mars"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -14359,11 +14359,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.scout']/@versions[name='latest']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/mars/201410031000">
+              label="https://download.eclipse.org/releases/mars/201410031000">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/mars/201410031000"/>
+                value="https://download.eclipse.org/releases/mars/201410031000"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -14567,11 +14567,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.scout']/@versions[name='latest.released']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/luna">
+              label="https://download.eclipse.org/technology/epp/packages/luna">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/luna"/>
+                value="https://download.eclipse.org/technology/epp/packages/luna"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -14580,11 +14580,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.scout']/@versions[name='latest.released']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/luna/201409261001">
+              label="https://download.eclipse.org/releases/luna/201409261001">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/luna/201409261001"/>
+                value="https://download.eclipse.org/releases/luna/201409261001"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -14788,11 +14788,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.scout']/@versions[name='mars']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/mars">
+              label="https://download.eclipse.org/technology/epp/packages/mars">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/mars"/>
+                value="https://download.eclipse.org/technology/epp/packages/mars"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -14801,11 +14801,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.scout']/@versions[name='mars']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/mars/201410031000">
+              label="https://download.eclipse.org/releases/mars/201410031000">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/mars/201410031000"/>
+                value="https://download.eclipse.org/releases/mars/201410031000"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -15009,11 +15009,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.scout']/@versions[name='luna']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/luna">
+              label="https://download.eclipse.org/technology/epp/packages/luna">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/luna"/>
+                value="https://download.eclipse.org/technology/epp/packages/luna"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -15022,11 +15022,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.scout']/@versions[name='luna']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/luna/201409261001">
+              label="https://download.eclipse.org/releases/luna/201409261001">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/luna/201409261001"/>
+                value="https://download.eclipse.org/releases/luna/201409261001"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -15230,11 +15230,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.scout']/@versions[name='kepler']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/kepler">
+              label="https://download.eclipse.org/technology/epp/packages/kepler">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/kepler"/>
+                value="https://download.eclipse.org/technology/epp/packages/kepler"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -15243,11 +15243,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.scout']/@versions[name='kepler']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/kepler/201402280900">
+              label="https://download.eclipse.org/releases/kepler/201402280900">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/kepler/201402280900"/>
+                value="https://download.eclipse.org/releases/kepler/201402280900"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -15451,11 +15451,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.scout']/@versions[name='juno']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/juno">
+              label="https://download.eclipse.org/technology/epp/packages/juno">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/juno"/>
+                value="https://download.eclipse.org/technology/epp/packages/juno"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -15464,11 +15464,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.scout']/@versions[name='juno']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/juno/201303010900">
+              label="https://download.eclipse.org/releases/juno/201303010900">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/juno/201303010900"/>
+                value="https://download.eclipse.org/releases/juno/201303010900"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -15643,11 +15643,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.testing']/@versions[name='latest']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/mars">
+              label="https://download.eclipse.org/technology/epp/packages/mars">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/mars"/>
+                value="https://download.eclipse.org/technology/epp/packages/mars"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -15656,11 +15656,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.testing']/@versions[name='latest']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/mars/201410031000">
+              label="https://download.eclipse.org/releases/mars/201410031000">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/mars/201410031000"/>
+                value="https://download.eclipse.org/releases/mars/201410031000"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -15814,11 +15814,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.testing']/@versions[name='latest.released']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/luna">
+              label="https://download.eclipse.org/technology/epp/packages/luna">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/luna"/>
+                value="https://download.eclipse.org/technology/epp/packages/luna"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -15827,11 +15827,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.testing']/@versions[name='latest.released']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/luna/201409261001">
+              label="https://download.eclipse.org/releases/luna/201409261001">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/luna/201409261001"/>
+                value="https://download.eclipse.org/releases/luna/201409261001"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -15985,11 +15985,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.testing']/@versions[name='mars']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/mars">
+              label="https://download.eclipse.org/technology/epp/packages/mars">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/mars"/>
+                value="https://download.eclipse.org/technology/epp/packages/mars"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -15998,11 +15998,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.testing']/@versions[name='mars']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/mars/201410031000">
+              label="https://download.eclipse.org/releases/mars/201410031000">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/mars/201410031000"/>
+                value="https://download.eclipse.org/releases/mars/201410031000"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -16156,11 +16156,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.testing']/@versions[name='luna']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/luna">
+              label="https://download.eclipse.org/technology/epp/packages/luna">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/luna"/>
+                value="https://download.eclipse.org/technology/epp/packages/luna"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -16169,11 +16169,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.testing']/@versions[name='luna']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/luna/201409261001">
+              label="https://download.eclipse.org/releases/luna/201409261001">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/luna/201409261001"/>
+                value="https://download.eclipse.org/releases/luna/201409261001"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -16327,11 +16327,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.testing']/@versions[name='kepler']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/kepler">
+              label="https://download.eclipse.org/technology/epp/packages/kepler">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/kepler"/>
+                value="https://download.eclipse.org/technology/epp/packages/kepler"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -16340,11 +16340,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.testing']/@versions[name='kepler']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/kepler/201402280900">
+              label="https://download.eclipse.org/releases/kepler/201402280900">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/kepler/201402280900"/>
+                value="https://download.eclipse.org/releases/kepler/201402280900"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -16498,11 +16498,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.testing']/@versions[name='juno']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/juno">
+              label="https://download.eclipse.org/technology/epp/packages/juno">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/juno"/>
+                value="https://download.eclipse.org/technology/epp/packages/juno"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -16511,11 +16511,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.testing']/@versions[name='juno']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/juno/201303010900">
+              label="https://download.eclipse.org/releases/juno/201303010900">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/juno/201303010900"/>
+                value="https://download.eclipse.org/releases/juno/201303010900"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -16715,11 +16715,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.mobile']/@versions[name='latest']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/kepler">
+              label="https://download.eclipse.org/technology/epp/packages/kepler">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/kepler"/>
+                value="https://download.eclipse.org/technology/epp/packages/kepler"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -16728,11 +16728,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.mobile']/@versions[name='latest']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/kepler/201402280900">
+              label="https://download.eclipse.org/releases/kepler/201402280900">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/kepler/201402280900"/>
+                value="https://download.eclipse.org/releases/kepler/201402280900"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -16911,11 +16911,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.mobile']/@versions[name='latest.released']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/kepler">
+              label="https://download.eclipse.org/technology/epp/packages/kepler">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/kepler"/>
+                value="https://download.eclipse.org/technology/epp/packages/kepler"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -16924,11 +16924,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.mobile']/@versions[name='latest.released']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/kepler/201402280900">
+              label="https://download.eclipse.org/releases/kepler/201402280900">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/kepler/201402280900"/>
+                value="https://download.eclipse.org/releases/kepler/201402280900"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -17107,11 +17107,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.mobile']/@versions[name='kepler']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/kepler">
+              label="https://download.eclipse.org/technology/epp/packages/kepler">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/kepler"/>
+                value="https://download.eclipse.org/technology/epp/packages/kepler"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -17120,11 +17120,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.mobile']/@versions[name='kepler']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/kepler/201402280900">
+              label="https://download.eclipse.org/releases/kepler/201402280900">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/kepler/201402280900"/>
+                value="https://download.eclipse.org/releases/kepler/201402280900"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -17303,11 +17303,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.mobile']/@versions[name='juno']/@setupTasks.0/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/technology/epp/packages/juno">
+              label="https://download.eclipse.org/technology/epp/packages/juno">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/technology/epp/packages/juno"/>
+                value="https://download.eclipse.org/technology/epp/packages/juno"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -17316,11 +17316,11 @@
           <children
               xmi:id="/setups/org.eclipse.products.setup#//@products[name='epp.package.mobile']/@versions[name='juno']/@setupTasks.0/@repositories.1"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/releases/juno/201303010900">
+              label="https://download.eclipse.org/releases/juno/201303010900">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/releases/juno/201303010900"/>
+                value="https://download.eclipse.org/releases/juno/201303010900"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -19051,11 +19051,11 @@
           <children
               xmi:id="/setups/org.eclipse.projects.setup#//@setupTasks.4/@targlets.0/@repositoryLists.1/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/eclipse/updates/4.5milestones">
+              label="https://download.eclipse.org/eclipse/updates/4.5milestones">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/eclipse/updates/4.5milestones"/>
+                value="https://download.eclipse.org/eclipse/updates/4.5milestones"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -19073,11 +19073,11 @@
           <children
               xmi:id="/setups/org.eclipse.projects.setup#//@setupTasks.4/@targlets.0/@repositoryLists.2/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/eclipse/updates/4.4">
+              label="https://download.eclipse.org/eclipse/updates/4.4">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/eclipse/updates/4.4"/>
+                value="https://download.eclipse.org/eclipse/updates/4.4"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -19095,11 +19095,11 @@
           <children
               xmi:id="/setups/org.eclipse.projects.setup#//@setupTasks.4/@targlets.0/@repositoryLists.3/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/eclipse/updates/4.3">
+              label="https://download.eclipse.org/eclipse/updates/4.3">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/eclipse/updates/4.3"/>
+                value="https://download.eclipse.org/eclipse/updates/4.3"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -19117,11 +19117,11 @@
           <children
               xmi:id="/setups/org.eclipse.projects.setup#//@setupTasks.4/@targlets.0/@repositoryLists.4/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/eclipse/updates/4.2">
+              label="https://download.eclipse.org/eclipse/updates/4.2">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/eclipse/updates/4.2"/>
+                value="https://download.eclipse.org/eclipse/updates/4.2"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -19139,11 +19139,11 @@
           <children
               xmi:id="/setups/org.eclipse.projects.setup#//@setupTasks.4/@targlets.0/@repositoryLists.5/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/eclipse/updates/3.7">
+              label="https://download.eclipse.org/eclipse/updates/3.7">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/eclipse/updates/3.7"/>
+                value="https://download.eclipse.org/eclipse/updates/3.7"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -19161,11 +19161,11 @@
           <children
               xmi:id="/setups/org.eclipse.projects.setup#//@setupTasks.4/@targlets.0/@repositoryLists.6/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/eclipse/updates/3.6">
+              label="https://download.eclipse.org/eclipse/updates/3.6">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/eclipse/updates/3.6"/>
+                value="https://download.eclipse.org/eclipse/updates/3.6"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
@@ -19183,11 +19183,11 @@
           <children
               xmi:id="/setups/org.eclipse.projects.setup#//@setupTasks.4/@targlets.0/@repositoryLists.7/@repositories.0"
               image="../../../../../../../images/trees/1ZFqqP-bP1VrLSFo3sI5VIjCgjA=.png"
-              label="http://download.eclipse.org/eclipse/updates/3.5">
+              label="https://download.eclipse.org/eclipse/updates/3.5">
             <properties
                 key="URL"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"
-                value="http://download.eclipse.org/eclipse/updates/3.5"/>
+                value="https://download.eclipse.org/eclipse/updates/3.5"/>
             <properties
                 key="Type"
                 valueImage="../../../../../../../images/trees/Bbau1EaDZonVSOeYgdMg1riEnxQ=.png"

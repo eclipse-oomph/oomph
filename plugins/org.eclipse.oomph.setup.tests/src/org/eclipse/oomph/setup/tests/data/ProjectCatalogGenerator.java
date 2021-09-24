@@ -115,7 +115,7 @@ public class ProjectCatalogGenerator
     for (File file : PROJECT_CATALOGS.listFiles())
     {
       URI uri = local ? URI.createFileURI(file.toString())
-          : URI.createURI("http://download.eclipse.org/modeling/emf/cdo/data/project_catalogs/" + file.getName());
+          : URI.createURI("https://download.eclipse.org/modeling/emf/cdo/data/project_catalogs/" + file.getName());
       Resource resource = resourceSet.getResource(uri, true);
       catalogs.add((ProjectCatalog)resource.getContents().get(0));
     }

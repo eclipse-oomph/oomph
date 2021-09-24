@@ -153,7 +153,7 @@ public class OpenDiscoveredType extends OomphDialog
 
   public static final String MESSAGE = Messages.OpenDiscoveredType_message;
 
-  private static final String GIT_INDICES = PropertiesUtil.getProperty("oomph.git.index", "http://download.eclipse.org/oomph/git/git-index.zip"); //$NON-NLS-1$ //$NON-NLS-2$
+  private static final String GIT_INDICES = PropertiesUtil.getProperty("oomph.git.index", "https://download.eclipse.org/oomph/git/git-index.zip"); //$NON-NLS-1$ //$NON-NLS-2$
 
   private final DockableDialog.Dockable dockable = new DockableDialog.Dockable(this);
 

@@ -69,9 +69,9 @@
     <requirement
         name="org.eclipse.eclemma.feature.feature.group"/>
     <repository
-        url="http://download.eclipse.org/egit/updates/"/>
+        url="https://download.eclipse.org/egit/updates/"/>
     <repository
-        url="http://download.eclipse.org/mylyn/releases/latest/"/>
+        url="https://download.eclipse.org/mylyn/releases/latest/"/>
     <repository
         url="http://findbugs.cs.umd.edu/eclipse/"/>
     <repository
@@ -85,7 +85,7 @@
     <repository
         url="http://mbarbero.github.io/fr.obeo.releng.targetplatform/p2/latest/"/>
     <repository
-        url="http://download.eclipse.org/modeling/tmf/xtext/updates/releases/"/>
+        url="https://download.eclipse.org/modeling/tmf/xtext/updates/releases/"/>
     <repository
         url="http://mbarbero.github.io/emf-loophole/2.9"/>
     <repository
@@ -107,7 +107,7 @@
       name="${scope.project.label}"
       version="3.0.0"
       location="${workspace.location/../api.baseline}"
-      remoteURI="http://download.eclipse.org/modeling/emf/compare/downloads/drops/3.0.0/R201406111328/emf-compare-update-3.0.0.zip"/>
+      remoteURI="https://download.eclipse.org/modeling/emf/compare/downloads/drops/3.0.0/R201406111328/emf-compare-update-3.0.0.zip"/>
   <setupTask
       xsi:type="setup:CompoundTask"
       name="org.eclipse.pde.api.tools">
@@ -201,37 +201,37 @@
       <repositoryList
           name="Photon">
         <repository
-            url="http://download.eclipse.org/releases/photon"/>
+            url="https://download.eclipse.org/releases/photon"/>
         <repository
-            url="http://download.eclipse.org/cbi/updates/license"/>
+            url="https://download.eclipse.org/cbi/updates/license"/>
       </repositoryList>
       <repositoryList
           name="Oxygen">
         <repository
-            url="http://download.eclipse.org/releases/oxygen"/>
+            url="https://download.eclipse.org/releases/oxygen"/>
         <repository
-            url="http://download.eclipse.org/cbi/updates/license"/>
+            url="https://download.eclipse.org/cbi/updates/license"/>
       </repositoryList>
       <repositoryList
           name="Mars">
         <repository
-            url="http://download.eclipse.org/releases/mars"/>
+            url="https://download.eclipse.org/releases/mars"/>
         <repository
-            url="http://download.eclipse.org/cbi/updates/license"/>
+            url="https://download.eclipse.org/cbi/updates/license"/>
       </repositoryList>
       <repositoryList
           name="Luna">
         <repository
-            url="http://download.eclipse.org/releases/luna"/>
+            url="https://download.eclipse.org/releases/luna"/>
         <repository
-            url="http://download.eclipse.org/cbi/updates/license"/>
+            url="https://download.eclipse.org/cbi/updates/license"/>
       </repositoryList>
       <repositoryList
           name="Kepler">
         <repository
-            url="http://download.eclipse.org/releases/kepler"/>
+            url="https://download.eclipse.org/releases/kepler"/>
         <repository
-            url="http://download.eclipse.org/cbi/updates/license"/>
+            url="https://download.eclipse.org/cbi/updates/license"/>
       </repositoryList>
     </targlet>
   </setupTask>

@@ -10,7 +10,7 @@
       source="http://www.eclipse.org/oomph/setup/StatsSending">
     <detail
         key="uri">
-      <value>http://download.eclipse.org/stats/oomph</value>
+      <value>https://download.eclipse.org/stats/oomph</value>
     </detail>
   </annotation>
   <annotation

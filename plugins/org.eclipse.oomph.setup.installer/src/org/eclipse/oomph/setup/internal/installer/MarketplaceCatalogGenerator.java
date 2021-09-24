@@ -413,10 +413,10 @@ public class MarketplaceCatalogGenerator implements IApplication
 
       for (String version : platformVersions.values())
       {
-        updateURLs.add("http://download.eclipse.org/releases/" + version.toLowerCase());
+        updateURLs.add("https://download.eclipse.org/releases/" + version.toLowerCase());
       }
 
-      updateURLs.add("http://download.eclipse.org/oomph/updates/milestone/latest");
+      updateURLs.add("https://download.eclipse.org/oomph/updates/milestone/latest");
 
       RepositoryLoader repositoryLoader = new RepositoryLoader(this);
       repositoryLoader.perform(updateURLs);
@@ -546,7 +546,7 @@ public class MarketplaceCatalogGenerator implements IApplication
               String name = getName(updateURL, iuID);
               if (name == null)
               {
-                name = getName("http://download.eclipse.org/releases/" + streamVersion.toLowerCase(), iuID);
+                name = getName("https://download.eclipse.org/releases/" + streamVersion.toLowerCase(), iuID);
               }
 
               if (name == null && !iuID.endsWith(".feature.group"))
@@ -554,7 +554,7 @@ public class MarketplaceCatalogGenerator implements IApplication
                 name = getName(updateURL, iuID + ".feature.group");
                 if (name == null)
                 {
-                  name = getName("http://download.eclipse.org/releases/" + streamVersion.toLowerCase(), iuID + ".feature.group");
+                  name = getName("https://download.eclipse.org/releases/" + streamVersion.toLowerCase(), iuID + ".feature.group");
                 }
 
                 if (name != null)

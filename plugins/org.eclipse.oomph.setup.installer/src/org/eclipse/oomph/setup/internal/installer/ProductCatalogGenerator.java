@@ -115,19 +115,17 @@ public class ProductCatalogGenerator implements IApplication
 {
   private static final String JAVA_VERSION_PREFIX = "addJvmArg(jvmArg:-Dosgi.requiredJavaVersion=";
 
-  private static final String PACKAGES = "http://download.eclipse.org/technology/epp/packages";
-
   private static final String HTTPS_PACKAGES = "https://download.eclipse.org/technology/epp/packages";
 
-  private static final String RELEASES = "http://download.eclipse.org/releases";
+  private static final String RELEASES = "https://download.eclipse.org/releases";
 
-  private static final String ICON_URL_PREFIX = "http://www.eclipse.org/downloads/images/";
+  private static final String ICON_URL_PREFIX = "https://www.eclipse.org/downloads/images/";
 
   private static final URI PACKAGES_URI = URI.createURI("https://www.eclipse.org/downloads/packages/release/");
 
-  private static final URI ECLIPSE_PROJECT_URI = URI.createURI("http://download.eclipse.org/eclipse/updates");
+  private static final URI ECLIPSE_PROJECT_URI = URI.createURI("https://download.eclipse.org/eclipse/updates");
 
-  private static final URI ECLIPSE_BRANDING_NOTIFICATION_URI = URI.createURI("https://www.eclipse.org/setups/donate/?scope=${scope}&campaign=2021-06");
+  private static final URI ECLIPSE_BRANDING_NOTIFICATION_URI = URI.createURI("https://www.eclipse.org/setups/donate/?scope=${scope}&campaign=2021-09");
 
   private static final String ICON_DEFAULT = ICON_URL_PREFIX + "committers.png";
 
@@ -171,7 +169,7 @@ public class ProductCatalogGenerator implements IApplication
 
   private static final boolean IS_RANGE_NARROW = Boolean.FALSE;
 
-  private static final String JUSTJ_JRES = "http://download.eclipse.org/justj/jres";
+  private static final String JUSTJ_JRES = "https://download.eclipse.org/justj/jres";
 
   private URI outputLocation;
 
@@ -304,7 +302,7 @@ public class ProductCatalogGenerator implements IApplication
   private String[] getTrains()
   {
     return new String[] { "juno", "kepler", "luna", "mars", "neon", "oxygen", "photon", "2018-09", "2018-12", "2019-03", "2019-06", "2019-09", "2019-12",
-        "2020-03", "2020-06", "2020-09", "2020-12", "2021-03", "2021-06", "2021-09" };
+        "2020-03", "2020-06", "2020-09", "2020-12", "2021-03", "2021-06", "2021-09", "2021-12" };
   }
 
   private URI getEclipsePlatformSite(String train)
@@ -401,7 +399,7 @@ public class ProductCatalogGenerator implements IApplication
       productCatalog.getSetupTasks().addAll(createOomphP2Task(null));
 
       emfRepositoryLocation = trimEmptyTrailingSegment(
-          URI.createURI(loadLatestRepository(manager, null, URI.createURI("http://download.eclipse.org/modeling/emf/emf/builds/release/latest"), true)
+          URI.createURI(loadLatestRepository(manager, null, URI.createURI("https://download.eclipse.org/modeling/emf/emf/builds/release/latest"), true)
               .getLocation().toString())).toString();
 
       new RepositoryLoader(this).perform(TRAINS);
@@ -661,7 +659,7 @@ public class ProductCatalogGenerator implements IApplication
     {
       StringBuilder log = new StringBuilder();
 
-      URI originalEPPURI = URI.createURI(PACKAGES + "/" + train);
+      URI originalEPPURI = URI.createURI(HTTPS_PACKAGES + "/" + train);
       URI eppURI = uriConverter.normalize(originalEPPURI);
       log.append(eppURI);
       boolean isStaging = train.equals(stagingTrain);
@@ -1025,7 +1023,7 @@ public class ProductCatalogGenerator implements IApplication
       long latest = Integer.MIN_VALUE;
       for (java.net.URI childURI : compositeRepository.getChildren())
       {
-        childURI = new java.net.URI(trimEmptyTrailingSegment(URI.createURI(childURI.toString())).toString());
+        childURI = new java.net.URI(trimEmptyTrailingSegment(URI.createURI(childURI.toString().replace("http:", "https:"))).toString());
         IMetadataRepository childRepository = manager.loadRepository(childURI, null);
         String value = childRepository.getProperties().get(IRepository.PROP_TIMESTAMP);
         long timestamp = Long.parseLong(value);
@@ -1051,8 +1049,8 @@ public class ProductCatalogGenerator implements IApplication
       long latest = Integer.MIN_VALUE;
       for (java.net.URI childURI : compositeRepository.getChildren())
       {
-        String trimmedChildURI = trimEmptyTrailingSegment(URI.createURI(childURI.toString())).toString();
-        if (!trimmedChildURI.startsWith(PACKAGES) && !trimmedChildURI.startsWith(HTTPS_PACKAGES))
+        String trimmedChildURI = trimEmptyTrailingSegment(URI.createURI(childURI.toString().replace("http:", "https:"))).toString();
+        if (!trimmedChildURI.startsWith(HTTPS_PACKAGES))
         {
           childURI = new java.net.URI(trimmedChildURI);
           IMetadataRepository childRepository = manager.loadRepository(childURI, null);
@@ -1085,7 +1083,7 @@ public class ProductCatalogGenerator implements IApplication
         integrationVersion.setName("integration");
         integrationVersion.setLabel(version.getLabel().replace("Latest", "Integration"));
         P2Task p2Task = (P2Task)integrationVersion.getSetupTasks().get(0);
-        p2Task.getRepositories().add(P2Factory.eINSTANCE.createRepository("http://download.eclipse.org/eclipse/updates/4." + platformVersion + "-I-builds"));
+        p2Task.getRepositories().add(P2Factory.eINSTANCE.createRepository("https://download.eclipse.org/eclipse/updates/4." + platformVersion + "-I-builds"));
         versions.add(0, integrationVersion);
       }
     }
@@ -1311,7 +1309,7 @@ public class ProductCatalogGenerator implements IApplication
       }
 
       // We only have URI mappings for a train that does not yet exist, so redirect it to the current released on.
-      URI actualEPPURI = uriConverter.getURIMap().values().contains(eppURI) ? URI.createURI(PACKAGES + "/" + getMostRecentReleasedTrain()) : eppURI;
+      URI actualEPPURI = uriConverter.getURIMap().values().contains(eppURI) ? URI.createURI(HTTPS_PACKAGES + "/" + getMostRecentReleasedTrain()) : eppURI;
       packageRepository.setURL(actualEPPURI.toString());
     }
 
@@ -1738,7 +1736,7 @@ public class ProductCatalogGenerator implements IApplication
     {
       product.setDescription(
           "This package contains all categorized features of the release train. It can do <a href='https://en.wiktionary.org/wiki/eierlegende_Wollmilchsau'>everything</a>, but it's not pretty.");
-      // addImageURI(product, "http://upload.wikimedia.org/wikipedia/commons/a/a7/Wollmilchsau.png");
+      // addImageURI(product, "https://upload.wikimedia.org/wikipedia/commons/a/a7/Wollmilchsau.png");
     }
 
     if (name.equals(ECLIPSE_PLATFORM_SDK_PRODUCT_ID))
@@ -1943,9 +1941,9 @@ public class ProductCatalogGenerator implements IApplication
       }
     }
 
-    URI releasePackages = URI.createURI("http://download.eclipse.org/eclipse/downloads/");
+    URI releasePackages = URI.createURI("https://download.eclipse.org/eclipse/downloads/");
     getPlatformPackageBrandingSites(releasePackages);
-    getPlatformPackageBrandingSites(URI.createURI("http://archive.eclipse.org/eclipse/downloads/"));
+    getPlatformPackageBrandingSites(URI.createURI("https://archive.eclipse.org/eclipse/downloads/"));
 
     packageLocationLoader.perform(locations);
   }

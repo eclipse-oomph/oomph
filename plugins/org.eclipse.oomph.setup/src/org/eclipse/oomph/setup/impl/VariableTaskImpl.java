@@ -11,15 +11,12 @@
 package org.eclipse.oomph.setup.impl;
 
 import org.eclipse.oomph.base.Annotation;
-import org.eclipse.oomph.base.BaseAnnotationConstants;
 import org.eclipse.oomph.base.BaseFactory;
 import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.setup.AnnotationConstants;
-import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.SetupTaskContext;
-import org.eclipse.oomph.setup.StringSubstitutionTask;
 import org.eclipse.oomph.setup.VariableChoice;
 import org.eclipse.oomph.setup.VariableTask;
 import org.eclipse.oomph.setup.VariableType;
@@ -28,10 +25,8 @@ import org.eclipse.oomph.util.StringUtil;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
@@ -41,7 +36,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -66,8 +60,6 @@ import java.util.Set;
  */
 public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
 {
-  private static final String ANNOTATION_KEY = "platform:/plugin/org.eclipse.oomph.base/model/legacy/setup.ecore#//ContextVariableTask/stringSubstitution"; //$NON-NLS-1$
-
   /**
    * The default value of the '{@link #getType() <em>Type</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -654,35 +646,4 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
   {
     throw new UnsupportedOperationException(Messages.VariableTaskImpl_NotExecutable_exception);
   }
-
-  protected void eMigrate()
-  {
-    Annotation annotation = getAnnotation(BaseAnnotationConstants.ANNOTATION_SOURCE);
-    if (annotation != null)
-    {
-      EMap<String, String> details = annotation.getDetails();
-      String value = details.get(ANNOTATION_KEY);
-      if (value != null)
-      {
-        String name = getName();
-        if (name != null && "true".equals(value)) //$NON-NLS-1$
-        {
-          StringSubstitutionTask stringSubstitutionTask = SetupFactory.eINSTANCE.createStringSubstitutionTask();
-          stringSubstitutionTask.setName(name);
-          stringSubstitutionTask.setValue("${" + name + "}"); //$NON-NLS-1$ //$NON-NLS-2$
-          EObject eContainer = eContainer();
-          @SuppressWarnings("unchecked")
-          List<EObject> list = (List<EObject>)eContainer.eGet(eContainmentFeature());
-          list.add(list.indexOf(this) + 1, stringSubstitutionTask);
-        }
-
-        details.removeKey(ANNOTATION_KEY);
-        if (annotation.getDetails().isEmpty())
-        {
-          getAnnotations().remove(annotation);
-        }
-      }
-    }
-  }
-
 } // VariableTaskImpl

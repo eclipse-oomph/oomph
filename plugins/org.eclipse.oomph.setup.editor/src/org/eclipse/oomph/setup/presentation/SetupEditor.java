@@ -15,7 +15,6 @@ import org.eclipse.oomph.base.provider.BaseEditUtil.IconReflectiveItemProvider;
 import org.eclipse.oomph.base.provider.BaseItemProviderAdapterFactory;
 import org.eclipse.oomph.base.util.BaseResourceImpl;
 import org.eclipse.oomph.edit.NoChildrenDelegatingWrapperItemProvider;
-import org.eclipse.oomph.internal.base.BasePlugin;
 import org.eclipse.oomph.internal.setup.SetupPrompter;
 import org.eclipse.oomph.internal.ui.FindAndReplaceTarget;
 import org.eclipse.oomph.internal.ui.IRevertablePart;
@@ -74,7 +73,6 @@ import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CommandStackListener;
-import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.command.UnexecutableCommand;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.AdapterFactory;
@@ -112,12 +110,10 @@ import org.eclipse.emf.ecore.util.ExtendedMetaData;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.emf.edit.EMFEditPlugin;
 import org.eclipse.emf.edit.command.AbstractOverrideableCommand;
-import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.command.CopyCommand;
 import org.eclipse.emf.edit.command.DragAndDropCommand;
 import org.eclipse.emf.edit.command.DragAndDropFeedback;
-import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.domain.IEditingDomainProvider;
@@ -312,10 +308,6 @@ import java.util.regex.Pattern;
 public class SetupEditor extends MultiPageEditorPart implements IEditingDomainProvider, ISelectionProvider, IMenuListener, IViewerProvider, IGotoMarker,
     IRevertablePart, WorkingSetsActionBarContributor.PreviewDialog.Previewable
 {
-  private static final URI LEGACY_MODELS = URI.createURI("platform:/plugin/" + BasePlugin.INSTANCE.getSymbolicName() + "/model/legacy"); //$NON-NLS-1$ //$NON-NLS-2$
-
-  private static final URI LEGACY_EXAMPLE_URI = URI.createURI("file:/example.setup"); //$NON-NLS-1$
-
   private static final Object VARIABLE_GROUP_IMAGE = SetupEditorPlugin.INSTANCE.getImage("full/obj16/VariableGroup"); //$NON-NLS-1$
 
   private static final Pattern HEADER_PATTERN = Pattern.compile("(<h1)(>)"); //$NON-NLS-1$
@@ -2089,55 +2081,6 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     }
 
     editingDomain.getResourceSet().eAdapters().add(problemIndicationAdapter);
-
-    if (!resourceMirror.get().isCanceled() && rootObject != null)
-    {
-      Display display = getSite().getShell().getDisplay();
-      display.asyncExec(new Runnable()
-      {
-        public void run()
-        {
-          EPackage ePackage = mainResource.getContents().get(0).eClass().getEPackage();
-          Resource packageResource = ePackage.eResource();
-          if (packageResource != null)
-          {
-            URI ePackageResourceURI = packageResource.getURI();
-            if (ePackageResourceURI.isHierarchical() && ePackageResourceURI.trimSegments(1).equals(LEGACY_MODELS))
-            {
-              List<EObject> migratedContents = new ArrayList<EObject>();
-
-              try
-              {
-                SetupCoreUtil.migrate(mainResource, migratedContents);
-                CompoundCommand command = new CompoundCommand(1, Messages.SetupEditor_command_replaceWithMigratedContents);
-                command.append(new RemoveCommand(editingDomain, mainResource.getContents(), new ArrayList<EObject>(mainResource.getContents())));
-                command.append(new AddCommand(editingDomain, mainResource.getContents(), migratedContents));
-                editingDomain.getCommandStack().execute(command);
-              }
-              catch (RuntimeException ex)
-              {
-                CompoundCommand command = new CompoundCommand(1, Messages.SetupEditor_command_addPartiallyMigratedContents);
-                command.append(new AddCommand(editingDomain, mainResource.getContents(), migratedContents));
-                editingDomain.getCommandStack().execute(command);
-
-                SetupEditorPlugin.INSTANCE.log(ex);
-              }
-
-              EcoreUtil.resolveAll(mainResource);
-              for (Resource resource : resourceSet.getResources())
-              {
-                URI uri = resource.getURI();
-                if ("bogus".equals(uri.scheme()) || LEGACY_EXAMPLE_URI.equals(uri)) //$NON-NLS-1$
-                {
-                  resource.getErrors().clear();
-                  resource.getWarnings().clear();
-                }
-              }
-            }
-          }
-        }
-      });
-    }
   }
 
   /**

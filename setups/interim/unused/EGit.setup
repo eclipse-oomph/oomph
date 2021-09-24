@@ -24,9 +24,9 @@
     <requirement
         name="org.eclipse.swtbot.generator.feature.feature.group"/>
     <repository
-        url="http://download.eclipse.org/egit/updates-nightly"/>
+        url="https://download.eclipse.org/egit/updates-nightly"/>
     <repository
-        url="http://download.eclipse.org/technology/swtbot/releases/2.1.1"/>
+        url="https://download.eclipse.org/technology/swtbot/releases/2.1.1"/>
   </setupTask>
   <setupTask
       xsi:type="setup:EclipseIniTask"
@@ -57,7 +57,7 @@
       name="EGit"
       version="3.4"
       location="${workspace.location/../api.baseline}"
-      remoteURI="http://download.eclipse.org/egit/updates/org.eclipse.egit.repository-3.7.0.201502260915-r.zip"/>
+      remoteURI="https://download.eclipse.org/egit/updates/org.eclipse.egit.repository-3.7.0.201502260915-r.zip"/>
   <stream name="master">
     <setupTask
         xsi:type="git:GitCloneTask"
@@ -162,24 +162,24 @@
         <repositoryList
             name="Mars">
           <repository
-              url="http://download.eclipse.org/releases/mars"/>
+              url="https://download.eclipse.org/releases/mars"/>
           <repository
-              url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
+              url="https://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
           <repository
-              url="http://download.eclipse.org/jetty/updates/jetty-bundles-7.x/7.6.14.v20131031"/>
+              url="https://download.eclipse.org/jetty/updates/jetty-bundles-7.x/7.6.14.v20131031"/>
           <repository
-              url="http://download.eclipse.org/technology/swtbot/releases/2.1.1"/>
+              url="https://download.eclipse.org/technology/swtbot/releases/2.1.1"/>
         </repositoryList>
         <repositoryList
             name="Luna">
           <repository
-              url="http://download.eclipse.org/releases/luna"/>
+              url="https://download.eclipse.org/releases/luna"/>
           <repository
-              url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
+              url="https://download.eclipse.org/modeling/emf/cdo/orbit/latest-R"/>
           <repository
-              url="http://download.eclipse.org/jetty/updates/jetty-bundles-7.x/7.6.14.v20131031"/>
+              url="https://download.eclipse.org/jetty/updates/jetty-bundles-7.x/7.6.14.v20131031"/>
           <repository
-              url="http://download.eclipse.org/technology/swtbot/releases/2.1.1"/>
+              url="https://download.eclipse.org/technology/swtbot/releases/2.1.1"/>
         </repositoryList>
       </targlet>
     </setupTask>

@@ -10,8 +10,6 @@
  */
 package org.eclipse.oomph.p2.impl;
 
-import org.eclipse.oomph.base.Annotation;
-import org.eclipse.oomph.base.BaseAnnotationConstants;
 import org.eclipse.oomph.base.impl.ModelElementImpl;
 import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.P2Package;
@@ -21,7 +19,6 @@ import org.eclipse.oomph.p2.VersionSegment;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
@@ -60,8 +57,6 @@ import java.lang.reflect.InvocationTargetException;
  */
 public class RequirementImpl extends ModelElementImpl implements Requirement
 {
-  private static final String ANNOTATION_KEY = "platform:/plugin/org.eclipse.oomph.base/model/legacy/setup.ecore#//Component/type"; //$NON-NLS-1$
-
   /**
    * The default value of the '{@link #getID() <em>ID</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -780,39 +775,6 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
         return null;
     }
     return super.eInvoke(operationID, arguments);
-  }
-
-  protected void eMigrate()
-  {
-    Annotation annotation = getAnnotation(BaseAnnotationConstants.ANNOTATION_SOURCE);
-    if (annotation != null)
-    {
-      EMap<String, String> details = annotation.getDetails();
-      String value = details.get(ANNOTATION_KEY);
-      boolean remove = false;
-      if ("eclipse.feature".equals(value)) //$NON-NLS-1$
-      {
-        String id = getName();
-        if (id != null)
-        {
-          setName(id + FEATURE_SUFFIX);
-          remove = true;
-        }
-      }
-      else if ("osgi.bundle".equals(value)) //$NON-NLS-1$
-      {
-        remove = true;
-      }
-
-      if (remove)
-      {
-        details.removeKey(ANNOTATION_KEY);
-        if (annotation.getDetails().isEmpty())
-        {
-          getAnnotations().remove(annotation);
-        }
-      }
-    }
   }
 
   /**

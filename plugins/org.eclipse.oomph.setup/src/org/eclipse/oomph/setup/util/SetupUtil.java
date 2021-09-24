@@ -31,7 +31,7 @@ import java.util.regex.Matcher;
  */
 public final class SetupUtil
 {
-  private static final String DEFAULT_INSTALLER_UPDATE_URL = "http://download.eclipse.org/oomph/products/repository"; //$NON-NLS-1$
+  private static final String DEFAULT_INSTALLER_UPDATE_URL = "https://download.eclipse.org/oomph/products/repository"; //$NON-NLS-1$
 
   private static final String RESOLVING_TARGET_PLATFORM_DEFINITIONS = "oomph.setup.resolving.target.platform.definitions"; //$NON-NLS-1$
 

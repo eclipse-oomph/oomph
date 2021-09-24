@@ -120,7 +120,7 @@ public final class SetupCoreUtil
 {
   public static final String OOMPH_NAMESPACE = "org.eclipse.oomph"; //$NON-NLS-1$
 
-  public static final String STATS_URI = "http://download.eclipse.org/stats/oomph"; //$NON-NLS-1$
+  public static final String STATS_URI = "https://download.eclipse.org/stats/oomph"; //$NON-NLS-1$
 
   public static final AuthorizationHandler AUTHORIZATION_HANDLER;
 

@@ -44,6 +44,10 @@
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
+          key="siteURI">
+        <value>https://www.eclipse.org/downloads/packages/release/2021-09/r</value>
+      </detail>
+      <detail
           key="shortcut">
         <value>Eclipse Eierlegende Wollmilchsau - Latest</value>
       </detail>
@@ -82,7 +86,7 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.21.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/2021-12">
+          url="https://download.eclipse.org/releases/2021-12">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
@@ -136,7 +140,7 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.21.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/2021-09/202109151000">
+          url="https://download.eclipse.org/releases/2021-09/202109151000">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
@@ -147,6 +151,10 @@
       requiredJavaVersion="11">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="siteURI">
+        <value>https://www.eclipse.org/downloads/packages/release/2021-09/r</value>
+      </detail>
       <detail
           key="shortcut">
         <value>Eclipse Eierlegende Wollmilchsau - 2021-12</value>
@@ -186,7 +194,7 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.21.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/2021-12">
+          url="https://download.eclipse.org/releases/2021-12">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
@@ -244,7 +252,7 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.21.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/2021-09/202109151000">
+          url="https://download.eclipse.org/releases/2021-09/202109151000">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
@@ -302,7 +310,7 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.20.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/2021-06/202106161001">
+          url="https://download.eclipse.org/releases/2021-06/202106161001">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
@@ -360,7 +368,7 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.19.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/2021-03/202103171000">
+          url="https://download.eclipse.org/releases/2021-03/202103171000">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
@@ -418,7 +426,7 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.18.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/2020-12/202012161000">
+          url="https://download.eclipse.org/releases/2020-12/202012161000">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
@@ -478,7 +486,7 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.17.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/2020-09/202009161000">
+          url="https://download.eclipse.org/releases/2020-09/202009161000">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
@@ -538,7 +546,7 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.16.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/2020-06/202006171000">
+          url="https://download.eclipse.org/releases/2020-06/202006171000">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
@@ -598,7 +606,7 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.15.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/2020-03/202003181000">
+          url="https://download.eclipse.org/releases/2020-03/202003181000">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
@@ -658,7 +666,7 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.14.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/2019-12/201912181000">
+          url="https://download.eclipse.org/releases/2019-12/201912181000">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
@@ -720,7 +728,7 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.13.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/2019-09/201909181001">
+          url="https://download.eclipse.org/releases/2019-09/201909181001">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
@@ -782,7 +790,7 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.12.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/2019-06/201906191000">
+          url="https://download.eclipse.org/releases/2019-06/201906191000">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
@@ -842,7 +850,7 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.11.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/2019-03/201903201000">
+          url="https://download.eclipse.org/releases/2019-03/201903201000">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
@@ -902,7 +910,7 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.10.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/2018-12/201812191000">
+          url="https://download.eclipse.org/releases/2018-12/201812191000">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
@@ -962,7 +970,7 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.9.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/2018-09/201809191002">
+          url="https://download.eclipse.org/releases/2018-09/201809191002">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
@@ -1022,7 +1030,7 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.8.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/photon/201806271001">
+          url="https://download.eclipse.org/releases/photon/201806271001">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
@@ -1082,7 +1090,7 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.7.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/oxygen/201804111000">
+          url="https://download.eclipse.org/releases/oxygen/201804111000">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
@@ -1142,7 +1150,7 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.6.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/neon/201705151400">
+          url="https://download.eclipse.org/releases/neon/201705151400">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
@@ -1200,7 +1208,7 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.5.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/mars/201602261000">
+          url="https://download.eclipse.org/releases/mars/201602261000">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
@@ -1256,7 +1264,7 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.4.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/luna/201502271000">
+          url="https://download.eclipse.org/releases/luna/201502271000">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
@@ -1312,12 +1320,12 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.3.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/kepler/201402280900">
+          url="https://download.eclipse.org/releases/kepler/201402280900">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
       <repository
-          url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.27"/>
+          url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.27"/>
     </setupTask>
   </version>
   <version name="juno"
@@ -1370,12 +1378,12 @@
           name="org.eclipse.platform.ide"
           versionRange="[4.2.0,5.0.0)"/>
       <repository
-          url="http://download.eclipse.org/releases/juno/201303010900">
+          url="https://download.eclipse.org/releases/juno/201303010900">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
       <repository
-          url="http://download.eclipse.org/modeling/emf/emf/builds/release/2.27"/>
+          url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.27"/>
     </setupTask>
   </version>
   <description>This package contains all categorized features of the release train. It can do &lt;a href='https://en.wiktionary.org/wiki/eierlegende_Wollmilchsau'>everything&lt;/a>, but it's not pretty.</description>

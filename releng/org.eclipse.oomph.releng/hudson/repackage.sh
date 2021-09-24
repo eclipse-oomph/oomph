@@ -58,8 +58,8 @@ for f in *.zip *.tar.gz; do
   mv "$inifile.tmp" "$inifile"
 
   if [[ "$BUILD_TYPE" == "" || "$BUILD_TYPE" == none || "$BUILD_TYPE" == nightly ]]; then
-    echo "-Doomph.installer.update.url=http://download.eclipse.org/oomph/products/latest/repository" >> "$inifile"
-    echo "-Doomph.update.url=http://download.eclipse.org/oomph/updates/latest" >> "$inifile"
+    echo "-Doomph.installer.update.url=https://download.eclipse.org/oomph/products/latest/repository" >> "$inifile"
+    echo "-Doomph.update.url=https://download.eclipse.org/oomph/updates/latest" >> "$inifile"
   fi
 
   if [[ $f == *macosx* ]]; then

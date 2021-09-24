@@ -41,7 +41,7 @@
     <setupTask
         xsi:type="setup:VariableTask"
         name="egit.url"
-        value="http://download.eclipse.org/egit/updates-nightly"/>
+        value="https://download.eclipse.org/egit/updates-nightly"/>
     <setupTask
         xsi:type="setup:ResourceCreationTask"
         excludedTriggers="STARTUP MANUAL"
@@ -690,11 +690,11 @@
             rootFolder="${ecf.git.location}"/>
         <repositoryLists>
           <repositories
-              url="http://download.eclipse.org/tools/orbit/downloads/drops/S20131024145017/repository/"/>
+              url="https://download.eclipse.org/tools/orbit/downloads/drops/S20131024145017/repository/"/>
           <repositories
-              url="http://download.eclipse.org/jetty/updates/jetty-bundles-8.x"/>
+              url="https://download.eclipse.org/jetty/updates/jetty-bundles-8.x"/>
           <repositories
-              url="http://download.eclipse.org/cbi/updates/license"/>
+              url="https://download.eclipse.org/cbi/updates/license"/>
         </repositoryLists>
       </targlets>
     </setupTask>

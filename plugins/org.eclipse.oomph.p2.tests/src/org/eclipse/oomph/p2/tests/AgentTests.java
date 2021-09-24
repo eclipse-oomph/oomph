@@ -560,6 +560,6 @@ public class AgentTests extends AbstractP2Test
       }
     }
 
-    new RepoMan().test("http://download.eclipse.org/releases/mars");
+    new RepoMan().test("https://download.eclipse.org/releases/mars");
   }
 }

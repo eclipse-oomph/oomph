@@ -80,13 +80,13 @@
         <repositoryLists
             name="Luna Dependencies">
           <repositories
-              url="http://download.eclipse.org/releases/luna"/>
+              url="https://download.eclipse.org/releases/luna"/>
           <repositories
-              url="http://download.eclipse.org/mylyn/snapshots/3.9"/>
+              url="https://download.eclipse.org/mylyn/snapshots/3.9"/>
           <repositories
-              url="http://download.eclipse.org/mylyn/snapshots/nightly/commons"/>
+              url="https://download.eclipse.org/mylyn/snapshots/nightly/commons"/>
           <repositories
-              url="http://download.eclipse.org/modeling/emf/cdo/orbit/latest-S"/>
+              url="https://download.eclipse.org/modeling/emf/cdo/orbit/latest-S"/>
         </repositoryLists>
       </targlets>
     </setupTask>

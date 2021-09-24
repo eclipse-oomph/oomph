@@ -21,28 +21,4 @@
             genModel="model/Base.genmodel"/>
    </extension>
 
-   <extension
-         point="org.eclipse.emf.ecore.dynamic_package">
-      <resource
-            location="model/legacy/predicates.ecore"
-            uri="http://www.eclipse.org/CDO/releng/predicates/1.0">
-      </resource>
-      <resource
-            location="model/legacy/preferences.ecore"
-            uri="http://www.eclipse.org/CDO/releng/preferences/1.0">
-      </resource>
-      <resource
-            location="model/legacy/projectconfig.ecore"
-            uri="http://www.eclipse.org/CDO/releng/projectconfig/1.0">
-      </resource>
-      <resource
-            location="model/legacy/setup.ecore"
-            uri="http://www.eclipse.org/CDO/releng/setup/1.0">
-      </resource>
-      <resource
-            location="model/legacy/workingsets.ecore"
-            uri="http://www.eclipse.org/CDO/releng/workingsets/1.0">
-      </resource>
-   </extension>
-
 </plugin>

@@ -10,7 +10,7 @@
   <setupTask
       xsi:type="setup.p2:P2Task">
     <repository
-        url="http://download.eclipse.org/oomph/updates/latest"/>
+        url="https://download.eclipse.org/oomph/updates/latest"/>
   </setupTask>
   <setupTask
       xsi:type="setup:ResourceCopyTask"

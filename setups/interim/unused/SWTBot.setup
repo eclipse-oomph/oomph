@@ -153,38 +153,38 @@
       <repositoryList
           name="Mars">
         <repository
-            url="http://download.eclipse.org/releases/mars"/>
+            url="https://download.eclipse.org/releases/mars"/>
         <repository
-            url="http://download.eclipse.org/cbi/updates/license"/>
+            url="https://download.eclipse.org/cbi/updates/license"/>
         <repository
-            url="http://download.eclipse.org/technology/nebula/snapshot"/>
+            url="https://download.eclipse.org/technology/nebula/snapshot"/>
       </repositoryList>
       <repositoryList
           name="Luna">
         <repository
-            url="http://download.eclipse.org/releases/luna"/>
+            url="https://download.eclipse.org/releases/luna"/>
         <repository
-            url="http://download.eclipse.org/cbi/updates/license"/>
+            url="https://download.eclipse.org/cbi/updates/license"/>
         <repository
-            url="http://download.eclipse.org/technology/nebula/snapshot"/>
+            url="https://download.eclipse.org/technology/nebula/snapshot"/>
       </repositoryList>
       <repositoryList
           name="Kepler">
         <repository
-            url="http://download.eclipse.org/releases/kepler"/>
+            url="https://download.eclipse.org/releases/kepler"/>
         <repository
-            url="http://download.eclipse.org/cbi/updates/license"/>
+            url="https://download.eclipse.org/cbi/updates/license"/>
         <repository
-            url="http://download.eclipse.org/technology/nebula/snapshot"/>
+            url="https://download.eclipse.org/technology/nebula/snapshot"/>
       </repositoryList>
       <repositoryList
           name="Juno">
         <repository
-            url="http://download.eclipse.org/releases/juno"/>
+            url="https://download.eclipse.org/releases/juno"/>
         <repository
-            url="http://download.eclipse.org/cbi/updates/license"/>
+            url="https://download.eclipse.org/cbi/updates/license"/>
         <repository
-            url="http://download.eclipse.org/technology/nebula/snapshot"/>
+            url="https://download.eclipse.org/technology/nebula/snapshot"/>
       </repositoryList>
     </targlet>
   </setupTask>
@@ -193,7 +193,7 @@
       name="swtbot-latest"
       version="2.3.0"
       location="${installation.location}/api/v2.3/"
-      remoteURI="http://download.eclipse.org/technology/swtbot/snapshots/repository.zip"/>
+      remoteURI="https://download.eclipse.org/technology/swtbot/snapshots/repository.zip"/>
   <setupTask
       xsi:type="projects:ProjectsImportTask">
     <sourceLocator

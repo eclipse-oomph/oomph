@@ -133,10 +133,10 @@ public abstract class AbstractP2Test extends AbstractTest
   @BeforeClass
   public static void setUpBeforeClass() throws Exception
   {
-    mirror("http://download.eclipse.org/modeling/emf/cdo/drops/R20130918-0029", CDO_OLD, CDO_FILTER);
-    mirror("http://download.eclipse.org/modeling/emf/cdo/drops/R20140218-1655", CDO_NEW, CDO_FILTER);
-    mirror("http://download.eclipse.org/eclipse/updates/4.3/R-4.3.1-201309111000", PLATFORM_OLD, PLATFORM_FILTER);
-    mirror("http://download.eclipse.org/eclipse/updates/4.3/R-4.3.2-201402211700", PLATFORM_NEW, PLATFORM_FILTER);
+    mirror("https://download.eclipse.org/modeling/emf/cdo/drops/R20130918-0029", CDO_OLD, CDO_FILTER);
+    mirror("https://download.eclipse.org/modeling/emf/cdo/drops/R20140218-1655", CDO_NEW, CDO_FILTER);
+    mirror("https://download.eclipse.org/eclipse/updates/4.3/R-4.3.1-201309111000", PLATFORM_OLD, PLATFORM_FILTER);
+    mirror("https://download.eclipse.org/eclipse/updates/4.3/R-4.3.2-201402211700", PLATFORM_NEW, PLATFORM_FILTER);
   }
 
   private static void mirror(String repo, File local, VersionedIdFilter filter) throws Exception

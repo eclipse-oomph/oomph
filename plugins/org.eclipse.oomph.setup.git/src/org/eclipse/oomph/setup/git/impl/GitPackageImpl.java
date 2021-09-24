@@ -481,7 +481,7 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
         "installableUnits", "org.eclipse.oomph.setup.git.feature.group" //$NON-NLS-1$ //$NON-NLS-2$
     });
     addAnnotation(this, source, new String[] { "variableName", "setup.egit.p2", //$NON-NLS-1$ //$NON-NLS-2$
-        "repository", "http://download.eclipse.org/egit/updates", //$NON-NLS-1$ //$NON-NLS-2$
+        "repository", "https://download.eclipse.org/egit/updates", //$NON-NLS-1$ //$NON-NLS-2$
         "installableUnits", "org.eclipse.egit.feature.group", //$NON-NLS-1$ //$NON-NLS-2$
         "releaseTrainAlternate", "true" //$NON-NLS-1$ //$NON-NLS-2$
     });

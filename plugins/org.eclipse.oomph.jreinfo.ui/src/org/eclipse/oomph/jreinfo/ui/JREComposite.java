@@ -399,7 +399,7 @@ public class JREComposite extends Composite
 
   protected void downloadPressed()
   {
-    Request request = new Request("http://download.eclipse.org/oomph/jre/"); //$NON-NLS-1$
+    Request request = new Request("https://download.eclipse.org/oomph/jre/"); //$NON-NLS-1$
 
     JREFilter filter = getJREFilter();
     if (filter != null)

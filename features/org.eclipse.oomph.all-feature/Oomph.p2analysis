@@ -7,8 +7,8 @@
     title="Oomph">
   <provider
       xsi:type="analysis:Repository"
-      url="http://download.eclipse.org/oomph/updates/latest"/>
+      url="https://download.eclipse.org/oomph/updates/latest"/>
   <provider
       xsi:type="analysis:Repository"
-      url="http://download.eclipse.org/releases/neon"/>
+      url="https://download.eclipse.org/releases/neon"/>
 </analysis:Analysis>

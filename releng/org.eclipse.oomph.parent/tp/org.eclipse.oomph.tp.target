@@ -21,18 +21,18 @@
       <unit id="org.eclipse.swtbot.generator" version="0.0.0"/>
       <unit id="org.eclipse.userstorage.oauth" version="0.0.0"/>
       <unit id="org.eclipse.userstorage.tests" version="0.0.0"/>
-      <repository location="http://download.eclipse.org/eclipse/updates/4.22-I-builds"/>
-      <repository location="http://download.eclipse.org/egit/updates"/>
-      <repository location="http://download.eclipse.org/justj/jres/16/updates/release/16.0.2"/>
-      <repository location="http://download.eclipse.org/modeling/emf/emf/builds/milestone/latest"/>
-      <repository location="http://download.eclipse.org/mylyn/snapshots/weekly"/>
-      <repository location="http://download.eclipse.org/nebula/snapshot"/>
-      <repository location="http://download.eclipse.org/technology/m2e/snapshots/latest"/>
-      <repository location="http://download.eclipse.org/technology/swtbot/snapshots"/>
-      <repository location="http://download.eclipse.org/tools/orbit/downloads/drops2/R20190602212107/repository"/>
-      <repository location="http://download.eclipse.org/tools/orbit/downloads/latest-R"/>
-      <repository location="http://download.eclipse.org/usssdk/updates/latest"/>
-      <repository location="http://download.eclipse.org/webtools/repository/latest"/>
+      <repository location="https://download.eclipse.org/eclipse/updates/4.22-I-builds"/>
+      <repository location="https://download.eclipse.org/egit/updates"/>
+      <repository location="https://download.eclipse.org/justj/jres/16/updates/release/16.0.2"/>
+      <repository location="https://download.eclipse.org/modeling/emf/emf/builds/milestone/latest"/>
+      <repository location="https://download.eclipse.org/mylyn/snapshots/weekly"/>
+      <repository location="https://download.eclipse.org/nebula/snapshot"/>
+      <repository location="https://download.eclipse.org/technology/m2e/snapshots/latest"/>
+      <repository location="https://download.eclipse.org/technology/swtbot/snapshots"/>
+      <repository location="https://download.eclipse.org/tools/orbit/downloads/drops2/R20190602212107/repository"/>
+      <repository location="https://download.eclipse.org/tools/orbit/downloads/latest-R"/>
+      <repository location="https://download.eclipse.org/usssdk/updates/latest"/>
+      <repository location="https://download.eclipse.org/webtools/repository/latest"/>
     </location>
   </locations>
 </target>

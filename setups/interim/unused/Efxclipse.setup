@@ -29,9 +29,9 @@
     <requirements
         id="org.eclipse.m2e.feature.feature.group"/>
     <repositories
-        url="http://download.eclipse.org/efxclipse/updates-nightly/site"/>
+        url="https://download.eclipse.org/efxclipse/updates-nightly/site"/>
     <repositories
-        url="http://download.eclipse.org/eclipse/updates/4.3-P-builds/"/>
+        url="https://download.eclipse.org/eclipse/updates/4.3-P-builds/"/>
   </setupTask>
   <setupTask
       xsi:type="projects:ProjectsImportTask">

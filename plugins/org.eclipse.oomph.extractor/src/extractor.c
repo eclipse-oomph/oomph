@@ -1405,7 +1405,7 @@ main (int argcIgnored, char** argvIngored)
 
   char url[4 * MAX_PATH];
   if (snprintf (url, sizeof(url),
-                "\"%s\\rundll32.exe\" %s\\url.dll,FileProtocolHandler \"http://download.eclipse.org/oomph/jre/?vm=1_%d_%d_%d_%d_%d&pn=%s&pu=%s&pi=%s\"", //
+                "\"%s\\rundll32.exe\" %s\\url.dll,FileProtocolHandler \"https://download.eclipse.org/oomph/jre/?vm=1_%d_%d_%d_%d_%d&pn=%s&pu=%s&pi=%s\"", //
                 sysdir, sysdir, req.major, req.minor, req.micro, req.bitness, req.jdk, req.productName, req.productURI, req.imageURI) >= sizeof(url))
   {
     return EXIT_FAILURE_BUFFER_OVERFLOW;

@@ -18,8 +18,8 @@ for i in $(find . -name "eclipse-inst.ini"); do
   grep -e "Eclipse" "$i"
   LC_ALL=C sed -e 's/^Eclipse.*Installer$/Eclipse Installer/g;' "$i" > "$i.tmp"
   if [[ "$BUILD_TYPE" == "" || "$BUILD_TYPE" == none || "$BUILD_TYPE" == nightly ]]; then
-    echo "-Doomph.installer.update.url=http://download.eclipse.org/oomph/products/latest/repository" >> "$i.tmp"
-    echo "-Doomph.update.url=http://download.eclipse.org/oomph/updates/latest" >> "$i.tmp"
+    echo "-Doomph.installer.update.url=https://download.eclipse.org/oomph/products/latest/repository" >> "$i.tmp"
+    echo "-Doomph.update.url=https://download.eclipse.org/oomph/updates/latest" >> "$i.tmp"
   fi
   mv "$i.tmp" "$i"
 done

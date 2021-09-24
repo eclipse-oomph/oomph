@@ -17,10 +17,10 @@ $pageKeywords   = "Oomph Installer Extractor Java JRE JDK";
 $pageAuthor     = "estepper";
 
 # Add page-specific Nav bars here
-# Format is Link text, link URL (can be http://www.someothersite.com/), target (_self, _blank), level (1, 2 or 3)
+# Format is Link text, link URL (can be https://www.someothersite.com/), target (_self, _blank), level (1, 2 or 3)
 # $Nav->addNavSeparator("My Page Links",    "downloads.php");
 # $Nav->addCustomNav("My Link", "mypage.php", "_self", 3);
-# $Nav->addCustomNav("Google", "http://www.google.com/", "_blank", 3);
+# $Nav->addCustomNav("Google", "https://www.google.com/", "_blank", 3);
 
 # End: page-specific settings
 #
@@ -37,14 +37,14 @@ $oracle = array(
   "https://www.oracle.com/technetwork/java/javase/downloads/jdk11-downloads-5066655.html", "", $pStart . $addModulesProblem .  "<br>" . $bestChoiceNew . "</p>",
   "https://www.oracle.com/technetwork/java/javase/downloads/java-archive-javase10-4425482.html", "",  $pStart . $addModulesProblem . "</p>",
   "https://www.oracle.com/technetwork/java/javase/downloads/java-archive-javase9-3934878.html", "",  $pStart . $addModulesProblem . "</p>",
-  "http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html", "http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html", $pStart . $bestChoice . "</p>",
-  "http://www.oracle.com/technetwork/java/javase/downloads/jre7-downloads-1880261.html", "http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html", "",
-  "http://www.oracle.com/technetwork/java/javase/downloads/java-archive-downloads-javase6-419409.html", "", "",
-  "http://www.oracle.com/technetwork/java/javasebusiness/downloads/java-archive-downloads-javase5-419410.html", "", "",
-  "http://www.oracle.com/technetwork/java/javasebusiness/downloads/java-archive-downloads-javase14-419411.html", "", "",
-  "http://www.oracle.com/technetwork/java/javasebusiness/downloads/java-archive-downloads-javase13-419413.html", "", "",
-  "http://www.oracle.com/technetwork/java/javasebusiness/downloads/java-archive-downloads-javase13-419413.html", "", "",
-  "http://www.oracle.com/technetwork/java/javasebusiness/downloads/java-archive-downloads-javase11-419415.html", "", "",);
+  "https://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html", "https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html", $pStart . $bestChoice . "</p>",
+  "https://www.oracle.com/technetwork/java/javase/downloads/jre7-downloads-1880261.html", "https://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html", "",
+  "https://www.oracle.com/technetwork/java/javase/downloads/java-archive-downloads-javase6-419409.html", "", "",
+  "https://www.oracle.com/technetwork/java/javasebusiness/downloads/java-archive-downloads-javase5-419410.html", "", "",
+  "https://www.oracle.com/technetwork/java/javasebusiness/downloads/java-archive-downloads-javase14-419411.html", "", "",
+  "https://www.oracle.com/technetwork/java/javasebusiness/downloads/java-archive-downloads-javase13-419413.html", "", "",
+  "https://www.oracle.com/technetwork/java/javasebusiness/downloads/java-archive-downloads-javase13-419413.html", "", "",
+  "https://www.oracle.com/technetwork/java/javasebusiness/downloads/java-archive-downloads-javase11-419415.html", "", "",);
 
 $productName = htmlentities($_GET["pn"]);
 if (!$productName)
@@ -61,7 +61,7 @@ if (!preg_match("#^https?://[\w-]*\.eclipse\.org($|/.*$)#", $productURL))
 $productImageURL = htmlentities($_GET["pi"]);
 if (!preg_match("#^https?://[\w-]*\.eclipse\.org($|/.*$)#", $productImageURL))
 {
-  $productImageURL = "http://www.eclipse.org/downloads/images/classic2.jpg";
+  $productImageURL = "https://www.eclipse.org/downloads/images/classic2.jpg";
 }
 
 
@@ -204,7 +204,7 @@ if ($windows && $productName == "Eclipse Installer")
     </p>
     <p>
     Please download the latest version of the installer:<br/>
-      <a href="http://www.eclipse.org/downloads/download.php?file=/oomph/products/latest/eclipse-inst-win64.exe" style="margin-left: 2em; margin-top: 1ex; margin-bottom: 1ex; border-radius: 5px; font-weight: bold; border: 1px solid Chocolate;  background-color: DarkOrange; color: white; padding: 0.25ex 0.25em; text-align: center; text-decoration: none; display: inline-block;">Download 64 bit</a><br/>
+      <a href="https://www.eclipse.org/downloads/download.php?file=/oomph/products/latest/eclipse-inst-win64.exe" style="margin-left: 2em; margin-top: 1ex; margin-bottom: 1ex; border-radius: 5px; font-weight: bold; border: 1px solid Chocolate;  background-color: DarkOrange; color: white; padding: 0.25ex 0.25em; text-align: center; text-decoration: none; display: inline-block;">Download 64 bit</a><br/>
     This version of the installer can install any version of Eclipse you may want and it recognizes the locations of Java 11 or higher installations.
     Keep in mind though that older versions of Eclipse will not function with more recent Java versions, i.e., with Java 9 or higher.
     </p>

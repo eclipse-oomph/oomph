@@ -68,11 +68,11 @@
     <requirement
         name="org.eclipse.egit.mylyn.feature.group"/>
     <repository
-        url="http://download.eclipse.org/cbi/updates/aggregator/ide/4.13"/>
+        url="https://download.eclipse.org/cbi/updates/aggregator/ide/4.13"/>
     <repository
-        url="http://download.eclipse.org/egit/updates-stable-nightly"/>
+        url="https://download.eclipse.org/egit/updates-stable-nightly"/>
     <repository
-        url="http://download.eclipse.org/mylyn/snapshots/weekly"/>
+        url="https://download.eclipse.org/mylyn/snapshots/weekly"/>
   </setupTask>
   <setupTask
       xsi:type="setup:VariableTask"

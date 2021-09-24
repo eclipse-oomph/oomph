@@ -566,7 +566,7 @@ public class GenericSetupTemplate extends SetupTemplate
               {
                 if (repository.getURL().contains("download.eclipse.org/releases")) //$NON-NLS-1$
                 {
-                  repository.setURL("http://download.eclipse.org/releases/" + trainName.toLowerCase()); //$NON-NLS-1$
+                  repository.setURL("https://download.eclipse.org/releases/" + trainName.toLowerCase()); //$NON-NLS-1$
                 }
               }
 

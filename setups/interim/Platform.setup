@@ -153,9 +153,9 @@
       <repositoryList
           name="CBI+Orbit">
         <repository
-            url="http://download.eclipse.org/cbi/updates/license"/>
+            url="https://download.eclipse.org/cbi/updates/license"/>
         <repository
-            url="http://download.eclipse.org/tools/orbit/downloads/latest-R"/>
+            url="https://download.eclipse.org/tools/orbit/downloads/latest-R"/>
       </repositoryList>
     </targlet>
   </setupTask>
@@ -629,7 +629,7 @@
         <repositoryList
             name="EGit+JGit">
           <repository
-              url="http://download.eclipse.org/egit/updates"/>
+              url="https://download.eclipse.org/egit/updates"/>
         </repositoryList>
       </targlet>
     </setupTask>
@@ -771,11 +771,11 @@
         <repositoryList
             name="Nebula+EMF+GEF">
           <repository
-              url="http://download.eclipse.org/nebula/snapshot"/>
+              url="https://download.eclipse.org/nebula/snapshot"/>
           <repository
-              url="http://download.eclipse.org/modeling/emf/emf/builds/milestone/latest"/>
+              url="https://download.eclipse.org/modeling/emf/emf/builds/milestone/latest"/>
           <repository
-              url="http://download.eclipse.org/tools/gef/updates/milestones"/>
+              url="https://download.eclipse.org/tools/gef/updates/milestones"/>
         </repositoryList>
       </targlet>
     </setupTask>

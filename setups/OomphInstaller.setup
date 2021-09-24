@@ -34,16 +34,16 @@
           url="${oomph.product.update.url}"/>
     </setupTask>
   </version>
-  <version name="mars"
-      label="Mars"
-      requiredJavaVersion="1.7">
+  <version name="latest"
+      label="latest"
+      requiredJavaVersion="11">
     <setupTask
         xsi:type="setup.p2:P2Task"
         label="Eclipse Installer">
       <requirement
           name="org.eclipse.oomph.setup.installer.product"/>
       <repository
-          url="http://download.eclipse.org/oomph/products/repository"/>
+          url="https://download.eclipse.org/oomph/products/repository"/>
     </setupTask>
   </version>
   <description>Oomph's Eclipse Installer product</description>

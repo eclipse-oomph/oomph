@@ -179,52 +179,52 @@
       <repositoryList
           name="Photon">
         <repository
-            url="http://download.eclipse.org/eclipse/updates/4.8-I-builds"/>
+            url="https://download.eclipse.org/eclipse/updates/4.8-I-builds"/>
       </repositoryList>
       <repositoryList
           name="Oxygen">
         <repository
-            url="http://download.eclipse.org/eclipse/updates/4.7"/>
+            url="https://download.eclipse.org/eclipse/updates/4.7"/>
       </repositoryList>
       <repositoryList
           name="Neon">
         <repository
-            url="http://download.eclipse.org/eclipse/updates/4.6"/>
+            url="https://download.eclipse.org/eclipse/updates/4.6"/>
       </repositoryList>
       <repositoryList
           name="Mars">
         <repository
-            url="http://download.eclipse.org/eclipse/updates/4.5"/>
+            url="https://download.eclipse.org/eclipse/updates/4.5"/>
       </repositoryList>
       <repositoryList
           name="Luna">
         <repository
-            url="http://download.eclipse.org/eclipse/updates/4.4"/>
+            url="https://download.eclipse.org/eclipse/updates/4.4"/>
       </repositoryList>
       <repositoryList
           name="Kepler">
         <repository
-            url="http://download.eclipse.org/eclipse/updates/4.3"/>
+            url="https://download.eclipse.org/eclipse/updates/4.3"/>
       </repositoryList>
       <repositoryList
           name="Juno">
         <repository
-            url="http://download.eclipse.org/eclipse/updates/4.2"/>
+            url="https://download.eclipse.org/eclipse/updates/4.2"/>
       </repositoryList>
       <repositoryList
           name="Indigo">
         <repository
-            url="http://download.eclipse.org/eclipse/updates/3.7"/>
+            url="https://download.eclipse.org/eclipse/updates/3.7"/>
       </repositoryList>
       <repositoryList
           name="Helios">
         <repository
-            url="http://download.eclipse.org/eclipse/updates/3.6"/>
+            url="https://download.eclipse.org/eclipse/updates/3.6"/>
       </repositoryList>
       <repositoryList
           name="Galileo">
         <repository
-            url="http://download.eclipse.org/eclipse/updates/3.5"/>
+            url="https://download.eclipse.org/eclipse/updates/3.5"/>
       </repositoryList>
     </targlet>
   </setupTask>
@@ -242,52 +242,52 @@
       <repositoryList
           name="Photon">
         <repository
-            url="http://download.eclipse.org/eclipse/updates/4.8-I-builds"/>
+            url="https://download.eclipse.org/eclipse/updates/4.8-I-builds"/>
       </repositoryList>
       <repositoryList
           name="Oxygen">
         <repository
-            url="http://download.eclipse.org/eclipse/updates/4.7"/>
+            url="https://download.eclipse.org/eclipse/updates/4.7"/>
       </repositoryList>
       <repositoryList
           name="Neon">
         <repository
-            url="http://download.eclipse.org/eclipse/updates/4.6"/>
+            url="https://download.eclipse.org/eclipse/updates/4.6"/>
       </repositoryList>
       <repositoryList
           name="Mars">
         <repository
-            url="http://download.eclipse.org/eclipse/updates/4.5"/>
+            url="https://download.eclipse.org/eclipse/updates/4.5"/>
       </repositoryList>
       <repositoryList
           name="Luna">
         <repository
-            url="http://download.eclipse.org/eclipse/updates/4.4"/>
+            url="https://download.eclipse.org/eclipse/updates/4.4"/>
       </repositoryList>
       <repositoryList
           name="Kepler">
         <repository
-            url="http://download.eclipse.org/eclipse/updates/4.3"/>
+            url="https://download.eclipse.org/eclipse/updates/4.3"/>
       </repositoryList>
       <repositoryList
           name="Juno">
         <repository
-            url="http://download.eclipse.org/eclipse/updates/4.2"/>
+            url="https://download.eclipse.org/eclipse/updates/4.2"/>
       </repositoryList>
       <repositoryList
           name="Indigo">
         <repository
-            url="http://download.eclipse.org/eclipse/updates/3.7"/>
+            url="https://download.eclipse.org/eclipse/updates/3.7"/>
       </repositoryList>
       <repositoryList
           name="Helios">
         <repository
-            url="http://download.eclipse.org/eclipse/updates/3.6"/>
+            url="https://download.eclipse.org/eclipse/updates/3.6"/>
       </repositoryList>
       <repositoryList
           name="Galileo">
         <repository
-            url="http://download.eclipse.org/eclipse/updates/3.5"/>
+            url="https://download.eclipse.org/eclipse/updates/3.5"/>
       </repositoryList>
     </targlet>
   </setupTask>
