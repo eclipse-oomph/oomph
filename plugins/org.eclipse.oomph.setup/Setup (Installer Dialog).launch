@@ -2,31 +2,32 @@
 <launchConfiguration type="org.eclipse.pde.ui.RuntimeWorkbench">
     <setAttribute key="additional_plugins">
         <setEntry value="com.sun.jna.platform:5.8.0.v20210406-1004:default:true:default:default"/>
-        <setEntry value="com.sun.jna:5.8.0.v20210406-1004:default:true:default:default"/>
-        <setEntry value="org.eclipse.equinox.p2.artifact.repository:1.4.100.v20210326-1056:default:true:default:default"/>
+        <setEntry value="com.sun.jna:5.8.0.v20210503-0343:default:true:default:default"/>
+        <setEntry value="org.eclipse.equinox.event:1.6.0.v20210212-1143:default:true:default:default"/>
+        <setEntry value="org.eclipse.equinox.p2.artifact.repository:1.4.300.v20210909-1654:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.console:1.2.0.v20210315-2042:default:true:default:default"/>
-        <setEntry value="org.eclipse.equinox.p2.core:2.7.0.v20210315-2042:default:true:default:default"/>
+        <setEntry value="org.eclipse.equinox.p2.core:2.8.100.v20210908-0659:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.director.app:1.2.0.v20210315-2042:default:true:default:default"/>
-        <setEntry value="org.eclipse.equinox.p2.director:2.5.0.v20210325-0750:default:true:default:default"/>
+        <setEntry value="org.eclipse.equinox.p2.director:2.5.100.v20210813-0606:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.directorywatcher:1.3.0.v20210316-1209:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.discovery.compatibility:1.2.100.v20210316-1209:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.discovery:1.2.0.v20210315-2042:default:true:default:default"/>
-        <setEntry value="org.eclipse.equinox.p2.engine:2.7.0.v20210328-0514:default:true:default:default"/>
+        <setEntry value="org.eclipse.equinox.p2.engine:2.7.200.v20210908-0659:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.extensionlocation:1.4.0.v20210316-1209:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.garbagecollector:1.2.0.v20210316-1209:default:true:default:default"/>
-        <setEntry value="org.eclipse.equinox.p2.jarprocessor:1.2.0.v20210325-0758:default:true:default:default"/>
+        <setEntry value="org.eclipse.equinox.p2.jarprocessor:1.2.100.v20210907-0854:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.metadata.repository:1.4.0.v20210315-2228:default:true:default:default"/>
-        <setEntry value="org.eclipse.equinox.p2.metadata:2.6.0.v20210331-1610:default:true:default:default"/>
+        <setEntry value="org.eclipse.equinox.p2.metadata:2.6.100.v20210813-0606:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.operations:2.6.0.v20210315-2228:default:true:default:default"/>
-        <setEntry value="org.eclipse.equinox.p2.publisher.eclipse:1.4.0.v20210326-1217:default:true:default:default"/>
-        <setEntry value="org.eclipse.equinox.p2.publisher:1.6.0.v20210322-0909:default:true:default:default"/>
+        <setEntry value="org.eclipse.equinox.p2.publisher.eclipse:1.4.1.v20210812-1422:default:true:default:default"/>
+        <setEntry value="org.eclipse.equinox.p2.publisher:1.6.100.v20210723-0757:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.reconciler.dropins:1.4.0.v20210312-1245:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.repository.tools:2.3.0.v20210325-0750:default:true:default:default"/>
-        <setEntry value="org.eclipse.equinox.p2.repository:2.5.100.v20210329-1206:default:true:default:default"/>
-        <setEntry value="org.eclipse.equinox.p2.touchpoint.eclipse:2.3.0.v20210315-2228:default:true:default:default"/>
-        <setEntry value="org.eclipse.equinox.p2.touchpoint.natives:1.4.0.v20210326-2048:default:true:default:default"/>
-        <setEntry value="org.eclipse.equinox.p2.transport.ecf:1.3.100.v20210329-1206:default:true:default:default"/>
-        <setEntry value="org.eclipse.equinox.p2.updatesite:1.2.0.v20210322-0909:default:true:default:default"/>
+        <setEntry value="org.eclipse.equinox.p2.repository:2.5.200.v20210813-0803:default:true:default:default"/>
+        <setEntry value="org.eclipse.equinox.p2.touchpoint.eclipse:2.3.100.v20210615-1334:default:true:default:default"/>
+        <setEntry value="org.eclipse.equinox.p2.touchpoint.natives:1.4.100.v20210630-1916:default:true:default:default"/>
+        <setEntry value="org.eclipse.equinox.p2.transport.ecf:1.3.200.v20210613-1953:default:true:default:default"/>
+        <setEntry value="org.eclipse.equinox.p2.updatesite:1.2.100.v20210813-0606:default:true:default:default"/>
     </setAttribute>
     <booleanAttribute key="append.args" value="true"/>
     <booleanAttribute key="askclear" value="false"/>
