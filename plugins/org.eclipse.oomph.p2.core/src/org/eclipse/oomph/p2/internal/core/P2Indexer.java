@@ -980,6 +980,17 @@ public final class P2Indexer implements IApplication
               childURI = childURI.trimSegments(1);
             }
 
+            if (childURI.scheme() != null && !"https".equals(childURI.scheme()))
+            {
+              String message = "Child repository URI " + childURI + " is absolute and is not secure";
+              if (indexer.reporter != null)
+              {
+                message = indexer.reporter.reportError(this, message);
+              }
+
+              System.err.println(uri + " --> " + message);
+            }
+
             if (childURI.isRelative())
             {
               childURI = childURI.resolve(uri.hasTrailingPathSeparator() ? uri : uri.appendSegment(""));
