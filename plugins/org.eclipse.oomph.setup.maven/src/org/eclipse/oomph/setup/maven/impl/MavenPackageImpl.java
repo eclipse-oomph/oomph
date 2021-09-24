@@ -343,12 +343,12 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
         "installableUnits", "org.eclipse.oomph.setup.maven.feature.group" //$NON-NLS-1$ //$NON-NLS-2$
     });
     addAnnotation(this, source, new String[] { "variableName", "setup.m2e.p2", //$NON-NLS-1$ //$NON-NLS-2$
-        "repository", "http://download.eclipse.org/technology/m2e/milestones/1.5", //$NON-NLS-1$ //$NON-NLS-2$
+        "repository", "https://download.eclipse.org/technology/m2e/releases/latest", //$NON-NLS-1$ //$NON-NLS-2$
         "installableUnits", "org.eclipse.m2e.feature.feature.group", //$NON-NLS-1$ //$NON-NLS-2$
         "releaseTrainAlternate", "true" //$NON-NLS-1$ //$NON-NLS-2$
     });
     addAnnotation(this, source, new String[] { "variableName", "setup.webtools.p2", //$NON-NLS-1$ //$NON-NLS-2$
-        "repository", "http://download.eclipse.org/webtools/repository/luna", //$NON-NLS-1$ //$NON-NLS-2$
+        "repository", "https://download.eclipse.org/webtools/repository/latest", //$NON-NLS-1$ //$NON-NLS-2$
         "releaseTrainAlternate", "true" //$NON-NLS-1$ //$NON-NLS-2$
     });
   }

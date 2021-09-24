@@ -32,8 +32,8 @@ import org.eclipse.emf.ecore.EReference;
  * @model kind="package"
  *        annotation="http://www.eclipse.org/emf/2002/Ecore schemaLocation='http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Maven.ecore'"
  *        annotation="http://www.eclipse.org/oomph/setup/Enablement variableName='setup.maven.p2' repository='${oomph.update.url}' installableUnits='org.eclipse.oomph.setup.maven.feature.group'"
- *        annotation="http://www.eclipse.org/oomph/setup/Enablement variableName='setup.m2e.p2' repository='http://download.eclipse.org/technology/m2e/milestones/1.5' installableUnits='org.eclipse.m2e.feature.feature.group' releaseTrainAlternate='true'"
- *        annotation="http://www.eclipse.org/oomph/setup/Enablement variableName='setup.webtools.p2' repository='http://download.eclipse.org/webtools/repository/luna' releaseTrainAlternate='true'"
+ *        annotation="http://www.eclipse.org/oomph/setup/Enablement variableName='setup.m2e.p2' repository='https://download.eclipse.org/technology/m2e/releases/latest' installableUnits='org.eclipse.m2e.feature.feature.group' releaseTrainAlternate='true'"
+ *        annotation="http://www.eclipse.org/oomph/setup/Enablement variableName='setup.webtools.p2' repository='https://download.eclipse.org/webtools/repository/latest' releaseTrainAlternate='true'"
  *        annotation="http://www.eclipse.org/oomph/base/LabelProvider imageBaseURI='http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.maven.edit/icons/full/obj16'"
  * @generated
  */

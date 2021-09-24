@@ -12,13 +12,13 @@
   </eAnnotations>
   <eAnnotations source="http://www.eclipse.org/oomph/setup/Enablement">
     <details key="variableName" value="setup.m2e.p2"/>
-    <details key="repository" value="http://download.eclipse.org/technology/m2e/milestones/1.5"/>
+    <details key="repository" value="https://download.eclipse.org/technology/m2e/releases/latest"/>
     <details key="installableUnits" value="org.eclipse.m2e.feature.feature.group"/>
     <details key="releaseTrainAlternate" value="true"/>
   </eAnnotations>
   <eAnnotations source="http://www.eclipse.org/oomph/setup/Enablement">
     <details key="variableName" value="setup.webtools.p2"/>
-    <details key="repository" value="http://download.eclipse.org/webtools/repository/luna"/>
+    <details key="repository" value="https://download.eclipse.org/webtools/repository/latest"/>
     <details key="releaseTrainAlternate" value="true"/>
   </eAnnotations>
   <eAnnotations source="http://www.eclipse.org/oomph/base/LabelProvider">
