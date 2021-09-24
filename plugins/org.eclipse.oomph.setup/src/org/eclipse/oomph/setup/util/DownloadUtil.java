@@ -113,7 +113,7 @@ public final class DownloadUtil
         try
         {
           URLConnection connection = new URL(url).openConnection();
-          connection.setConnectTimeout(CONNECT_TIMEOUT - (int)(System.currentTimeMillis() - start));
+          connection.setConnectTimeout(CONNECT_TIMEOUT);
           connection.setReadTimeout(READ_TIMEOUT);
 
           if (connection instanceof HttpURLConnection)
