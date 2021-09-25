@@ -415,6 +415,9 @@
     }
 
     function loadMarketplaceBranding(url) {
+      var e = document.getElementById('button-section');
+      e.style.display = 'none';
+
       var request = new XMLHttpRequest();
       var requestURL = '/setups/installer/fetch.php?url=' + url.replace("https:", "http:") + '/api/p';
       request.open('GET', requestURL, true);
@@ -712,12 +715,13 @@ Or here in advanced mode:
 <br/>
 Alternatively, you can
 <span class="help-link" onclick="expand_collapse('copy-and-apply-installer', true);">copy and apply<img class="help" src="Help.png"/></span>the link.
-<br/>
+</p>
+<div id="button-section">
 <br/>
 <button id="drag-and-drop-installer-button_arrow" class="orange bb" onclick="expand_collapse('drag-and-drop-installer-button');">&#x25B7;</button>
 You can even drag and drop the link for this page directly and the author could provide a styled button for that purpose.
-</p>
 <div id="drag-and-drop-installer-button" style="display:none;">
+<br/>
 <a id="button-sample-link"
   title="Click to open the Eclipse Installer Auto Launch documentation or drag into your running installer"
   href="https://www.eclipse.org/setups/installer/?url=PROJECT_URL&show=true">
@@ -736,6 +740,7 @@ Please visit the <a href="https://wiki.eclipse.org/Eclipse_Oomph_Authoring#Linki
                   <button id="copy-and-apply-installer_arrow" class="orange bb" onclick="expand_collapse('copy-and-apply-installer');">&#x25B7;</button>
                   Install Using Copy and Apply
                 </h3>
+</div>
                 <p id="copy-and-apply-installer" class="url-required" style="display: none;">
 If you don't wish to register the Eclipse Installer,
 you can click the following link button to copy it to the system clipboard:
