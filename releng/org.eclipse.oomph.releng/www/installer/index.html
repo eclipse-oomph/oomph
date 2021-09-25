@@ -269,7 +269,6 @@
         updateHref('link-copy-and-apply', url, 'Click to copy the following link to the system clipboard and apply it to the installer:\n' + url);
         updateHref('link-launch', scheme + ':' + url, 'Click to launch the installer for the following link:\n' + url);
         updateProjectURL('button-sample-link', 'href', url);
-        updateProjectURLText('button-sample', url);
       }
 
       var os = getOS();
@@ -306,8 +305,6 @@
 
     function updateProjectLabel(label) {
        var name = label.replace(/ *Development */, '').replace(/ *Environment */, '').replace(/ *Configuration */, '')
-       var e = document.getElementById('button-sample');
-       e.innerHTML =  e.innerHTML.replace(/PROJECT/g, name);
        var e = document.getElementById('button-sample-link');
        e.innerHTML =  e.innerHTML.replace(/PROJECT/g, name);
     }
