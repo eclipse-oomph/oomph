@@ -10,6 +10,9 @@
  */
 package org.eclipse.oomph.setup.presentation;
 
+import org.eclipse.oomph.base.Annotation;
+import org.eclipse.oomph.base.BasePackage;
+import org.eclipse.oomph.base.provider.AnnotationItemProvider;
 import org.eclipse.oomph.base.provider.BaseEditUtil;
 import org.eclipse.oomph.base.provider.BaseEditUtil.IconReflectiveItemProvider;
 import org.eclipse.oomph.base.provider.BaseItemProviderAdapterFactory;
@@ -20,6 +23,7 @@ import org.eclipse.oomph.internal.ui.FindAndReplaceTarget;
 import org.eclipse.oomph.internal.ui.IRevertablePart;
 import org.eclipse.oomph.internal.ui.OomphEditingDomain;
 import org.eclipse.oomph.internal.ui.OomphPropertySheetPage;
+import org.eclipse.oomph.setup.AnnotationConstants;
 import org.eclipse.oomph.setup.Argument;
 import org.eclipse.oomph.setup.CompoundTask;
 import org.eclipse.oomph.setup.Configuration;
@@ -131,6 +135,7 @@ import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptorDecorator;
 import org.eclipse.emf.edit.provider.ItemProvider;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
+import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProvider;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.resource.ResourceSetItemProvider;
@@ -1163,7 +1168,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
     adapterFactory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
     adapterFactory.addAdapterFactory(new SetupItemProviderAdapterFactory());
-    adapterFactory.addAdapterFactory(new BaseItemProviderAdapterFactory());
+    adapterFactory.addAdapterFactory(new ExtendedBaseItemProviderAdapterFactory());
     adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
 
     // Create the command stack that will notify this editor as commands are executed.
@@ -6524,5 +6529,97 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
       return DockableDialog.openFor(BrowserDialog.class, factory, workbenchWindow);
     }
+  }
+}
+
+class ExtendedBaseItemProviderAdapterFactory extends BaseItemProviderAdapterFactory
+{
+
+  @Override
+  public Adapter createAnnotationAdapter()
+  {
+    if (annotationItemProvider == null)
+    {
+      annotationItemProvider = new AnnotationItemProvider(this)
+      {
+        @Override
+        protected Collection<?> filterChoices(Collection<?> choices, EStructuralFeature feature, Object object)
+        {
+          Collection<?> result = super.filterChoices(choices, feature, object);
+          if (feature == BasePackage.Literals.ANNOTATION__REFERENCES)
+          {
+            Annotation annotation = (Annotation)object;
+            if (AnnotationConstants.ANNOTATION_CONFIGURATION_REFERENCE.equals(annotation.getSource()))
+            {
+              List<Configuration> configurations = new ArrayList<Configuration>();
+              for (Object choice : choices)
+              {
+                if (choice instanceof Configuration)
+                {
+                  configurations.add((Configuration)choice);
+                }
+              }
+              return configurations;
+            }
+          }
+
+          return result;
+        }
+
+        @Override
+        public String getText(Object object)
+        {
+          String result = super.getText(object);
+          Annotation annotation = (Annotation)object;
+          if (AnnotationConstants.ANNOTATION_CONFIGURATION_REFERENCE.equals(annotation.getSource()))
+          {
+            EList<EObject> references = annotation.getReferences();
+            if (!references.isEmpty())
+            {
+              StringBuilder text = new StringBuilder(result);
+              AdapterFactoryItemDelegator adapterFactoryItemDelegator = new AdapterFactoryItemDelegator(getRootAdapterFactory());
+              for (EObject reference : references)
+              {
+                text.append(" - ").append(adapterFactoryItemDelegator.getText(reference)); //$NON-NLS-1$
+                if (text.length() > 500)
+                {
+                  text.append("..."); //$NON-NLS-1$
+                  break;
+                }
+              }
+
+              return text.toString();
+            }
+          }
+
+          return result;
+        }
+
+        @Override
+        protected Command createAddCommand(EditingDomain domain, EObject owner, EStructuralFeature feature, Collection<?> collection, int index)
+        {
+          if (feature == BasePackage.Literals.ANNOTATION__CONTENTS)
+          {
+            return UnexecutableCommand.INSTANCE;
+          }
+
+          return super.createAddCommand(domain, owner, feature, collection, index);
+        }
+
+        @Override
+        public void notifyChanged(Notification notification)
+        {
+          super.notifyChanged(notification);
+          switch (notification.getFeatureID(Annotation.class))
+          {
+            case BasePackage.ANNOTATION__REFERENCES:
+              fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+              return;
+          }
+        }
+      };
+    }
+
+    return annotationItemProvider;
   }
 }

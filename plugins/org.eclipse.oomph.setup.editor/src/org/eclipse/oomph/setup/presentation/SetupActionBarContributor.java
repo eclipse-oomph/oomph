@@ -777,6 +777,18 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
             action.setText(action.getText() + " - " + AnnotationConstants.ANNOTATION_BRANDING_INFO); //$NON-NLS-1$
             actions.add(action);
           }
+
+          if (modelElement instanceof Project || modelElement instanceof Product)
+          {
+            if (modelElement.getAnnotation(AnnotationConstants.ANNOTATION_CONFIGURATION_REFERENCE) == null)
+            {
+              Annotation annotation = BaseFactory.eINSTANCE.createAnnotation(AnnotationConstants.ANNOTATION_CONFIGURATION_REFERENCE);
+              CommandParameter descriptor = new CommandParameter(null, BasePackage.Literals.MODEL_ELEMENT__ANNOTATIONS, annotation);
+              Action action = sibling ? new CreateSiblingAction(domain, selection, descriptor) : new CreateChildAction(domain, selection, descriptor);
+              action.setText(action.getText() + " - " + AnnotationConstants.ANNOTATION_CONFIGURATION_REFERENCE); //$NON-NLS-1$
+              actions.add(action);
+            }
+          }
         }
       }
     }
