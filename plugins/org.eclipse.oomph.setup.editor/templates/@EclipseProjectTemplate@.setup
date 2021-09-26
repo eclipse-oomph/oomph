@@ -81,7 +81,7 @@
     <setupTask
         xsi:type="setup:VariableTask"
         name="project.jre"
-        value="${jre.location-1.8}"
+        value="${jre.location-11}"
         label="JRE">
       <choice
           value="${jre.location-1.4}"
@@ -98,6 +98,36 @@
       <choice
           value="${jre.location-1.8}"
           label="JavaSE-1.8"/>
+      <choice
+          value="${jre.location-9}"
+          label="JavaSE-9"/>
+      <choice
+          value="${jre.location-10}"
+          label="JavaSE-10"/>
+      <choice
+          value="${jre.location-11}"
+          label="JavaSE-11"/>
+      <choice
+          value="${jre.location-12}"
+          label="JavaSE-12"/>
+      <choice
+          value="${jre.location-13}"
+          label="JavaSE-13"/>
+      <choice
+          value="${jre.location-14}"
+          label="JavaSE-14"/>
+      <choice
+          value="${jre.location-15}"
+          label="JavaSE-15"/>
+      <choice
+          value="${jre.location-16}"
+          label="JavaSE-16"/>
+      <choice
+          value="${jre.location-17}"
+          label="JavaSE-17"/>
+      <choice
+          value="${jre.location-18}"
+          label="JavaSE-18"/>
       <description>Define the JRE needed to compile and run the Java projects of ${scope.project.label}</description>
     </setupTask>
     <setupTask
