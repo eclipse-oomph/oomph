@@ -8,7 +8,6 @@ http://www.eclipse.org/legal/epl-v20.html
 <%@jet
   package="org.eclipse.oomph.p2.internal.core"
   class="RepositoryIndex"
-  skeleton="Skeleton.java"
   imports=
     "
       java.security.cert.Certificate
@@ -20,7 +19,8 @@ http://www.eclipse.org/legal/epl-v20.html
       org.eclipse.oomph.p2.internal.core.RepositoryIntegrityAnalyzer.Report.LicenseDetail
       org.eclipse.oomph.p2.internal.core.RepositoryIntegrityAnalyzer.Reporter
     "
-  minimize="true"%>
+  minimize="true"
+  skeleton="Skeleton.java"%>
 <%Reporter reporter = (Reporter)argument;
   IUReport iuReport = argument instanceof IUReport ? (IUReport)argument : null;
   Report report = argument instanceof Report ? (Report)argument : iuReport == null ? null : iuReport.getReport();
@@ -538,8 +538,19 @@ span:target {
   <%Map<String, Boolean> artifacts = report.getIUArtifacts(iuReport.getIU());
     if (!artifacts.isEmpty()) {
       List<Certificate> certificates = report.getCertificates(iuReport.getIU());
-      if (certificates != null) {%>
-           <h3 style="font-weight: bold;">Certificate</h3>
+      if (certificates != null) {
+        Set<Certificate> expiredCertificates = new HashSet<Certificate>();
+        for (Certificate certificate : certificates) {
+          if (report.isExpired(certificate)) {
+            expiredCertificates.add(certificate);
+          }
+        }%>
+           <h3 style="font-weight: bold;">
+             Certificate
+      <%if (!expiredCertificates.isEmpty()) {%>
+           <span style="color: FireBrick; font-size: 60%;">(<%=expiredCertificates.size()%> Expired Certificate<%if (expiredCertificates.size() > 1) {%>s<%}%>)</span>
+      <%}%>
+           </h3>
       <%if (certificates.isEmpty()) {%>
              <div>
                <img class="fit-image" src="../<%=report.getSignedImage(false)%>"/>
@@ -553,8 +564,17 @@ span:target {
                <img alt="Signed" class="fit-image" src="../<%=report.getSignedImage(true)%>"/>
           <%for (Map.Entry<String, String> component : components.entrySet()) {
               String key = component.getKey();
-              String value = component.getValue();%>
-               <span class="text-nowrap"><span style="color: SteelBlue; font-size: 75%;"><%=key%>=</span><%=value%></span>
+              String value = component.getValue();
+              String keyStyle;
+              String spanStyle;
+              if ("to".equals(key) && expiredCertificates.contains(certificate)) {
+                keyStyle = "color: Firebrick; ";
+                spanStyle = " style='font-weight: bold; color: Firebrick;'";
+              } else {
+                keyStyle = "color: SteelBlue; ";
+                spanStyle = "";
+              }%>
+               <span class="text-nowrap"<%=spanStyle%>><span style="<%=keyStyle%>font-size: 75%;"><%=key%>=</span><%=value%></span>
           <%}%>
              </div>
         <%}%>
@@ -621,7 +641,7 @@ span:target {
   <%List<Report> children = report.getChildren();
     if (!children.isEmpty()) {%>
            <p>
-      <%if (!report.isRoot()) {%>
+    <%if (!report.isRoot()) {%>
              This is a composite update site.
     <%}%>
              In addition to this composite report, reports are also generated for each of the composed children listed in the navigation bar to the left.
@@ -728,6 +748,20 @@ span:target {
     if (!allCertificates.isEmpty()) {
       int idCount = 0;
       Map<String, IInstallableUnit> unsigned = allCertificates.get(Collections.emptyList());
+      int expiredChainCount = 0;
+      Set<Certificate> expiredCertificates = new HashSet<Certificate>();
+      for (List<Certificate> list : allCertificates.keySet()) {
+        boolean expired = false;
+        for (Certificate certificate : list) {
+          if (report.isExpired(certificate)) {
+            expiredCertificates.add(certificate);
+            expired = true;
+          }
+        }
+        if (expired) {
+          ++expiredChainCount;
+        }
+      }
       boolean isInitiallyExpanded = false;
       String display = isInitiallyExpanded ? "block" : "none";
       String displayButton = isInitiallyExpanded ? "inline" : "none";%>
@@ -739,6 +773,9 @@ span:target {
            <span style="color: DarkCyan;"><%=allCertificates.size()%></span>
     <%if (unsigned != null) {%>
            <span style="color: FireBrick; font-size: 60%;">(<%=unsigned.size()%> Unsigned Artifacts)</span>
+    <%}%>
+    <%if (expiredChainCount > 0) {%>
+           <span style="color: FireBrick; font-size: 60%;">(<%=expiredChainCount%> Expired)</span>
     <%}%>
     <%{
         StringBuilder onClick = new StringBuilder();
@@ -777,8 +814,17 @@ span:target {
           <%}%>
           <%for (Map.Entry<String, String> component : components.entrySet()) {
               String key = component.getKey();
-              String value = component.getValue();%>
-               <span class="text-nowrap"><span style="color: SteelBlue; font-size: 75%;"><%=key%>=</span><%=value%></span>
+              String value = component.getValue();
+              String keyStyle;
+              String spanStyle;
+              if ("to".equals(key) && expiredCertificates.contains(certificate)) {
+                keyStyle = "color: Firebrick; ";
+                spanStyle = " style='font-weight: bold; color: Firebrick;'";
+              } else {
+                keyStyle = "color: SteelBlue; ";
+                spanStyle = "";
+              }%>
+               <span class="text-nowrap"<%=spanStyle%>><span style="<%=keyStyle%>font-size: 75%;"><%=key%>=</span><%=value%></span>
           <%}%>
              </div>
         <%}%>

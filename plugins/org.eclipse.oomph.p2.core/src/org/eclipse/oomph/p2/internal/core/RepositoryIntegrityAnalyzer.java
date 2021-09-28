@@ -284,8 +284,6 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         }
       }
 
-      reportBranding = reportBranding.replaceFirst("https:", "http:");
-
       createFolders(outputLocation);
 
       if (aggregator)
@@ -1804,9 +1802,19 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         }
 
         @Override
-        public Map<String, String> getCertificateComponents(Certificate certificate)
+        public boolean isExpired(Certificate certificate)
         {
           X509Certificate x509Certificate = (X509Certificate)certificate;
+          return new Date().after(x509Certificate.getNotAfter());
+        }
+
+        @Override
+        public Map<String, String> getCertificateComponents(Certificate certificate)
+        {
+          SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy'-'MM'-'dd");
+          X509Certificate x509Certificate = (X509Certificate)certificate;
+          String notBefore = dateFormat.format(x509Certificate.getNotBefore());
+          String notAfter = dateFormat.format(x509Certificate.getNotAfter());
           X500Principal subjectX500Principal = x509Certificate.getSubjectX500Principal();
           String name = subjectX500Principal.getName();
           Pattern namePattern = Pattern.compile("([A-Za-z]+)=(([^,\\\\]|\\\\,)+),");
@@ -1816,6 +1824,9 @@ public class RepositoryIntegrityAnalyzer implements IApplication
           {
             components.put(matcher.group(1), matcher.group(2).replaceAll("\\\\", ""));
           }
+
+          components.put("from", notBefore);
+          components.put("to", notAfter);
 
           return components;
         }
@@ -3893,6 +3904,8 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     public abstract String getBundleImage();
 
     public abstract Map<String, String> getCertificateComponents(Certificate certificate);
+
+    public abstract boolean isExpired(Certificate certificate);
 
     public abstract Map<List<Certificate>, Map<String, IInstallableUnit>> getCertificates();
 
