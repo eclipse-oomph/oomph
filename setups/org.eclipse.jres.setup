@@ -38,7 +38,7 @@
       label="JRE 15.0.2">
     <requirement
         name="org.eclipse.justj.openjdk.hotspot.jre.full.feature.group"
-        filter="(|(&amp;(osgi.arch=x86_64)(osgi.os=linux))(&amp;(osgi.arch=aarch64)(osgi.os=linux))(&amp;(osgi.arch=x86_64)(osgi.os=macosx))(&amp;(osgi.arch=x86_64)(osgi.os=win32)))"/>
+        filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux))(&amp;(osgi.arch=x86_64)(osgi.os=linux))(&amp;(osgi.arch=x86_64)(osgi.os=macosx))(&amp;(osgi.arch=x86_64)(osgi.os=win32)))"/>
     <repository
         url="https://download.eclipse.org/justj/jres/15/updates/release/15.0.2"/>
     <description>
@@ -59,7 +59,7 @@
     </annotation>
     <requirement
         name="org.eclipse.justj.openjdk.hotspot.jre.full.feature.group"
-        filter="(|(&amp;(osgi.arch=x86_64)(osgi.os=linux))(&amp;(osgi.arch=aarch64)(osgi.os=linux))(&amp;(osgi.arch=x86_64)(osgi.os=macosx))(&amp;(osgi.arch=x86_64)(osgi.os=win32)))"/>
+        filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux))(&amp;(osgi.arch=x86_64)(osgi.os=linux))(&amp;(osgi.arch=x86_64)(osgi.os=macosx))(&amp;(osgi.arch=x86_64)(osgi.os=win32)))"/>
     <repository
         url="https://download.eclipse.org/justj/jres/16/updates/release/16.0.2"/>
     <description>

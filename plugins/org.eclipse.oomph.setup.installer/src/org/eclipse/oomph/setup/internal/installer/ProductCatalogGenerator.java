@@ -2140,7 +2140,7 @@ public class ProductCatalogGenerator implements IApplication
       System.out.println("jre=" + iu + " -> " + childRepository.getLocation());
 
       Requirement jreRequirement = P2Factory.eINSTANCE.createRequirement(iu.getId());
-      StringBuilder compositeFilter = new StringBuilder();
+      Set<String> filterValues = new TreeSet<String>();
       for (IRequirement requirement : iu.getRequirements())
       {
         if (requirement instanceof IRequiredCapability)
@@ -2153,19 +2153,20 @@ public class ProductCatalogGenerator implements IApplication
             Matcher matcher = ARCH_OS_FILTER_PATTERN.matcher(value);
             if (matcher.matches())
             {
-              if (compositeFilter.length() == 0)
-              {
-                compositeFilter.append("(|");
-              }
-
-              compositeFilter.append(value);
+              filterValues.add(value);
             }
           }
         }
       }
 
-      if (compositeFilter.length() != 0)
+      if (!filterValues.isEmpty())
       {
+        StringBuilder compositeFilter = new StringBuilder("(|");
+        for (String value : filterValues)
+        {
+          compositeFilter.append(value);
+        }
+
         jreRequirement.setFilter(compositeFilter.append(')').toString());
       }
 
