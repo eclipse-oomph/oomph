@@ -156,6 +156,11 @@ public final class P2CorePlugin extends OomphPlugin
           }
         }
       }
+      catch (LinkageError ex)
+      {
+        // If the platform changes their API we'll have to find a new way to ensure that our adapters are used.
+        log("Failed to register the thread safe credentials providers: " + ex.getLocalizedMessage()); //$NON-NLS-1$
+      }
       catch (ContainerCreateException ex)
       {
         // If we can't create the container, ECF is probably pretty broken and downstream things will fail, e.g., loading remote repositories, but at least this
