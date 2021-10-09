@@ -349,8 +349,13 @@ public class ProgressPage extends SetupWizardPage
     });
     AccessUtil.setKey(scrollLockButton, "lock"); //$NON-NLS-1$
 
-    dismissButton = buttonBar.addCheckButton(Messages.ProgressPage_dismissButton_text, Messages.ProgressPage_dismissButton_tooltip, false,
-        "dismissAutomatically"); //$NON-NLS-1$
+    Boolean dismissAutomaticallyPropertyValue = PropertiesUtil.getBoolean(SetupProperties.PROP_SETUP_DISMISS_AUTOMATICALLY);
+    if (dismissAutomaticallyPropertyValue == null)
+    {
+      dismissAutomaticallyPropertyValue = false;
+    }
+    dismissButton = buttonBar.addCheckButton(Messages.ProgressPage_dismissButton_text, Messages.ProgressPage_dismissButton_tooltip,
+        dismissAutomaticallyPropertyValue, "dismissAutomatically"); //$NON-NLS-1$
     dismissAutomatically = dismissButton.getSelection();
     dismissButton.addSelectionListener(new SelectionAdapter()
     {

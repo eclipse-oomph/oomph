@@ -101,6 +101,11 @@ public class SetupProperties
    */
   public static final String PROP_SETUP_SHOW_INITIAL_PROGRESS = "oomph.setup.show.initial.progress"; //$NON-NLS-1$
 
+  /**
+   * If defined, the 'Dismiss automatically' check box is set to the value (true or false) as initial value.
+   */
+  public static final String PROP_SETUP_DISMISS_AUTOMATICALLY = "oomph.setup.dismiss.automatically"; //$NON-NLS-1$
+
   private SetupProperties()
   {
   }
