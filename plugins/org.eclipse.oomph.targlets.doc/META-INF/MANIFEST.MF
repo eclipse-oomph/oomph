@@ -11,7 +11,7 @@ Require-Bundle: org.eclipse.help;bundle-version="[3.3.0,4.0.0)";resolution:=opti
  org.eclipse.oomph.util.doc;bundle-version="[1.12.0,2.0.0)";resolution:=optional;visibility:=reexport,
  org.eclipse.oomph.p2.doc;bundle-version="[1.12.0,2.0.0)";resolution:=optional;visibility:=reexport,
  org.eclipse.oomph.targlets;bundle-version="[1.14.0,2.0.0)";resolution:=optional;visibility:=reexport,
- org.eclipse.oomph.targlets.core;bundle-version="[1.14.0,2.0.0)";resolution:=optional;visibility:=reexport,
+ org.eclipse.oomph.targlets.core;bundle-version="[1.15.0,2.0.0)";resolution:=optional;visibility:=reexport,
  org.eclipse.oomph.targlets.ui;bundle-version="[1.13.0,2.0.0)";resolution:=optional;visibility:=reexport
 Export-Package: org.eclipse.oomph.targlets.doc;version="1.12.0";x-internal:=true,
  org.eclipse.oomph.targlets.doc.guide;version="1.12.0";x-internal:=true,

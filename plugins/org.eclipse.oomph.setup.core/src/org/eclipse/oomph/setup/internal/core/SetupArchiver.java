@@ -427,13 +427,19 @@ public class SetupArchiver implements IApplication
     {
       URI uri = resource.getURI();
       URI normalizedURI = uriConverter.normalize(uri);
-      if ("ecore".equals(uri.fileExtension()) && (resource.getContents().isEmpty() || !resource.getErrors().isEmpty())) //$NON-NLS-1$
+      if ("ecore".equals(uri.fileExtension())) //$NON-NLS-1$
       {
-        System.err.println(NLS.bind(Messages.SetupArchiver_FailedToLoad_message, normalizedURI));
-        printDiagnostics(resource.getErrors());
-        System.err.println(Messages.SetupArchiver_Aborting_message);
-        hasEcoreFailures = true;
-        break;
+        if (resource.getContents().isEmpty() || !resource.getErrors().isEmpty())
+        {
+          System.err.println(NLS.bind(Messages.SetupArchiver_FailedToLoad_message, normalizedURI));
+          printDiagnostics(resource.getErrors());
+          System.err.println(Messages.SetupArchiver_Aborting_message);
+          hasEcoreFailures = true;
+          break;
+        }
+
+        // Ensure that the model resources consistently use their actual location, not index:/...
+        resource.setURI(normalizedURI);
       }
     }
 
