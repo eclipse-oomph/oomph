@@ -31,6 +31,8 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.common.util.UniqueEList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -438,7 +440,23 @@ public class SetupArchiver implements IApplication
           break;
         }
 
-        // Ensure that the model resources consistently use their actual location, not index:/...
+        // Ensure that the model resources consistently use their actual location (the schemaLocation anntatoion of the model), not index:/...
+        // It appears that someone has manually changed their schemaLocations to use https leading to non-deterministic changes to the setups.zip.
+        EPackage ePackage = (EPackage)EcoreUtil.getObjectByType(resource.getContents(), EcorePackage.Literals.EPACKAGE);
+        if (ePackage != null)
+        {
+          String schemaLocation = EcoreUtil.getAnnotation(ePackage, EcorePackage.eNS_URI, "schemaLocation"); //$NON-NLS-1$
+          if (schemaLocation != null)
+          {
+            URI schemLocationURI = URI.createURI(schemaLocation);
+            if (uriConverter.normalize(schemLocationURI).equals(normalizedURI))
+            {
+              resource.setURI(schemLocationURI);
+              continue;
+            }
+          }
+        }
+
         resource.setURI(normalizedURI);
       }
     }
