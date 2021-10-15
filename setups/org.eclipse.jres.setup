@@ -9,14 +9,14 @@
     label="JRE">
   <setupTask
       xsi:type="setup.p2:P2Task"
-      label="JRE 11.0.2">
+      label="JRE 11.0.12">
     <requirement
         name="org.eclipse.justj.openjdk.hotspot.jre.full.feature.group"
-        filter="(|(&amp;(osgi.arch=x86_64)(osgi.os=linux))(&amp;(osgi.arch=x86_64)(osgi.os=macosx))(&amp;(osgi.arch=x86_64)(osgi.os=win32)))"/>
+        filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux))(&amp;(osgi.arch=x86_64)(osgi.os=linux))(&amp;(osgi.arch=x86_64)(osgi.os=macosx))(&amp;(osgi.arch=x86_64)(osgi.os=win32)))"/>
     <repository
-        url="https://download.eclipse.org/justj/jres/11/updates/release/11.0.2"/>
+        url="https://download.eclipse.org/justj/jres/11/updates/release/11.0.12"/>
     <description>
-      Contains the plug-ins and fragments for the OpenJDK Hotspot JRE Complete.
+      Contains the plug-ins and fragments for the Adoptium OpenJDK Hotspot JRE Complete.
       Provides the complete set of modules of the JDK, excluding incubators.
     </description>
   </setupTask>
@@ -64,6 +64,26 @@
         url="https://download.eclipse.org/justj/jres/16/updates/release/16.0.2"/>
     <description>
       Contains the plug-ins and fragments for the OpenJDK Hotspot JRE Complete.
+      Provides the complete set of modules of the JDK, excluding incubators.
+    </description>
+  </setupTask>
+  <setupTask
+      xsi:type="setup.p2:P2Task"
+      label="JRE 17.0.0">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/JRESpecificTasks">
+      <content
+          xsi:type="setup:EclipseIniTask"
+          option="--add-opens=java.base/java.lang=ALL-UNNAMED"
+          vm="true"/>
+    </annotation>
+    <requirement
+        name="org.eclipse.justj.openjdk.hotspot.jre.full.feature.group"
+        filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux))(&amp;(osgi.arch=aarch64)(osgi.os=macosx))(&amp;(osgi.arch=x86_64)(osgi.os=linux))(&amp;(osgi.arch=x86_64)(osgi.os=macosx))(&amp;(osgi.arch=x86_64)(osgi.os=win32)))"/>
+    <repository
+        url="https://download.eclipse.org/justj/jres/17/updates/release/17.0.0"/>
+    <description>
+      Contains the plug-ins and fragments for the Adoptium OpenJDK Hotspot JRE Complete.
       Provides the complete set of modules of the JDK, excluding incubators.
     </description>
   </setupTask>
