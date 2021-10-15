@@ -15,6 +15,7 @@ import org.eclipse.oomph.internal.ui.UIPlugin;
 import org.eclipse.oomph.p2.core.ProfileTransaction.Resolution;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
+import org.eclipse.oomph.setup.internal.installer.Installer.MissingIndexStatus;
 import org.eclipse.oomph.setup.ui.wizards.ConfirmationPage;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard.SelectionMemento;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizardDialog;
@@ -140,13 +141,24 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
 
                 if (installer.getCatalogManager().getIndex() == null)
                 {
-                  if (installer.handleMissingIndex(shell))
+                  MissingIndexStatus missingIndexStatus = installer.handleMissingIndex(shell);
+                  switch (missingIndexStatus)
                   {
-                    shell.getDisplay().asyncExec(checkIndex);
-                  }
-                  else
-                  {
-                    close();
+                    case EXIT:
+                    {
+                      close();
+                      break;
+                    }
+                    case RETRY:
+                    {
+                      shell.getDisplay().asyncExec(checkIndex);
+                      break;
+                    }
+                    default:
+                    {
+                      // Ignore.
+                      break;
+                    }
                   }
                 }
               }

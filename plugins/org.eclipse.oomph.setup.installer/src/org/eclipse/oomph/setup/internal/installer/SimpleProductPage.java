@@ -1078,7 +1078,7 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
 
       if (index == null)
       {
-        if (!installer.handleMissingIndex(getShell()))
+        if (installer.handleMissingIndex(getShell()) == Installer.MissingIndexStatus.EXIT)
         {
           dialog.exitSelected();
           return;

@@ -330,12 +330,22 @@ public class Installer extends SetupWizard
     }
   }
 
-  public boolean handleMissingIndex(Shell shell)
+  public enum MissingIndexStatus
+  {
+    IGNORE, RETRY, EXIT
+  }
+
+  public MissingIndexStatus handleMissingIndex(Shell shell)
   {
     int answer = new MessageDialog(shell, Messages.Installer_NetworkProblem_title, null, Messages.Installer_TalogNotLoaded_message, MessageDialog.ERROR,
         new String[] { Messages.Installer_Retry_label, Messages.Installer_Configure_label, Messages.Installer_Exit_label }, 0).open();
     switch (answer)
     {
+      case 2:
+      {
+        return MissingIndexStatus.EXIT;
+      }
+
       case 1:
       {
         new NetworkConnectionsDialog(shell).open();
@@ -348,12 +358,12 @@ public class Installer extends SetupWizard
         URI currentIndexLocation = resourceSet.getURIConverter().normalize(SetupContext.INDEX_SETUP_URI);
         ECFURIHandlerImpl.clearExpectedETags();
         reloadIndex(currentIndexLocation);
-        return true;
+        return MissingIndexStatus.RETRY;
       }
 
       default:
       {
-        return false;
+        return MissingIndexStatus.IGNORE;
       }
     }
   }
