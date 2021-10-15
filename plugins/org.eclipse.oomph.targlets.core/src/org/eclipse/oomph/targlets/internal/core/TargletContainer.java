@@ -80,7 +80,6 @@ import org.eclipse.equinox.internal.p2.engine.phases.Uninstall;
 import org.eclipse.equinox.internal.p2.metadata.IRequiredCapability;
 import org.eclipse.equinox.internal.p2.metadata.InstallableUnit;
 import org.eclipse.equinox.internal.p2.metadata.ResolvedInstallableUnit;
-import org.eclipse.equinox.internal.p2.metadata.expression.LDAPFilter;
 import org.eclipse.equinox.internal.p2.touchpoint.natives.NativeTouchpoint;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.engine.IPhaseSet;
@@ -90,20 +89,12 @@ import org.eclipse.equinox.p2.engine.ProvisioningContext;
 import org.eclipse.equinox.p2.engine.spi.ProvisioningAction;
 import org.eclipse.equinox.p2.metadata.IArtifactKey;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
-import org.eclipse.equinox.p2.metadata.IInstallableUnitFragment;
-import org.eclipse.equinox.p2.metadata.IInstallableUnitPatch;
-import org.eclipse.equinox.p2.metadata.ILicense;
 import org.eclipse.equinox.p2.metadata.IProvidedCapability;
 import org.eclipse.equinox.p2.metadata.IRequirement;
-import org.eclipse.equinox.p2.metadata.IRequirementChange;
-import org.eclipse.equinox.p2.metadata.ITouchpointData;
 import org.eclipse.equinox.p2.metadata.MetadataFactory;
 import org.eclipse.equinox.p2.metadata.MetadataFactory.InstallableUnitDescription;
 import org.eclipse.equinox.p2.metadata.Version;
 import org.eclipse.equinox.p2.metadata.VersionRange;
-import org.eclipse.equinox.p2.metadata.expression.ExpressionUtil;
-import org.eclipse.equinox.p2.metadata.expression.IExpression;
-import org.eclipse.equinox.p2.metadata.expression.IFilterExpression;
 import org.eclipse.equinox.p2.metadata.expression.IMatchExpression;
 import org.eclipse.equinox.p2.planner.IProfileChangeRequest;
 import org.eclipse.equinox.p2.publisher.eclipse.BundlesAction;
@@ -148,7 +139,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.jar.JarFile;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -1244,8 +1234,6 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
    */
   private static final class TargletCommitContext extends CommitContext
   {
-    private static final Pattern OSGI_PROPERTY_FILTER = Pattern.compile("(!?)\\((osgi.arch|osgi.os|osgi.ws)=([^)]+)\\)"); //$NON-NLS-1$
-
     private static final String NATIVE_ARTIFACTS = "nativeArtifacts"; //$NON-NLS-1$
 
     private final Profile profile;
@@ -1318,7 +1306,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
             {
               TargletsCorePlugin.checkCancelation(monitor);
 
-              ius.add(createGeneralizedIU(iu));
+              ius.add(P2Util.createGeneralizedIU(iu, isIncludeAllPlatforms, isIncludeAllRequirements, true));
 
               if (isIncludeBinaryEquivalents)
               {
@@ -1473,185 +1461,6 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
           return metadata;
         }
 
-        private IInstallableUnit createGeneralizedIU(IInstallableUnit iu)
-        {
-          // If we're not including all platform, no generalization is needed.
-          if (!isIncludeAllPlatforms && isIncludeAllRequirements)
-          {
-            return iu;
-          }
-
-          // Determine the generalized IU filter.
-          IMatchExpression<IInstallableUnit> filter = iu.getFilter();
-          IMatchExpression<IInstallableUnit> generalizedFilter = isIncludeAllPlatforms ? generalize(filter) : filter;
-          boolean needsGeneralization = filter != generalizedFilter;
-
-          // Determine the generalized requirement filters.
-          Collection<IRequirement> requirements = iu.getRequirements();
-          IRequirement[] generalizedRequirements = requirements.toArray(new IRequirement[requirements.size()]);
-          for (int i = 0; i < generalizedRequirements.length; ++i)
-          {
-            IRequirement requirement = generalizedRequirements[i];
-            IMatchExpression<IInstallableUnit> requirementFilter = requirement.getFilter();
-            IMatchExpression<IInstallableUnit> generalizedRequirementFilter = isIncludeAllPlatforms ? generalize(requirementFilter) : filter;
-
-            // If the filter needs generalization, create a clone of the requirement, with the generalized filter replacement.
-            if (requirementFilter != filter || !isIncludeAllRequirements && requirement.getMin() != 0)
-            {
-              needsGeneralization = true;
-              // IRequirement generalizedRequirement = MetadataFactory.createRequirement(requirement.getMatches(), generalizedRequirementFilter,
-              // requirement.getMin(), requirement.getMax(), requirement.isGreedy(), requirement.getDescription());
-              IRequirement generalizedRequirement = MetadataFactory.createRequirement(requirement.getMatches(), generalizedRequirementFilter, 0,
-                  requirement.getMax(), true, requirement.getDescription());
-              generalizedRequirements[i] = generalizedRequirement;
-            }
-          }
-
-          // If none of the filters or slicer-mode lower bounds need generalization, the original IU can be used.
-          if (!needsGeneralization)
-          {
-            return iu;
-          }
-
-          // Create a description that clones the IU with the generalized filter and slicer-mode lower bound replacements.
-          InstallableUnitDescription description;
-
-          if (iu instanceof IInstallableUnitFragment)
-          {
-            IInstallableUnitFragment installableUnitFragment = (IInstallableUnitFragment)iu;
-            MetadataFactory.InstallableUnitFragmentDescription fragmentDescription = new MetadataFactory.InstallableUnitFragmentDescription();
-            Collection<IRequirement> host = installableUnitFragment.getHost();
-            fragmentDescription.setHost(host.toArray(new IRequirement[host.size()]));
-            description = fragmentDescription;
-          }
-          else if (iu instanceof IInstallableUnitPatch)
-          {
-            IInstallableUnitPatch installableUnitPatch = (IInstallableUnitPatch)iu;
-            MetadataFactory.InstallableUnitPatchDescription patchDescription = new MetadataFactory.InstallableUnitPatchDescription();
-            patchDescription.setApplicabilityScope(installableUnitPatch.getApplicabilityScope());
-            patchDescription.setLifeCycle(installableUnitPatch.getLifeCycle());
-            List<IRequirementChange> requirementsChange = installableUnitPatch.getRequirementsChange();
-            patchDescription.setRequirementChanges(requirementsChange.toArray(new IRequirementChange[requirementsChange.size()]));
-            description = patchDescription;
-          }
-          else
-          {
-            description = new MetadataFactory.InstallableUnitDescription();
-          }
-
-          description.setId(iu.getId());
-
-          description.setVersion(iu.getVersion());
-
-          Collection<IArtifactKey> artifacts = iu.getArtifacts();
-          description.setArtifacts(artifacts.toArray(new IArtifactKey[artifacts.size()]));
-
-          Collection<IProvidedCapability> providedCapabilities = iu.getProvidedCapabilities();
-          description.setCapabilities(providedCapabilities.toArray(new IProvidedCapability[providedCapabilities.size()]));
-
-          description.setCopyright(iu.getCopyright());
-
-          description.setFilter(generalizedFilter);
-
-          Collection<ILicense> licenses = iu.getLicenses();
-          description.setLicenses(licenses.toArray(new ILicense[licenses.size()]));
-
-          Collection<IRequirement> metaRequirements = iu.getMetaRequirements();
-          description.setMetaRequirements(metaRequirements.toArray(new IRequirement[metaRequirements.size()]));
-
-          description.setRequirements(generalizedRequirements);
-
-          description.setSingleton(iu.isSingleton());
-
-          description.setTouchpointType(iu.getTouchpointType());
-          description.setUpdateDescriptor(iu.getUpdateDescriptor());
-
-          for (Iterator<Map.Entry<String, String>> iterator = iu.getProperties().entrySet().iterator(); iterator.hasNext();)
-          {
-            Map.Entry<String, String> entry = iterator.next();
-            description.setProperty(entry.getKey(), entry.getValue());
-          }
-
-          for (ITouchpointData touchpointData : iu.getTouchpointData())
-          {
-            description.addTouchpointData(touchpointData);
-          }
-
-          return MetadataFactory.createInstallableUnit(description);
-        }
-
-        private IMatchExpression<IInstallableUnit> generalize(IMatchExpression<IInstallableUnit> filter)
-        {
-          if (filter == null)
-          {
-            return null;
-          }
-
-          // Lazily determine if any parameter needs generalization.
-          Object[] generalizedParameters = null;
-          Object[] parameters = filter.getParameters();
-          for (int i = 0; i < parameters.length; ++i)
-          {
-            Object parameter = parameters[i];
-            if (parameter instanceof LDAPFilter)
-            {
-              String value = parameter.toString();
-              Matcher matcher = OSGI_PROPERTY_FILTER.matcher(value);
-              if (matcher.find())
-              {
-                // If the pattern matches, we need to generalize the parameters.
-                if (generalizedParameters == null)
-                {
-                  // Copy over all the parameters.
-                  // The ones that need generalization will be replaced.
-                  generalizedParameters = new Object[parameters.length];
-                  System.arraycopy(parameters, 0, generalizedParameters, 0, parameters.length);
-                }
-
-                // Build the replacement expression
-                StringBuffer result = new StringBuffer();
-                if (matcher.group(1).length() == 0)
-                {
-                  matcher.appendReplacement(result, "($2=*)"); //$NON-NLS-1$
-                }
-                else
-                {
-                  matcher.appendReplacement(result, "!($2=nothing)"); //$NON-NLS-1$
-                }
-
-                // Handle all the remaining matches the same way.
-                while (matcher.find())
-                {
-                  if (matcher.group(1).length() == 0)
-                  {
-                    matcher.appendReplacement(result, "($2=*)"); //$NON-NLS-1$
-                  }
-                  else
-                  {
-                    matcher.appendReplacement(result, "!($2=nothing)"); //$NON-NLS-1$
-                  }
-                }
-
-                // Complete the replacements, parse it back into an LDAP filter, and replace this parameter.
-                matcher.appendTail(result);
-                IFilterExpression ldap = ExpressionUtil.parseLDAP(result.toString());
-                generalizedParameters[i] = ldap;
-              }
-            }
-          }
-
-          // If one of the parameters needed to be generalized...
-          if (generalizedParameters != null)
-          {
-            // Parse the filter expression and create a new match expressions with the same filter but the generalized parameters.
-            IExpression expression = ExpressionUtil.parse(filter.toString());
-            return ExpressionUtil.getFactory().matchExpression(expression, generalizedParameters);
-          }
-
-          // Otherwise, return the original filter.
-          return filter;
-        }
-
         private void generateWorkspaceSourceIUs(Set<IInstallableUnit> ius, Map<String, Version> ids, Map<IU, IInstallableUnit> idToIUMap,
             IProgressMonitor monitor)
         {
@@ -1663,7 +1472,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
             TargletsCorePlugin.checkCancelation(monitor);
 
             String id = iu.getId();
-            ius.add(createGeneralizedIU(iu));
+            ius.add(P2Util.createGeneralizedIU(iu, isIncludeAllPlatforms, isIncludeAllRequirements, true));
             idToIUMap.put(new IU(iu), iu);
 
             if (id.endsWith(Requirement.PROJECT_SUFFIX))

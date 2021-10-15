@@ -286,6 +286,7 @@ public class WorkingSetTaskImpl extends SetupTaskImpl implements WorkingSetTask
 
     WorkingSetTask workingSetTask = (WorkingSetTask)overriddenSetupTask;
     EList<WorkingSet> workingSets = getWorkingSets();
+    int count = 0;
     LOOP: for (WorkingSet overriddenWorkingSet : new ArrayList<WorkingSet>(workingSetTask.getWorkingSets()))
     {
       for (WorkingSet workingSet : workingSets)
@@ -296,7 +297,7 @@ public class WorkingSetTaskImpl extends SetupTaskImpl implements WorkingSetTask
         }
       }
 
-      workingSets.add(0, overriddenWorkingSet);
+      workingSets.add(count++, overriddenWorkingSet);
     }
   }
 
