@@ -24,6 +24,7 @@ import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OS;
+import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.util.EList;
@@ -428,9 +429,9 @@ public class SetupArchiver implements IApplication
     for (Resource resource : resourceSet.getResources())
     {
       URI uri = resource.getURI();
-      URI normalizedURI = uriConverter.normalize(uri);
       if ("ecore".equals(uri.fileExtension())) //$NON-NLS-1$
       {
+        URI normalizedURI = uriConverter.normalize(uri);
         if (resource.getContents().isEmpty() || !resource.getErrors().isEmpty())
         {
           System.err.println(NLS.bind(Messages.SetupArchiver_FailedToLoad_message, normalizedURI));
@@ -440,7 +441,7 @@ public class SetupArchiver implements IApplication
           break;
         }
 
-        // Ensure that the model resources consistently use their actual location (the schemaLocation anntatoion of the model), not index:/...
+        // Ensure that the model resources consistently use their actual location (the schemaLocation annotation of the model), not index:/...
         // It appears that someone has manually changed their schemaLocations to use https leading to non-deterministic changes to the setups.zip.
         EPackage ePackage = (EPackage)EcoreUtil.getObjectByType(resource.getContents(), EcorePackage.Literals.EPACKAGE);
         if (ePackage != null)
@@ -458,6 +459,19 @@ public class SetupArchiver implements IApplication
         }
 
         resource.setURI(normalizedURI);
+      }
+    }
+
+    if (PropertiesUtil.isProperty("org.eclipse.oomph.setup.internal.core.SetupArchiver.traceEcore")) //$NON-NLS-1$
+    {
+      for (Resource resource : resourceSet.getResources())
+      {
+        URI uri = resource.getURI();
+        URI normalizedURI = uriConverter.normalize(uri);
+        if ("ecore".equals(uri.fileExtension()) || "ecore".equals(normalizedURI.fileExtension())) //$NON-NLS-1$ //$NON-NLS-2$
+        {
+          System.out.println("Model: " + uri + " -> " + normalizedURI); //$NON-NLS-1$ //$NON-NLS-2$
+        }
       }
     }
 
