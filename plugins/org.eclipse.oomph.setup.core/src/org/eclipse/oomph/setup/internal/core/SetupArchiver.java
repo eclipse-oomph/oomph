@@ -423,9 +423,12 @@ public class SetupArchiver implements IApplication
 
     uriMap.remove(SetupContext.INDEX_ROOT_LOCATION_URI);
 
-    // If Ecore models fail to load correct, the org.eclipse.setup will resolve the package proxies incorrectly and will look changed.
-    // We don't want that, so terminate early.
+    // If Ecore models fail to load correctly, the org.eclipse.setup will resolve the package proxies incorrectly and will look changed.
+    // We don't want that, so terminate early in that case.
     boolean hasEcoreFailures = false;
+    // It appears that someone has manually changed their schemaLocations to use https leading to non-deterministic changes to the setups.zip.
+    uriMap.put(URI.createURI("https://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/"), //$NON-NLS-1$
+        URI.createURI("http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/")); //$NON-NLS-1$
     for (Resource resource : resourceSet.getResources())
     {
       URI uri = resource.getURI();
