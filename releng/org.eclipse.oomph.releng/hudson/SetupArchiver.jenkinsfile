@@ -44,6 +44,7 @@ pipeline {
               ${WORKSPACE}/${ARCHIVE_NAME} \
               -vmargs \
                 -Dfile.encoding=UTF-8 \
+                -Dorg.eclipse.oomph.setup.internal.core.SetupArchiver.traceEcore=true \
                 -Doomph.setup.ecf.trace=false 2>&1 | tee log
 
             if  ! grep "FAILED" log > changes; then
