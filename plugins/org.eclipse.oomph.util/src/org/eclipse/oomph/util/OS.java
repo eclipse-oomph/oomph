@@ -296,11 +296,6 @@ public abstract class OS
 
   private static OS create()
   {
-    if (Boolean.FALSE)
-    {
-      return new Mac(Platform.WS_COCOA, Platform.ARCH_AARCH64);
-    }
-
     String os = Platform.getOS();
     String ws = Platform.getWS();
     String arch = Platform.getOSArch();

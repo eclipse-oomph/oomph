@@ -182,6 +182,12 @@ public final class JRE implements Comparable<JRE>
       return false;
     }
 
+    String filterArch = filter.getArch();
+    if (!StringUtil.isEmpty(filterArch) && !StringUtil.isEmpty(arch) && !filterArch.equals(arch))
+    {
+      return false;
+    }
+
     Boolean filterJDK = filter.isJDK();
     if (filterJDK != null && jdk != filterJDK.booleanValue())
     {
@@ -233,12 +239,6 @@ public final class JRE implements Comparable<JRE>
     }
 
     if (micro < filterMicro)
-    {
-      return false;
-    }
-
-    String filterArch = filter.getArch();
-    if (!StringUtil.isEmpty(filterArch) && !StringUtil.isEmpty(arch) && !filterArch.equals(arch))
     {
       return false;
     }

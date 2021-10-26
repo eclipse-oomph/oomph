@@ -188,6 +188,7 @@ public final class JREFilter
     if (!StringUtil.isEmpty(arch))
     {
       builder.append(arch);
+      builder.append(" "); //$NON-NLS-1$
     }
 
     if (jdk != null)
