@@ -282,6 +282,54 @@
                   <sign>true</sign>
                 </configuration>
               </execution>
+              <execution>
+                <id>product-aarch64</id>
+                <goals>
+                  <goal>package-dmg</goal>
+                </goals>
+                <phase>integration-test</phase>
+                <configuration>
+                  <source>${project.build.directory}/repackaged-products/eclipse-inst-mac-aarch64.tar.gz</source>
+                  <timeoutMillis>600000</timeoutMillis> <!-- 10 min -->
+                  <sign>true</sign>
+                </configuration>
+              </execution>
+              <execution>
+                <id>product-with-jre-aarch64</id>
+                <goals>
+                  <goal>package-dmg</goal>
+                </goals>
+                <phase>integration-test</phase>
+                <configuration>
+                  <source>${project.build.directory}/repackaged-products/eclipse-inst-jre-mac-aarch64.tar.gz</source>
+                  <timeoutMillis>600000</timeoutMillis> <!-- 10 min -->
+                  <sign>true</sign>
+                </configuration>
+              </execution>
+              <execution>
+                <id>product-restricted-aarch64</id>
+                <goals>
+                  <goal>package-dmg</goal>
+                </goals>
+                <phase>integration-test</phase>
+                <configuration>
+                  <source>${project.build.directory}/repackaged-products/eclipse-inst-restricted-mac-aarch64.tar.gz</source>
+                  <timeoutMillis>600000</timeoutMillis> <!-- 10 min -->
+                  <sign>true</sign>
+                </configuration>
+              </execution>
+              <execution>
+                <id>product-with-jre-restricted-aarch64</id>
+                <goals>
+                  <goal>package-dmg</goal>
+                </goals>
+                <phase>integration-test</phase>
+                <configuration>
+                  <source>${project.build.directory}/repackaged-products/eclipse-inst-jre-restricted-mac-aarch64.tar.gz</source>
+                  <timeoutMillis>600000</timeoutMillis> <!-- 10 min -->
+                  <sign>true</sign>
+                </configuration>
+              </execution>
             </executions>
           </plugin>
         </plugins>
