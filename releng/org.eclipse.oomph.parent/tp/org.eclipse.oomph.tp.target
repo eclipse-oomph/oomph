@@ -23,7 +23,7 @@
       <unit id="org.eclipse.userstorage.tests" version="0.0.0"/>
       <repository location="https://download.eclipse.org/eclipse/updates/4.22-I-builds"/>
       <repository location="https://download.eclipse.org/egit/updates-stable-nightly"/>
-      <repository location="https://download.eclipse.org/justj/jres/16/updates/release/16.0.2"/>
+      <repository location="https://download.eclipse.org/justj/jres/17/updates/release/17.0.0"/>
       <repository location="https://download.eclipse.org/modeling/emf/emf/builds/milestone/latest"/>
       <repository location="https://download.eclipse.org/mylyn/snapshots/weekly"/>
       <repository location="https://download.eclipse.org/nebula/snapshot"/>

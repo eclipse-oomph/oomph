@@ -167,6 +167,8 @@ public class ProductCatalogGenerator implements IApplication
 
   private static final Pattern ARCH_OS_FILTER_PATTERN = Pattern.compile("\\(\\&\\(osgi\\.arch=([^)]+)\\)\\(osgi\\.os=([^)]+)\\)\\)");
 
+  private static final Pattern ARCH_OS_WS_FILTER_PATTERN = Pattern.compile("\\(\\&\\(osgi\\.arch=([^)]+)\\)\\(osgi\\.os=([^)]+)\\)\\(osgi\\.ws=([^)]+)\\)\\)");
+
   private static final boolean IS_RANGE_NARROW = Boolean.FALSE;
 
   private static final String JUSTJ_JRES = "https://download.eclipse.org/justj/jres";
@@ -1331,11 +1333,13 @@ public class ProductCatalogGenerator implements IApplication
       requirement.setVersionRange(versionRange);
       p2Task.getRequirements().add(requirement);
       addRootIURequirements(p2Task.getRequirements(), versionSegment, ius);
-      addAdditionalInstallRootIURequirements(p2Task.getRequirements(), productName, train, ius);
+      addAdditionalInstallRootIURequirements(p2Task.getRequirements(), productName, train);
     }
     else
     {
-      addAllRootIURequirements(p2Task.getRequirements(), versionSegment, ius);
+      EList<Requirement> requirements = p2Task.getRequirements();
+      addAllRootIURequirements(requirements, versionSegment, ius);
+      requirements.move(0, requirements.size() - 1);
     }
 
     if (!SPECIAL_PRODUCT_IDS.contains(productName) && packageRepository != null)
@@ -1414,6 +1418,48 @@ public class ProductCatalogGenerator implements IApplication
           log.append(" No version specific branding site -> ").append(siteURI);
         }
       }
+    }
+
+    String configurationID = "tooling" + (SPECIAL_PRODUCT_IDS.contains(productName) || ALL_PRODUCT_ID.equals(productName) ? "epp.package.java"
+        : ECLIPSE_PLATFORM_SDK_PRODUCT_ID.equals(productName) ? "org.eclipse.platform.sdk" : productName) + ".configuration";
+    Iterator<IInstallableUnit> configurationIUs = P2Util.asIterable(metadDataRepository.query(QueryUtil.createIUQuery(configurationID), null)).iterator();
+    if (configurationIUs.hasNext())
+    {
+      IInstallableUnit configurationIU = configurationIUs.next();
+      Set<String> filterValues = new TreeSet<String>();
+      for (IRequirement requirement : configurationIU.getRequirements())
+      {
+        IMatchExpression<IInstallableUnit> filter = requirement.getFilter();
+        if (filter != null)
+        {
+          String value = RequirementImpl.formatMatchExpression(filter);
+          Matcher matcher = ARCH_OS_WS_FILTER_PATTERN.matcher(value);
+          if (matcher.matches())
+          {
+            filterValues.add(value);
+          }
+        }
+      }
+
+      if (!filterValues.isEmpty())
+      {
+        StringBuilder compositeFilter = new StringBuilder("(|");
+        for (String value : filterValues)
+        {
+          compositeFilter.append(value);
+        }
+
+        String applicationFilter = compositeFilter.append(')').toString();
+        p2Task.getRequirements().get(0).setFilter(applicationFilter);
+      }
+      else
+      {
+        System.err.println("###");
+      }
+    }
+    else
+    {
+      System.err.println("###");
     }
 
     if (siteURI != null)
@@ -1666,7 +1712,7 @@ public class ProductCatalogGenerator implements IApplication
     }
   }
 
-  private void addAdditionalInstallRootIURequirements(EList<Requirement> requirements, String productName, String train, Map<String, Set<IInstallableUnit>> ius)
+  private void addAdditionalInstallRootIURequirements(EList<Requirement> requirements, String productName, String train)
   {
     IMetadataRepository eppMetadataRepository = eppMetaDataRepositories.get(train);
     IInstallableUnit maxProductIU = null;
@@ -1683,7 +1729,7 @@ public class ProductCatalogGenerator implements IApplication
 
     if (maxProductIU != null)
     {
-      Set<String> rootInstallIUs = getRootInstallIUs(train, maxProductIU);
+      Set<String> rootInstallIUs = getRootInstallIUs(maxProductIU);
       if (rootInstallIUs != null)
       {
         for (String id : rootInstallIUs)
@@ -2071,7 +2117,7 @@ public class ProductCatalogGenerator implements IApplication
     }
   }
 
-  private Set<String> getRootInstallIUs(String release, IInstallableUnit productIU)
+  private Set<String> getRootInstallIUs(IInstallableUnit productIU)
   {
     Set<String> rootInstallIUs = new TreeSet<String>();
     for (IRequirement requirement : productIU.getRequirements())

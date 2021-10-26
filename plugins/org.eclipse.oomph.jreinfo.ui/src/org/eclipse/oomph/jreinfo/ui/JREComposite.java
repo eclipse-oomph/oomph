@@ -20,6 +20,7 @@ import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.Request;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.edit.provider.IItemFontProvider;
 import org.eclipse.emf.edit.ui.provider.ExtendedFontRegistry;
@@ -198,7 +199,7 @@ public class JREComposite extends Composite
 
     TreeColumn bitnessColumn = new TreeColumn(tree, SWT.LEFT);
     bitnessColumn.setText(Messages.JREComposite_column_bitness);
-    treeLayout.setColumnData(bitnessColumn, new ColumnWeightData(1, 60 + EXTRA_WIDTH));
+    treeLayout.setColumnData(bitnessColumn, new ColumnWeightData(1, 100 + EXTRA_WIDTH));
 
     TreeColumn typeColumn = new TreeColumn(tree, SWT.LEFT);
     typeColumn.setText(Messages.JREComposite_column_type);
@@ -578,7 +579,7 @@ public class JREComposite extends Composite
           case 1:
             return jre.getMajor() + "." + jre.getMinor() + "." + jre.getMicro(); //$NON-NLS-1$ //$NON-NLS-2$
           case 2:
-            return jre.getBitness() + " " + Messages.JREComposite_bit; //$NON-NLS-1$
+            return jre.getBitness() + " " + Messages.JREComposite_bit + (StringUtil.isEmpty(jre.getArch()) ? "" : " (" + jre.getArch() + ")"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
           case 3:
             return jre.isJDK() ? "JDK" : "JRE"; //$NON-NLS-1$ //$NON-NLS-2$
         }

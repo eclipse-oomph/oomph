@@ -296,6 +296,11 @@ public abstract class OS
 
   private static OS create()
   {
+    if (Boolean.FALSE)
+    {
+      return new Mac(Platform.WS_COCOA, Platform.ARCH_AARCH64);
+    }
+
     String os = Platform.getOS();
     String ws = Platform.getWS();
     String arch = Platform.getOSArch();
@@ -330,8 +335,9 @@ public abstract class OS
     result.add(Win64.INSTANCE);
     result.add(Win32.INSTANCE);
     result.add(new Mac(Platform.WS_COCOA, Platform.ARCH_X86_64));
+    result.add(new Mac(Platform.WS_COCOA, Platform.ARCH_AARCH64));
     result.add(new Linux(Platform.WS_GTK, Platform.ARCH_X86_64));
-    result.add(new Linux(Platform.WS_GTK, Platform.ARCH_X86));
+    result.add(new Linux(Platform.WS_GTK, Platform.ARCH_AARCH64));
 
     return Collections.unmodifiableList(result);
   }

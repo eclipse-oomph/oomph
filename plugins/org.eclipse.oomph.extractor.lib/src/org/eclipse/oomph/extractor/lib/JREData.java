@@ -23,6 +23,8 @@ public final class JREData
 
   private final int bitness;
 
+  private final String arch;
+
   private final String javaHome;
 
   public JREData(int major, int minor, int micro, int bitness)
@@ -32,6 +34,7 @@ public final class JREData
     this.micro = micro;
     this.bitness = bitness;
     javaHome = ""; //$NON-NLS-1$
+    arch = ""; //$NON-NLS-1$
   }
 
   public JREData(String args)
@@ -45,6 +48,7 @@ public final class JREData
     minor = parseInt(args[1]);
     micro = parseInt(args[2]);
     bitness = parseInt(args[3]);
+
     if (args.length > 4)
     {
       javaHome = args[4].replace("%25", "%").replace("%20", " "); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
@@ -52,6 +56,15 @@ public final class JREData
     else
     {
       javaHome = ""; //$NON-NLS-1$
+    }
+
+    if (args.length > 5)
+    {
+      arch = args[5];
+    }
+    else
+    {
+      arch = ""; //$NON-NLS-1$
     }
   }
 
@@ -92,6 +105,8 @@ public final class JREData
 
     bitness = determineBitness();
     javaHome = System.getProperty("java.home"); //$NON-NLS-1$
+    String osArchProperty = System.getProperty("os.arch"); //$NON-NLS-1$
+    arch = "amd64".equals(osArchProperty) ? "x86_64" : osArchProperty; //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   public int getMajor()
@@ -117,6 +132,11 @@ public final class JREData
   public String getJavaHome()
   {
     return javaHome;
+  }
+
+  public String getArch()
+  {
+    return arch;
   }
 
   public boolean satisfies(JREData requirement)
@@ -147,6 +167,12 @@ public final class JREData
     }
 
     if (micro < requirement.micro)
+    {
+      return false;
+    }
+
+    String requirementArch = requirement.getArch();
+    if (!"".equals(requirementArch) && !requirementArch.equals(arch)) //$NON-NLS-1$
     {
       return false;
     }
@@ -190,6 +216,12 @@ public final class JREData
             break;
           }
         }
+      }
+
+      if (!"".equals(arch)) //$NON-NLS-1$
+      {
+        result.append(' ');
+        result.append(arch);
       }
     }
 

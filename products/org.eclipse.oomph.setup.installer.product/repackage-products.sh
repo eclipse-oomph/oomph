@@ -53,6 +53,18 @@ for i in $(ls); do
       $product \
       $marker > ../repackaged-products/$extractor
 
+  elif [[ $i == *mac*aarch64.dmg ]]; then
+    if [[ $i == *with-jre* ]]; then
+      cp $i ../repackaged-products/eclipse-inst-jre$restricted-mac-aarch64.dmg
+    else
+      cp $i ../repackaged-products/eclipse-inst$restricted-mac-aarch64.dmg
+    fi
+  elif [[ $i == *mac*aarch64* ]]; then
+    if [[ $i == *with-jre* ]]; then
+      cp $i ../repackaged-products/eclipse-inst-jre$restricted-mac-aarch64.tar.gz
+    else
+      cp $i ../repackaged-products/eclipse-inst$restricted-mac-aarch64.tar.gz
+    fi
   elif [[ $i == *mac*.dmg ]]; then
     if [[ $i == *with-jre* ]]; then
       cp $i ../repackaged-products/eclipse-inst-jre$restricted-mac64.dmg

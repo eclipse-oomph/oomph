@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="org.eclipse.ui.externaltools.ProgramLaunchConfigurationType">
-<mapAttribute key="org.eclipse.debug.core.environmentVariables">
-<mapEntry key="JAVA_HOME" value="${maven.build.java.home}"/>
-<mapEntry key="PATH" value="${maven.bash.home}${system_property:path.separator}${env_var:PATH}"/>
-</mapAttribute>
-<stringAttribute key="org.eclipse.debug.ui.ATTR_CAPTURE_IN_FILE" value="${workspace_loc:/org.eclipse.oomph.releng}/build.log"/>
-<listAttribute key="org.eclipse.debug.ui.favoriteGroups">
-<listEntry value="org.eclipse.ui.externaltools.launchGroup"/>
-</listAttribute>
-<stringAttribute key="org.eclipse.ui.externaltools.ATTR_LAUNCH_CONFIGURATION_BUILD_SCOPE" value="${none}"/>
-<stringAttribute key="org.eclipse.ui.externaltools.ATTR_LOCATION" value="${maven.build.command}"/>
-<stringAttribute key="org.eclipse.ui.externaltools.ATTR_TOOL_ARGUMENTS" value="-Dbuild.id=Local&#13;&#10;-Dgit.commit=Unknown&#13;&#10;-DskipTests=true&#13;&#10;-DDtycho.debug.resolver=true&#13;&#10;-DGENERATE_SOURCE=true&#13;&#10;-DBUILD_TYPE=milestone&#13;&#10;-DRESTRICTED_VERSION=2021-06&#13;&#10;-DX&#13;&#10;-DU&#13;&#10;clean&#13;&#10;verify"/>
-<stringAttribute key="org.eclipse.ui.externaltools.ATTR_WORKING_DIRECTORY" value="${git.clone.oomph}"/>
+    <mapAttribute key="org.eclipse.debug.core.environmentVariables">
+        <mapEntry key="JAVA_HOME" value="${maven.build.java.home}"/>
+        <mapEntry key="PATH" value="${maven.bash.home}${system_property:path.separator}${env_var:PATH}"/>
+    </mapAttribute>
+    <stringAttribute key="org.eclipse.debug.ui.ATTR_CAPTURE_IN_FILE" value="${workspace_loc:/org.eclipse.oomph.releng}/build.log"/>
+    <listAttribute key="org.eclipse.debug.ui.favoriteGroups">
+        <listEntry value="org.eclipse.ui.externaltools.launchGroup"/>
+    </listAttribute>
+    <stringAttribute key="org.eclipse.ui.externaltools.ATTR_LAUNCH_CONFIGURATION_BUILD_SCOPE" value="${none}"/>
+    <stringAttribute key="org.eclipse.ui.externaltools.ATTR_LOCATION" value="${maven.build.command}"/>
+    <stringAttribute key="org.eclipse.ui.externaltools.ATTR_TOOL_ARGUMENTS" value="-Dbuild.id=Local&#13;&#10;-Dgit.commit=Unknown&#13;&#10;-DskipTests=true&#13;&#10;-DDtycho.debug.resolver=true&#13;&#10;-DGENERATE_SOURCE=true&#13;&#10;-DBUILD_TYPE=milestone&#13;&#10;-DRESTRICTED_VERSION=2021-12&#13;&#10;-DX&#13;&#10;-DU&#13;&#10;clean&#13;&#10;verify"/>
+    <stringAttribute key="org.eclipse.ui.externaltools.ATTR_WORKING_DIRECTORY" value="${git.clone.oomph}"/>
 </launchConfiguration>

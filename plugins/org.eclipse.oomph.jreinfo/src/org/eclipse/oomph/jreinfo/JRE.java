@@ -10,6 +10,8 @@
  */
 package org.eclipse.oomph.jreinfo;
 
+import org.eclipse.oomph.util.StringUtil;
+
 import java.io.File;
 
 /**
@@ -17,7 +19,7 @@ import java.io.File;
  */
 public final class JRE implements Comparable<JRE>
 {
-  private static final String SEPARATOR = File.pathSeparator;
+  static final String SEPARATOR = File.pathSeparator;
 
   private final File javaHome;
 
@@ -31,11 +33,18 @@ public final class JRE implements Comparable<JRE>
 
   private final int bitness;
 
+  private final String arch;
+
   private final boolean jdk;
 
   private final long lastModified;
 
   public JRE(File javaHome, int major, int minor, int micro, int bitness, boolean jdk, long lastModified)
+  {
+    this(javaHome, major, minor, micro, bitness, "", jdk, lastModified); //$NON-NLS-1$
+  }
+
+  public JRE(File javaHome, int major, int minor, int micro, int bitness, String arch, boolean jdk, long lastModified)
   {
     this.javaHome = javaHome;
     descriptor = null;
@@ -43,6 +52,7 @@ public final class JRE implements Comparable<JRE>
     this.minor = minor;
     this.micro = micro;
     this.bitness = bitness;
+    this.arch = arch;
     this.jdk = jdk;
     this.lastModified = lastModified;
   }
@@ -55,6 +65,7 @@ public final class JRE implements Comparable<JRE>
     minor = descriptor.getMinor();
     micro = descriptor.getMicro();
     bitness = descriptor.getBitness();
+    arch = ""; //$NON-NLS-1$
     jdk = descriptor.isJDK();
     lastModified = -1;
   }
@@ -67,6 +78,7 @@ public final class JRE implements Comparable<JRE>
     minor = info.minor;
     micro = info.micro;
     bitness = info.bitness;
+    arch = info.arch;
     jdk = info.jdk;
     lastModified = info.lastModified;
   }
@@ -82,6 +94,7 @@ public final class JRE implements Comparable<JRE>
     bitness = Integer.parseInt(tokens[4]);
     jdk = Boolean.parseBoolean(tokens[5]);
     lastModified = Long.parseLong(tokens[6]);
+    arch = tokens.length > 7 ? tokens[7] : ""; //$NON-NLS-1$
   }
 
   public File getJavaHome()
@@ -117,6 +130,11 @@ public final class JRE implements Comparable<JRE>
   public int getBitness()
   {
     return bitness;
+  }
+
+  public String getArch()
+  {
+    return arch;
   }
 
   public boolean isJDK()
@@ -219,6 +237,12 @@ public final class JRE implements Comparable<JRE>
       return false;
     }
 
+    String filterArch = filter.getArch();
+    if (!StringUtil.isEmpty(filterArch) && !StringUtil.isEmpty(arch) && !filterArch.equals(arch))
+    {
+      return false;
+    }
+
     return true;
   }
 
@@ -315,7 +339,7 @@ public final class JRE implements Comparable<JRE>
   String toLine()
   {
     return javaHome.getAbsolutePath() + SEPARATOR + major + SEPARATOR + minor + SEPARATOR + micro + SEPARATOR + bitness + SEPARATOR + jdk + SEPARATOR
-        + lastModified;
+        + lastModified + SEPARATOR + arch;
   }
 
   static File getExecutable(File javaHome)

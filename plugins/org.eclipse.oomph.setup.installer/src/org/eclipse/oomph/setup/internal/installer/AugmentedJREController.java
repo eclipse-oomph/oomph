@@ -54,7 +54,12 @@ public class AugmentedJREController extends JREController
   protected JREFilter createJREFilter()
   {
     // Creates a filter that permits descriptor-based JREs.
-    return new JREFilter(getJavaVersion(), getBitness(), null, null);
+    return new JREFilter(getJavaVersion(), getBitness(), null, null, getArch());
+  }
+
+  protected String getArch()
+  {
+    return ""; //$NON-NLS-1$
   }
 
   /**

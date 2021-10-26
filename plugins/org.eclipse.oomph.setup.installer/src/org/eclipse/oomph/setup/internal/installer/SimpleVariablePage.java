@@ -447,6 +447,12 @@ public class SimpleVariablePage extends SimpleInstallerPage
       }
 
       @Override
+      protected String getArch()
+      {
+        return OS.INSTANCE.isMac() ? OS.INSTANCE.getOsgiArch() : super.getArch();
+      }
+
+      @Override
       protected void jreChanged(JRE jre)
       {
         super.jreChanged(jre);

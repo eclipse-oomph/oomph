@@ -25,6 +25,8 @@ public final class JREFilter
 
   private final Integer bitness;
 
+  private final String arch;
+
   private final Boolean jdk;
 
   private final Boolean descriptor;
@@ -62,6 +64,7 @@ public final class JREFilter
     this.bitness = bitness;
     this.jdk = jdk;
     descriptor = Boolean.FALSE;
+    arch = ""; //$NON-NLS-1$
   }
 
   public JREFilter(int bitness)
@@ -81,6 +84,11 @@ public final class JREFilter
 
   public JREFilter(String version, Integer bitness, Boolean jdk, Boolean descriptor)
   {
+    this(version, bitness, jdk, descriptor, ""); //$NON-NLS-1$
+  }
+
+  public JREFilter(String version, Integer bitness, Boolean jdk, Boolean descriptor, String arch)
+  {
     if (StringUtil.isEmpty(version))
     {
       major = null;
@@ -98,6 +106,7 @@ public final class JREFilter
     this.bitness = bitness;
     this.jdk = jdk;
     this.descriptor = descriptor;
+    this.arch = arch;
   }
 
   public Integer getMajor()
@@ -118,6 +127,11 @@ public final class JREFilter
   public Integer getBitness()
   {
     return bitness;
+  }
+
+  public String getArch()
+  {
+    return arch;
   }
 
   public Boolean isJDK()
@@ -169,6 +183,11 @@ public final class JREFilter
     if (builder.length() != 0)
     {
       builder.append(" "); //$NON-NLS-1$
+    }
+
+    if (!StringUtil.isEmpty(arch))
+    {
+      builder.append(arch);
     }
 
     if (jdk != null)

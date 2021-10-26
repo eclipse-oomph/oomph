@@ -18,6 +18,7 @@ import org.eclipse.oomph.jreinfo.JRE;
 import org.eclipse.oomph.jreinfo.JREManager;
 import org.eclipse.oomph.jreinfo.ui.JREController;
 import org.eclipse.oomph.jreinfo.ui.JREInfoUIPlugin;
+import org.eclipse.oomph.p2.Requirement;
 import org.eclipse.oomph.p2.core.AgentManager;
 import org.eclipse.oomph.p2.core.BundlePool;
 import org.eclipse.oomph.p2.core.P2Util;
@@ -33,10 +34,12 @@ import org.eclipse.oomph.setup.ProductVersion;
 import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.SetupPackage;
+import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.util.CatalogManager;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
+import org.eclipse.oomph.setup.p2.P2Task;
 import org.eclipse.oomph.setup.provider.CatalogSelectionItemProvider;
 import org.eclipse.oomph.setup.provider.IndexItemProvider;
 import org.eclipse.oomph.setup.provider.InstallationItemProvider;
@@ -275,7 +278,7 @@ public class ProductPage extends SetupWizardPage
       @Override
       public Object[] getElements(Object object)
       {
-        return getValidProductVersions((Product)object, null).toArray();
+        return getValidProductVersions((Product)object, null, getWizard().getOS()).toArray();
       }
     });
 
@@ -404,6 +407,13 @@ public class ProductPage extends SetupWizardPage
       {
         super.modelEmpty(empty);
         setPageComplete(!empty);
+      }
+
+      @Override
+      protected String getArch()
+      {
+        OS os = getWizard().getOS();
+        return os.isMac() ? os.getOsgiArch() : super.getArch();
       }
 
       @Override
@@ -1001,7 +1011,7 @@ public class ProductPage extends SetupWizardPage
 
     if (productSelected)
     {
-      ProductVersion version = getDefaultProductVersion(catalogSelector.getCatalogManager(), product);
+      ProductVersion version = getDefaultProductVersion(catalogSelector.getCatalogManager(), product, getWizard().getOS());
       if (version != null)
       {
         versionComboViewer.setSelection(new StructuredSelection(version));
@@ -1301,8 +1311,13 @@ public class ProductPage extends SetupWizardPage
 
   public static ProductVersion getDefaultProductVersion(CatalogManager catalogManager, Product product)
   {
+    return getDefaultProductVersion(catalogManager, product, OS.INSTANCE);
+  }
+
+  public static ProductVersion getDefaultProductVersion(CatalogManager catalogManager, Product product, OS os)
+  {
     ProductVersion version = catalogManager.getSelection().getDefaultProductVersions().get(product);
-    List<ProductVersion> validProductVersions = getValidProductVersions(product, null);
+    List<ProductVersion> validProductVersions = getValidProductVersions(product, null, os);
     if (!validProductVersions.contains(version))
     {
       ProductVersion firstReleasedProductVersion = null;
@@ -1448,6 +1463,11 @@ public class ProductPage extends SetupWizardPage
 
   public static List<ProductVersion> getValidProductVersions(Product product, Pattern filter)
   {
+    return getValidProductVersions(product, filter, OS.INSTANCE);
+  }
+
+  public static List<ProductVersion> getValidProductVersions(Product product, Pattern filter, OS os)
+  {
     List<ProductVersion> versions = new ArrayList<ProductVersion>(product.getVersions());
     if (OS.INSTANCE.isMac())
     {
@@ -1476,6 +1496,33 @@ public class ProductPage extends SetupWizardPage
       }
     }
 
+    if (os != null)
+    {
+      LOOP: //
+      for (Iterator<ProductVersion> it = versions.iterator(); it.hasNext();)
+      {
+        ProductVersion version = it.next();
+        for (SetupTask setupTask : version.getSetupTasks())
+        {
+          if (setupTask instanceof P2Task)
+          {
+            P2Task p2Task = (P2Task)setupTask;
+            for (Requirement requirement : p2Task.getRequirements())
+            {
+              if (!requirement.isOptional())
+              {
+                String requirementFilter = requirement.getFilter();
+                if (requirementFilter != null && requirementFilter.contains("osgi.arch=") && !SetupWizard.matchesFilterContext(requirementFilter, os)) //$NON-NLS-1$
+                {
+                  it.remove();
+                  continue LOOP;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
     return versions;
   }
 

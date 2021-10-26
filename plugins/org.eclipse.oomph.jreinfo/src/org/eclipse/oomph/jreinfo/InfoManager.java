@@ -68,13 +68,14 @@ final class InfoManager
             int minor = result.getMinor();
             int micro = result.getMicro();
             int bitness = result.getBitness();
+            String arch = result.getArch();
 
             boolean jdk = JREInfo.isJDK(canonicalJavaHome) == 1;
 
             File executable = JRE.getExecutable(canonicalJavaHome);
             long lastModified = executable.lastModified();
 
-            jre = new JRE(canonicalJavaHome, major, minor, micro, bitness, jdk, lastModified);
+            jre = new JRE(canonicalJavaHome, major, minor, micro, bitness, arch, jdk, lastModified);
             infos.put(canonicalJavaHome, jre);
 
             try
@@ -116,10 +117,15 @@ final class InfoManager
         {
           try
           {
-            JRE jre = new JRE(line);
-            if (jre.isValid())
+            // Ignore if the arch is missing.
+            String[] tokens = line.split(JRE.SEPARATOR);
+            if (tokens.length > 7)
             {
-              infos.put(jre.getJavaHome(), jre);
+              JRE jre = new JRE(line);
+              if (jre.isValid())
+              {
+                infos.put(jre.getJavaHome(), jre);
+              }
             }
           }
           catch (RuntimeException ex)

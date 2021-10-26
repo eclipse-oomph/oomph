@@ -24,6 +24,11 @@ public class JRETest
     System.out.println("minor:   " + jre.getMinor());
     System.out.println("micro:   " + jre.getMicro());
     System.out.println("bitness: " + jre.getBitness());
+    System.out.println("home:    " + jre.getJavaHome());
+    System.out.println("arch:    " + jre.getArch());
+
+    System.out.println();
+    System.out.println("jre:     " + jre);
 
     System.out.println();
     System.out.println(new JREData().satisfies(new JREData(1, 6, 0, 32)));

@@ -994,6 +994,34 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     return getImage(imageURI);
   }
 
+  @SuppressWarnings("restriction")
+  public static boolean matchesFilterContext(String filter, OS os)
+  {
+    if (StringUtil.isEmpty(filter))
+    {
+      return true;
+    }
+
+    Map<String, String> filterContext = new LinkedHashMap<String, String>();
+    filterContext.put("osgi.ws", os.getOsgiWS()); //$NON-NLS-1$
+    filterContext.put("osgi.os", os.getOsgiOS()); //$NON-NLS-1$
+    filterContext.put("osgi.arch", os.getOsgiArch()); //$NON-NLS-1$
+
+    org.eclipse.equinox.internal.p2.metadata.InstallableUnit filterContextIU = (org.eclipse.equinox.internal.p2.metadata.InstallableUnit)org.eclipse.equinox.internal.p2.metadata.InstallableUnit
+        .contextIU(filterContext);
+
+    try
+    {
+      IMatchExpression<IInstallableUnit> matchExpression = org.eclipse.equinox.internal.p2.metadata.InstallableUnit.parseFilter(filter);
+      return matchExpression.isMatch(filterContextIU);
+    }
+    catch (RuntimeException ex)
+    {
+      // If the filter can't be parsed, assume it matches nothing.
+      return false;
+    }
+  }
+
   private static String getImageURI(URI imageURI)
   {
     Image remoteImage = getImage(imageURI);
@@ -1396,7 +1424,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
                       // The requirements capture filter information about arch/os combinations for which JREs are available.
                       // We should not offer a JRE feature for which there isn't really an actual JRE fragment for the current arch/os available.
                       String filter = requirement.getFilter();
-                      if (!matchesFilterContext(filter))
+                      if (!matchesFilterContext(filter, wizard.getOS()))
                       {
                         continue LOOP;
                       }
@@ -1419,35 +1447,6 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
         }
 
         JREManager.INSTANCE.setJREs(jreDescriptors);
-      }
-    }
-
-    @SuppressWarnings("restriction")
-    private boolean matchesFilterContext(String filter)
-    {
-      if (StringUtil.isEmpty(filter))
-      {
-        return true;
-      }
-
-      OS os = wizard.getOS();
-      Map<String, String> filterContext = new LinkedHashMap<String, String>();
-      filterContext.put("osgi.ws", os.getOsgiWS()); //$NON-NLS-1$
-      filterContext.put("osgi.os", os.getOsgiOS()); //$NON-NLS-1$
-      filterContext.put("osgi.arch", os.getOsgiArch()); //$NON-NLS-1$
-
-      org.eclipse.equinox.internal.p2.metadata.InstallableUnit filterContextIU = (org.eclipse.equinox.internal.p2.metadata.InstallableUnit)org.eclipse.equinox.internal.p2.metadata.InstallableUnit
-          .contextIU(filterContext);
-
-      try
-      {
-        IMatchExpression<IInstallableUnit> matchExpression = org.eclipse.equinox.internal.p2.metadata.InstallableUnit.parseFilter(filter);
-        return matchExpression.isMatch(filterContextIU);
-      }
-      catch (RuntimeException ex)
-      {
-        // If the filter can't be parsed, assume it matches nothing.
-        return false;
       }
     }
 
