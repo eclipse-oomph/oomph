@@ -1454,12 +1454,12 @@ public class ProductCatalogGenerator implements IApplication
       }
       else
       {
-        System.err.println("###");
+        throw new RuntimeException("Configuration " + configurationID + " filters not found in " + metadDataRepository.getLocation());
       }
     }
     else
     {
-      System.err.println("###");
+      throw new RuntimeException("Configuration " + configurationID + " not found in " + metadDataRepository.getLocation());
     }
 
     if (siteURI != null)
