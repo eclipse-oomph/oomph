@@ -66,7 +66,8 @@
         label="Eclipse SDK (4.22 - 2021-12)">
       <requirement
           name="org.eclipse.sdk.ide"
-          versionRange="[4.22.0,5.0.0)"/>
+          versionRange="[4.22.0,5.0.0)"
+          filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=ppc64le)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
       <repository
           url="https://download.eclipse.org/eclipse/updates/4.22-I-builds"/>
     </setupTask>
@@ -90,7 +91,8 @@
         label="Eclipse SDK (4.21 - 2021-09)">
       <requirement
           name="org.eclipse.sdk.ide"
-          versionRange="[4.21.0,5.0.0)"/>
+          versionRange="[4.21.0,5.0.0)"
+          filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=ppc64le)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
       <repository
           url="https://download.eclipse.org/eclipse/updates/4.21/R-4.21-202109060500"/>
     </setupTask>
@@ -114,7 +116,8 @@
         label="Eclipse SDK (4.22 - 2021-12)">
       <requirement
           name="org.eclipse.sdk.ide"
-          versionRange="[4.22.0,5.0.0)"/>
+          versionRange="[4.22.0,5.0.0)"
+          filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=ppc64le)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
       <repository
           url="https://download.eclipse.org/eclipse/updates/4.22-I-builds"/>
     </setupTask>
@@ -142,7 +145,8 @@
         label="Eclipse SDK (4.21 - 2021-09)">
       <requirement
           name="org.eclipse.sdk.ide"
-          versionRange="[4.21.0,5.0.0)"/>
+          versionRange="[4.21.0,5.0.0)"
+          filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=ppc64le)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
       <repository
           url="https://download.eclipse.org/eclipse/updates/4.21/R-4.21-202109060500"/>
     </setupTask>
@@ -170,7 +174,8 @@
         label="Eclipse SDK (4.20 - 2021-06)">
       <requirement
           name="org.eclipse.sdk.ide"
-          versionRange="[4.20.0,5.0.0)"/>
+          versionRange="[4.20.0,5.0.0)"
+          filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=ppc64le)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
       <repository
           url="https://download.eclipse.org/eclipse/updates/4.20/R-4.20-202106111600"/>
     </setupTask>
@@ -198,7 +203,8 @@
         label="Eclipse SDK (4.19 - 2021-03)">
       <requirement
           name="org.eclipse.sdk.ide"
-          versionRange="[4.19.0,5.0.0)"/>
+          versionRange="[4.19.0,5.0.0)"
+          filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=ppc64le)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
       <repository
           url="https://download.eclipse.org/eclipse/updates/4.19/R-4.19-202103031800"/>
     </setupTask>
@@ -226,7 +232,8 @@
         label="Eclipse SDK (4.18 - 2020-12)">
       <requirement
           name="org.eclipse.sdk.ide"
-          versionRange="[4.18.0,5.0.0)"/>
+          versionRange="[4.18.0,5.0.0)"
+          filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=ppc64le)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
       <repository
           url="https://download.eclipse.org/eclipse/updates/4.18/R-4.18-202012021800"/>
     </setupTask>
@@ -254,7 +261,8 @@
         label="Eclipse SDK (4.17 - 2020-09)">
       <requirement
           name="org.eclipse.sdk.ide"
-          versionRange="[4.17.0,5.0.0)"/>
+          versionRange="[4.17.0,5.0.0)"
+          filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=ppc64le)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
       <repository
           url="https://download.eclipse.org/eclipse/updates/4.17/R-4.17-202009021800"/>
     </setupTask>
@@ -282,7 +290,8 @@
         label="Eclipse SDK (4.16 - 2020-06)">
       <requirement
           name="org.eclipse.sdk.ide"
-          versionRange="[4.16.0,5.0.0)"/>
+          versionRange="[4.16.0,5.0.0)"
+          filter="(|(&amp;(osgi.arch=ppc64le)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
       <repository
           url="https://download.eclipse.org/eclipse/updates/4.16/R-4.16-202006040540"/>
     </setupTask>
@@ -310,7 +319,8 @@
         label="Eclipse SDK (4.15 - 2020-03)">
       <requirement
           name="org.eclipse.sdk.ide"
-          versionRange="[4.15.0,5.0.0)"/>
+          versionRange="[4.15.0,5.0.0)"
+          filter="(|(&amp;(osgi.arch=ppc64le)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
       <repository
           url="https://download.eclipse.org/eclipse/updates/4.15/R-4.15-202003050155"/>
     </setupTask>
@@ -338,7 +348,8 @@
         label="Eclipse SDK (4.14 - 2019-12)">
       <requirement
           name="org.eclipse.sdk.ide"
-          versionRange="[4.14.0,5.0.0)"/>
+          versionRange="[4.14.0,5.0.0)"
+          filter="(|(&amp;(osgi.arch=ppc64le)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
       <repository
           url="https://download.eclipse.org/eclipse/updates/4.14/R-4.14-201912100610"/>
     </setupTask>
@@ -366,7 +377,8 @@
         label="Eclipse SDK (4.13 - 2019-09)">
       <requirement
           name="org.eclipse.sdk.ide"
-          versionRange="[4.13.0,5.0.0)"/>
+          versionRange="[4.13.0,5.0.0)"
+          filter="(|(&amp;(osgi.arch=ppc64le)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
       <repository
           url="https://download.eclipse.org/eclipse/updates/4.13/R-4.13-201909161045"/>
     </setupTask>
@@ -394,7 +406,8 @@
         label="Eclipse SDK (4.12 - 2019-06)">
       <requirement
           name="org.eclipse.sdk.ide"
-          versionRange="[4.12.0,5.0.0)"/>
+          versionRange="[4.12.0,5.0.0)"
+          filter="(|(&amp;(osgi.arch=ppc64le)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
       <repository
           url="https://download.eclipse.org/eclipse/updates/4.12/R-4.12-201906051800"/>
     </setupTask>
@@ -422,7 +435,8 @@
         label="Eclipse SDK (4.11 - 2019-03)">
       <requirement
           name="org.eclipse.sdk.ide"
-          versionRange="[4.11.0,5.0.0)"/>
+          versionRange="[4.11.0,5.0.0)"
+          filter="(|(&amp;(osgi.arch=ppc64le)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
       <repository
           url="https://download.eclipse.org/eclipse/updates/4.11/R-4.11-201903070500"/>
     </setupTask>
@@ -450,7 +464,8 @@
         label="Eclipse SDK (4.10 - 2018-12)">
       <requirement
           name="org.eclipse.sdk.ide"
-          versionRange="[4.10.0,5.0.0)"/>
+          versionRange="[4.10.0,5.0.0)"
+          filter="(|(&amp;(osgi.arch=ppc64le)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
       <repository
           url="https://download.eclipse.org/eclipse/updates/4.10/R-4.10-201812060815"/>
     </setupTask>
@@ -478,7 +493,8 @@
         label="Eclipse SDK (4.9 - 2018-09)">
       <requirement
           name="org.eclipse.sdk.ide"
-          versionRange="[4.9.0,5.0.0)"/>
+          versionRange="[4.9.0,5.0.0)"
+          filter="(|(&amp;(osgi.arch=ppc64le)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
       <repository
           url="https://download.eclipse.org/eclipse/updates/4.9/R-4.9-201809060745"/>
     </setupTask>
@@ -506,7 +522,8 @@
         label="Eclipse SDK (4.8 - Photon)">
       <requirement
           name="org.eclipse.sdk.ide"
-          versionRange="[4.8.0,5.0.0)"/>
+          versionRange="[4.8.0,5.0.0)"
+          filter="(|(&amp;(osgi.arch=ppc64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=ppc64le)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
       <repository
           url="https://download.eclipse.org/eclipse/updates/4.8/R-4.8-201806110500"/>
     </setupTask>
@@ -534,7 +551,8 @@
         label="Eclipse SDK (4.7 - Oxygen)">
       <requirement
           name="org.eclipse.sdk.ide"
-          versionRange="[4.7.0,5.0.0)"/>
+          versionRange="[4.7.0,5.0.0)"
+          filter="(|(&amp;(osgi.arch=ppc64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=ppc64le)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
       <repository
           url="https://download.eclipse.org/eclipse/updates/4.7/R-4.7.3a-201803300640"/>
     </setupTask>
@@ -562,7 +580,8 @@
         label="Eclipse SDK (4.6 - Neon)">
       <requirement
           name="org.eclipse.sdk.ide"
-          versionRange="[4.6.0,5.0.0)"/>
+          versionRange="[4.6.0,5.0.0)"
+          filter="(|(&amp;(osgi.arch=ia64)(osgi.os=hpux)(osgi.ws=gtk))(&amp;(osgi.arch=ppc)(osgi.os=aix)(osgi.ws=gtk))(&amp;(osgi.arch=ppc)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=ppc64)(osgi.os=aix)(osgi.ws=gtk))(&amp;(osgi.arch=ppc64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=ppc64le)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=s390)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=s390x)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=sparcv9)(osgi.os=solaris)(osgi.ws=gtk))(&amp;(osgi.arch=x86)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=solaris)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
       <repository
           url="https://download.eclipse.org/eclipse/updates/4.6/R-4.6.3-201703010400"/>
     </setupTask>
@@ -590,7 +609,8 @@
         label="Eclipse SDK (4.5 - Mars)">
       <requirement
           name="org.eclipse.sdk.ide"
-          versionRange="[4.5.0,5.0.0)"/>
+          versionRange="[4.5.0,5.0.0)"
+          filter="(|(&amp;(osgi.arch=ia64)(osgi.os=hpux)(osgi.ws=gtk))(&amp;(osgi.arch=ppc)(osgi.os=aix)(osgi.ws=gtk))(&amp;(osgi.arch=ppc)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=ppc64)(osgi.os=aix)(osgi.ws=gtk))(&amp;(osgi.arch=ppc64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=ppc64le)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=s390)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=s390x)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=sparc)(osgi.os=solaris)(osgi.ws=gtk))(&amp;(osgi.arch=x86)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86)(osgi.os=solaris)(osgi.ws=gtk))(&amp;(osgi.arch=x86)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
       <repository
           url="https://download.eclipse.org/eclipse/updates/4.5/R-4.5.2-201602121500"/>
     </setupTask>
@@ -618,7 +638,8 @@
         label="Eclipse SDK (4.4 - Luna)">
       <requirement
           name="org.eclipse.sdk.ide"
-          versionRange="[4.4.0,5.0.0)"/>
+          versionRange="[4.4.0,5.0.0)"
+          filter="(|(&amp;(osgi.arch=ia64)(osgi.os=hpux)(osgi.ws=gtk))(&amp;(osgi.arch=ppc)(osgi.os=aix)(osgi.ws=gtk))(&amp;(osgi.arch=ppc)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=ppc64)(osgi.os=aix)(osgi.ws=gtk))(&amp;(osgi.arch=ppc64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=ppc64le)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=s390)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=s390x)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=sparc)(osgi.os=solaris)(osgi.ws=gtk))(&amp;(osgi.arch=x86)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86)(osgi.os=solaris)(osgi.ws=gtk))(&amp;(osgi.arch=x86)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
       <repository
           url="https://download.eclipse.org/eclipse/updates/4.4/R-4.4.2-201502041700"/>
     </setupTask>
@@ -646,7 +667,8 @@
         label="Eclipse SDK (4.3 - Kepler)">
       <requirement
           name="org.eclipse.sdk.ide"
-          versionRange="[4.3.0,5.0.0)"/>
+          versionRange="[4.3.0,5.0.0)"
+          filter="(|(&amp;(osgi.arch=ia64)(osgi.os=hpux)(osgi.ws=gtk))(&amp;(osgi.arch=ppc)(osgi.os=aix)(osgi.ws=gtk))(&amp;(osgi.arch=ppc)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=ppc64)(osgi.os=aix)(osgi.ws=gtk))(&amp;(osgi.arch=ppc64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=s390)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=s390x)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=sparc)(osgi.os=solaris)(osgi.ws=gtk))(&amp;(osgi.arch=x86)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86)(osgi.os=solaris)(osgi.ws=gtk))(&amp;(osgi.arch=x86)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
       <repository
           url="https://download.eclipse.org/eclipse/updates/4.3/R-4.3.2-201402211700"/>
       <repository
@@ -676,7 +698,8 @@
         label="Eclipse SDK (4.2 - Juno)">
       <requirement
           name="org.eclipse.sdk.ide"
-          versionRange="[4.2.0,5.0.0)"/>
+          versionRange="[4.2.0,5.0.0)"
+          filter="(|(&amp;(osgi.arch=ia64_32)(osgi.os=hpux)(osgi.ws=gtk))(&amp;(osgi.arch=ppc)(osgi.os=aix)(osgi.ws=gtk))(&amp;(osgi.arch=ppc)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=ppc64)(osgi.os=aix)(osgi.ws=gtk))(&amp;(osgi.arch=ppc64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=s390)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=s390x)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=sparc)(osgi.os=solaris)(osgi.ws=gtk))(&amp;(osgi.arch=x86)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86)(osgi.os=solaris)(osgi.ws=gtk))(&amp;(osgi.arch=x86)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
       <repository
           url="https://download.eclipse.org/eclipse/updates/4.2/R-4.2.2-201302041200"/>
       <repository

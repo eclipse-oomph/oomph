@@ -56,6 +56,10 @@
         xsi:type="setup.p2:P2Task"
         label="Eclipse Eierlegende Wollmilchsau (2021-12)">
       <requirement
+          name="org.eclipse.platform.ide"
+          versionRange="[4.22.0,5.0.0)"
+          filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
+      <requirement
           name="Application Development Frameworks"/>
       <requirement
           name="Collaboration"/>
@@ -82,9 +86,6 @@
           name="Testing"/>
       <requirement
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
-      <requirement
-          name="org.eclipse.platform.ide"
-          versionRange="[4.22.0,5.0.0)"/>
       <repository
           url="https://download.eclipse.org/releases/2021-12/202110081000">
         <annotation
@@ -110,6 +111,10 @@
         xsi:type="setup.p2:P2Task"
         label="Eclipse Eierlegende Wollmilchsau (2021-09)">
       <requirement
+          name="org.eclipse.platform.ide"
+          versionRange="[4.21.0,5.0.0)"
+          filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
+      <requirement
           name="Application Development Frameworks"/>
       <requirement
           name="Collaboration"/>
@@ -136,9 +141,6 @@
           name="Testing"/>
       <requirement
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
-      <requirement
-          name="org.eclipse.platform.ide"
-          versionRange="[4.21.0,5.0.0)"/>
       <repository
           url="https://download.eclipse.org/releases/2021-09/202109151000">
         <annotation
@@ -164,6 +166,10 @@
         xsi:type="setup.p2:P2Task"
         label="Eclipse Eierlegende Wollmilchsau (2021-12)">
       <requirement
+          name="org.eclipse.platform.ide"
+          versionRange="[4.22.0,5.0.0)"
+          filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
+      <requirement
           name="Application Development Frameworks"/>
       <requirement
           name="Collaboration"/>
@@ -190,9 +196,6 @@
           name="Testing"/>
       <requirement
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
-      <requirement
-          name="org.eclipse.platform.ide"
-          versionRange="[4.22.0,5.0.0)"/>
       <repository
           url="https://download.eclipse.org/releases/2021-12/202110081000">
         <annotation
@@ -222,6 +225,10 @@
         xsi:type="setup.p2:P2Task"
         label="Eclipse Eierlegende Wollmilchsau (2021-09)">
       <requirement
+          name="org.eclipse.platform.ide"
+          versionRange="[4.21.0,5.0.0)"
+          filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
+      <requirement
           name="Application Development Frameworks"/>
       <requirement
           name="Collaboration"/>
@@ -248,9 +255,6 @@
           name="Testing"/>
       <requirement
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
-      <requirement
-          name="org.eclipse.platform.ide"
-          versionRange="[4.21.0,5.0.0)"/>
       <repository
           url="https://download.eclipse.org/releases/2021-09/202109151000">
         <annotation
@@ -280,6 +284,10 @@
         xsi:type="setup.p2:P2Task"
         label="Eclipse Eierlegende Wollmilchsau (2021-06)">
       <requirement
+          name="org.eclipse.platform.ide"
+          versionRange="[4.20.0,5.0.0)"
+          filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
+      <requirement
           name="Application Development Frameworks"/>
       <requirement
           name="Collaboration"/>
@@ -306,9 +314,6 @@
           name="Testing"/>
       <requirement
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
-      <requirement
-          name="org.eclipse.platform.ide"
-          versionRange="[4.20.0,5.0.0)"/>
       <repository
           url="https://download.eclipse.org/releases/2021-06/202106161001">
         <annotation
@@ -338,6 +343,10 @@
         xsi:type="setup.p2:P2Task"
         label="Eclipse Eierlegende Wollmilchsau (2021-03)">
       <requirement
+          name="org.eclipse.platform.ide"
+          versionRange="[4.19.0,5.0.0)"
+          filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
+      <requirement
           name="Application Development Frameworks"/>
       <requirement
           name="Collaboration"/>
@@ -364,9 +373,6 @@
           name="Testing"/>
       <requirement
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
-      <requirement
-          name="org.eclipse.platform.ide"
-          versionRange="[4.19.0,5.0.0)"/>
       <repository
           url="https://download.eclipse.org/releases/2021-03/202103171000">
         <annotation
@@ -396,6 +402,10 @@
         xsi:type="setup.p2:P2Task"
         label="Eclipse Eierlegende Wollmilchsau (2020-12)">
       <requirement
+          name="org.eclipse.platform.ide"
+          versionRange="[4.18.0,5.0.0)"
+          filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
+      <requirement
           name="Application Development Frameworks"/>
       <requirement
           name="Collaboration"/>
@@ -422,9 +432,6 @@
           name="Testing"/>
       <requirement
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
-      <requirement
-          name="org.eclipse.platform.ide"
-          versionRange="[4.18.0,5.0.0)"/>
       <repository
           url="https://download.eclipse.org/releases/2020-12/202012161000">
         <annotation
@@ -454,6 +461,10 @@
         xsi:type="setup.p2:P2Task"
         label="Eclipse Eierlegende Wollmilchsau (2020-09)">
       <requirement
+          name="org.eclipse.platform.ide"
+          versionRange="[4.17.0,5.0.0)"
+          filter="(|(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
+      <requirement
           name="Application Development Frameworks"/>
       <requirement
           name="Cloud Tools"/>
@@ -482,9 +493,6 @@
           name="Testing"/>
       <requirement
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
-      <requirement
-          name="org.eclipse.platform.ide"
-          versionRange="[4.17.0,5.0.0)"/>
       <repository
           url="https://download.eclipse.org/releases/2020-09/202009161000">
         <annotation
@@ -514,6 +522,10 @@
         xsi:type="setup.p2:P2Task"
         label="Eclipse Eierlegende Wollmilchsau (2020-06)">
       <requirement
+          name="org.eclipse.platform.ide"
+          versionRange="[4.16.0,5.0.0)"
+          filter="(|(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
+      <requirement
           name="Application Development Frameworks"/>
       <requirement
           name="Cloud Tools"/>
@@ -542,9 +554,6 @@
           name="Testing"/>
       <requirement
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
-      <requirement
-          name="org.eclipse.platform.ide"
-          versionRange="[4.16.0,5.0.0)"/>
       <repository
           url="https://download.eclipse.org/releases/2020-06/202006171000">
         <annotation
@@ -574,6 +583,10 @@
         xsi:type="setup.p2:P2Task"
         label="Eclipse Eierlegende Wollmilchsau (2020-03)">
       <requirement
+          name="org.eclipse.platform.ide"
+          versionRange="[4.15.0,5.0.0)"
+          filter="(|(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
+      <requirement
           name="Application Development Frameworks"/>
       <requirement
           name="Cloud Tools"/>
@@ -602,9 +615,6 @@
           name="Testing"/>
       <requirement
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
-      <requirement
-          name="org.eclipse.platform.ide"
-          versionRange="[4.15.0,5.0.0)"/>
       <repository
           url="https://download.eclipse.org/releases/2020-03/202003181000">
         <annotation
@@ -634,6 +644,10 @@
         xsi:type="setup.p2:P2Task"
         label="Eclipse Eierlegende Wollmilchsau (2019-12)">
       <requirement
+          name="org.eclipse.platform.ide"
+          versionRange="[4.14.0,5.0.0)"
+          filter="(|(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
+      <requirement
           name="Application Development Frameworks"/>
       <requirement
           name="Cloud Tools"/>
@@ -662,9 +676,6 @@
           name="Testing"/>
       <requirement
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
-      <requirement
-          name="org.eclipse.platform.ide"
-          versionRange="[4.14.0,5.0.0)"/>
       <repository
           url="https://download.eclipse.org/releases/2019-12/201912181000">
         <annotation
@@ -694,6 +705,10 @@
         xsi:type="setup.p2:P2Task"
         label="Eclipse Eierlegende Wollmilchsau (2019-09)">
       <requirement
+          name="org.eclipse.platform.ide"
+          versionRange="[4.13.0,5.0.0)"
+          filter="(|(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
+      <requirement
           name="Application Development Frameworks"/>
       <requirement
           name="Business Intelligence, Reporting and Charting"/>
@@ -724,9 +739,6 @@
           name="Testing"/>
       <requirement
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
-      <requirement
-          name="org.eclipse.platform.ide"
-          versionRange="[4.13.0,5.0.0)"/>
       <repository
           url="https://download.eclipse.org/releases/2019-09/201909181001">
         <annotation
@@ -756,6 +768,10 @@
         xsi:type="setup.p2:P2Task"
         label="Eclipse Eierlegende Wollmilchsau (2019-06)">
       <requirement
+          name="org.eclipse.platform.ide"
+          versionRange="[4.12.0,5.0.0)"
+          filter="(|(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
+      <requirement
           name="Application Development Frameworks"/>
       <requirement
           name="Business Intelligence, Reporting and Charting"/>
@@ -786,9 +802,6 @@
           name="Testing"/>
       <requirement
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
-      <requirement
-          name="org.eclipse.platform.ide"
-          versionRange="[4.12.0,5.0.0)"/>
       <repository
           url="https://download.eclipse.org/releases/2019-06/201906191000">
         <annotation
@@ -818,6 +831,10 @@
         xsi:type="setup.p2:P2Task"
         label="Eclipse Eierlegende Wollmilchsau (2019-03)">
       <requirement
+          name="org.eclipse.platform.ide"
+          versionRange="[4.11.0,5.0.0)"
+          filter="(|(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
+      <requirement
           name="Application Development Frameworks"/>
       <requirement
           name="Business Intelligence, Reporting and Charting"/>
@@ -846,9 +863,6 @@
           name="Testing"/>
       <requirement
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
-      <requirement
-          name="org.eclipse.platform.ide"
-          versionRange="[4.11.0,5.0.0)"/>
       <repository
           url="https://download.eclipse.org/releases/2019-03/201903201000">
         <annotation
@@ -878,6 +892,10 @@
         xsi:type="setup.p2:P2Task"
         label="Eclipse Eierlegende Wollmilchsau (2018-12)">
       <requirement
+          name="org.eclipse.platform.ide"
+          versionRange="[4.10.0,5.0.0)"
+          filter="(|(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
+      <requirement
           name="Application Development Frameworks"/>
       <requirement
           name="Business Intelligence, Reporting and Charting"/>
@@ -906,9 +924,6 @@
           name="Testing"/>
       <requirement
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
-      <requirement
-          name="org.eclipse.platform.ide"
-          versionRange="[4.10.0,5.0.0)"/>
       <repository
           url="https://download.eclipse.org/releases/2018-12/201812191000">
         <annotation
@@ -938,6 +953,10 @@
         xsi:type="setup.p2:P2Task"
         label="Eclipse Eierlegende Wollmilchsau (2018-09)">
       <requirement
+          name="org.eclipse.platform.ide"
+          versionRange="[4.9.0,5.0.0)"
+          filter="(|(&amp;(osgi.arch=x86)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
+      <requirement
           name="Application Development Frameworks"/>
       <requirement
           name="Business Intelligence, Reporting and Charting"/>
@@ -966,9 +985,6 @@
           name="Testing"/>
       <requirement
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
-      <requirement
-          name="org.eclipse.platform.ide"
-          versionRange="[4.9.0,5.0.0)"/>
       <repository
           url="https://download.eclipse.org/releases/2018-09/201809191002">
         <annotation
@@ -998,6 +1014,10 @@
         xsi:type="setup.p2:P2Task"
         label="Eclipse Eierlegende Wollmilchsau (Photon)">
       <requirement
+          name="org.eclipse.platform.ide"
+          versionRange="[4.8.0,5.0.0)"
+          filter="(|(&amp;(osgi.arch=x86)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
+      <requirement
           name="Application Development Frameworks"/>
       <requirement
           name="Business Intelligence, Reporting and Charting"/>
@@ -1026,9 +1046,6 @@
           name="Testing"/>
       <requirement
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
-      <requirement
-          name="org.eclipse.platform.ide"
-          versionRange="[4.8.0,5.0.0)"/>
       <repository
           url="https://download.eclipse.org/releases/photon/201806271001">
         <annotation
@@ -1058,6 +1075,10 @@
         xsi:type="setup.p2:P2Task"
         label="Eclipse Eierlegende Wollmilchsau (Oxygen)">
       <requirement
+          name="org.eclipse.platform.ide"
+          versionRange="[4.7.0,5.0.0)"
+          filter="(|(&amp;(osgi.arch=x86)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
+      <requirement
           name="Application Development Frameworks"/>
       <requirement
           name="Business Intelligence, Reporting and Charting"/>
@@ -1086,9 +1107,6 @@
           name="Testing"/>
       <requirement
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
-      <requirement
-          name="org.eclipse.platform.ide"
-          versionRange="[4.7.0,5.0.0)"/>
       <repository
           url="https://download.eclipse.org/releases/oxygen/201804111000">
         <annotation
@@ -1118,6 +1136,10 @@
         xsi:type="setup.p2:P2Task"
         label="Eclipse Eierlegende Wollmilchsau (Neon)">
       <requirement
+          name="org.eclipse.platform.ide"
+          versionRange="[4.6.0,5.0.0)"
+          filter="(|(&amp;(osgi.arch=x86)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
+      <requirement
           name="Application Development Frameworks"/>
       <requirement
           name="Business Intelligence, Reporting and Charting"/>
@@ -1146,9 +1168,6 @@
           name="Testing"/>
       <requirement
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
-      <requirement
-          name="org.eclipse.platform.ide"
-          versionRange="[4.6.0,5.0.0)"/>
       <repository
           url="https://download.eclipse.org/releases/neon/201705151400">
         <annotation
@@ -1178,6 +1197,10 @@
         xsi:type="setup.p2:P2Task"
         label="Eclipse Eierlegende Wollmilchsau (Mars)">
       <requirement
+          name="org.eclipse.platform.ide"
+          versionRange="[4.5.0,5.0.0)"
+          filter="(|(&amp;(osgi.arch=x86)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
+      <requirement
           name="Application Development Frameworks"/>
       <requirement
           name="Business Intelligence, Reporting and Charting"/>
@@ -1204,9 +1227,6 @@
           name="Testing"/>
       <requirement
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
-      <requirement
-          name="org.eclipse.platform.ide"
-          versionRange="[4.5.0,5.0.0)"/>
       <repository
           url="https://download.eclipse.org/releases/mars/201602261000">
         <annotation
@@ -1236,6 +1256,10 @@
         xsi:type="setup.p2:P2Task"
         label="Eclipse Eierlegende Wollmilchsau (Luna)">
       <requirement
+          name="org.eclipse.platform.ide"
+          versionRange="[4.4.0,5.0.0)"
+          filter="(|(&amp;(osgi.arch=x86)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
+      <requirement
           name="Application Development Frameworks"/>
       <requirement
           name="Business Intelligence, Reporting and Charting"/>
@@ -1260,9 +1284,6 @@
           name="Testing"/>
       <requirement
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
-      <requirement
-          name="org.eclipse.platform.ide"
-          versionRange="[4.4.0,5.0.0)"/>
       <repository
           url="https://download.eclipse.org/releases/luna/201502271000">
         <annotation
@@ -1292,6 +1313,10 @@
         xsi:type="setup.p2:P2Task"
         label="Eclipse Eierlegende Wollmilchsau (Kepler)">
       <requirement
+          name="org.eclipse.platform.ide"
+          versionRange="[4.3.0,5.0.0)"
+          filter="(|(&amp;(osgi.arch=ia64_32)(osgi.os=hpux)(osgi.ws=motif))(&amp;(osgi.arch=ppc)(osgi.os=aix)(osgi.ws=motif))(&amp;(osgi.arch=ppc)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=ppc)(osgi.os=macosx)(osgi.ws=carbon))(&amp;(osgi.arch=ppc64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=sparc)(osgi.os=solaris)(osgi.ws=gtk))(&amp;(osgi.arch=sparc)(osgi.os=solaris)(osgi.ws=motif))(&amp;(osgi.arch=x86)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86)(osgi.os=linux)(osgi.ws=motif))(&amp;(osgi.arch=x86)(osgi.os=macosx)(osgi.ws=carbon))(&amp;(osgi.arch=x86)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86)(osgi.os=solaris)(osgi.ws=gtk))(&amp;(osgi.arch=x86)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
+      <requirement
           name="Application Development Frameworks"/>
       <requirement
           name="Business Intelligence, Reporting and Charting"/>
@@ -1316,9 +1341,6 @@
           name="Testing"/>
       <requirement
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
-      <requirement
-          name="org.eclipse.platform.ide"
-          versionRange="[4.3.0,5.0.0)"/>
       <repository
           url="https://download.eclipse.org/releases/kepler/201402280900">
         <annotation
@@ -1350,6 +1372,10 @@
         xsi:type="setup.p2:P2Task"
         label="Eclipse Eierlegende Wollmilchsau (Juno)">
       <requirement
+          name="org.eclipse.platform.ide"
+          versionRange="[4.2.0,5.0.0)"
+          filter="(|(&amp;(osgi.arch=ia64_32)(osgi.os=hpux)(osgi.ws=motif))(&amp;(osgi.arch=ppc)(osgi.os=aix)(osgi.ws=motif))(&amp;(osgi.arch=ppc)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=ppc)(osgi.os=macosx)(osgi.ws=carbon))(&amp;(osgi.arch=ppc64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=sparc)(osgi.os=solaris)(osgi.ws=gtk))(&amp;(osgi.arch=sparc)(osgi.os=solaris)(osgi.ws=motif))(&amp;(osgi.arch=x86)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86)(osgi.os=linux)(osgi.ws=motif))(&amp;(osgi.arch=x86)(osgi.os=macosx)(osgi.ws=carbon))(&amp;(osgi.arch=x86)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86)(osgi.os=solaris)(osgi.ws=gtk))(&amp;(osgi.arch=x86)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
+      <requirement
           name="Application Development Frameworks"/>
       <requirement
           name="Business Intelligence, Reporting and Charting"/>
@@ -1374,9 +1400,6 @@
           name="Testing"/>
       <requirement
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
-      <requirement
-          name="org.eclipse.platform.ide"
-          versionRange="[4.2.0,5.0.0)"/>
       <repository
           url="https://download.eclipse.org/releases/juno/201303010900">
         <annotation
