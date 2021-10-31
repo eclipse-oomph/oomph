@@ -39,6 +39,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.osgi.util.NLS;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -531,26 +532,22 @@ public class ProjectsBuildTaskImpl extends SetupTaskImpl implements ProjectsBuil
 
   private Set<IProject> getProjects()
   {
-    Set<IProject> projects = new HashSet<IProject>();
-    for (IProject project : ROOT.getProjects())
-    {
-      projects.add(project);
-    }
-
-    return projects;
+    return new HashSet<IProject>(Arrays.asList(ROOT.getProjects()));
   }
 
   private IBuildConfiguration[] getBuildConfigs(Set<IProject> projects) throws CoreException
   {
-    IBuildConfiguration[] buildConfigs = new IBuildConfiguration[projects.size()];
-    int i = 0;
+    List<IBuildConfiguration> buildConfigs = new ArrayList<IBuildConfiguration>();
 
     for (IProject project : projects)
     {
-      buildConfigs[i++] = project.getBuildConfig(IBuildConfiguration.DEFAULT_CONFIG_NAME);
+      if (project.isOpen())
+      {
+        buildConfigs.add(project.getBuildConfig(IBuildConfiguration.DEFAULT_CONFIG_NAME));
+      }
     }
 
-    return buildConfigs;
+    return buildConfigs.toArray(new IBuildConfiguration[buildConfigs.size()]);
   }
 
   private void logNothingToDo(SetupTaskContext context)
