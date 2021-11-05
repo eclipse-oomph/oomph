@@ -965,6 +965,7 @@
   </setupTask>
   <project href="user:/org.eclipse.projects.setup?name='user.project',label='&lt;User>',description='A container project for local user projects that are virtual members of the Eclipse.org project catalog'#/"/>
   <project href="https://git.eclipse.org/c/amalgam/org.eclipse.amalgam.git/plain/releng/org.eclipse.amalgam.releng/Amalgam.setup#/"/>
+  <project href="https://raw.githubusercontent.com/eclipse/birt/master/build/org.eclipse.birt.releng/BIRT.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse/buildship/master/buildship.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse/capella/master/releng/plugins/org.polarsys.capella.settings/oomph/Capella.setup#/"/>
   <project href="https://git.eclipse.org/c/capra/org.eclipse.capra.git/plain/releng/org.eclipse.capra.oomph/EclipseCapra.setup#/"/>
