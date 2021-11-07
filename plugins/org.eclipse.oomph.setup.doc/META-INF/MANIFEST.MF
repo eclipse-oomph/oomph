@@ -26,7 +26,7 @@ Require-Bundle: org.eclipse.help;bundle-version="[3.3.0,4.0.0)";resolution:=opti
  org.eclipse.oomph.setup.mylyn.edit;bundle-version="[1.11.0,2.0.0)";resolution:=optional;visibility:=reexport,
  org.eclipse.oomph.setup.p2;bundle-version="[1.17.0,2.0.0)";resolution:=optional;visibility:=reexport,
  org.eclipse.oomph.setup.p2.edit;bundle-version="[1.13.0,2.0.0)";resolution:=optional;visibility:=reexport,
- org.eclipse.oomph.setup.pde;bundle-version="[1.12.0,2.0.0)";resolution:=optional;visibility:=reexport,
+ org.eclipse.oomph.setup.pde;bundle-version="[1.13.0,2.0.0)";resolution:=optional;visibility:=reexport,
  org.eclipse.oomph.setup.pde.edit;bundle-version="[1.12.0,2.0.0)";resolution:=optional;visibility:=reexport,
  org.eclipse.oomph.setup.projects;bundle-version="[1.14.0,2.0.0)";resolution:=optional;visibility:=reexport,
  org.eclipse.oomph.setup.projects.edit;bundle-version="[1.12.0,2.0.0)";resolution:=optional;visibility:=reexport,

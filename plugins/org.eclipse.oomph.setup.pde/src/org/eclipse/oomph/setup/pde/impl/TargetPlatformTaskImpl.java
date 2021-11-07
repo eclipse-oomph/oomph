@@ -268,8 +268,7 @@ public class TargetPlatformTaskImpl extends SetupTaskImpl implements TargetPlatf
     targetDefinition = TargetPlatformUtil.getTargetDefinition(name);
 
     ITargetDefinition activeTargetDefinition = TargetPlatformUtil.getActiveTargetDefinition();
-    if (targetDefinition == null || !targetDefinition.isResolved() || !isActivate() || activeTargetDefinition == null
-        || !targetDefinition.getHandle().equals(activeTargetDefinition.getHandle()))
+    if (targetDefinition == null || !isActivate() || activeTargetDefinition == null || !targetDefinition.getHandle().equals(activeTargetDefinition.getHandle()))
     {
       SetupUtil.getResolvingTargetDefinitions(context).add(name);
 
