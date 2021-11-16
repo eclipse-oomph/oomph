@@ -53,6 +53,8 @@ public class RequirementItemProvider extends ModelElementItemProvider
 {
   public static final String NAMESPACE_PACKAGE_ID = "java.package"; //$NON-NLS-1$
 
+  public static final String NAMESPACE_BUNDLE_ID = "osgi.bundle"; //$NON-NLS-1$
+
   /**
    * This constructs an instance from a factory and a notifier.
    * <!-- begin-user-doc -->
@@ -519,6 +521,10 @@ public class RequirementItemProvider extends ModelElementItemProvider
     else if (NAMESPACE_PACKAGE_ID.equals(namespace))
     {
       key += "_Package"; //$NON-NLS-1$
+    }
+    else if (NAMESPACE_BUNDLE_ID.equals(namespace))
+    {
+      key += "_Bundle"; //$NON-NLS-1$
     }
 
     Object result = overlayImage(object, getResourceLocator().getImage(key));
