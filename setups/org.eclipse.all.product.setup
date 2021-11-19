@@ -45,7 +45,7 @@
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/2021-12/m2</value>
+        <value>https://www.eclipse.org/downloads/packages/release/2021-12/m3</value>
       </detail>
       <detail
           key="shortcut">
@@ -87,7 +87,7 @@
       <requirement
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
       <repository
-          url="https://download.eclipse.org/releases/2021-12/202110291000">
+          url="https://download.eclipse.org/releases/2021-12/202111191000">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
@@ -155,7 +155,7 @@
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/2021-12/m2</value>
+        <value>https://www.eclipse.org/downloads/packages/release/2021-12/m3</value>
       </detail>
       <detail
           key="shortcut">
@@ -197,7 +197,7 @@
       <requirement
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
       <repository
-          url="https://download.eclipse.org/releases/2021-12/202110291000">
+          url="https://download.eclipse.org/releases/2021-12/202111191000">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
@@ -1347,7 +1347,7 @@
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
       <repository
-          url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.27"/>
+          url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.28"/>
     </setupTask>
   </version>
   <version name="juno"
@@ -1406,7 +1406,7 @@
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
       <repository
-          url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.27"/>
+          url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.28"/>
     </setupTask>
   </version>
   <description>This package contains all categorized features of the release train. It can do &lt;a href='https://en.wiktionary.org/wiki/eierlegende_Wollmilchsau'>everything&lt;/a>, but it's not pretty.</description>

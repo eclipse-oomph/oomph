@@ -38,7 +38,7 @@
   <setupTask
       xsi:type="setup:VariableTask"
       name="oomph.emf.update.url"
-      value="https://download.eclipse.org/modeling/emf/emf/builds/release/2.27"
+      value="https://download.eclipse.org/modeling/emf/emf/builds/release/2.28"
       label="Oomph's EMF Repository Location">
     <description>The location of the EMF repository for satisifying Oomph's dependencies on EMF</description>
   </setupTask>
@@ -672,7 +672,7 @@
       <repository
           url="https://download.eclipse.org/eclipse/updates/4.3/R-4.3.2-201402211700"/>
       <repository
-          url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.27"/>
+          url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.28"/>
     </setupTask>
   </version>
   <version name="4.2"
@@ -703,7 +703,7 @@
       <repository
           url="https://download.eclipse.org/eclipse/updates/4.2/R-4.2.2-201302041200"/>
       <repository
-          url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.27"/>
+          url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.28"/>
     </setupTask>
   </version>
   <description>This package contains the IDE provided by the Eclipse project's platform build.</description>
