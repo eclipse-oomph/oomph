@@ -427,10 +427,15 @@
     <setupTask
         xsi:type="setup:VariableTask"
         name="eclipse.latest.p2"
-        value="https://download.eclipse.org/eclipse/updates/4.22-I-builds"
+        value="https://download.eclipse.org/eclipse/updates/4.23-I-builds"
         label="Eclipse Latest I-Build p2 Repository - 4.22">
       <description>The update site of the latest Eclipse project's builds, typically an I-Build for the next release</description>
     </setupTask>
+    <setupTask
+        xsi:type="setup:VariableTask"
+        name="eclipse.4.22.release.p2"
+        value="https://download.eclipse.org/eclipse/updates/4.22/R-4.22-202111241800"
+        label="Eclipse 4.21 Release p2 Repository"/>
     <setupTask
         xsi:type="setup:VariableTask"
         name="eclipse.4.21.release.p2"
@@ -439,8 +444,8 @@
     <setupTask
         xsi:type="setup:VariableTask"
         name="eclipse.latest.release.p2"
-        value="${eclipse.4.21.release.p2}"
-        label="Eclipse Latest Release p2 Repository - 4.21">
+        value="${eclipse.4.22.release.p2}"
+        label="Eclipse Latest Release p2 Repository - 4.22">
       <description>The update site of the latest released Eclipse project's builds, always an R-Build for the most recent release</description>
     </setupTask>
     <setupTask
@@ -531,7 +536,7 @@
     <setupTask
         xsi:type="setup:VariableTask"
         name="eclipse.target.platform.latest"
-        value="2021-12"
+        value="2022-03"
         storageURI="scope://Workspace"
         label="Target Platform Latest">
       <annotation
@@ -541,7 +546,7 @@
     <setupTask
         xsi:type="setup:VariableTask"
         name="eclipse.target.platform.latest.released"
-        value="2021-09"
+        value="2021-12"
         storageURI="scope://Workspace"
         label="Target Platform Latest Released">
       <annotation
@@ -633,7 +638,7 @@
     <setupTask
         xsi:type="setup:VariableTask"
         name="eclipse.api.baseline.target.platform.latest.released"
-        value="2021-09"
+        value="2021-12"
         storageURI="scope://Workspace"
         label="Target Platform Latest Released">
       <annotation
@@ -776,9 +781,14 @@
       <repositoryList
           name="None"/>
       <repositoryList
+          name="2022-03">
+        <repository
+            url="${eclipse.latest.p2}"/>
+      </repositoryList>
+      <repositoryList
           name="2021-12">
         <repository
-            url="https://download.eclipse.org/eclipse/updates/4.22-I-builds"/>
+            url="${eclipse.4.22.release.p2}"/>
       </repositoryList>
       <repositoryList
           name="2021-09">
@@ -895,6 +905,11 @@
         <repository
             url="https://download.eclipse.org/eclipse/updates/3.5/R-3.5.2-201002111343"/>
       </repositoryList>
+      <repositoryList
+          name="2021-12">
+        <repository
+            url="${eclipse.4.22.release.p2}"/>
+      </repositoryList>
     </targlet>
   </setupTask>
   <setupTask
@@ -909,14 +924,19 @@
       <repositoryList
           name="None"/>
       <repositoryList
-          name="2021-06">
+          name="2021-12">
         <repository
-            url="https://download.eclipse.org/eclipse/updates/4.20/R-4.20-202106111600"/>
+            url="${eclipse.4.22.release.p2}"/>
       </repositoryList>
       <repositoryList
           name="2021-09">
         <repository
             url="${eclipse.4.21.release.p2}"/>
+      </repositoryList>
+      <repositoryList
+          name="2021-06">
+        <repository
+            url="https://download.eclipse.org/eclipse/updates/4.20/R-4.20-202106111600"/>
       </repositoryList>
       <repositoryList
           name="2021-03">
