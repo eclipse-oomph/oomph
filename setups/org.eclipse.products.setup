@@ -14773,7 +14773,8 @@
         <requirement
             name="org.eclipse.m2e.pde.feature.feature.group"/>
         <requirement
-            name="org.eclipse.passage.ldc.feature.feature.group"/>
+            name="org.eclipse.passage.ldc.feature.feature.group"
+            versionRange="2.2.1"/>
         <requirement
             name="org.eclipse.rap.tools.feature.feature.group"/>
         <requirement
@@ -14784,6 +14785,8 @@
             name="org.eclipse.swtbot.ide.feature.group"/>
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/passage/updates/release/2.2.1"/>
         <repository
             url="https://download.eclipse.org/technology/epp/packages/2022-03"/>
         <repository
@@ -14848,7 +14851,8 @@
         <requirement
             name="org.eclipse.m2e.pde.feature.feature.group"/>
         <requirement
-            name="org.eclipse.passage.ldc.feature.feature.group"/>
+            name="org.eclipse.passage.ldc.feature.feature.group"
+            versionRange="2.2.1"/>
         <requirement
             name="org.eclipse.rap.tools.feature.feature.group"/>
         <requirement
@@ -14859,6 +14863,8 @@
             name="org.eclipse.swtbot.ide.feature.group"/>
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/passage/updates/release/2.2.1"/>
         <repository
             url="https://download.eclipse.org/technology/epp/packages/2021-12/202112021200"/>
         <repository
@@ -14923,7 +14929,8 @@
         <requirement
             name="org.eclipse.m2e.pde.feature.feature.group"/>
         <requirement
-            name="org.eclipse.passage.ldc.feature.feature.group"/>
+            name="org.eclipse.passage.ldc.feature.feature.group"
+            versionRange="2.2.1"/>
         <requirement
             name="org.eclipse.rap.tools.feature.feature.group"/>
         <requirement
@@ -14934,6 +14941,8 @@
             name="org.eclipse.swtbot.ide.feature.group"/>
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/passage/updates/release/2.2.1"/>
         <repository
             url="https://download.eclipse.org/technology/epp/packages/2022-03"/>
         <repository
@@ -15002,7 +15011,8 @@
         <requirement
             name="org.eclipse.m2e.pde.feature.feature.group"/>
         <requirement
-            name="org.eclipse.passage.ldc.feature.feature.group"/>
+            name="org.eclipse.passage.ldc.feature.feature.group"
+            versionRange="2.2.1"/>
         <requirement
             name="org.eclipse.rap.tools.feature.feature.group"/>
         <requirement
@@ -15013,6 +15023,8 @@
             name="org.eclipse.swtbot.ide.feature.group"/>
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/passage/updates/release/2.2.1"/>
         <repository
             url="https://download.eclipse.org/technology/epp/packages/2021-12/202112021200"/>
         <repository
@@ -15081,7 +15093,8 @@
         <requirement
             name="org.eclipse.m2e.pde.feature.feature.group"/>
         <requirement
-            name="org.eclipse.passage.ldc.feature.feature.group"/>
+            name="org.eclipse.passage.ldc.feature.feature.group"
+            versionRange="2.2.1"/>
         <requirement
             name="org.eclipse.rap.tools.feature.feature.group"/>
         <requirement
@@ -15092,6 +15105,8 @@
             name="org.eclipse.swtbot.ide.feature.group"/>
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/passage/updates/release/2.2.1"/>
         <repository
             url="https://download.eclipse.org/technology/epp/packages/2021-09/202109101200"/>
         <repository
@@ -15160,7 +15175,8 @@
         <requirement
             name="org.eclipse.m2e.pde.feature.feature.group"/>
         <requirement
-            name="org.eclipse.passage.ldc.feature.feature.group"/>
+            name="org.eclipse.passage.ldc.feature.feature.group"
+            versionRange="2.2.1"/>
         <requirement
             name="org.eclipse.rap.tools.feature.feature.group"/>
         <requirement
@@ -15171,6 +15187,8 @@
             name="org.eclipse.swtbot.ide.feature.group"/>
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/passage/updates/release/2.2.1"/>
         <repository
             url="https://download.eclipse.org/technology/epp/packages/2021-06/202106121200"/>
         <repository
@@ -15239,7 +15257,8 @@
         <requirement
             name="org.eclipse.m2e.pde.feature.feature.group"/>
         <requirement
-            name="org.eclipse.passage.ldc.feature.feature.group"/>
+            name="org.eclipse.passage.ldc.feature.feature.group"
+            versionRange="2.2.1"/>
         <requirement
             name="org.eclipse.rap.tools.feature.feature.group"/>
         <requirement
@@ -15250,6 +15269,8 @@
             name="org.eclipse.swtbot.ide.feature.group"/>
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/passage/updates/release/2.2.1"/>
         <repository
             url="https://download.eclipse.org/technology/epp/packages/2021-03/202103121200"/>
         <repository
@@ -15316,7 +15337,8 @@
         <requirement
             name="org.eclipse.m2e.logback.feature.feature.group"/>
         <requirement
-            name="org.eclipse.passage.ldc.feature.feature.group"/>
+            name="org.eclipse.passage.ldc.feature.feature.group"
+            versionRange="2.2.1"/>
         <requirement
             name="org.eclipse.rap.tools.feature.feature.group"/>
         <requirement
@@ -15327,6 +15349,8 @@
             name="org.eclipse.swtbot.ide.feature.group"/>
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/passage/updates/release/2.2.1"/>
         <repository
             url="https://download.eclipse.org/technology/epp/packages/2020-12/202012101200"/>
         <repository
@@ -15393,7 +15417,8 @@
         <requirement
             name="org.eclipse.m2e.logback.feature.feature.group"/>
         <requirement
-            name="org.eclipse.passage.ldc.feature.feature.group"/>
+            name="org.eclipse.passage.ldc.feature.feature.group"
+            versionRange="2.2.1"/>
         <requirement
             name="org.eclipse.rap.tools.feature.feature.group"/>
         <requirement
@@ -15404,6 +15429,8 @@
             name="org.eclipse.swtbot.ide.feature.group"/>
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/passage/updates/release/2.2.1"/>
         <repository
             url="https://download.eclipse.org/technology/epp/packages/2020-09/202009101200"/>
         <repository
@@ -15470,7 +15497,8 @@
         <requirement
             name="org.eclipse.m2e.logback.feature.feature.group"/>
         <requirement
-            name="org.eclipse.passage.ldc.feature.feature.group"/>
+            name="org.eclipse.passage.ldc.feature.feature.group"
+            versionRange="2.2.1"/>
         <requirement
             name="org.eclipse.rap.tools.feature.feature.group"/>
         <requirement
@@ -15481,6 +15509,8 @@
             name="org.eclipse.swtbot.ide.feature.group"/>
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/passage/updates/release/2.2.1"/>
         <repository
             url="https://download.eclipse.org/technology/epp/packages/2020-06"/>
         <repository
@@ -15545,7 +15575,8 @@
         <requirement
             name="org.eclipse.m2e.logback.feature.feature.group"/>
         <requirement
-            name="org.eclipse.passage.ldc.feature.feature.group"/>
+            name="org.eclipse.passage.ldc.feature.feature.group"
+            versionRange="2.2.1"/>
         <requirement
             name="org.eclipse.rap.tools.feature.feature.group"/>
         <requirement
@@ -15556,6 +15587,8 @@
             name="org.eclipse.swtbot.ide.feature.group"/>
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/passage/updates/release/2.2.1"/>
         <repository
             url="https://download.eclipse.org/technology/epp/packages/2020-03"/>
         <repository
@@ -15642,7 +15675,8 @@
         <requirement
             name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
         <requirement
-            name="org.eclipse.passage.ldc.feature.feature.group"/>
+            name="org.eclipse.passage.ldc.feature.feature.group"
+            versionRange="2.2.1"/>
         <requirement
             name="org.eclipse.rap.tools.feature.feature.group"/>
         <requirement
@@ -15653,6 +15687,8 @@
             name="org.eclipse.swtbot.ide.feature.group"/>
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/passage/updates/release/2.2.1"/>
         <repository
             url="https://download.eclipse.org/technology/epp/packages/2019-12"/>
         <repository
@@ -15739,7 +15775,8 @@
         <requirement
             name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
         <requirement
-            name="org.eclipse.passage.ldc.feature.feature.group"/>
+            name="org.eclipse.passage.ldc.feature.feature.group"
+            versionRange="2.2.1"/>
         <requirement
             name="org.eclipse.rap.tools.feature.feature.group"/>
         <requirement
@@ -15750,6 +15787,8 @@
             name="org.eclipse.swtbot.ide.feature.group"/>
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/passage/updates/release/2.2.1"/>
         <repository
             url="https://download.eclipse.org/technology/epp/packages/2019-09"/>
         <repository
