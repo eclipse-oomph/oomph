@@ -11,7 +11,10 @@
 package org.eclipse.oomph.util;
 
 import java.io.IOException;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodHandles.Lookup;
 import java.lang.reflect.AccessibleObject;
+import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -2193,6 +2196,12 @@ final class AccessUtil
 
   private static final Method DEFINE_ANONYMOUS_CLASS_METHOD;
 
+  private static final Method DEFINE_HIDDEN_CLASS_METHOD;
+
+  private static final MethodHandles.Lookup LOOKUP;
+
+  private static final Object CLASS_OPTIONS;
+
   private static final Method ALLOCATE_INSTANCE_METHOD;
 
   private static final Method CONSUMER_ACCEPT_METHOD;
@@ -2201,6 +2210,9 @@ final class AccessUtil
   {
     Object unsafeInstance = null;
     Method defineAnonymousClassMethod = null;
+    Method defineHiddenClassMethod = null;
+    MethodHandles.Lookup lookup = null;
+    Object classOptions = null;
     Method allocateInstanceMethod = null;
     Method consumerAcceptMethod = null;
 
@@ -2220,8 +2232,20 @@ final class AccessUtil
       // Get the singleton from the static field.
       unsafeInstance = theUnsafeField.get(null);
 
-      // We will use the Unsafe.defineAnonymousClass method to a create class that will be able to make an AccessibleObject accessible.
-      defineAnonymousClassMethod = unsafeClass.getMethod("defineAnonymousClass", Class.class, byte[].class, Object[].class);
+      try
+      {
+        // We will use the Unsafe.defineAnonymousClass method to a create class that will be able to make an AccessibleObject accessible.
+        defineAnonymousClassMethod = unsafeClass.getMethod("defineAnonymousClass", Class.class, byte[].class, Object[].class);
+      }
+      catch (NoSuchMethodException ex)
+      {
+        long offset = (Long)unsafeClass.getMethod("staticFieldOffset", Field.class).invoke(unsafeInstance,
+            MethodHandles.Lookup.class.getDeclaredField("IMPL_LOOKUP"));
+        lookup = (MethodHandles.Lookup)unsafeClass.getMethod("getObject", Object.class, long.class).invoke(unsafeInstance, MethodHandles.Lookup.class, offset);
+        Class<?> classOption = Class.forName("java.lang.invoke.MethodHandles$Lookup$ClassOption");
+        classOptions = Array.newInstance(classOption, 0);
+        defineHiddenClassMethod = Lookup.class.getMethod("defineHiddenClass", byte[].class, boolean.class, classOptions.getClass());
+      }
 
       allocateInstanceMethod = unsafeClass.getDeclaredMethod("allocateInstance", Class.class);
 
@@ -2238,6 +2262,9 @@ final class AccessUtil
 
     UNSAFE_INSTANCE = unsafeInstance;
     DEFINE_ANONYMOUS_CLASS_METHOD = defineAnonymousClassMethod;
+    DEFINE_HIDDEN_CLASS_METHOD = defineHiddenClassMethod;
+    LOOKUP = lookup;
+    CLASS_OPTIONS = classOptions;
     ALLOCATE_INSTANCE_METHOD = allocateInstanceMethod;
     CONSUMER_ACCEPT_METHOD = consumerAcceptMethod;
   }
@@ -2376,7 +2403,17 @@ final class AccessUtil
 
         // Define an anonymous class in the declaring class' package
         // using the computed class bytes.
-        Class<?> theAnonymousClass = (Class<?>)DEFINE_ANONYMOUS_CLASS_METHOD.invoke(UNSAFE_INSTANCE, declaringClass, bytes, null);
+        Class<?> theAnonymousClass;
+        if (DEFINE_ANONYMOUS_CLASS_METHOD != null)
+        {
+          theAnonymousClass = (Class<?>)DEFINE_ANONYMOUS_CLASS_METHOD.invoke(UNSAFE_INSTANCE, declaringClass, bytes, null);
+        }
+        else
+        {
+          MethodHandles.Lookup lookup = LOOKUP.in(declaringClass);
+          lookup = (Lookup)DEFINE_HIDDEN_CLASS_METHOD.invoke(lookup, bytes, Boolean.FALSE, CLASS_OPTIONS);
+          theAnonymousClass = lookup.lookupClass();
+        }
 
         // Because the template bytes were computed class local to this
         // file, the class isn't public and we're not allowed by Java 9
