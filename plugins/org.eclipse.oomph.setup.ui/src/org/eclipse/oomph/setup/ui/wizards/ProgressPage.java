@@ -977,7 +977,7 @@ public class ProgressPage extends SetupWizardPage
                     {
                       if (restart)
                       {
-                        setMessage(Messages.ProgressPage_taskSuccessfulAndRequiresRestart + Messages.ProgressPage_pressFinishOrCancel,
+                        setMessage(Messages.ProgressPage_taskSuccessfulAndRequiresRestart + ' ' + Messages.ProgressPage_pressFinishOrCancel,
                             IMessageProvider.WARNING);
                         setButtonState(IDialogConstants.CANCEL_ID, true);
 
@@ -986,7 +986,7 @@ public class ProgressPage extends SetupWizardPage
                       }
                       else
                       {
-                        setMessage(Messages.ProgressPage_taskSuccessful + Messages.ProgressPage_pressBackOrFinish);
+                        setMessage(Messages.ProgressPage_taskSuccessful + ' ' + Messages.ProgressPage_pressBackOrFinish);
                         if (disableCancelButton.get())
                         {
                           setButtonState(IDialogConstants.CANCEL_ID, false);
@@ -1001,14 +1001,14 @@ public class ProgressPage extends SetupWizardPage
                       setButtonState(IDialogConstants.CANCEL_ID, true);
                       if (progressLog.isCanceled())
                       {
-                        setErrorMessage(Messages.ProgressPage_taskCanceled + Messages.ProgressPage_pressBackOrCancel);
+                        setErrorMessage(Messages.ProgressPage_taskCanceled + ' ' + Messages.ProgressPage_pressBackOrCancel);
 
                         shell.setData(PROGRESS_STATUS,
                             new Status(IStatus.CANCEL, SetupEditPlugin.INSTANCE.getSymbolicName(), Messages.ProgressPage_taskCanceled));
                       }
                       else
                       {
-                        setErrorMessage(Messages.ProgressPage_failedTasks + Messages.ProgressPage_pressBackOrCancel);
+                        setErrorMessage(Messages.ProgressPage_failedTasks + ' ' + Messages.ProgressPage_pressBackOrCancel);
 
                         shell.setData(PROGRESS_STATUS, new Status(IStatus.ERROR, SetupEditPlugin.INSTANCE.getSymbolicName(), Messages.ProgressPage_taskFailed));
                       }
