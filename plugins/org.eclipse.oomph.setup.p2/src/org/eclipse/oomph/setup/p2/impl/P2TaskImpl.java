@@ -720,10 +720,11 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     Set<Requirement> unsatisifiedRequirements = new LinkedHashSet<Requirement>();
     for (Requirement requirement : getRequirements())
     {
-      if (context.matchesFilterContext(requirement.getFilter()) && !requirement.isOptional())
+      if (context.matchesFilterContext(requirement.getFilter()) && (!requirement.isOptional() || requirement.getMax() == 0))
       {
+        // A normal requirement is satisfied its IU is present while a negative requirement is satisfied if the IU is not present.
         IQueryResult<IInstallableUnit> result = profile.query(QueryUtil.createMatchQuery(requirement.toIRequirement().getMatches()), null);
-        if (result.isEmpty())
+        if (result.isEmpty() ? requirement.getMax() > 0 : requirement.getMax() == 0)
         {
           unsatisifiedRequirements.add(requirement);
         }
