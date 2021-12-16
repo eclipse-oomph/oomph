@@ -25,6 +25,8 @@ import java.util.List;
  */
 public class FreeDesktopSupport implements DesktopSupport
 {
+  private static final String IM_MODULE_XIM = "xim"; //$NON-NLS-1$
+
   private static final String DESKTOP_FILE_EXTENSION = ".desktop"; //$NON-NLS-1$
 
   private File userDir;
@@ -53,7 +55,36 @@ public class FreeDesktopSupport implements DesktopSupport
     desktopFile.append("Encoding=UTF-8\n");
     desktopFile.append("Version=1.1\n");
     desktopFile.append("Name=").append(shortcutName).append("\n");
-    desktopFile.append("Exec=env GTK_IM_MODULE=ibus ").append(executable).append("\n");
+    desktopFile.append("Exec=");
+
+    String module = System.getenv("GTK_IM_MODULE");
+    if (IM_MODULE_XIM.equals(module))
+    {
+      try // to find a better choice see Bug 517671 xim produces flickering
+      {
+        Process process = Runtime.getRuntime().exec("im-config -l");
+        for (String s : new String(process.getInputStream().readAllBytes()).trim().split("\\s+"))
+        {
+          if (!IM_MODULE_XIM.equals(s) && !s.isBlank())
+          {
+            module = s;
+            break;
+          }
+        }
+      }
+      catch (Exception e)
+      {
+        // no luck then...
+      }
+    }
+    if (module != null && !module.isBlank())
+    {
+      desktopFile.append("env GTK_IM_MODULE=");
+      desktopFile.append(module);
+      desktopFile.append(' ');
+    }
+    desktopFile.append(executable).append("\n");
+
     if (groupName != null)
     {
       desktopFile.append("Categories=").append(groupName).append("\n");
