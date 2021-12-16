@@ -15108,6 +15108,8 @@
         <repository
             url="https://download.eclipse.org/passage/updates/release/2.2.1"/>
         <repository
+            url="https://download.eclipse.org/tools/orbit/downloads/drops2/R20211213173813/repository"/>
+        <repository
             url="https://download.eclipse.org/technology/epp/packages/2021-09/202109101200"/>
         <repository
             url="https://download.eclipse.org/releases/2021-09/202109151000">
@@ -15189,6 +15191,8 @@
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
             url="https://download.eclipse.org/passage/updates/release/2.2.1"/>
+        <repository
+            url="https://download.eclipse.org/tools/orbit/downloads/drops2/R20211213173813/repository"/>
         <repository
             url="https://download.eclipse.org/technology/epp/packages/2021-06/202106121200"/>
         <repository
@@ -15272,6 +15276,8 @@
         <repository
             url="https://download.eclipse.org/passage/updates/release/2.2.1"/>
         <repository
+            url="https://download.eclipse.org/tools/orbit/downloads/drops2/R20211213173813/repository"/>
+        <repository
             url="https://download.eclipse.org/technology/epp/packages/2021-03/202103121200"/>
         <repository
             url="https://download.eclipse.org/releases/2021-03/202103171000">
@@ -15351,6 +15357,8 @@
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
             url="https://download.eclipse.org/passage/updates/release/2.2.1"/>
+        <repository
+            url="https://download.eclipse.org/tools/orbit/downloads/drops2/R20211213173813/repository"/>
         <repository
             url="https://download.eclipse.org/technology/epp/packages/2020-12/202012101200"/>
         <repository
@@ -15432,6 +15440,8 @@
         <repository
             url="https://download.eclipse.org/passage/updates/release/2.2.1"/>
         <repository
+            url="https://download.eclipse.org/tools/orbit/downloads/drops2/R20211213173813/repository"/>
+        <repository
             url="https://download.eclipse.org/technology/epp/packages/2020-09/202009101200"/>
         <repository
             url="https://download.eclipse.org/releases/2020-09/202009161000">
@@ -15512,6 +15522,8 @@
         <repository
             url="https://download.eclipse.org/passage/updates/release/2.2.1"/>
         <repository
+            url="https://download.eclipse.org/tools/orbit/downloads/drops2/R20211213173813/repository"/>
+        <repository
             url="https://download.eclipse.org/technology/epp/packages/2020-06"/>
         <repository
             url="https://download.eclipse.org/releases/2020-06/202006171000">
@@ -15589,6 +15601,8 @@
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
             url="https://download.eclipse.org/passage/updates/release/2.2.1"/>
+        <repository
+            url="https://download.eclipse.org/tools/orbit/downloads/drops2/R20211213173813/repository"/>
         <repository
             url="https://download.eclipse.org/technology/epp/packages/2020-03"/>
         <repository
@@ -15690,6 +15704,8 @@
         <repository
             url="https://download.eclipse.org/passage/updates/release/2.2.1"/>
         <repository
+            url="https://download.eclipse.org/tools/orbit/downloads/drops2/R20211213173813/repository"/>
+        <repository
             url="https://download.eclipse.org/technology/epp/packages/2019-12"/>
         <repository
             url="https://download.eclipse.org/releases/2019-12/201912181000">
@@ -15789,6 +15805,8 @@
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
             url="https://download.eclipse.org/passage/updates/release/2.2.1"/>
+        <repository
+            url="https://download.eclipse.org/tools/orbit/downloads/drops2/R20211213173813/repository"/>
         <repository
             url="https://download.eclipse.org/technology/epp/packages/2019-09"/>
         <repository
