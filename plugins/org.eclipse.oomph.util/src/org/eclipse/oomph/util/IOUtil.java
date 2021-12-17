@@ -829,6 +829,18 @@ public final class IOUtil
   public static String readUTF8(File file) throws Exception
   {
     InputStream inputStream = new FileInputStream(file);
+    try
+    {
+      return readUTF8(inputStream);
+    }
+    finally
+    {
+      close(inputStream);
+    }
+  }
+
+  public static String readUTF8(InputStream inputStream) throws Exception
+  {
     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
     try

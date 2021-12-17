@@ -11,6 +11,7 @@
 package org.eclipse.oomph.setup.internal.installer;
 
 import org.eclipse.oomph.util.IOUtil;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.osgi.util.NLS;
 
@@ -63,9 +64,9 @@ public class FreeDesktopSupport implements DesktopSupport
       try // to find a better choice see Bug 517671 xim produces flickering
       {
         Process process = Runtime.getRuntime().exec("im-config -l");
-        for (String s : new String(process.getInputStream().readAllBytes()).trim().split("\\s+"))
+        for (String s : IOUtil.readUTF8(process.getInputStream()).trim().split("\\s+"))
         {
-          if (!IM_MODULE_XIM.equals(s) && !s.isBlank())
+          if (!IM_MODULE_XIM.equals(s) && !StringUtil.isEmpty(s.trim()))
           {
             module = s;
             break;
@@ -77,7 +78,7 @@ public class FreeDesktopSupport implements DesktopSupport
         // no luck then...
       }
     }
-    if (module != null && !module.isBlank())
+    if (module != null && !StringUtil.isEmpty(module.trim()))
     {
       desktopFile.append("env GTK_IM_MODULE=");
       desktopFile.append(module);
