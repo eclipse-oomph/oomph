@@ -101,7 +101,7 @@
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.core.net.linux.x86_64"
+         id="org.eclipse.core.net.linux"
          os="linux"
          arch="x86_64"
          download-size="0"
