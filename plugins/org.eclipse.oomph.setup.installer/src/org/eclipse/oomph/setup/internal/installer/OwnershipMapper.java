@@ -17,9 +17,11 @@ import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.io.Writer;
 import java.net.URL;
@@ -104,7 +106,7 @@ public final class OwnershipMapper
     {
       Arrays.sort(topLevelFolders);
 
-      stats = new BufferedWriter(new FileWriter("folders.txt"));
+      stats = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("folders.txt"), "UTF-8"));
       long start = System.currentTimeMillis();
       ThreadPool threadPool = new ThreadPool();
 
@@ -604,7 +606,7 @@ public final class OwnershipMapper
         Matcher nameMatcher = namePattern.matcher(content);
         if (nameMatcher.find())
         {
-          name = nameMatcher.group(1).trim();
+          name = nameMatcher.group(1).trim().replace("\u2122", "").replace("\u00ae", "");
         }
 
         projects.put(project, name);
