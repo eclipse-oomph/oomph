@@ -252,6 +252,16 @@ public final class RepositoryComposer
     long timestamp = System.currentTimeMillis();
     writeRepository(compositeFolder, true, name, timestamp, drops);
     writeRepository(compositeFolder, false, name, timestamp, drops);
+
+    File file = new File(compositeFolder, "p2.index");
+    FileOutputStream fileOutputStream = new FileOutputStream(file);
+    Writer out = new OutputStreamWriter(fileOutputStream, "UTF-8");
+    BufferedWriter writer = new BufferedWriter(out);
+    writeLine(writer, "version=1");
+    writeLine(writer, "metadata.repository.factory.order=compositeContent.xml,\\!");
+    writeLine(writer, "artifact.repository.factory.order=compositeArtifacts.xml,\\!");
+    writer.flush();
+    fileOutputStream.close();
   }
 
   private static void writeRepository(File compositeFolder, boolean metadata, String name, long timestamp, List<File> drops) throws IOException
