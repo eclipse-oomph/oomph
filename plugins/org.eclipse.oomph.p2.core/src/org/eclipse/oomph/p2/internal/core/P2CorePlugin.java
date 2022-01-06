@@ -13,6 +13,7 @@ package org.eclipse.oomph.p2.internal.core;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OomphPlugin;
+import org.eclipse.oomph.util.ReflectUtil;
 
 import org.eclipse.emf.common.util.ResourceLocator;
 
@@ -33,6 +34,7 @@ import org.osgi.framework.BundleContext;
 import java.io.File;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Eike Stepper
@@ -141,8 +143,9 @@ public final class P2CorePlugin extends OomphPlugin
         adapterManager.registerAdapters(retrieveAdapter, container.getClass());
 
         // Make sure it's used as the default.
-        for (@SuppressWarnings("all")
-        Iterator<List<IAdapterFactory>> it = adapterManager.getFactories().values().iterator(); it.hasNext();)
+        // Call like this because the signature of the method has changed.
+        Map<String, List<IAdapterFactory>> factories = ReflectUtil.invokeMethod("getFactories", adapterManager); //$NON-NLS-1$
+        for (Iterator<List<IAdapterFactory>> it = factories.values().iterator(); it.hasNext();)
         {
           List<IAdapterFactory> list = it.next();
           if (list.remove(browserAdapter))

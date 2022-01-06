@@ -18,6 +18,7 @@ import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.core.runtime.Platform;
 
+import org.apache.hc.client5.http.utils.DateUtils;
 import org.osgi.framework.Bundle;
 
 import java.io.BufferedReader;
@@ -641,10 +642,9 @@ public final class HTTPServer
       return URLDecoder.decode(path, URL_ENCODING);
     }
 
-    @SuppressWarnings("all")
     protected static String formatDate(long lastModified)
     {
-      return org.apache.http.impl.cookie.DateUtils.formatDate(new Date(lastModified));
+      return DateUtils.formatDate(new Date(lastModified));
     }
 
     protected static void sendResponse(DataOutputStream output, String status, String fileName, long lastModified, boolean ignoreExceptions)

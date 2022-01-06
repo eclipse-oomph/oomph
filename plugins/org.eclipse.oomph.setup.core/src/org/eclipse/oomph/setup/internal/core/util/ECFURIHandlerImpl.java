@@ -75,8 +75,9 @@ import org.eclipse.equinox.security.storage.ISecurePreferences;
 import org.eclipse.equinox.security.storage.StorageException;
 import org.eclipse.osgi.util.NLS;
 
-import org.apache.http.cookie.Cookie;
-import org.apache.http.cookie.CookieSpecProvider;
+import org.apache.hc.client5.http.cookie.BasicCookieStore;
+import org.apache.hc.client5.http.cookie.Cookie;
+import org.apache.hc.client5.http.utils.DateUtils;
 import org.osgi.framework.Version;
 
 import java.io.ByteArrayInputStream;
@@ -95,7 +96,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -106,7 +106,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -482,12 +481,11 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
     return null;
   }
 
-  @SuppressWarnings("all")
   private static Date parseHTTPDate(String string)
   {
     try
     {
-      return org.apache.http.impl.cookie.DateUtils.parseDate(string);
+      return DateUtils.parseDate(string);
     }
     catch (Exception ex)
     {
@@ -837,7 +835,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
   private static final class FileTransferListener implements IFileTransferListener, ConnectionListener
   {
     @SuppressWarnings("all")
-    private static final org.apache.http.impl.client.BasicCookieStore COOKIE_STORE = new org.apache.http.impl.client.BasicCookieStore();
+    private static final BasicCookieStore COOKIE_STORE = new BasicCookieStore();
 
     private static final DelegatingCookieStore DELEGATING_COOKIE_STORE = new DelegatingCookieStore(COOKIE_STORE);
 
@@ -970,7 +968,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
             System.out.println(NLS.bind(Messages.ECFURIHandlerImpl_ManageCookies_message, fileID.getURI(), httpClient));
           }
 
-          ReflectUtil.setValue("cookieStore", httpClient, new org.apache.http.client.CookieStore() //$NON-NLS-1$
+          ReflectUtil.setValue(ReflectUtil.getField(httpClient.getClass(), "cookieStore"), httpClient, new org.apache.hc.client5.http.cookie.CookieStore() //$NON-NLS-1$
           {
             @SuppressWarnings("all")
             public List<Cookie> getCookies()
@@ -1027,49 +1025,9 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
               HttpCookie httpCookie = new HttpCookie(cookie.getName(), cookie.getValue());
               httpCookie.setDomain(cookie.getDomain());
               httpCookie.setPath(cookie.getPath());
-              httpCookie.setVersion(cookie.getVersion());
               return httpCookie;
             }
-          });
-
-          @SuppressWarnings("deprecation")
-          String[] permissiveDatePatterns = ReflectUtil.getValue("DEFAULT_DATE_PATTERNS", org.apache.http.impl.cookie.BrowserCompatSpec.class); //$NON-NLS-1$
-
-          try
-          {
-            // The following ensures that more permissive date patterns are used to parse the expiration date of cookies.
-            Object defaultParameters = ReflectUtil.getValue("defaultParams", httpClient); //$NON-NLS-1$
-
-            if (TRACE)
-            {
-              System.out.println(NLS.bind(Messages.ECFURIHandlerImpl_ManagingHandling_message, fileID.getURI()));
-            }
-
-            @SuppressWarnings("deprecation")
-            String datePatternsParameterName = org.apache.http.cookie.params.CookieSpecPNames.DATE_PATTERNS;
-            ReflectUtil.invokeMethod(ReflectUtil.getMethod(defaultParameters, "setParameter", String.class, Object.class), defaultParameters, //$NON-NLS-1$
-                datePatternsParameterName, Arrays.asList(permissiveDatePatterns));
-          }
-          catch (Throwable throwable2)
-          {
-            if (TRACE)
-            {
-              System.out.println(NLS.bind(Messages.ECFURIHandlerImpl_ManagingCookieHandling_message, fileID.getURI()));
-            }
-
-            // This is the case of the ECF implementation based on Apache 4.5.
-            Object copiedSpecRegistry = ReflectUtil.getValue("cookieSpecRegistry", httpClient); //$NON-NLS-1$
-            ConcurrentHashMap<String, CookieSpecProvider> map = ReflectUtil.getValue("map", copiedSpecRegistry); //$NON-NLS-1$
-            for (Map.Entry<String, CookieSpecProvider> entry : map.entrySet())
-            {
-              final CookieSpecProvider cookieSpecProvider = entry.getValue();
-              if (cookieSpecProvider instanceof org.apache.http.impl.cookie.DefaultCookieSpecProvider)
-              {
-                // Change the date patterns to be permissive.
-                ReflectUtil.setValue("datepatterns", cookieSpecProvider, permissiveDatePatterns); //$NON-NLS-1$
-              }
-            }
-          }
+          }, true);
         }
       }
       catch (Throwable throwable)
@@ -1115,9 +1073,9 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
     {
       private final CookieStore delegate = new CookieManager().getCookieStore();
 
-      private final org.apache.http.impl.client.BasicCookieStore basicCookieStore;
+      private final BasicCookieStore basicCookieStore;
 
-      public DelegatingCookieStore(org.apache.http.impl.client.BasicCookieStore basicCookieStore)
+      public DelegatingCookieStore(BasicCookieStore basicCookieStore)
       {
         this.basicCookieStore = basicCookieStore;
       }
@@ -1153,9 +1111,10 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
         return delegate.getURIs();
       }
 
+      @SuppressWarnings("restriction")
       public boolean remove(java.net.URI uri, HttpCookie httpCookie)
       {
-        org.apache.http.impl.cookie.BasicClientCookie basicClientCookie = createCookie(uri, httpCookie);
+        org.apache.hc.client5.http.impl.cookie.BasicClientCookie basicClientCookie = createCookie(uri, httpCookie);
         basicClientCookie.setExpiryDate(new Date(System.currentTimeMillis() - 1000));
         basicCookieStore.addCookie(basicClientCookie);
         return basicRemove(uri, httpCookie);
@@ -1182,10 +1141,11 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
         return delegate.removeAll();
       }
 
-      private org.apache.http.impl.cookie.BasicClientCookie createCookie(java.net.URI uri, HttpCookie httpCookie)
+      @SuppressWarnings("restriction")
+      private org.apache.hc.client5.http.impl.cookie.BasicClientCookie createCookie(java.net.URI uri, HttpCookie httpCookie)
       {
-        org.apache.http.impl.cookie.BasicClientCookie basicClientCookie = new org.apache.http.impl.cookie.BasicClientCookie(httpCookie.getName(),
-            httpCookie.getValue());
+        org.apache.hc.client5.http.impl.cookie.BasicClientCookie basicClientCookie = new org.apache.hc.client5.http.impl.cookie.BasicClientCookie(
+            httpCookie.getName(), httpCookie.getValue());
         basicClientCookie.setPath(httpCookie.getPath());
         if (uri != null)
         {

@@ -75,8 +75,12 @@ Eike Stepper - initial API and implementation
               <excludes>
                 <plugin id="org.apache.commons.codec"/>
                 <plugin id="org.apache.commons.logging"/>
+                <plugin id="org.apache.httpcomponents.client5.httpclient5"/>
+                <plugin id="org.apache.httpcomponents.core5.httpcore5"/>
+                <plugin id="org.apache.httpcomponents.core5.httpcore5-h2"/>
                 <plugin id="org.apache.httpcomponents.httpclient"/>
                 <plugin id="org.apache.httpcomponents.httpcore"/>
+                <plugin id="org.slf4j.api"/>
                 <plugin id="org.eclipse.nebula.widgets.tablecombo"/>
                 <plugin id="org.eclipse.oomph.releng.helpcenter"/>
               </excludes>
