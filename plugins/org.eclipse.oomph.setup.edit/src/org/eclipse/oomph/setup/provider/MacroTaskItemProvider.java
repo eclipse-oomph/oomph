@@ -411,7 +411,7 @@ public class MacroTaskItemProvider extends SetupTaskItemProvider
         String name = parameter.getName();
         if (!StringUtil.isEmpty(name))
         {
-          return result += getString("_UI_MacroArgumentSuffix_label", new Object[] { name }); //$NON-NLS-1$
+          return result += ' ' + getString("_UI_MacroArgumentSuffix_label", new Object[] { name }); //$NON-NLS-1$
         }
       }
     }
