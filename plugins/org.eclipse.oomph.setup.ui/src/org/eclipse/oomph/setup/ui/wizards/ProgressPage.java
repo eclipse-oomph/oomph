@@ -848,7 +848,8 @@ public class ProgressPage extends SetupWizardPage
                     startupLogMessage.append(" ").append(NLS.bind(Messages.ProgressPage_log_startup_updatingPreferences, preferenceTaskCount)); //$NON-NLS-1$
                   }
 
-                  startupLogMessage.append(".").append(NLS.bind(Messages.ProgressPage_log_startup_seeLogForDetails, SetupContext.SETUP_LOG_URI.toFileString())); //$NON-NLS-1$
+                  startupLogMessage.append(". ") //$NON-NLS-1$
+                      .append(NLS.bind(Messages.ProgressPage_log_startup_seeLogForDetails, SetupContext.SETUP_LOG_URI.toFileString()));
 
                   SetupUIPlugin.INSTANCE.log(startupLogMessage.toString(), IStatus.INFO);
                 }
