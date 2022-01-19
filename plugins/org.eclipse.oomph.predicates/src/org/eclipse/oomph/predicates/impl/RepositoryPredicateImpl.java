@@ -12,6 +12,7 @@ package org.eclipse.oomph.predicates.impl;
 
 import org.eclipse.oomph.predicates.PredicatesPackage;
 import org.eclipse.oomph.predicates.RepositoryPredicate;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
@@ -28,6 +29,8 @@ import org.eclipse.team.core.RepositoryProvider;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.net.URI;
+import java.util.Objects;
+import java.util.regex.Pattern;
 
 /**
  * <!-- begin-user-doc -->
@@ -38,6 +41,7 @@ import java.net.URI;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.predicates.impl.RepositoryPredicateImpl#getProject <em>Project</em>}</li>
+ *   <li>{@link org.eclipse.oomph.predicates.impl.RepositoryPredicateImpl#getRelativePathPattern <em>Relative Path Pattern</em>}</li>
  * </ul>
  *
  * @generated
@@ -63,6 +67,28 @@ public class RepositoryPredicateImpl extends PredicateImpl implements Repository
    * @ordered
    */
   protected IProject project = PROJECT_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #getRelativePathPattern() <em>Relative Path Pattern</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getRelativePathPattern()
+   * @generated
+   * @ordered
+   */
+  protected static final String RELATIVE_PATH_PATTERN_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getRelativePathPattern() <em>Relative Path Pattern</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getRelativePathPattern()
+   * @generated
+   * @ordered
+   */
+  protected String relativePathPattern = RELATIVE_PATH_PATTERN_EDEFAULT;
+
+  private Pattern compiledPattern;
 
   /**
    * <!-- begin-user-doc -->
@@ -110,7 +136,49 @@ public class RepositoryPredicateImpl extends PredicateImpl implements Repository
     }
   }
 
-  private String getGitDirAbsolutePath(IProject project)
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String getRelativePathPattern()
+  {
+    return relativePathPattern;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setRelativePathPatternGen(String newRelativePathPattern)
+  {
+    String oldRelativePathPattern = relativePathPattern;
+    relativePathPattern = newRelativePathPattern;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, PredicatesPackage.REPOSITORY_PREDICATE__RELATIVE_PATH_PATTERN, oldRelativePathPattern,
+          relativePathPattern));
+    }
+  }
+
+  public void setRelativePathPattern(String newRelativePathPattern)
+  {
+    setRelativePathPatternGen(newRelativePathPattern);
+    compiledPattern = null;
+  }
+
+  private Pattern getCompiledPattern()
+  {
+    if (compiledPattern == null)
+    {
+      compiledPattern = getPattern(getRelativePathPattern());
+    }
+
+    return compiledPattern;
+  }
+
+  private String getRepoDirAbsolutePath(IProject project)
   {
     if (project != null)
     {
@@ -126,7 +194,7 @@ public class RepositoryPredicateImpl extends PredicateImpl implements Repository
             File gitFolder = new File(parent, ".git"); //$NON-NLS-1$
             if (new File(gitFolder, "index").exists()) //$NON-NLS-1$
             {
-              return gitFolder.toString();
+              return parent.toString();
             }
           }
         }
@@ -140,8 +208,8 @@ public class RepositoryPredicateImpl extends PredicateImpl implements Repository
             GitProvider gitProvider = (GitProvider)provider;
             GitProjectData data = gitProvider.getData();
             RepositoryMapping repositoryMapping = data.getRepositoryMapping(project);
-            IPath gitDirAbsolutePath = repositoryMapping.getGitDirAbsolutePath();
-            return gitDirAbsolutePath == null ? null : gitDirAbsolutePath.toOSString();
+            File workTree = repositoryMapping.getWorkTree();
+            return workTree == null ? null : workTree.toString();
           }
         }
         catch (NoClassDefFoundError ex)
@@ -199,9 +267,40 @@ public class RepositoryPredicateImpl extends PredicateImpl implements Repository
   @Override
   public boolean matches(IResource resource)
   {
-    String prototypeGitDirAbsolutePath = getGitDirAbsolutePath(getProject());
-    String gitDirAbsolutePath = getGitDirAbsolutePath(resource.getProject());
-    return prototypeGitDirAbsolutePath == null ? gitDirAbsolutePath == null : prototypeGitDirAbsolutePath.equals(gitDirAbsolutePath);
+    if (resource == null)
+    {
+      return false;
+    }
+
+    String prototypeRepoDirAbsolutePath = getRepoDirAbsolutePath(getProject());
+    String repoDirAbsolutePath = getRepoDirAbsolutePath(resource.getProject());
+
+    if (!Objects.equals(prototypeRepoDirAbsolutePath, repoDirAbsolutePath))
+    {
+      return false;
+    }
+
+    if (repoDirAbsolutePath != null && getRelativePathPattern() != null)
+    {
+      IPath location = resource.getLocation();
+      if (location != null)
+      {
+        String projectLocation = location.toPortableString();
+        repoDirAbsolutePath = repoDirAbsolutePath.replace(File.separatorChar, '/');
+
+        String relativePath = StringUtil.removePrefix(projectLocation, repoDirAbsolutePath);
+        relativePath = StringUtil.removePrefix(relativePath, "/"); //$NON-NLS-1$
+
+        if (getCompiledPattern().matcher(relativePath).matches())
+        {
+          return true;
+        }
+      }
+
+      return false;
+    }
+
+    return true;
   }
 
   /**
@@ -216,6 +315,8 @@ public class RepositoryPredicateImpl extends PredicateImpl implements Repository
     {
       case PredicatesPackage.REPOSITORY_PREDICATE__PROJECT:
         return getProject();
+      case PredicatesPackage.REPOSITORY_PREDICATE__RELATIVE_PATH_PATTERN:
+        return getRelativePathPattern();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -232,6 +333,9 @@ public class RepositoryPredicateImpl extends PredicateImpl implements Repository
     {
       case PredicatesPackage.REPOSITORY_PREDICATE__PROJECT:
         setProject((IProject)newValue);
+        return;
+      case PredicatesPackage.REPOSITORY_PREDICATE__RELATIVE_PATH_PATTERN:
+        setRelativePathPattern((String)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -250,6 +354,9 @@ public class RepositoryPredicateImpl extends PredicateImpl implements Repository
       case PredicatesPackage.REPOSITORY_PREDICATE__PROJECT:
         setProject(PROJECT_EDEFAULT);
         return;
+      case PredicatesPackage.REPOSITORY_PREDICATE__RELATIVE_PATH_PATTERN:
+        setRelativePathPattern(RELATIVE_PATH_PATTERN_EDEFAULT);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -266,6 +373,8 @@ public class RepositoryPredicateImpl extends PredicateImpl implements Repository
     {
       case PredicatesPackage.REPOSITORY_PREDICATE__PROJECT:
         return PROJECT_EDEFAULT == null ? project != null : !PROJECT_EDEFAULT.equals(project);
+      case PredicatesPackage.REPOSITORY_PREDICATE__RELATIVE_PATH_PATTERN:
+        return RELATIVE_PATH_PATTERN_EDEFAULT == null ? relativePathPattern != null : !RELATIVE_PATH_PATTERN_EDEFAULT.equals(relativePathPattern);
     }
     return super.eIsSet(featureID);
   }
@@ -286,6 +395,8 @@ public class RepositoryPredicateImpl extends PredicateImpl implements Repository
     StringBuilder result = new StringBuilder(super.toString());
     result.append(" (project: "); //$NON-NLS-1$
     result.append(project);
+    result.append(", relativePathPattern: "); //$NON-NLS-1$
+    result.append(relativePathPattern);
     result.append(')');
     return result.toString();
   }

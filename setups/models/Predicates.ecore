@@ -27,6 +27,8 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="RepositoryPredicate" eSuperTypes="#//Predicate">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="project" eType="#//Project"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="relativePathPattern" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AndPredicate" eSuperTypes="#//Predicate">
     <eStructuralFeatures xsi:type="ecore:EReference" name="operands" upperBound="-1"

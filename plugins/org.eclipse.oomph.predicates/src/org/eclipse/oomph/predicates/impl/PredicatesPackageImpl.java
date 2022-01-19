@@ -322,6 +322,16 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getRepositoryPredicate_RelativePathPattern()
+  {
+    return (EAttribute)repositoryPredicateEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getAndPredicate()
   {
     return andPredicateEClass;
@@ -534,6 +544,7 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
 
     repositoryPredicateEClass = createEClass(REPOSITORY_PREDICATE);
     createEAttribute(repositoryPredicateEClass, REPOSITORY_PREDICATE__PROJECT);
+    createEAttribute(repositoryPredicateEClass, REPOSITORY_PREDICATE__RELATIVE_PATH_PATTERN);
 
     andPredicateEClass = createEClass(AND_PREDICATE);
     createEReference(andPredicateEClass, AND_PREDICATE__OPERANDS);
@@ -632,6 +643,8 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
     initEClass(repositoryPredicateEClass, RepositoryPredicate.class, "RepositoryPredicate", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
     initEAttribute(getRepositoryPredicate_Project(), getProject(), "project", null, 0, 1, RepositoryPredicate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getRepositoryPredicate_RelativePathPattern(), ecorePackage.getEString(), "relativePathPattern", null, 1, 1, RepositoryPredicate.class, //$NON-NLS-1$
+        !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(andPredicateEClass, AndPredicate.class, "AndPredicate", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
     initEReference(getAndPredicate_Operands(), getPredicate(), null, "operands", null, 0, -1, AndPredicate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$

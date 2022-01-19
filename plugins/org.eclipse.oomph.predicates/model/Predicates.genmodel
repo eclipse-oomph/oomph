@@ -32,6 +32,8 @@
     <genClasses ecoreClass="Predicates.ecore#//RepositoryPredicate">
       <genFeatures createChild="false" propertyDescription="A project used to determine whether a resource is in the same repository as that project"
           ecoreFeature="ecore:EAttribute Predicates.ecore#//RepositoryPredicate/project"/>
+      <genFeatures createChild="false" propertyDescription="A regular expression used to match the repository-relative path (in portable notation with forward slashes) of the resource"
+          ecoreFeature="ecore:EAttribute Predicates.ecore#//RepositoryPredicate/relativePathPattern"/>
     </genClasses>
     <genClasses ecoreClass="Predicates.ecore#//AndPredicate">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Predicates.ecore#//AndPredicate/operands"/>

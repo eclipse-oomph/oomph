@@ -347,13 +347,22 @@ public interface PredicatesPackage extends EPackage
   int REPOSITORY_PREDICATE__PROJECT = PREDICATE_FEATURE_COUNT + 0;
 
   /**
+   * The feature id for the '<em><b>Relative Path Pattern</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int REPOSITORY_PREDICATE__RELATIVE_PATH_PATTERN = PREDICATE_FEATURE_COUNT + 1;
+
+  /**
    * The number of structural features of the '<em>Repository Predicate</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int REPOSITORY_PREDICATE_FEATURE_COUNT = PREDICATE_FEATURE_COUNT + 1;
+  int REPOSITORY_PREDICATE_FEATURE_COUNT = PREDICATE_FEATURE_COUNT + 2;
 
   /**
    * The operation id for the '<em>Get Annotation</em>' operation.
@@ -964,6 +973,17 @@ public interface PredicatesPackage extends EPackage
   EAttribute getRepositoryPredicate_Project();
 
   /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.predicates.RepositoryPredicate#getRelativePathPattern <em>Relative Path Pattern</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Relative Path Pattern</em>'.
+   * @see org.eclipse.oomph.predicates.RepositoryPredicate#getRelativePathPattern()
+   * @see #getRepositoryPredicate()
+   * @generated
+   */
+  EAttribute getRepositoryPredicate_RelativePathPattern();
+
+  /**
    * Returns the meta object for class '{@link org.eclipse.oomph.predicates.AndPredicate <em>And Predicate</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1256,6 +1276,14 @@ public interface PredicatesPackage extends EPackage
      * @generated
      */
     EAttribute REPOSITORY_PREDICATE__PROJECT = eINSTANCE.getRepositoryPredicate_Project();
+
+    /**
+     * The meta object literal for the '<em><b>Relative Path Pattern</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute REPOSITORY_PREDICATE__RELATIVE_PATH_PATTERN = eINSTANCE.getRepositoryPredicate_RelativePathPattern();
 
     /**
      * The meta object literal for the '{@link org.eclipse.oomph.predicates.impl.AndPredicateImpl <em>And Predicate</em>}' class.

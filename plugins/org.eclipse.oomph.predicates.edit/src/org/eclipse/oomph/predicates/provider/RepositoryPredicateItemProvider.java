@@ -69,6 +69,7 @@ public class RepositoryPredicateItemProvider extends PredicateItemProvider
       super.getPropertyDescriptors(object);
 
       addProjectPropertyDescriptor(object);
+      addRelativePathPatternPropertyDescriptor(object);
     }
     return itemPropertyDescriptors;
   }
@@ -96,6 +97,20 @@ public class RepositoryPredicateItemProvider extends PredicateItemProvider
         return result;
       }
     });
+  }
+
+  /**
+   * This adds a property descriptor for the Relative Path Pattern feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addRelativePathPatternPropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_RepositoryPredicate_relativePathPattern_feature"), //$NON-NLS-1$
+        getString("_UI_RepositoryPredicate_relativePathPattern_description"), //$NON-NLS-1$
+        PredicatesPackage.Literals.REPOSITORY_PREDICATE__RELATIVE_PATH_PATTERN, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
   /**
@@ -150,6 +165,7 @@ public class RepositoryPredicateItemProvider extends PredicateItemProvider
     switch (notification.getFeatureID(RepositoryPredicate.class))
     {
       case PredicatesPackage.REPOSITORY_PREDICATE__PROJECT:
+      case PredicatesPackage.REPOSITORY_PREDICATE__RELATIVE_PATH_PATTERN:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
         return;
     }

@@ -22,6 +22,7 @@ import org.eclipse.core.resources.IProject;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.predicates.RepositoryPredicate#getProject <em>Project</em>}</li>
+ *   <li>{@link org.eclipse.oomph.predicates.RepositoryPredicate#getRelativePathPattern <em>Relative Path Pattern</em>}</li>
  * </ul>
  *
  * @see org.eclipse.oomph.predicates.PredicatesPackage#getRepositoryPredicate()
@@ -55,5 +56,27 @@ public interface RepositoryPredicate extends Predicate
    * @generated
    */
   void setProject(IProject value);
+
+  /**
+   * Returns the value of the '<em><b>Relative Path Pattern</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Relative Path Pattern</em>' attribute.
+   * @see #setRelativePathPattern(String)
+   * @see org.eclipse.oomph.predicates.PredicatesPackage#getRepositoryPredicate_RelativePathPattern()
+   * @model required="true"
+   * @generated
+   */
+  String getRelativePathPattern();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.predicates.RepositoryPredicate#getRelativePathPattern <em>Relative Path Pattern</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Relative Path Pattern</em>' attribute.
+   * @see #getRelativePathPattern()
+   * @generated
+   */
+  void setRelativePathPattern(String value);
 
 } // RepositoryPredicate
