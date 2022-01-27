@@ -26,7 +26,6 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.osgi.util.NLS;
-import org.eclipse.pde.api.tools.internal.ApiBaselineManager;
 import org.eclipse.pde.api.tools.internal.model.ApiModelFactory;
 import org.eclipse.pde.api.tools.internal.provisional.ApiPlugin;
 import org.eclipse.pde.api.tools.internal.provisional.IApiBaselineManager;
@@ -257,7 +256,8 @@ public class APIBaselineFromTargetTaskImpl extends AbstractAPIBaselineTaskImpl i
       return true;
     }
 
-    ((ApiBaselineManager)baselineManager).loadBaselineInfos(baseline);
+    // Force a load.
+    baseline.getApiComponents();
 
     // Work-around for PDE bug 489924:
     // API baseline from target X is not considered as derived from target X

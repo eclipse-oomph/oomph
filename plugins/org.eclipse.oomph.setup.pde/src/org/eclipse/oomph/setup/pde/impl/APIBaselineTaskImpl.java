@@ -25,7 +25,6 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import org.eclipse.osgi.util.NLS;
-import org.eclipse.pde.api.tools.internal.ApiBaselineManager;
 import org.eclipse.pde.api.tools.internal.model.ApiModelFactory;
 import org.eclipse.pde.api.tools.internal.provisional.ApiPlugin;
 import org.eclipse.pde.api.tools.internal.provisional.IApiBaselineManager;
@@ -350,7 +349,8 @@ public class APIBaselineTaskImpl extends AbstractAPIBaselineTaskImpl implements 
       return true;
     }
 
-    ((ApiBaselineManager)baselineManager).loadBaselineInfos(baseline);
+    // Force a load.
+    baseline.getApiComponents();
 
     if (!baselineDir.isDirectory() || !new File(baseline.getLocation()).equals(baselineDir))
     {
