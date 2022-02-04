@@ -64,7 +64,7 @@ public interface RepositoryPredicate extends Predicate
    * @return the value of the '<em>Relative Path Pattern</em>' attribute.
    * @see #setRelativePathPattern(String)
    * @see org.eclipse.oomph.predicates.PredicatesPackage#getRepositoryPredicate_RelativePathPattern()
-   * @model required="true"
+   * @model
    * @generated
    */
   String getRelativePathPattern();
