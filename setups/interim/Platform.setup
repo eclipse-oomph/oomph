@@ -670,28 +670,22 @@
     <setupTask
         xsi:type="git:GitCloneTask"
         id="git.clone.platform.releng.aggregator"
-        remoteURI="platform/eclipse.platform.releng.aggregator">
+        remoteURI="eclipse-platform/eclipse.platform.releng.aggregator">
       <annotation
           source="http://www.eclipse.org/oomph/setup/InducedChoices">
         <detail
             key="inherit">
-          <value>eclipse.git.gerrit.remoteURIs</value>
+          <value>github.remoteURIs</value>
         </detail>
         <detail
             key="label">
-          <value>Platform Releng Aggregator Git or Gerrit Repository</value>
+          <value>Platform Releng Aggregator Git Repository</value>
         </detail>
         <detail
             key="target">
           <value>remoteURI</value>
         </detail>
       </annotation>
-      <configSections
-          name="gerrit">
-        <properties
-            key="createchangeid"
-            value="true"/>
-      </configSections>
       <description>Platform Releng Aggregator</description>
     </setupTask>
     <setupTask
