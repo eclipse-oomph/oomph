@@ -589,12 +589,12 @@
     <setupTask
         xsi:type="git:GitCloneTask"
         id="git.clone.platform.releng"
-        remoteURI="platform/eclipse.platform.releng">
+        remoteURI="eclipse-platform/eclipse.platform.releng">
       <annotation
           source="http://www.eclipse.org/oomph/setup/InducedChoices">
         <detail
             key="inherit">
-          <value>eclipse.git.gerrit.remoteURIs</value>
+          <value>github.remoteURIs</value>
         </detail>
         <detail
             key="label">
@@ -605,12 +605,6 @@
           <value>remoteURI</value>
         </detail>
       </annotation>
-      <configSections
-          name="gerrit">
-        <properties
-            key="createchangeid"
-            value="true"/>
-      </configSections>
       <description>Platform Releng</description>
     </setupTask>
     <setupTask
