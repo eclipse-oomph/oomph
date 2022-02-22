@@ -1336,7 +1336,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
         @Override
         public void init(UIServices serviceUI)
         {
-          P2UIPlugin.init(serviceUI, getShell().getDisplay());
+          UIUtil.syncExec(() -> P2UIPlugin.init(serviceUI, getShell().getDisplay()));
         }
       });
 
