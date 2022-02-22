@@ -144,18 +144,6 @@ Eike Stepper - initial API and implementation
       <build>
         <plugins>
           <plugin>
-            <groupId>org.eclipse.tycho.extras</groupId>
-            <artifactId>tycho-pack200a-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>pack200-normalize</id>
-                <goals>
-                  <goal>normalize</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
             <groupId>org.eclipse.cbi.maven.plugins</groupId>
             <artifactId>eclipse-jarsigner-plugin</artifactId>
             <executions>
@@ -163,18 +151,6 @@ Eike Stepper - initial API and implementation
                 <id>sign</id>
                 <goals>
                   <goal>sign</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.eclipse.tycho.extras</groupId>
-            <artifactId>tycho-pack200b-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>pack200-pack</id>
-                <goals>
-                  <goal>pack</goal>
                 </goals>
               </execution>
             </executions>
