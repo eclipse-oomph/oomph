@@ -90,12 +90,14 @@ public class SetupP2FactoryImpl extends EFactoryImpl implements SetupP2Factory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public P2Task createP2Task()
   {
     P2TaskImpl p2Task = new P2TaskImpl();
     return p2Task;
   }
 
+  @Override
   public P2Task createP2Task(String[] ius, String[] urls, Set<String> existingIUs)
   {
     P2Task p2Task = createP2Task();
@@ -125,6 +127,7 @@ public class SetupP2FactoryImpl extends EFactoryImpl implements SetupP2Factory
     return p2Task;
   }
 
+  @Override
   public P2Task createP2Task(String[] ius, String[] repositories)
   {
     return createP2Task(ius, repositories, null);
@@ -135,6 +138,7 @@ public class SetupP2FactoryImpl extends EFactoryImpl implements SetupP2Factory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public SetupP2Package getSetupP2Package()
   {
     return (SetupP2Package)getEPackage();

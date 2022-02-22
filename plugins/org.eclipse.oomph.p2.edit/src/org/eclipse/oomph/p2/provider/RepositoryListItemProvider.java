@@ -223,7 +223,7 @@ public class RepositoryListItemProvider extends ModelElementItemProvider
   @Override
   protected Command createAddCommand(EditingDomain domain, EObject owner, EStructuralFeature feature, Collection<?> collection, int index)
   {
-    List<Object> filteredCollection = new ArrayList<Object>();
+    List<Object> filteredCollection = new ArrayList<>();
     if (collection != null)
     {
       for (Object object : collection)

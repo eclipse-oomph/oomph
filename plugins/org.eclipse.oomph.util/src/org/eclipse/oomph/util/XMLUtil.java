@@ -137,6 +137,7 @@ public final class XMLUtil
       this.tagName = tagName;
       handleElementsByTagName(rootElement, tagName, new ElementHandler()
       {
+        @Override
         public void handleElement(Element element) throws Exception
         {
           if (element.getParentNode() == rootElement)

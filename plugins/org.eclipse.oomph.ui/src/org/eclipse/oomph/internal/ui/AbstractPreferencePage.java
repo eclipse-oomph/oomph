@@ -27,6 +27,7 @@ public abstract class AbstractPreferencePage extends PreferencePage implements I
   {
   }
 
+  @Override
   public void init(IWorkbench workbench)
   {
     // Do nothing

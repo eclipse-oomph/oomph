@@ -108,6 +108,7 @@ public class TargetPlatformTaskImpl extends SetupTaskImpl implements TargetPlatf
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getName()
   {
     return name;
@@ -118,6 +119,7 @@ public class TargetPlatformTaskImpl extends SetupTaskImpl implements TargetPlatf
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setName(String newName)
   {
     String oldName = name;
@@ -133,6 +135,7 @@ public class TargetPlatformTaskImpl extends SetupTaskImpl implements TargetPlatf
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public boolean isActivate()
   {
     return activate;
@@ -143,6 +146,7 @@ public class TargetPlatformTaskImpl extends SetupTaskImpl implements TargetPlatf
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setActivate(boolean newActivate)
   {
     boolean oldActivate = activate;
@@ -257,6 +261,7 @@ public class TargetPlatformTaskImpl extends SetupTaskImpl implements TargetPlatf
     return 50;
   }
 
+  @Override
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     if (context.getTrigger() == Trigger.MANUAL)
@@ -278,6 +283,7 @@ public class TargetPlatformTaskImpl extends SetupTaskImpl implements TargetPlatf
     return false;
   }
 
+  @Override
   public void perform(SetupTaskContext context) throws Exception
   {
     if (targetDefinition == null)

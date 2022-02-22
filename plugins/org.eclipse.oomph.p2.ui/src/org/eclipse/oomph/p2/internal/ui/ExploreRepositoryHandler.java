@@ -27,6 +27,7 @@ import java.util.Iterator;
  */
 public class ExploreRepositoryHandler extends AbstractHandler
 {
+  @Override
   public Object execute(ExecutionEvent event) throws ExecutionException
   {
     ISelection selection = HandlerUtil.getCurrentSelection(event);

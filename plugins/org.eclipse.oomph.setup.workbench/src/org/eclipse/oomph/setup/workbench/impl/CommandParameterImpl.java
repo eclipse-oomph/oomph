@@ -100,6 +100,7 @@ public class CommandParameterImpl extends ModelElementImpl implements CommandPar
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getID()
   {
     return iD;
@@ -110,6 +111,7 @@ public class CommandParameterImpl extends ModelElementImpl implements CommandPar
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setID(String newID)
   {
     String oldID = iD;
@@ -125,6 +127,7 @@ public class CommandParameterImpl extends ModelElementImpl implements CommandPar
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getValue()
   {
     return value;
@@ -135,6 +138,7 @@ public class CommandParameterImpl extends ModelElementImpl implements CommandPar
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setValue(String newValue)
   {
     String oldValue = value;

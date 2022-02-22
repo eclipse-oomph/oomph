@@ -62,6 +62,7 @@ public final class OwnershipMapper
 
   private static final FileFilter FOLDER_FILTER = new FileFilter()
   {
+    @Override
     public boolean accept(File pathname)
     {
       Path path = pathname.toPath();
@@ -114,6 +115,7 @@ public final class OwnershipMapper
       {
         threadPool.submit(new Runnable()
         {
+          @Override
           public void run()
           {
             try
@@ -469,10 +471,12 @@ public final class OwnershipMapper
   {
     private static final Random RANDOM = new Random();
 
+    @Override
     public UserPrincipal owner()
     {
       return new UserPrincipal()
       {
+        @Override
         public String getName()
         {
           return "foo.bar";
@@ -480,10 +484,12 @@ public final class OwnershipMapper
       };
     }
 
+    @Override
     public GroupPrincipal group()
     {
       return new GroupPrincipal()
       {
+        @Override
         public String getName()
         {
           int i = RANDOM.nextInt(4);
@@ -497,51 +503,61 @@ public final class OwnershipMapper
       };
     }
 
+    @Override
     public long size()
     {
       throw new UnsupportedOperationException();
     }
 
+    @Override
     public FileTime lastModifiedTime()
     {
       throw new UnsupportedOperationException();
     }
 
+    @Override
     public FileTime lastAccessTime()
     {
       throw new UnsupportedOperationException();
     }
 
+    @Override
     public boolean isSymbolicLink()
     {
       throw new UnsupportedOperationException();
     }
 
+    @Override
     public boolean isRegularFile()
     {
       throw new UnsupportedOperationException();
     }
 
+    @Override
     public boolean isOther()
     {
       throw new UnsupportedOperationException();
     }
 
+    @Override
     public boolean isDirectory()
     {
       throw new UnsupportedOperationException();
     }
 
+    @Override
     public Object fileKey()
     {
       throw new UnsupportedOperationException();
     }
 
+    @Override
     public FileTime creationTime()
     {
       throw new UnsupportedOperationException();
     }
 
+    @Override
     public Set<PosixFilePermission> permissions()
     {
       throw new UnsupportedOperationException();

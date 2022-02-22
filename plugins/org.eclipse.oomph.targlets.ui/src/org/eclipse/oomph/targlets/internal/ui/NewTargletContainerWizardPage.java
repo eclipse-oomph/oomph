@@ -46,6 +46,7 @@ public class NewTargletContainerWizardPage extends WizardPage
     return containerID;
   }
 
+  @Override
   public void createControl(Composite parent)
   {
     final Set<String> ids = TargletContainerDescriptorManager.getContainerIDs(new NullProgressMonitor());
@@ -67,6 +68,7 @@ public class NewTargletContainerWizardPage extends WizardPage
     text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
     text.addModifyListener(new ModifyListener()
     {
+      @Override
       public void modifyText(ModifyEvent e)
       {
         containerID = text.getText();

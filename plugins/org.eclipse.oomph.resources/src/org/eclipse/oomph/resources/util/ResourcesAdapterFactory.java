@@ -83,7 +83,7 @@ public class ResourcesAdapterFactory extends AdapterFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  protected ResourcesSwitch<Adapter> modelSwitch = new ResourcesSwitch<Adapter>()
+  protected ResourcesSwitch<Adapter> modelSwitch = new ResourcesSwitch<>()
   {
     @Override
     public Adapter caseSourceLocator(SourceLocator object)

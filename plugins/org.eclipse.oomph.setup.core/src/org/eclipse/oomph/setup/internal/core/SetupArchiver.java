@@ -77,6 +77,7 @@ import java.util.zip.ZipFile;
  */
 public class SetupArchiver implements IApplication
 {
+  @Override
   public Object start(IApplicationContext context)
   {
     String[] arguments = (String[])context.getArguments().get(IApplicationContext.APPLICATION_ARGS);
@@ -85,7 +86,7 @@ public class SetupArchiver implements IApplication
     final ResourceSet resourceSet = SetupCoreUtil.createResourceSet();
     final URIConverter uriConverter = resourceSet.getURIConverter();
 
-    final Map<URI, URI> configurationImages = new ConcurrentHashMap<URI, URI>();
+    final Map<URI, URI> configurationImages = new ConcurrentHashMap<>();
 
     EList<URIHandler> uriHandlers = uriConverter.getURIHandlers();
     uriHandlers.add(0, new URIHandlerImpl()
@@ -112,31 +113,37 @@ public class SetupArchiver implements IApplication
       {
         it.set(new URIHandler()
         {
+          @Override
           public void setAttributes(URI uri, Map<String, ?> attributes, Map<?, ?> options) throws IOException
           {
             uriHandler.setAttributes(uri, attributes, options);
           }
 
+          @Override
           public Map<String, ?> getAttributes(URI uri, Map<?, ?> options)
           {
             return uriHandler.getAttributes(uri, options);
           }
 
+          @Override
           public boolean exists(URI uri, Map<?, ?> options)
           {
             return uriHandler.exists(uri, options);
           }
 
+          @Override
           public void delete(URI uri, Map<?, ?> options) throws IOException
           {
             uriHandler.delete(uri, options);
           }
 
+          @Override
           public OutputStream createOutputStream(URI uri, Map<?, ?> options) throws IOException
           {
             return uriHandler.createOutputStream(uri, options);
           }
 
+          @Override
           public InputStream createInputStream(URI uri, Map<?, ?> options) throws IOException
           {
             InputStream result = uriHandler.createInputStream(uri, options);
@@ -175,11 +182,13 @@ public class SetupArchiver implements IApplication
             }
           }
 
+          @Override
           public Map<String, ?> contentDescription(URI uri, Map<?, ?> options) throws IOException
           {
             return uriHandler.contentDescription(uri, options);
           }
 
+          @Override
           public boolean canHandle(URI uri)
           {
             return uriHandler.canHandle(uri);
@@ -191,7 +200,7 @@ public class SetupArchiver implements IApplication
     URI archiveLocation = uriConverter.normalize(SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI);
     File file = new File(ECFURIHandlerImpl.getCacheFile(archiveLocation).toFileString());
 
-    Set<URI> uris = new LinkedHashSet<URI>();
+    Set<URI> uris = new LinkedHashSet<>();
     uris.add(SetupContext.INDEX_SETUP_URI);
 
     boolean expectURIs = false;
@@ -226,7 +235,7 @@ public class SetupArchiver implements IApplication
       System.out.println();
     }
 
-    Set<String> entryNames = new HashSet<String>();
+    Set<String> entryNames = new HashSet<>();
     long lastModified = file.lastModified();
     File temp = new File(file.toString() + ".tmp"); //$NON-NLS-1$
     URI outputLocation;
@@ -329,7 +338,7 @@ public class SetupArchiver implements IApplication
             Workspace workspace = configuration.getWorkspace();
             if (workspace != null)
             {
-              List<String> projects = new UniqueEList<String>();
+              List<String> projects = new UniqueEList<>();
               for (Stream stream : workspace.getStreams())
               {
                 String proxyURI = EcoreUtil.getURI(stream).toString();
@@ -402,7 +411,7 @@ public class SetupArchiver implements IApplication
     ECFURIHandlerImpl.clearExpectedETags();
 
     Map<URI, URI> uriMap = uriConverter.getURIMap();
-    Map<Object, Object> options = new HashMap<Object, Object>();
+    Map<Object, Object> options = new HashMap<>();
     if (lastModified != 0)
     {
       options.put(Resource.OPTION_SAVE_ONLY_IF_CHANGED, Resource.OPTION_SAVE_ONLY_IF_CHANGED_MEMORY_BUFFER);
@@ -714,6 +723,7 @@ public class SetupArchiver implements IApplication
     }
   }
 
+  @Override
   public void stop()
   {
   }

@@ -60,6 +60,7 @@ public class ListFilesAction extends AbstractAction<Repository>
   {
     IRunnableWithProgress runnable = new IRunnableWithProgress()
     {
+      @Override
       public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
       {
         long start = System.currentTimeMillis();
@@ -70,6 +71,7 @@ public class ListFilesAction extends AbstractAction<Repository>
 
           shell.getDisplay().asyncExec(new Runnable()
           {
+            @Override
             public void run()
             {
               try
@@ -110,7 +112,7 @@ public class ListFilesAction extends AbstractAction<Repository>
     int commitCount = getCommitCount(git);
     monitor.beginTask(Messages.ListFilesAction_ListFiles_task, commitCount);
 
-    Map<String, Set<String>> namesByExtension = new HashMap<String, Set<String>>();
+    Map<String, Set<String>> namesByExtension = new HashMap<>();
 
     for (RevCommit commit : git.log().call())
     {
@@ -139,7 +141,7 @@ public class ListFilesAction extends AbstractAction<Repository>
         Set<String> names = namesByExtension.get(extension);
         if (names == null)
         {
-          names = new HashSet<String>();
+          names = new HashSet<>();
           namesByExtension.put(extension, names);
         }
 
@@ -194,7 +196,7 @@ public class ListFilesAction extends AbstractAction<Repository>
 
   private List<String> sort(Collection<String> c)
   {
-    List<String> list = new ArrayList<String>(c);
+    List<String> list = new ArrayList<>(c);
     Collections.sort(list);
     return list;
   }

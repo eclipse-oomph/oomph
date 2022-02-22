@@ -10,6 +10,8 @@
  */
 package org.eclipse.oomph.setup.pde.provider;
 
+import org.eclipse.oomph.base.BaseFactory;
+import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.setup.pde.PDEPackage;
 import org.eclipse.oomph.setup.pde.TargetPlatformTask;
 import org.eclipse.oomph.setup.provider.SetupTaskItemProvider;
@@ -165,6 +167,8 @@ public class TargetPlatformTaskItemProvider extends SetupTaskItemProvider
   protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object)
   {
     super.collectNewChildDescriptors(newChildDescriptors, object);
+
+    newChildDescriptors.add(createChildParameter(BasePackage.Literals.MODEL_ELEMENT__ANNOTATIONS, BaseFactory.eINSTANCE.createAnnotation()));
   }
 
   /**

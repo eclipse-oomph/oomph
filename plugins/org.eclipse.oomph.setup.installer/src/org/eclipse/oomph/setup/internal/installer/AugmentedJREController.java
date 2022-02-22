@@ -43,7 +43,7 @@ import java.util.Set;
  */
 public class AugmentedJREController extends JREController
 {
-  private static Set<Trigger> BOOSTRAP_ONLY_TRIGGER = new LinkedHashSet<Trigger>(Arrays.asList(new Trigger[] { Trigger.STARTUP, Trigger.MANUAL }));
+  private static Set<Trigger> BOOSTRAP_ONLY_TRIGGER = new LinkedHashSet<>(Arrays.asList(new Trigger[] { Trigger.STARTUP, Trigger.MANUAL }));
 
   public AugmentedJREController(Label label, StructuredViewer viewer, Handler downloadHandler)
   {
@@ -100,7 +100,7 @@ public class AugmentedJREController extends JREController
         if (jreSpecificTasks != null)
         {
           setupTaskCopy.getAnnotations().remove(jreSpecificTasks);
-          for (EObject eObject : new ArrayList<EObject>(jreSpecificTasks.getContents()))
+          for (EObject eObject : new ArrayList<>(jreSpecificTasks.getContents()))
           {
             if (eObject instanceof SetupTask)
             {

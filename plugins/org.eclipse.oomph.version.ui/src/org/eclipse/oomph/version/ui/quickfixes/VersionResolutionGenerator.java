@@ -29,9 +29,10 @@ public class VersionResolutionGenerator implements IMarkerResolutionGenerator2
   {
   }
 
+  @Override
   public IMarkerResolution[] getResolutions(IMarker marker)
   {
-    List<IMarkerResolution> resolutions = new ArrayList<IMarkerResolution>();
+    List<IMarkerResolution> resolutions = new ArrayList<>();
 
     String problemType = Markers.getProblemType(marker);
     String regEx = Markers.getQuickFixPattern(marker);
@@ -96,24 +97,10 @@ public class VersionResolutionGenerator implements IMarkerResolutionGenerator2
     return resolutions.toArray(new IMarkerResolution[resolutions.size()]);
   }
 
+  @Override
   public boolean hasResolutions(IMarker marker)
   {
-    if (Markers.getQuickFixPattern(marker) != null)
-    {
-      return true;
-    }
-
-    if (Markers.getQuickFixConfigureOption(marker) != null)
-    {
-      return true;
-    }
-
-    if (Markers.getQuickFixReference(marker) != null)
-    {
-      return true;
-    }
-
-    if (Markers.getQuickFixNature(marker) != null)
+    if ((Markers.getQuickFixPattern(marker) != null) || (Markers.getQuickFixConfigureOption(marker) != null) || (Markers.getQuickFixReference(marker) != null) || (Markers.getQuickFixNature(marker) != null))
     {
       return true;
     }

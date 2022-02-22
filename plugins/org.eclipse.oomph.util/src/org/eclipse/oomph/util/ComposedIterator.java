@@ -27,6 +27,7 @@ public class ComposedIterator<T> extends AbstractIterator<T>
 
   private Iterator<T> currentDelegate;
 
+  @SafeVarargs
   public ComposedIterator(Iterator<T>... delegates)
   {
     this(Arrays.asList(delegates));
@@ -66,12 +67,12 @@ public class ComposedIterator<T> extends AbstractIterator<T>
 
   public static <T> Iterator<T> fromIterables(Collection<? extends Iterable<T>> iterables)
   {
-    List<Iterator<T>> iterators = new ArrayList<Iterator<T>>();
+    List<Iterator<T>> iterators = new ArrayList<>();
     for (Iterable<T> iterable : iterables)
     {
       iterators.add(iterable.iterator());
     }
 
-    return new ComposedIterator<T>(iterators.iterator());
+    return new ComposedIterator<>(iterators.iterator());
   }
 }

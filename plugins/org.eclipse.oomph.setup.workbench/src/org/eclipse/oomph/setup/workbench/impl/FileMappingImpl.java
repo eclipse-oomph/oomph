@@ -119,6 +119,7 @@ public class FileMappingImpl extends ModelElementImpl implements FileMapping
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getFilePattern()
   {
     return filePattern;
@@ -129,6 +130,7 @@ public class FileMappingImpl extends ModelElementImpl implements FileMapping
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setFilePattern(String newFilePattern)
   {
     String oldFilePattern = filePattern;
@@ -144,6 +146,7 @@ public class FileMappingImpl extends ModelElementImpl implements FileMapping
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getDefaultEditorID()
   {
     return defaultEditorID;
@@ -154,6 +157,7 @@ public class FileMappingImpl extends ModelElementImpl implements FileMapping
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setDefaultEditorID(String newDefaultEditorID)
   {
     String oldDefaultEditorID = defaultEditorID;
@@ -169,11 +173,12 @@ public class FileMappingImpl extends ModelElementImpl implements FileMapping
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<FileEditor> getEditors()
   {
     if (editors == null)
     {
-      editors = new EObjectContainmentEList<FileEditor>(FileEditor.class, this, WorkbenchPackage.FILE_MAPPING__EDITORS);
+      editors = new EObjectContainmentEList<>(FileEditor.class, this, WorkbenchPackage.FILE_MAPPING__EDITORS);
     }
     return editors;
   }

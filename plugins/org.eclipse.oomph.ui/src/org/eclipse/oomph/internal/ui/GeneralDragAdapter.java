@@ -87,6 +87,7 @@ public final class GeneralDragAdapter extends OomphDragAdapter
     contextMenu.setRemoveAllWhenShown(true);
     contextMenu.addMenuListener(new IMenuListener()
     {
+      @Override
       public void menuAboutToShow(IMenuManager manager)
       {
         IStructuredSelection selection = (IStructuredSelection)selectionProvider.getSelection();
@@ -113,6 +114,7 @@ public final class GeneralDragAdapter extends OomphDragAdapter
   {
     return new ISelectionProvider()
     {
+      @Override
       public ISelection getSelection()
       {
         ISelection selection = viewer.getSelection();
@@ -133,16 +135,19 @@ public final class GeneralDragAdapter extends OomphDragAdapter
         return StructuredSelection.EMPTY;
       }
 
+      @Override
       public void setSelection(ISelection selection)
       {
         // Do nothing.
       }
 
+      @Override
       public void removeSelectionChangedListener(ISelectionChangedListener listener)
       {
         // Do nothing.
       }
 
+      @Override
       public void addSelectionChangedListener(ISelectionChangedListener listener)
       {
         // Do nothing.

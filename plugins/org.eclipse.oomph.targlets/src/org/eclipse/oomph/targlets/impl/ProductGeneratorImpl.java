@@ -72,11 +72,13 @@ public class ProductGeneratorImpl extends ModelElementImpl implements ProductGen
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public void generateIUs(IProject project, final String qualifierReplacement, Map<String, Version> iuVersions, final EList<IInstallableUnit> result)
       throws Exception
   {
-    Predicate<IFile> filter = new Predicate<IFile>()
+    Predicate<IFile> filter = new Predicate<>()
     {
+      @Override
       public boolean apply(IFile file)
       {
         return "product".equals(file.getFileExtension()); //$NON-NLS-1$
@@ -85,6 +87,7 @@ public class ProductGeneratorImpl extends ModelElementImpl implements ProductGen
 
     ResourcesUtil.runWithFiles(project, Path.EMPTY, filter, new ResourcesUtil.RunnableWithFile()
     {
+      @Override
       public void run(File projectFolder, File file) throws Exception
       {
         IProductDescriptor productDescriptor = new ProductFile(file.getAbsolutePath());

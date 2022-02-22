@@ -197,6 +197,7 @@ public abstract class JREController implements ISelectionChangedListener
     refresh();
   }
 
+  @Override
   public void selectionChanged(SelectionChangedEvent event)
   {
     Object element = ((IStructuredSelection)viewer.getSelection()).getFirstElement();
@@ -222,6 +223,7 @@ public abstract class JREController implements ISelectionChangedListener
 
     UIUtil.asyncExec(new Runnable()
     {
+      @Override
       public void run()
       {
         refreshing = true;

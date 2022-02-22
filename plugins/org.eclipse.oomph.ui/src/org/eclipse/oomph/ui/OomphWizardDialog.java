@@ -53,6 +53,7 @@ public class OomphWizardDialog extends WizardDialog implements HelpProvider
 
       pageChangedListener = new IPageChangedListener()
       {
+        @Override
         public void pageChanged(PageChangedEvent event)
         {
           if (helpSupport != null)
@@ -71,6 +72,7 @@ public class OomphWizardDialog extends WizardDialog implements HelpProvider
     return helpSupport;
   }
 
+  @Override
   public String getHelpPath()
   {
     IWizardPage page = getCurrentPage();

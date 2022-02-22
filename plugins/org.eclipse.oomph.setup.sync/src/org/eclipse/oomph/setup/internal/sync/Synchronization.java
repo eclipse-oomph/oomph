@@ -60,9 +60,9 @@ public class Synchronization
 {
   private final ResourceSet resourceSet = SyncUtil.createResourceSet();
 
-  private final Set<String> ids = new HashSet<String>();
+  private final Set<String> ids = new HashSet<>();
 
-  private final Map<String, String> preferenceIDs = new HashMap<String, String>();
+  private final Map<String, String> preferenceIDs = new HashMap<>();
 
   private final Synchronizer synchronizer;
 
@@ -207,8 +207,8 @@ public class Synchronization
 
   private Map<String, SyncAction> computeSyncActions()
   {
-    Map<String, SyncAction> actions = new HashMap<String, SyncAction>();
-    Map<String, SyncDelta> tmpRemoteDeltas = new HashMap<String, SyncDelta>(remoteDeltas);
+    Map<String, SyncAction> actions = new HashMap<>();
+    Map<String, SyncDelta> tmpRemoteDeltas = new HashMap<>(remoteDeltas);
 
     for (Map.Entry<String, SyncDelta> localEntry : localDeltas.entrySet())
     {
@@ -325,7 +325,7 @@ public class Synchronization
 
   private Map<String, SyncDelta> compareTasks(Location location, SetupTaskContainer oldTaskContainer, SetupTaskContainer newTaskContainer)
   {
-    Map<String, SyncDelta> deltas = new HashMap<String, SyncDelta>();
+    Map<String, SyncDelta> deltas = new HashMap<>();
 
     Map<String, SetupTask> oldTasks = collectTasks(oldTaskContainer);
     Map<String, SetupTask> newTasks = collectTasks(newTaskContainer);
@@ -382,13 +382,7 @@ public class Synchronization
     PreferenceTask oldPreference = (PreferenceTask)oldTask;
     PreferenceTask newPreference = (PreferenceTask)newTask;
 
-    if (!ObjectUtil.equals(oldPreference.getKey(), newPreference.getKey()))
-    {
-      // Ignore changed keys.
-      return null;
-    }
-
-    if (ObjectUtil.equals(oldPreference.getValue(), newPreference.getValue()))
+    if (!ObjectUtil.equals(oldPreference.getKey(), newPreference.getKey()) || ObjectUtil.equals(oldPreference.getValue(), newPreference.getValue()))
     {
       // Ignore unchanged values.
       return null;
@@ -403,7 +397,7 @@ public class Synchronization
     EList<SetupTask> setupTasks = taskContainer.getSetupTasks();
     collectIDs(setupTasks);
 
-    Map<String, SetupTask> tasks = new HashMap<String, SetupTask>();
+    Map<String, SetupTask> tasks = new HashMap<>();
     if (collectTasks(setupTasks, tasks))
     {
       new ChangedAdapter(taskContainer);
@@ -582,7 +576,7 @@ public class Synchronization
   {
     if (unresolvedActions == null)
     {
-      unresolvedActions = new HashMap<String, SyncAction>();
+      unresolvedActions = new HashMap<>();
 
       for (Map.Entry<String, SyncAction> entry : actions.entrySet())
       {

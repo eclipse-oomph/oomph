@@ -150,6 +150,7 @@ public final class AboutDialog extends AbstractSetupDialog
     TableViewer tableViewer = new TableViewer(table);
     GeneralDragAdapter generalDragAdapter = new GeneralDragAdapter(tableViewer, new GeneralDragAdapter.DraggedObjectsFactory()
     {
+      @Override
       public List<Object> createDraggedObjects(ISelection selection) throws Exception
       {
         List<Object> result = new ArrayList<Object>();
@@ -220,6 +221,7 @@ public final class AboutDialog extends AbstractSetupDialog
 
     table.getDisplay().asyncExec(new Runnable()
     {
+      @Override
       public void run()
       {
         columnResizer.controlResized(null);

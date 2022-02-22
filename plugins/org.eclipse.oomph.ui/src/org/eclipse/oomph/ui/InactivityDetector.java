@@ -60,6 +60,7 @@ public abstract class InactivityDetector
     final Display controlDisplay = control.getDisplay();
     controlDisplay.asyncExec(new Runnable()
     {
+      @Override
       public void run()
       {
         if (!control.isDisposed())
@@ -71,6 +72,7 @@ public abstract class InactivityDetector
             display = controlDisplay;
             display.timerExec(detectorInterval, new Runnable()
             {
+              @Override
               public void run()
               {
                 if (!control.isDisposed())

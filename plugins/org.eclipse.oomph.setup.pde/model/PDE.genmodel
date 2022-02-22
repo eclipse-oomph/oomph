@@ -4,7 +4,7 @@
     editorDirectory="" modelPluginID="org.eclipse.oomph.setup.pde" modelName="PDE"
     modelPluginClass="org.eclipse.oomph.setup.internal.pde.PDEPlugin" updateClasspath="false"
     nonNLSMarkers="true" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
-    testsDirectory="" importerID="org.eclipse.emf.importer.ecore" complianceLevel="5.0"
+    testsDirectory="" importerID="org.eclipse.emf.importer.ecore" complianceLevel="11.0"
     copyrightFields="false" optimizedHasChildren="true" runtimeVersion="2.10" usedGenPackages="../../org.eclipse.oomph.base/model/Base.genmodel#//base ../../org.eclipse.oomph.setup/model/Setup.genmodel#//setup"
     importOrganizing="true" decoration="Live" cleanup="true">
   <foreignModel>PDE.ecore</foreignModel>

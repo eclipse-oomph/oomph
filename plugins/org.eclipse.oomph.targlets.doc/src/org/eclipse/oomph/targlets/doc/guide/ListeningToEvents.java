@@ -63,6 +63,7 @@ class TargletContainerEventLogger implements ITargletContainerListener
   {
   }
 
+  @Override
   @SuppressWarnings("nls")
   public void handleTargletContainerEvent(TargletContainerEvent event, IProgressMonitor monitor) throws Exception
   {

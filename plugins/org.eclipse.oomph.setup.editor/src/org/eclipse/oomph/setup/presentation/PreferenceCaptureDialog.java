@@ -103,7 +103,7 @@ public class PreferenceCaptureDialog extends Dialog
 
   protected FilteringAdapterFactoryContentProvider selectedPreferencesContentProvider;
 
-  protected Set<Object> included = new HashSet<Object>();
+  protected Set<Object> included = new HashSet<>();
 
   protected boolean fromEclipsePreferenceFile;
 
@@ -139,10 +139,11 @@ public class PreferenceCaptureDialog extends Dialog
 
   protected List<?> getAvailablePreferences()
   {
-    PreferenceNode rootPreferenceNode = PreferencesUtil.getRootPreferenceNode(Collections.unmodifiableSet(new LinkedHashSet<String>(
-        Arrays.asList(new String[] { PreferencesUtil.BUNDLE_DEFAULTS_NODE, PreferencesUtil.DEFAULT_NODE, PreferencesUtil.INSTANCE_NODE }))), false);
+    PreferenceNode rootPreferenceNode = PreferencesUtil.getRootPreferenceNode(Collections.unmodifiableSet(
+        new LinkedHashSet<>(Arrays.asList(new String[] { PreferencesUtil.BUNDLE_DEFAULTS_NODE, PreferencesUtil.DEFAULT_NODE, PreferencesUtil.INSTANCE_NODE }))),
+        false);
 
-    Map<URI, Pair<String, String>> preferences = new HashMap<URI, Pair<String, String>>();
+    Map<URI, Pair<String, String>> preferences = new HashMap<>();
     for (PreferenceNode preferenceNode : rootPreferenceNode.getChildren())
     {
       traverse(preferences, preferenceNode);
@@ -329,6 +330,7 @@ public class PreferenceCaptureDialog extends Dialog
 
     availablePreferencesTreeViewer.addDoubleClickListener(new IDoubleClickListener()
     {
+      @Override
       public void doubleClick(DoubleClickEvent event)
       {
         if (addButton.isEnabled())
@@ -340,6 +342,7 @@ public class PreferenceCaptureDialog extends Dialog
 
     selectedPreferencesTreeViewer.addDoubleClickListener(new IDoubleClickListener()
     {
+      @Override
       public void doubleClick(DoubleClickEvent event)
       {
         if (removeButton.isEnabled())
@@ -356,6 +359,7 @@ public class PreferenceCaptureDialog extends Dialog
     {
       preferenceFileText.addModifyListener(new ModifyListener()
       {
+        @Override
         public void modifyText(ModifyEvent e)
         {
           included.clear();
@@ -364,7 +368,7 @@ public class PreferenceCaptureDialog extends Dialog
 
           try
           {
-            Map<URI, Pair<String, String>> preferences = new HashMap<URI, Pair<String, String>>();
+            Map<URI, Pair<String, String>> preferences = new HashMap<>();
             Map<String, String> loadProperties = PropertiesUtil.loadProperties(new File(((Text)e.widget).getText()));
             for (Map.Entry<String, String> entry : loadProperties.entrySet())
             {
@@ -402,7 +406,7 @@ public class PreferenceCaptureDialog extends Dialog
 
   public Map<URI, Pair<String, String>> getResult()
   {
-    Map<URI, Pair<String, String>> result = new HashMap<URI, Pair<String, String>>();
+    Map<URI, Pair<String, String>> result = new HashMap<>();
     for (Object object : included)
     {
       PreferenceTask preferenceTask = (PreferenceTask)object;
@@ -439,7 +443,7 @@ public class PreferenceCaptureDialog extends Dialog
     public void widgetSelected(SelectionEvent event)
     {
       IStructuredSelection selection = (IStructuredSelection)(add ? availablePreferencesTreeViewer : selectedPreferencesTreeViewer).getSelection();
-      List<Object> newSelection = new ArrayList<Object>();
+      List<Object> newSelection = new ArrayList<>();
 
       for (Object object : selection.toArray())
       {
@@ -455,7 +459,7 @@ public class PreferenceCaptureDialog extends Dialog
         }
       }
 
-      Set<Object> nonCandidates = new HashSet<Object>(newSelection);
+      Set<Object> nonCandidates = new HashSet<>(newSelection);
       Object candidate = null;
       Object bestCandidate = null;
 
@@ -539,7 +543,7 @@ public class PreferenceCaptureDialog extends Dialog
 
     public TreeIterator<Object> getAllContents(Object object, boolean includeRoot)
     {
-      return new AbstractTreeIterator<Object>(object, includeRoot)
+      return new AbstractTreeIterator<>(object, includeRoot)
       {
         private static final long serialVersionUID = 1L;
 
@@ -556,7 +560,7 @@ public class PreferenceCaptureDialog extends Dialog
     public Object[] getElements(Object object)
     {
       List<Object> elements = ((ItemProvider)object).getChildren();
-      List<Object> result = new ArrayList<Object>();
+      List<Object> result = new ArrayList<>();
 
       for (Object element : elements)
       {
@@ -588,7 +592,7 @@ public class PreferenceCaptureDialog extends Dialog
     public Object[] getChildren(Object object)
     {
       Object[] children = super.getChildren(object);
-      List<Object> result = new ArrayList<Object>();
+      List<Object> result = new ArrayList<>();
 
       for (Object child : children)
       {
@@ -664,7 +668,7 @@ public class PreferenceCaptureDialog extends Dialog
         private final IScopeContext[] preferenceContexts = new IScopeContext[] { DUMMY_PROJECT_SCOPE, DUMMY_INSTANCE_SCOPE, DUMMY_CONFIGURATION_SCOPE,
             DUMMY_DEFAULT_SCOPE };
 
-        private final Map<PreferenceTask, Boolean> selected = new HashMap<PreferenceTask, Boolean>();
+        private final Map<PreferenceTask, Boolean> selected = new HashMap<>();
 
         @Override
         public boolean select(Viewer viewer, Object parentElement, Object element)
@@ -740,140 +744,171 @@ public class PreferenceCaptureDialog extends Dialog
     */
     private static final class DummyPreferences implements IEclipsePreferences
     {
+      @Override
       public String absolutePath()
       {
         return null;
       }
 
+      @Override
       public void accept(IPreferenceNodeVisitor visitor) throws BackingStoreException
       {
       }
 
+      @Override
       public void addNodeChangeListener(INodeChangeListener listener)
       {
       }
 
+      @Override
       public void addPreferenceChangeListener(IPreferenceChangeListener listener)
       {
       }
 
+      @Override
       public String[] childrenNames() throws BackingStoreException
       {
         return null;
       }
 
+      @Override
       public void clear() throws BackingStoreException
       {
       }
 
+      @Override
       public void flush() throws BackingStoreException
       {
       }
 
+      @Override
       public String get(String key, String def)
       {
         return def;
       }
 
+      @Override
       public boolean getBoolean(String key, boolean def)
       {
         return def;
       }
 
+      @Override
       public byte[] getByteArray(String key, byte[] def)
       {
         return def;
       }
 
+      @Override
       public double getDouble(String key, double def)
       {
         return def;
       }
 
+      @Override
       public float getFloat(String key, float def)
       {
         return def;
       }
 
+      @Override
       public int getInt(String key, int def)
       {
         return def;
       }
 
+      @Override
       public long getLong(String key, long def)
       {
         return def;
       }
 
+      @Override
       public String[] keys() throws BackingStoreException
       {
         return null;
       }
 
+      @Override
       public String name()
       {
         return null;
       }
 
+      @Override
       public Preferences node(String path)
       {
         return this;
       }
 
+      @Override
       public boolean nodeExists(String pathName) throws BackingStoreException
       {
         return false;
       }
 
+      @Override
       public Preferences parent()
       {
         return null;
       }
 
+      @Override
       public void put(String key, String value)
       {
       }
 
+      @Override
       public void putBoolean(String key, boolean value)
       {
       }
 
+      @Override
       public void putByteArray(String key, byte[] value)
       {
       }
 
+      @Override
       public void putDouble(String key, double value)
       {
       }
 
+      @Override
       public void putFloat(String key, float value)
       {
       }
 
+      @Override
       public void putInt(String key, int value)
       {
       }
 
+      @Override
       public void putLong(String key, long value)
       {
       }
 
+      @Override
       public void remove(String key)
       {
       }
 
+      @Override
       public void removeNode() throws BackingStoreException
       {
       }
 
+      @Override
       public void removeNodeChangeListener(INodeChangeListener listener)
       {
       }
 
+      @Override
       public void removePreferenceChangeListener(IPreferenceChangeListener listener)
       {
       }
 
+      @Override
       public void sync() throws BackingStoreException
       {
       }
@@ -891,16 +926,19 @@ public class PreferenceCaptureDialog extends Dialog
         this.name = name;
       }
 
+      @Override
       public IPath getLocation()
       {
         return null;
       }
 
+      @Override
       public String getName()
       {
         return name;
       }
 
+      @Override
       public IEclipsePreferences getNode(String qualifier)
       {
         return DUMMY_PREFERENCES;

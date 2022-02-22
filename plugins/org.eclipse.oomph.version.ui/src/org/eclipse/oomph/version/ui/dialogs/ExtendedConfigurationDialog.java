@@ -64,7 +64,7 @@ public class ExtendedConfigurationDialog extends TitleAreaDialog
       new ColumnHandler(IVersionBuilderArguments.CHECK_CLOSURE_CONTENT_ARGUMENT, Messages.ExtendedConfigurationDialog_column_checkFeatureClosureContent),
       new ColumnHandler(IVersionBuilderArguments.CHECK_MAVEN_POM_ARGUMENT, Messages.ExtendedConfigurationDialog_column_checkMavenPom) };
 
-  private final Map<IProject, VersionBuilderArguments> map = new HashMap<IProject, VersionBuilderArguments>();
+  private final Map<IProject, VersionBuilderArguments> map = new HashMap<>();
 
   private Table table;
 
@@ -127,9 +127,10 @@ public class ExtendedConfigurationDialog extends TitleAreaDialog
       columnHandler.createColumn(table);
     }
 
-    List<IProject> list = new ArrayList<IProject>(map.keySet());
+    List<IProject> list = new ArrayList<>(map.keySet());
     Collections.sort(list, new Comparator<IProject>()
     {
+      @Override
       public int compare(IProject p1, IProject p2)
       {
         return p1.getName().compareTo(p2.getName());
@@ -197,10 +198,11 @@ public class ExtendedConfigurationDialog extends TitleAreaDialog
       column.setWidth(10 + extent.x + 10);
       column.setText(header);
 
-      final ArrayList<Button> buttons = new ArrayList<Button>();
+      final ArrayList<Button> buttons = new ArrayList<>();
       column.setData("buttons", buttons); //$NON-NLS-1$
       column.addSelectionListener(new SelectionListener()
       {
+        @Override
         public void widgetSelected(SelectionEvent e)
         {
           boolean selected = false;
@@ -219,6 +221,7 @@ public class ExtendedConfigurationDialog extends TitleAreaDialog
           }
         }
 
+        @Override
         public void widgetDefaultSelected(SelectionEvent e)
         {
         }

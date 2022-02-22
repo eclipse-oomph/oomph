@@ -98,6 +98,7 @@ public class ConfigSubsectionImpl extends MinimalEObjectImpl.Container implement
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getName()
   {
     return name;
@@ -108,6 +109,7 @@ public class ConfigSubsectionImpl extends MinimalEObjectImpl.Container implement
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setName(String newName)
   {
     String oldName = name;
@@ -123,11 +125,12 @@ public class ConfigSubsectionImpl extends MinimalEObjectImpl.Container implement
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<ConfigProperty> getProperties()
   {
     if (properties == null)
     {
-      properties = new EObjectContainmentEList<ConfigProperty>(ConfigProperty.class, this, GitPackage.CONFIG_SUBSECTION__PROPERTIES);
+      properties = new EObjectContainmentEList<>(ConfigProperty.class, this, GitPackage.CONFIG_SUBSECTION__PROPERTIES);
     }
     return properties;
   }

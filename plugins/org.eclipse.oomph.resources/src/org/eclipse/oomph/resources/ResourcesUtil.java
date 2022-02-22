@@ -73,9 +73,10 @@ public final class ResourcesUtil
     DocumentBuilder documentBuilder = XMLUtil.createDocumentBuilder();
     Element rootElement = XMLUtil.loadRootElement(documentBuilder, new File(folder, ".project")); //$NON-NLS-1$
 
-    final AtomicReference<String> projectName = new AtomicReference<String>();
+    final AtomicReference<String> projectName = new AtomicReference<>();
     XMLUtil.handleChildElements(rootElement, new ElementHandler()
     {
+      @Override
       public void handleElement(Element element) throws Exception
       {
         if ("name".equals(element.getTagName())) //$NON-NLS-1$
@@ -210,6 +211,7 @@ public final class ResourcesUtil
     final AtomicInteger count = new AtomicInteger();
     getWorkspace().run(new IWorkspaceRunnable()
     {
+      @Override
       public void run(IProgressMonitor monitor) throws CoreException
       {
         SubMonitor progress = SubMonitor.convert(monitor, projectLocations.size()).detectCancelation();
@@ -321,6 +323,7 @@ public final class ResourcesUtil
     final IWorkspace workspace = getWorkspace();
     workspace.run(new IWorkspaceRunnable()
     {
+      @Override
       public void run(IProgressMonitor monitor) throws CoreException
       {
         IWorkspaceRoot root = workspace.getRoot();

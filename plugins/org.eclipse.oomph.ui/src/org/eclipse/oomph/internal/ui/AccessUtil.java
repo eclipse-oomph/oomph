@@ -282,10 +282,12 @@ public final class AccessUtil
           // Wait 2 more seconds.
           UIUtil.asyncExec(new Runnable()
           {
+            @Override
             public void run()
             {
               UIUtil.timerExec(milliseconds, new Runnable()
               {
+                @Override
                 public void run()
                 {
                   // Ensure that the sleeping display loop wakes up.

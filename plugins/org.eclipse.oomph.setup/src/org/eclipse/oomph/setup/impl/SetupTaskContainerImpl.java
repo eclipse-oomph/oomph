@@ -75,11 +75,12 @@ public abstract class SetupTaskContainerImpl extends ModelElementImpl implements
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<SetupTask> getSetupTasks()
   {
     if (setupTasks == null)
     {
-      setupTasks = new EObjectContainmentEList.Resolving<SetupTask>(SetupTask.class, this, SetupPackage.SETUP_TASK_CONTAINER__SETUP_TASKS);
+      setupTasks = new EObjectContainmentEList.Resolving<>(SetupTask.class, this, SetupPackage.SETUP_TASK_CONTAINER__SETUP_TASKS);
     }
     return setupTasks;
   }

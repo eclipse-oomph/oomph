@@ -58,19 +58,23 @@ public final class BaseUtil
 
   private static final Adapter REDUCED = new Adapter()
   {
+    @Override
     public void setTarget(Notifier newTarget)
     {
     }
 
+    @Override
     public void notifyChanged(Notification notification)
     {
     }
 
+    @Override
     public boolean isAdapterForType(Object type)
     {
       return false;
     }
 
+    @Override
     public Notifier getTarget()
     {
       return null;
@@ -346,7 +350,7 @@ public final class BaseUtil
 
   public static EList<Annotation> getAnnotations(ModelElement modelElement, String sourceURI)
   {
-    EList<Annotation> annotations = new BasicEList<Annotation>();
+    EList<Annotation> annotations = new BasicEList<>();
     for (Annotation annotation : modelElement.getAnnotations())
     {
       if (ObjectUtil.equals(annotation.getSource(), sourceURI))

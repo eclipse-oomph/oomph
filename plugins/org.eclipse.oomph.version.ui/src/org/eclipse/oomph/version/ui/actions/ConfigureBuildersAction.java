@@ -44,7 +44,7 @@ public class ConfigureBuildersAction extends AbstractAction<Map<IProject, Versio
   protected Map<IProject, VersionBuilderArguments> promptArguments()
   {
     IStructuredSelection structuredSelection = (IStructuredSelection)selection;
-    Collection<String> releasePaths = new HashSet<String>();
+    Collection<String> releasePaths = new HashSet<>();
     for (Object element : structuredSelection.toArray())
     {
       if (element instanceof IFile)
@@ -88,7 +88,7 @@ public class ConfigureBuildersAction extends AbstractAction<Map<IProject, Versio
 
   public static Map<IProject, VersionBuilderArguments> collectVersionBuilderArguments(Collection<String> releasePaths)
   {
-    Map<IProject, VersionBuilderArguments> map = new HashMap<IProject, VersionBuilderArguments>();
+    Map<IProject, VersionBuilderArguments> map = new HashMap<>();
 
     for (IProject project : ResourcesPlugin.getWorkspace().getRoot().getProjects())
     {

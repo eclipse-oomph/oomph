@@ -80,11 +80,12 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<Annotation> getAnnotations()
   {
     if (annotations == null)
     {
-      annotations = new EObjectContainmentWithInverseEList<Annotation>(Annotation.class, this, BasePackage.MODEL_ELEMENT__ANNOTATIONS,
+      annotations = new EObjectContainmentWithInverseEList<>(Annotation.class, this, BasePackage.MODEL_ELEMENT__ANNOTATIONS,
           BasePackage.ANNOTATION__MODEL_ELEMENT);
     }
     return annotations;
@@ -95,6 +96,7 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public Annotation getAnnotation(String source)
   {
     for (Annotation annotation : getAnnotations())

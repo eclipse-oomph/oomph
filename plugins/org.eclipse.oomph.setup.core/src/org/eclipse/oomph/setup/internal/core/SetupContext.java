@@ -390,6 +390,7 @@ public class SetupContext
       URIConverter uriConverter = resourceSet.getURIConverter();
       BaseUtil.execute(5000, new Runnable()
       {
+        @Override
         public void run()
         {
           associate(resourceSet, installation, workspace);
@@ -832,7 +833,7 @@ public class SetupContext
 
     User userCopy = (User)copier.copy(user);
 
-    for (Map.Entry<EObject, EObject> entry : new LinkedHashSet<Map.Entry<EObject, EObject>>(copier.entrySet()))
+    for (Map.Entry<EObject, EObject> entry : new LinkedHashSet<>(copier.entrySet()))
     {
       EObject eObject = entry.getKey();
       EObject copyEObject = entry.getValue();

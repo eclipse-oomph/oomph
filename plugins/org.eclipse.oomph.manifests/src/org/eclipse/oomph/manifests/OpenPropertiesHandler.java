@@ -32,19 +32,23 @@ public class OpenPropertiesHandler extends AbstractProjectHandler
   {
     PropertyDialogAction action = new PropertyDialogAction(page.getWorkbenchWindow(), new ISelectionProvider()
     {
+      @Override
       public ISelection getSelection()
       {
         return new StructuredSelection(project);
       }
 
+      @Override
       public void setSelection(ISelection selection)
       {
       }
 
+      @Override
       public void addSelectionChangedListener(ISelectionChangedListener listener)
       {
       }
 
+      @Override
       public void removeSelectionChangedListener(ISelectionChangedListener listener)
       {
       }

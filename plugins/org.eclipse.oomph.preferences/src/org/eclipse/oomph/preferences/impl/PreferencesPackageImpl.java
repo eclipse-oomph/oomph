@@ -143,6 +143,7 @@ public class PreferencesPackageImpl extends EPackageImpl implements PreferencesP
     // Register package validator
     EValidator.Registry.INSTANCE.put(thePreferencesPackage, new EValidator.Descriptor()
     {
+      @Override
       public EValidator getEValidator()
       {
         return PreferencesValidator.INSTANCE;
@@ -162,6 +163,7 @@ public class PreferencesPackageImpl extends EPackageImpl implements PreferencesP
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getPreferenceItem()
   {
     return preferenceItemEClass;
@@ -172,6 +174,7 @@ public class PreferencesPackageImpl extends EPackageImpl implements PreferencesP
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getPreferenceItem_Root()
   {
     return (EReference)preferenceItemEClass.getEStructuralFeatures().get(0);
@@ -182,6 +185,7 @@ public class PreferencesPackageImpl extends EPackageImpl implements PreferencesP
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getPreferenceItem_AbsolutePath()
   {
     return (EAttribute)preferenceItemEClass.getEStructuralFeatures().get(2);
@@ -192,6 +196,7 @@ public class PreferencesPackageImpl extends EPackageImpl implements PreferencesP
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getPreferenceItem_Name()
   {
     return (EAttribute)preferenceItemEClass.getEStructuralFeatures().get(3);
@@ -202,6 +207,7 @@ public class PreferencesPackageImpl extends EPackageImpl implements PreferencesP
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getPreferenceItem_RelativePath()
   {
     return (EAttribute)preferenceItemEClass.getEStructuralFeatures().get(4);
@@ -212,6 +218,7 @@ public class PreferencesPackageImpl extends EPackageImpl implements PreferencesP
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getPreferenceItem_Ancestor()
   {
     return (EReference)preferenceItemEClass.getEStructuralFeatures().get(5);
@@ -222,6 +229,7 @@ public class PreferencesPackageImpl extends EPackageImpl implements PreferencesP
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getPreferenceItem_Scope()
   {
     return (EReference)preferenceItemEClass.getEStructuralFeatures().get(1);
@@ -232,6 +240,7 @@ public class PreferencesPackageImpl extends EPackageImpl implements PreferencesP
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EOperation getPreferenceItem__GetParent()
   {
     return preferenceItemEClass.getEOperations().get(0);
@@ -242,6 +251,7 @@ public class PreferencesPackageImpl extends EPackageImpl implements PreferencesP
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getPreferenceNode()
   {
     return preferenceNodeEClass;
@@ -252,6 +262,7 @@ public class PreferencesPackageImpl extends EPackageImpl implements PreferencesP
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getPreferenceNode_Children()
   {
     return (EReference)preferenceNodeEClass.getEStructuralFeatures().get(1);
@@ -262,6 +273,7 @@ public class PreferencesPackageImpl extends EPackageImpl implements PreferencesP
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getPreferenceNode_Parent()
   {
     return (EReference)preferenceNodeEClass.getEStructuralFeatures().get(0);
@@ -272,6 +284,7 @@ public class PreferencesPackageImpl extends EPackageImpl implements PreferencesP
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getPreferenceNode_Properties()
   {
     return (EReference)preferenceNodeEClass.getEStructuralFeatures().get(2);
@@ -282,6 +295,7 @@ public class PreferencesPackageImpl extends EPackageImpl implements PreferencesP
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getPreferenceNode_Location()
   {
     return (EAttribute)preferenceNodeEClass.getEStructuralFeatures().get(3);
@@ -292,6 +306,7 @@ public class PreferencesPackageImpl extends EPackageImpl implements PreferencesP
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EOperation getPreferenceNode__GetNode__String()
   {
     return preferenceNodeEClass.getEOperations().get(0);
@@ -302,6 +317,7 @@ public class PreferencesPackageImpl extends EPackageImpl implements PreferencesP
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EOperation getPreferenceNode__GetNode__URI()
   {
     return preferenceNodeEClass.getEOperations().get(1);
@@ -312,6 +328,7 @@ public class PreferencesPackageImpl extends EPackageImpl implements PreferencesP
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EOperation getPreferenceNode__GetProperty__String()
   {
     return preferenceNodeEClass.getEOperations().get(2);
@@ -322,6 +339,7 @@ public class PreferencesPackageImpl extends EPackageImpl implements PreferencesP
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EOperation getPreferenceNode__GetProperty__URI()
   {
     return preferenceNodeEClass.getEOperations().get(3);
@@ -332,6 +350,7 @@ public class PreferencesPackageImpl extends EPackageImpl implements PreferencesP
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EOperation getPreferenceNode__GetAncestor()
   {
     return preferenceNodeEClass.getEOperations().get(4);
@@ -342,6 +361,7 @@ public class PreferencesPackageImpl extends EPackageImpl implements PreferencesP
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getProperty()
   {
     return propertyEClass;
@@ -352,6 +372,7 @@ public class PreferencesPackageImpl extends EPackageImpl implements PreferencesP
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getProperty_Parent()
   {
     return (EReference)propertyEClass.getEStructuralFeatures().get(0);
@@ -362,6 +383,7 @@ public class PreferencesPackageImpl extends EPackageImpl implements PreferencesP
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getProperty_Value()
   {
     return (EAttribute)propertyEClass.getEStructuralFeatures().get(1);
@@ -372,6 +394,7 @@ public class PreferencesPackageImpl extends EPackageImpl implements PreferencesP
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getProperty_NonDefault()
   {
     return (EAttribute)propertyEClass.getEStructuralFeatures().get(2);
@@ -382,6 +405,7 @@ public class PreferencesPackageImpl extends EPackageImpl implements PreferencesP
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getProperty_Secure()
   {
     return (EAttribute)propertyEClass.getEStructuralFeatures().get(3);
@@ -392,6 +416,7 @@ public class PreferencesPackageImpl extends EPackageImpl implements PreferencesP
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EOperation getProperty__GetAncestor()
   {
     return propertyEClass.getEOperations().get(0);
@@ -402,6 +427,7 @@ public class PreferencesPackageImpl extends EPackageImpl implements PreferencesP
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EDataType getEscapedString()
   {
     return escapedStringEDataType;
@@ -412,6 +438,7 @@ public class PreferencesPackageImpl extends EPackageImpl implements PreferencesP
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EDataType getURI()
   {
     return uriEDataType;
@@ -422,6 +449,7 @@ public class PreferencesPackageImpl extends EPackageImpl implements PreferencesP
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EDataType getPreferenceNodeName()
   {
     return preferenceNodeNameEDataType;
@@ -432,6 +460,7 @@ public class PreferencesPackageImpl extends EPackageImpl implements PreferencesP
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public PreferencesFactory getPreferencesFactory()
   {
     return (PreferencesFactory)getEFactoryInstance();

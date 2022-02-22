@@ -69,6 +69,7 @@ public interface Project extends ProjectContainer
    * @model opposite="projects"
    * @generated
    */
+  @Override
   ProjectContainer getProjectContainer();
 
   /**
@@ -135,6 +136,7 @@ public interface Project extends ProjectContainer
    * @model resolveProxies="false" transient="true" changeable="false" volatile="true" derived="true"
    * @generated
    */
+  @Override
   ProjectCatalog getProjectCatalog();
 
 } // Project

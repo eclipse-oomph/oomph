@@ -58,7 +58,7 @@ public class OomphDropAdapter extends EditingDomainViewerDropAdapter
     }
     else
     {
-      unavailableDelegates = new HashSet<OomphTransferDelegate>();
+      unavailableDelegates = new HashSet<>();
     }
 
     super.dragEnter(event);
@@ -70,7 +70,7 @@ public class OomphDropAdapter extends EditingDomainViewerDropAdapter
     // Transfer data isn't available until the drop accept phase for Motif.
     if (!HAS_EARLY_DRAG_SOURCE)
     {
-      unavailableDelegates = new HashSet<OomphTransferDelegate>();
+      unavailableDelegates = new HashSet<>();
     }
 
     super.dropAccept(event);

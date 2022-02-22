@@ -51,6 +51,7 @@ public class RemoteDataProvider implements DataProvider
     blob = storage.getBlob(KEY);
   }
 
+  @Override
   public final Location getLocation()
   {
     return Location.REMOTE;
@@ -77,11 +78,13 @@ public class RemoteDataProvider implements DataProvider
     return blob;
   }
 
+  @Override
   public File[] getExtraFiles()
   {
     return NO_FILES;
   }
 
+  @Override
   public boolean retrieve(File file) throws IOException, NotFoundException
   {
     try
@@ -102,6 +105,7 @@ public class RemoteDataProvider implements DataProvider
     }
   }
 
+  @Override
   public void update(File file, File baseFile) throws IOException, NotCurrentException
   {
     try
@@ -121,6 +125,7 @@ public class RemoteDataProvider implements DataProvider
     }
   }
 
+  @Override
   public boolean delete() throws IOException
   {
     return blob.delete();

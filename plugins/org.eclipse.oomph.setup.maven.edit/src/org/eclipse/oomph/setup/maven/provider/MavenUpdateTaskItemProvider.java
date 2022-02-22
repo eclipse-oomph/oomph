@@ -10,6 +10,8 @@
  */
 package org.eclipse.oomph.setup.maven.provider;
 
+import org.eclipse.oomph.base.BaseFactory;
+import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.setup.maven.MavenPackage;
 import org.eclipse.oomph.setup.maven.MavenUpdateTask;
 import org.eclipse.oomph.setup.provider.SetupTaskItemProvider;
@@ -199,6 +201,8 @@ public class MavenUpdateTaskItemProvider extends SetupTaskItemProvider
   protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object)
   {
     super.collectNewChildDescriptors(newChildDescriptors, object);
+
+    newChildDescriptors.add(createChildParameter(BasePackage.Literals.MODEL_ELEMENT__ANNOTATIONS, BaseFactory.eINSTANCE.createAnnotation()));
   }
 
   /**

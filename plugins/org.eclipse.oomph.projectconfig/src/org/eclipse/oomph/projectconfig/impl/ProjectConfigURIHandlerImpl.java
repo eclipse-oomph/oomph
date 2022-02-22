@@ -51,6 +51,7 @@ public class ProjectConfigURIHandlerImpl extends URIHandlerImpl
       {
         private InputStream in;
 
+        @Override
         public void loadResource(Resource resource) throws IOException
         {
           resource.getContents().addAll(ProjectConfigUtil.getWorkspaceConfiguration().eResource().getContents());
@@ -82,6 +83,7 @@ public class ProjectConfigURIHandlerImpl extends URIHandlerImpl
     {
       class ProjectConfigOutput extends OutputStream implements URIConverter.Saveable
       {
+        @Override
         public void saveResource(Resource resource) throws IOException
         {
           try

@@ -137,11 +137,11 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
 
   private static final URI CACHE_FOLDER = SetupContext.GLOBAL_STATE_LOCATION_URI.appendSegment("cache"); //$NON-NLS-1$
 
-  private static final Map<URI, String> EXPECTED_ETAGS = new HashMap<URI, String>();
+  private static final Map<URI, String> EXPECTED_ETAGS = new HashMap<>();
 
   private static final Map<URI, IOException> EXPECTED_EXCEPTIONS = Collections.synchronizedMap(new HashMap<URI, IOException>());
 
-  private static final Map<URI, CountDownLatch> LOCKS = new HashMap<URI, CountDownLatch>();
+  private static final Map<URI, CountDownLatch> LOCKS = new HashMap<>();
 
   private static final boolean TEST_IO_EXCEPTION = false;
 
@@ -195,6 +195,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
     this.defaultAuthorizationHandler = defaultAuthorizationHandler;
   }
 
+  @Override
   public URI resolve(URI uri)
   {
     return transform(uri, null);
@@ -209,7 +210,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
       if (requestedAttributes != null && requestedAttributes.contains(URIConverter.ATTRIBUTE_READ_ONLY) && requestedAttributes.size() == 1)
       {
         // For performance reasons, this assumes that all http/https accessible files are read only.
-        Map<String, Object> result = new HashMap<String, Object>();
+        Map<String, Object> result = new HashMap<>();
         result.put(URIConverter.ATTRIBUTE_READ_ONLY, true);
         return result;
       }
@@ -237,7 +238,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
 
   private final Map<String, ?> handleResponseAttributes(Set<String> requestedAttributes, Map<Object, Object> response)
   {
-    Map<String, Object> result = new HashMap<String, Object>();
+    Map<String, Object> result = new HashMap<>();
     if (requestedAttributes == null || requestedAttributes.contains(URIConverter.ATTRIBUTE_READ_ONLY))
     {
       result.put(URIConverter.ATTRIBUTE_READ_ONLY, true);
@@ -257,7 +258,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
 
   private final Map<String, ?> handleAttributes(Set<String> requestedAttributes, IRemoteFileInfo info)
   {
-    Map<String, Object> result = new HashMap<String, Object>();
+    Map<String, Object> result = new HashMap<>();
     if (requestedAttributes == null || requestedAttributes.contains(URIConverter.ATTRIBUTE_READ_ONLY))
     {
       result.put(URIConverter.ATTRIBUTE_READ_ONLY, true);
@@ -278,7 +279,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
 
   private final Map<String, ?> handleAttributes(Set<String> requestedAttributes, Map<String, ?> attributes)
   {
-    Map<String, Object> result = new HashMap<String, Object>();
+    Map<String, Object> result = new HashMap<>();
     if (requestedAttributes == null || requestedAttributes.contains(URIConverter.ATTRIBUTE_READ_ONLY))
     {
       result.put(URIConverter.ATTRIBUTE_READ_ONLY, true);
@@ -374,7 +375,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
     Set<URI> result;
     synchronized (EXPECTED_ETAGS)
     {
-      result = new HashSet<URI>(EXPECTED_ETAGS.keySet());
+      result = new HashSet<>(EXPECTED_ETAGS.keySet());
       EXPECTED_ETAGS.clear();
     }
 
@@ -644,12 +645,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
           return true;
         }
 
-        if (obj == null)
-        {
-          return false;
-        }
-
-        if (getClass() != obj.getClass())
+        if (obj == null || getClass() != obj.getClass())
         {
           return false;
         }
@@ -660,12 +656,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
         }
 
         Authorization other = (Authorization)obj;
-        if (!user.equals(other.user))
-        {
-          return false;
-        }
-
-        if (!password.equals(other.password))
+        if (!user.equals(other.user) || !password.equals(other.password))
         {
           return false;
         }
@@ -698,7 +689,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
    */
   public static class AuthorizationHandlerImpl implements AuthorizationHandler
   {
-    private final Map<String, Authorization> authorizations = new HashMap<String, Authorization>();
+    private final Map<String, Authorization> authorizations = new HashMap<>();
 
     private final UIServices uiServices;
 
@@ -715,6 +706,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
       authorizations.clear();
     }
 
+    @Override
     public synchronized Authorization authorize(URI uri)
     {
       String host = getHost(uri);
@@ -757,6 +749,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
       return Authorization.UNAUTHORIZED;
     }
 
+    @Override
     public synchronized Authorization reauthorize(URI uri, Authorization authorization)
     {
       // Double check that another thread hasn't already prompted and updated the secure store or has not already permanently failed to authorize.
@@ -859,6 +852,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
       this.monitor = monitor;
     }
 
+    @Override
     public void handleTransferEvent(IFileTransferEvent event)
     {
       if (event instanceof IFileTransferConnectStartEvent)
@@ -970,18 +964,20 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
 
           ReflectUtil.setValue(ReflectUtil.getField(httpClient.getClass(), "cookieStore"), httpClient, new org.apache.hc.client5.http.cookie.CookieStore() //$NON-NLS-1$
           {
+            @Override
             @SuppressWarnings("all")
             public List<Cookie> getCookies()
             {
               return COOKIE_STORE.getCookies();
             }
 
+            @Override
             @SuppressWarnings("all")
             public boolean clearExpired(Date date)
             {
               synchronized (COOKIE_STORE)
               {
-                List<Cookie> originalCookies = new ArrayList<Cookie>(COOKIE_STORE.getCookies());
+                List<Cookie> originalCookies = new ArrayList<>(COOKIE_STORE.getCookies());
                 COOKIE_STORE.clearExpired(date);
                 List<Cookie> remainingCookies = COOKIE_STORE.getCookies();
                 originalCookies.removeAll(remainingCookies);
@@ -996,6 +992,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
               }
             }
 
+            @Override
             @SuppressWarnings("all")
             public void clear()
             {
@@ -1003,6 +1000,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
               DELEGATING_COOKIE_STORE.basicRemoveAll();
             }
 
+            @Override
             @SuppressWarnings("all")
             public void addCookie(Cookie cookie)
             {
@@ -1046,21 +1044,25 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
       }
     }
 
+    @Override
     public void await() throws InterruptedException
     {
       receiveLatch.await();
     }
 
+    @Override
     public Exception getException()
     {
       return exception;
     }
 
+    @Override
     public boolean hasTransferException()
     {
       return exception instanceof IncomingFileTransferException;
     }
 
+    @Override
     public int getErrorCode()
     {
       return ((IncomingFileTransferException)exception).getErrorCode();
@@ -1080,6 +1082,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
         this.basicCookieStore = basicCookieStore;
       }
 
+      @Override
       public void add(java.net.URI uri, HttpCookie httpCookie)
       {
         basicAdd(uri, httpCookie);
@@ -1096,21 +1099,25 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
         delegate.add(uri, httpCookie);
       }
 
+      @Override
       public List<HttpCookie> get(java.net.URI uri)
       {
         return delegate.get(uri);
       }
 
+      @Override
       public List<HttpCookie> getCookies()
       {
         return delegate.getCookies();
       }
 
+      @Override
       public List<java.net.URI> getURIs()
       {
         return delegate.getURIs();
       }
 
+      @Override
       @SuppressWarnings("restriction")
       public boolean remove(java.net.URI uri, HttpCookie httpCookie)
       {
@@ -1130,6 +1137,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
         return delegate.remove(uri, cookie);
       }
 
+      @Override
       public boolean removeAll()
       {
         basicCookieStore.clear();
@@ -1183,6 +1191,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
     {
     }
 
+    @Override
     public void handleRemoteFileEvent(IRemoteFileSystemEvent event)
     {
       if (event instanceof IRemoteFileSystemBrowseEvent)
@@ -1202,21 +1211,25 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
       }
     }
 
+    @Override
     public void await() throws InterruptedException
     {
       receiveLatch.await();
     }
 
+    @Override
     public Exception getException()
     {
       return exception;
     }
 
+    @Override
     public boolean hasTransferException()
     {
       return exception instanceof BrowseFileTransferException;
     }
 
+    @Override
     public int getErrorCode()
     {
       return ((BrowseFileTransferException)exception).getErrorCode();
@@ -1245,7 +1258,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
 
     private Set<? extends URI> uris;
 
-    private Map<Object, Object> options = new HashMap<Object, Object>(OPTIONS);
+    private Map<Object, Object> options = new HashMap<>(OPTIONS);
 
     public ETagMirror()
     {
@@ -1387,7 +1400,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
     public T process() throws IOException
     {
       // First transform the URI, if necessary, extracting a login URI or form URI if one is needed.
-      Map<Object, Object> transformedOptions = new HashMap<Object, Object>(options);
+      Map<Object, Object> transformedOptions = new HashMap<>(options);
       uri = SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI.equals(uri) ? ACTUAL_INDEX_SETUP_ARCHIVE_LOCATION_URI : transform(originalURI, transformedOptions);
 
       // This is used to prefix all tracing statements.
@@ -1858,7 +1871,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
       Map<String, String> requestHeaders = (Map<String, String>)requestOptions.get(IRetrieveFileTransferOptions.REQUEST_HEADERS);
       if (requestHeaders == null)
       {
-        requestHeaders = new HashMap<String, String>();
+        requestHeaders = new HashMap<>();
         requestOptions.put(IRetrieveFileTransferOptions.REQUEST_HEADERS, requestHeaders);
       }
 
@@ -1868,7 +1881,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
     @Override
     protected void sendConnectionRequest(FileTransferID fileTransferID, String host) throws ECFException
     {
-      Map<Object, Object> requestOptions = new HashMap<Object, Object>();
+      Map<Object, Object> requestOptions = new HashMap<>();
       requestOptions.put(IRetrieveFileTransferOptions.CONNECT_TIMEOUT, CONNECT_TIMEOUT);
       requestOptions.put("org.eclipse.ecf.provider.filetransfer.httpclient4.retrieve.connectTimeout", CONNECT_TIMEOUT); //$NON-NLS-1$
       requestOptions.put(IRetrieveFileTransferOptions.READ_TIMEOUT, READ_TIMEOUT);
@@ -1885,7 +1898,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
         Map<String, String> requestHeaders = (Map<String, String>)requestOptions.get(IRetrieveFileTransferOptions.REQUEST_HEADERS);
         if (requestHeaders == null)
         {
-          requestHeaders = new HashMap<String, String>();
+          requestHeaders = new HashMap<>();
           requestOptions.put(IRetrieveFileTransferOptions.REQUEST_HEADERS, requestHeaders);
         }
 
@@ -2072,8 +2085,8 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
       }
 
       // Try instead to create an input stream and use the response to get at least the timestamp property.
-      Map<Object, Object> specializedOptions = new HashMap<Object, Object>(options);
-      Map<Object, Object> response = new HashMap<Object, Object>();
+      Map<Object, Object> specializedOptions = new HashMap<>(options);
+      Map<Object, Object> response = new HashMap<>();
       specializedOptions.put(URIConverter.OPTION_RESPONSE, response);
       try
       {
@@ -2135,7 +2148,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
       inputURI = URI.createURI(
           "https://example.com/gerrit/gitweb/EXAMPLE.git/Src/com.example.releng/example.setup?oomph=b[0..1];oomph_login=b[0]/'login';oomph-p=[2];oomph-f=[3..];a=blob_plain;hb=HEAD"); //$NON-NLS-1$
       new java.net.URI(inputURI.toString());
-      HashMap<Object, Object> options = new HashMap<Object, Object>();
+      HashMap<Object, Object> options = new HashMap<>();
       URI uri = transform(inputURI, options);
       System.err.println(">   " + expectedURI); //$NON-NLS-1$
       System.err.println(">>  " + inputURI); //$NON-NLS-1$
@@ -2154,7 +2167,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
           return uri;
         }
 
-        Map<String, String> arguments = new LinkedHashMap<String, String>();
+        Map<String, String> arguments = new LinkedHashMap<>();
         for (String parameter : parameters)
         {
           List<String> assignment = StringUtil.explode(parameter, "="); //$NON-NLS-1$
@@ -2170,7 +2183,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
         URI loginURI = null;
         URI formURI = null;
         boolean basicAuthentication = false;
-        Map<String, String> outputQuery = new LinkedHashMap<String, String>();
+        Map<String, String> outputQuery = new LinkedHashMap<>();
         for (Map.Entry<String, String> entry : arguments.entrySet())
         {
           String key = entry.getKey();
@@ -2488,12 +2501,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
                 }
 
                 character = expression.charAt(i);
-                if (character != '.')
-                {
-                  return null;
-                }
-
-                if (++i >= length)
+                if (character != '.' || ++i >= length)
                 {
                   return null;
                 }
@@ -2771,7 +2779,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
    */
   protected static class ProxyHelper
   {
-    private static final Set<IProxyData> PROXY_DATA = new HashSet<IProxyData>();
+    private static final Set<IProxyData> PROXY_DATA = new HashSet<>();
 
     @SuppressWarnings("restriction")
     private static final IProxyService PROXY_MANAGER = org.eclipse.core.internal.net.ProxyManager.getProxyManager();
@@ -2875,11 +2883,11 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
 
     private final URIConverter uriConverter;
 
-    private final Map<String, String> parameterTypes = new LinkedHashMap<String, String>();
+    private final Map<String, String> parameterTypes = new LinkedHashMap<>();
 
-    private final Map<String, String> parameterValues = new LinkedHashMap<String, String>();
+    private final Map<String, String> parameterValues = new LinkedHashMap<>();
 
-    private final Set<String> secureParameters = new LinkedHashSet<String>();
+    private final Set<String> secureParameters = new LinkedHashSet<>();
 
     private final AuthorizationHandler authorizationHandler;
 
@@ -2936,7 +2944,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
               authorization = authorizationHandler.reauthorize(formURI, authorization);
             }
 
-            Set<String> emptyKeys = new HashSet<String>();
+            Set<String> emptyKeys = new HashSet<>();
             for (int i = 0; i < limit && !authorization.isUnauthorizeable(); ++i)
             {
               if (authorization.isAuthorized())
@@ -3007,7 +3015,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
 
         // Ensure that the input stream really reads the remote form, not something from the cache.
         // This is to ensure that the cookies of the response header are properly processed.
-        HashMap<Object, Object> options = new HashMap<Object, Object>();
+        HashMap<Object, Object> options = new HashMap<>();
         options.put(OPTION_CACHE_HANDLING, CacheHandling.CACHE_IGNORE);
         options.put(OPTION_AUTHORIZATION_HANDLER, null);
         in = uriConverter.createInputStream(formURI, options);

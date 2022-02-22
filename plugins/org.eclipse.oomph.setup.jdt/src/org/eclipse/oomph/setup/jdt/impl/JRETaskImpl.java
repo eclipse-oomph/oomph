@@ -225,6 +225,7 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getVersion()
   {
     return version;
@@ -235,6 +236,7 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setVersion(String newVersion)
   {
     String oldVersion = version;
@@ -250,6 +252,7 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getLocation()
   {
     return location;
@@ -260,6 +263,7 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setLocation(String newLocation)
   {
     String oldLocation = location;
@@ -280,6 +284,7 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
     return name;
   }
 
+  @Override
   public String getName()
   {
     String name = getNameGen();
@@ -302,6 +307,7 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setName(String newName)
   {
     String oldName = name;
@@ -317,6 +323,7 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getVMInstallType()
   {
     return vMInstallType;
@@ -327,6 +334,7 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setVMInstallType(String newVMInstallType)
   {
     String oldVMInstallType = vMInstallType;
@@ -342,6 +350,7 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public boolean isExecutionEnvironmentDefault()
   {
     return executionEnvironmentDefault;
@@ -352,6 +361,7 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setExecutionEnvironmentDefault(boolean newExecutionEnvironmentDefault)
   {
     boolean oldExecutionEnvironmentDefault = executionEnvironmentDefault;
@@ -368,6 +378,7 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getVMArguments()
   {
     return vMArguments;
@@ -378,6 +389,7 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setVMArguments(String newVMArguments)
   {
     String oldVMArguments = vMArguments;
@@ -393,11 +405,12 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<JRELibrary> getJRELibraries()
   {
     if (jRELibraries == null)
     {
-      jRELibraries = new EObjectContainmentEList<JRELibrary>(JRELibrary.class, this, JDTPackage.JRE_TASK__JRE_LIBRARIES);
+      jRELibraries = new EObjectContainmentEList<>(JRELibrary.class, this, JDTPackage.JRE_TASK__JRE_LIBRARIES);
     }
     return jRELibraries;
   }
@@ -619,12 +632,14 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
     return arguments.trim().replaceAll("(\n\r?|\r\n?)", StringUtil.NL); //$NON-NLS-1$
   }
 
+  @Override
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     return JREHelper.isNeeded(context, getName(), getVersion(), getLocation(), getVMInstallType(), isExecutionEnvironmentDefault(),
         sanitizeArguments(getVMArguments()), getJRELibraries());
   }
 
+  @Override
   public void perform(SetupTaskContext context) throws Exception
   {
     JREHelper.perform(context, getName(), getVersion(), getLocation(), getVMInstallType(), isExecutionEnvironmentDefault(), sanitizeArguments(getVMArguments()),
@@ -669,7 +684,7 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
 
           vmStandin.setInstallLocation(installLocation);
 
-          List<String> mergedVMArguments = new ArrayList<String>();
+          List<String> mergedVMArguments = new ArrayList<>();
 
           if (vmArguments != null)
           {

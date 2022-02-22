@@ -77,7 +77,7 @@ public class P2IndexImpl implements P2Index
   {
     if (capabilitiesMap == null || capabilitiesCacheFile.lastModified() + capabilitiesRefreshHours * 60 * 60 * 1000 < System.currentTimeMillis())
     {
-      capabilitiesMap = new LinkedHashMap<String, Set<String>>();
+      capabilitiesMap = new LinkedHashMap<>();
 
       ZipFile zipFile = null;
       InputStream inputStream = null;
@@ -91,7 +91,7 @@ public class P2IndexImpl implements P2Index
 
         inputStream = zipFile.getInputStream(zipEntry);
 
-        Map<Object, Object> options = new HashMap<Object, Object>();
+        Map<Object, Object> options = new HashMap<>();
         options.put(BinaryResourceImpl.OPTION_VERSION, BinaryResourceImpl.BinaryIO.Version.VERSION_1_1);
         options.put(BinaryResourceImpl.OPTION_STYLE_DATA_CONVERTER, Boolean.TRUE);
         options.put(BinaryResourceImpl.OPTION_BUFFER_CAPACITY, 8192);
@@ -137,7 +137,7 @@ public class P2IndexImpl implements P2Index
   {
     if (repositories == null || force || repositoriesCacheFile.lastModified() + repositoriesRefreshHours * 60 * 60 * 1000 < System.currentTimeMillis())
     {
-      repositories = new HashMap<Integer, RepositoryImpl>();
+      repositories = new HashMap<>();
 
       ZipFile zipFile = null;
       InputStream inputStream = null;
@@ -151,7 +151,7 @@ public class P2IndexImpl implements P2Index
 
         inputStream = zipFile.getInputStream(zipEntry);
 
-        Map<Object, Object> options = new HashMap<Object, Object>();
+        Map<Object, Object> options = new HashMap<>();
         options.put(BinaryResourceImpl.OPTION_VERSION, BinaryResourceImpl.BinaryIO.Version.VERSION_1_1);
         options.put(BinaryResourceImpl.OPTION_STYLE_DATA_CONVERTER, Boolean.TRUE);
         options.put(BinaryResourceImpl.OPTION_BUFFER_CAPACITY, 8192);
@@ -162,7 +162,7 @@ public class P2IndexImpl implements P2Index
         repositoriesRefreshHours = stream.readInt();
         int repositoryCount = stream.readInt();
 
-        Map<RepositoryImpl, List<Integer>> composedRepositories = new HashMap<RepositoryImpl, List<Integer>>();
+        Map<RepositoryImpl, List<Integer>> composedRepositories = new HashMap<>();
         for (int id = 1; id <= repositoryCount; id++)
         {
           RepositoryImpl repository = new RepositoryImpl(stream, id, composedRepositories);
@@ -250,21 +250,24 @@ public class P2IndexImpl implements P2Index
     return true;
   }
 
+  @Override
   public Repository[] getRepositories()
   {
     initRepositories(false);
     return repositoriesArray;
   }
 
+  @Override
   public Map<String, Set<String>> getCapabilities()
   {
     initCapabilities();
     return Collections.unmodifiableMap(capabilitiesMap);
   }
 
+  @Override
   public Map<Repository, Set<Version>> lookupCapabilities(String namespace, String name)
   {
-    Map<Repository, Set<Version>> capabilities = new HashMap<Repository, Set<Version>>();
+    Map<Repository, Set<Version>> capabilities = new HashMap<>();
     if (!StringUtil.isEmpty(namespace) && !StringUtil.isEmpty(name))
     {
       namespace = URI.encodeSegment(namespace, false);
@@ -293,7 +296,7 @@ public class P2IndexImpl implements P2Index
           Repository repository = repositories.get(repositoryID);
           if (repository != null)
           {
-            Set<Version> versions = new HashSet<Version>();
+            Set<Version> versions = new HashSet<>();
             for (int i = 1; i < tokens.length; i++)
             {
               versions.add(Version.parseVersion(tokens[i]));
@@ -320,9 +323,10 @@ public class P2IndexImpl implements P2Index
     return capabilities;
   }
 
+  @Override
   public Map<Repository, Set<Version>> generateCapabilitiesFromComposedRepositories(Map<Repository, Set<Version>> capabilitiesFromSimpleRepositories)
   {
-    Map<Repository, Set<Version>> capabilities = new HashMap<Repository, Set<Version>>();
+    Map<Repository, Set<Version>> capabilities = new HashMap<>();
     for (Map.Entry<Repository, Set<Version>> entry : capabilitiesFromSimpleRepositories.entrySet())
     {
       Repository repository = entry.getKey();
@@ -340,7 +344,7 @@ public class P2IndexImpl implements P2Index
       Set<Version> set = capabilities.get(composite);
       if (set == null)
       {
-        set = new HashSet<Version>();
+        set = new HashSet<>();
         capabilities.put(composite, set);
       }
 
@@ -436,7 +440,7 @@ public class P2IndexImpl implements P2Index
       {
         if (composites == null)
         {
-          composites = new ArrayList<Integer>();
+          composites = new ArrayList<>();
           composedRepositories.put(this, composites);
         }
 
@@ -445,31 +449,37 @@ public class P2IndexImpl implements P2Index
       }
     }
 
+    @Override
     public URI getLocation()
     {
       return location;
     }
 
+    @Override
     public int getID()
     {
       return id;
     }
 
+    @Override
     public boolean isComposed()
     {
       return composed;
     }
 
+    @Override
     public boolean isCompressed()
     {
       return compressed;
     }
 
+    @Override
     public long getTimestamp()
     {
       return timestamp;
     }
 
+    @Override
     public int getCapabilityCount()
     {
       if (composed && capabilityCount == UNINITIALIZED)
@@ -484,11 +494,13 @@ public class P2IndexImpl implements P2Index
       return capabilityCount;
     }
 
+    @Override
     public int getUnresolvedChildren()
     {
       return unresolvedChildren;
     }
 
+    @Override
     public Repository[] getChildren()
     {
       if (children == null)
@@ -499,6 +511,7 @@ public class P2IndexImpl implements P2Index
       return children;
     }
 
+    @Override
     public Repository[] getComposites()
     {
       if (composites == null)
@@ -526,12 +539,7 @@ public class P2IndexImpl implements P2Index
         return true;
       }
 
-      if (obj == null)
-      {
-        return false;
-      }
-
-      if (getClass() != obj.getClass())
+      if (obj == null || getClass() != obj.getClass())
       {
         return false;
       }
@@ -545,6 +553,7 @@ public class P2IndexImpl implements P2Index
       return true;
     }
 
+    @Override
     public int compareTo(Repository o)
     {
       return location.toString().compareTo(o.getLocation().toString());

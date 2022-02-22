@@ -94,6 +94,7 @@ public class TextModificationImpl extends ModelElementImpl implements TextModifi
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getPattern()
   {
     return pattern;
@@ -104,6 +105,7 @@ public class TextModificationImpl extends ModelElementImpl implements TextModifi
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setPattern(String newPattern)
   {
     String oldPattern = pattern;
@@ -119,11 +121,12 @@ public class TextModificationImpl extends ModelElementImpl implements TextModifi
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<String> getSubstitutions()
   {
     if (substitutions == null)
     {
-      substitutions = new EDataTypeUniqueEList<String>(String.class, this, SetupPackage.TEXT_MODIFICATION__SUBSTITUTIONS);
+      substitutions = new EDataTypeUniqueEList<>(String.class, this, SetupPackage.TEXT_MODIFICATION__SUBSTITUTIONS);
     }
     return substitutions;
   }

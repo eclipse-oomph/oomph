@@ -58,7 +58,7 @@ public class MarketPlaceListing
 
   private final IOException exception;
 
-  private final List<Requirement> requirements = new ArrayList<Requirement>();
+  private final List<Requirement> requirements = new ArrayList<>();
 
   private MarketPlaceListing(URI uri, URIConverter uriConverter)
   {
@@ -155,7 +155,7 @@ public class MarketPlaceListing
 
   public List<Requirement> getRequirements()
   {
-    return new ArrayList<Requirement>(EcoreUtil.copyAll(requirements));
+    return new ArrayList<>(EcoreUtil.copyAll(requirements));
   }
 
   public static boolean isRequired(Requirement requirement)

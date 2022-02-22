@@ -45,6 +45,7 @@ public class DonateHandler extends AbstractHandler
   {
   }
 
+  @Override
   public Object execute(ExecutionEvent event) throws ExecutionException
   {
     final IWorkbenchBrowserSupport browserSupport = PlatformUI.getWorkbench().getBrowserSupport();
@@ -84,6 +85,7 @@ public class DonateHandler extends AbstractHandler
               // Add a listener for when a new browser window is opened so that we can open an external browser.
               newBrowser.addOpenWindowListener(new OpenWindowListener()
               {
+                @Override
                 public void open(WindowEvent event)
                 {
                   // Listen for the URL changing for this new browser.
@@ -98,6 +100,7 @@ public class DonateHandler extends AbstractHandler
                       // Close this browser's shell.
                       UIUtil.asyncExec(newBrowser, new Runnable()
                       {
+                        @Override
                         public void run()
                         {
                           newBrowser.getShell().close();

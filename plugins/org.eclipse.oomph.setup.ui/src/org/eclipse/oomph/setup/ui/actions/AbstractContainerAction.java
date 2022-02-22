@@ -153,6 +153,7 @@ public abstract class AbstractContainerAction extends Action
       {
         UIUtil.getDisplay().asyncExec(new Runnable()
         {
+          @Override
           public void run()
           {
             TreeViewer treeViewer = (TreeViewer)viewer;
@@ -162,7 +163,7 @@ public abstract class AbstractContainerAction extends Action
 
             @SuppressWarnings("unchecked")
             List<Object> list = selection.toList();
-            list = new ArrayList<Object>(list);
+            list = new ArrayList<>(list);
             list.add(object);
 
             treeViewer.setSelection(new StructuredSelection(list));

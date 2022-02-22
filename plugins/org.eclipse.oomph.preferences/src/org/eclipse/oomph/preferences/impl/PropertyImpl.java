@@ -146,6 +146,7 @@ public class PropertyImpl extends PreferenceItemImpl implements Property
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setParent(PreferenceNode newParent)
   {
     if (newParent != eInternalContainer() || eContainerFeatureID() != PreferencesPackage.PROPERTY__PARENT && newParent != null)
@@ -180,11 +181,13 @@ public class PropertyImpl extends PreferenceItemImpl implements Property
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getValue()
   {
     return value;
   }
 
+  @Override
   public String getSecureValue()
   {
     return isSecure() ? PreferencesUtil.decrypt(getValue()) : getValue();
@@ -195,6 +198,7 @@ public class PropertyImpl extends PreferenceItemImpl implements Property
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public void setValue(String newValue)
   {
     if (isSecure())
@@ -216,6 +220,7 @@ public class PropertyImpl extends PreferenceItemImpl implements Property
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public boolean isNonDefault()
   {
     Property ancestor = getAncestor();
@@ -234,6 +239,7 @@ public class PropertyImpl extends PreferenceItemImpl implements Property
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public boolean isSecure()
   {
     return secure;
@@ -244,6 +250,7 @@ public class PropertyImpl extends PreferenceItemImpl implements Property
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public void setSecure(boolean newSecure)
   {
     boolean oldSecure = secure;

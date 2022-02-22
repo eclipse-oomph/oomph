@@ -27,6 +27,7 @@ import java.util.Date;
  */
 public class ActiveMylynTaskVariableResolver implements IDynamicVariableResolver
 {
+  @Override
   public String resolveValue(IDynamicVariable variable, String argument) throws CoreException
   {
     ITask activeTask = TasksUi.getTaskActivityManager().getActiveTask();

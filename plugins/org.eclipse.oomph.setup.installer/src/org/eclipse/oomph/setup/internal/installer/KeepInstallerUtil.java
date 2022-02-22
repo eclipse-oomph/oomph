@@ -162,7 +162,7 @@ public final class KeepInstallerUtil
     if (startPermanentInstaller)
     {
       // Include the application arguments in this launch.
-      List<String> command = new ArrayList<String>();
+      List<String> command = new ArrayList<>();
       command.add(permanentLauncher.getAbsolutePath());
       command.addAll(Arrays.asList(Platform.getApplicationArgs()));
       try

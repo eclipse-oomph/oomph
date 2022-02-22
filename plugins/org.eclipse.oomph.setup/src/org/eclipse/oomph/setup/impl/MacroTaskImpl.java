@@ -89,11 +89,12 @@ public class MacroTaskImpl extends SetupTaskImpl implements MacroTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<Argument> getArguments()
   {
     if (arguments == null)
     {
-      arguments = new EObjectContainmentWithInverseEList<Argument>(Argument.class, this, SetupPackage.MACRO_TASK__ARGUMENTS, SetupPackage.ARGUMENT__MACRO_TASK);
+      arguments = new EObjectContainmentWithInverseEList<>(Argument.class, this, SetupPackage.MACRO_TASK__ARGUMENTS, SetupPackage.ARGUMENT__MACRO_TASK);
     }
     return arguments;
   }
@@ -119,6 +120,7 @@ public class MacroTaskImpl extends SetupTaskImpl implements MacroTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Macro getMacro()
   {
     if (macro != null && macro.eIsProxy())
@@ -151,6 +153,7 @@ public class MacroTaskImpl extends SetupTaskImpl implements MacroTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setMacro(Macro newMacro)
   {
     Macro oldMacro = macro;
@@ -260,11 +263,13 @@ public class MacroTaskImpl extends SetupTaskImpl implements MacroTask
     return super.eIsSet(featureID);
   }
 
+  @Override
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     return false;
   }
 
+  @Override
   public void perform(SetupTaskContext context) throws Exception
   {
   }

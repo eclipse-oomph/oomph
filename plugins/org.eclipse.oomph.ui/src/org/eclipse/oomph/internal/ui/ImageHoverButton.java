@@ -126,7 +126,7 @@ public class ImageHoverButton extends FlatButton
     {
       return getDisabledImage() != null ? getDisabledImage() : getDefaultImage();
     }
-  
+
     return isHover() || isFocusControl() ? getHoverImage() : getDefaultImage();
   }
 

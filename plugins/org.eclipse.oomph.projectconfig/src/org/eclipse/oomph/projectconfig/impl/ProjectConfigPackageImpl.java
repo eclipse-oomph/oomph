@@ -159,6 +159,7 @@ public class ProjectConfigPackageImpl extends EPackageImpl implements ProjectCon
     // Register package validator
     EValidator.Registry.INSTANCE.put(theProjectConfigPackage, new EValidator.Descriptor()
     {
+      @Override
       public EValidator getEValidator()
       {
         return ProjectConfigValidator.INSTANCE;
@@ -178,6 +179,7 @@ public class ProjectConfigPackageImpl extends EPackageImpl implements ProjectCon
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getWorkspaceConfiguration()
   {
     return workspaceConfigurationEClass;
@@ -188,6 +190,7 @@ public class ProjectConfigPackageImpl extends EPackageImpl implements ProjectCon
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getWorkspaceConfiguration_Projects()
   {
     return (EReference)workspaceConfigurationEClass.getEStructuralFeatures().get(0);
@@ -198,6 +201,7 @@ public class ProjectConfigPackageImpl extends EPackageImpl implements ProjectCon
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getWorkspaceConfiguration_DefaultPreferenceNode()
   {
     return (EReference)workspaceConfigurationEClass.getEStructuralFeatures().get(1);
@@ -208,6 +212,7 @@ public class ProjectConfigPackageImpl extends EPackageImpl implements ProjectCon
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getWorkspaceConfiguration_InstancePreferenceNode()
   {
     return (EReference)workspaceConfigurationEClass.getEStructuralFeatures().get(2);
@@ -218,6 +223,7 @@ public class ProjectConfigPackageImpl extends EPackageImpl implements ProjectCon
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EOperation getWorkspaceConfiguration__ApplyPreferenceProfiles()
   {
     return workspaceConfigurationEClass.getEOperations().get(0);
@@ -228,6 +234,7 @@ public class ProjectConfigPackageImpl extends EPackageImpl implements ProjectCon
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EOperation getWorkspaceConfiguration__UpdatePreferenceProfileReferences()
   {
     return workspaceConfigurationEClass.getEOperations().get(1);
@@ -238,6 +245,7 @@ public class ProjectConfigPackageImpl extends EPackageImpl implements ProjectCon
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EOperation getWorkspaceConfiguration__GetProject__String()
   {
     return workspaceConfigurationEClass.getEOperations().get(2);
@@ -248,6 +256,7 @@ public class ProjectConfigPackageImpl extends EPackageImpl implements ProjectCon
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getProject()
   {
     return projectEClass;
@@ -258,6 +267,7 @@ public class ProjectConfigPackageImpl extends EPackageImpl implements ProjectCon
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getProject_Configuration()
   {
     return (EReference)projectEClass.getEStructuralFeatures().get(0);
@@ -268,6 +278,7 @@ public class ProjectConfigPackageImpl extends EPackageImpl implements ProjectCon
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getProject_PreferenceProfiles()
   {
     return (EReference)projectEClass.getEStructuralFeatures().get(1);
@@ -278,6 +289,7 @@ public class ProjectConfigPackageImpl extends EPackageImpl implements ProjectCon
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getProject_PreferenceNode()
   {
     return (EReference)projectEClass.getEStructuralFeatures().get(2);
@@ -288,6 +300,7 @@ public class ProjectConfigPackageImpl extends EPackageImpl implements ProjectCon
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getProject_PreferenceProfileReferences()
   {
     return (EReference)projectEClass.getEStructuralFeatures().get(3);
@@ -298,6 +311,7 @@ public class ProjectConfigPackageImpl extends EPackageImpl implements ProjectCon
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EOperation getProject__GetProperty__URI()
   {
     return projectEClass.getEOperations().get(0);
@@ -308,6 +322,7 @@ public class ProjectConfigPackageImpl extends EPackageImpl implements ProjectCon
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getPreferenceProfile()
   {
     return preferenceProfileEClass;
@@ -318,6 +333,7 @@ public class ProjectConfigPackageImpl extends EPackageImpl implements ProjectCon
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getPreferenceProfile_PreferenceFilters()
   {
     return (EReference)preferenceProfileEClass.getEStructuralFeatures().get(0);
@@ -328,6 +344,7 @@ public class ProjectConfigPackageImpl extends EPackageImpl implements ProjectCon
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getPreferenceProfile_ReferentProjects()
   {
     return (EReference)preferenceProfileEClass.getEStructuralFeatures().get(1);
@@ -338,6 +355,7 @@ public class ProjectConfigPackageImpl extends EPackageImpl implements ProjectCon
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getPreferenceProfile_Name()
   {
     return (EAttribute)preferenceProfileEClass.getEStructuralFeatures().get(2);
@@ -348,6 +366,7 @@ public class ProjectConfigPackageImpl extends EPackageImpl implements ProjectCon
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getPreferenceProfile_Project()
   {
     return (EReference)preferenceProfileEClass.getEStructuralFeatures().get(3);
@@ -358,6 +377,7 @@ public class ProjectConfigPackageImpl extends EPackageImpl implements ProjectCon
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getPreferenceProfile_Predicates()
   {
     return (EReference)preferenceProfileEClass.getEStructuralFeatures().get(4);
@@ -368,6 +388,7 @@ public class ProjectConfigPackageImpl extends EPackageImpl implements ProjectCon
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EOperation getPreferenceProfile__Matches__IProject()
   {
     return preferenceProfileEClass.getEOperations().get(0);
@@ -378,6 +399,7 @@ public class ProjectConfigPackageImpl extends EPackageImpl implements ProjectCon
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EOperation getPreferenceProfile__GetProperty__URI()
   {
     return preferenceProfileEClass.getEOperations().get(1);
@@ -388,6 +410,7 @@ public class ProjectConfigPackageImpl extends EPackageImpl implements ProjectCon
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getPreferenceFilter()
   {
     return preferenceFilterEClass;
@@ -398,6 +421,7 @@ public class ProjectConfigPackageImpl extends EPackageImpl implements ProjectCon
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getPreferenceFilter_PreferenceNode()
   {
     return (EReference)preferenceFilterEClass.getEStructuralFeatures().get(0);
@@ -408,6 +432,7 @@ public class ProjectConfigPackageImpl extends EPackageImpl implements ProjectCon
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getPreferenceFilter_PreferenceProfile()
   {
     return (EReference)preferenceFilterEClass.getEStructuralFeatures().get(1);
@@ -418,6 +443,7 @@ public class ProjectConfigPackageImpl extends EPackageImpl implements ProjectCon
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getPreferenceFilter_Inclusions()
   {
     return (EAttribute)preferenceFilterEClass.getEStructuralFeatures().get(2);
@@ -428,6 +454,7 @@ public class ProjectConfigPackageImpl extends EPackageImpl implements ProjectCon
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getPreferenceFilter_Exclusions()
   {
     return (EAttribute)preferenceFilterEClass.getEStructuralFeatures().get(3);
@@ -438,6 +465,7 @@ public class ProjectConfigPackageImpl extends EPackageImpl implements ProjectCon
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getPreferenceFilter_Properties()
   {
     return (EReference)preferenceFilterEClass.getEStructuralFeatures().get(4);
@@ -448,6 +476,7 @@ public class ProjectConfigPackageImpl extends EPackageImpl implements ProjectCon
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EOperation getPreferenceFilter__Matches__String()
   {
     return preferenceFilterEClass.getEOperations().get(0);
@@ -458,6 +487,7 @@ public class ProjectConfigPackageImpl extends EPackageImpl implements ProjectCon
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EOperation getPreferenceFilter__GetProperty__String()
   {
     return preferenceFilterEClass.getEOperations().get(1);
@@ -468,6 +498,7 @@ public class ProjectConfigPackageImpl extends EPackageImpl implements ProjectCon
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getInclusionPredicate()
   {
     return inclusionPredicateEClass;
@@ -478,6 +509,7 @@ public class ProjectConfigPackageImpl extends EPackageImpl implements ProjectCon
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getInclusionPredicate_IncludedPreferenceProfiles()
   {
     return (EReference)inclusionPredicateEClass.getEStructuralFeatures().get(0);
@@ -488,6 +520,7 @@ public class ProjectConfigPackageImpl extends EPackageImpl implements ProjectCon
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getExclusionPredicate()
   {
     return exclusionPredicateEClass;
@@ -498,6 +531,7 @@ public class ProjectConfigPackageImpl extends EPackageImpl implements ProjectCon
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getExclusionPredicate_ExcludedPreferenceProfiles()
   {
     return (EReference)exclusionPredicateEClass.getEStructuralFeatures().get(0);
@@ -508,6 +542,7 @@ public class ProjectConfigPackageImpl extends EPackageImpl implements ProjectCon
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EDataType getPattern()
   {
     return patternEDataType;
@@ -518,6 +553,7 @@ public class ProjectConfigPackageImpl extends EPackageImpl implements ProjectCon
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ProjectConfigFactory getProjectConfigFactory()
   {
     return (ProjectConfigFactory)getEFactoryInstance();

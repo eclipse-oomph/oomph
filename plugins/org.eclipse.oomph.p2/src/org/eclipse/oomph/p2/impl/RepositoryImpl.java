@@ -101,6 +101,7 @@ public class RepositoryImpl extends ModelElementImpl implements Repository
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getURL()
   {
     return uRL;
@@ -111,6 +112,7 @@ public class RepositoryImpl extends ModelElementImpl implements Repository
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setURL(String newURL)
   {
     String oldURL = uRL;
@@ -126,6 +128,7 @@ public class RepositoryImpl extends ModelElementImpl implements Repository
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public RepositoryType getType()
   {
     return type;
@@ -136,6 +139,7 @@ public class RepositoryImpl extends ModelElementImpl implements Repository
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setType(RepositoryType newType)
   {
     RepositoryType oldType = type;

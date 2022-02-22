@@ -179,6 +179,7 @@ public class PredicatesFactoryImpl extends EFactoryImpl implements PredicatesFac
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public NamePredicate createNamePredicate()
   {
     NamePredicateImpl namePredicate = new NamePredicateImpl();
@@ -190,6 +191,7 @@ public class PredicatesFactoryImpl extends EFactoryImpl implements PredicatesFac
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public CommentPredicate createCommentPredicate()
   {
     CommentPredicateImpl commentPredicate = new CommentPredicateImpl();
@@ -201,12 +203,14 @@ public class PredicatesFactoryImpl extends EFactoryImpl implements PredicatesFac
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public LocationPredicate createLocationPredicate()
   {
     LocationPredicateImpl locationPredicate = new LocationPredicateImpl();
     return locationPredicate;
   }
 
+  @Override
   public NamePredicate createNamePredicate(String pattern)
   {
     NamePredicate result = createNamePredicate();
@@ -219,12 +223,14 @@ public class PredicatesFactoryImpl extends EFactoryImpl implements PredicatesFac
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public RepositoryPredicate createRepositoryPredicate()
   {
     RepositoryPredicateImpl repositoryPredicate = new RepositoryPredicateImpl();
     return repositoryPredicate;
   }
 
+  @Override
   public RepositoryPredicate createRepositoryPredicate(IProject project)
   {
     RepositoryPredicate result = createRepositoryPredicate();
@@ -237,12 +243,14 @@ public class PredicatesFactoryImpl extends EFactoryImpl implements PredicatesFac
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public AndPredicate createAndPredicate()
   {
     AndPredicateImpl andPredicate = new AndPredicateImpl();
     return andPredicate;
   }
 
+  @Override
   public AndPredicate createAndPredicate(Predicate... operands)
   {
     AndPredicate result = createAndPredicate();
@@ -255,12 +263,14 @@ public class PredicatesFactoryImpl extends EFactoryImpl implements PredicatesFac
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public OrPredicate createOrPredicate()
   {
     OrPredicateImpl orPredicate = new OrPredicateImpl();
     return orPredicate;
   }
 
+  @Override
   public OrPredicate createOrPredicate(Predicate... operands)
   {
     OrPredicate result = createOrPredicate();
@@ -273,12 +283,14 @@ public class PredicatesFactoryImpl extends EFactoryImpl implements PredicatesFac
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public NotPredicate createNotPredicate()
   {
     NotPredicateImpl notPredicate = new NotPredicateImpl();
     return notPredicate;
   }
 
+  @Override
   public NotPredicate createNotPredicate(Predicate operand)
   {
     NotPredicate result = createNotPredicate();
@@ -291,12 +303,14 @@ public class PredicatesFactoryImpl extends EFactoryImpl implements PredicatesFac
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public NaturePredicate createNaturePredicate()
   {
     NaturePredicateImpl naturePredicate = new NaturePredicateImpl();
     return naturePredicate;
   }
 
+  @Override
   public NaturePredicate createNaturePredicate(String nature)
   {
     NaturePredicate result = createNaturePredicate();
@@ -309,12 +323,14 @@ public class PredicatesFactoryImpl extends EFactoryImpl implements PredicatesFac
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public BuilderPredicate createBuilderPredicate()
   {
     BuilderPredicateImpl builderPredicate = new BuilderPredicateImpl();
     return builderPredicate;
   }
 
+  @Override
   public BuilderPredicate createBuilderPredicate(String builder)
   {
     BuilderPredicate result = createBuilderPredicate();
@@ -327,6 +343,7 @@ public class PredicatesFactoryImpl extends EFactoryImpl implements PredicatesFac
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public FilePredicate createFilePredicate()
   {
     FilePredicateImpl filePredicate = new FilePredicateImpl();
@@ -338,12 +355,14 @@ public class PredicatesFactoryImpl extends EFactoryImpl implements PredicatesFac
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ImportedPredicate createImportedPredicate()
   {
     ImportedPredicateImpl importedPredicate = new ImportedPredicateImpl();
     return importedPredicate;
   }
 
+  @Override
   public FilePredicate createFilePredicate(String filePattern)
   {
     FilePredicate result = createFilePredicate();
@@ -351,6 +370,7 @@ public class PredicatesFactoryImpl extends EFactoryImpl implements PredicatesFac
     return result;
   }
 
+  @Override
   public FilePredicate createFilePredicate(String filePattern, String contentPattern)
   {
     FilePredicate result = createFilePredicate(filePattern);
@@ -455,6 +475,7 @@ public class PredicatesFactoryImpl extends EFactoryImpl implements PredicatesFac
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public PredicatesPackage getPredicatesPackage()
   {
     return (PredicatesPackage)getEPackage();

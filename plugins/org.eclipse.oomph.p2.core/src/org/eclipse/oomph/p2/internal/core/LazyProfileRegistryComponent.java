@@ -33,6 +33,7 @@ public class LazyProfileRegistryComponent implements IAgentServiceFactory
 {
   public static final String PROP_LAZY_PROFILE_REGISTRY = "oomph.p2.lazy.profile.registry"; //$NON-NLS-1$
 
+  @Override
   public Object createService(IProvisioningAgent agent)
   {
     IAgentLocation location = (IAgentLocation)agent.getService(IAgentLocation.SERVICE_NAME);

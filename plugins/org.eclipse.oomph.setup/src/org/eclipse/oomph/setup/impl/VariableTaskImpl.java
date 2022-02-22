@@ -226,6 +226,7 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public VariableType getType()
   {
     return type;
@@ -236,6 +237,7 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setType(VariableType newType)
   {
     VariableType oldType = type;
@@ -251,6 +253,7 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getName()
   {
     return name;
@@ -261,6 +264,7 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setName(String newName)
   {
     String oldName = name;
@@ -276,6 +280,7 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getValue()
   {
     return value;
@@ -286,6 +291,7 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setValue(String newValue)
   {
     String oldValue = value;
@@ -301,6 +307,7 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getDefaultValue()
   {
     return defaultValue;
@@ -311,6 +318,7 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setDefaultValue(String newDefaultValue)
   {
     String oldDefaultValue = defaultValue;
@@ -326,6 +334,7 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getLabel()
   {
     return label;
@@ -336,6 +345,7 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setLabel(String newLabel)
   {
     String oldLabel = label;
@@ -351,11 +361,12 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<VariableChoice> getChoices()
   {
     if (choices == null)
     {
-      choices = new EObjectContainmentEList.Resolving<VariableChoice>(VariableChoice.class, this, SetupPackage.VARIABLE_TASK__CHOICES);
+      choices = new EObjectContainmentEList.Resolving<>(VariableChoice.class, this, SetupPackage.VARIABLE_TASK__CHOICES);
     }
     return choices;
   }
@@ -385,6 +396,7 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public URI getStorageURI()
   {
     return storageURI;
@@ -395,6 +407,7 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setStorageURI(URI newStorageURI)
   {
     URI oldStorageURI = storageURI;
@@ -621,6 +634,7 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
     }
   }
 
+  @Override
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     return false;
@@ -631,7 +645,7 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
   {
     super.consolidate();
 
-    Set<String> choices = new HashSet<String>();
+    Set<String> choices = new HashSet<>();
     for (Iterator<VariableChoice> it = getChoices().iterator(); it.hasNext();)
     {
       VariableChoice choice = it.next();
@@ -642,6 +656,7 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
     }
   }
 
+  @Override
   public void perform(SetupTaskContext context) throws Exception
   {
     throw new UnsupportedOperationException(Messages.VariableTaskImpl_NotExecutable_exception);

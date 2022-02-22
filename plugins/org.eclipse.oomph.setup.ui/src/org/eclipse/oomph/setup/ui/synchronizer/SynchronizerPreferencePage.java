@@ -236,6 +236,7 @@ public class SynchronizerPreferencePage extends AbstractPreferencePage
 
             UIUtil.asyncExec(shell, new Runnable()
             {
+              @Override
               public void run()
               {
                 try
@@ -256,6 +257,7 @@ public class SynchronizerPreferencePage extends AbstractPreferencePage
 
             UIUtil.asyncExec(shell.getDisplay(), new Runnable()
             {
+              @Override
               public void run()
               {
                 try
@@ -296,6 +298,7 @@ public class SynchronizerPreferencePage extends AbstractPreferencePage
             {
               dialog.run(true, false, new IRunnableWithProgress()
               {
+                @Override
                 public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
                 {
                   try
@@ -309,6 +312,7 @@ public class SynchronizerPreferencePage extends AbstractPreferencePage
 
                     UIUtil.asyncExec(new Runnable()
                     {
+                      @Override
                       public void run()
                       {
                         final Point size = getShell().getSize();
@@ -351,7 +355,7 @@ public class SynchronizerPreferencePage extends AbstractPreferencePage
                               Pattern xmlPattern = Pattern.compile("<\\??/?[^>]+\\??/?>", Pattern.DOTALL); //$NON-NLS-1$
                               Pattern attributePattern = Pattern.compile("\\s+([^=\">]+)=\"([^\"]*)\"", Pattern.DOTALL); //$NON-NLS-1$
                               int index = 0;
-                              List<StyleRange> styleRanges = new ArrayList<StyleRange>();
+                              List<StyleRange> styleRanges = new ArrayList<>();
                               for (Matcher xmlMatcher = xmlPattern.matcher(data), attributeMatcher = attributePattern.matcher(data); index != -1
                                   && xmlMatcher.find(index);)
                               {
@@ -460,6 +464,7 @@ public class SynchronizerPreferencePage extends AbstractPreferencePage
         enableButton.setSelection(initialEnabled);
         UIUtil.asyncExec(new Runnable()
         {
+          @Override
           public void run()
           {
             updateEnablement();

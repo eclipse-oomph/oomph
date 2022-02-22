@@ -13,7 +13,6 @@ package org.eclipse.oomph.setup.ui;
 import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.ProfileDefinition;
 import org.eclipse.oomph.p2.Repository;
-import org.eclipse.oomph.p2.core.CertificateConfirmer;
 import org.eclipse.oomph.p2.core.ProfileTransaction;
 import org.eclipse.oomph.p2.core.ProfileTransaction.CommitContext;
 import org.eclipse.oomph.setup.User;
@@ -21,7 +20,6 @@ import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.p2.impl.P2TaskImpl;
 import org.eclipse.oomph.setup.ui.wizards.ProgressPage;
 import org.eclipse.oomph.setup.util.SetupUtil;
-import org.eclipse.oomph.util.Confirmer;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
@@ -54,7 +52,7 @@ public class SelfCommitContext extends CommitContext
   }
 
   @Override
-  public boolean handleProvisioningPlan(ResolutionInfo info) throws CoreException
+  public boolean handleProvisioningPlan(CommitContext.ResolutionInfo info) throws CoreException
   {
     if (repositoryChanged && info.getIUDeltas().isEmpty() && info.getPropertyDeltas().size() <= 1)
     {
@@ -67,27 +65,9 @@ public class SelfCommitContext extends CommitContext
   }
 
   @Override
-  public Confirmer getUnsignedContentConfirmer()
+  public void init()
   {
-    if (user == null)
-    {
-      return Confirmer.ACCEPT;
-    }
-
     P2TaskImpl.processLicenses(provisioningPlan, ProgressPage.LICENSE_CONFIRMER, user, true, new NullProgressMonitor());
-
-    return UnsignedContentDialog.createUnsignedContentConfirmer(user, true);
-  }
-
-  @Override
-  public CertificateConfirmer getCertficateConfirmer()
-  {
-    if (user == null)
-    {
-      return CertificateConfirmer.ACCEPT;
-    }
-
-    return SetupCoreUtil.createCertificateConfirmer(user, true);
   }
 
   private boolean changeRepositoryIfNeeded(ProfileDefinition profileDefinition)

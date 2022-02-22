@@ -83,7 +83,7 @@ public class PDEAdapterFactory extends AdapterFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  protected PDESwitch<Adapter> modelSwitch = new PDESwitch<Adapter>()
+  protected PDESwitch<Adapter> modelSwitch = new PDESwitch<>()
   {
     @Override
     public Adapter caseTargetPlatformTask(TargetPlatformTask object)

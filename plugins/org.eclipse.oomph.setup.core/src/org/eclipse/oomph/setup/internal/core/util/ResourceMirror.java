@@ -47,7 +47,7 @@ public class ResourceMirror extends WorkerPool<ResourceMirror, URI, ResourceMirr
 
   private DelegatingResourceLocator resourceLocator;
 
-  private HashSet<URI> visited = new HashSet<URI>();
+  private HashSet<URI> visited = new HashSet<>();
 
   public ResourceMirror()
   {
@@ -89,7 +89,7 @@ public class ResourceMirror extends WorkerPool<ResourceMirror, URI, ResourceMirr
     {
       private int counter;
 
-      private final Set<ResourceSet> resourceSets = new HashSet<ResourceSet>();
+      private final Set<ResourceSet> resourceSets = new HashSet<>();
 
       @Override
       public synchronized void preLoad(XMLResource resource, InputStream inputStream, Map<?, ?> options)

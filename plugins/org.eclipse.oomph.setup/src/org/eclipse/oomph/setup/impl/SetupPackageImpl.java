@@ -486,6 +486,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     // Register package validator
     EValidator.Registry.INSTANCE.put(theSetupPackage, new EValidator.Descriptor()
     {
+      @Override
       public EValidator getEValidator()
       {
         return SetupValidator.INSTANCE;
@@ -505,6 +506,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getIndex()
   {
     return indexEClass;
@@ -515,6 +517,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getIndex_Name()
   {
     return (EAttribute)indexEClass.getEStructuralFeatures().get(0);
@@ -525,6 +528,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getIndex_DiscoverablePackages()
   {
     return (EReference)indexEClass.getEStructuralFeatures().get(1);
@@ -535,6 +539,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getIndex_ProjectCatalogs()
   {
     return (EReference)indexEClass.getEStructuralFeatures().get(3);
@@ -545,6 +550,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getCatalogSelection()
   {
     return catalogSelectionEClass;
@@ -555,6 +561,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getCatalogSelection_ProductCatalogs()
   {
     return (EReference)catalogSelectionEClass.getEStructuralFeatures().get(0);
@@ -565,6 +572,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getCatalogSelection_ProjectCatalogs()
   {
     return (EReference)catalogSelectionEClass.getEStructuralFeatures().get(1);
@@ -575,6 +583,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getCatalogSelection_DefaultProductVersions()
   {
     return (EReference)catalogSelectionEClass.getEStructuralFeatures().get(2);
@@ -585,6 +594,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getCatalogSelection_DefaultStreams()
   {
     return (EReference)catalogSelectionEClass.getEStructuralFeatures().get(3);
@@ -595,6 +605,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getCatalogSelection_SelectedStreams()
   {
     return (EReference)catalogSelectionEClass.getEStructuralFeatures().get(4);
@@ -605,6 +616,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getIndex_ProductCatalogs()
   {
     return (EReference)indexEClass.getEStructuralFeatures().get(2);
@@ -615,6 +627,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getProject()
   {
     return projectEClass;
@@ -625,6 +638,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getProject_Streams()
   {
     return (EReference)projectEClass.getEStructuralFeatures().get(0);
@@ -635,6 +649,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getProject_ProjectContainer()
   {
     return (EReference)projectEClass.getEStructuralFeatures().get(1);
@@ -645,6 +660,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getProject_LogicalProjectContainer()
   {
     return (EReference)projectEClass.getEStructuralFeatures().get(2);
@@ -655,6 +671,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getProject_ParentProject()
   {
     return (EReference)projectEClass.getEStructuralFeatures().get(3);
@@ -665,6 +682,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getProject_ProjectCatalog()
   {
     return (EReference)projectEClass.getEStructuralFeatures().get(4);
@@ -675,6 +693,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getStream()
   {
     return streamEClass;
@@ -685,6 +704,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getStream_Project()
   {
     return (EReference)streamEClass.getEStructuralFeatures().get(0);
@@ -695,6 +715,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getInstallation()
   {
     return installationEClass;
@@ -705,6 +726,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getInstallation_ProductVersion()
   {
     return (EReference)installationEClass.getEStructuralFeatures().get(0);
@@ -715,6 +737,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getProductCatalog()
   {
     return productCatalogEClass;
@@ -725,6 +748,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getProductCatalog_Index()
   {
     return (EReference)productCatalogEClass.getEStructuralFeatures().get(0);
@@ -735,6 +759,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getProductCatalog_Products()
   {
     return (EReference)productCatalogEClass.getEStructuralFeatures().get(1);
@@ -745,6 +770,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getProduct()
   {
     return productEClass;
@@ -755,6 +781,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getProduct_ProductCatalog()
   {
     return (EReference)productEClass.getEStructuralFeatures().get(0);
@@ -765,6 +792,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getProduct_Versions()
   {
     return (EReference)productEClass.getEStructuralFeatures().get(1);
@@ -775,6 +803,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getProductVersion()
   {
     return productVersionEClass;
@@ -785,6 +814,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getProductVersion_Product()
   {
     return (EReference)productVersionEClass.getEStructuralFeatures().get(0);
@@ -795,6 +825,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getProductVersion_RequiredJavaVersion()
   {
     return (EAttribute)productVersionEClass.getEStructuralFeatures().get(1);
@@ -805,6 +836,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getProjectCatalog()
   {
     return projectCatalogEClass;
@@ -815,6 +847,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getProjectCatalog_Index()
   {
     return (EReference)projectCatalogEClass.getEStructuralFeatures().get(0);
@@ -825,6 +858,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getInstallationTask()
   {
     return installationTaskEClass;
@@ -835,6 +869,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getInstallationTask_Location()
   {
     return (EAttribute)installationTaskEClass.getEStructuralFeatures().get(0);
@@ -845,6 +880,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getInstallationTask_RelativeProductFolder()
   {
     return (EAttribute)installationTaskEClass.getEStructuralFeatures().get(1);
@@ -855,6 +891,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getWorkspaceTask()
   {
     return workspaceTaskEClass;
@@ -865,6 +902,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getWorkspaceTask_Location()
   {
     return (EAttribute)workspaceTaskEClass.getEStructuralFeatures().get(0);
@@ -875,6 +913,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getConfiguration()
   {
     return configurationEClass;
@@ -885,6 +924,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getConfiguration_Label()
   {
     return (EAttribute)configurationEClass.getEStructuralFeatures().get(0);
@@ -895,6 +935,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getConfiguration_Description()
   {
     return (EAttribute)configurationEClass.getEStructuralFeatures().get(1);
@@ -905,6 +946,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getConfiguration_Installation()
   {
     return (EReference)configurationEClass.getEStructuralFeatures().get(2);
@@ -915,6 +957,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getConfiguration_Workspace()
   {
     return (EReference)configurationEClass.getEStructuralFeatures().get(3);
@@ -925,6 +968,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getCompoundTask()
   {
     return compoundTaskEClass;
@@ -935,6 +979,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getCompoundTask_Name()
   {
     return (EAttribute)compoundTaskEClass.getEStructuralFeatures().get(0);
@@ -945,6 +990,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getVariableTask()
   {
     return variableTaskEClass;
@@ -955,6 +1001,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getVariableTask_Type()
   {
     return (EAttribute)variableTaskEClass.getEStructuralFeatures().get(0);
@@ -965,6 +1012,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getVariableTask_Name()
   {
     return (EAttribute)variableTaskEClass.getEStructuralFeatures().get(1);
@@ -975,6 +1023,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getVariableTask_Value()
   {
     return (EAttribute)variableTaskEClass.getEStructuralFeatures().get(2);
@@ -985,6 +1034,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getVariableTask_DefaultValue()
   {
     return (EAttribute)variableTaskEClass.getEStructuralFeatures().get(3);
@@ -995,6 +1045,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getVariableTask_StorePromptedValue()
   {
     return (EAttribute)variableTaskEClass.getEStructuralFeatures().get(4);
@@ -1005,6 +1056,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getVariableTask_StorageURI()
   {
     return (EAttribute)variableTaskEClass.getEStructuralFeatures().get(5);
@@ -1015,6 +1067,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getVariableTask_Label()
   {
     return (EAttribute)variableTaskEClass.getEStructuralFeatures().get(6);
@@ -1025,6 +1078,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getVariableTask_Choices()
   {
     return (EReference)variableTaskEClass.getEStructuralFeatures().get(7);
@@ -1035,6 +1089,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getSetupTask()
   {
     return setupTaskEClass;
@@ -1045,6 +1100,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getSetupTask_Predecessors()
   {
     return (EReference)setupTaskEClass.getEStructuralFeatures().get(5);
@@ -1055,6 +1111,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getSetupTask_Successors()
   {
     return (EReference)setupTaskEClass.getEStructuralFeatures().get(6);
@@ -1065,6 +1122,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getSetupTask_ID()
   {
     return (EAttribute)setupTaskEClass.getEStructuralFeatures().get(0);
@@ -1075,6 +1133,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getSetupTask_ScopeType()
   {
     return (EAttribute)setupTaskEClass.getEStructuralFeatures().get(2);
@@ -1085,6 +1144,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getSetupTask_Restrictions()
   {
     return (EReference)setupTaskEClass.getEStructuralFeatures().get(7);
@@ -1095,6 +1155,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getSetupTask_Filter()
   {
     return (EAttribute)setupTaskEClass.getEStructuralFeatures().get(8);
@@ -1105,6 +1166,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getSetupTask_ExcludedTriggers()
   {
     return (EAttribute)setupTaskEClass.getEStructuralFeatures().get(3);
@@ -1115,6 +1177,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getSetupTask_Description()
   {
     return (EAttribute)setupTaskEClass.getEStructuralFeatures().get(1);
@@ -1125,6 +1188,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getSetupTask_Disabled()
   {
     return (EAttribute)setupTaskEClass.getEStructuralFeatures().get(4);
@@ -1135,6 +1199,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getResourceCopyTask()
   {
     return resourceCopyTaskEClass;
@@ -1145,6 +1210,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getResourceCopyTask_Force()
   {
     return (EAttribute)resourceCopyTaskEClass.getEStructuralFeatures().get(0);
@@ -1155,6 +1221,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getResourceCopyTask_SourceURL()
   {
     return (EAttribute)resourceCopyTaskEClass.getEStructuralFeatures().get(1);
@@ -1165,6 +1232,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getResourceCopyTask_TargetURL()
   {
     return (EAttribute)resourceCopyTaskEClass.getEStructuralFeatures().get(2);
@@ -1175,6 +1243,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getTextModifyTask()
   {
     return textModifyTaskEClass;
@@ -1185,6 +1254,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getTextModifyTask_URL()
   {
     return (EAttribute)textModifyTaskEClass.getEStructuralFeatures().get(0);
@@ -1195,6 +1265,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getTextModifyTask_Modifications()
   {
     return (EReference)textModifyTaskEClass.getEStructuralFeatures().get(1);
@@ -1205,6 +1276,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getTextModifyTask_Encoding()
   {
     return (EAttribute)textModifyTaskEClass.getEStructuralFeatures().get(2);
@@ -1215,6 +1287,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getTextModification()
   {
     return textModificationEClass;
@@ -1225,6 +1298,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getTextModification_Pattern()
   {
     return (EAttribute)textModificationEClass.getEStructuralFeatures().get(0);
@@ -1235,6 +1309,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getTextModification_Substitutions()
   {
     return (EAttribute)textModificationEClass.getEStructuralFeatures().get(1);
@@ -1245,6 +1320,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getProductToProductVersionMapEntry()
   {
     return productToProductVersionMapEntryEClass;
@@ -1255,6 +1331,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getProductToProductVersionMapEntry_Key()
   {
     return (EReference)productToProductVersionMapEntryEClass.getEStructuralFeatures().get(0);
@@ -1265,6 +1342,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getProductToProductVersionMapEntry_Value()
   {
     return (EReference)productToProductVersionMapEntryEClass.getEStructuralFeatures().get(1);
@@ -1275,6 +1353,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getProjectToStreamMapEntry()
   {
     return projectToStreamMapEntryEClass;
@@ -1285,6 +1364,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getProjectToStreamMapEntry_Key()
   {
     return (EReference)projectToStreamMapEntryEClass.getEStructuralFeatures().get(0);
@@ -1295,6 +1375,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getProjectToStreamMapEntry_Value()
   {
     return (EReference)projectToStreamMapEntryEClass.getEStructuralFeatures().get(1);
@@ -1305,6 +1386,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getProjectToStreamMapEntry_Selection()
   {
     return (EAttribute)projectToStreamMapEntryEClass.getEStructuralFeatures().get(2);
@@ -1315,6 +1397,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getInstallationToWorkspacesMapEntry()
   {
     return installationToWorkspacesMapEntryEClass;
@@ -1325,6 +1408,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getInstallationToWorkspacesMapEntry_Key()
   {
     return (EReference)installationToWorkspacesMapEntryEClass.getEStructuralFeatures().get(0);
@@ -1335,6 +1419,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getInstallationToWorkspacesMapEntry_Value()
   {
     return (EReference)installationToWorkspacesMapEntryEClass.getEStructuralFeatures().get(1);
@@ -1345,6 +1430,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getWorkspaceToInstallationsMapEntry()
   {
     return workspaceToInstallationsMapEntryEClass;
@@ -1355,6 +1441,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getWorkspaceToInstallationsMapEntry_Value()
   {
     return (EReference)workspaceToInstallationsMapEntryEClass.getEStructuralFeatures().get(1);
@@ -1365,6 +1452,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getMacro()
   {
     return macroEClass;
@@ -1375,6 +1463,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getMacro_LogicalContainer()
   {
     return (EReference)macroEClass.getEStructuralFeatures().get(0);
@@ -1385,6 +1474,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getMacro_Parameters()
   {
     return (EReference)macroEClass.getEStructuralFeatures().get(1);
@@ -1395,6 +1485,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getParameter()
   {
     return parameterEClass;
@@ -1405,6 +1496,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getParameter_Name()
   {
     return (EAttribute)parameterEClass.getEStructuralFeatures().get(0);
@@ -1415,6 +1507,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getParameter_Description()
   {
     return (EAttribute)parameterEClass.getEStructuralFeatures().get(1);
@@ -1425,6 +1518,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getParameter_DefaultValue()
   {
     return (EAttribute)parameterEClass.getEStructuralFeatures().get(2);
@@ -1435,6 +1529,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getMacroTask()
   {
     return macroTaskEClass;
@@ -1445,6 +1540,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getMacroTask_Arguments()
   {
     return (EReference)macroTaskEClass.getEStructuralFeatures().get(0);
@@ -1455,6 +1551,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getArgument()
   {
     return argumentEClass;
@@ -1465,6 +1562,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getArgument_MacroTask()
   {
     return (EReference)argumentEClass.getEStructuralFeatures().get(0);
@@ -1475,6 +1573,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getArgument_Name()
   {
     return (EAttribute)argumentEClass.getEStructuralFeatures().get(1);
@@ -1485,6 +1584,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getArgument_Parameter()
   {
     return (EReference)argumentEClass.getEStructuralFeatures().get(2);
@@ -1495,6 +1595,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getArgument_Value()
   {
     return (EAttribute)argumentEClass.getEStructuralFeatures().get(3);
@@ -1505,6 +1606,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getMacroTask_Macro()
   {
     return (EReference)macroTaskEClass.getEStructuralFeatures().get(1);
@@ -1515,6 +1617,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getWorkspaceToInstallationsMapEntry_Key()
   {
     return (EReference)workspaceToInstallationsMapEntryEClass.getEStructuralFeatures().get(0);
@@ -1525,6 +1628,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getStringSubstitutionTask()
   {
     return stringSubstitutionTaskEClass;
@@ -1535,6 +1639,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getStringSubstitutionTask_Name()
   {
     return (EAttribute)stringSubstitutionTaskEClass.getEStructuralFeatures().get(0);
@@ -1545,6 +1650,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getStringSubstitutionTask_Value()
   {
     return (EAttribute)stringSubstitutionTaskEClass.getEStructuralFeatures().get(1);
@@ -1555,6 +1661,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getProjectContainer()
   {
     return projectContainerEClass;
@@ -1565,6 +1672,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getProjectContainer_Projects()
   {
     return (EReference)projectContainerEClass.getEStructuralFeatures().get(0);
@@ -1575,6 +1683,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EEnum getScopeType()
   {
     return scopeTypeEEnum;
@@ -1585,6 +1694,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getAttributeRule()
   {
     return attributeRuleEClass;
@@ -1595,6 +1705,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getAttributeRule_AttributeURI()
   {
     return (EAttribute)attributeRuleEClass.getEStructuralFeatures().get(0);
@@ -1605,6 +1716,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getAttributeRule_Value()
   {
     return (EAttribute)attributeRuleEClass.getEStructuralFeatures().get(1);
@@ -1615,6 +1727,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getLocationCatalog()
   {
     return locationCatalogEClass;
@@ -1625,6 +1738,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getLocationCatalog_Installations()
   {
     return (EReference)locationCatalogEClass.getEStructuralFeatures().get(0);
@@ -1635,6 +1749,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getLocationCatalog_Workspaces()
   {
     return (EReference)locationCatalogEClass.getEStructuralFeatures().get(1);
@@ -1645,6 +1760,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getRedirectionTask()
   {
     return redirectionTaskEClass;
@@ -1655,6 +1771,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getRedirectionTask_SourceURL()
   {
     return (EAttribute)redirectionTaskEClass.getEStructuralFeatures().get(0);
@@ -1665,6 +1782,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getRedirectionTask_TargetURL()
   {
     return (EAttribute)redirectionTaskEClass.getEStructuralFeatures().get(1);
@@ -1675,6 +1793,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getVariableChoice()
   {
     return variableChoiceEClass;
@@ -1685,6 +1804,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getVariableChoice_Value()
   {
     return (EAttribute)variableChoiceEClass.getEStructuralFeatures().get(0);
@@ -1695,6 +1815,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getVariableChoice_Label()
   {
     return (EAttribute)variableChoiceEClass.getEStructuralFeatures().get(1);
@@ -1705,6 +1826,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getResourceCreationTask()
   {
     return resourceCreationTaskEClass;
@@ -1715,6 +1837,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getResourceCreationTask_Force()
   {
     return (EAttribute)resourceCreationTaskEClass.getEStructuralFeatures().get(0);
@@ -1725,6 +1848,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getResourceCreationTask_Content()
   {
     return (EAttribute)resourceCreationTaskEClass.getEStructuralFeatures().get(1);
@@ -1735,6 +1859,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getResourceCreationTask_TargetURL()
   {
     return (EAttribute)resourceCreationTaskEClass.getEStructuralFeatures().get(2);
@@ -1745,6 +1870,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getResourceCreationTask_Encoding()
   {
     return (EAttribute)resourceCreationTaskEClass.getEStructuralFeatures().get(3);
@@ -1755,6 +1881,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getEclipseIniTask()
   {
     return eclipseIniTaskEClass;
@@ -1765,6 +1892,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getEclipseIniTask_Option()
   {
     return (EAttribute)eclipseIniTaskEClass.getEStructuralFeatures().get(0);
@@ -1775,6 +1903,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getEclipseIniTask_Value()
   {
     return (EAttribute)eclipseIniTaskEClass.getEStructuralFeatures().get(1);
@@ -1785,6 +1914,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getEclipseIniTask_Vm()
   {
     return (EAttribute)eclipseIniTaskEClass.getEStructuralFeatures().get(2);
@@ -1795,6 +1925,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EEnum getTrigger()
   {
     return triggerEEnum;
@@ -1805,6 +1936,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EEnum getVariableType()
   {
     return variableTypeEEnum;
@@ -1815,6 +1947,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EEnum getUnsignedPolicy()
   {
     return unsignedPolicyEEnum;
@@ -1825,6 +1958,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EEnum getCertificatePolicy()
   {
     return certificatePolicyEEnum;
@@ -1835,6 +1969,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getUser()
   {
     return userEClass;
@@ -1845,6 +1980,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getUser_AttributeRules()
   {
     return (EReference)userEClass.getEStructuralFeatures().get(0);
@@ -1855,6 +1991,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getUser_AcceptedLicenses()
   {
     return (EAttribute)userEClass.getEStructuralFeatures().get(1);
@@ -1865,6 +2002,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getUser_AcceptedCertificates()
   {
     return (EAttribute)userEClass.getEStructuralFeatures().get(2);
@@ -1875,6 +2013,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getUser_UnsignedPolicy()
   {
     return (EAttribute)userEClass.getEStructuralFeatures().get(3);
@@ -1885,6 +2024,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getUser_CertificatePolicy()
   {
     return (EAttribute)userEClass.getEStructuralFeatures().get(4);
@@ -1895,6 +2035,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getUser_QuestionnaireDate()
   {
     return (EAttribute)userEClass.getEStructuralFeatures().get(5);
@@ -1905,6 +2046,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getUser_PreferenceRecorderDefault()
   {
     return (EAttribute)userEClass.getEStructuralFeatures().get(6);
@@ -1915,6 +2057,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getWorkspace()
   {
     return workspaceEClass;
@@ -1925,6 +2068,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getWorkspace_Streams()
   {
     return (EReference)workspaceEClass.getEStructuralFeatures().get(0);
@@ -1935,6 +2079,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getLinkLocationTask()
   {
     return linkLocationTaskEClass;
@@ -1945,6 +2090,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getLinkLocationTask_Path()
   {
     return (EAttribute)linkLocationTaskEClass.getEStructuralFeatures().get(0);
@@ -1955,6 +2101,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getLinkLocationTask_Name()
   {
     return (EAttribute)linkLocationTaskEClass.getEStructuralFeatures().get(1);
@@ -1965,6 +2112,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getPreferenceTask()
   {
     return preferenceTaskEClass;
@@ -1975,6 +2123,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getPreferenceTask_Key()
   {
     return (EAttribute)preferenceTaskEClass.getEStructuralFeatures().get(0);
@@ -1985,6 +2134,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getPreferenceTask_Value()
   {
     return (EAttribute)preferenceTaskEClass.getEStructuralFeatures().get(1);
@@ -1995,6 +2145,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getSetupTaskContainer()
   {
     return setupTaskContainerEClass;
@@ -2005,6 +2156,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getSetupTaskContainer_SetupTasks()
   {
     return (EReference)setupTaskContainerEClass.getEStructuralFeatures().get(0);
@@ -2015,6 +2167,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getScope()
   {
     return scopeEClass;
@@ -2025,6 +2178,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getScope_Name()
   {
     return (EAttribute)scopeEClass.getEStructuralFeatures().get(0);
@@ -2035,6 +2189,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getScope_Label()
   {
     return (EAttribute)scopeEClass.getEStructuralFeatures().get(1);
@@ -2045,6 +2200,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getScope_Description()
   {
     return (EAttribute)scopeEClass.getEStructuralFeatures().get(2);
@@ -2055,6 +2211,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getScope_QualifiedName()
   {
     return (EAttribute)scopeEClass.getEStructuralFeatures().get(3);
@@ -2065,6 +2222,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EDataType getLicenseInfo()
   {
     return licenseInfoEDataType;
@@ -2075,6 +2233,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EDataType getFilter()
   {
     return filterEDataType;
@@ -2085,6 +2244,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EDataType getCertificateInfo()
   {
     return certificateInfoEDataType;
@@ -2095,6 +2255,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EDataType getTriggerSet()
   {
     return triggerSetEDataType;
@@ -2105,6 +2266,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public SetupFactory getSetupFactory()
   {
     return (SetupFactory)getEFactoryInstance();

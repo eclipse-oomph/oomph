@@ -49,6 +49,7 @@ public class LaunchConfigLabelDecorator extends BaseLabelProvider implements ILa
     super.dispose();
   }
 
+  @Override
   public Image decorateImage(Image image, Object element)
   {
     if (image != null)
@@ -69,6 +70,7 @@ public class LaunchConfigLabelDecorator extends BaseLabelProvider implements ILa
     return null;
   }
 
+  @Override
   public String decorateText(String text, Object element)
   {
     if (isLocal(element))

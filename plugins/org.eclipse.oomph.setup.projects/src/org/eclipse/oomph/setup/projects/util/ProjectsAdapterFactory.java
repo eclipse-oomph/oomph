@@ -82,7 +82,7 @@ public class ProjectsAdapterFactory extends AdapterFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  protected ProjectsSwitch<Adapter> modelSwitch = new ProjectsSwitch<Adapter>()
+  protected ProjectsSwitch<Adapter> modelSwitch = new ProjectsSwitch<>()
   {
     @Override
     public Adapter casePathVariableTask(PathVariableTask object)

@@ -166,6 +166,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
 
   private static final Comparator<? super IAction> ACTION_COMPARATOR = new Comparator<IAction>()
   {
+    @Override
     public int compare(IAction a1, IAction a2)
     {
       return StringUtil.safe(a1.getText()).compareTo(StringUtil.safe(a2.getText()));
@@ -344,7 +345,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
       {
         ResourceSet resourceSet = domain.getResourceSet();
         EList<Resource> resources = resourceSet.getResources();
-        final Set<URI> loadedURIs = new LinkedHashSet<URI>();
+        final Set<URI> loadedURIs = new LinkedHashSet<>();
         LoadResourceDialog loadResourceDialog = new LoadResourceDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), domain)
         {
           @Override
@@ -370,7 +371,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
 
         if (loadResourceDialog.open() == IDialogConstants.OK_ID)
         {
-          List<Resource> loadedResources = new ArrayList<Resource>();
+          List<Resource> loadedResources = new ArrayList<>();
           synchronized (resourceSet)
           {
             int index = 0;
@@ -472,6 +473,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
     //
     submenuManager.addMenuListener(new IMenuListener()
     {
+      @Override
       public void menuAboutToShow(IMenuManager menuManager)
       {
         menuManager.updateAll(true);
@@ -593,6 +595,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
     }
   }
 
+  @Override
   public void selectionChanged(SelectionChangedEvent event)
   {
     selectionChangedGen(event);
@@ -612,7 +615,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
    */
   protected Collection<IAction> generateCreateChildActionsGen(Collection<?> descriptors, ISelection selection)
   {
-    Collection<IAction> actions = new ArrayList<IAction>();
+    Collection<IAction> actions = new ArrayList<>();
     if (descriptors != null)
     {
       for (Object descriptor : descriptors)
@@ -638,7 +641,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
    */
   protected Collection<IAction> generateCreateSiblingActionsGen(Collection<?> descriptors, ISelection selection)
   {
-    Collection<IAction> actions = new ArrayList<IAction>();
+    Collection<IAction> actions = new ArrayList<>();
     if (descriptors != null)
     {
       for (Object descriptor : descriptors)
@@ -658,7 +661,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
   private Collection<IAction> addSpecializedAnnotationCreationActions(Collection<?> descriptors, ISelection selection, boolean sibling,
       Collection<IAction> actions)
   {
-    actions = new ArrayList<IAction>(actions);
+    actions = new ArrayList<>(actions);
     if (selection instanceof IStructuredSelection && ((IStructuredSelection)selection).size() == 1)
     {
       EditingDomain domain = ((IEditingDomainProvider)activeEditorPart).getEditingDomain();
@@ -798,7 +801,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
 
   private Set<EAttribute> getFeatureSubstitutionAttributes(ModelElement modelElement)
   {
-    Set<EAttribute> result = new LinkedHashSet<EAttribute>();
+    Set<EAttribute> result = new LinkedHashSet<>();
 
     for (EAttribute eAttribute : modelElement.eClass().getEAllAttributes())
     {
@@ -822,7 +825,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
       Object object = ((IStructuredSelection)selection).getFirstElement();
       if (object instanceof EObject)
       {
-        actions = new ArrayList<IAction>(actions);
+        actions = new ArrayList<>(actions);
         addEnablementActions(descriptors, object, sibling, actions);
       }
     }
@@ -966,17 +969,17 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
     manager.add(new Separator("additions")); //$NON-NLS-1$
     manager.add(new Separator("additions-end")); //$NON-NLS-1$
 
-    List<IAction> elements = new ArrayList<IAction>();
-    List<IAction> scopes = new ArrayList<IAction>();
-    List<IAction> defaults = new ArrayList<IAction>();
-    List<IAction> installations = new ArrayList<IAction>();
-    List<IAction> tasks = new ArrayList<IAction>();
-    List<IAction> annotations = new ArrayList<IAction>();
-    List<IAction> additions = new ArrayList<IAction>();
-    List<EnablementAction> additionalTasks = new ArrayList<EnablementAction>();
-    List<EnablementAction> additionalElements = new ArrayList<EnablementAction>();
+    List<IAction> elements = new ArrayList<>();
+    List<IAction> scopes = new ArrayList<>();
+    List<IAction> defaults = new ArrayList<>();
+    List<IAction> installations = new ArrayList<>();
+    List<IAction> tasks = new ArrayList<>();
+    List<IAction> annotations = new ArrayList<>();
+    List<IAction> additions = new ArrayList<>();
+    List<EnablementAction> additionalTasks = new ArrayList<>();
+    List<EnablementAction> additionalElements = new ArrayList<>();
 
-    Set<String> installedClasses = new HashSet<String>();
+    Set<String> installedClasses = new HashSet<>();
 
     for (IAction action : actions)
     {
@@ -1107,14 +1110,16 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
     final MenuManager submenuManager = new MenuManager(subMenuText, subMenuID);
     submenuManager.addMenuListener(new IMenuListener()
     {
+      @Override
       public void menuAboutToShow(IMenuManager manager)
       {
         // Execute later in event loop to make sure the menu is visible when the first image is loaded.
         UIUtil.asyncExec(new Runnable()
         {
+          @Override
           public void run()
           {
-            final Queue<EnablementAction> queue = new ConcurrentLinkedQueue<EnablementAction>(additionalTasks);
+            final Queue<EnablementAction> queue = new ConcurrentLinkedQueue<>(additionalTasks);
             int jobs = Math.max(queue.size(), 10);
 
             for (int i = 0; i < jobs; i++)
@@ -1538,7 +1543,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
     {
       IBindingService bindingService = UIUtil.getService(PlatformUI.getWorkbench(), IBindingService.class);
       Binding[] bindings = bindingService.getBindings();
-      Map<String, List<Command>> map = new HashMap<String, List<Command>>();
+      Map<String, List<Command>> map = new HashMap<>();
 
       ICommandService commandService = UIUtil.getService(PlatformUI.getWorkbench(), ICommandService.class);
       for (Command command : commandService.getDefinedCommands())
@@ -1554,7 +1559,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
           List<Command> commands = map.get(category);
           if (commands == null)
           {
-            commands = new ArrayList<Command>();
+            commands = new ArrayList<>();
             map.put(category, commands);
           }
 
@@ -1566,7 +1571,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
         }
       }
 
-      List<String> categories = new ArrayList<String>(map.keySet());
+      List<String> categories = new ArrayList<>(map.keySet());
       Collections.sort(categories);
 
       ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -1644,8 +1649,9 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
     @SuppressWarnings("unchecked")
     protected DockableDialog.Factory<CommandTableDialog> getDialogFactory()
     {
-      return new Factory<CommandTableDialog>()
+      return new Factory<>()
       {
+        @Override
         public CommandTableDialog create(IWorkbenchWindow workbenchWindow)
         {
           return new CommandTableDialog(workbenchWindow, CommandTableAction.this);
@@ -1720,8 +1726,9 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
     @SuppressWarnings("unchecked")
     protected DockableDialog.Factory<EditorTableDialog> getDialogFactory()
     {
-      return new Factory<EditorTableDialog>()
+      return new Factory<>()
       {
+        @Override
         public EditorTableDialog create(IWorkbenchWindow workbenchWindow)
         {
           return new EditorTableDialog(workbenchWindow, EditorTableAction.this);
@@ -1911,6 +1918,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
       final Resource resource = object instanceof Resource ? (Resource)object : ((EObject)object).eResource();
       IStorageEditorInput editorInput = new IStorageEditorInput()
       {
+        @Override
         @SuppressWarnings("all")
         public Object getAdapter(Class adapter)
         {
@@ -1928,56 +1936,67 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
           return null;
         }
 
+        @Override
         public String getToolTipText()
         {
           return uri.toString();
         }
 
+        @Override
         public IPersistableElement getPersistable()
         {
           return null;
         }
 
+        @Override
         public String getName()
         {
           return uri.lastSegment();
         }
 
+        @Override
         public ImageDescriptor getImageDescriptor()
         {
           return null;
         }
 
+        @Override
         public boolean exists()
         {
           return true;
         }
 
+        @Override
         public IStorage getStorage() throws CoreException
         {
           return new IStorage()
           {
+            @Override
             @SuppressWarnings("all")
             public Object getAdapter(Class adapter)
             {
               return null;
             }
 
+            @Override
             public boolean isReadOnly()
             {
               return true;
             }
 
+            @Override
             public String getName()
             {
               return uri.lastSegment();
             }
 
+            @Override
             public IPath getFullPath()
             {
               return new Path(uri.toString());
             }
 
+            @Override
             public InputStream getContents() throws CoreException
             {
               try
@@ -2072,10 +2091,11 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
         @Override
         protected boolean prepare()
         {
-          eObjectToExtensionMap = new LinkedHashMap<EObject, AnyType>(resource.getEObjectToExtensionMap());
+          eObjectToExtensionMap = new LinkedHashMap<>(resource.getEObjectToExtensionMap());
           return true;
         }
 
+        @Override
         public void execute()
         {
           resource.getEObjectToExtensionMap().clear();
@@ -2087,6 +2107,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
           resource.getEObjectToExtensionMap().putAll(eObjectToExtensionMap);
         }
 
+        @Override
         public void redo()
         {
           execute();

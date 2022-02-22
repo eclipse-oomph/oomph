@@ -274,6 +274,7 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Index createIndex()
   {
     IndexImpl index = new IndexImpl();
@@ -285,6 +286,7 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public CatalogSelection createCatalogSelection()
   {
     CatalogSelectionImpl catalogSelection = new CatalogSelectionImpl();
@@ -296,6 +298,7 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public User createUser()
   {
     UserImpl user = new UserImpl();
@@ -307,6 +310,7 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Project createProject()
   {
     ProjectImpl project = new ProjectImpl();
@@ -318,6 +322,7 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Stream createStream()
   {
     StreamImpl stream = new StreamImpl();
@@ -329,6 +334,7 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Installation createInstallation()
   {
     InstallationImpl installation = new InstallationImpl();
@@ -340,6 +346,7 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ProductCatalog createProductCatalog()
   {
     ProductCatalogImpl productCatalog = new ProductCatalogImpl();
@@ -351,6 +358,7 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Product createProduct()
   {
     ProductImpl product = new ProductImpl();
@@ -362,6 +370,7 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ProductVersion createProductVersion()
   {
     ProductVersionImpl productVersion = new ProductVersionImpl();
@@ -373,6 +382,7 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ProjectCatalog createProjectCatalog()
   {
     ProjectCatalogImpl projectCatalog = new ProjectCatalogImpl();
@@ -384,6 +394,7 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public InstallationTask createInstallationTask()
   {
     InstallationTaskImpl installationTask = new InstallationTaskImpl();
@@ -395,6 +406,7 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public WorkspaceTask createWorkspaceTask()
   {
     WorkspaceTaskImpl workspaceTask = new WorkspaceTaskImpl();
@@ -406,6 +418,7 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Configuration createConfiguration()
   {
     ConfigurationImpl configuration = new ConfigurationImpl();
@@ -417,6 +430,7 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public CompoundTask createCompoundTask()
   {
     CompoundTaskImpl compoundTask = new CompoundTaskImpl();
@@ -428,6 +442,7 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public VariableTask createVariableTask()
   {
     VariableTaskImpl variableTask = new VariableTaskImpl();
@@ -439,6 +454,7 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ResourceCopyTask createResourceCopyTask()
   {
     ResourceCopyTaskImpl resourceCopyTask = new ResourceCopyTaskImpl();
@@ -450,6 +466,7 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public TextModifyTask createTextModifyTask()
   {
     TextModifyTaskImpl textModifyTask = new TextModifyTaskImpl();
@@ -461,6 +478,7 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public TextModification createTextModification()
   {
     TextModificationImpl textModification = new TextModificationImpl();
@@ -516,6 +534,7 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Macro createMacro()
   {
     MacroImpl macro = new MacroImpl();
@@ -527,6 +546,7 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Parameter createParameter()
   {
     ParameterImpl parameter = new ParameterImpl();
@@ -538,6 +558,7 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public MacroTask createMacroTask()
   {
     MacroTaskImpl macroTask = new MacroTaskImpl();
@@ -549,6 +570,7 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Argument createArgument()
   {
     ArgumentImpl argument = new ArgumentImpl();
@@ -560,6 +582,7 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public StringSubstitutionTask createStringSubstitutionTask()
   {
     StringSubstitutionTaskImpl stringSubstitutionTask = new StringSubstitutionTaskImpl();
@@ -596,6 +619,7 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public AttributeRule createAttributeRule()
   {
     AttributeRuleImpl attributeRule = new AttributeRuleImpl();
@@ -607,6 +631,7 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public LocationCatalog createLocationCatalog()
   {
     LocationCatalogImpl locationCatalog = new LocationCatalogImpl();
@@ -618,6 +643,7 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public RedirectionTask createRedirectionTask()
   {
     RedirectionTaskImpl redirectionTask = new RedirectionTaskImpl();
@@ -629,6 +655,7 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public VariableChoice createVariableChoice()
   {
     VariableChoiceImpl variableChoice = new VariableChoiceImpl();
@@ -640,6 +667,7 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ResourceCreationTask createResourceCreationTask()
   {
     ResourceCreationTaskImpl resourceCreationTask = new ResourceCreationTaskImpl();
@@ -651,6 +679,7 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EclipseIniTask createEclipseIniTask()
   {
     EclipseIniTaskImpl eclipseIniTask = new EclipseIniTaskImpl();
@@ -757,6 +786,7 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
     return instanceValue == null ? null : instanceValue.toString();
   }
 
+  @Override
   public CompoundTask createCompoundTask(String name)
   {
     CompoundTask compoundSetupTask = createCompoundTask();
@@ -769,6 +799,7 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Workspace createWorkspace()
   {
     WorkspaceImpl workspace = new WorkspaceImpl();
@@ -780,6 +811,7 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public LinkLocationTask createLinkLocationTask()
   {
     LinkLocationTaskImpl linkLocationTask = new LinkLocationTaskImpl();
@@ -791,6 +823,7 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public PreferenceTask createPreferenceTask()
   {
     PreferenceTaskImpl preferenceTask = new PreferenceTaskImpl();
@@ -869,7 +902,7 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
       return null;
     }
 
-    Set<Trigger> result = new HashSet<Trigger>();
+    Set<Trigger> result = new HashSet<>();
     for (String value : split(initialValue))
     {
       result.add(Trigger.get(value));
@@ -900,6 +933,7 @@ public class SetupFactoryImpl extends EFactoryImpl implements SetupFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public SetupPackage getSetupPackage()
   {
     return (SetupPackage)getEPackage();

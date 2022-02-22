@@ -29,7 +29,7 @@ public final class CollectionUtil
     Set<V> set = map.get(key);
     if (set == null)
     {
-      set = new LinkedHashSet<V>();
+      set = new LinkedHashSet<>();
       map.put(key, set);
     }
 

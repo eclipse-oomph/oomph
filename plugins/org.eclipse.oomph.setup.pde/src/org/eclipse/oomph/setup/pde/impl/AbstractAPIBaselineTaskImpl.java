@@ -100,6 +100,7 @@ public abstract class AbstractAPIBaselineTaskImpl extends SetupTaskImpl implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getName()
   {
     return name;
@@ -110,6 +111,7 @@ public abstract class AbstractAPIBaselineTaskImpl extends SetupTaskImpl implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setName(String newName)
   {
     String oldName = name;
@@ -125,6 +127,7 @@ public abstract class AbstractAPIBaselineTaskImpl extends SetupTaskImpl implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public boolean isActivate()
   {
     return activate;
@@ -135,6 +138,7 @@ public abstract class AbstractAPIBaselineTaskImpl extends SetupTaskImpl implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setActivate(boolean newActivate)
   {
     boolean oldActivate = activate;

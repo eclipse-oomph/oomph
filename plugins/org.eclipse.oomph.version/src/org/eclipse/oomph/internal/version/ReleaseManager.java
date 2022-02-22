@@ -56,10 +56,10 @@ import java.util.WeakHashMap;
  */
 public class ReleaseManager implements IReleaseManager
 {
-  private final Map<IRelease, Long> releases = new WeakHashMap<IRelease, Long>();
+  private final Map<IRelease, Long> releases = new WeakHashMap<>();
 
   @SuppressWarnings("restriction")
-  private final Map<org.eclipse.pde.internal.core.iproduct.IProductModel, Long> productModels = new WeakHashMap<org.eclipse.pde.internal.core.iproduct.IProductModel, Long>();
+  private final Map<org.eclipse.pde.internal.core.iproduct.IProductModel, Long> productModels = new WeakHashMap<>();
 
   private SAXParserFactory parserFactory;
 
@@ -77,6 +77,7 @@ public class ReleaseManager implements IReleaseManager
     return parserFactory.newSAXParser();
   }
 
+  @Override
   public synchronized IRelease getRelease(IFile file) throws CoreException
   {
     try
@@ -129,9 +130,10 @@ public class ReleaseManager implements IReleaseManager
     }
   }
 
+  @Override
   public Map<IElement, IElement> createElements(String path, boolean resolve)
   {
-    Map<IElement, IElement> elements = new HashMap<IElement, IElement>();
+    Map<IElement, IElement> elements = new HashMap<>();
     for (IProject project : ResourcesPlugin.getWorkspace().getRoot().getProjects())
     {
       if (project.isOpen())
@@ -150,7 +152,7 @@ public class ReleaseManager implements IReleaseManager
     }
 
     Set<IElement> keySet = elements.keySet();
-    ArrayList<IElement> queue = new ArrayList<IElement>(keySet);
+    ArrayList<IElement> queue = new ArrayList<>(keySet);
     for (int i = 0; i < queue.size(); i++)
     {
       IElement element = queue.get(i);
@@ -176,6 +178,7 @@ public class ReleaseManager implements IReleaseManager
     return elements;
   }
 
+  @Override
   public synchronized IRelease createRelease(IFile file) throws CoreException, IOException, NoSuchAlgorithmException
   {
     Release release = new Release(file);
@@ -188,6 +191,7 @@ public class ReleaseManager implements IReleaseManager
     return release;
   }
 
+  @Override
   @SuppressWarnings("restriction")
   public IElement createElement(IModel componentModel, boolean withFeatureContent, boolean resolve)
   {
@@ -321,6 +325,7 @@ public class ReleaseManager implements IReleaseManager
     return element;
   }
 
+  @Override
   @SuppressWarnings("restriction")
   public IModel getComponentModel(IElement element)
   {

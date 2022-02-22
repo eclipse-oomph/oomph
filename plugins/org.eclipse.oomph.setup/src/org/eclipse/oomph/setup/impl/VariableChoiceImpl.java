@@ -100,6 +100,7 @@ public class VariableChoiceImpl extends ModelElementImpl implements VariableChoi
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getValue()
   {
     return value;
@@ -110,6 +111,7 @@ public class VariableChoiceImpl extends ModelElementImpl implements VariableChoi
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setValue(String newValue)
   {
     String oldValue = value;
@@ -125,6 +127,7 @@ public class VariableChoiceImpl extends ModelElementImpl implements VariableChoi
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getLabel()
   {
     return label;
@@ -135,6 +138,7 @@ public class VariableChoiceImpl extends ModelElementImpl implements VariableChoi
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setLabel(String newLabel)
   {
     String oldLabel = label;

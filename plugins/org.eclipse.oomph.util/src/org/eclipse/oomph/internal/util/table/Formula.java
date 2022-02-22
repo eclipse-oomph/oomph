@@ -29,6 +29,7 @@ public interface Formula
       this.range = range;
     }
 
+    @Override
     public Double evaluate()
     {
       double sum = 0.0;
@@ -57,6 +58,7 @@ public interface Formula
       this.range = range;
     }
 
+    @Override
     public Double evaluate()
     {
       double min = Double.MAX_VALUE;
@@ -88,6 +90,7 @@ public interface Formula
       this.range = range;
     }
 
+    @Override
     public Double evaluate()
     {
       double max = Double.MIN_VALUE;
@@ -119,6 +122,7 @@ public interface Formula
       this.range = range;
     }
 
+    @Override
     public Double evaluate()
     {
       double sum = 0.0;
@@ -154,6 +158,7 @@ public interface Formula
       this.range = range;
     }
 
+    @Override
     public Integer evaluate()
     {
       int count = 0;

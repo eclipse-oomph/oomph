@@ -26,6 +26,7 @@ public class ImportProjectsHandler extends AbstractDropdownItemHandler
     super("Project", Messages.ImportProjectsHandler_text); //$NON-NLS-1$
   }
 
+  @Override
   public void run()
   {
     Shell shell = SetupPropertyTester.getHandlingShell();

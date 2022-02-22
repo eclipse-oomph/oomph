@@ -36,16 +36,19 @@ public abstract class AbstractPreferenceDialog extends AbstractSetupDialog imple
     super(parentShell, title, 600, 600, SetupInstallerPlugin.INSTANCE, false);
   }
 
+  @Override
   public IPreferenceStore getPreferenceStore()
   {
     return SetupInstallerPlugin.INSTANCE.getPreferenceStore();
   }
 
+  @Override
   public void updateTitle()
   {
     // Do nothing
   }
 
+  @Override
   public void updateMessage()
   {
     String message = null;
@@ -89,6 +92,7 @@ public abstract class AbstractPreferenceDialog extends AbstractSetupDialog imple
     setMessage(message, messageType);
   }
 
+  @Override
   public void updateButtons()
   {
     Button button = getButton(IDialogConstants.OK_ID);

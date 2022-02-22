@@ -24,6 +24,7 @@ import org.eclipse.core.variables.IDynamicVariableResolver;
  */
 public class TargletContainerBundlePool implements IDynamicVariableResolver
 {
+  @Override
   public String resolveValue(IDynamicVariable variable, String containerID) throws CoreException
   {
     ITargletContainerDescriptor descriptor = TargletContainerDescriptorManager.getInstance().getDescriptor(containerID, new NullProgressMonitor());

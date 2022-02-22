@@ -98,6 +98,7 @@ public class TargletContainerImpl extends ModelElementImpl implements TargletCon
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getID()
   {
     return iD;
@@ -108,6 +109,7 @@ public class TargletContainerImpl extends ModelElementImpl implements TargletCon
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setID(String newID)
   {
     String oldID = iD;
@@ -123,11 +125,12 @@ public class TargletContainerImpl extends ModelElementImpl implements TargletCon
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<Targlet> getTarglets()
   {
     if (targlets == null)
     {
-      targlets = new EObjectContainmentEList<Targlet>(Targlet.class, this, TargletPackage.TARGLET_CONTAINER__TARGLETS);
+      targlets = new EObjectContainmentEList<>(Targlet.class, this, TargletPackage.TARGLET_CONTAINER__TARGLETS);
     }
     return targlets;
   }

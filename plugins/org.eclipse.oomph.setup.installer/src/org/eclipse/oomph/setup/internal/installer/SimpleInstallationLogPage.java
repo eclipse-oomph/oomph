@@ -82,6 +82,7 @@ public class SimpleInstallationLogPage extends SimpleInstallerPage
     // Setting the focus on the scroller doesn't work, that is why we forward the mouse wheel event.
     text.addListener(SWT.MouseVerticalWheel, new Listener()
     {
+      @Override
       public void handleEvent(Event event)
       {
         int value = event.count * SCROLL_SPEED;

@@ -72,11 +72,12 @@ public class WorkspaceImpl extends ScopeImpl implements Workspace
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<Stream> getStreams()
   {
     if (streams == null)
     {
-      streams = new EObjectResolvingEList<Stream>(Stream.class, this, SetupPackage.WORKSPACE__STREAMS);
+      streams = new EObjectResolvingEList<>(Stream.class, this, SetupPackage.WORKSPACE__STREAMS);
     }
     return streams;
   }

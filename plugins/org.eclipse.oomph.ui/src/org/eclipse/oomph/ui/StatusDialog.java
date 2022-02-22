@@ -111,6 +111,7 @@ public class StatusDialog extends DiagnosticDialog
 
     UIUtil.asyncExec(diagnosticComposite, new Runnable()
     {
+      @Override
       public void run()
       {
         setDiagnostic(diagnostic);

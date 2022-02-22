@@ -724,7 +724,7 @@ public final class IOUtil
 
   public static List<String> readLines(File file, String charsetName)
   {
-    List<String> lines = new ArrayList<String>();
+    List<String> lines = new ArrayList<>();
 
     if (file.exists())
     {
@@ -750,7 +750,7 @@ public final class IOUtil
 
   public static List<String> readLines(InputStream in, String charsetName)
   {
-    List<String> lines = new ArrayList<String>();
+    List<String> lines = new ArrayList<>();
 
     Reader reader = null;
     BufferedReader bufferedReader = null;
@@ -1042,7 +1042,7 @@ public final class IOUtil
    */
   private static class FileCollector implements IOVisitor
   {
-    private List<File> files = new ArrayList<File>();
+    private List<File> files = new ArrayList<>();
 
     public FileCollector()
     {
@@ -1053,6 +1053,7 @@ public final class IOUtil
       return files;
     }
 
+    @Override
     public boolean visit(File file) throws IOException
     {
       files.add(file);
@@ -1082,6 +1083,7 @@ public final class IOUtil
       this.classLoader = classLoader;
     }
 
+    @Override
     public Class<?> resolveClass(ObjectStreamClass v) throws ClassNotFoundException
     {
       String className = v.getName();

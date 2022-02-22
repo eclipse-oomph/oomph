@@ -151,6 +151,7 @@ public class SyncActionImpl extends MinimalEObjectImpl.Container implements Sync
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public String getID()
   {
     if (localDelta != null)
@@ -177,6 +178,7 @@ public class SyncActionImpl extends MinimalEObjectImpl.Container implements Sync
   /**
    * @ADDED
    */
+  @Override
   public Map.Entry<String, String> getPreference()
   {
     SyncDelta delta = getLocalDelta();
@@ -196,18 +198,21 @@ public class SyncActionImpl extends MinimalEObjectImpl.Container implements Sync
       if (task instanceof PreferenceTask)
       {
         final PreferenceTask preferenceTask = (PreferenceTask)task;
-        return new Map.Entry<String, String>()
+        return new Map.Entry<>()
         {
+          @Override
           public String getKey()
           {
             return preferenceTask.getKey();
           }
 
+          @Override
           public String getValue()
           {
             return preferenceTask.getValue();
           }
 
+          @Override
           public String setValue(String value)
           {
             throw new UnsupportedOperationException();
@@ -224,6 +229,7 @@ public class SyncActionImpl extends MinimalEObjectImpl.Container implements Sync
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public SyncDelta getLocalDelta()
   {
     if (localDelta != null && localDelta.eIsProxy())
@@ -271,6 +277,7 @@ public class SyncActionImpl extends MinimalEObjectImpl.Container implements Sync
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public SyncDelta getRemoteDelta()
   {
     if (remoteDelta != null && remoteDelta.eIsProxy())
@@ -318,6 +325,7 @@ public class SyncActionImpl extends MinimalEObjectImpl.Container implements Sync
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public SyncActionType getComputedType()
   {
     return computedType;
@@ -343,6 +351,7 @@ public class SyncActionImpl extends MinimalEObjectImpl.Container implements Sync
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public SyncActionType getResolvedType()
   {
     return resolvedType;
@@ -353,6 +362,7 @@ public class SyncActionImpl extends MinimalEObjectImpl.Container implements Sync
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setResolvedType(SyncActionType newResolvedType)
   {
     SyncActionType oldResolvedType = resolvedType;
@@ -368,6 +378,7 @@ public class SyncActionImpl extends MinimalEObjectImpl.Container implements Sync
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public SyncActionType getEffectiveType()
   {
     if (resolvedType != null)

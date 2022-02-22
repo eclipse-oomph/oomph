@@ -108,6 +108,7 @@ public class StringSubstitutionTaskImpl extends SetupTaskImpl implements StringS
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getName()
   {
     return name;
@@ -118,6 +119,7 @@ public class StringSubstitutionTaskImpl extends SetupTaskImpl implements StringS
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setName(String newName)
   {
     String oldName = name;
@@ -133,6 +135,7 @@ public class StringSubstitutionTaskImpl extends SetupTaskImpl implements StringS
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getValue()
   {
     return value;
@@ -143,6 +146,7 @@ public class StringSubstitutionTaskImpl extends SetupTaskImpl implements StringS
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setValue(String newValue)
   {
     String oldValue = value;
@@ -263,6 +267,7 @@ public class StringSubstitutionTaskImpl extends SetupTaskImpl implements StringS
     return 0;
   }
 
+  @Override
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     IValueVariable variable = getValueVariable(false);
@@ -272,12 +277,8 @@ public class StringSubstitutionTaskImpl extends SetupTaskImpl implements StringS
     }
 
     String value = getValue();
-    if (!StringUtil.isEmpty(value) && !value.equals(variable.getValue()))
-    {
-      return true;
-    }
-
-    if (!StringUtil.safe(getDescription()).equals(StringUtil.safe(variable.getDescription())))
+    if (!StringUtil.isEmpty(value) && !value.equals(variable.getValue())
+        || !StringUtil.safe(getDescription()).equals(StringUtil.safe(variable.getDescription())))
     {
       return true;
     }
@@ -285,6 +286,7 @@ public class StringSubstitutionTaskImpl extends SetupTaskImpl implements StringS
     return false;
   }
 
+  @Override
   public void perform(SetupTaskContext context) throws Exception
   {
     String name = getName();

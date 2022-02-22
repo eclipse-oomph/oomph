@@ -184,7 +184,7 @@ public class ProjectPage extends SetupWizardPage
   /**
    * Cannot be removed from {@link #streamViewer}.
    */
-  private final Set<URI> existingStreams = new HashSet<URI>();
+  private final Set<URI> existingStreams = new HashSet<>();
 
   private final SelectionMemento selectionMemento;
 
@@ -240,6 +240,7 @@ public class ProjectPage extends SetupWizardPage
         final Collection<?> affectedObjects = command.getAffectedObjects();
         UIUtil.asyncExec(projectViewer.getControl(), new Runnable()
         {
+          @Override
           public void run()
           {
             projectViewer.setSelection(new StructuredSelection(affectedObjects.toArray()), true);
@@ -268,7 +269,7 @@ public class ProjectPage extends SetupWizardPage
     addProjectButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("add_project")); //$NON-NLS-1$
     AccessUtil.setKey(addProjectButton, "addProject"); //$NON-NLS-1$
 
-    final Set<ProjectCatalog> projectCatalogs = new HashSet<ProjectCatalog>();
+    final Set<ProjectCatalog> projectCatalogs = new HashSet<>();
     addProjectButton.addSelectionListener(new SelectionAdapter()
     {
       @Override
@@ -285,18 +286,18 @@ public class ProjectPage extends SetupWizardPage
     removeProjectButton.setEnabled(false);
     AccessUtil.setKey(removeProjectButton, "removeProject"); //$NON-NLS-1$
 
-    final List<Project> projects = new ArrayList<Project>();
-    final List<Project> userProjects = new ArrayList<Project>();
+    final List<Project> projects = new ArrayList<>();
+    final List<Project> userProjects = new ArrayList<>();
     final SelectionAdapter removeProjectSelectionAdapter = new SelectionAdapter()
     {
       @Override
       public void widgetSelected(SelectionEvent event)
       {
         Workspace workspace = getWorkspace();
-        List<Stream> streamsToRemove = new ArrayList<Stream>();
+        List<Stream> streamsToRemove = new ArrayList<>();
 
-        List<Project> parents = new UniqueEList<Project>();
-        Set<Resource> containingResources = new HashSet<Resource>();
+        List<Project> parents = new UniqueEList<>();
+        Set<Resource> containingResources = new HashSet<>();
         for (Project project : userProjects)
         {
           Project parentProject = project.getParentProject();
@@ -443,6 +444,7 @@ public class ProjectPage extends SetupWizardPage
         return true;
       }
 
+      @Override
       public boolean isGrayed(Object element)
       {
         Workspace workspace = getWorkspace();
@@ -451,7 +453,7 @@ public class ProjectPage extends SetupWizardPage
           return false;
         }
 
-        projectContainers = new HashSet<ProjectContainer>();
+        projectContainers = new HashSet<>();
         for (Stream stream : workspace.getStreams())
         {
           for (ProjectContainer projectContainer = stream.getProject(); projectContainer != null; projectContainer = projectContainer.getProjectContainer())
@@ -464,6 +466,7 @@ public class ProjectPage extends SetupWizardPage
         return !containsAll(projectContainer.getProjects());
       }
 
+      @Override
       public boolean isChecked(Object element)
       {
         Workspace workspace = getWorkspace();
@@ -487,6 +490,7 @@ public class ProjectPage extends SetupWizardPage
 
     ColumnViewerInformationControlToolTipSupport toolTipSupport = new ColumnViewerInformationControlToolTipSupport(projectViewer, new LocationListener()
     {
+      @Override
       public void changing(LocationEvent event)
       {
         if (!"about:blank".equals(event.location)) //$NON-NLS-1$
@@ -496,6 +500,7 @@ public class ProjectPage extends SetupWizardPage
         }
       }
 
+      @Override
       public void changed(LocationEvent event)
       {
       }
@@ -577,7 +582,7 @@ public class ProjectPage extends SetupWizardPage
         List<URI> uris = selectionMemento.getStreams();
         if (uris != null)
         {
-          List<Project> projects = new ArrayList<Project>();
+          List<Project> projects = new ArrayList<>();
           ResourceSet resourceSet = getResourceSet();
 
           for (URI uri : uris)
@@ -613,6 +618,7 @@ public class ProjectPage extends SetupWizardPage
         {
           UIUtil.asyncExec(streamViewer.getControl(), new Runnable()
           {
+            @Override
             public void run()
             {
               streamViewer.setInput(workspace);
@@ -624,6 +630,7 @@ public class ProjectPage extends SetupWizardPage
         {
           UIUtil.asyncExec(projectViewer.getControl(), new Runnable()
           {
+            @Override
             public void run()
             {
               if (!selectionMementoTried.getAndSet(true))
@@ -744,6 +751,7 @@ public class ProjectPage extends SetupWizardPage
 
     projectViewer.addSelectionChangedListener(new ISelectionChangedListener()
     {
+      @Override
       public void selectionChanged(SelectionChangedEvent event)
       {
         projects.clear();
@@ -770,7 +778,7 @@ public class ProjectPage extends SetupWizardPage
         removeProjectButton.setEnabled(!userProjects.isEmpty());
 
         Workspace workspace = getWorkspace();
-        List<Project> projectsToAdd = new ArrayList<Project>(projects);
+        List<Project> projectsToAdd = new ArrayList<>(projects);
         if (workspace != null)
         {
           for (Stream stream : workspace.getStreams())
@@ -810,6 +818,7 @@ public class ProjectPage extends SetupWizardPage
 
     projectViewer.addDoubleClickListener(new IDoubleClickListener()
     {
+      @Override
       public void doubleClick(DoubleClickEvent event)
       {
         IStructuredSelection selection = (IStructuredSelection)projectViewer.getSelection();
@@ -847,12 +856,13 @@ public class ProjectPage extends SetupWizardPage
 
     projectViewer.addCheckStateListener(new ICheckStateListener()
     {
+      @Override
       public void checkStateChanged(CheckStateChangedEvent event)
       {
         ProjectContainer element = (ProjectContainer)event.getElement();
         projectViewer.setSelection(new StructuredSelection(element));
 
-        List<Stream> streams = new ArrayList<Stream>();
+        List<Stream> streams = new ArrayList<>();
         Workspace workspace = getWorkspace();
         if (workspace != null)
         {
@@ -873,7 +883,7 @@ public class ProjectPage extends SetupWizardPage
 
         if (streams.isEmpty())
         {
-          List<Project> projects = new ArrayList<Project>();
+          List<Project> projects = new ArrayList<>();
           if (element instanceof Project)
           {
             projects.add((Project)element);
@@ -908,7 +918,7 @@ public class ProjectPage extends SetupWizardPage
       {
         if (event.character == SWT.DEL)
         {
-          List<Stream> selectedProjectStreams = new ArrayList<Stream>();
+          List<Stream> selectedProjectStreams = new ArrayList<>();
           Workspace workspace = getWorkspace();
           if (workspace != null)
           {
@@ -945,6 +955,7 @@ public class ProjectPage extends SetupWizardPage
 
     streamViewer.addSelectionChangedListener(new ISelectionChangedListener()
     {
+      @Override
       public void selectionChanged(SelectionChangedEvent event)
       {
         boolean enabled = false;
@@ -967,6 +978,7 @@ public class ProjectPage extends SetupWizardPage
 
     streamViewer.addDoubleClickListener(new IDoubleClickListener()
     {
+      @Override
       public void doubleClick(DoubleClickEvent event)
       {
         removeSelectedStreams();
@@ -996,6 +1008,7 @@ public class ProjectPage extends SetupWizardPage
 
     dropListener = new SetupTransferSupport.DropListener()
     {
+      @Override
       public void resourcesDropped(Collection<? extends Resource> resources)
       {
         SetupWizard setupWizard = getWizard();
@@ -1013,7 +1026,7 @@ public class ProjectPage extends SetupWizardPage
           protected boolean applyStreams(List<Stream> streams)
           {
             filteredTree.clearText();
-            List<Project> projects = new ArrayList<Project>();
+            List<Project> projects = new ArrayList<>();
             for (Stream stream : streams)
             {
               Project project = stream.getProject();
@@ -1125,6 +1138,7 @@ public class ProjectPage extends SetupWizardPage
       {
         Runnable initializer = new Runnable()
         {
+          @Override
           public void run()
           {
             // If there is an index loader, await for the index to finish loading.
@@ -1164,7 +1178,7 @@ public class ProjectPage extends SetupWizardPage
               streamViewer.setInput(workspace);
             }
 
-            List<Project> projects = new ArrayList<Project>();
+            List<Project> projects = new ArrayList<>();
             for (Stream stream : selection.getSelectedStreams())
             {
               projects.add(stream.getProject());
@@ -1259,7 +1273,7 @@ public class ProjectPage extends SetupWizardPage
       Workspace workspace = getWorkspace();
       if (workspace != null)
       {
-        List<URI> uris = new ArrayList<URI>();
+        List<URI> uris = new ArrayList<>();
         for (Stream stream : workspace.getStreams())
         {
           URI uri = EcoreUtil.getURI(stream);
@@ -1322,14 +1336,17 @@ public class ProjectPage extends SetupWizardPage
     cellEditor.setLabelProvider(labelProvider);
     cellEditor.setContentProvider(new IStructuredContentProvider()
     {
+      @Override
       public void inputChanged(Viewer viewer, Object oldInput, Object newInput)
       {
       }
 
+      @Override
       public void dispose()
       {
       }
 
+      @Override
       public Object[] getElements(Object inputElement)
       {
         Project project = (Project)inputElement;
@@ -1388,6 +1405,7 @@ public class ProjectPage extends SetupWizardPage
 
     streamViewer.addSelectionChangedListener(new ISelectionChangedListener()
     {
+      @Override
       public void selectionChanged(SelectionChangedEvent event)
       {
         ComboViewer comboViewer = cellEditor.getViewer();
@@ -1415,7 +1433,7 @@ public class ProjectPage extends SetupWizardPage
 
   private void addSelectedProjects()
   {
-    List<Project> projects = new ArrayList<Project>();
+    List<Project> projects = new ArrayList<>();
     IStructuredSelection selection = (IStructuredSelection)projectViewer.getSelection();
     for (Object element : selection.toArray())
     {
@@ -1433,8 +1451,8 @@ public class ProjectPage extends SetupWizardPage
   {
     projectsChanged = true;
 
-    List<Project> addedProjects = new ArrayList<Project>();
-    List<Stream> addedStreams = new ArrayList<Stream>();
+    List<Project> addedProjects = new ArrayList<>();
+    List<Stream> addedStreams = new ArrayList<>();
 
     CatalogManager catalogManager = catalogSelector.getCatalogManager();
     CatalogSelection catalogSelection = catalogManager.getSelection();
@@ -1489,7 +1507,7 @@ public class ProjectPage extends SetupWizardPage
 
   private void removeSelectedStreams()
   {
-    List<Stream> streams = new ArrayList<Stream>();
+    List<Stream> streams = new ArrayList<>();
     IStructuredSelection selection = (IStructuredSelection)streamViewer.getSelection();
     for (Object element : selection.toArray())
     {
@@ -1507,7 +1525,7 @@ public class ProjectPage extends SetupWizardPage
     if (workspace != null)
     {
       EList<Stream> workspaceStreams = workspace.getStreams();
-      List<Project> removedProjects = new ArrayList<Project>();
+      List<Project> removedProjects = new ArrayList<>();
 
       int selectionIndex = -1;
       for (Stream stream : streams)
@@ -1596,7 +1614,7 @@ public class ProjectPage extends SetupWizardPage
           {
             if (childrenFeatures == null)
             {
-              childrenFeatures = new ArrayList<EStructuralFeature>();
+              childrenFeatures = new ArrayList<>();
               childrenFeatures.add(CATALOG_SELECTION__PROJECT_CATALOGS);
             }
 
@@ -1626,7 +1644,7 @@ public class ProjectPage extends SetupWizardPage
           {
             if (childrenFeatures == null)
             {
-              childrenFeatures = new ArrayList<EStructuralFeature>();
+              childrenFeatures = new ArrayList<>();
               childrenFeatures.add(INDEX__PROJECT_CATALOGS);
             }
 
@@ -1656,7 +1674,7 @@ public class ProjectPage extends SetupWizardPage
         {
           if (childrenFeatures == null)
           {
-            childrenFeatures = new ArrayList<EStructuralFeature>();
+            childrenFeatures = new ArrayList<>();
             childrenFeatures.add(PROJECT_CONTAINER__PROJECTS);
           }
 
@@ -1667,7 +1685,7 @@ public class ProjectPage extends SetupWizardPage
         public Collection<?> getChildren(Object object)
         {
           @SuppressWarnings("unchecked")
-          Collection<Project> result = new ArrayList<Project>((Collection<? extends Project>)super.getChildren(object));
+          Collection<Project> result = new ArrayList<>((Collection<? extends Project>)super.getChildren(object));
           for (Iterator<Project> it = result.iterator(); it.hasNext();)
           {
             Project project = it.next();
@@ -1757,7 +1775,7 @@ public class ProjectPage extends SetupWizardPage
         {
           if (childrenFeatures == null)
           {
-            childrenFeatures = new ArrayList<EStructuralFeature>();
+            childrenFeatures = new ArrayList<>();
             childrenFeatures.add(PROJECT_CONTAINER__PROJECTS);
           }
 
@@ -1775,9 +1793,9 @@ public class ProjectPage extends SetupWizardPage
             final ResourceSet resourceSet = domain.getResourceSet();
             return new DragAndDropCommand(domain, resourceSet, location, operations, operation, collection)
             {
-              final Set<Project> projects = new LinkedHashSet<Project>();
+              final Set<Project> projects = new LinkedHashSet<>();
 
-              final Set<Project> affectedObjects = new LinkedHashSet<Project>();
+              final Set<Project> affectedObjects = new LinkedHashSet<>();
 
               @Override
               public void execute()
@@ -1895,6 +1913,7 @@ public class ProjectPage extends SetupWizardPage
           return parent == null ? super.getParent(object) : parent;
         }
 
+        @Override
         public void setParent(Object object, Object parent)
         {
           this.parent = parent;
@@ -1916,7 +1935,7 @@ public class ProjectPage extends SetupWizardPage
           {
             if (childrenFeatures == null)
             {
-              childrenFeatures = new ArrayList<EStructuralFeature>();
+              childrenFeatures = new ArrayList<>();
               childrenFeatures.add(WORKSPACE__STREAMS);
             }
 
@@ -2134,7 +2153,7 @@ public class ProjectPage extends SetupWizardPage
         }
       });
 
-      List<Scope> catalogs = new ArrayList<Scope>();
+      List<Scope> catalogs = new ArrayList<>();
       for (Scope scope : catalogSelector.getCatalogs())
       {
         for (EObject eObject : scope.eContents())
@@ -2162,6 +2181,7 @@ public class ProjectPage extends SetupWizardPage
 
       catalogViewer.addSelectionChangedListener(new ISelectionChangedListener()
       {
+        @Override
         public void selectionChanged(SelectionChangedEvent event)
         {
           validate();
@@ -2179,6 +2199,7 @@ public class ProjectPage extends SetupWizardPage
 
       UIUtil.asyncExec(main, new Runnable()
       {
+        @Override
         public void run()
         {
           validate();
@@ -2284,9 +2305,9 @@ public class ProjectPage extends SetupWizardPage
     @Override
     protected boolean processResources()
     {
-      List<Project> validProjects = new ArrayList<Project>();
-      List<Project> invalidProjects = new ArrayList<Project>();
-      List<URI> invalidURIs = new ArrayList<URI>();
+      List<Project> validProjects = new ArrayList<>();
+      List<Project> invalidProjects = new ArrayList<>();
+      List<URI> invalidURIs = new ArrayList<>();
       ResourceSet resourceSet = editingDomain.getResourceSet();
       for (URI uri : getURIs())
       {
@@ -2454,7 +2475,7 @@ public class ProjectPage extends SetupWizardPage
 
     protected Collection<?> convertPlatformResourceURIs(Collection<?> uris)
     {
-      List<Object> result = new ArrayList<Object>(uris);
+      List<Object> result = new ArrayList<>(uris);
       for (ListIterator<Object> it = result.listIterator(); it.hasNext();)
       {
         Object object = it.next();
@@ -2531,7 +2552,7 @@ public class ProjectPage extends SetupWizardPage
       {
         class ConfigurationSelectionAdapter extends SelectionAdapter
         {
-          final Collection<Resource> resources = new ArrayList<Resource>();
+          final Collection<Resource> resources = new ArrayList<>();
 
           @Override
           public void widgetSelected(SelectionEvent e)

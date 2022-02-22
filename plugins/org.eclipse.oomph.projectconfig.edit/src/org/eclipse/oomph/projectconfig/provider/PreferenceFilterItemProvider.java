@@ -102,7 +102,7 @@ public class PreferenceFilterItemProvider extends ModelElementItemProvider
       @Override
       public Collection<?> getChoiceOfValues(Object object)
       {
-        Collection<Object> result = new ArrayList<Object>();
+        Collection<Object> result = new ArrayList<>();
         PreferenceFilter preferenceFilter = (PreferenceFilter)object;
         PreferenceProfile preferenceProfile = preferenceFilter.getPreferenceProfile();
         if (preferenceProfile != null)
@@ -277,7 +277,7 @@ public class PreferenceFilterItemProvider extends ModelElementItemProvider
     super.collectNewChildDescriptors(newChildDescriptors, object);
   }
 
-  Map<Property, IWrapperItemProvider> wrappers = new HashMap<Property, IWrapperItemProvider>();
+  Map<Property, IWrapperItemProvider> wrappers = new HashMap<>();
 
   private IWrapperItemProvider wrap(final PreferenceFilter preferenceFilter, int i, Property project)
   {
@@ -296,7 +296,7 @@ public class PreferenceFilterItemProvider extends ModelElementItemProvider
         public Object getImage(Object object)
         {
           Object image = super.getImage(object);
-          List<Object> images = new ArrayList<Object>(2);
+          List<Object> images = new ArrayList<>(2);
           images.add(image);
           images.add(EMFEditPlugin.INSTANCE.getImage("full/ovr16/ControlledObject")); //$NON-NLS-1$
           return image = new ComposedImage(images);
@@ -329,7 +329,7 @@ public class PreferenceFilterItemProvider extends ModelElementItemProvider
     if (commandParameter.getFeature() == null)
     {
       Collection<?> collection = commandParameter.getCollection();
-      List<Property> properties = new ArrayList<Property>();
+      List<Property> properties = new ArrayList<>();
       for (Object value : collection)
       {
         if (value instanceof Property)
@@ -423,7 +423,7 @@ public class PreferenceFilterItemProvider extends ModelElementItemProvider
   @Override
   public Collection<?> getChildren(Object object)
   {
-    Collection<Object> result = new ArrayList<Object>();
+    Collection<Object> result = new ArrayList<>();
     PreferenceFilter preferenceFilter = (PreferenceFilter)object;
     for (Property property : preferenceFilter.getProperties())
     {

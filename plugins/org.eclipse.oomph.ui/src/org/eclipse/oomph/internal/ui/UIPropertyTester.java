@@ -37,6 +37,7 @@ public class UIPropertyTester extends PropertyTester
   {
     ((IEclipsePreferences)PREFERENCES).addPreferenceChangeListener(new IEclipsePreferences.IPreferenceChangeListener()
     {
+      @Override
       public void preferenceChange(final IEclipsePreferences.PreferenceChangeEvent event)
       {
         if (SHOW_OFFLINE.equals(event.getKey()))
@@ -49,6 +50,7 @@ public class UIPropertyTester extends PropertyTester
     // This is a nasty workaround for bug 464582 (Toolbar contributions are missing after startup).
     UIUtil.timerExec(2000, new Runnable()
     {
+      @Override
       public void run()
       {
         UIPropertyTester.requestEvaluation("org.eclipse.oomph.ui." + SHOW_OFFLINE, true); //$NON-NLS-1$
@@ -60,6 +62,7 @@ public class UIPropertyTester extends PropertyTester
   {
   }
 
+  @Override
   public boolean test(Object receiver, String property, Object[] args, Object expectedValue)
   {
     if (expectedValue == null)
@@ -80,6 +83,7 @@ public class UIPropertyTester extends PropertyTester
   {
     UIUtil.syncExec(new Runnable()
     {
+      @Override
       public void run()
       {
         if (PlatformUI.isWorkbenchRunning())
@@ -96,6 +100,7 @@ public class UIPropertyTester extends PropertyTester
               {
                 UIUtil.asyncExec(new Runnable()
                 {
+                  @Override
                   public void run()
                   {
                     for (IWorkbenchWindow workbenchWindow : workbench.getWorkbenchWindows())

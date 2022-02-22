@@ -55,6 +55,7 @@ public abstract class ButtonAnimator implements Runnable
     return button;
   }
 
+  @Override
   public void run()
   {
     Shell shell = getShell();

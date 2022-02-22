@@ -55,6 +55,7 @@ public abstract class AbstractUITest extends AbstractTest
   {
     private final Listener skinListener = new Listener()
     {
+      @Override
       public void handleEvent(Event event)
       {
         if (event.widget instanceof Shell)
@@ -67,29 +68,34 @@ public abstract class AbstractUITest extends AbstractTest
 
     private final ShellListener shellListener = new ShellListener()
     {
+      @Override
       public void shellActivated(ShellEvent e)
       {
         Shell shell = (Shell)e.widget;
         activeShell = shell;
       }
 
+      @Override
       public void shellDeactivated(ShellEvent e)
       {
         // Do nothing.
       }
 
+      @Override
       public void shellIconified(ShellEvent e)
       {
         Shell shell = (Shell)e.widget;
         shells.put(shell, true);
       }
 
+      @Override
       public void shellDeiconified(ShellEvent e)
       {
         Shell shell = (Shell)e.widget;
         shells.put(shell, false);
       }
 
+      @Override
       public void shellClosed(ShellEvent e)
       {
         final Shell shell = (Shell)e.widget;
@@ -97,6 +103,7 @@ public abstract class AbstractUITest extends AbstractTest
         {
           display.syncExec(new Runnable()
           {
+            @Override
             public void run()
             {
               shell.removeShellListener(shellListener);
@@ -113,7 +120,7 @@ public abstract class AbstractUITest extends AbstractTest
       }
     };
 
-    private final Map<Shell, Boolean> shells = new HashMap<Shell, Boolean>();
+    private final Map<Shell, Boolean> shells = new HashMap<>();
 
     private Shell activeShell;
 
@@ -121,6 +128,7 @@ public abstract class AbstractUITest extends AbstractTest
     {
       display.syncExec(new Runnable()
       {
+        @Override
         public void run()
         {
           for (Shell shell : display.getShells())
@@ -151,6 +159,7 @@ public abstract class AbstractUITest extends AbstractTest
     {
       display.syncExec(new Runnable()
       {
+        @Override
         public void run()
         {
           for (Map.Entry<Shell, Boolean> entry : shells.entrySet())

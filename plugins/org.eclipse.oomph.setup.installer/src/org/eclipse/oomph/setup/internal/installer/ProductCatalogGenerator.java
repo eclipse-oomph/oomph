@@ -129,7 +129,7 @@ public class ProductCatalogGenerator implements IApplication
 
   private static final String ICON_DEFAULT = ICON_URL_PREFIX + "committers.png";
 
-  private static final Map<String, String> ICONS = new HashMap<String, String>();
+  private static final Map<String, String> ICONS = new HashMap<>();
 
   private static final String ECLIPSE_PLATFORM_SDK_PRODUCT_IDE_ID = "org.eclipse.sdk.ide";
 
@@ -161,7 +161,7 @@ public class ProductCatalogGenerator implements IApplication
 
   private static final List<String> SPECIAL_PRODUCT_IDS = Arrays.asList(new String[] { "org.eclipse.platform.ide" });
 
-  private static final Set<String> EXCLUDED_IDS = new HashSet<String>(Arrays.asList("epp.package.mobile"));
+  private static final Set<String> EXCLUDED_IDS = new HashSet<>(Arrays.asList("epp.package.mobile"));
 
   private static final String EPP_INSTALL_ROOTS_FILTER = "(org.eclipse.epp.install.roots=true)";
 
@@ -185,7 +185,7 @@ public class ProductCatalogGenerator implements IApplication
 
   private boolean brandingNotification;
 
-  private List<String> compositeTrains = new ArrayList<String>();
+  private List<String> compositeTrains = new ArrayList<>();
 
   private URI stagingEPPLocation;
 
@@ -195,19 +195,19 @@ public class ProductCatalogGenerator implements IApplication
 
   private URI eppSiteURI;
 
-  private final Map<String, Map<URI, Map<String, URI>>> sites = new LinkedHashMap<String, Map<URI, Map<String, URI>>>();
+  private final Map<String, Map<URI, Map<String, URI>>> sites = new LinkedHashMap<>();
 
   private final IMetadataRepositoryManager manager = getMetadataRepositoryManager();
 
-  private final Map<String, IMetadataRepository> eppMetaDataRepositories = new HashMap<String, IMetadataRepository>();
+  private final Map<String, IMetadataRepository> eppMetaDataRepositories = new HashMap<>();
 
-  private final Map<String, IMetadataRepository> platformMetaDataRepositories = new HashMap<String, IMetadataRepository>();
+  private final Map<String, IMetadataRepository> platformMetaDataRepositories = new HashMap<>();
 
-  private final Map<String, List<TrainAndVersion>> trainsAndVersions = new HashMap<String, List<TrainAndVersion>>();
+  private final Map<String, List<TrainAndVersion>> trainsAndVersions = new HashMap<>();
 
-  private final Map<String, String> labels = new HashMap<String, String>();
+  private final Map<String, String> labels = new HashMap<>();
 
-  private final Map<String, Product> products = new LinkedHashMap<String, Product>();
+  private final Map<String, Product> products = new LinkedHashMap<>();
 
   private String emfRepositoryLocation;
 
@@ -215,6 +215,7 @@ public class ProductCatalogGenerator implements IApplication
 
   private URIConverter uriConverter;
 
+  @Override
   public Object start(IApplicationContext context) throws Exception
   {
     System.out.println("user.home=" + System.getProperty("user.home"));
@@ -297,6 +298,7 @@ public class ProductCatalogGenerator implements IApplication
     return null;
   }
 
+  @Override
   public void stop()
   {
   }
@@ -409,9 +411,10 @@ public class ProductCatalogGenerator implements IApplication
       System.out.println("#################################################################################################################");
       System.out.println();
 
-      List<String> ids = new ArrayList<String>(trainsAndVersions.keySet());
+      List<String> ids = new ArrayList<>(trainsAndVersions.keySet());
       Collections.sort(ids, new Comparator<String>()
       {
+        @Override
         public int compare(String id1, String id2)
         {
           int result = getLatestTrain(id2) - getLatestTrain(id1);
@@ -453,7 +456,7 @@ public class ProductCatalogGenerator implements IApplication
 
       final EList<Product> products = productCatalog.getProducts();
       products.addAll(this.products.values());
-      final List<String> productIDs = new UniqueEList<String>(PRODUCT_IDS);
+      final List<String> productIDs = new UniqueEList<>(PRODUCT_IDS);
       for (Product product : products)
       {
         productIDs.add(product.getName());
@@ -461,6 +464,7 @@ public class ProductCatalogGenerator implements IApplication
 
       ECollections.sort(products, new Comparator<Product>()
       {
+        @Override
         public int compare(Product product1, Product product2)
         {
           int index1 = productIDs.indexOf(product1.getName());
@@ -495,7 +499,7 @@ public class ProductCatalogGenerator implements IApplication
         jresResource.getContents().add(jreMacro);
         jresResource.save(Collections.singletonMap(Resource.OPTION_SAVE_ONLY_IF_CHANGED, Resource.OPTION_SAVE_ONLY_IF_CHANGED_MEMORY_BUFFER));
 
-        for (Product product : new ArrayList<Product>(products))
+        for (Product product : new ArrayList<>(products))
         {
           if (ALL_PRODUCT_ID.equals(product.getName()))
           {
@@ -544,7 +548,7 @@ public class ProductCatalogGenerator implements IApplication
 
   private List<SetupTask> createOomphP2Task(String emfRepository)
   {
-    List<SetupTask> result = new ArrayList<SetupTask>();
+    List<SetupTask> result = new ArrayList<>();
     Requirement oomphRequirement = P2Factory.eINSTANCE.createRequirement("org.eclipse.oomph.setup.feature.group");
     Repository oomphRepository = P2Factory.eINSTANCE.createRepository("${" + SetupProperties.PROP_UPDATE_URL + "}");
 
@@ -707,7 +711,7 @@ public class ProductCatalogGenerator implements IApplication
         eppMetaDataRepositories.put(train, eppMetaDataRepository);
       }
 
-      Map<String, IInstallableUnit> ius = new HashMap<String, IInstallableUnit>();
+      Map<String, IInstallableUnit> ius = new HashMap<>();
 
       URI releaseURI = URI.createURI(RELEASES + "/" + train);
       log.append(releaseURI);
@@ -734,7 +738,7 @@ public class ProductCatalogGenerator implements IApplication
       generateFullTrainProduct(train, releaseMetaDataRepository, releaseURI);
 
       String mostRecentTrain = getMostRecentTrain();
-      Set<String> requirements = new HashSet<String>();
+      Set<String> requirements = new HashSet<>();
 
       for (IInstallableUnit iu : P2Util.asIterable(eppMetaDataRepository.query(QueryUtil.createLatestIUQuery(), null)))
       {
@@ -823,7 +827,7 @@ public class ProductCatalogGenerator implements IApplication
         final Version version = iu.getVersion();
         log.append("  ").append(label).append("  --  ").append(id).append(" ").append(version).append('\n');
 
-        Map<String, Set<IInstallableUnit>> versionIUs = new HashMap<String, Set<IInstallableUnit>>();
+        Map<String, Set<IInstallableUnit>> versionIUs = new HashMap<>();
         gatherReleaseIUs(versionIUs, iu, releaseMetaDataRepository, eppMetaDataRepository);
         filterRoots(versionIUs);
 
@@ -832,7 +836,7 @@ public class ProductCatalogGenerator implements IApplication
           List<TrainAndVersion> list = trainsAndVersions.get(id);
           if (list == null)
           {
-            list = new ArrayList<TrainAndVersion>();
+            list = new ArrayList<>();
             trainsAndVersions.put(id, list);
           }
 
@@ -862,7 +866,7 @@ public class ProductCatalogGenerator implements IApplication
     IMetadataRepository repository = loadLatestRepository(manager, null, eclipsePlatformSite, true);
     log.append(repository.getLocation() + "\n");
 
-    Map<String, Set<IInstallableUnit>> versionIUs = new TreeMap<String, Set<IInstallableUnit>>();
+    Map<String, Set<IInstallableUnit>> versionIUs = new TreeMap<>();
     @SuppressWarnings("unchecked")
     IQuery<IInstallableUnit> query = QueryUtil.createCompoundQuery((List<IQuery<IInstallableUnit>>)(List<?>)Arrays
         .asList(new IQuery<?>[] { QueryUtil.createIUQuery(ECLIPSE_PLATFORM_SDK_PRODUCT_IDE_ID), QueryUtil.createLatestIUQuery() }), true);
@@ -892,7 +896,7 @@ public class ProductCatalogGenerator implements IApplication
         List<TrainAndVersion> list = trainsAndVersions.get(ECLIPSE_PLATFORM_SDK_PRODUCT_ID);
         if (list == null)
         {
-          list = new ArrayList<TrainAndVersion>();
+          list = new ArrayList<>();
           trainsAndVersions.put(ECLIPSE_PLATFORM_SDK_PRODUCT_ID, list);
         }
 
@@ -920,10 +924,10 @@ public class ProductCatalogGenerator implements IApplication
 
   private void generateFullTrainProduct(String train, IMetadataRepository releaseMetaDataRepository, URI releaseURI)
   {
-    Map<String, IInstallableUnit> ius = new HashMap<String, IInstallableUnit>();
+    Map<String, IInstallableUnit> ius = new HashMap<>();
 
-    Set<IInstallableUnit> categories = new HashSet<IInstallableUnit>();
-    Set<String> categorizedIUs = new HashSet<String>();
+    Set<IInstallableUnit> categories = new HashSet<>();
+    Set<String> categorizedIUs = new HashSet<>();
     for (IInstallableUnit iu : P2Util.asIterable(releaseMetaDataRepository.query(QueryUtil.createLatestIUQuery(), null)))
     {
       String id = iu.getId();
@@ -944,7 +948,7 @@ public class ProductCatalogGenerator implements IApplication
     categorizedIUs.addAll(SPECIAL_PRODUCT_IDS);
     ius.keySet().retainAll(categorizedIUs);
 
-    Map<String, Set<IInstallableUnit>> versionIUs = new TreeMap<String, Set<IInstallableUnit>>();
+    Map<String, Set<IInstallableUnit>> versionIUs = new TreeMap<>();
     for (IInstallableUnit iu : ius.values())
     {
       String id = iu.getId();
@@ -961,7 +965,7 @@ public class ProductCatalogGenerator implements IApplication
       List<TrainAndVersion> list = trainsAndVersions.get(ALL_PRODUCT_ID);
       if (list == null)
       {
-        list = new ArrayList<TrainAndVersion>();
+        list = new ArrayList<>();
         trainsAndVersions.put(ALL_PRODUCT_ID, list);
       }
 
@@ -1284,6 +1288,14 @@ public class ProductCatalogGenerator implements IApplication
     String productName = product.getName();
     VersionRange versionRange = createVersionRange(version, versionSegment);
 
+    if (ECLIPSE_PLATFORM_SDK_PRODUCT_ID.equals(productName) && version.compareTo(Version.createOSGi(4, 23, 0)) < 0)
+    {
+      VariableTask oomphUpdateURLVariable = SetupFactory.eINSTANCE.createVariableTask();
+      oomphUpdateURLVariable.setName(SetupProperties.PROP_UPDATE_URL);
+      oomphUpdateURLVariable.setValue("https://download.eclipse.org/oomph/updates/release");
+      productVersion.getSetupTasks().add(oomphUpdateURLVariable);
+    }
+
     Repository packageRepository = null;
     if (eppURI != null)
     {
@@ -1443,7 +1455,7 @@ public class ProductCatalogGenerator implements IApplication
     if (configurationIUs.hasNext())
     {
       IInstallableUnit configurationIU = configurationIUs.next();
-      Set<String> filterValues = new TreeSet<String>();
+      Set<String> filterValues = new TreeSet<>();
       for (IRequirement requirement : configurationIU.getRequirements())
       {
         IMatchExpression<IInstallableUnit> filter = requirement.getFilter();
@@ -1836,6 +1848,7 @@ public class ProductCatalogGenerator implements IApplication
         Element rootElement = XMLUtil.loadRootElement(documentBuilder, in);
         XMLUtil.handleElementsByTagName(rootElement, "packageMetaData", new XMLUtil.ElementHandler()
         {
+          @Override
           public void handleElement(Element element) throws Exception
           {
             if (staticIconURL != null)
@@ -1871,7 +1884,7 @@ public class ProductCatalogGenerator implements IApplication
                     if (releaseLocations == null)
                     {
                       // Nothing yet for this train, so create it.
-                      releaseLocations = new LinkedHashMap<URI, Map<String, URI>>();
+                      releaseLocations = new LinkedHashMap<>();
                       sites.put(train, releaseLocations);
                     }
 
@@ -1880,7 +1893,7 @@ public class ProductCatalogGenerator implements IApplication
                     {
                       // Clear any existing map and create a new one for this EPP site.
                       releaseLocations.clear();
-                      map = new LinkedHashMap<String, URI>();
+                      map = new LinkedHashMap<>();
                       releaseLocations.put(eppSiteURI, map);
                       map.put(key, siteURI);
                     }
@@ -1896,6 +1909,7 @@ public class ProductCatalogGenerator implements IApplication
 
             XMLUtil.handleChildElements(element, new XMLUtil.ElementHandler()
             {
+              @Override
               public void handleElement(Element childElement) throws Exception
               {
                 String localName = childElement.getLocalName();
@@ -1966,7 +1980,7 @@ public class ProductCatalogGenerator implements IApplication
   private void getPackageBrandingSites()
   {
     PackageLocationLoader packageLocationLoader = new PackageLocationLoader(this);
-    Set<URI> locations = new LinkedHashSet<URI>();
+    Set<URI> locations = new LinkedHashSet<>();
     for (String train : getTrains())
     {
       InputStream packages = null;
@@ -1984,8 +1998,8 @@ public class ProductCatalogGenerator implements IApplication
           {
             URI siteURI = URI.createURI(matcher.group(1)).resolve(PACKAGES_URI);
             System.out.println(train + " -> " + siteURI);
-            Map<URI, Map<String, URI>> releaseLocations = new LinkedHashMap<URI, Map<String, URI>>();
-            Map<String, URI> packageLocations = new LinkedHashMap<String, URI>();
+            Map<URI, Map<String, URI>> releaseLocations = new LinkedHashMap<>();
+            Map<String, URI> packageLocations = new LinkedHashMap<>();
             releaseLocations.put(siteURI, packageLocations);
             sites.put(train, releaseLocations);
             locations.add(siteURI);
@@ -2136,7 +2150,7 @@ public class ProductCatalogGenerator implements IApplication
 
   private Set<String> getRootInstallIUs(IInstallableUnit productIU)
   {
-    Set<String> rootInstallIUs = new TreeSet<String>();
+    Set<String> rootInstallIUs = new TreeSet<>();
     for (IRequirement requirement : productIU.getRequirements())
     {
       if (requirement instanceof IRequiredCapability)
@@ -2170,7 +2184,7 @@ public class ProductCatalogGenerator implements IApplication
     IMetadataRepositoryManager manager = getMetadataRepositoryManager();
     IMetadataRepository jreRepository = manager.loadRepository(new java.net.URI(JUSTJ_JRES), null);
     IQueryResult<IInstallableUnit> features = jreRepository.query(QueryUtil.createIUGroupQuery(), null);
-    Set<IInstallableUnit> ius = new TreeSet<IInstallableUnit>(Collections.reverseOrder());
+    Set<IInstallableUnit> ius = new TreeSet<>(Collections.reverseOrder());
     for (IInstallableUnit iu : features)
     {
       if (iu.getId().endsWith(".full.feature.group"))
@@ -2181,7 +2195,7 @@ public class ProductCatalogGenerator implements IApplication
 
     // Boil them down by versions, excluding minor versions.
     // Because they are sorted this will grab the version with the largest micro version.
-    Map<Version, IInstallableUnit> jreVersions = new TreeMap<Version, IInstallableUnit>();
+    Map<Version, IInstallableUnit> jreVersions = new TreeMap<>();
     for (IInstallableUnit iu : ius)
     {
       Version version = iu.getVersion();
@@ -2203,7 +2217,7 @@ public class ProductCatalogGenerator implements IApplication
       System.out.println("jre=" + iu + " -> " + childRepository.getLocation());
 
       Requirement jreRequirement = P2Factory.eINSTANCE.createRequirement(iu.getId());
-      Set<String> filterValues = new TreeSet<String>();
+      Set<String> filterValues = new TreeSet<>();
       for (IRequirement requirement : iu.getRequirements())
       {
         if (requirement instanceof IRequiredCapability)

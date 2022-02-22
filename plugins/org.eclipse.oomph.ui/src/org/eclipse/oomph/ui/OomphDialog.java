@@ -129,6 +129,7 @@ public abstract class OomphDialog extends TitleAreaDialog implements HelpProvide
     return helpSupport;
   }
 
+  @Override
   public String getHelpPath()
   {
     return null;
@@ -455,6 +456,7 @@ public abstract class OomphDialog extends TitleAreaDialog implements HelpProvide
         {
           UIUtil.asyncExec(dialog.getShell(), new Runnable()
           {
+            @Override
             public void run()
             {
               try
@@ -494,6 +496,7 @@ public abstract class OomphDialog extends TitleAreaDialog implements HelpProvide
     final GridData data = (GridData)trayControl.getLayoutData();
     sash.addListener(SWT.Selection, new Listener()
     {
+      @Override
       public void handleEvent(Event event)
       {
         if (event.detail == SWT.DRAG)
@@ -568,6 +571,7 @@ public abstract class OomphDialog extends TitleAreaDialog implements HelpProvide
 
         private boolean reverse;
 
+        @Override
         public void run()
         {
           // System.out.println(loop + ", " + color);

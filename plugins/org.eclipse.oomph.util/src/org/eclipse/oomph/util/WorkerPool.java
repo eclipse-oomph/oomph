@@ -42,8 +42,9 @@ public abstract class WorkerPool<P extends WorkerPool<P, K, W>, K, W extends Wor
    * Otherwise workers are processed in the {@link Worker#id identifier order},
    * i.e., first come first serve.
    */
-  private static final Comparator<Worker<?, ?>> COMPARATOR = new Comparator<Worker<?, ?>>()
+  private static final Comparator<Worker<?, ?>> COMPARATOR = new Comparator<>()
   {
+    @Override
     public int compare(Worker<?, ?> o1, Worker<?, ?> o2)
     {
       int result = (o2.secondary ? 0 : 1) - (o1.secondary ? 0 : 1);
@@ -64,12 +65,12 @@ public abstract class WorkerPool<P extends WorkerPool<P, K, W>, K, W extends Wor
   /**
    * The map of the worker key to the worker associated with that key.
    */
-  private final Map<K, W> workers = new HashMap<K, W>();
+  private final Map<K, W> workers = new HashMap<>();
 
   /**
    * The workers waiting to perform their work.
    */
-  private final List<W> pendingWorkers = new ArrayList<W>();
+  private final List<W> pendingWorkers = new ArrayList<>();
 
   /**
    * Whether the workers have been canceled.
@@ -191,6 +192,7 @@ public abstract class WorkerPool<P extends WorkerPool<P, K, W>, K, W extends Wor
    * Performs the work for the given keys,
    * blocking until the work has been performed.
    */
+  @SafeVarargs
   public final void perform(K... keys)
   {
     perform(Arrays.asList(keys));
@@ -250,6 +252,7 @@ public abstract class WorkerPool<P extends WorkerPool<P, K, W>, K, W extends Wor
    * The work will be performed at some later point in time on a different thread.
    * Returns whether any work is actually scheduled (needed) for any of the given keys.
    */
+  @SafeVarargs
   public final boolean schedule(K... keys)
   {
     return schedule(Arrays.asList(keys));
@@ -323,7 +326,7 @@ public abstract class WorkerPool<P extends WorkerPool<P, K, W>, K, W extends Wor
    * If there are no remaining {@link #workers},
    * the {@link #latch latch} is unlatched.
    */
-  private synchronized void deschedule(K key)
+  synchronized void deschedule(K key)
   {
     workers.remove(key);
 
@@ -385,7 +388,7 @@ public abstract class WorkerPool<P extends WorkerPool<P, K, W>, K, W extends Wor
     /**
      * The priority {@link WorkerPool#createWorker(Object, int, boolean) allocated} by the pool to this worker.
      */
-    private boolean secondary;
+    boolean secondary;
 
     /**
      * Creates an instance with the given Job name,

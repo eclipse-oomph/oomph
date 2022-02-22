@@ -80,7 +80,7 @@ public class LaunchingAdapterFactory extends AdapterFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  protected LaunchingSwitch<Adapter> modelSwitch = new LaunchingSwitch<Adapter>()
+  protected LaunchingSwitch<Adapter> modelSwitch = new LaunchingSwitch<>()
   {
     @Override
     public Adapter caseLaunchTask(LaunchTask object)

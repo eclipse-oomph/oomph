@@ -85,7 +85,7 @@ public class PropertiesType extends MinimalEObjectImpl.Container
   {
     if (property == null)
     {
-      property = new EObjectContainmentEList<PropertyType>(PropertyType.class, this, JUnitPackage.PROPERTIES_TYPE__PROPERTY);
+      property = new EObjectContainmentEList<>(PropertyType.class, this, JUnitPackage.PROPERTIES_TYPE__PROPERTY);
     }
     return property;
   }

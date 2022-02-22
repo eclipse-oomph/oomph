@@ -81,6 +81,7 @@ public class ProductCatalogImpl extends ScopeImpl implements ProductCatalog
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Index getIndex()
   {
     if (eContainerFeatureID() != SetupPackage.PRODUCT_CATALOG__INDEX)
@@ -120,6 +121,7 @@ public class ProductCatalogImpl extends ScopeImpl implements ProductCatalog
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setIndex(Index newIndex)
   {
     if (newIndex != eInternalContainer() || eContainerFeatureID() != SetupPackage.PRODUCT_CATALOG__INDEX && newIndex != null)
@@ -154,11 +156,12 @@ public class ProductCatalogImpl extends ScopeImpl implements ProductCatalog
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<Product> getProducts()
   {
     if (products == null)
     {
-      products = new EObjectContainmentWithInverseEList.Resolving<Product>(Product.class, this, SetupPackage.PRODUCT_CATALOG__PRODUCTS,
+      products = new EObjectContainmentWithInverseEList.Resolving<>(Product.class, this, SetupPackage.PRODUCT_CATALOG__PRODUCTS,
           SetupPackage.PRODUCT__PRODUCT_CATALOG);
     }
     return products;

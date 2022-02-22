@@ -167,17 +167,20 @@ public class OomphPropertySheetPage extends ExtendedPropertySheetPage
     {
       Runnable runnable = new Runnable()
       {
+        @Override
         public void run()
         {
           resizeColumns();
         }
       };
 
+      @Override
       public void treeExpanded(TreeEvent e)
       {
         UIUtil.asyncExec(tree, runnable);
       }
 
+      @Override
       public void treeCollapsed(TreeEvent e)
       {
         UIUtil.asyncExec(tree, runnable);
@@ -313,6 +316,7 @@ public class OomphPropertySheetPage extends ExtendedPropertySheetPage
       final AdapterFactoryContentProvider adapterFactoryContentProvider = (AdapterFactoryContentProvider)newProvider;
       super.setPropertySourceProvider(new IPropertySourceProvider()
       {
+        @Override
         public IPropertySource getPropertySource(Object object)
         {
           IPropertySource propertySource = adapterFactoryContentProvider.getPropertySource(object);
@@ -393,6 +397,7 @@ public class OomphPropertySheetPage extends ExtendedPropertySheetPage
 
           private VerifyListener verifyListener = new VerifyListener()
           {
+            @Override
             public void verifyText(VerifyEvent e)
             {
               e.doit = false;
@@ -405,6 +410,7 @@ public class OomphPropertySheetPage extends ExtendedPropertySheetPage
             button.setFocus();
             UIUtil.asyncExec(new Runnable()
             {
+              @Override
               public void run()
               {
                 button.notifyListeners(SWT.Selection, null);
@@ -599,6 +605,7 @@ public class OomphPropertySheetPage extends ExtendedPropertySheetPage
             {
               UIUtil.asyncExec(new Runnable()
               {
+                @Override
                 public void run()
                 {
                   try

@@ -91,18 +91,21 @@ public class EnablementDialog extends AbstractSetupDialog
 
     enablementComposite.install(new InstallHandler()
     {
+      @Override
       public void installSucceeded()
       {
         enableButtons(true);
         EnablementDialog.super.okPressed();
       }
 
+      @Override
       public void installFailed(Throwable t)
       {
         ErrorDialog.open(t);
         installCanceled();
       }
 
+      @Override
       public void installCanceled()
       {
         enableButtons(true);

@@ -141,6 +141,7 @@ public class SyncFactoryImpl extends EFactoryImpl implements SyncFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public RemoteData createRemoteData()
   {
     RemoteDataImpl remoteData = new RemoteDataImpl();
@@ -163,12 +164,14 @@ public class SyncFactoryImpl extends EFactoryImpl implements SyncFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public SyncDelta createSyncDelta()
   {
     SyncDeltaImpl syncDelta = new SyncDeltaImpl();
     return syncDelta;
   }
 
+  @Override
   public SyncDelta createSyncDelta(String id, SetupTask oldTask, SetupTask newTask, SyncDeltaType type)
   {
     SyncDeltaImpl syncDelta = new SyncDeltaImpl();
@@ -184,12 +187,14 @@ public class SyncFactoryImpl extends EFactoryImpl implements SyncFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public SyncAction createSyncAction()
   {
     SyncActionImpl syncAction = new SyncActionImpl();
     return syncAction;
   }
 
+  @Override
   public SyncAction createSyncAction(SyncDelta localDelta, SyncDelta remoteDelta, SyncActionType computedType)
   {
     SyncActionImpl syncAction = new SyncActionImpl();
@@ -279,6 +284,7 @@ public class SyncFactoryImpl extends EFactoryImpl implements SyncFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public SyncPackage getSyncPackage()
   {
     return (SyncPackage)getEPackage();

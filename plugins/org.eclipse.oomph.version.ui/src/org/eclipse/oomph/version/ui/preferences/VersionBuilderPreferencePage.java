@@ -53,9 +53,9 @@ import java.util.Set;
  */
 public class VersionBuilderPreferencePage extends AbstractPreferencePage
 {
-  private final Map<String, ReleaseCheckMode> releaseCheckModes = new LinkedHashMap<String, ReleaseCheckMode>();
+  private final Map<String, ReleaseCheckMode> releaseCheckModes = new LinkedHashMap<>();
 
-  private final Map<String, LaxLowerBoundCheckMode> lowerBoundCheckModes = new LinkedHashMap<String, LaxLowerBoundCheckMode>();
+  private final Map<String, LaxLowerBoundCheckMode> lowerBoundCheckModes = new LinkedHashMap<>();
 
   public VersionBuilderPreferencePage()
   {
@@ -68,7 +68,7 @@ public class VersionBuilderPreferencePage extends AbstractPreferencePage
       //$FALL-THROUGH$
     }
 
-    final List<String> releasePaths = new ArrayList<String>(Activator.getReleasePaths());
+    final List<String> releasePaths = new ArrayList<>(Activator.getReleasePaths());
     Collections.sort(releasePaths);
     for (String releasePath : releasePaths)
     {
@@ -219,6 +219,7 @@ public class VersionBuilderPreferencePage extends AbstractPreferencePage
     table.addControlListener(columnResizer);
     table.getDisplay().asyncExec(new Runnable()
     {
+      @Override
       public void run()
       {
         columnResizer.controlResized(null);
@@ -233,11 +234,13 @@ public class VersionBuilderPreferencePage extends AbstractPreferencePage
 
     viewer.setCellModifier(new ICellModifier()
     {
+      @Override
       public boolean canModify(Object element, String property)
       {
         return "checkMode".equals(property) || "lowerBoundCheckMode".equals(property); //$NON-NLS-1$ //$NON-NLS-2$
       }
 
+      @Override
       public Object getValue(Object element, String property)
       {
         if (property.equals("checkMode")) //$NON-NLS-1$
@@ -248,6 +251,7 @@ public class VersionBuilderPreferencePage extends AbstractPreferencePage
         return lowerBoundCheckModes.get(element);
       }
 
+      @Override
       public void modify(Object element, String property, Object value)
       {
         if (element instanceof TableItem)
@@ -272,14 +276,17 @@ public class VersionBuilderPreferencePage extends AbstractPreferencePage
     ComboBoxViewerCellEditor checkModeCellEditor = new ComboBoxViewerCellEditor(table, SWT.READ_ONLY);
     checkModeCellEditor.setContentProvider(new IStructuredContentProvider()
     {
+      @Override
       public void inputChanged(Viewer viewer, Object oldInput, Object newInput)
       {
       }
 
+      @Override
       public void dispose()
       {
       }
 
+      @Override
       public Object[] getElements(Object inputElement)
       {
         return ReleaseCheckMode.values();
@@ -292,14 +299,17 @@ public class VersionBuilderPreferencePage extends AbstractPreferencePage
     ComboBoxViewerCellEditor lowerBoundCheckModeCellEditor = new ComboBoxViewerCellEditor(table, SWT.READ_ONLY);
     lowerBoundCheckModeCellEditor.setContentProvider(new IStructuredContentProvider()
     {
+      @Override
       public void inputChanged(Viewer viewer, Object oldInput, Object newInput)
       {
       }
 
+      @Override
       public void dispose()
       {
       }
 
+      @Override
       public Object[] getElements(Object inputElement)
       {
         return LaxLowerBoundCheckMode.values();
@@ -329,7 +339,7 @@ public class VersionBuilderPreferencePage extends AbstractPreferencePage
   @Override
   protected void performApply()
   {
-    Set<String> changedReleases = new HashSet<String>();
+    Set<String> changedReleases = new HashSet<>();
 
     for (Map.Entry<String, ReleaseCheckMode> entry : releaseCheckModes.entrySet())
     {
@@ -374,11 +384,13 @@ public class VersionBuilderPreferencePage extends AbstractPreferencePage
    */
   private final class ReleaseCheckModeLabelProvider extends LabelProvider implements ITableLabelProvider
   {
+    @Override
     public Image getColumnImage(Object element, int columnIndex)
     {
       return null;
     }
 
+    @Override
     public String getColumnText(Object element, int columnIndex)
     {
       String releasePath = element.toString();

@@ -147,6 +147,7 @@ public class MarketplaceCatalogGenerator implements IApplication
 
   private long await = 60;
 
+  @Override
   @SuppressWarnings("restriction")
   public Object start(IApplicationContext context) throws Exception
   {
@@ -427,7 +428,6 @@ public class MarketplaceCatalogGenerator implements IApplication
     System.out.println("Total memory MB: " + Runtime.getRuntime().totalMemory() / 1024 / 1024);
     System.out.println("Max memory MB: " + Runtime.getRuntime().maxMemory() / 1024 / 1024);
 
-    @SuppressWarnings("unchecked")
     List<IQuery<IInstallableUnit>> jreQuery = Arrays.asList(QueryUtil.createIUQuery("a.jre.javase"), QueryUtil.createLatestIUQuery());
     IQueryResult<IInstallableUnit> jreResult = manager.query(QueryUtil.createCompoundQuery(jreQuery, true), new NullProgressMonitor());
     IInstallableUnit jreIU = jreResult.iterator().next();
@@ -724,6 +724,7 @@ public class MarketplaceCatalogGenerator implements IApplication
     List<Project> projectList = new ArrayList<Project>(projects.values());
     Collections.sort(projectList, new Comparator<Project>()
     {
+      @Override
       public int compare(Project p1, Project p2)
       {
         return p1.getLabel().compareToIgnoreCase(p2.getLabel());
@@ -980,6 +981,7 @@ public class MarketplaceCatalogGenerator implements IApplication
     {
       executor.submit(new Runnable()
       {
+        @Override
         public void run()
         {
           for (Stream stream : project.getStreams())
@@ -1015,6 +1017,7 @@ public class MarketplaceCatalogGenerator implements IApplication
 
               SetupPrompter prompter = new SetupPrompter()
               {
+                @Override
                 public boolean promptVariables(List<? extends SetupTaskContext> performers)
                 {
                   List<VariableTask> unresolveVariables = new ArrayList<VariableTask>();
@@ -1034,21 +1037,25 @@ public class MarketplaceCatalogGenerator implements IApplication
                   return unresolveVariables.isEmpty();
                 }
 
+                @Override
                 public String getValue(VariableTask variable)
                 {
                   return "installation.location".equals(variable.getName()) ? location : null;
                 }
 
+                @Override
                 public String getVMPath()
                 {
                   return null;
                 }
 
+                @Override
                 public UserCallback getUserCallback()
                 {
                   return null;
                 }
 
+                @Override
                 public OS getOS()
                 {
                   return OS.INSTANCE;
@@ -1085,21 +1092,25 @@ public class MarketplaceCatalogGenerator implements IApplication
               {
                 Resolution bogus = new Resolution()
                 {
+                  @Override
                   public ProfileTransaction getProfileTransaction()
                   {
                     return null;
                   }
 
+                  @Override
                   public IProvisioningPlan getProvisioningPlan()
                   {
                     return null;
                   }
 
+                  @Override
                   public boolean commit(IProgressMonitor monitor) throws CoreException
                   {
                     return false;
                   }
 
+                  @Override
                   public void rollback()
                   {
                   }
@@ -1434,6 +1445,7 @@ public class MarketplaceCatalogGenerator implements IApplication
     return result;
   }
 
+  @Override
   public void stop()
   {
   }

@@ -74,7 +74,7 @@ public class GearAnimator extends Animator
 
   private static Color DARK_GRAY;
 
-  private final List<Listener> listeners = new ArrayList<Listener>();
+  private final List<Listener> listeners = new ArrayList<>();
 
   private Color purple;
 

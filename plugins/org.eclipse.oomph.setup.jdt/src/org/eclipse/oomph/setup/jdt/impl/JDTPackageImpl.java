@@ -120,6 +120,7 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getJRETask()
   {
     return jreTaskEClass;
@@ -130,6 +131,7 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getJRETask_Version()
   {
     return (EAttribute)jreTaskEClass.getEStructuralFeatures().get(0);
@@ -140,6 +142,7 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getJRETask_Location()
   {
     return (EAttribute)jreTaskEClass.getEStructuralFeatures().get(1);
@@ -150,6 +153,7 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getJRETask_Name()
   {
     return (EAttribute)jreTaskEClass.getEStructuralFeatures().get(2);
@@ -160,6 +164,7 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getJRETask_VMInstallType()
   {
     return (EAttribute)jreTaskEClass.getEStructuralFeatures().get(3);
@@ -170,6 +175,7 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getJRETask_ExecutionEnvironmentDefault()
   {
     return (EAttribute)jreTaskEClass.getEStructuralFeatures().get(4);
@@ -180,6 +186,7 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getJRETask_VMArguments()
   {
     return (EAttribute)jreTaskEClass.getEStructuralFeatures().get(5);
@@ -190,6 +197,7 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getJRETask_JRELibraries()
   {
     return (EReference)jreTaskEClass.getEStructuralFeatures().get(6);
@@ -200,6 +208,7 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getJRELibrary()
   {
     return jreLibraryEClass;
@@ -210,6 +219,7 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getJRELibrary_LibraryPath()
   {
     return (EAttribute)jreLibraryEClass.getEStructuralFeatures().get(0);
@@ -220,6 +230,7 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getJRELibrary_ExternalAnnotationsPath()
   {
     return (EAttribute)jreLibraryEClass.getEStructuralFeatures().get(1);
@@ -230,6 +241,7 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public JDTFactory getJDTFactory()
   {
     return (JDTFactory)getEFactoryInstance();

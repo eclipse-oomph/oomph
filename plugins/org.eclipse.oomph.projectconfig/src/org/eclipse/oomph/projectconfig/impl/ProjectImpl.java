@@ -109,6 +109,7 @@ public class ProjectImpl extends ModelElementImpl implements Project
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public WorkspaceConfiguration getConfiguration()
   {
     if (eContainerFeatureID() != ProjectConfigPackage.PROJECT__CONFIGURATION)
@@ -134,6 +135,7 @@ public class ProjectImpl extends ModelElementImpl implements Project
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setConfiguration(WorkspaceConfiguration newConfiguration)
   {
     if (newConfiguration != eInternalContainer() || eContainerFeatureID() != ProjectConfigPackage.PROJECT__CONFIGURATION && newConfiguration != null)
@@ -169,11 +171,12 @@ public class ProjectImpl extends ModelElementImpl implements Project
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<PreferenceProfile> getPreferenceProfiles()
   {
     if (preferenceProfiles == null)
     {
-      preferenceProfiles = new EObjectContainmentWithInverseEList<PreferenceProfile>(PreferenceProfile.class, this,
+      preferenceProfiles = new EObjectContainmentWithInverseEList<>(PreferenceProfile.class, this,
           ProjectConfigPackage.PROJECT__PREFERENCE_PROFILES, ProjectConfigPackage.PREFERENCE_PROFILE__PROJECT);
     }
     return preferenceProfiles;
@@ -184,6 +187,7 @@ public class ProjectImpl extends ModelElementImpl implements Project
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public PreferenceNode getPreferenceNode()
   {
     if (preferenceNode != null && preferenceNode.eIsProxy())
@@ -216,6 +220,7 @@ public class ProjectImpl extends ModelElementImpl implements Project
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setPreferenceNode(PreferenceNode newPreferenceNode)
   {
     PreferenceNode oldPreferenceNode = preferenceNode;
@@ -231,11 +236,12 @@ public class ProjectImpl extends ModelElementImpl implements Project
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<PreferenceProfile> getPreferenceProfileReferences()
   {
     if (preferenceProfileReferences == null)
     {
-      preferenceProfileReferences = new EObjectWithInverseResolvingEList.ManyInverse<PreferenceProfile>(PreferenceProfile.class, this,
+      preferenceProfileReferences = new EObjectWithInverseResolvingEList.ManyInverse<>(PreferenceProfile.class, this,
           ProjectConfigPackage.PROJECT__PREFERENCE_PROFILE_REFERENCES, ProjectConfigPackage.PREFERENCE_PROFILE__REFERENT_PROJECTS);
     }
     return preferenceProfileReferences;
@@ -246,6 +252,7 @@ public class ProjectImpl extends ModelElementImpl implements Project
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public Property getProperty(URI path)
   {
     for (PreferenceProfile preferenceProfile : getPreferenceProfiles())

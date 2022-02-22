@@ -87,7 +87,7 @@ public class ProductToProductVersionMapEntryItemProvider extends ItemProviderAda
     @Override
     public Collection<?> getChoiceOfValues(Object object)
     {
-      List<Object> result = new ArrayList<Object>(super.getChoiceOfValues(object));
+      List<Object> result = new ArrayList<>(super.getChoiceOfValues(object));
       for (Iterator<Object> it = result.iterator(); it.hasNext();)
       {
         Product product = (Product)it.next();

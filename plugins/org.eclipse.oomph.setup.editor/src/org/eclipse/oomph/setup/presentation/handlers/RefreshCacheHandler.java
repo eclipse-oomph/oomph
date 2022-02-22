@@ -33,6 +33,7 @@ public class RefreshCacheHandler extends AbstractDropdownItemHandler
     super("RefreshCache", Messages.RefreshCacheHandler_text); //$NON-NLS-1$
   }
 
+  @Override
   public void run()
   {
     try

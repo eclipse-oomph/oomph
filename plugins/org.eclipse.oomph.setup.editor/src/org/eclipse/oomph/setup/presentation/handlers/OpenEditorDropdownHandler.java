@@ -57,6 +57,7 @@ public class OpenEditorDropdownHandler extends AbstractDropdownHandler
 
     Runnable runnable = new Runnable()
     {
+      @Override
       public void run()
       {
         openEditor(user);

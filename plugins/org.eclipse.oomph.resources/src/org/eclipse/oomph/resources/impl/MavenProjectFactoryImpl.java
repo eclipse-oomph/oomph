@@ -60,6 +60,7 @@ public class MavenProjectFactoryImpl extends XMLProjectFactoryImpl implements Ma
   {
     XMLUtil.handleChildElements(rootElement, new XMLUtil.ElementHandler()
     {
+      @Override
       public void handleElement(Element element) throws Exception
       {
         if ("artifactId".equals(element.getTagName())) //$NON-NLS-1$

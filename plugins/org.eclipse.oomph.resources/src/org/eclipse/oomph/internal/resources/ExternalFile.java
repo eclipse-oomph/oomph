@@ -41,67 +41,80 @@ public final class ExternalFile extends ExternalResource implements IFile
     return (BackendFile)super.getBackendResource();
   }
 
+  @Override
   public int getType()
   {
     return FILE;
   }
 
+  @Override
   public void appendContents(InputStream source, boolean force, boolean keepHistory, IProgressMonitor monitor) throws CoreException
   {
     throw new ReadOnlyException();
   }
 
+  @Override
   public void appendContents(InputStream source, int updateFlags, IProgressMonitor monitor) throws CoreException
   {
     throw new ReadOnlyException();
   }
 
+  @Override
   public void create(InputStream source, boolean force, IProgressMonitor monitor) throws CoreException
   {
     throw new ReadOnlyException();
   }
 
+  @Override
   public void create(InputStream source, int updateFlags, IProgressMonitor monitor) throws CoreException
   {
     throw new ReadOnlyException();
   }
 
+  @Override
   public void createLink(IPath localLocation, int updateFlags, IProgressMonitor monitor) throws CoreException
   {
     throw new ReadOnlyException();
   }
 
+  @Override
   public void createLink(URI location, int updateFlags, IProgressMonitor monitor) throws CoreException
   {
     throw new ReadOnlyException();
   }
 
+  @Override
   public void delete(boolean force, boolean keepHistory, IProgressMonitor monitor) throws CoreException
   {
     throw new ReadOnlyException();
   }
 
+  @Override
   public String getCharset() throws CoreException
   {
     return "UTF-8"; //$NON-NLS-1$
   }
 
+  @Override
   public String getCharset(boolean checkImplicit) throws CoreException
   {
     return getCharset();
   }
 
+  @Override
   public String getCharsetFor(Reader reader) throws CoreException
   {
     return getCharset();
   }
 
+  @Override
   public IContentDescription getContentDescription() throws CoreException
   {
     // TODO
     return null;
   }
 
+  @Override
   public InputStream getContents() throws CoreException
   {
     try
@@ -114,53 +127,63 @@ public final class ExternalFile extends ExternalResource implements IFile
     }
   }
 
+  @Override
   public InputStream getContents(boolean force) throws CoreException
   {
     return getContents();
   }
 
+  @Override
   @Deprecated
   public int getEncoding() throws CoreException
   {
     throw new UnsupportedOperationException();
   }
 
+  @Override
   public IFileState[] getHistory(IProgressMonitor monitor) throws CoreException
   {
     return new IFileState[0];
   }
 
+  @Override
   public void move(IPath destination, boolean force, boolean keepHistory, IProgressMonitor monitor) throws CoreException
   {
     throw new ReadOnlyException();
   }
 
+  @Override
   @Deprecated
   public void setCharset(String newCharset) throws CoreException
   {
     throw new ReadOnlyException();
   }
 
+  @Override
   public void setCharset(String newCharset, IProgressMonitor monitor) throws CoreException
   {
     throw new ReadOnlyException();
   }
 
+  @Override
   public void setContents(InputStream source, boolean force, boolean keepHistory, IProgressMonitor monitor) throws CoreException
   {
     throw new ReadOnlyException();
   }
 
+  @Override
   public void setContents(IFileState source, boolean force, boolean keepHistory, IProgressMonitor monitor) throws CoreException
   {
     throw new ReadOnlyException();
   }
 
+  @Override
   public void setContents(InputStream source, int updateFlags, IProgressMonitor monitor) throws CoreException
   {
     throw new ReadOnlyException();
   }
 
+  @Override
   public void setContents(IFileState source, int updateFlags, IProgressMonitor monitor) throws CoreException
   {
     throw new ReadOnlyException();

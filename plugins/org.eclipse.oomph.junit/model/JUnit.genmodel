@@ -4,7 +4,7 @@
     editorDirectory="" modelPluginID="org.eclipse.oomph.junit" modelName="JUnit" editPluginClass=""
     editorPluginClass="" nonNLSMarkers="true" rootExtendsInterface="" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
     suppressInterfaces="true" codeFormatting="true" testsDirectory="" importerID="org.eclipse.emf.importer.ecore"
-    complianceLevel="5.0" copyrightFields="false" editPluginID="org.eclipse.oomph.junit.edit"
+    complianceLevel="11.0" copyrightFields="false" editPluginID="org.eclipse.oomph.junit.edit"
     editorPluginID="org.eclipse.oomph.junit.edit" importOrganizing="true" cleanup="true">
   <foreignModel>JUnit.ecore</foreignModel>
   <genPackages prefix="JUnit" basePackage="org.eclipse.oomph" resource="XML" disposableProviderFactory="true"

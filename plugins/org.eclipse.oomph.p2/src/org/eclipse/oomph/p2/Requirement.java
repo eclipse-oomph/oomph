@@ -54,8 +54,9 @@ public interface Requirement extends ModelElement
 
   public static final String PROJECT_SUFFIX = ".plain.project"; //$NON-NLS-1$
 
-  public static final Comparator<Requirement> COMPARATOR = new Comparator<Requirement>()
+  public static final Comparator<Requirement> COMPARATOR = new Comparator<>()
   {
+    @Override
     public int compare(Requirement o1, Requirement o2)
     {
       String ns1 = StringUtil.safe(o1.getNamespace());

@@ -117,7 +117,7 @@ public class SetupAdapterFactory extends AdapterFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  protected SetupSwitch<Adapter> modelSwitch = new SetupSwitch<Adapter>()
+  protected SetupSwitch<Adapter> modelSwitch = new SetupSwitch<>()
   {
     @Override
     public Adapter caseSetupTask(SetupTask object)

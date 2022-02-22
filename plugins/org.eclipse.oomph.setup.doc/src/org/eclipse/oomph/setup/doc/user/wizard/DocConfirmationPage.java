@@ -148,7 +148,7 @@ public class DocConfirmationPage
     {
       IWizardPage page = wizardDialog.getCurrentPage();
 
-      Map<Control, Image> decorations = new LinkedHashMap<Control, Image>();
+      Map<Control, Image> decorations = new LinkedHashMap<>();
       viewerDecoration = getCalloutImage(1);
       Control viewer = getViewerControl(wizardDialog, "viewer");
       decorations.put(viewer, viewerDecoration);

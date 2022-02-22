@@ -26,6 +26,7 @@ import java.util.Collections;
  */
 public class TargletContainerClasspathFile implements IDynamicVariableResolver
 {
+  @Override
   public String resolveValue(IDynamicVariable variable, String containerID) throws CoreException
   {
     try

@@ -34,6 +34,7 @@ public abstract class AbstractIterator<T> implements Iterator<T>
   {
   }
 
+  @Override
   public final boolean hasNext()
   {
     if (nextComputed)
@@ -55,6 +56,7 @@ public abstract class AbstractIterator<T> implements Iterator<T>
     return true;
   }
 
+  @Override
   public final T next()
   {
     if (!hasNext())
@@ -66,6 +68,7 @@ public abstract class AbstractIterator<T> implements Iterator<T>
     return next;
   }
 
+  @Override
   public void remove()
   {
     throw new UnsupportedOperationException();
@@ -89,46 +92,55 @@ public abstract class AbstractIterator<T> implements Iterator<T>
   {
     private static final ListIterator<Object> INSTANCE = new EmptyIterator();
 
+    @Override
     public boolean hasNext()
     {
       return false;
     }
 
+    @Override
     public Object next()
     {
       throw new NoSuchElementException();
     }
 
+    @Override
     public boolean hasPrevious()
     {
       return false;
     }
 
+    @Override
     public Object previous()
     {
       throw new NoSuchElementException();
     }
 
+    @Override
     public int nextIndex()
     {
       throw new NoSuchElementException();
     }
 
+    @Override
     public int previousIndex()
     {
       throw new NoSuchElementException();
     }
 
+    @Override
     public void remove()
     {
       throw new UnsupportedOperationException();
     }
 
+    @Override
     public void set(Object e)
     {
       throw new UnsupportedOperationException();
     }
 
+    @Override
     public void add(Object e)
     {
       throw new UnsupportedOperationException();

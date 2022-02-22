@@ -100,6 +100,7 @@ public class ProjectSetImportTaskImpl extends SetupTaskImpl implements ProjectSe
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getURL()
   {
     return uRL;
@@ -110,6 +111,7 @@ public class ProjectSetImportTaskImpl extends SetupTaskImpl implements ProjectSe
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setURL(String newURL)
   {
     String oldURL = uRL;
@@ -212,6 +214,7 @@ public class ProjectSetImportTaskImpl extends SetupTaskImpl implements ProjectSe
     return 100;
   }
 
+  @Override
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     URI uri = createResolvedURI(getURL());
@@ -219,6 +222,7 @@ public class ProjectSetImportTaskImpl extends SetupTaskImpl implements ProjectSe
     return helper.isNeeded(context);
   }
 
+  @Override
   public void perform(SetupTaskContext context) throws Exception
   {
     helper.perform(context);
@@ -309,7 +313,7 @@ public class ProjectSetImportTaskImpl extends SetupTaskImpl implements ProjectSe
       if (value != null)
       {
         String digest = getDigest(content);
-        List<IProject> projects = new ArrayList<IProject>();
+        List<IProject> projects = new ArrayList<>();
         boolean confirm = true;
         for (String element : XMLTypeFactory.eINSTANCE.createNMTOKENS(value))
         {

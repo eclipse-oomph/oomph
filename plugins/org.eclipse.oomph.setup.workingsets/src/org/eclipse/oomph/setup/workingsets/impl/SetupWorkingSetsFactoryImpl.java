@@ -84,6 +84,7 @@ public class SetupWorkingSetsFactoryImpl extends EFactoryImpl implements SetupWo
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public WorkingSetTask createWorkingSetTask()
   {
     WorkingSetTaskImpl workingSetTask = new WorkingSetTaskImpl();
@@ -95,6 +96,7 @@ public class SetupWorkingSetsFactoryImpl extends EFactoryImpl implements SetupWo
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public SetupWorkingSetsPackage getSetupWorkingSetsPackage()
   {
     return (SetupWorkingSetsPackage)getEPackage();

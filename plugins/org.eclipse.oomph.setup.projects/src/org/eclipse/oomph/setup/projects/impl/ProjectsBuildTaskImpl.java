@@ -185,11 +185,12 @@ public class ProjectsBuildTaskImpl extends SetupTaskImpl implements ProjectsBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<Predicate> getPredicates()
   {
     if (predicates == null)
     {
-      predicates = new EObjectContainmentEList<Predicate>(Predicate.class, this, ProjectsPackage.PROJECTS_BUILD_TASK__PREDICATES);
+      predicates = new EObjectContainmentEList<>(Predicate.class, this, ProjectsPackage.PROJECTS_BUILD_TASK__PREDICATES);
     }
     return predicates;
   }
@@ -199,6 +200,7 @@ public class ProjectsBuildTaskImpl extends SetupTaskImpl implements ProjectsBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public boolean isOnlyNewProjects()
   {
     return onlyNewProjects;
@@ -209,6 +211,7 @@ public class ProjectsBuildTaskImpl extends SetupTaskImpl implements ProjectsBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setOnlyNewProjects(boolean newOnlyNewProjects)
   {
     boolean oldOnlyNewProjects = onlyNewProjects;
@@ -224,6 +227,7 @@ public class ProjectsBuildTaskImpl extends SetupTaskImpl implements ProjectsBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public boolean isRefresh()
   {
     return refresh;
@@ -234,6 +238,7 @@ public class ProjectsBuildTaskImpl extends SetupTaskImpl implements ProjectsBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setRefresh(boolean newRefresh)
   {
     boolean oldRefresh = refresh;
@@ -249,6 +254,7 @@ public class ProjectsBuildTaskImpl extends SetupTaskImpl implements ProjectsBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public boolean isClean()
   {
     return clean;
@@ -259,6 +265,7 @@ public class ProjectsBuildTaskImpl extends SetupTaskImpl implements ProjectsBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setClean(boolean newClean)
   {
     boolean oldClean = clean;
@@ -274,6 +281,7 @@ public class ProjectsBuildTaskImpl extends SetupTaskImpl implements ProjectsBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public boolean isBuild()
   {
     return build;
@@ -284,6 +292,7 @@ public class ProjectsBuildTaskImpl extends SetupTaskImpl implements ProjectsBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setBuild(boolean newBuild)
   {
     boolean oldBuild = build;
@@ -444,6 +453,7 @@ public class ProjectsBuildTaskImpl extends SetupTaskImpl implements ProjectsBuil
     return result.toString();
   }
 
+  @Override
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     if (!(isRefresh() || isClean() || isBuild()))
@@ -464,6 +474,7 @@ public class ProjectsBuildTaskImpl extends SetupTaskImpl implements ProjectsBuil
     return true;
   }
 
+  @Override
   public void perform(SetupTaskContext context) throws Exception
   {
     Set<IProject> projects = getProjects();
@@ -532,12 +543,12 @@ public class ProjectsBuildTaskImpl extends SetupTaskImpl implements ProjectsBuil
 
   private Set<IProject> getProjects()
   {
-    return new HashSet<IProject>(Arrays.asList(ROOT.getProjects()));
+    return new HashSet<>(Arrays.asList(ROOT.getProjects()));
   }
 
   private IBuildConfiguration[] getBuildConfigs(Set<IProject> projects) throws CoreException
   {
-    List<IBuildConfiguration> buildConfigs = new ArrayList<IBuildConfiguration>();
+    List<IBuildConfiguration> buildConfigs = new ArrayList<>();
 
     for (IProject project : projects)
     {
@@ -552,7 +563,7 @@ public class ProjectsBuildTaskImpl extends SetupTaskImpl implements ProjectsBuil
 
   private void logNothingToDo(SetupTaskContext context)
   {
-    List<String> tokens = new ArrayList<String>();
+    List<String> tokens = new ArrayList<>();
 
     if (isRefresh())
     {

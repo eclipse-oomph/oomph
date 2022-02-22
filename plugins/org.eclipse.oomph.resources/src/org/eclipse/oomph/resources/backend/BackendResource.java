@@ -278,12 +278,7 @@ public abstract class BackendResource
       return true;
     }
 
-    if (obj == null)
-    {
-      return false;
-    }
-
-    if (!(obj instanceof BackendResource))
+    if ((obj == null) || !(obj instanceof BackendResource))
     {
       return false;
     }
@@ -428,16 +423,19 @@ public abstract class BackendResource
         return visitDefault(container, monitor);
       }
 
+      @Override
       public boolean visit(BackendSystem system, IProgressMonitor monitor) throws BackendException
       {
         return visitContainer(system, monitor);
       }
 
+      @Override
       public boolean visit(BackendFolder folder, IProgressMonitor monitor) throws BackendException
       {
         return visitContainer(folder, monitor);
       }
 
+      @Override
       public boolean visit(BackendFile file, IProgressMonitor monitor) throws BackendException
       {
         return visitDefault(file, monitor);

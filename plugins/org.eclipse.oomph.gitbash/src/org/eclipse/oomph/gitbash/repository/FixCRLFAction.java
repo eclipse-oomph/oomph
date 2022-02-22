@@ -59,27 +59,32 @@ public class FixCRLFAction extends AbstractAction<Repository>
 
     ProgressMonitor monitor = new ProgressMonitor()
     {
+      @Override
       public void update(int completed)
       {
         processDisplay();
       }
 
+      @Override
       public void start(int totalTasks)
       {
         processDisplay();
       }
 
+      @Override
       public boolean isCancelled()
       {
         processDisplay();
         return false;
       }
 
+      @Override
       public void endTask()
       {
         processDisplay();
       }
 
+      @Override
       public void beginTask(String title, int totalWork)
       {
         processDisplay();

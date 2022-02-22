@@ -83,7 +83,7 @@ public class GitAdapterFactory extends AdapterFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  protected GitSwitch<Adapter> modelSwitch = new GitSwitch<Adapter>()
+  protected GitSwitch<Adapter> modelSwitch = new GitSwitch<>()
   {
     @Override
     public Adapter caseGitCloneTask(GitCloneTask object)

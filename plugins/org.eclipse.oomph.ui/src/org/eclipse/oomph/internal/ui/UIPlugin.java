@@ -105,11 +105,13 @@ public final class UIPlugin extends OomphUIPlugin
 
       UtilPlugin.setToggleStateAccessor(new UtilPlugin.ToggleStateAccessor()
       {
+        @Override
         public boolean isEnabled(String id)
         {
           return ToggleCommandHandler.getToggleState(id);
         }
 
+        @Override
         public void setEnabled(String id, boolean enabled)
         {
           ToggleCommandHandler.setToggleState(id, enabled);

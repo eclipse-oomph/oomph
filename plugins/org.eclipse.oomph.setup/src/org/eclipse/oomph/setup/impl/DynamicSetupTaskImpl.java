@@ -17,11 +17,13 @@ import org.eclipse.oomph.setup.SetupTaskContext;
  */
 public final class DynamicSetupTaskImpl extends SetupTaskImpl
 {
+  @Override
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     return false;
   }
 
+  @Override
   public void perform(SetupTaskContext context) throws Exception
   {
     // Do nothing.

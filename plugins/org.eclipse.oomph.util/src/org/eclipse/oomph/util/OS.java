@@ -325,7 +325,7 @@ public abstract class OS
 
   private static List<OS> createAll()
   {
-    List<OS> result = new ArrayList<OS>();
+    List<OS> result = new ArrayList<>();
 
     result.add(Win64.INSTANCE);
     result.add(Win32.INSTANCE);
@@ -410,7 +410,7 @@ public abstract class OS
     {
       if (terminal)
       {
-        List<String> terminalCommand = new ArrayList<String>();
+        List<String> terminalCommand = new ArrayList<>();
         terminalCommand.add("cmd"); //$NON-NLS-1$
         terminalCommand.add("/C"); //$NON-NLS-1$
         terminalCommand.add("start"); //$NON-NLS-1$
@@ -533,7 +533,7 @@ public abstract class OS
         String commandLine = getCommandLine(command);
         IOUtil.writeUTF8(commandFile, commandLine);
 
-        List<String> chmodCommand = new ArrayList<String>();
+        List<String> chmodCommand = new ArrayList<>();
         chmodCommand.add("chmod"); //$NON-NLS-1$
         chmodCommand.add("a+x"); //$NON-NLS-1$
         chmodCommand.add(commandPath);
@@ -542,7 +542,7 @@ public abstract class OS
         Process chmodProcess = chmodProcessBuilder.start();
         chmodProcess.waitFor();
 
-        List<String> terminalCommand = new ArrayList<String>();
+        List<String> terminalCommand = new ArrayList<>();
         terminalCommand.add("open"); //$NON-NLS-1$
         terminalCommand.add("-b"); //$NON-NLS-1$
         terminalCommand.add("com.apple.terminal"); //$NON-NLS-1$
@@ -631,7 +631,7 @@ public abstract class OS
         {
           try
           {
-            List<String> terminalCommand = new ArrayList<String>();
+            List<String> terminalCommand = new ArrayList<>();
             terminalCommand.add(xterm);
             terminalCommand.add("-e"); //$NON-NLS-1$
             terminalCommand.add(commandLine);

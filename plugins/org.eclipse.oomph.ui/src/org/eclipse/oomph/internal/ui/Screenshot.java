@@ -75,9 +75,12 @@ class Screenshot
 
   private static final File LOCATION;
 
+  private static int SCALE;
+
   static
   {
     File folderLocation = null;
+    int scale = 100;
     String location = PropertiesUtil.getProperty("org.eclipse.oomph.ui.screenshot"); //$NON-NLS-1$
     if (location != null)
     {
@@ -86,9 +89,16 @@ class Screenshot
       {
         folderLocation = file;
       }
+
+      String scaleProperty = PropertiesUtil.getProperty("org.eclipse.oomph.ui.screenshot.scale"); //$NON-NLS-1$
+      if (scaleProperty != null)
+      {
+        scale = Integer.parseInt(scaleProperty);
+      }
     }
 
     LOCATION = folderLocation;
+    SCALE = scale;
   }
 
   Screenshot()
@@ -97,6 +107,7 @@ class Screenshot
     {
       DISPLAY.asyncExec(new Runnable()
       {
+        @Override
         public void run()
         {
           DisplayMenuListener displayMenuListener = new DisplayMenuListener();
@@ -119,6 +130,7 @@ class Screenshot
   {
     private ToolBar toolBar;
 
+    @Override
     public void handleEvent(Event event)
     {
       if (event.widget instanceof ToolBar)
@@ -137,8 +149,9 @@ class Screenshot
    */
   private static final class DisplayMenuListener implements Listener
   {
-    private List<Menu> menus = new ArrayList<Menu>();
+    private List<Menu> menus = new ArrayList<>();
 
+    @Override
     public void handleEvent(Event event)
     {
       if (event.widget instanceof Menu)
@@ -177,6 +190,7 @@ class Screenshot
       this.displayMouseUpListener = displayMouseUpListener;
     }
 
+    @Override
     public void handleEvent(Event event)
     {
       long now = System.currentTimeMillis();
@@ -201,6 +215,7 @@ class Screenshot
           UIPlugin.INSTANCE.log("delay-capture", IStatus.INFO); //$NON-NLS-1$
           DISPLAY.timerExec(5000, new Runnable()
           {
+            @Override
             public void run()
             {
               UIPlugin.INSTANCE.log("capturing-now", IStatus.INFO); //$NON-NLS-1$
@@ -234,7 +249,7 @@ class Screenshot
 
     private final ToolBar toolBar;
 
-    private final List<Rectangle> itemBounds = new ArrayList<Rectangle>();
+    private final List<Rectangle> itemBounds = new ArrayList<>();
 
     public Capture(File folder, List<Menu> menus, ToolBar toolBar)
     {
@@ -260,7 +275,7 @@ class Screenshot
       if (!menus.isEmpty())
       {
         int count = 0;
-        List<Rectangle> allBounds = new ArrayList<Rectangle>();
+        List<Rectangle> allBounds = new ArrayList<>();
         for (Menu menu : menus)
         {
           Decorations parent = menu.getParent();
@@ -426,7 +441,7 @@ class Screenshot
       Image image = newImage(bounds);
 
       Point displayPoint = toDisplay(drawable, new Point(bounds.x, bounds.y));
-      gc.copyArea(image, displayPoint.x, displayPoint.y);
+      gc.copyArea(image, scaleUp(displayPoint.x), scaleUp(displayPoint.y));
 
       drawCaret(drawable, gc, image);
 
@@ -457,13 +472,13 @@ class Screenshot
 
       GC gc = new GC(DISPLAY);
 
-      Map<Image, Point> images = new LinkedHashMap<Image, Point>();
+      Map<Image, Point> images = new LinkedHashMap<>();
       for (Rectangle bounds : allBounds)
       {
         Image image = newImage(bounds);
         Point imagePoint = new Point(bounds.x, bounds.y);
         Point displayPoint = toDisplay(drawable, imagePoint);
-        gc.copyArea(image, displayPoint.x, displayPoint.y);
+        gc.copyArea(image, scaleUp(displayPoint.x), scaleUp(displayPoint.y));
         drawCaret(drawable, gc, image);
         GC imageGC = new GC(image);
         drawCursor(drawable, imageGC, bounds);
@@ -485,7 +500,7 @@ class Screenshot
         Image childImage = entry.getKey();
         Point point = entry.getValue();
         Point targetPoint = new Point(point.x - imageBounds.x, point.y - imageBounds.y);
-        imageGC.drawImage(childImage, targetPoint.x, targetPoint.y);
+        drawImage(imageGC, childImage, targetPoint.x, targetPoint.y);
         childImage.dispose();
       }
 
@@ -556,7 +571,7 @@ class Screenshot
           imageGC.setBackground(gc.getForeground());
 
           Rectangle caretBounds = caret.getBounds();
-          imageGC.fillRectangle(caretBounds);
+          imageGC.fillRectangle(scaleUp(caretBounds));
 
           imageGC.dispose();
         }
@@ -580,7 +595,7 @@ class Screenshot
 
     private Image newImage(Rectangle bounds, boolean transparent)
     {
-      Image image = new Image(DISPLAY, bounds.width, bounds.height);
+      Image image = new Image(DISPLAY, scaleUp(bounds.width), scaleUp(bounds.height));
       if (transparent)
       {
         ImageData imageData = image.getImageData();
@@ -630,6 +645,24 @@ class Screenshot
       throw new RuntimeException("No such field"); //$NON-NLS-1$
     }
 
+    private static int scaleUp(int value)
+    {
+      return SCALE * value / 100;
+    }
+
+    private static Rectangle scaleUp(Rectangle rectangle)
+    {
+      return new Rectangle(scaleUp(rectangle.x), scaleUp(rectangle.y), scaleUp(rectangle.width), scaleUp(rectangle.height));
+    }
+
+    private static void drawImage(GC gc, Image image, int x, int y)
+    {
+      Rectangle bounds = image.getBounds();
+      int width = bounds.width;
+      int height = bounds.height;
+      gc.drawImage(image, 0, 0, width, height, scaleUp(x), scaleUp(y), scaleUp(width), scaleUp(height));
+    }
+
     private String toString(int count)
     {
       String result = Integer.toString(count);
@@ -646,7 +679,7 @@ class Screenshot
      */
     private static class MouseCursor
     {
-      private static final Map<Cursor, MouseCursor> CURSORS = new HashMap<Cursor, MouseCursor>();
+      private static final Map<Cursor, MouseCursor> CURSORS = new HashMap<>();
 
       private Image image;
 
@@ -676,7 +709,7 @@ class Screenshot
 
       public void drawMouseCursor(GC gc, Point location)
       {
-        gc.drawImage(image, location.x - hotspot.x, location.y - hotspot.y);
+        drawImage(gc, image, location.x - hotspot.x, location.y - hotspot.y);
       }
 
       private static Image getCursorImage(String type)

@@ -80,6 +80,7 @@ public class SiteGeneratorImpl extends ModelElementImpl implements SiteGenerator
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public void generateIUs(final IProject project, final String qualifierReplacement, Map<String, Version> iuVersions, final EList<IInstallableUnit> result)
       throws Exception
   {
@@ -87,6 +88,7 @@ public class SiteGeneratorImpl extends ModelElementImpl implements SiteGenerator
 
     ResourcesUtil.runWithFile(project, path, new ResourcesUtil.RunnableWithFile()
     {
+      @Override
       public void run(File projectFolder, File file) throws Exception
       {
         final IProvisioningAgent provisioningAgent = P2Util.getCurrentProvisioningAgent();

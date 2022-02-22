@@ -133,6 +133,7 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getProjectsImportTask()
   {
     return projectsImportTaskEClass;
@@ -143,6 +144,7 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getProjectsImportTask_Force()
   {
     return (EAttribute)projectsImportTaskEClass.getEStructuralFeatures().get(0);
@@ -153,6 +155,7 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getProjectsImportTask_SourceLocators()
   {
     return (EReference)projectsImportTaskEClass.getEStructuralFeatures().get(1);
@@ -163,6 +166,7 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getProjectsBuildTask()
   {
     return projectsBuildTaskEClass;
@@ -173,6 +177,7 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getProjectsBuildTask_Predicates()
   {
     return (EReference)projectsBuildTaskEClass.getEStructuralFeatures().get(0);
@@ -183,6 +188,7 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getProjectsBuildTask_OnlyNewProjects()
   {
     return (EAttribute)projectsBuildTaskEClass.getEStructuralFeatures().get(1);
@@ -193,6 +199,7 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getProjectsBuildTask_Refresh()
   {
     return (EAttribute)projectsBuildTaskEClass.getEStructuralFeatures().get(2);
@@ -203,6 +210,7 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getProjectsBuildTask_Clean()
   {
     return (EAttribute)projectsBuildTaskEClass.getEStructuralFeatures().get(3);
@@ -213,6 +221,7 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getProjectsBuildTask_Build()
   {
     return (EAttribute)projectsBuildTaskEClass.getEStructuralFeatures().get(4);
@@ -223,6 +232,7 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getPathVariableTask()
   {
     return pathVariableTaskEClass;
@@ -233,6 +243,7 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getPathVariableTask_Name()
   {
     return (EAttribute)pathVariableTaskEClass.getEStructuralFeatures().get(0);
@@ -243,6 +254,7 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getPathVariableTask_URI()
   {
     return (EAttribute)pathVariableTaskEClass.getEStructuralFeatures().get(1);
@@ -253,6 +265,7 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ProjectsFactory getProjectsFactory()
   {
     return (ProjectsFactory)getEFactoryInstance();

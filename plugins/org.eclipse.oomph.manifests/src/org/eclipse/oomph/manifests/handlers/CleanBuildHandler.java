@@ -44,6 +44,7 @@ import java.util.Set;
  */
 public class CleanBuildHandler extends AbstractHandler
 {
+  @Override
   public Object execute(ExecutionEvent event) throws ExecutionException
   {
     IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindow(event);
@@ -56,6 +57,7 @@ public class CleanBuildHandler extends AbstractHandler
         {
           ResourcesPlugin.getWorkspace().run(new IWorkspaceRunnable()
           {
+            @Override
             public void run(IProgressMonitor monitor) throws CoreException
             {
               Object[] array = selection.toArray();
@@ -107,7 +109,7 @@ public class CleanBuildHandler extends AbstractHandler
     ISelection selection = HandlerUtil.getCurrentSelection(event);
     if (selection instanceof IStructuredSelection)
     {
-      Set<IProject> projects = new HashSet<IProject>();
+      Set<IProject> projects = new HashSet<>();
       for (Iterator<?> it = ((IStructuredSelection)selection).iterator(); it.hasNext();)
       {
         Object element = it.next();

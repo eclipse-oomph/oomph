@@ -17,6 +17,7 @@ import org.eclipse.ui.IStartup;
  */
 public final class EarlyStartup implements IStartup
 {
+  @Override
   public void earlyStartup()
   {
     SetupUIPlugin.performStartup();

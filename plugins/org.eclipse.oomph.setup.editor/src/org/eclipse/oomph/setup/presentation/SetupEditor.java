@@ -325,7 +325,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
   static
   {
-    List<Object> images = new ArrayList<Object>(2);
+    List<Object> images = new ArrayList<>(2);
     images.add(VARIABLE_GROUP_IMAGE);
     images.add(EMFEditUIPlugin.INSTANCE.getImage("full/ovr16/error_ovr.gif")); //$NON-NLS-1$
     ComposedImage composedImage = new ErrorOverlayImage(images);
@@ -378,7 +378,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
    * <!-- end-user-doc -->
    * @generated
    */
-  protected List<PropertySheetPage> propertySheetPages = new ArrayList<PropertySheetPage>();
+  protected List<PropertySheetPage> propertySheetPages = new ArrayList<>();
 
   /**
    * This is the viewer that shadows the selection in the content outline.
@@ -411,7 +411,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
    * <!-- end-user-doc -->
    * @generated
    */
-  protected Collection<ISelectionChangedListener> selectionChangedListeners = new ArrayList<ISelectionChangedListener>();
+  protected Collection<ISelectionChangedListener> selectionChangedListeners = new ArrayList<>();
 
   /**
    * This keeps track of the selection of the editor as a whole.
@@ -438,6 +438,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
    */
   protected IPartListener partListener = new IPartListener()
   {
+    @Override
     @SuppressWarnings("restriction")
     public void partActivated(IWorkbenchPart p)
     {
@@ -471,21 +472,25 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       }
     }
 
+    @Override
     public void partBroughtToTop(IWorkbenchPart p)
     {
       // Ignore.
     }
 
+    @Override
     public void partClosed(IWorkbenchPart p)
     {
       // Ignore.
     }
 
+    @Override
     public void partDeactivated(IWorkbenchPart p)
     {
       // Ignore.
     }
 
+    @Override
     public void partOpened(IWorkbenchPart p)
     {
       // Ignore.
@@ -494,18 +499,22 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
   protected IWindowListener windowListener = new IWindowListener()
   {
+    @Override
     public void windowOpened(IWorkbenchWindow window)
     {
     }
 
+    @Override
     public void windowDeactivated(IWorkbenchWindow window)
     {
     }
 
+    @Override
     public void windowClosed(IWorkbenchWindow window)
     {
     }
 
+    @Override
     public void windowActivated(IWorkbenchWindow window)
     {
       if (getSite().getWorkbenchWindow() == window)
@@ -545,7 +554,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
    * <!-- end-user-doc -->
    * @generated
    */
-  protected Collection<Resource> removedResources = new ArrayList<Resource>();
+  protected Collection<Resource> removedResources = new ArrayList<>();
 
   /**
    * Resources that have been changed since last activation.
@@ -553,7 +562,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
    * <!-- end-user-doc -->
    * @generated
    */
-  protected Collection<Resource> changedResources = new ArrayList<Resource>();
+  protected Collection<Resource> changedResources = new ArrayList<>();
 
   /**
    * Resources that have been saved.
@@ -561,7 +570,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
    * <!-- end-user-doc -->
    * @generated
    */
-  protected Collection<Resource> savedResources = new ArrayList<Resource>();
+  protected Collection<Resource> savedResources = new ArrayList<>();
 
   /**
    * Map to store the diagnostic associated with a resource.
@@ -569,7 +578,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
    * <!-- end-user-doc -->
    * @generated
    */
-  protected Map<Resource, Diagnostic> resourceToDiagnosticMap = new LinkedHashMap<Resource, Diagnostic>();
+  protected Map<Resource, Diagnostic> resourceToDiagnosticMap = new LinkedHashMap<>();
 
   /**
    * Controls whether the problem indication should be updated.
@@ -628,6 +637,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         dispatching = true;
         getSite().getShell().getDisplay().asyncExec(new Runnable()
         {
+          @Override
           public void run()
           {
             dispatching = false;
@@ -660,6 +670,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
    */
   protected IResourceChangeListener resourceChangeListener = new IResourceChangeListener()
   {
+    @Override
     public void resourceChanged(IResourceChangeEvent event)
     {
       IResourceDelta delta = event.getDelta();
@@ -669,10 +680,11 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         {
           protected ResourceSet resourceSet = editingDomain.getResourceSet();
 
-          protected Collection<Resource> changedResources = new ArrayList<Resource>();
+          protected Collection<Resource> changedResources = new ArrayList<>();
 
-          protected Collection<Resource> removedResources = new ArrayList<Resource>();
+          protected Collection<Resource> removedResources = new ArrayList<>();
 
+          @Override
           public boolean visit(final IResourceDelta delta)
           {
             if (delta.getResource().getType() == IResource.FILE)
@@ -681,7 +693,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
               {
                 // If this is a *.ecore resource, it will be demand loaded regardless of demandLoad == false.
                 EList<Resource> resources = resourceSet.getResources();
-                List<Resource> originalResources = new ArrayList<Resource>(resources);
+                List<Resource> originalResources = new ArrayList<>(resources);
                 Resource resource = null;
                 try
                 {
@@ -745,6 +757,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         {
           getSite().getShell().getDisplay().asyncExec(new Runnable()
           {
+            @Override
             public void run()
             {
               removedResources.addAll(visitor.getRemovedResources());
@@ -760,6 +773,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         {
           getSite().getShell().getDisplay().asyncExec(new Runnable()
           {
+            @Override
             public void run()
             {
               changedResources.addAll(visitor.getChangedResources());
@@ -809,6 +823,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     initializeEditingDomain();
   }
 
+  @Override
   public WorkingSetsProvider getWorkingSetsProvider()
   {
     return workingSetsProvider;
@@ -865,7 +880,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       {
         ResourceSet resourceSet = editingDomain.getResourceSet();
         URIConverter uriConverter = resourceSet.getURIConverter();
-        final Set<IFile> files = new LinkedHashSet<IFile>();
+        final Set<IFile> files = new LinkedHashSet<>();
 
         for (Resource resource : resourceSet.getResources())
         {
@@ -903,6 +918,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
           //
           IWorkspaceRunnable operation = new IWorkspaceRunnable()
           {
+            @Override
             public void run(IProgressMonitor monitor) throws CoreException
             {
               for (IFile file : files)
@@ -940,7 +956,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
         if (!removedResources.isEmpty())
         {
-          List<Resource> removedResources = new ArrayList<Resource>(this.removedResources);
+          List<Resource> removedResources = new ArrayList<>(this.removedResources);
           if (!removedResources.remove(resourceSet.getResources().get(0)))
           {
             // Only the first resource is modifiable, so if other resources are removed, we can just unload them, an ignore them form further dirty handling.
@@ -955,7 +971,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         if (!changedResources.isEmpty())
         {
           // Only the first resource is modifiable, so if other resources are removed, we can just unload them, an ignore them from further dirty handling.
-          List<Resource> changedResources = new ArrayList<Resource>(this.changedResources);
+          List<Resource> changedResources = new ArrayList<>(this.changedResources);
           if (!changedResources.remove(resourceSet.getResources().get(0)))
           {
             updateProblemIndication = false;
@@ -996,7 +1012,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         // Controlled resources will be explicitly marked as not read only.
         // But the call handleActivateGen will clear the map, so we need to ensure we restore the map, and only force recomputation for the primary resource.
         Map<Resource, Boolean> resourceToReadOnlyMap = editingDomain.getResourceToReadOnlyMap();
-        Map<Resource, Boolean> resourceToReadOnlyMapCopy = new LinkedHashMap<Resource, Boolean>(resourceToReadOnlyMap);
+        Map<Resource, Boolean> resourceToReadOnlyMapCopy = new LinkedHashMap<>(resourceToReadOnlyMap);
         handleActivateGen();
         EList<Resource> resources = resourceSet.getResources();
         if (!resources.isEmpty())
@@ -1168,7 +1184,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
     adapterFactory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
     adapterFactory.addAdapterFactory(new SetupItemProviderAdapterFactory());
-    adapterFactory.addAdapterFactory(new ExtendedBaseItemProviderAdapterFactory());
+    adapterFactory.addAdapterFactory(new BaseItemProviderAdapterFactory());
     adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
 
     // Create the command stack that will notify this editor as commands are executed.
@@ -1179,10 +1195,12 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     //
     commandStack.addCommandStackListener(new CommandStackListener()
     {
+      @Override
       public void commandStackChanged(final EventObject event)
       {
         getContainer().getDisplay().asyncExec(new Runnable()
         {
+          @Override
           public void run()
           {
             firePropertyChange(IEditorPart.PROP_DIRTY);
@@ -1246,7 +1264,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
           public Collection<?> getChildren(Object object)
           {
             Resource resource = (Resource)object;
-            List<EObject> contents = new ArrayList<EObject>(resource.getContents());
+            List<EObject> contents = new ArrayList<>(resource.getContents());
 
             ResourceSet resourceSet = resource.getResourceSet();
             if (resourceSet != null && resourceSet.getResources().get(0) != resource)
@@ -1265,7 +1283,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
               if (children == null)
               {
-                children = new ArrayList<DelegatingWrapperItemProvider>();
+                children = new ArrayList<>();
                 int index = 0;
                 for (EObject child : contents)
                 {
@@ -1376,10 +1394,10 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
               Collection<?> collection)
           {
             final List<CommandParameter> commandParameters = domain instanceof OomphEditingDomain
-                ? new ArrayList<CommandParameter>(((OomphEditingDomain)domain).getCommandParameters())
+                ? new ArrayList<>(((OomphEditingDomain)domain).getCommandParameters())
                 : Collections.<CommandParameter> emptyList();
 
-            final Set<URI> uris = new LinkedHashSet<URI>();
+            final Set<URI> uris = new LinkedHashSet<>();
             for (Object object : collection)
             {
               if (object instanceof URI)
@@ -1413,7 +1431,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
               @Override
               public void doExecute()
               {
-                resources = new ArrayList<Resource>();
+                resources = new ArrayList<>();
                 int index = 1;
                 Macro macro = null;
                 for (URI uri : uris)
@@ -1453,6 +1471,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
                   final Macro finalMacro = macro;
                   UIUtil.asyncExec(getContainer(), new Runnable()
                   {
+                    @Override
                     public void run()
                     {
                       // Drop the macro onto the original owner.
@@ -1506,16 +1525,19 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
                 return EMFEditPlugin.INSTANCE.getString("_UI_LoadResources_label"); //$NON-NLS-1$
               }
 
+              @Override
               public boolean validate(Object owner, float location, int operations, int operation, Collection<?> collection)
               {
                 return true;
               }
 
+              @Override
               public int getFeedback()
               {
                 return FEEDBACK_SELECT;
               }
 
+              @Override
               public int getOperation()
               {
                 return DROP_COPY;
@@ -1533,7 +1555,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
     // Create the editing domain with a special command stack.
     //
-    Map<Resource, Boolean> readOnlyMap = new LinkedHashMap<Resource, Boolean>()
+    Map<Resource, Boolean> readOnlyMap = new LinkedHashMap<>()
     {
       private static final long serialVersionUID = 1L;
 
@@ -1561,6 +1583,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       {
         UIUtil.asyncExec(new Runnable()
         {
+          @Override
           public void run()
           {
             for (Object object : collection)
@@ -1580,6 +1603,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     //
     editingDomain.getCommandStack().addCommandStackListener(new CommandStackListener()
     {
+      @Override
       public void commandStackChanged(final EventObject event)
       {
         if (contentOutlinePage != null)
@@ -1622,6 +1646,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     {
       Runnable runnable = new Runnable()
       {
+        @Override
         public void run()
         {
           // Try to select the items in the current content viewer of the editor.
@@ -1643,7 +1668,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       // If we're trying to select a resource in the selection viewer, make sure resources are visible there.
       if (currentViewer == selectionViewer)
       {
-        List<Object> effectiveCollection = new ArrayList<Object>();
+        List<Object> effectiveCollection = new ArrayList<>();
         boolean selectResource = false;
         for (Object object : collection)
         {
@@ -1686,6 +1711,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EditingDomain getEditingDomain()
   {
     return editingDomain;
@@ -1704,7 +1730,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     @Override
     public List<Point> getDrawPoints(Size size)
     {
-      List<Point> result = new ArrayList<Point>();
+      List<Point> result = new ArrayList<>();
       result.add(new Point());
       Point overlay = new Point();
       overlay.y = 7;
@@ -1799,6 +1825,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         {
           // This just notifies those things that are affected by the section.
           //
+          @Override
           public void selectionChanged(SelectionChangedEvent selectionChangedEvent)
           {
             setSelection(selectionChangedEvent.getSelection());
@@ -1836,6 +1863,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Viewer getViewer()
   {
     return currentViewer;
@@ -1902,7 +1930,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     // If the index's folder is redirected to the local file system...
     URIConverter uriConverter = resourceSet.getURIConverter();
     Map<URI, URI> uriMap = uriConverter.getURIMap();
-    Map<URI, URI> workspaceMappings = new LinkedHashMap<URI, URI>();
+    Map<URI, URI> workspaceMappings = new LinkedHashMap<>();
     for (URI uri : uriMap.values())
     {
       if (uri.isFile() && !uri.isRelative())
@@ -1967,7 +1995,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         {
           final InternalEList<EPackage> discoverablePackages = (InternalEList<EPackage>)index.getDiscoverablePackages();
 
-          final Map<EPackage, EPackage> packageProxies = new LinkedHashMap<EPackage, EPackage>();
+          final Map<EPackage, EPackage> packageProxies = new LinkedHashMap<>();
 
           {
             // Record a map from resolved EPackage to the original EPackage proxy.
@@ -1979,6 +2007,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
             }
           }
 
+          @Override
           public void run()
           {
             // Before saving, we can run this to restore the original proxies.
@@ -2009,7 +2038,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
           // so that this configuration.
           reproxifier = new Runnable()
           {
-            final Map<Object, Object> proxies = new LinkedHashMap<Object, Object>();
+            final Map<Object, Object> proxies = new LinkedHashMap<>();
 
             private final Adapter proxyListener = new AdapterImpl()
             {
@@ -2040,6 +2069,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
               }
             }
 
+            @Override
             public void run()
             {
               if (installation != null)
@@ -2144,11 +2174,13 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         this.informationControlCloser = informationControlCloser;
       }
 
+      @Override
       public void setSubjectControl(Control subject)
       {
         informationControlCloser.setSubjectControl(subject);
       }
 
+      @Override
       public void setInformationControl(IInformationControl control)
       {
         if (shell != null)
@@ -2162,6 +2194,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         informationControlCloser.setInformationControl(control);
       }
 
+      @Override
       public void start(Rectangle subjectArea)
       {
         informationControlCloser.start(subjectArea);
@@ -2170,6 +2203,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         shell.getDisplay().addFilter(SWT.MouseExit, this);
       }
 
+      @Override
       public void stop()
       {
         informationControlCloser.stop();
@@ -2181,6 +2215,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         }
       }
 
+      @Override
       public void handleEvent(Event event)
       {
         if (event.widget instanceof Control)
@@ -2258,22 +2293,8 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
       protected boolean equals(Diagnostic diagnostic1, Diagnostic diagnostic2)
       {
-        if (diagnostic1.getCode() != diagnostic2.getCode())
-        {
-          return false;
-        }
-
-        if (diagnostic1.getSource() != diagnostic2.getSource())
-        {
-          return false;
-        }
-
-        if (diagnostic1.getSeverity() != diagnostic2.getSeverity())
-        {
-          return false;
-        }
-
-        if (!ObjectUtil.equals(diagnostic1.getMessage(), diagnostic2.getMessage()))
+        if (diagnostic1.getCode() != diagnostic2.getCode() || diagnostic1.getSource() != diagnostic2.getSource()
+            || diagnostic1.getSeverity() != diagnostic2.getSeverity() || !ObjectUtil.equals(diagnostic1.getMessage(), diagnostic2.getMessage()))
         {
           return false;
         }
@@ -2367,7 +2388,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         }
         else
         {
-          EList<Object> path = new BasicEList<Object>();
+          EList<Object> path = new BasicEList<>();
           for (Object parent = itemDelegator.getParent(object); parent != null; parent = itemDelegator.getParent(parent))
           {
             if (parent instanceof ResourceSet)
@@ -2410,7 +2431,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
         result.append("</div>\n"); //$NON-NLS-1$
 
-        List<IItemPropertyDescriptor> propertyDescriptors = new ArrayList<IItemPropertyDescriptor>();
+        List<IItemPropertyDescriptor> propertyDescriptors = new ArrayList<>();
         List<IItemPropertyDescriptor> underlyingPropertyDescriptors = itemDelegator.getPropertyDescriptors(object);
         if (underlyingPropertyDescriptors != null)
         {
@@ -2612,6 +2633,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     final Control control = viewer.getControl();
     control.addMouseListener(new MouseListener()
     {
+      @Override
       public void mouseDoubleClick(MouseEvent e)
       {
         try
@@ -2633,11 +2655,13 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         }
       }
 
+      @Override
       public void mouseDown(MouseEvent e)
       {
         // Do nothing
       }
 
+      @Override
       public void mouseUp(final MouseEvent e)
       {
         if ((e.stateMask & SWT.MOD3) != 0)
@@ -2714,6 +2738,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
     getSite().getShell().getDisplay().asyncExec(new Runnable()
     {
+      @Override
       public void run()
       {
         if (getPageCount() > 0)
@@ -2747,7 +2772,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
   protected void doLoad()
   {
-    resourceMirror = new AtomicReference<ResourceMirror>();
+    resourceMirror = new AtomicReference<>();
     final Tree tree = selectionViewer.getTree();
     Job job = new Job(Messages.SetupEditor_loadingModelJob_name)
     {
@@ -2780,6 +2805,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
         UIUtil.asyncExec(tree, new Runnable()
         {
+          @Override
           public void run()
           {
             try
@@ -2958,21 +2984,21 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
     private Trigger trigger;
 
-    private final Map<Object, Set<Object>> copyMap = new LinkedHashMap<Object, Set<Object>>();
+    private final Map<Object, Set<Object>> copyMap = new LinkedHashMap<>();
 
-    private final Map<Object, Set<Object>> inverseCopyMap = new LinkedHashMap<Object, Set<Object>>();
+    private final Map<Object, Set<Object>> inverseCopyMap = new LinkedHashMap<>();
 
-    private final Map<SetupTask, Set<VariableTask>> inducedIDVariables = new LinkedHashMap<SetupTask, Set<VariableTask>>();
+    private final Map<SetupTask, Set<VariableTask>> inducedIDVariables = new LinkedHashMap<>();
 
-    private final List<Notifier> notifiers = new ArrayList<Notifier>();
+    private final List<Notifier> notifiers = new ArrayList<>();
 
-    private final Set<EObject> syntheticObjects = new LinkedHashSet<EObject>();
+    private final Set<EObject> syntheticObjects = new LinkedHashSet<>();
 
-    private final Map<Object, Object> parents = new LinkedHashMap<Object, Object>();
+    private final Map<Object, Object> parents = new LinkedHashMap<>();
 
-    private final List<Scope> previewableScopes = new UniqueEList<Scope>();
+    private final List<Scope> previewableScopes = new UniqueEList<>();
 
-    private final Set<Resource> primaryResources = new LinkedHashSet<Resource>();
+    private final Set<Resource> primaryResources = new LinkedHashSet<>();
 
     private final Stream compositeStream = SetupFactory.eINSTANCE.createStream();
 
@@ -3008,7 +3034,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     {
       private SetupTaskPerformer setupTaskPerformer;
 
-      private Map<Pair<Object, Object>, IWrapperItemProvider> wrappers = new LinkedHashMap<Pair<Object, Object>, IWrapperItemProvider>();
+      private Map<Pair<Object, Object>, IWrapperItemProvider> wrappers = new LinkedHashMap<>();
 
       public VariableContainer(SetupTaskPerformer setupTaskPerformer, String text, Object image)
       {
@@ -3065,6 +3091,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
       parent.addDisposeListener(new DisposeListener()
       {
+        @Override
         public void widgetDisposed(DisposeEvent e)
         {
           contentOutlinePage = null;
@@ -3079,6 +3106,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
       contentOutlineViewer.addDoubleClickListener(new IDoubleClickListener()
       {
+        @Override
         public void doubleClick(DoubleClickEvent event)
         {
           if (selectionViewer != null)
@@ -3124,7 +3152,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
             if (!StringUtil.isEmpty(name))
             {
               boolean isMacro = false;
-              List<Object> variableUsages = new UniqueEList<Object>();
+              List<Object> variableUsages = new UniqueEList<>();
               Set<Object> inverses = inverseCopyMap.get(object);
               if (inverses != null)
               {
@@ -3173,7 +3201,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
         private List<Object> getMatchingUsages(VariableContainer variableContainer, Object object, EObject context, String actualName)
         {
-          List<Object> variableUsages = new ArrayList<Object>();
+          List<Object> variableUsages = new ArrayList<>();
           SetupTaskPerformer setupTaskPerformer = variableContainer.getSetupTaskPerformer();
           for (Object original : copyMap.keySet())
           {
@@ -3236,6 +3264,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       IMenuManager menuManager = (IMenuManager)menu.getData(MenuManager.MANAGER_KEY);
       menuManager.addMenuListener(new IMenuListener()
       {
+        @Override
         public void menuAboutToShow(IMenuManager manager)
         {
           manager.insertBefore("edit", previewAction); //$NON-NLS-1$
@@ -3247,12 +3276,13 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
       selectionViewer.addSelectionChangedListener(new ISelectionChangedListener()
       {
+        @Override
         public void selectionChanged(SelectionChangedEvent event)
         {
           IStructuredSelection selection = (IStructuredSelection)event.getSelection();
           if (selectionViewer != null && selectionViewer.getControl().isFocusControl() && !selection.isEmpty() && contentOutlinePage != null)
           {
-            ArrayList<Object> selectionList = new ArrayList<Object>();
+            ArrayList<Object> selectionList = new ArrayList<>();
             for (Object object : selection.toArray())
             {
               collectSelection(selectionList, object);
@@ -3396,7 +3426,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
                 }
               }
 
-              List<Object> newRootChildren = new ArrayList<Object>();
+              List<Object> newRootChildren = new ArrayList<>();
               newRootChildren.add(reconcileOutline(root, null, rootEObject));
               if (rootEObject instanceof Workspace || rootEObject instanceof Installation || rootEObject instanceof Configuration)
               {
@@ -3490,7 +3520,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       EClass eClass = composite.eClass();
       EList<Resource> resources = editingDomain.getResourceSet().getResources();
       OutlineItemProvider compositeOutline = null;
-      List<OutlineItemProvider> newChildren = new ArrayList<OutlineItemProvider>();
+      List<OutlineItemProvider> newChildren = new ArrayList<>();
       for (int i = 1, size = resources.size(); i < size; ++i)
       {
         Resource otherResource = resources.get(i);
@@ -3510,6 +3540,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       {
         Collections.sort(newChildren, new Comparator<OutlineItemProvider>()
         {
+          @Override
           public int compare(OutlineItemProvider o1, OutlineItemProvider o2)
           {
             return CommonPlugin.INSTANCE.getComparator().compare(o1.getText(), o2.getText());
@@ -3524,10 +3555,10 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
     private List<String> sortStrings(Collection<? extends String> strings)
     {
-      EList<Pair<SegmentSequence, String>> pairs = new BasicEList<Pair<SegmentSequence, String>>();
+      EList<Pair<SegmentSequence, String>> pairs = new BasicEList<>();
       for (String string : strings)
       {
-        pairs.add(new Pair<SegmentSequence, String>(SegmentSequence.create(".", string), string)); //$NON-NLS-1$
+        pairs.add(new Pair<>(SegmentSequence.create(".", string), string)); //$NON-NLS-1$
       }
 
       @SuppressWarnings("unchecked")
@@ -3537,10 +3568,10 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
     private List<VariableTask> sortVariables(Collection<? extends VariableTask> variables)
     {
-      EList<Pair<SegmentSequence, VariableTask>> pairs = new BasicEList<Pair<SegmentSequence, VariableTask>>();
+      EList<Pair<SegmentSequence, VariableTask>> pairs = new BasicEList<>();
       for (VariableTask variable : variables)
       {
-        pairs.add(new Pair<SegmentSequence, VariableTask>(SegmentSequence.create(".", variable.getName()), variable)); //$NON-NLS-1$
+        pairs.add(new Pair<>(SegmentSequence.create(".", variable.getName()), variable)); //$NON-NLS-1$
       }
 
       @SuppressWarnings("unchecked")
@@ -3554,6 +3585,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       {
         private final Comparator<String> comparator = CommonPlugin.INSTANCE.getComparator();
 
+        @Override
         public int compare(Pair<SegmentSequence, T> o1, Pair<SegmentSequence, T> o2)
         {
           SegmentSequence s1 = o1.getElement1();
@@ -3594,7 +3626,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         }
       });
 
-      List<T> result = new ArrayList<T>(pairs.length);
+      List<T> result = new ArrayList<>(pairs.length);
       for (Pair<SegmentSequence, T> pair : pairs)
       {
         result.add(pair.getElement2());
@@ -3617,7 +3649,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
       add(copyMap, scope, outlineItemProvider);
 
-      List<Object> newChildren = new ArrayList<Object>();
+      List<Object> newChildren = new ArrayList<>();
       if (getPreviewableScopes().contains(scope))
       {
         newChildren.addAll(gatherSetupTasks(outlineItemProvider, context, (Scope)scope));
@@ -3735,11 +3767,12 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         return super.getForeground(object);
       }
 
+      @Override
       public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object)
       {
         List<IItemPropertyDescriptor> descriptors = itemDelegator.getPropertyDescriptors(eObject);
 
-        List<IItemPropertyDescriptor> result = new ArrayList<IItemPropertyDescriptor>();
+        List<IItemPropertyDescriptor> result = new ArrayList<>();
         for (IItemPropertyDescriptor descriptor : descriptors)
         {
           result.add(new ItemPropertyDescriptorDecorator(eObject, descriptor));
@@ -3748,6 +3781,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         return result;
       }
 
+      @Override
       public IItemPropertyDescriptor getPropertyDescriptor(Object object, Object propertyID)
       {
         IItemPropertyDescriptor descriptor = itemDelegator.getPropertyDescriptor(eObject, propertyID);
@@ -3759,31 +3793,37 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         return null;
       }
 
+      @Override
       public Object getEditableValue(Object object)
       {
         return itemDelegator.getEditableValue(eObject);
       }
 
+      @Override
       public Object getValue()
       {
         return eObject;
       }
 
+      @Override
       public Object getOwner()
       {
         return getParent();
       }
 
+      @Override
       public EStructuralFeature getFeature()
       {
         return null;
       }
 
+      @Override
       public int getIndex()
       {
         return 0;
       }
 
+      @Override
       public void setIndex(int index)
       {
       }
@@ -3791,7 +3831,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
     private List<Object> gatherSetupTasks(OutlineItemProvider container, Scope context, Scope scope)
     {
-      List<Object> result = new ArrayList<Object>();
+      List<Object> result = new ArrayList<>();
       ProductVersion version = scope instanceof ProductVersion ? (ProductVersion)scope : null;
       Stream stream = scope instanceof Stream ? (Stream)scope : null;
       Macro macro = scope instanceof Macro ? (Macro)scope : null;
@@ -3921,7 +3961,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       }
 
       MacroTask macroTask = null;
-      List<VariableTask> macroTaskVariables = new ArrayList<VariableTask>();
+      List<VariableTask> macroTaskVariables = new ArrayList<>();
       if (macro != null)
       {
         Workspace workspace = setupContext.getWorkspace();
@@ -3972,7 +4012,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         return result;
       }
 
-      List<SetupTask> triggeredSetupTasks = new ArrayList<SetupTask>(setupTaskPerformer.getTriggeredSetupTasks());
+      List<SetupTask> triggeredSetupTasks = new ArrayList<>(setupTaskPerformer.getTriggeredSetupTasks());
 
       if (!triggeredSetupTasks.isEmpty())
       {
@@ -3994,7 +4034,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         EList<EObject> fakeResourceContents = fakeResource.getContents();
         resourceLocator.map(uri, fakeResource);
 
-        Set<EObject> eObjects = new LinkedHashSet<EObject>();
+        Set<EObject> eObjects = new LinkedHashSet<>();
         for (Set<EObject> copies : performerCopyMap.values())
         {
           eObjects.addAll(copies);
@@ -4065,7 +4105,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
           result.add(undeclaredVariablesItem);
         }
 
-        Map<String, VariableTask> variablesMap = new LinkedHashMap<String, VariableTask>();
+        Map<String, VariableTask> variablesMap = new LinkedHashMap<>();
 
         ItemProvider unresolvedVariablesItem = new VariableContainer(setupTaskPerformer, Messages.SetupEditor_outlinePreviewPage_unresolvedVariables,
             VARIABLE_GROUP_IMAGE);
@@ -4117,8 +4157,8 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         }
 
         // Establish a mapping from wrapper item providers for macro tasks to their underlying wrapped objects.
-        Map<Object, Set<Object>> macroTaskMap = new LinkedHashMap<Object, Set<Object>>();
-        Map<Object, Set<Object>> argumentBindingMap = new LinkedHashMap<Object, Set<Object>>();
+        Map<Object, Set<Object>> macroTaskMap = new LinkedHashMap<>();
+        Map<Object, Set<Object>> argumentBindingMap = new LinkedHashMap<>();
         for (EObject eObject : performerCopyMap.keySet())
         {
           if (eObject instanceof MacroTask)
@@ -4330,7 +4370,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       Set<V> set = map.get(key);
       if (set == null)
       {
-        set = new LinkedHashSet<V>();
+        set = new LinkedHashSet<>();
         map.put(key, set);
       }
 
@@ -4342,7 +4382,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       Set<V> set = map.get(key);
       if (set == null)
       {
-        set = new LinkedHashSet<V>();
+        set = new LinkedHashSet<>();
         map.put(key, set);
       }
 
@@ -4401,6 +4441,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       getActionBarContributor().shareGlobalActions(this, actionBars);
     }
 
+    @Override
     @SuppressWarnings("all")
     public Object getAdapter(Class adapter)
     {
@@ -4434,9 +4475,9 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
     protected class PreviewAction extends Action implements ISelectionChangedListener
     {
-      final List<Scope> selectedPeviewableScopes = new ArrayList<Scope>();
+      final List<Scope> selectedPeviewableScopes = new ArrayList<>();
 
-      final Map<Scope, Object> scopes = new LinkedHashMap<Scope, Object>();
+      final Map<Scope, Object> scopes = new LinkedHashMap<>();
 
       public PreviewAction()
       {
@@ -4445,6 +4486,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
         contentOutlineViewer.addPostSelectionChangedListener(this);
       }
 
+      @Override
       public void selectionChanged(SelectionChangedEvent event)
       {
         update((ITreeSelection)event.getSelection());
@@ -4525,6 +4567,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
       getSite().getShell().getDisplay().asyncExec(new Runnable()
       {
+        @Override
         public void run()
         {
           if (contentOutlinePage != null && resourceMirror == null)
@@ -4540,6 +4583,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       {
         // This ensures that we handle selections correctly.
         //
+        @Override
         public void selectionChanged(SelectionChangedEvent event)
         {
           handleContentOutlineSelection(event.getSelection());
@@ -4597,7 +4641,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       {
         Object selectedElement = selectedElements.next();
 
-        List<Object> selectionList = new ArrayList<Object>();
+        List<Object> selectionList = new ArrayList<>();
         selectionList.addAll(contentOutlinePage.getOriginals(selectedElement));
         while (selectedElements.hasNext())
         {
@@ -4626,11 +4670,11 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     }
 
     // All but the first resource use delegating wrappers for children, so we need to find those wrappers and create a tree path based on those.
-    List<TreePath> treePaths = new ArrayList<TreePath>();
+    List<TreePath> treePaths = new ArrayList<>();
     ITreeContentProvider treeContentProvider = (ITreeContentProvider)selectionViewer.getContentProvider();
     for (Object object : objects)
     {
-      List<Object> path = new ArrayList<Object>();
+      List<Object> path = new ArrayList<>();
       computePath(path, treeContentProvider, object);
       treePaths.add(new TreePath(path.toArray()));
     }
@@ -4685,6 +4729,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     return ((BasicCommandStack)editingDomain.getCommandStack()).isSaveNeeded();
   }
 
+  @Override
   public void doRevert()
   {
     Object input = selectionViewer.getInput();
@@ -4715,7 +4760,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
   {
     // Save only resources that have actually changed.
     //
-    final Map<Object, Object> saveOptions = new LinkedHashMap<Object, Object>();
+    final Map<Object, Object> saveOptions = new LinkedHashMap<>();
     saveOptions.put(Resource.OPTION_SAVE_ONLY_IF_CHANGED, Resource.OPTION_SAVE_ONLY_IF_CHANGED_MEMORY_BUFFER);
     saveOptions.put(Resource.OPTION_LINE_DELIMITER, Resource.OPTION_LINE_DELIMITER_UNSPECIFIED);
 
@@ -4898,6 +4943,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void gotoMarker(IMarker marker)
   {
     List<?> targetObjects = markerHelper.getTargetObjects(editingDomain, marker);
@@ -4973,6 +5019,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     final IResourceChangeListener delegateResourceChangeListener = resourceChangeListener;
     resourceChangeListener = new IResourceChangeListener()
     {
+      @Override
       public void resourceChanged(IResourceChangeEvent event)
       {
         // We don't want to process deltas while we're mirroring the resource set.
@@ -5007,6 +5054,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void addSelectionChangedListener(ISelectionChangedListener listener)
   {
     selectionChangedListeners.add(listener);
@@ -5018,6 +5066,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void removeSelectionChangedListener(ISelectionChangedListener listener)
   {
     selectionChangedListeners.remove(listener);
@@ -5029,6 +5078,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ISelection getSelection()
   {
     return editorSelection;
@@ -5041,6 +5091,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setSelection(ISelection selection)
   {
     editorSelection = selection;
@@ -5122,6 +5173,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public void menuAboutToShow(IMenuManager menuManager)
   {
     ((IMenuListener)getEditorSite().getActionBarContributor()).menuAboutToShow(menuManager);
@@ -5219,26 +5271,31 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       this.liveValidation = liveValidation;
     }
 
+    @Override
     public IDialogSettings addNewSection(String name)
     {
       return dialogSettings.addNewSection(name);
     }
 
+    @Override
     public void addSection(IDialogSettings section)
     {
       dialogSettings.addSection(section);
     }
 
+    @Override
     public String get(String key)
     {
       return dialogSettings.get(key);
     }
 
+    @Override
     public String[] getArray(String key)
     {
       return dialogSettings.getArray(key);
     }
 
+    @Override
     public boolean getBoolean(String key)
     {
       if (DiagnosticDecorator.LiveValidator.LiveValidationAction.LIVE_VALIDATOR_DIALOG_SETTINGS_KEY.equals(key) && !liveValidation)
@@ -5249,91 +5306,109 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       return dialogSettings.getBoolean(key);
     }
 
+    @Override
     public double getDouble(String key) throws NumberFormatException
     {
       return dialogSettings.getDouble(key);
     }
 
+    @Override
     public float getFloat(String key) throws NumberFormatException
     {
       return dialogSettings.getFloat(key);
     }
 
+    @Override
     public int getInt(String key) throws NumberFormatException
     {
       return dialogSettings.getInt(key);
     }
 
+    @Override
     public long getLong(String key) throws NumberFormatException
     {
       return dialogSettings.getLong(key);
     }
 
+    @Override
     public String getName()
     {
       return dialogSettings.getName();
     }
 
+    @Override
     public IDialogSettings getSection(String sectionName)
     {
       return dialogSettings.getSection(sectionName);
     }
 
+    @Override
     public IDialogSettings[] getSections()
     {
       return dialogSettings.getSections();
     }
 
+    @Override
     public void load(Reader reader) throws IOException
     {
       dialogSettings.load(reader);
     }
 
+    @Override
     public void load(String fileName) throws IOException
     {
       dialogSettings.load(fileName);
     }
 
+    @Override
     public void put(String key, String[] value)
     {
       dialogSettings.put(key, value);
     }
 
+    @Override
     public void put(String key, double value)
     {
       dialogSettings.put(key, value);
     }
 
+    @Override
     public void put(String key, float value)
     {
       dialogSettings.put(key, value);
     }
 
+    @Override
     public void put(String key, int value)
     {
       dialogSettings.put(key, value);
     }
 
+    @Override
     public void put(String key, long value)
     {
       dialogSettings.put(key, value);
     }
 
+    @Override
     public void put(String key, String value)
     {
       dialogSettings.put(key, value);
     }
 
+    @Override
     public void put(String key, boolean value)
     {
       dialogSettings.put(key, value);
     }
 
+    @Override
     public void save(Writer writer) throws IOException
     {
       dialogSettings.save(writer);
     }
 
+    @Override
     public void save(String fileName) throws IOException
     {
       dialogSettings.save(fileName);
@@ -5367,7 +5442,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
     private ToolTipObject toolTipObject;
 
-    private List<ToolTipObject> toolTipObjects = new ArrayList<ToolTipObject>();
+    private List<ToolTipObject> toolTipObjects = new ArrayList<>();
 
     private int toolTipIndex = -1;
 
@@ -5381,7 +5456,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
     private boolean editorSpecific;
 
-    private final Map<SetupEditor, DisposeListener> editorDisposeListeners = new LinkedHashMap<SetupEditor, DisposeListener>();
+    private final Map<SetupEditor, DisposeListener> editorDisposeListeners = new LinkedHashMap<>();
 
     private ColumnViewerInformationControlToolTipSupport toolTipSupport;
 
@@ -5495,6 +5570,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
         browser.addAuthenticationListener(new AuthenticationListener()
         {
+          @Override
           public void authenticate(AuthenticationEvent event)
           {
             if (mostRecentChangingLocation != null)
@@ -5555,7 +5631,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
             Point location = new Point(bounds.x, bounds.y + bounds.height);
             location = toolBar.toDisplay(location);
 
-            List<ItemProvider> items = new ArrayList<ItemProvider>();
+            List<ItemProvider> items = new ArrayList<>();
             for (int i = toolTipObjects.size() - 1; i >= 0; --i)
             {
               ToolTipObject wrapper = toolTipObjects.get(i);
@@ -5874,6 +5950,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
           {
             private SetupEditor setupEditor = SetupLocationListener.this.setupEditor;
 
+            @Override
             public void widgetDisposed(DisposeEvent e)
             {
               editorDisposeListeners.remove(setupEditor);
@@ -5912,7 +5989,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
       setEditor(setupEditor);
       setToolTipSupport(toolTipSupport);
-      toolTipObjects = new ArrayList<ToolTipObject>(toolTipObjects.subList(0, toolTipIndex + 1));
+      toolTipObjects = new ArrayList<>(toolTipObjects.subList(0, toolTipIndex + 1));
       if (toolTipIndex == -1 || toolTipObjects.get(toolTipIndex).getWrappedObject() != toolTipObject)
       {
         toolTipObjects.add(this.toolTipObject);
@@ -5996,7 +6073,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       }
 
       URI uri = originalURI;
-      Map<Object, Object> options = new LinkedHashMap<Object, Object>();
+      Map<Object, Object> options = new LinkedHashMap<>();
       uri = ECFURIHandlerImpl.transform(uri, options);
       event.location = uri.toString();
 
@@ -6073,6 +6150,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
             {
               UIUtil.asyncExec(browser, new Runnable()
               {
+                @Override
                 public void run()
                 {
                   content.getDisplay().readAndDispatch();
@@ -6360,6 +6438,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
      */
     private final ISelectionListener selectionListener = new ISelectionListener()
     {
+      @Override
       public void selectionChanged(IWorkbenchPart part, ISelection selection)
       {
         getDockable().setWorkbenchPart(part);
@@ -6486,6 +6565,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       selectionService.addPostSelectionListener(selectionListener);
       content.addDisposeListener(new DisposeListener()
       {
+        @Override
         public void widgetDisposed(DisposeEvent e)
         {
           locationListener.dispose();
@@ -6519,8 +6599,9 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
      */
     public static BrowserDialog openFor(final IWorkbenchWindow workbenchWindow)
     {
-      Factory<BrowserDialog> factory = new Factory<BrowserDialog>()
+      Factory<BrowserDialog> factory = new Factory<>()
       {
+        @Override
         public BrowserDialog create(IWorkbenchWindow workbenchWindow)
         {
           return new BrowserDialog(workbenchWindow);
@@ -6551,7 +6632,7 @@ class ExtendedBaseItemProviderAdapterFactory extends BaseItemProviderAdapterFact
             Annotation annotation = (Annotation)object;
             if (AnnotationConstants.ANNOTATION_CONFIGURATION_REFERENCE.equals(annotation.getSource()))
             {
-              List<Configuration> configurations = new ArrayList<Configuration>();
+              List<Configuration> configurations = new ArrayList<>();
               for (Object choice : choices)
               {
                 if (choice instanceof Configuration)

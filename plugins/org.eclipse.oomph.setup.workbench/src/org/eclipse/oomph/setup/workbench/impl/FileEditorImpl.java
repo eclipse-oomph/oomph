@@ -79,6 +79,7 @@ public class FileEditorImpl extends ModelElementImpl implements FileEditor
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getID()
   {
     return iD;
@@ -89,6 +90,7 @@ public class FileEditorImpl extends ModelElementImpl implements FileEditor
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setID(String newID)
   {
     String oldID = iD;

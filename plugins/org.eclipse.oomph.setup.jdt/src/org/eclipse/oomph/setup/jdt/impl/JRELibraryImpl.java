@@ -100,6 +100,7 @@ public class JRELibraryImpl extends MinimalEObjectImpl.Container implements JREL
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getLibraryPath()
   {
     return libraryPath;
@@ -110,6 +111,7 @@ public class JRELibraryImpl extends MinimalEObjectImpl.Container implements JREL
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setLibraryPath(String newLibraryPath)
   {
     String oldLibraryPath = libraryPath;
@@ -125,6 +127,7 @@ public class JRELibraryImpl extends MinimalEObjectImpl.Container implements JREL
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getExternalAnnotationsPath()
   {
     return externalAnnotationsPath;
@@ -135,6 +138,7 @@ public class JRELibraryImpl extends MinimalEObjectImpl.Container implements JREL
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setExternalAnnotationsPath(String newExternalAnnotationsPath)
   {
     String oldExternalAnnotationsPath = externalAnnotationsPath;

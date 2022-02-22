@@ -151,6 +151,7 @@ public class ErrorDialog extends MessageDialog
     {
       Display.getDefault().syncExec(new Runnable()
       {
+        @Override
         public void run()
         {
           openWithDetail(detail);

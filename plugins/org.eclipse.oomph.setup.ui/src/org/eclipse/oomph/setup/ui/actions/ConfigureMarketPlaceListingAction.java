@@ -49,7 +49,7 @@ import java.util.Set;
  */
 public class ConfigureMarketPlaceListingAction implements IObjectActionDelegate
 {
-  private final Set<MacroTask> macroTasks = new HashSet<MacroTask>();
+  private final Set<MacroTask> macroTasks = new HashSet<>();
 
   private Shell shell;
 
@@ -57,11 +57,13 @@ public class ConfigureMarketPlaceListingAction implements IObjectActionDelegate
   {
   }
 
+  @Override
   public void setActivePart(IAction action, IWorkbenchPart targetPart)
   {
     shell = targetPart == null ? null : targetPart.getSite().getShell();
   }
 
+  @Override
   public void selectionChanged(IAction action, ISelection selection)
   {
     macroTasks.clear();
@@ -84,6 +86,7 @@ public class ConfigureMarketPlaceListingAction implements IObjectActionDelegate
     action.setImageDescriptor(SetupUIPlugin.INSTANCE.getImageDescriptor("marketplace16.png")); //$NON-NLS-1$
   }
 
+  @Override
   public void run(IAction action)
   {
     MacroTask macroTask = macroTasks.iterator().next();
@@ -115,7 +118,7 @@ public class ConfigureMarketPlaceListingAction implements IObjectActionDelegate
     final Macro macro = macroTask.getMacro();
     Resource resource = macro.eResource();
     URI uri = resource.getURI();
-    final Map<String, Argument> arguments = new LinkedHashMap<String, Argument>();
+    final Map<String, Argument> arguments = new LinkedHashMap<>();
     for (Argument argument : macroTask.getArguments())
     {
       Parameter parameter = argument.getParameter();
@@ -145,15 +148,15 @@ public class ConfigureMarketPlaceListingAction implements IObjectActionDelegate
         CompoundTask compoundTask = SetupFactory.eINSTANCE.createCompoundTask();
         MacroTask newMacroTask = createMacroTask(compoundTask, macro, checkedRequirements);
 
-        Map<String, Parameter> parameters = new LinkedHashMap<String, Parameter>();
+        Map<String, Parameter> parameters = new LinkedHashMap<>();
         for (Parameter parameter : macro.getParameters())
         {
           String name = parameter.getName();
           parameters.put(name, parameter);
         }
 
-        List<Argument> newArguments = new ArrayList<Argument>();
-        Map<Argument, String> newArgumentValues = new LinkedHashMap<Argument, String>();
+        List<Argument> newArguments = new ArrayList<>();
+        Map<Argument, String> newArgumentValues = new LinkedHashMap<>();
         boolean addArgument = false;
         for (Argument argument : newMacroTask.getArguments())
         {

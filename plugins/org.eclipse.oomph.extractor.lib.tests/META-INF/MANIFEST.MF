@@ -1,13 +1,13 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.oomph.extractor.lib.tests
-Bundle-Version: 1.7.0.qualifier
+Bundle-Version: 1.8.0.qualifier
 Bundle-Localization: plugin
 Bundle-Name: %pluginName
 Bundle-Vendor: %providerName
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-ClassPath: .
-Export-Package: org.eclipse.oomph.extractor.lib.tests;version="1.7.0"
+Export-Package: org.eclipse.oomph.extractor.lib.tests;version="1.8.0"
 Require-Bundle: org.eclipse.oomph.extractor.lib;bundle-version="[1.9.0,2.0.0)",
  org.junit;bundle-version="[4.0.0,5.0.0)"
 Automatic-Module-Name: org.eclipse.oomph.extractor.lib.tests

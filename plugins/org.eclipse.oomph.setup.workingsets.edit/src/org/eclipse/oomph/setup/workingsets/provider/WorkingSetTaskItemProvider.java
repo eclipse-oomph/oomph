@@ -10,6 +10,8 @@
  */
 package org.eclipse.oomph.setup.workingsets.provider;
 
+import org.eclipse.oomph.base.BaseFactory;
+import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.setup.provider.SetupTaskItemProvider;
 import org.eclipse.oomph.setup.workingsets.SetupWorkingSetsPackage;
 import org.eclipse.oomph.setup.workingsets.WorkingSetTask;
@@ -151,7 +153,7 @@ public class WorkingSetTaskItemProvider extends SetupTaskItemProvider
     WorkingSetTask workingSetTask = (WorkingSetTask)object;
 
     StringBuilder builder = new StringBuilder();
-    Set<String> added = new HashSet<String>();
+    Set<String> added = new HashSet<>();
 
     for (WorkingSet workingSet : workingSetTask.getWorkingSets())
     {
@@ -211,6 +213,8 @@ public class WorkingSetTaskItemProvider extends SetupTaskItemProvider
   protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object)
   {
     super.collectNewChildDescriptors(newChildDescriptors, object);
+
+    newChildDescriptors.add(createChildParameter(BasePackage.Literals.MODEL_ELEMENT__ANNOTATIONS, BaseFactory.eINSTANCE.createAnnotation()));
 
     newChildDescriptors
         .add(createChildParameter(SetupWorkingSetsPackage.Literals.WORKING_SET_TASK__WORKING_SETS, WorkingSetsFactory.eINSTANCE.createWorkingSet()));

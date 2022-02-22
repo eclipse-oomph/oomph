@@ -126,6 +126,7 @@ public class ConfigurationImpl extends ModelElementImpl implements Configuration
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getLabel()
   {
     return label;
@@ -136,6 +137,7 @@ public class ConfigurationImpl extends ModelElementImpl implements Configuration
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setLabel(String newLabel)
   {
     String oldLabel = label;
@@ -151,6 +153,7 @@ public class ConfigurationImpl extends ModelElementImpl implements Configuration
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getDescription()
   {
     return description;
@@ -161,6 +164,7 @@ public class ConfigurationImpl extends ModelElementImpl implements Configuration
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setDescription(String newDescription)
   {
     String oldDescription = description;
@@ -176,6 +180,7 @@ public class ConfigurationImpl extends ModelElementImpl implements Configuration
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Installation getInstallation()
   {
     if (installation != null && installation.eIsProxy())
@@ -243,6 +248,7 @@ public class ConfigurationImpl extends ModelElementImpl implements Configuration
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setInstallation(Installation newInstallation)
   {
     if (newInstallation != installation)
@@ -273,6 +279,7 @@ public class ConfigurationImpl extends ModelElementImpl implements Configuration
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Workspace getWorkspace()
   {
     if (workspace != null && workspace.eIsProxy())
@@ -339,6 +346,7 @@ public class ConfigurationImpl extends ModelElementImpl implements Configuration
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setWorkspace(Workspace newWorkspace)
   {
     if (newWorkspace != workspace)

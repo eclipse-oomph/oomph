@@ -56,7 +56,7 @@ public class TransportTests extends AbstractP2Test
 
   private static HTTPServer httpServer;
 
-  private List<Context> contexts = new ArrayList<Context>();
+  private List<Context> contexts = new ArrayList<>();
 
   @BeforeClass
   public static void setUpBeforeClass() throws Exception
@@ -182,7 +182,7 @@ public class TransportTests extends AbstractP2Test
     assertThat(plugins.isDirectory(), is(true));
     assertThat(plugins.list().length, is(1));
 
-    List<String> results = new ArrayList<String>();
+    List<String> results = new ArrayList<>();
     results.addAll(countingTransport.getRequests());
 
     File cacheFile = cachingTransport.getCacheFile(new URI(url + "/p2.index"));
@@ -197,7 +197,7 @@ public class TransportTests extends AbstractP2Test
 
   private List<String> test(boolean startWithComposite, boolean startWithP2Index, boolean endWithP2Index) throws Exception
   {
-    List<String> results = new ArrayList<String>();
+    List<String> results = new ArrayList<>();
 
     File root = new File(getUserHome(), "cdo");
     System.out.println(root);
@@ -617,7 +617,7 @@ public class TransportTests extends AbstractP2Test
   {
     private final org.eclipse.equinox.internal.p2.repository.Transport delegate;
 
-    private final List<String> requests = new ArrayList<String>();
+    private final List<String> requests = new ArrayList<>();
 
     private CountingTransport(org.eclipse.equinox.internal.p2.repository.Transport delegate)
     {

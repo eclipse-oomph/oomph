@@ -53,7 +53,7 @@ public class FlatButton extends Canvas implements Listener, PaintListener
 
   protected static final Color COLOR_DEFAULT_DISABLED_FOREGROUND = UIPlugin.getColor(170, 170, 170);
 
-  private final List<SelectionListener> selectionListeners = new ArrayList<SelectionListener>();
+  private final List<SelectionListener> selectionListeners = new ArrayList<>();
 
   private final int buttonStyle;
 
@@ -484,6 +484,7 @@ public class FlatButton extends Canvas implements Listener, PaintListener
     // Allow subclassing.
   }
 
+  @Override
   public void handleEvent(final Event event)
   {
     switch (event.type)
@@ -527,6 +528,7 @@ public class FlatButton extends Canvas implements Listener, PaintListener
         // Async exec to ensure that focus transfer is completed
         UIUtil.asyncExec(this, new Runnable()
         {
+          @Override
           public void run()
           {
             onFocusOut(event);
@@ -659,6 +661,7 @@ public class FlatButton extends Canvas implements Listener, PaintListener
     listenersPaused = pause;
   }
 
+  @Override
   public final void paintControl(PaintEvent e)
   {
     Rectangle clientBounds = getClientArea();

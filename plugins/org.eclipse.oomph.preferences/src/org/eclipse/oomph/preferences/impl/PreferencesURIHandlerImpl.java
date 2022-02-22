@@ -188,6 +188,7 @@ public class PreferencesURIHandlerImpl extends URIHandlerImpl
 
         private InputStream in;
 
+        @Override
         public void loadResource(Resource resource) throws IOException
         {
           resource.getContents().add(preferencesNode);
@@ -225,6 +226,7 @@ public class PreferencesURIHandlerImpl extends URIHandlerImpl
     {
       class PreferencesOutput extends OutputStream implements URIConverter.Saveable
       {
+        @Override
         public void saveResource(Resource resource) throws IOException
         {
           Copier copier = new Copier()

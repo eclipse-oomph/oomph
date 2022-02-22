@@ -44,19 +44,23 @@ public class P2ContentProvider implements ITreeContentProvider
     this.showProfiles = showProfiles;
   }
 
+  @Override
   public void inputChanged(Viewer viewer, Object oldInput, Object newInput)
   {
   }
 
+  @Override
   public void dispose()
   {
   }
 
+  @Override
   public Object[] getElements(Object element)
   {
     return getChildren(element);
   }
 
+  @Override
   public Object getParent(Object element)
   {
     if (element instanceof Profile)
@@ -80,14 +84,16 @@ public class P2ContentProvider implements ITreeContentProvider
     return null;
   }
 
+  @Override
   public boolean hasChildren(Object element)
   {
     return getChildren(element).length != 0;
   }
 
+  @Override
   public Object[] getChildren(Object element)
   {
-    List<Object> children = new ArrayList<Object>();
+    List<Object> children = new ArrayList<>();
 
     if (element instanceof AgentManager)
     {

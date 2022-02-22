@@ -53,11 +53,12 @@ public class GearShell extends AnimatedShell<Map<URI, Pair<String, String>>> imp
     return animator;
   }
 
+  @Override
   public void onAnswer(GearAnimator animator, Page page, Answer answer)
   {
     if (page instanceof SummaryPage)
     {
-      HashMap<URI, Pair<String, String>> preferences = new HashMap<URI, Pair<String, String>>();
+      HashMap<URI, Pair<String, String>> preferences = new HashMap<>();
 
       Page[] pages = animator.getPages();
       for (Page p : pages)
@@ -80,6 +81,7 @@ public class GearShell extends AnimatedShell<Map<URI, Pair<String, String>>> imp
     }
   }
 
+  @Override
   public void onExit(GearAnimator animator, Page page)
   {
     dispose();

@@ -89,7 +89,7 @@ import java.util.Set;
  */
 public abstract class OomphTransferDelegate
 {
-  private static final List<OomphTransferDelegate> MODIFIABLE_DELEGATES = new ArrayList<OomphTransferDelegate>();
+  private static final List<OomphTransferDelegate> MODIFIABLE_DELEGATES = new ArrayList<>();
 
   public static final List<? extends OomphTransferDelegate> DELEGATES = Collections.unmodifiableList(MODIFIABLE_DELEGATES);
 
@@ -102,55 +102,64 @@ public abstract class OomphTransferDelegate
 
   public static List<? extends Transfer> asTransfers(final List<? extends OomphTransferDelegate> delegates)
   {
-    return new AbstractSequentialList<Transfer>()
+    return new AbstractSequentialList<>()
     {
       @Override
       public ListIterator<Transfer> listIterator(final int index)
       {
-        return new ListIterator<Transfer>()
+        return new ListIterator<>()
         {
           ListIterator<? extends OomphTransferDelegate> delegate = delegates.listIterator(index);
 
+          @Override
           public boolean hasNext()
           {
             return delegate.hasNext();
           }
 
+          @Override
           public Transfer next()
           {
             return delegate.next().getTransfer();
           }
 
+          @Override
           public boolean hasPrevious()
           {
             return delegate.hasPrevious();
           }
 
+          @Override
           public Transfer previous()
           {
             return delegate.previous().getTransfer();
           }
 
+          @Override
           public int nextIndex()
           {
             return delegate.nextIndex();
           }
 
+          @Override
           public int previousIndex()
           {
             return delegate.previousIndex();
           }
 
+          @Override
           public void remove()
           {
             throw new UnsupportedOperationException();
           }
 
+          @Override
           public void set(Transfer o)
           {
             throw new UnsupportedOperationException();
           }
 
+          @Override
           public void add(Transfer o)
           {
             throw new UnsupportedOperationException();
@@ -207,7 +216,7 @@ public abstract class OomphTransferDelegate
 
   public static List<? extends OomphTransferDelegate> merge(Collection<? extends OomphTransferDelegate> delegates, OomphTransferDelegate... overridingDelegates)
   {
-    List<OomphTransferDelegate> result = new ArrayList<OomphTransferDelegate>();
+    List<OomphTransferDelegate> result = new ArrayList<>();
     LOOP: for (OomphTransferDelegate delegate : delegates)
     {
       Transfer transfer = delegate.getTransfer();
@@ -271,7 +280,7 @@ public abstract class OomphTransferDelegate
   {
     protected Collection<?> extractSelectedObjects(Object... objects)
     {
-      List<Object> result = new ArrayList<Object>();
+      List<Object> result = new ArrayList<>();
       for (Object object : objects)
       {
         Object filteredObject = filter(object);
@@ -492,7 +501,7 @@ public abstract class OomphTransferDelegate
           };
 
           // Read all the packages first.
-          InternalEList<InternalEObject> ePackages = new BasicInternalEList<InternalEObject>(EPackage.class);
+          InternalEList<InternalEObject> ePackages = new BasicInternalEList<>(EPackage.class);
           eObjectInputStream.loadEObjects(ePackages);
 
           // Process the packages, putting each one in a resource in a resource set.
@@ -514,7 +523,7 @@ public abstract class OomphTransferDelegate
             else
             {
               // If so, convert all the objects to proxies and so dynamic packages will extend the generated packages.
-              Map<EObject, String> fragments = new LinkedHashMap<EObject, String>();
+              Map<EObject, String> fragments = new LinkedHashMap<>();
               for (Iterator<EObject> it = resource.getAllContents(); it.hasNext();)
               {
                 EObject eObject = it.next();
@@ -530,7 +539,7 @@ public abstract class OomphTransferDelegate
           }
 
           // Read in all the objects, which will use the appropriate registered packages.
-          InternalEList<InternalEObject> eObjects = new BasicInternalEList<InternalEObject>(EObject.class);
+          InternalEList<InternalEObject> eObjects = new BasicInternalEList<>(EObject.class);
           eObjectInputStream.loadEObjects(eObjects);
           Resource resource = transferResourceSet.createResource(URI.createURI("*.xmi")); //$NON-NLS-1$
           resource.getContents().addAll(eObjects);
@@ -553,7 +562,7 @@ public abstract class OomphTransferDelegate
     {
       if (!selection.isEmpty() && selection instanceof IStructuredSelection)
       {
-        eObjects = new LinkedHashSet<EObject>();
+        eObjects = new LinkedHashSet<>();
         for (Object object : ((IStructuredSelection)selection).toArray())
         {
           gather(domain, object);
@@ -585,7 +594,7 @@ public abstract class OomphTransferDelegate
       if (!eObjects.isEmpty())
       {
         // Determine the packages of all the instances that will be copied.
-        EList<EPackage> ePackages = new UniqueEList<EPackage>();
+        EList<EPackage> ePackages = new UniqueEList<>();
         for (Iterator<EObject> it = EcoreUtil.getAllContents(eObjects); it.hasNext();)
         {
           EObject eObject = it.next();
@@ -682,7 +691,7 @@ public abstract class OomphTransferDelegate
               {
                 if (eAttribute.isMany())
                 {
-                  List<Object> values = new ArrayList<Object>();
+                  List<Object> values = new ArrayList<>();
                   for (Object element : (Collection<?>)value)
                   {
                     values.add(EcoreUtil.createFromString(eType, EcoreUtil.convertToString(eAttributeType, element)));
@@ -703,11 +712,11 @@ public abstract class OomphTransferDelegate
           public Collection<EPackage> copyEPackages(Collection<? extends EPackage> ePackages)
           {
             // Copy all the packages.
-            Collection<EPackage> result = new BasicInternalEList<EPackage>(EPackage.class, copyAll(ePackages));
+            Collection<EPackage> result = new BasicInternalEList<>(EPackage.class, copyAll(ePackages));
             copyReferences();
 
             // Remember the state of the map at this time.
-            packageCopies = new HashMap<EObject, EObject>(this);
+            packageCopies = new HashMap<>(this);
 
             return result;
           }
@@ -718,7 +727,7 @@ public abstract class OomphTransferDelegate
             useOriginalReferences = false;
 
             // Copy all the objects.
-            Collection<EObject> result = new BasicInternalEList<EObject>(InternalEObject.class, copyAll(eObjects));
+            Collection<EObject> result = new BasicInternalEList<>(InternalEObject.class, copyAll(eObjects));
 
             // Remove the already-processed references from the map, before processing the references for the copied objects.
             keySet().removeAll(packageCopies.keySet());
@@ -824,7 +833,7 @@ public abstract class OomphTransferDelegate
     {
       if (data instanceof String[])
       {
-        List<URI> result = new ArrayList<URI>();
+        List<URI> result = new ArrayList<>();
         for (String file : (String[])data)
         {
           result.add(URI.createFileURI(file));
@@ -838,7 +847,7 @@ public abstract class OomphTransferDelegate
     @Override
     public boolean setSelection(EditingDomain domain, ISelection selection)
     {
-      files = new LinkedHashSet<String>();
+      files = new LinkedHashSet<>();
       if (!selection.isEmpty() && selection instanceof IStructuredSelection)
       {
         for (Object object : ((IStructuredSelection)selection).toArray())
@@ -1012,7 +1021,7 @@ public abstract class OomphTransferDelegate
         }
 
         String[] uriStrings = value.split("\r?\n"); //$NON-NLS-1$
-        Set<URI> uris = new LinkedHashSet<URI>();
+        Set<URI> uris = new LinkedHashSet<>();
         for (String uriString : uriStrings)
         {
           try
@@ -1091,8 +1100,8 @@ public abstract class OomphTransferDelegate
     @Override
     public boolean setSelection(EditingDomain domain, ISelection selection)
     {
-      eObjects = new LinkedHashSet<EObject>();
-      text = new ArrayList<String>();
+      eObjects = new LinkedHashSet<>();
+      text = new ArrayList<>();
       if (!selection.isEmpty() && selection instanceof IStructuredSelection)
       {
         for (Object object : ((IStructuredSelection)selection).toArray())
@@ -1199,7 +1208,7 @@ public abstract class OomphTransferDelegate
 
     private final BaseResourceImpl.BaseHelperImpl helper = new BaseResourceImpl.BaseHelperImpl(null);
 
-    private transient final Collection<Resource> excludedResources = new HashSet<Resource>();
+    private transient final Collection<Resource> excludedResources = new HashSet<>();
 
     public ProxifyingCopier(boolean resolveProxies, boolean useOriginalReferences)
     {

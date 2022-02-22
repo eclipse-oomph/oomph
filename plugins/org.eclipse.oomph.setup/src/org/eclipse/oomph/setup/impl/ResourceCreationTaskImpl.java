@@ -151,6 +151,7 @@ public class ResourceCreationTaskImpl extends SetupTaskImpl implements ResourceC
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public boolean isForce()
   {
     return force;
@@ -161,6 +162,7 @@ public class ResourceCreationTaskImpl extends SetupTaskImpl implements ResourceC
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setForce(boolean newForce)
   {
     boolean oldForce = force;
@@ -176,6 +178,7 @@ public class ResourceCreationTaskImpl extends SetupTaskImpl implements ResourceC
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getContent()
   {
     return content;
@@ -186,6 +189,7 @@ public class ResourceCreationTaskImpl extends SetupTaskImpl implements ResourceC
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setContent(String newContent)
   {
     String oldContent = content;
@@ -201,6 +205,7 @@ public class ResourceCreationTaskImpl extends SetupTaskImpl implements ResourceC
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getTargetURL()
   {
     return targetURL;
@@ -211,6 +216,7 @@ public class ResourceCreationTaskImpl extends SetupTaskImpl implements ResourceC
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setTargetURL(String newTargetURL)
   {
     String oldTargetURL = targetURL;
@@ -226,6 +232,7 @@ public class ResourceCreationTaskImpl extends SetupTaskImpl implements ResourceC
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getEncoding()
   {
     return encoding;
@@ -236,6 +243,7 @@ public class ResourceCreationTaskImpl extends SetupTaskImpl implements ResourceC
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setEncoding(String newEncoding)
   {
     String oldEncoding = encoding;
@@ -396,12 +404,14 @@ public class ResourceCreationTaskImpl extends SetupTaskImpl implements ResourceC
     return createToken(getTargetURL());
   }
 
+  @Override
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     URI targetURI = createResolvedURI(getTargetURL());
     return targetURI != null && (isForce() || !context.getURIConverter().exists(targetURI, null));
   }
 
+  @Override
   public void perform(SetupTaskContext context) throws Exception
   {
     URI targetURI = createResolvedURI(getTargetURL());

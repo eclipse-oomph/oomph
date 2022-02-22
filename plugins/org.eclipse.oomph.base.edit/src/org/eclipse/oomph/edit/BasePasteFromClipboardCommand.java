@@ -58,7 +58,7 @@ public class BasePasteFromClipboardCommand extends PasteFromClipboardCommand
       @Override
       protected Command createCommand()
       {
-        copy = new ArrayList<Object>(copyCommand.getResult());
+        copy = new ArrayList<>(copyCommand.getResult());
         Command addCommand = createAddCommand(domain, owner, feature, copy, index);
         return addCommand;
       }

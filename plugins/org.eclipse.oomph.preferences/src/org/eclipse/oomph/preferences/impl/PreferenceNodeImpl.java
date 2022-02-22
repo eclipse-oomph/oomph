@@ -110,11 +110,12 @@ public class PreferenceNodeImpl extends PreferenceItemImpl implements Preference
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<PreferenceNode> getChildren()
   {
     if (children == null)
     {
-      children = new EObjectContainmentWithInverseEList<PreferenceNode>(PreferenceNode.class, this, PreferencesPackage.PREFERENCE_NODE__CHILDREN,
+      children = new EObjectContainmentWithInverseEList<>(PreferenceNode.class, this, PreferencesPackage.PREFERENCE_NODE__CHILDREN,
           PreferencesPackage.PREFERENCE_NODE__PARENT);
     }
     return children;
@@ -151,6 +152,7 @@ public class PreferenceNodeImpl extends PreferenceItemImpl implements Preference
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setParent(PreferenceNode newParent)
   {
     if (newParent != eInternalContainer() || eContainerFeatureID() != PreferencesPackage.PREFERENCE_NODE__PARENT && newParent != null)
@@ -185,11 +187,12 @@ public class PreferenceNodeImpl extends PreferenceItemImpl implements Preference
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<Property> getProperties()
   {
     if (properties == null)
     {
-      properties = new EObjectContainmentWithInverseEList<Property>(Property.class, this, PreferencesPackage.PREFERENCE_NODE__PROPERTIES,
+      properties = new EObjectContainmentWithInverseEList<>(Property.class, this, PreferencesPackage.PREFERENCE_NODE__PROPERTIES,
           PreferencesPackage.PROPERTY__PARENT);
     }
     return properties;
@@ -200,6 +203,7 @@ public class PreferenceNodeImpl extends PreferenceItemImpl implements Preference
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public String getLocation()
   {
     try
@@ -220,6 +224,7 @@ public class PreferenceNodeImpl extends PreferenceItemImpl implements Preference
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public PreferenceNode getNode(String name)
   {
     for (PreferenceNode node : getChildren())
@@ -238,6 +243,7 @@ public class PreferenceNodeImpl extends PreferenceItemImpl implements Preference
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public PreferenceNode getNode(URI path)
   {
     PreferenceNode preferenceNode = this;
@@ -274,6 +280,7 @@ public class PreferenceNodeImpl extends PreferenceItemImpl implements Preference
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public Property getProperty(String name)
   {
     for (Property property : getProperties())
@@ -292,6 +299,7 @@ public class PreferenceNodeImpl extends PreferenceItemImpl implements Preference
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public Property getProperty(URI path)
   {
     if (path.segmentCount() == 0)

@@ -35,9 +35,9 @@ public class PreferencesRecorder extends EContentAdapter
 {
   private static final String INSTANCE_SCOPE = "instance"; //$NON-NLS-1$
 
-  private final Map<Property, URI> paths = new HashMap<Property, URI>();
+  private final Map<Property, URI> paths = new HashMap<>();
 
-  private final Map<URI, Pair<String, String>> values = new HashMap<URI, Pair<String, String>>();
+  private final Map<URI, Pair<String, String>> values = new HashMap<>();
 
   private PreferenceNode rootPreferenceNode;
 
@@ -152,7 +152,7 @@ public class PreferencesRecorder extends EContentAdapter
     Pair<String, String> pair = values.get(absolutePath);
     if (pair == null)
     {
-      values.put(absolutePath, new Pair<String, String>(oldValue, newValue));
+      values.put(absolutePath, new Pair<>(oldValue, newValue));
     }
     else
     {

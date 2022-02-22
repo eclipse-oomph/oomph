@@ -211,7 +211,7 @@ public final class SynchronizerManager
     {
       EMap<String, SyncPolicy> policies = synchronization.getRemotePolicies();
       Map<String, SyncAction> actions = synchronization.getActions();
-      Map<String, SyncAction> includedActions = new HashMap<String, SyncAction>();
+      Map<String, SyncAction> includedActions = new HashMap<>();
 
       for (Iterator<Map.Entry<String, SyncAction>> it = actions.entrySet().iterator(); it.hasNext();)
       {
@@ -220,13 +220,7 @@ public final class SynchronizerManager
         SyncAction syncAction = entry.getValue();
 
         SyncPolicy policy = policies.get(syncID);
-        if (policy == SyncPolicy.EXCLUDE)
-        {
-          it.remove();
-          continue;
-        }
-
-        if (policy == null && !interactive)
+        if (policy == SyncPolicy.EXCLUDE || policy == null && !interactive)
         {
           it.remove();
           continue;
@@ -323,12 +317,7 @@ public final class SynchronizerManager
    */
   public boolean offerFirstTimeConnect(Shell shell)
   {
-    if (!ENABLED)
-    {
-      return false;
-    }
-
-    if (isSyncEnabled())
+    if (!ENABLED || isSyncEnabled())
     {
       return false;
     }
@@ -374,6 +363,7 @@ public final class SynchronizerManager
     {
       shell.getDisplay().syncExec(new Runnable()
       {
+        @Override
         public void run()
         {
           OptInDialog dialog = new OptInDialog(shell, service);
@@ -438,15 +428,15 @@ public final class SynchronizerManager
 
     private static final String ID_SEPARATOR = " "; //$NON-NLS-1$
 
-    private final Set<Location> skippedLocations = new HashSet<Location>();
+    private final Set<Location> skippedLocations = new HashSet<>();
 
-    private final Set<String> skippedLocal = new HashSet<String>();
+    private final Set<String> skippedLocal = new HashSet<>();
 
-    private final Set<String> skippedRemote = new HashSet<String>();
+    private final Set<String> skippedRemote = new HashSet<>();
 
-    private final Set<String> computedLocal = new HashSet<String>();
+    private final Set<String> computedLocal = new HashSet<>();
 
-    private final Set<String> computedRemote = new HashSet<String>();
+    private final Set<String> computedRemote = new HashSet<>();
 
     private boolean localImpact;
 
@@ -456,11 +446,13 @@ public final class SynchronizerManager
     {
     }
 
+    @Override
     public boolean hasLocalImpact()
     {
       return localImpact;
     }
 
+    @Override
     public boolean hasRemoteImpact()
     {
       return remoteImpact;
@@ -490,8 +482,8 @@ public final class SynchronizerManager
         return;
       }
 
-      Set<String> committedLocal = new HashSet<String>();
-      Set<String> committedRemote = new HashSet<String>();
+      Set<String> committedLocal = new HashSet<>();
+      Set<String> committedRemote = new HashSet<>();
 
       Map<String, SyncAction> actions = synchronization.getActions();
       analyzeImpact(actions, committedLocal, committedRemote);
@@ -540,7 +532,7 @@ public final class SynchronizerManager
       }
       else
       {
-        List<String> list = new ArrayList<String>(skippedIDs);
+        List<String> list = new ArrayList<>(skippedIDs);
         Collections.sort(list);
 
         StringBuilder builder = new StringBuilder();
@@ -666,6 +658,7 @@ public final class SynchronizerManager
 
               UIUtil.syncExec(new Runnable()
               {
+                @Override
                 public void run()
                 {
                   try
@@ -675,6 +668,7 @@ public final class SynchronizerManager
 
                     dialog.run(true, true, new IRunnableWithProgress()
                     {
+                      @Override
                       public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
                       {
                         authenticationSemaphore.release();

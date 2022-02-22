@@ -60,12 +60,7 @@ public final class Coordinate implements Comparable<Coordinate>
       return true;
     }
 
-    if (obj == null)
-    {
-      return false;
-    }
-
-    if (Coordinate.class != obj.getClass())
+    if ((obj == null) || (Coordinate.class != obj.getClass()))
     {
       return false;
     }
@@ -74,6 +69,7 @@ public final class Coordinate implements Comparable<Coordinate>
     return col == other.col && row == other.row;
   }
 
+  @Override
   public int compareTo(Coordinate o)
   {
     int result = row - o.row;

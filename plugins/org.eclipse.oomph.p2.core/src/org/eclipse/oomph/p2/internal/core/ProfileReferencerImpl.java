@@ -45,11 +45,13 @@ public class ProfileReferencerImpl extends PersistentMap<Boolean> implements Pro
     load();
   }
 
+  @Override
   public boolean isDirectory()
   {
     return directory;
   }
 
+  @Override
   public boolean isReferenced(String profileID)
   {
     if (!getFile().exists())
@@ -68,6 +70,7 @@ public class ProfileReferencerImpl extends PersistentMap<Boolean> implements Pro
     return true;
   }
 
+  @Override
   public void reference(String profileID)
   {
     File file = getFile();
@@ -84,6 +87,7 @@ public class ProfileReferencerImpl extends PersistentMap<Boolean> implements Pro
     }
   }
 
+  @Override
   public void unreference(String profileID)
   {
     if (!directory)

@@ -258,6 +258,7 @@ public class StringToSyncPolicyMapEntryImpl extends MinimalEObjectImpl.Container
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public int getHash()
   {
     if (hash == -1)
@@ -273,6 +274,7 @@ public class StringToSyncPolicyMapEntryImpl extends MinimalEObjectImpl.Container
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setHash(int hash)
   {
     this.hash = hash;
@@ -283,6 +285,7 @@ public class StringToSyncPolicyMapEntryImpl extends MinimalEObjectImpl.Container
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getKey()
   {
     return getTypedKey();
@@ -293,6 +296,7 @@ public class StringToSyncPolicyMapEntryImpl extends MinimalEObjectImpl.Container
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setKey(String key)
   {
     setTypedKey(key);
@@ -303,6 +307,7 @@ public class StringToSyncPolicyMapEntryImpl extends MinimalEObjectImpl.Container
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public SyncPolicy getValue()
   {
     return getTypedValue();
@@ -313,6 +318,7 @@ public class StringToSyncPolicyMapEntryImpl extends MinimalEObjectImpl.Container
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public SyncPolicy setValue(SyncPolicy value)
   {
     SyncPolicy oldValue = getValue();

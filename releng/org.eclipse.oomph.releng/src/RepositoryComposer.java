@@ -37,8 +37,9 @@ public final class RepositoryComposer
 
   private static final String REMOVE_MARKER = "REMOVE";
 
-  private static final Comparator<String> ALPHA_COMPARATOR = new Comparator<String>()
+  private static final Comparator<String> ALPHA_COMPARATOR = new Comparator<>()
   {
+    @Override
     public int compare(String n1, String n2)
     {
       if (n1 == null)
@@ -55,8 +56,9 @@ public final class RepositoryComposer
     }
   };
 
-  private static final Comparator<String> VERSION_COMPARATOR = new Comparator<String>()
+  private static final Comparator<String> VERSION_COMPARATOR = new Comparator<>()
   {
+    @Override
     public int compare(String n1, String n2)
     {
       return new Version(n2).compareTo(new Version(n1));
@@ -161,7 +163,7 @@ public final class RepositoryComposer
     File milestonesFolder = new File(dropsFolder, MILESTONE_TYPE);
     if (!composeRepositories(milestonesFolder, updateTypeFolder, ALPHA_COMPARATOR, Integer.MAX_VALUE))
     {
-      List<File> releaseDrop = new ArrayList<File>();
+      List<File> releaseDrop = new ArrayList<>();
 
       File releasesFolder = new File(dropsFolder, RELEASE_TYPE);
       List<String> names = getSortedChildren(releasesFolder, VERSION_COMPARATOR);
@@ -190,7 +192,7 @@ public final class RepositoryComposer
       return false;
     }
 
-    List<File> drops = new ArrayList<File>();
+    List<File> drops = new ArrayList<>();
     int count = 0;
 
     for (String dropName : dropNames)
@@ -354,7 +356,7 @@ public final class RepositoryComposer
 
   private static List<File> getComposites(File updatesFolder)
   {
-    List<File> composites = new ArrayList<File>();
+    List<File> composites = new ArrayList<>();
     addComposite(updatesFolder, composites, RELEASE_TYPE);
     addComposite(updatesFolder, composites, MILESTONE_TYPE);
     addComposite(updatesFolder, composites, NIGHTLY_TYPE);
@@ -371,7 +373,7 @@ public final class RepositoryComposer
 
   private static List<String> getSortedChildren(File folder, Comparator<String> comparator)
   {
-    List<String> names = new ArrayList<String>();
+    List<String> names = new ArrayList<>();
 
     File[] children = folder.listFiles();
     if (children != null)

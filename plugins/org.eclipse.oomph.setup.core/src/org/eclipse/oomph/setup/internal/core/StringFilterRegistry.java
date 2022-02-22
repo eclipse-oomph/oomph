@@ -48,12 +48,13 @@ public class StringFilterRegistry
 
   private static final Pattern CAMEL_PATTERN = Pattern.compile("(?:[^\\p{Alnum}]+|^)(\\p{Lower})?"); //$NON-NLS-1$
 
-  private final Map<String, StringFilter> filters = new HashMap<String, StringFilter>();
+  private final Map<String, StringFilter> filters = new HashMap<>();
 
   private StringFilterRegistry()
   {
     registerFilter(new DocumentedStringFilter()
     {
+      @Override
       public String getName()
       {
         return "file"; //$NON-NLS-1$
@@ -65,6 +66,7 @@ public class StringFilterRegistry
         return Messages.StringFilterRegistry_File_description;
       }
 
+      @Override
       public String filter(String value)
       {
         return URI.createURI(value).toFileString();
@@ -73,6 +75,7 @@ public class StringFilterRegistry
 
     registerFilter(new DocumentedStringFilter()
     {
+      @Override
       public String getName()
       {
         return "uri"; //$NON-NLS-1$
@@ -84,6 +87,7 @@ public class StringFilterRegistry
         return Messages.StringFilterRegistry_URI_description;
       }
 
+      @Override
       public String filter(String value)
       {
         return URI.createFileURI(value).toString();
@@ -92,6 +96,7 @@ public class StringFilterRegistry
 
     registerFilter(new DocumentedStringFilter()
     {
+      @Override
       public String getName()
       {
         return "uriLastSegment"; //$NON-NLS-1$
@@ -103,6 +108,7 @@ public class StringFilterRegistry
         return Messages.StringFilterRegistry_URILastSegment_description;
       }
 
+      @Override
       public String filter(String value)
       {
         URI uri = URI.createURI(value);
@@ -117,6 +123,7 @@ public class StringFilterRegistry
 
     registerFilter(new DocumentedStringFilter()
     {
+      @Override
       public String getName()
       {
         return "gitRepository"; //$NON-NLS-1$
@@ -128,6 +135,7 @@ public class StringFilterRegistry
         return Messages.StringFilterRegistry_GitRepository_description;
       }
 
+      @Override
       public String filter(String value)
       {
         URI uri = URI.createURI(value);
@@ -148,6 +156,7 @@ public class StringFilterRegistry
 
     registerFilter(new DocumentedStringFilter()
     {
+      @Override
       public String getName()
       {
         return "username"; //$NON-NLS-1$
@@ -159,6 +168,7 @@ public class StringFilterRegistry
         return Messages.StringFilterRegistry_Username_description;
       }
 
+      @Override
       public String filter(String value)
       {
         return URI.encodeSegment(value, false).replace(":", "%3A").replace("@", "%40"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
@@ -167,6 +177,7 @@ public class StringFilterRegistry
 
     registerFilter(new DocumentedStringFilter()
     {
+      @Override
       public String getName()
       {
         return "canonical"; //$NON-NLS-1$
@@ -178,6 +189,7 @@ public class StringFilterRegistry
         return Messages.StringFilterRegistry_Canonical_description;
       }
 
+      @Override
       public String filter(String value)
       {
         // Don't canonicalize the value if it contains a unexpanded variable reference.
@@ -201,6 +213,7 @@ public class StringFilterRegistry
 
     registerFilter(new DocumentedStringFilter()
     {
+      @Override
       public String getName()
       {
         return "preferenceNode"; //$NON-NLS-1$
@@ -212,6 +225,7 @@ public class StringFilterRegistry
         return Messages.StringFilterRegistry_PreferenceNode_description;
       }
 
+      @Override
       public String filter(String value)
       {
         return value.replaceAll("/", "\\\\2f"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -220,6 +234,7 @@ public class StringFilterRegistry
 
     registerFilter(new DocumentedStringFilter()
     {
+      @Override
       public String getName()
       {
         return "length"; //$NON-NLS-1$
@@ -231,6 +246,7 @@ public class StringFilterRegistry
         return Messages.StringFilterRegistry_Length_description;
       }
 
+      @Override
       public String filter(String value)
       {
         return Integer.toString(value.length());
@@ -239,6 +255,7 @@ public class StringFilterRegistry
 
     registerFilter(new DocumentedStringFilter()
     {
+      @Override
       public String getName()
       {
         return "trim"; //$NON-NLS-1$
@@ -250,6 +267,7 @@ public class StringFilterRegistry
         return Messages.StringFilterRegistry_Trim_description;
       }
 
+      @Override
       public String filter(String value)
       {
         return value.trim();
@@ -258,6 +276,7 @@ public class StringFilterRegistry
 
     registerFilter(new DocumentedStringFilter()
     {
+      @Override
       public String getName()
       {
         return "trimLeft"; //$NON-NLS-1$
@@ -269,6 +288,7 @@ public class StringFilterRegistry
         return Messages.StringFilterRegistry_TrimLeft_description;
       }
 
+      @Override
       public String filter(String value)
       {
         return StringUtil.trimLeft(value);
@@ -277,6 +297,7 @@ public class StringFilterRegistry
 
     registerFilter(new DocumentedStringFilter()
     {
+      @Override
       public String getName()
       {
         return "trimRight"; //$NON-NLS-1$
@@ -288,6 +309,7 @@ public class StringFilterRegistry
         return Messages.StringFilterRegistry_TrimRight_description;
       }
 
+      @Override
       public String filter(String value)
       {
         return StringUtil.trimRight(value);
@@ -296,6 +318,7 @@ public class StringFilterRegistry
 
     registerFilter(new DocumentedStringFilter()
     {
+      @Override
       public String getName()
       {
         return "trimTrailingSlashes"; //$NON-NLS-1$
@@ -307,6 +330,7 @@ public class StringFilterRegistry
         return Messages.StringFilterRegistry_TrimTrailingSlashes_description;
       }
 
+      @Override
       public String filter(String value)
       {
         return StringUtil.trimTrailingSlashes(value);
@@ -315,6 +339,7 @@ public class StringFilterRegistry
 
     registerFilter(new DocumentedStringFilter()
     {
+      @Override
       public String getName()
       {
         return "upper"; //$NON-NLS-1$
@@ -326,6 +351,7 @@ public class StringFilterRegistry
         return Messages.StringFilterRegistry_Upper_description;
       }
 
+      @Override
       public String filter(String value)
       {
         return value.toUpperCase();
@@ -334,6 +360,7 @@ public class StringFilterRegistry
 
     registerFilter(new DocumentedStringFilter()
     {
+      @Override
       public String getName()
       {
         return "lower"; //$NON-NLS-1$
@@ -345,6 +372,7 @@ public class StringFilterRegistry
         return Messages.StringFilterRegistry_Lower_description;
       }
 
+      @Override
       public String filter(String value)
       {
         return value.toLowerCase();
@@ -353,6 +381,7 @@ public class StringFilterRegistry
 
     registerFilter(new DocumentedStringFilter()
     {
+      @Override
       public String getName()
       {
         return "cap"; //$NON-NLS-1$
@@ -364,6 +393,7 @@ public class StringFilterRegistry
         return Messages.StringFilterRegistry_Cap_description;
       }
 
+      @Override
       public String filter(String value)
       {
         return StringUtil.cap(value);
@@ -372,6 +402,7 @@ public class StringFilterRegistry
 
     registerFilter(new DocumentedStringFilter()
     {
+      @Override
       public String getName()
       {
         return "capAll"; //$NON-NLS-1$
@@ -389,6 +420,7 @@ public class StringFilterRegistry
         return new String[] { "allCap" }; //$NON-NLS-1$
       }
 
+      @Override
       public String filter(String value)
       {
         return StringUtil.capAll(value);
@@ -397,6 +429,7 @@ public class StringFilterRegistry
 
     registerFilter(new DocumentedStringFilter()
     {
+      @Override
       public String getName()
       {
         return "qualifiedName"; //$NON-NLS-1$
@@ -408,6 +441,7 @@ public class StringFilterRegistry
         return Messages.StringFilterRegistry_QualifiedName_description;
       }
 
+      @Override
       public String filter(String value)
       {
         return value.trim().replaceAll("[^\\p{Alnum}]+", ".").toLowerCase(); //$NON-NLS-1$ //$NON-NLS-2$
@@ -416,6 +450,7 @@ public class StringFilterRegistry
 
     registerFilter(new DocumentedStringFilter()
     {
+      @Override
       public String getName()
       {
         return "camel"; //$NON-NLS-1$
@@ -427,6 +462,7 @@ public class StringFilterRegistry
         return Messages.StringFilterRegistry_Camel_description;
       }
 
+      @Override
       public String filter(String value)
       {
         Matcher matcher = CAMEL_PATTERN.matcher(value);
@@ -445,6 +481,7 @@ public class StringFilterRegistry
 
     registerFilter(new DocumentedStringFilter()
     {
+      @Override
       public String getName()
       {
         return "property"; //$NON-NLS-1$
@@ -456,6 +493,7 @@ public class StringFilterRegistry
         return Messages.StringFilterRegistry_Property_description;
       }
 
+      @Override
       public String filter(String value)
       {
         return value.replaceAll("\\\\", "\\\\\\\\"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -464,6 +502,7 @@ public class StringFilterRegistry
 
     registerFilter(new DocumentedStringFilter()
     {
+      @Override
       public String getName()
       {
         return "path"; //$NON-NLS-1$
@@ -475,6 +514,7 @@ public class StringFilterRegistry
         return Messages.StringFilterRegistry_Path_description;
       }
 
+      @Override
       public String filter(String value)
       {
         return value.replaceAll("\\\\", "/"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -483,6 +523,7 @@ public class StringFilterRegistry
 
     registerFilter(new DocumentedStringFilter()
     {
+      @Override
       public String getName()
       {
         return "basePath"; //$NON-NLS-1$
@@ -494,6 +535,7 @@ public class StringFilterRegistry
         return Messages.StringFilterRegistry_BasePath_description;
       }
 
+      @Override
       public String filter(String value)
       {
         value = value.replaceAll("\\\\", "/"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -509,6 +551,7 @@ public class StringFilterRegistry
 
     registerFilter(new DocumentedStringFilter()
     {
+      @Override
       public String getName()
       {
         return "lastSegment"; //$NON-NLS-1$
@@ -520,6 +563,7 @@ public class StringFilterRegistry
         return Messages.StringFilterRegistry_LastSegment_description;
       }
 
+      @Override
       public String filter(String value)
       {
         int pos = Math.max(value.lastIndexOf('/'), value.lastIndexOf('\\'));
@@ -534,6 +578,7 @@ public class StringFilterRegistry
 
     registerFilter(new DocumentedStringFilter()
     {
+      @Override
       public String getName()
       {
         return "fileExtension"; //$NON-NLS-1$
@@ -545,6 +590,7 @@ public class StringFilterRegistry
         return Messages.StringFilterRegistry_FileExtension_description;
       }
 
+      @Override
       public String filter(String value)
       {
         int pos = value.lastIndexOf('.');
@@ -559,6 +605,7 @@ public class StringFilterRegistry
 
     registerFilter(new DocumentedStringFilter()
     {
+      @Override
       public String getName()
       {
         return "pathEncode"; //$NON-NLS-1$
@@ -570,6 +617,7 @@ public class StringFilterRegistry
         return Messages.StringFilterRegistry_PathEncode_description;
       }
 
+      @Override
       public String filter(String value)
       {
         return IOUtil.encodeFileName(value);
@@ -578,6 +626,7 @@ public class StringFilterRegistry
 
     registerFilter(new DocumentedStringFilter()
     {
+      @Override
       public String getName()
       {
         return "urlEncode"; //$NON-NLS-1$
@@ -589,6 +638,7 @@ public class StringFilterRegistry
         return Messages.StringFilterRegistry_URLEncode_description;
       }
 
+      @Override
       public String filter(String value)
       {
         try
@@ -605,6 +655,7 @@ public class StringFilterRegistry
 
     registerFilter(new DocumentedStringFilter()
     {
+      @Override
       public String getName()
       {
         return "urlDecode"; //$NON-NLS-1$
@@ -616,6 +667,7 @@ public class StringFilterRegistry
         return Messages.StringFilterRegistry_URLDecode_description;
       }
 
+      @Override
       public String filter(String value)
       {
         try
@@ -632,6 +684,7 @@ public class StringFilterRegistry
 
     registerFilter(new DocumentedStringFilter()
     {
+      @Override
       public String getName()
       {
         return "slashEncode"; //$NON-NLS-1$
@@ -643,6 +696,7 @@ public class StringFilterRegistry
         return Messages.StringFilterRegistry_SlashEncode_description;
       }
 
+      @Override
       @SuppressWarnings("restriction")
       public String filter(String value)
       {
@@ -660,6 +714,7 @@ public class StringFilterRegistry
 
     registerFilter(new DocumentedStringFilter()
     {
+      @Override
       public String getName()
       {
         return "slashDecode"; //$NON-NLS-1$
@@ -671,6 +726,7 @@ public class StringFilterRegistry
         return Messages.StringFilterRegistry_SlashDecode_description;
       }
 
+      @Override
       @SuppressWarnings("restriction")
       public String filter(String value)
       {
@@ -688,6 +744,7 @@ public class StringFilterRegistry
 
     registerFilter(new DocumentedStringFilter()
     {
+      @Override
       public String getName()
       {
         return "propertyValue"; //$NON-NLS-1$
@@ -699,6 +756,7 @@ public class StringFilterRegistry
         return Messages.StringFilterRegistry_PropertyValue_description;
       }
 
+      @Override
       public String filter(String value)
       {
         PreferenceProperty preferenceProperty = new PreferencesUtil.PreferenceProperty(value);
@@ -709,6 +767,7 @@ public class StringFilterRegistry
 
     registerFilter(new DocumentedParameterizedStringFilter()
     {
+      @Override
       public String getName()
       {
         return "base64"; //$NON-NLS-1$
@@ -720,11 +779,13 @@ public class StringFilterRegistry
         return Messages.StringFilterRegistry_Base64_description;
       }
 
+      @Override
       public String filter(String value)
       {
         return filter(value, null);
       }
 
+      @Override
       public String filter(String value, String argument)
       {
         try
@@ -755,6 +816,7 @@ public class StringFilterRegistry
 
     registerFilter(new DocumentedStringFilter()
     {
+      @Override
       public String getName()
       {
         return "not"; //$NON-NLS-1$
@@ -766,6 +828,7 @@ public class StringFilterRegistry
         return Messages.StringFilterRegistry_Not_description;
       }
 
+      @Override
       public String filter(String value)
       {
         return "true".equalsIgnoreCase(value) ? "false" : "true"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -774,6 +837,7 @@ public class StringFilterRegistry
 
     registerFilter(new DocumentedStringFilter()
     {
+      @Override
       public String getName()
       {
         return "patternQuote"; //$NON-NLS-1$
@@ -785,6 +849,7 @@ public class StringFilterRegistry
         return Messages.StringFilterRegistry_PatternQuote_description;
       }
 
+      @Override
       public String filter(String value)
       {
         return Pattern.quote(value);
@@ -794,9 +859,10 @@ public class StringFilterRegistry
 
   public static void main(String[] args) throws UnsupportedEncodingException
   {
-    List<Map.Entry<String, StringFilter>> entries = new ArrayList<Map.Entry<String, StringFilter>>(INSTANCE.filters.entrySet());
+    List<Map.Entry<String, StringFilter>> entries = new ArrayList<>(INSTANCE.filters.entrySet());
     Collections.sort(entries, new Comparator<Map.Entry<String, StringFilter>>()
     {
+      @Override
       public int compare(Map.Entry<String, StringFilter> e1, Map.Entry<String, StringFilter> e2)
       {
         return e1.getKey().compareTo(e2.getKey());
@@ -923,11 +989,13 @@ public class StringFilterRegistry
    */
   public static abstract class DocumentedStringFilter implements StringFilter, StringFilterDocumentation
   {
+    @Override
     public String getDescription()
     {
       return null;
     }
 
+    @Override
     public String[] getDeprecations()
     {
       return null;
@@ -939,11 +1007,13 @@ public class StringFilterRegistry
    */
   public static abstract class DocumentedParameterizedStringFilter implements ParameterizedStringFilter, StringFilterDocumentation
   {
+    @Override
     public String getDescription()
     {
       return null;
     }
 
+    @Override
     public String[] getDeprecations()
     {
       return null;

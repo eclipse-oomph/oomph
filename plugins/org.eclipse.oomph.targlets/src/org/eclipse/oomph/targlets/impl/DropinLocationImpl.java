@@ -100,6 +100,7 @@ public class DropinLocationImpl extends MinimalEObjectImpl.Container implements 
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getRootFolder()
   {
     return rootFolder;
@@ -110,6 +111,7 @@ public class DropinLocationImpl extends MinimalEObjectImpl.Container implements 
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setRootFolder(String newRootFolder)
   {
     String oldRootFolder = rootFolder;
@@ -125,6 +127,7 @@ public class DropinLocationImpl extends MinimalEObjectImpl.Container implements 
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public boolean isRecursive()
   {
     return recursive;
@@ -135,6 +138,7 @@ public class DropinLocationImpl extends MinimalEObjectImpl.Container implements 
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setRecursive(boolean newRecursive)
   {
     boolean oldRecursive = recursive;

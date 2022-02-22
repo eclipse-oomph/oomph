@@ -21,6 +21,7 @@ import org.eclipse.core.variables.IDynamicVariableResolver;
  */
 public class URIVariableResolver implements IDynamicVariableResolver
 {
+  @Override
   public String resolveValue(IDynamicVariable variable, String file) throws CoreException
   {
     return file == null ? null : URI.createFileURI(file).toString();

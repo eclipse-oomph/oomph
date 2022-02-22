@@ -161,6 +161,7 @@ public class SimpleMessageOverlay extends Shell implements ControlListener
 
     addDisposeListener(new DisposeListener()
     {
+      @Override
       public void widgetDisposed(DisposeEvent e)
       {
         SimpleMessageOverlay.this.getParent().removeControlListener(SimpleMessageOverlay.this);
@@ -200,6 +201,7 @@ public class SimpleMessageOverlay extends Shell implements ControlListener
       final Display display = getDisplay();
       Thread dismissThread = new Thread(new Runnable()
       {
+        @Override
         public void run()
         {
           try
@@ -213,6 +215,7 @@ public class SimpleMessageOverlay extends Shell implements ControlListener
 
           display.asyncExec(new Runnable()
           {
+            @Override
             public void run()
             {
               dialog.clearMessage();
@@ -309,6 +312,7 @@ public class SimpleMessageOverlay extends Shell implements ControlListener
     return wrappedText;
   }
 
+  @Override
   public void controlResized(ControlEvent e)
   {
     if (!isDisposed())
@@ -317,6 +321,7 @@ public class SimpleMessageOverlay extends Shell implements ControlListener
     }
   }
 
+  @Override
   public void controlMoved(ControlEvent e)
   {
     if (!isDisposed())
@@ -400,6 +405,7 @@ public class SimpleMessageOverlay extends Shell implements ControlListener
       move = false;
     }
 
+    @Override
     public void mouseMove(final MouseEvent e)
     {
       if (move)

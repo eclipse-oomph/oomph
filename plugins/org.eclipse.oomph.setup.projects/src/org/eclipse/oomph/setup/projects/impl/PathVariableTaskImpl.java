@@ -108,6 +108,7 @@ public class PathVariableTaskImpl extends SetupTaskImpl implements PathVariableT
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getName()
   {
     return name;
@@ -118,6 +119,7 @@ public class PathVariableTaskImpl extends SetupTaskImpl implements PathVariableT
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setName(String newName)
   {
     String oldName = name;
@@ -133,6 +135,7 @@ public class PathVariableTaskImpl extends SetupTaskImpl implements PathVariableT
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getURI()
   {
     return uRI;
@@ -143,6 +146,7 @@ public class PathVariableTaskImpl extends SetupTaskImpl implements PathVariableT
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setURI(String newURI)
   {
     String oldURI = uRI;
@@ -263,6 +267,7 @@ public class PathVariableTaskImpl extends SetupTaskImpl implements PathVariableT
     return 0;
   }
 
+  @Override
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     IPathVariableManager pathVariableManager = ResourcesPlugin.getWorkspace().getPathVariableManager();
@@ -270,6 +275,7 @@ public class PathVariableTaskImpl extends SetupTaskImpl implements PathVariableT
     return !ObjectUtil.equals(value == null ? null : value.toString(), getURI());
   }
 
+  @Override
   public void perform(SetupTaskContext context) throws Exception
   {
     String name = getName();

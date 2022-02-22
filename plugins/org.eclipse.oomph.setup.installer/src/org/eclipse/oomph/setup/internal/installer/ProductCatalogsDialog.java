@@ -114,16 +114,19 @@ public class ProductCatalogsDialog extends AbstractSetupDialog
     catalogViewer.getTable().setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
     catalogViewer.setContentProvider(new IStructuredContentProvider()
     {
+      @Override
       public void inputChanged(Viewer viewer, Object oldInput, Object newInput)
       {
         // Do nothing.
       }
 
+      @Override
       public void dispose()
       {
         // Do nothing.
       }
 
+      @Override
       public Object[] getElements(Object inputElement)
       {
         if (!(inputElement instanceof CatalogManager))
@@ -131,7 +134,7 @@ public class ProductCatalogsDialog extends AbstractSetupDialog
           throw new IllegalArgumentException(Messages.ProductCatalogsDialog_BadInput_exception);
         }
 
-        List<Scope> scopes = new ArrayList<Scope>();
+        List<Scope> scopes = new ArrayList<>();
         for (Scope scope : catalogManager.getCatalogs(true))
         {
           if (!scope.eIsProxy() && !"redirectable".equals(scope.getName())) //$NON-NLS-1$
@@ -163,11 +166,12 @@ public class ProductCatalogsDialog extends AbstractSetupDialog
     });
 
     catalogViewer.setInput(catalogManager);
-    originalSelectedCatalogs = new ArrayList<Scope>(catalogManager.getSelectedCatalogs(true));
+    originalSelectedCatalogs = new ArrayList<>(catalogManager.getSelectedCatalogs(true));
     catalogViewer.setCheckedElements(originalSelectedCatalogs.toArray());
 
     catalogViewer.addCheckStateListener(new ICheckStateListener()
     {
+      @Override
       public void checkStateChanged(CheckStateChangedEvent event)
       {
         updateEnablement();
@@ -182,7 +186,7 @@ public class ProductCatalogsDialog extends AbstractSetupDialog
         if (notification.getFeature() == SetupPackage.Literals.CATALOG_SELECTION__PRODUCT_CATALOGS)
         {
           catalogViewer.refresh();
-          originalSelectedCatalogs = new ArrayList<Scope>(catalogManager.getSelectedCatalogs(true));
+          originalSelectedCatalogs = new ArrayList<>(catalogManager.getSelectedCatalogs(true));
           catalogViewer.setCheckedElements(originalSelectedCatalogs.toArray());
           updateEnablement();
         }
@@ -193,6 +197,7 @@ public class ProductCatalogsDialog extends AbstractSetupDialog
     selection.eAdapters().add(selectionAdapter);
     parent.addDisposeListener(new DisposeListener()
     {
+      @Override
       public void widgetDisposed(DisposeEvent e)
       {
         selection.eAdapters().remove(selectionAdapter);
@@ -222,14 +227,14 @@ public class ProductCatalogsDialog extends AbstractSetupDialog
 
     final Combo indexCombo = createCombo(parent);
 
-    final List<String> values = new ArrayList<String>(indexChoices.values());
+    final List<String> values = new ArrayList<>(indexChoices.values());
     addManagementValues(values);
 
     String[] items = values.toArray(new String[values.size()]);
     indexCombo.setItems(items);
     indexCombo.select(0);
 
-    final List<URI> uris = new ArrayList<URI>(indexChoices.keySet());
+    final List<URI> uris = new ArrayList<>(indexChoices.keySet());
     if (indexUnmanaged && uris.size() > 0)
     {
       indexSelection = uris.get(0);
@@ -368,10 +373,12 @@ public class ProductCatalogsDialog extends AbstractSetupDialog
 
         Runnable buttonAnimator = new Runnable()
         {
-          private String[] label = new String[] { Messages.ProductCatalogsDialog_Apply1_label, Messages.ProductCatalogsDialog_Apply2_label, Messages.ProductCatalogsDialog_Apply3_label };
+          private String[] label = new String[] { Messages.ProductCatalogsDialog_Apply1_label, Messages.ProductCatalogsDialog_Apply2_label,
+              Messages.ProductCatalogsDialog_Apply3_label };
 
           private int counter;
 
+          @Override
           public void run()
           {
             if (counter == 0 || !applyButton.isDisposed() && !Messages.ProductCatalogsDialog_Apply_label.equals(applyButton.getText()))

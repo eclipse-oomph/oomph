@@ -28,10 +28,12 @@ import org.eclipse.swt.widgets.Shell;
 @SuppressWarnings("restriction")
 public class UICallbackProvider implements IUICallbacks
 {
+  @Override
   public void setupPasswordRecovery(final int size, final String moduleID, final IPreferencesContainer container)
   {
     UIUtil.syncExec(new Runnable()
     {
+      @Override
       public void run()
       {
         Shell shell = UIUtil.getShell();
@@ -65,16 +67,19 @@ public class UICallbackProvider implements IUICallbacks
     });
   }
 
+  @Override
   public void execute(final IStorageTask callback) throws StorageException
   {
     callback.execute();
   }
 
+  @Override
   public Boolean ask(final String msg)
   {
     final Boolean[] result = new Boolean[1];
     UIUtil.getDisplay().syncExec(new Runnable()
     {
+      @Override
       public void run()
       {
         boolean reply = MessageDialog.openConfirm(UIUtil.getShell(), SecUIMessages.generalDialogTitle, msg);
@@ -85,6 +90,7 @@ public class UICallbackProvider implements IUICallbacks
     return result[0];
   }
 
+  @Override
   public boolean runningUI()
   {
     return true;

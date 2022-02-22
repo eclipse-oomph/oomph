@@ -75,6 +75,7 @@ public class SetupTaskWizard extends Wizard implements INewWizard
     setNeedsProgressMonitor(true);
   }
 
+  @Override
   public void init(IWorkbench workbench, IStructuredSelection selection)
   {
   }
@@ -93,6 +94,7 @@ public class SetupTaskWizard extends Wizard implements INewWizard
 
     IRunnableWithProgress op = new IRunnableWithProgress()
     {
+      @Override
       public void run(IProgressMonitor monitor) throws InvocationTargetException
       {
         try
@@ -134,9 +136,9 @@ public class SetupTaskWizard extends Wizard implements INewWizard
     String sourceRoot = TEMPLATES + "/"; //$NON-NLS-1$
     String targetRoot = new File(variables.get("@ContainerLocation@")) + "/"; //$NON-NLS-1$ //$NON-NLS-2$
 
-    final List<File> projects = new ArrayList<File>();
-    final List<File> genModels = new ArrayList<File>();
-    final List<File> filesToOpen = new ArrayList<File>();
+    final List<File> projects = new ArrayList<>();
+    final List<File> genModels = new ArrayList<>();
+    final List<File> filesToOpen = new ArrayList<>();
     generate(variables, sourceRoot.length(), targetRoot, sourceRoot, projects, genModels, filesToOpen, 0);
 
     final Shell shell = getShell();
@@ -149,6 +151,7 @@ public class SetupTaskWizard extends Wizard implements INewWizard
 
     ResourcesPlugin.getWorkspace().run(new IWorkspaceRunnable()
     {
+      @Override
       public void run(IProgressMonitor monitor) throws CoreException
       {
         SubMonitor progress = SubMonitor.convert(monitor, genModels.size()).detectCancelation();
@@ -196,6 +199,7 @@ public class SetupTaskWizard extends Wizard implements INewWizard
     progress.setTaskName(Messages.SetupTaskWizard_fileOpenTask_name);
     shell.getDisplay().asyncExec(new Runnable()
     {
+      @Override
       public void run()
       {
         IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
@@ -371,7 +375,7 @@ public class SetupTaskWizard extends Wizard implements INewWizard
 
   public static List<File> getProjectLocations(String projectName, String containerLocation)
   {
-    List<File> projects = new ArrayList<File>();
+    List<File> projects = new ArrayList<>();
 
     Bundle bundle = SetupUIIDEPlugin.INSTANCE.getBundle();
     Enumeration<String> entries = bundle.getEntryPaths(TEMPLATES);

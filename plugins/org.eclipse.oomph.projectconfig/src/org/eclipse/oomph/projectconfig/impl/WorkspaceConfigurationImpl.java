@@ -123,11 +123,12 @@ public class WorkspaceConfigurationImpl extends ModelElementImpl implements Work
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<Project> getProjects()
   {
     if (projects == null)
     {
-      projects = new EObjectContainmentWithInverseEList<Project>(Project.class, this, ProjectConfigPackage.WORKSPACE_CONFIGURATION__PROJECTS,
+      projects = new EObjectContainmentWithInverseEList<>(Project.class, this, ProjectConfigPackage.WORKSPACE_CONFIGURATION__PROJECTS,
           ProjectConfigPackage.PROJECT__CONFIGURATION);
     }
     return projects;
@@ -138,6 +139,7 @@ public class WorkspaceConfigurationImpl extends ModelElementImpl implements Work
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public PreferenceNode getDefaultPreferenceNode()
   {
     if (defaultPreferenceNode != null && defaultPreferenceNode.eIsProxy())
@@ -171,6 +173,7 @@ public class WorkspaceConfigurationImpl extends ModelElementImpl implements Work
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setDefaultPreferenceNode(PreferenceNode newDefaultPreferenceNode)
   {
     PreferenceNode oldDefaultPreferenceNode = defaultPreferenceNode;
@@ -187,6 +190,7 @@ public class WorkspaceConfigurationImpl extends ModelElementImpl implements Work
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public PreferenceNode getInstancePreferenceNode()
   {
     if (instancePreferenceNode != null && instancePreferenceNode.eIsProxy())
@@ -220,6 +224,7 @@ public class WorkspaceConfigurationImpl extends ModelElementImpl implements Work
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setInstancePreferenceNode(PreferenceNode newInstancePreferenceNode)
   {
     PreferenceNode oldInstancePreferenceNode = instancePreferenceNode;
@@ -236,12 +241,14 @@ public class WorkspaceConfigurationImpl extends ModelElementImpl implements Work
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public void applyPreferenceProfiles()
   {
     try
     {
       WORKSPACE_ROOT.getWorkspace().run(new IWorkspaceRunnable()
       {
+        @Override
         public void run(IProgressMonitor monitor) throws CoreException
         {
           Preferences projectsPreferences = null;
@@ -313,6 +320,7 @@ public class WorkspaceConfigurationImpl extends ModelElementImpl implements Work
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public void updatePreferenceProfileReferences()
   {
     for (Project project : getProjects())
@@ -322,7 +330,7 @@ public class WorkspaceConfigurationImpl extends ModelElementImpl implements Work
         EList<Predicate> predicates = preferenceProfile.getPredicates();
         if (!predicates.isEmpty())
         {
-          List<Project> referents = new ArrayList<Project>();
+          List<Project> referents = new ArrayList<>();
           for (Project referencedProject : getProjects())
           {
             if (referencedProject != project)
@@ -349,6 +357,7 @@ public class WorkspaceConfigurationImpl extends ModelElementImpl implements Work
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public Project getProject(String name)
   {
     for (Project project : getProjects())

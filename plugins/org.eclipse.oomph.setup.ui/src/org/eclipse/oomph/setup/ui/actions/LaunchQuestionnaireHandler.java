@@ -25,6 +25,7 @@ import org.eclipse.ui.handlers.HandlerUtil;
  */
 public class LaunchQuestionnaireHandler extends AbstractHandler
 {
+  @Override
   public Object execute(ExecutionEvent event) throws ExecutionException
   {
     if (!Questionnaire.exists())

@@ -208,7 +208,7 @@ public class ProjectConfigValidator extends EObjectValidator
 
   static Map<PreferenceNode, Set<Property>> collectUnmanagedPreferences(Project project)
   {
-    Map<PreferenceNode, Set<Property>> result = new LinkedHashMap<PreferenceNode, Set<Property>>();
+    Map<PreferenceNode, Set<Property>> result = new LinkedHashMap<>();
     PreferenceNode projectPreferenceNode = project.getPreferenceNode();
     if (projectPreferenceNode != null)
     {
@@ -256,8 +256,9 @@ public class ProjectConfigValidator extends EObjectValidator
 
             LOOP: for (Map.Entry<PreferenceNode, Set<Property>> entry : result.entrySet())
             {
-              for (PreferenceNode targetPreferenceNode = entry.getKey(), otherPreferenceNode = referencedPreferenceNode; targetPreferenceNode.getName()
-                  .equals(otherPreferenceNode.getName()) && targetPreferenceNode != projectPreferenceNode && otherPreferenceNode != otherProjectPreferenceNode;)
+              for (PreferenceNode targetPreferenceNode = entry.getKey(),
+                  otherPreferenceNode = referencedPreferenceNode; targetPreferenceNode.getName().equals(otherPreferenceNode.getName())
+                      && targetPreferenceNode != projectPreferenceNode && otherPreferenceNode != otherProjectPreferenceNode;)
               {
                 targetPreferenceNode = targetPreferenceNode.getParent();
                 otherPreferenceNode = otherPreferenceNode.getParent();
@@ -303,7 +304,7 @@ public class ProjectConfigValidator extends EObjectValidator
       EList<Property> properties = child.getProperties();
       if (!properties.isEmpty())
       {
-        Set<Property> propertySet = new LinkedHashSet<Property>(properties);
+        Set<Property> propertySet = new LinkedHashSet<>(properties);
         result.put(child, propertySet);
       }
 
@@ -314,7 +315,7 @@ public class ProjectConfigValidator extends EObjectValidator
   private static String getObjectLabel(Collection<? extends EObject> eObjects, Map<Object, Object> context)
   {
     StringBuilder result = new StringBuilder();
-    List<EObject> values = new ArrayList<EObject>(eObjects);
+    List<EObject> values = new ArrayList<>(eObjects);
     for (int i = 0, size = values.size(); i < size; ++i)
     {
       if (i == size - 1 && size > 1)
@@ -346,7 +347,7 @@ public class ProjectConfigValidator extends EObjectValidator
       {
         PreferenceNode projectPreferenceNode = project.getPreferenceNode();
         StringBuilder substitution = new StringBuilder();
-        List<PreferenceNode> preferenceNodes = new ArrayList<PreferenceNode>(unmanagedPreferences.keySet());
+        List<PreferenceNode> preferenceNodes = new ArrayList<>(unmanagedPreferences.keySet());
         for (int i = 0, size = preferenceNodes.size(); i < size; ++i)
         {
           if (i == size - 1 && size > 1)
@@ -371,7 +372,7 @@ public class ProjectConfigValidator extends EObjectValidator
           }
         }
 
-        List<Object> data = new ArrayList<Object>();
+        List<Object> data = new ArrayList<>();
         data.add(project);
         data.add(ProjectConfigPackage.Literals.PROJECT__PREFERENCE_PROFILE_REFERENCES);
         data.addAll(preferenceNodes);
@@ -409,7 +410,7 @@ public class ProjectConfigValidator extends EObjectValidator
         .get(OVERLAPPING_PROFILES_KEY);
     if (overlappingProfiles == null)
     {
-      overlappingProfiles = new HashMap<PreferenceProfile, Map<PreferenceProfile, Set<Property>>>();
+      overlappingProfiles = new HashMap<>();
       context.put(OVERLAPPING_PROFILES_KEY, overlappingProfiles);
     }
     return overlappingProfiles;
@@ -426,17 +427,17 @@ public class ProjectConfigValidator extends EObjectValidator
   {
     try
     {
-      Map<URI, Set<Property>> keyToPropertiesMap = new HashMap<URI, Set<Property>>();
-      Map<Property, Set<PreferenceProfile>> propertyToPreferenceProfileMap = new HashMap<Property, Set<PreferenceProfile>>();
-      Map<PreferenceProfile, Set<Property>> preferenceProfileToPropertyMap = new LinkedHashMap<PreferenceProfile, Set<Property>>();
-      Set<PreferenceProfile> preferenceProfileReferences = new LinkedHashSet<PreferenceProfile>(project.getPreferenceProfileReferences());
+      Map<URI, Set<Property>> keyToPropertiesMap = new HashMap<>();
+      Map<Property, Set<PreferenceProfile>> propertyToPreferenceProfileMap = new HashMap<>();
+      Map<PreferenceProfile, Set<Property>> preferenceProfileToPropertyMap = new LinkedHashMap<>();
+      Set<PreferenceProfile> preferenceProfileReferences = new LinkedHashSet<>(project.getPreferenceProfileReferences());
       preferenceProfileReferences.addAll(project.getPreferenceProfiles());
       for (PreferenceProfile preferenceProfile : preferenceProfileReferences)
       {
         Set<Property> preferenceProfileProperties = preferenceProfileToPropertyMap.get(preferenceProfile);
         if (preferenceProfileProperties == null)
         {
-          preferenceProfileProperties = new LinkedHashSet<Property>();
+          preferenceProfileProperties = new LinkedHashSet<>();
           preferenceProfileToPropertyMap.put(preferenceProfile, preferenceProfileProperties);
         }
 
@@ -449,7 +450,7 @@ public class ProjectConfigValidator extends EObjectValidator
             Set<PreferenceProfile> preferenceProfiles = propertyToPreferenceProfileMap.get(property);
             if (preferenceProfiles == null)
             {
-              preferenceProfiles = new LinkedHashSet<PreferenceProfile>();
+              preferenceProfiles = new LinkedHashSet<>();
               propertyToPreferenceProfileMap.put(property, preferenceProfiles);
             }
 
@@ -459,7 +460,7 @@ public class ProjectConfigValidator extends EObjectValidator
             Set<Property> properties = keyToPropertiesMap.get(relativePath);
             if (properties == null)
             {
-              properties = new HashSet<Property>();
+              properties = new HashSet<>();
               keyToPropertiesMap.put(relativePath, properties);
             }
 
@@ -477,7 +478,7 @@ public class ProjectConfigValidator extends EObjectValidator
         }
         else
         {
-          Set<PreferenceProfile> preferencesProfiles = new LinkedHashSet<PreferenceProfile>();
+          Set<PreferenceProfile> preferencesProfiles = new LinkedHashSet<>();
           for (Property property : properties)
           {
             preferencesProfiles.addAll(propertyToPreferenceProfileMap.get(property));
@@ -489,7 +490,7 @@ public class ProjectConfigValidator extends EObjectValidator
             Map<PreferenceProfile, Set<Property>> profileProperties = overlaps.get(preferenceProfile);
             if (profileProperties == null)
             {
-              profileProperties = new LinkedHashMap<PreferenceProfile, Set<Property>>();
+              profileProperties = new LinkedHashMap<>();
               overlaps.put(preferenceProfile, profileProperties);
             }
 
@@ -500,7 +501,7 @@ public class ProjectConfigValidator extends EObjectValidator
                 Set<Property> otherProperties = profileProperties.get(otherPreferenceProfile);
                 if (otherProperties == null)
                 {
-                  otherProperties = new LinkedHashSet<Property>();
+                  otherProperties = new LinkedHashSet<>();
                   profileProperties.put(otherPreferenceProfile, otherProperties);
                 }
 
@@ -512,16 +513,17 @@ public class ProjectConfigValidator extends EObjectValidator
 
           for (Property property : properties)
           {
-            LinkedHashSet<Property> otherProperties = new LinkedHashSet<Property>(properties);
+            LinkedHashSet<Property> otherProperties = new LinkedHashSet<>(properties);
             otherProperties.remove(property);
-            List<Object> data = new ArrayList<Object>(otherProperties);
+            List<Object> data = new ArrayList<>(otherProperties);
 
             data.add(0, property);
             data.add(1, project);
             data.addAll(2, preferencesProfiles);
 
             diagnostics.add(createDiagnostic(Diagnostic.ERROR, DIAGNOSTIC_SOURCE, 0, "_UI_NonUniquePropertyApplication_diagnostic", //$NON-NLS-1$
-                new Object[] { getObjectLabel(property, context), getObjectLabel(preferencesProfiles, context), getObjectLabel(project, context), getObjectLabel(otherProperties, context) },
+                new Object[] { getObjectLabel(property, context), getObjectLabel(preferencesProfiles, context), getObjectLabel(project, context),
+                    getObjectLabel(otherProperties, context) },
                 data.toArray(), context));
           }
         }
@@ -541,20 +543,20 @@ public class ProjectConfigValidator extends EObjectValidator
           {
             PreferenceProfile key = entry.getKey();
             Map<PreferenceProfile, Set<Property>> value = entry.getValue();
-            Set<Object> data = new LinkedHashSet<Object>();
+            Set<Object> data = new LinkedHashSet<>();
             data.add(key);
             data.addAll(value.keySet());
             BasicDiagnostic diagnostic = createDiagnostic(Diagnostic.ERROR, DIAGNOSTIC_SOURCE, 0, "_UI_OverlappingPreferenceProfile_diagnostic", //$NON-NLS-1$
                 new Object[] { getObjectLabel(key, context), getObjectLabel(value.keySet(), context) }, data.toArray(), context);
 
-            List<Project> referentProjects = new ArrayList<Project>(key.getReferentProjects());
+            List<Project> referentProjects = new ArrayList<>(key.getReferentProjects());
             referentProjects.add(key.getProject());
             for (Map.Entry<PreferenceProfile, Set<Property>> propertyEntry : value.entrySet())
             {
-              Set<Object> data2 = new LinkedHashSet<Object>();
+              Set<Object> data2 = new LinkedHashSet<>();
               data2.add(key);
               PreferenceProfile otherPreferenceProfile = propertyEntry.getKey();
-              Set<Project> otherReferentProjects = new LinkedHashSet<Project>(otherPreferenceProfile.getReferentProjects());
+              Set<Project> otherReferentProjects = new LinkedHashSet<>(otherPreferenceProfile.getReferentProjects());
               otherReferentProjects.add(otherPreferenceProfile.getProject());
               otherReferentProjects.retainAll(referentProjects);
               data2.add(otherPreferenceProfile);
@@ -574,7 +576,7 @@ public class ProjectConfigValidator extends EObjectValidator
 
   static Map<PreferenceNode, Map<Property, Property>> collectInconsistentPreferences(Project project)
   {
-    Map<PreferenceNode, Map<Property, Property>> result = new LinkedHashMap<PreferenceNode, Map<Property, Property>>();
+    Map<PreferenceNode, Map<Property, Property>> result = new LinkedHashMap<>();
     collectInconsistentPreferences(result, project.getConfiguration(), project, project.getPreferenceNode());
     return result;
   }
@@ -594,7 +596,7 @@ public class ProjectConfigValidator extends EObjectValidator
         {
           if (propertyMap == null)
           {
-            propertyMap = new LinkedHashMap<Property, Property>();
+            propertyMap = new LinkedHashMap<>();
             result.put(preferenceNode, propertyMap);
           }
 

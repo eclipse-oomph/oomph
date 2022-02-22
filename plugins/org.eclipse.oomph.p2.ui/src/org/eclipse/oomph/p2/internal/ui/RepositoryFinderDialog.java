@@ -205,6 +205,7 @@ public class RepositoryFinderDialog extends DockableDialog implements FilterHand
 
     viewer.addSelectionChangedListener(new ISelectionChangedListener()
     {
+      @Override
       public void selectionChanged(SelectionChangedEvent event)
       {
         IStructuredSelection selection = event.getStructuredSelection();
@@ -222,9 +223,10 @@ public class RepositoryFinderDialog extends DockableDialog implements FilterHand
 
     GeneralDragAdapter dragAdapter = new GeneralDragAdapter(viewer, new GeneralDragAdapter.DraggedObjectsFactory()
     {
+      @Override
       public List<Object> createDraggedObjects(ISelection selection) throws Exception
       {
-        List<Object> result = new ArrayList<Object>();
+        List<Object> result = new ArrayList<>();
         for (Object object : ((IStructuredSelection)selection).toArray())
         {
           if (object instanceof Repository)
@@ -242,6 +244,7 @@ public class RepositoryFinderDialog extends DockableDialog implements FilterHand
 
     dragAdapter.getContextMenu().addMenuListener(new IMenuListener()
     {
+      @Override
       public void menuAboutToShow(IMenuManager manager)
       {
         String url = getURL(viewer.getSelection());
@@ -254,6 +257,7 @@ public class RepositoryFinderDialog extends DockableDialog implements FilterHand
 
     viewer.addOpenListener(new IOpenListener()
     {
+      @Override
       public void open(OpenEvent event)
       {
         String url = getURL(event.getSelection());
@@ -271,6 +275,7 @@ public class RepositoryFinderDialog extends DockableDialog implements FilterHand
     return composite;
   }
 
+  @Override
   public void handleFilter(final String filter)
   {
     if (repositories == null)
@@ -286,7 +291,7 @@ public class RepositoryFinderDialog extends DockableDialog implements FilterHand
     else
     {
       Pattern pattern = StringUtil.globPattern(filter);
-      List<Repository> list = new ArrayList<Repository>();
+      List<Repository> list = new ArrayList<>();
 
       for (Repository repository : repositories)
       {
@@ -312,6 +317,7 @@ public class RepositoryFinderDialog extends DockableDialog implements FilterHand
     return true;
   }
 
+  @Override
   public void changing(LocationEvent event)
   {
     if (repositories != null)
@@ -328,6 +334,7 @@ public class RepositoryFinderDialog extends DockableDialog implements FilterHand
     }
   }
 
+  @Override
   public void changed(LocationEvent event)
   {
     // Do nothing.
@@ -350,6 +357,7 @@ public class RepositoryFinderDialog extends DockableDialog implements FilterHand
 
         UIUtil.asyncExec(statsLabel, new Runnable()
         {
+          @Override
           public void run()
           {
             setStats(repositories.length);
@@ -484,8 +492,9 @@ public class RepositoryFinderDialog extends DockableDialog implements FilterHand
    */
   public static RepositoryFinderDialog openFor(final IWorkbenchWindow workbenchWindow)
   {
-    Factory<RepositoryFinderDialog> factory = new Factory<RepositoryFinderDialog>()
+    Factory<RepositoryFinderDialog> factory = new Factory<>()
     {
+      @Override
       public RepositoryFinderDialog create(IWorkbenchWindow workbenchWindow)
       {
         return new RepositoryFinderDialog(workbenchWindow);
@@ -505,11 +514,13 @@ public class RepositoryFinderDialog extends DockableDialog implements FilterHand
       viewer.setItemCount(1); // Loading...
     }
 
+    @Override
     public void inputChanged(Viewer viewer, Object oldInput, Object newInput)
     {
       // Do nothing.
     }
 
+    @Override
     public void updateElement(int index)
     {
       if (filteredRepositories != null)
@@ -526,6 +537,7 @@ public class RepositoryFinderDialog extends DockableDialog implements FilterHand
       }
     }
 
+    @Override
     public void dispose()
     {
       // Do nothing.

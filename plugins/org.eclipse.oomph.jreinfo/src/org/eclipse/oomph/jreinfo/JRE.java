@@ -150,12 +150,7 @@ public final class JRE implements Comparable<JRE>
     }
 
     File executable = getJavaExecutable();
-    if (!executable.isFile())
-    {
-      return false;
-    }
-
-    if (executable.lastModified() != lastModified)
+    if (!executable.isFile() || (executable.lastModified() != lastModified))
     {
       return false;
     }
@@ -264,12 +259,7 @@ public final class JRE implements Comparable<JRE>
       return true;
     }
 
-    if (obj == null)
-    {
-      return false;
-    }
-
-    if (getClass() != obj.getClass())
+    if ((obj == null) || (getClass() != obj.getClass()))
     {
       return false;
     }
@@ -302,6 +292,7 @@ public final class JRE implements Comparable<JRE>
     return true;
   }
 
+  @Override
   public int compareTo(JRE o)
   {
     int result = o.major - major;

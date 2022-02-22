@@ -80,7 +80,7 @@ public class SetupP2AdapterFactory extends AdapterFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  protected SetupP2Switch<Adapter> modelSwitch = new SetupP2Switch<Adapter>()
+  protected SetupP2Switch<Adapter> modelSwitch = new SetupP2Switch<>()
   {
     @Override
     public Adapter caseP2Task(P2Task object)

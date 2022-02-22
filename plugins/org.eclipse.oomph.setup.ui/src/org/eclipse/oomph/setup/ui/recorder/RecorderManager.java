@@ -158,6 +158,7 @@ public final class RecorderManager
     // Defer this until the transaction has been processed.
     reset = new Runnable()
     {
+      @Override
       public void run()
       {
         RecorderManager.this.editor = null;
@@ -245,7 +246,7 @@ public final class RecorderManager
 
   private Set<String> getIDs(String key)
   {
-    Set<String> result = new LinkedHashSet<String>();
+    Set<String> result = new LinkedHashSet<>();
     String value = SETUP_UI_PREFERENCES.getString(key);
     if (!StringUtil.isEmpty(value))
     {
@@ -456,7 +457,7 @@ public final class RecorderManager
       {
         try
         {
-          Map<String, PolicyAndValue> preferenceChanges = new HashMap<String, PolicyAndValue>();
+          Map<String, PolicyAndValue> preferenceChanges = new HashMap<>();
           for (URI uri : preferenceURIs)
           {
             String key = PreferencesFactory.eINSTANCE.convertURI(uri);
@@ -509,6 +510,7 @@ public final class RecorderManager
 
         transaction.setCommitHandler(new CommitHandler()
         {
+          @Override
           public void handlePreferenceTask(PreferenceTask preferenceTask)
           {
             String key = preferenceTask.getKey();
@@ -657,6 +659,7 @@ public final class RecorderManager
     final boolean[] ok = { true };
     UIUtil.syncExec(display, new Runnable()
     {
+      @Override
       public void run()
       {
         Shell shell = UIUtil.getShell();
@@ -784,6 +787,7 @@ public final class RecorderManager
 
             recordItem.addDisposeListener(new DisposeListener()
             {
+              @Override
               public void widgetDisposed(DisposeEvent e)
               {
                 recordItem = null;
@@ -857,6 +861,7 @@ public final class RecorderManager
 
       initializeItem.addDisposeListener(new DisposeListener()
       {
+        @Override
         public void widgetDisposed(DisposeEvent e)
         {
           initializeItem = null;
@@ -964,6 +969,7 @@ public final class RecorderManager
       {
         UIUtil.asyncExec(INSTANCE.display, new Runnable()
         {
+          @Override
           public void run()
           {
             if (!INSTANCE.display.isDisposed())
@@ -988,6 +994,7 @@ public final class RecorderManager
       stopped = true;
     }
 
+    @Override
     public void handleEvent(Event event)
     {
       if (stopped)
@@ -1002,6 +1009,7 @@ public final class RecorderManager
         {
           UIUtil.asyncExec(display, new Runnable()
           {
+            @Override
             public void run()
             {
               hookRecorderToggleButton(shell);
@@ -1016,6 +1024,7 @@ public final class RecorderManager
 
           shell.addDisposeListener(new DisposeListener()
           {
+            @Override
             public void widgetDisposed(DisposeEvent e)
             {
               final PreferencesRecorder finalRecorder = recorder;
@@ -1026,6 +1035,7 @@ public final class RecorderManager
 
               UIUtil.timerExec(100, new Runnable()
               {
+                @Override
                 public void run()
                 {
                   final Map<URI, Pair<String, String>> values = finalRecorder.done();
@@ -1102,12 +1112,7 @@ public final class RecorderManager
       {
         IStorage storage = SynchronizerManager.INSTANCE.getStorage();
         IStorageService service = storage.getService();
-        if (service == null)
-        {
-          return false;
-        }
-
-        if (!interactive && storage.getConnectedness() == Connectedness.UNAUTHORIZED)
+        if (service == null || !interactive && storage.getConnectedness() == Connectedness.UNAUTHORIZED)
         {
           return false;
         }
@@ -1251,6 +1256,7 @@ public final class RecorderManager
 
             UIUtil.syncExec(new Runnable()
             {
+              @Override
               public void run()
               {
                 try
@@ -1260,6 +1266,7 @@ public final class RecorderManager
 
                   dialog.run(true, true, new IRunnableWithProgress()
                   {
+                    @Override
                     public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
                     {
                       authenticationSemaphore.release();
@@ -1317,6 +1324,7 @@ public final class RecorderManager
       }
     }
 
+    @Override
     public void handleFinish(Throwable ex) throws Exception
     {
       if (ex instanceof ProtocolException)
@@ -1326,6 +1334,7 @@ public final class RecorderManager
         {
           UIUtil.syncExec(new Runnable()
           {
+            @Override
             public void run()
             {
               OptOutDialog dialog = new OptOutDialog(UIUtil.getShell(), synchronizerJob.getService());

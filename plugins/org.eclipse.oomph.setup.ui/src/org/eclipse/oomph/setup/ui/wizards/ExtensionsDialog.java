@@ -54,7 +54,7 @@ public class ExtensionsDialog extends AbstractSetupDialog
 
   private final Collection<? extends Resource> extensions;
 
-  private final Collection<Resource> result = new LinkedHashSet<Resource>();
+  private final Collection<Resource> result = new LinkedHashSet<>();
 
   public ExtensionsDialog(Shell parentShell, Collection<? extends Resource> extensions)
   {
@@ -89,16 +89,19 @@ public class ExtensionsDialog extends AbstractSetupDialog
 
     extensionViewer.setContentProvider(new IStructuredContentProvider()
     {
+      @Override
       public void inputChanged(Viewer viewer, Object oldInput, Object newInput)
       {
         // Do nothing.
       }
 
+      @Override
       public void dispose()
       {
         // Do nothing.
       }
 
+      @Override
       public Object[] getElements(Object inputElement)
       {
         return extensions.toArray();
@@ -132,6 +135,7 @@ public class ExtensionsDialog extends AbstractSetupDialog
 
     extensionViewer.addCheckStateListener(new ICheckStateListener()
     {
+      @Override
       public void checkStateChanged(CheckStateChangedEvent event)
       {
         updateEnablement();
@@ -141,13 +145,13 @@ public class ExtensionsDialog extends AbstractSetupDialog
 
   protected Map<String, String> getCurrentSelfRegistrations()
   {
-    Map<String, String> result = new LinkedHashMap<String, String>();
+    Map<String, String> result = new LinkedHashMap<>();
     return result;
   }
 
   protected void updateEnablement()
   {
-    Set<Object> checkedElements = new HashSet<Object>(Arrays.asList(extensionViewer.getCheckedElements()));
+    Set<Object> checkedElements = new HashSet<>(Arrays.asList(extensionViewer.getCheckedElements()));
     boolean catalogSelectionChanged = !checkedElements.equals(new HashSet<Object>(extensions));
     boolean applyEnabled = catalogSelectionChanged;
     getButton(IDialogConstants.OK_ID).setEnabled(applyEnabled);
@@ -180,7 +184,7 @@ public class ExtensionsDialog extends AbstractSetupDialog
     }
     else if (buttonId == IDialogConstants.OK_ID)
     {
-      Set<Object> checkedElements = new HashSet<Object>(Arrays.asList(extensionViewer.getCheckedElements()));
+      Set<Object> checkedElements = new HashSet<>(Arrays.asList(extensionViewer.getCheckedElements()));
       result.addAll(extensions);
       result.retainAll(checkedElements);
     }

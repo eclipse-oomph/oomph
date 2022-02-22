@@ -84,6 +84,7 @@ public class NamePredicateImpl extends PredicateImpl implements NamePredicate
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getPattern()
   {
     return pattern;
@@ -104,6 +105,7 @@ public class NamePredicateImpl extends PredicateImpl implements NamePredicate
     }
   }
 
+  @Override
   public void setPattern(String newPattern)
   {
     setPatternGen(newPattern);

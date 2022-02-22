@@ -93,6 +93,7 @@ public class WorkingSetsFactoryImpl extends EFactoryImpl implements WorkingSetsF
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public WorkingSet createWorkingSet()
   {
     WorkingSetImpl workingSet = new WorkingSetImpl();
@@ -104,6 +105,7 @@ public class WorkingSetsFactoryImpl extends EFactoryImpl implements WorkingSetsF
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public WorkingSetGroup createWorkingSetGroup()
   {
     WorkingSetGroupImpl workingSetGroup = new WorkingSetGroupImpl();
@@ -115,6 +117,7 @@ public class WorkingSetsFactoryImpl extends EFactoryImpl implements WorkingSetsF
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ExclusionPredicate createExclusionPredicate()
   {
     ExclusionPredicateImpl exclusionPredicate = new ExclusionPredicateImpl();
@@ -126,6 +129,7 @@ public class WorkingSetsFactoryImpl extends EFactoryImpl implements WorkingSetsF
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public InclusionPredicate createInclusionPredicate()
   {
     InclusionPredicateImpl inclusionPredicate = new InclusionPredicateImpl();
@@ -137,6 +141,7 @@ public class WorkingSetsFactoryImpl extends EFactoryImpl implements WorkingSetsF
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public WorkingSetsPackage getWorkingSetsPackage()
   {
     return (WorkingSetsPackage)getEPackage();

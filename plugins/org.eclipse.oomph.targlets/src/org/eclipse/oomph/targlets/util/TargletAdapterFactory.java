@@ -94,7 +94,7 @@ public class TargletAdapterFactory extends AdapterFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  protected TargletSwitch<Adapter> modelSwitch = new TargletSwitch<Adapter>()
+  protected TargletSwitch<Adapter> modelSwitch = new TargletSwitch<>()
   {
     @Override
     public Adapter caseTargletContainer(TargletContainer object)

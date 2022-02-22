@@ -28,6 +28,7 @@ public class ToggleCommandHandler extends AbstractHandler
   {
   }
 
+  @Override
   public Object execute(ExecutionEvent event) throws ExecutionException
   {
     HandlerUtil.toggleCommandState(event.getCommand());

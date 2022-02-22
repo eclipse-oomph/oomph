@@ -180,6 +180,7 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getSourceLocator()
   {
     return sourceLocatorEClass;
@@ -190,6 +191,7 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getSourceLocator_RootFolder()
   {
     return (EAttribute)sourceLocatorEClass.getEStructuralFeatures().get(0);
@@ -200,6 +202,7 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getSourceLocator_ExcludedPaths()
   {
     return (EAttribute)sourceLocatorEClass.getEStructuralFeatures().get(1);
@@ -210,6 +213,7 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getSourceLocator_ProjectFactories()
   {
     return (EReference)sourceLocatorEClass.getEStructuralFeatures().get(2);
@@ -220,6 +224,7 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getSourceLocator_LocateNestedProjects()
   {
     return (EAttribute)sourceLocatorEClass.getEStructuralFeatures().get(4);
@@ -230,6 +235,7 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getSourceLocator_Predicates()
   {
     return (EReference)sourceLocatorEClass.getEStructuralFeatures().get(3);
@@ -240,6 +246,7 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EOperation getSourceLocator__Matches__IProject()
   {
     return sourceLocatorEClass.getEOperations().get(0);
@@ -250,6 +257,7 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EOperation getSourceLocator__LoadProject__EList_BackendContainer_IProgressMonitor()
   {
     return sourceLocatorEClass.getEOperations().get(1);
@@ -260,6 +268,7 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EOperation getSourceLocator__HandleProjects__EList_ProjectHandler_MultiStatus_IProgressMonitor()
   {
     return sourceLocatorEClass.getEOperations().get(2);
@@ -270,6 +279,7 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getProjectFactory()
   {
     return projectFactoryEClass;
@@ -280,6 +290,7 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getProjectFactory_ExcludedPaths()
   {
     return (EAttribute)projectFactoryEClass.getEStructuralFeatures().get(0);
@@ -290,6 +301,7 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EOperation getProjectFactory__CreateProject__BackendContainer_BackendContainer_IProgressMonitor()
   {
     return projectFactoryEClass.getEOperations().get(0);
@@ -300,6 +312,7 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EOperation getProjectFactory__IsExcludedPath__BackendContainer_BackendContainer()
   {
     return projectFactoryEClass.getEOperations().get(1);
@@ -310,6 +323,7 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getXMLProjectFactory()
   {
     return xmlProjectFactoryEClass;
@@ -320,6 +334,7 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getEclipseProjectFactory()
   {
     return eclipseProjectFactoryEClass;
@@ -330,6 +345,7 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getMavenProjectFactory()
   {
     return mavenProjectFactoryEClass;
@@ -340,6 +356,7 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EDataType getProjectHandler()
   {
     return projectHandlerEDataType;
@@ -350,6 +367,7 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EDataType getBackendContainer()
   {
     return backendContainerEDataType;
@@ -360,6 +378,7 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EDataType getMultiStatus()
   {
     return multiStatusEDataType;
@@ -370,6 +389,7 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EDataType getProgressMonitor()
   {
     return progressMonitorEDataType;
@@ -380,6 +400,7 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ResourcesFactory getResourcesFactory()
   {
     return (ResourcesFactory)getEFactoryInstance();

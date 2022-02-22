@@ -175,6 +175,7 @@ public abstract class SetupModelWizard extends Wizard implements INewWizard
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public void init(IWorkbench workbench, IStructuredSelection selection)
   {
     this.workbench = workbench;
@@ -243,7 +244,7 @@ public abstract class SetupModelWizard extends Wizard implements INewWizard
   {
     if (initialObjectNames == null)
     {
-      initialObjectNames = new ArrayList<String>();
+      initialObjectNames = new ArrayList<>();
       for (EClassifier eClassifier : setupPackage.getEClassifiers())
       {
         if (eClassifier instanceof EClass)
@@ -312,6 +313,7 @@ public abstract class SetupModelWizard extends Wizard implements INewWizard
         final ISelection targetSelection = new StructuredSelection(modelFile);
         getShell().getDisplay().asyncExec(new Runnable()
         {
+          @Override
           public void run()
           {
             ((ISetSelectionTarget)activePart).selectReveal(targetSelection);
@@ -457,6 +459,7 @@ public abstract class SetupModelWizard extends Wizard implements INewWizard
       setControl(composite);
     }
 
+    @Override
     public void createControl(Composite parent)
     {
       createControlGen(parent);
@@ -479,6 +482,7 @@ public abstract class SetupModelWizard extends Wizard implements INewWizard
      */
     protected ModifyListener validator = new ModifyListener()
     {
+      @Override
       public void modifyText(ModifyEvent e)
       {
         setPageComplete(validatePage());
@@ -575,7 +579,7 @@ public abstract class SetupModelWizard extends Wizard implements INewWizard
     {
       if (encodings == null)
       {
-        encodings = new ArrayList<String>();
+        encodings = new ArrayList<>();
         for (StringTokenizer stringTokenizer = new StringTokenizer(SetupEditorPlugin.INSTANCE.getString("_UI_XMLEncodingChoices")); stringTokenizer //$NON-NLS-1$
             .hasMoreTokens();)
         {
@@ -591,9 +595,9 @@ public abstract class SetupModelWizard extends Wizard implements INewWizard
    */
   public class TemplateUsagePage extends WizardPage implements SetupTemplate.Container
   {
-    private final List<SetupTemplate> templates = new ArrayList<SetupTemplate>();
+    private final List<SetupTemplate> templates = new ArrayList<>();
 
-    private final Map<SetupTemplate, Control> templateControls = new HashMap<SetupTemplate, Control>();
+    private final Map<SetupTemplate, Control> templateControls = new HashMap<>();
 
     private ComboViewer templatesViewer;
 
@@ -641,6 +645,7 @@ public abstract class SetupModelWizard extends Wizard implements INewWizard
       return template == null ? null : template.getDecorator();
     }
 
+    @Override
     public String getDefaultLocation()
     {
       IContainer defaultContainer = getWizard().getDefaultContainer();
@@ -659,6 +664,7 @@ public abstract class SetupModelWizard extends Wizard implements INewWizard
       }
     }
 
+    @Override
     public void createControl(Composite parent)
     {
       GridLayout layout = new GridLayout();
@@ -676,6 +682,7 @@ public abstract class SetupModelWizard extends Wizard implements INewWizard
       templatesViewer.setInput(templates);
       templatesViewer.addSelectionChangedListener(new ISelectionChangedListener()
       {
+        @Override
         public void selectionChanged(SelectionChangedEvent event)
         {
           Control control = getSelectedTemplateControl();
@@ -722,6 +729,7 @@ public abstract class SetupModelWizard extends Wizard implements INewWizard
             previewer.setContentProvider(new AdapterFactoryContentProvider(adapterFactory));
             previewer.addSelectionChangedListener(new ISelectionChangedListener()
             {
+              @Override
               public void selectionChanged(SelectionChangedEvent event)
               {
                 if (propertiesViewer != null)
@@ -809,16 +817,19 @@ public abstract class SetupModelWizard extends Wizard implements INewWizard
       }
     }
 
+    @Override
     public TreeViewer getPreviewer()
     {
       return previewer;
     }
 
+    @Override
     public PropertiesViewer getPropertiesViewer()
     {
       return propertiesViewer;
     }
 
+    @Override
     public void validate()
     {
       String message = getValidationMessage();

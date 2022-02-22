@@ -131,15 +131,15 @@ public class SynchronizerDialog extends AbstractSetupDialog
 
   private final ComposedAdapterFactory adapterFactory = BaseEditUtil.createAdapterFactory();
 
-  private final Map<SetupTask, TaskItem> taskItems = new HashMap<SetupTask, TaskItem>();
+  private final Map<SetupTask, TaskItem> taskItems = new HashMap<>();
 
-  private final Map<String, TaskItem> taskItemsByPreferenceKey = new HashMap<String, TaskItem>();
+  private final Map<String, TaskItem> taskItemsByPreferenceKey = new HashMap<>();
 
   private final Mode mode;
 
   private final RecorderTransaction recorderTransaction;
 
-  private final Set<URI> recorderValuesToRemove = new HashSet<URI>();
+  private final Set<URI> recorderValuesToRemove = new HashSet<>();
 
   private final Scope recorderTarget;
 
@@ -271,6 +271,7 @@ public class SynchronizerDialog extends AbstractSetupDialog
   {
     parent.addDisposeListener(new DisposeListener()
     {
+      @Override
       public void widgetDisposed(DisposeEvent e)
       {
         if (localColumnManager != null)
@@ -360,6 +361,7 @@ public class SynchronizerDialog extends AbstractSetupDialog
     {
       protected boolean changing;
 
+      @Override
       public void handleEvent(Event event)
       {
         if (!changing)
@@ -575,7 +577,7 @@ public class SynchronizerDialog extends AbstractSetupDialog
 
   private Map<URI, String> getRecorderPreferences()
   {
-    Map<URI, String> result = new HashMap<URI, String>();
+    Map<URI, String> result = new HashMap<>();
 
     Map<String, PreferenceTask> commitResult = recorderTransaction.getCommitResult();
     if (commitResult != null)
@@ -622,13 +624,13 @@ public class SynchronizerDialog extends AbstractSetupDialog
 
   private void populateTree()
   {
-    final Map<String, Set<SetupTask>> tasks = new HashMap<String, Set<SetupTask>>();
-    final Map<SetupTask, String> labels = new HashMap<SetupTask, String>();
-    final Map<SetupTask, Image> images = new HashMap<SetupTask, Image>();
+    final Map<String, Set<SetupTask>> tasks = new HashMap<>();
+    final Map<SetupTask, String> labels = new HashMap<>();
+    final Map<SetupTask, Image> images = new HashMap<>();
 
     if (mode.isRecord())
     {
-      Map<String, CompoundTask> compounds = new HashMap<String, CompoundTask>();
+      Map<String, CompoundTask> compounds = new HashMap<>();
       Map<String, Boolean> cleanLocalPolicies = recorderTransaction.getPolicies(true);
       Map<String, Boolean> dirtyLocalPolicies = recorderTransaction.getPolicies(false);
 
@@ -689,7 +691,7 @@ public class SynchronizerDialog extends AbstractSetupDialog
     }
     else // if (mode.isSync())
     {
-      Map<String, CompoundTask> compounds = new HashMap<String, CompoundTask>();
+      Map<String, CompoundTask> compounds = new HashMap<>();
 
       Map<String, SyncAction> syncActions = synchronization.getActions();
       for (Entry<String, SyncAction> entry : syncActions.entrySet())
@@ -723,11 +725,12 @@ public class SynchronizerDialog extends AbstractSetupDialog
 
   private void populateTree(final Map<String, Set<SetupTask>> tasks, final Map<SetupTask, String> labels, final Map<SetupTask, Image> images)
   {
-    List<String> nodes = new ArrayList<String>(tasks.keySet());
+    List<String> nodes = new ArrayList<>(tasks.keySet());
     Collections.sort(nodes);
 
-    Comparator<SetupTask> comparator = new Comparator<SetupTask>()
+    Comparator<SetupTask> comparator = new Comparator<>()
     {
+      @Override
       public int compare(SetupTask t1, SetupTask t2)
       {
         String l1 = labels.get(t1);
@@ -740,7 +743,7 @@ public class SynchronizerDialog extends AbstractSetupDialog
     {
       NodeItem nodeItem = new NodeItem(tree, adapterFactory, node);
 
-      List<SetupTask> list = new ArrayList<SetupTask>(tasks.get(node));
+      List<SetupTask> list = new ArrayList<>(tasks.get(node));
       Collections.sort(list, comparator);
 
       for (SetupTask task : list)
@@ -797,7 +800,7 @@ public class SynchronizerDialog extends AbstractSetupDialog
         Set<String> preferenceKeys = null;
         if (mode.isRecord())
         {
-          Map<String, PolicyAndValue> preferenceChanges = new HashMap<String, PolicyAndValue>();
+          Map<String, PolicyAndValue> preferenceChanges = new HashMap<>();
           for (TaskItem taskItem : taskItems.values())
           {
             SetupTask task = taskItem.getTask();
@@ -912,8 +915,8 @@ public class SynchronizerDialog extends AbstractSetupDialog
     URI targetURI = URI.createFileURI(target.getAbsolutePath());
     Resource resource = synchronization.getResourceSet().getResource(targetURI, true);
 
-    Set<String> preferenceKeys = new HashSet<String>();
-    Map<URI, Pair<String, String>> preferenceMap = new HashMap<URI, Pair<String, String>>();
+    Set<String> preferenceKeys = new HashSet<>();
+    Map<URI, Pair<String, String>> preferenceMap = new HashMap<>();
 
     RecorderTransaction tmpTransaction = RecorderTransaction.openTmp(resource);
     tmpTransaction.setPreferences(preferenceMap);
@@ -1047,6 +1050,7 @@ public class SynchronizerDialog extends AbstractSetupDialog
    */
   private final class PaintHandler implements Listener
   {
+    @Override
     public void handleEvent(Event event)
     {
       ColumnManager manager = getColumnManager(event.index);
@@ -1087,6 +1091,7 @@ public class SynchronizerDialog extends AbstractSetupDialog
       lastColumn = 0;
     }
 
+    @Override
     public void handleEvent(Event event)
     {
       Point eventPoint = new Point(event.x, event.y);
@@ -1535,8 +1540,8 @@ public class SynchronizerDialog extends AbstractSetupDialog
     protected void handleToggleAllChoices()
     {
       TreeItem[] items = dialog.tree.getItems();
-      Map<Choice[], Choice> minimumnChoice = new HashMap<Choice[], Choice>();
-      Set<TaskItem> taskItems = new LinkedHashSet<TaskItem>();
+      Map<Choice[], Choice> minimumnChoice = new HashMap<>();
+      Set<TaskItem> taskItems = new LinkedHashSet<>();
       visit(minimumnChoice, taskItems, items);
       boolean hasConflictChoice = false;
       for (Entry<Choice[], Choice> entry : minimumnChoice.entrySet())

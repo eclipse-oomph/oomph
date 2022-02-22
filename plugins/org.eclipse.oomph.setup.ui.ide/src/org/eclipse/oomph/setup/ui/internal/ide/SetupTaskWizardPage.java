@@ -90,6 +90,7 @@ public class SetupTaskWizardPage extends WizardPage
     setImageDescriptor(SetupUIIDEPlugin.INSTANCE.getImageDescriptor("extension_wiz.png")); //$NON-NLS-1$
   }
 
+  @Override
   public void createControl(Composite parent)
   {
     Composite container = new Composite(parent, SWT.NULL);
@@ -271,6 +272,7 @@ public class SetupTaskWizardPage extends WizardPage
     {
       private String lastValue;
 
+      @Override
       public void modifyText(ModifyEvent e)
       {
         lastValue = projectNameChanged(lastValue);
@@ -305,7 +307,7 @@ public class SetupTaskWizardPage extends WizardPage
     String publicationLocation = publicationLocationText.getText();
     String enablementURL = enablementURLText.getText();
 
-    final Map<String, String> variables = new HashMap<String, String>();
+    final Map<String, String> variables = new HashMap<>();
     variables.put("@ProjectName@", projectName); //$NON-NLS-1$
     variables.put("@ProjectURI@", getProjectURI(projectName)); //$NON-NLS-1$
     variables.put("@ContainerLocation@", containerLocation); //$NON-NLS-1$
@@ -348,6 +350,7 @@ public class SetupTaskWizardPage extends WizardPage
   {
     text.addModifyListener(new ModifyListener()
     {
+      @Override
       public void modifyText(ModifyEvent e)
       {
         dialogChanged();

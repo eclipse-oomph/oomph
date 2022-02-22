@@ -89,7 +89,7 @@ public class ProxyResolver extends WorkerPool<ProxyResolver, Resource, ProxyReso
     try
     {
       resourceSet.eAdapters().add(adapter);
-      perform(new ArrayList<Resource>(resources));
+      perform(new ArrayList<>(resources));
     }
     finally
     {
@@ -136,7 +136,7 @@ public class ProxyResolver extends WorkerPool<ProxyResolver, Resource, ProxyReso
     protected void visit(EObject eObject)
     {
       EClass eClass = eObject.eClass();
-      List<EObject> properContentObjects = new ArrayList<EObject>();
+      List<EObject> properContentObjects = new ArrayList<>();
       for (EReference eReference : eClass.getEAllReferences())
       {
         if (!eReference.isDerived())

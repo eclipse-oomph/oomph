@@ -41,7 +41,7 @@ public class UpdateCommitCopyrightsAction extends AbstractRevisionAction
       RevCommit parent = commit.getParent(0);
 
       DiffFormatter diffFormatter = new DiffFormatter(System.out);
-      List<File> inputFiles = new ArrayList<File>();
+      List<File> inputFiles = new ArrayList<>();
 
       try
       {

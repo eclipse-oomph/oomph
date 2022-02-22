@@ -32,7 +32,7 @@ import java.util.Map;
  */
 public abstract class RepositoryProviderMap<M extends IRepositoryManager<T>, R extends IRepository<T>, T, P extends RepositoryProvider<M, R, T>>
 {
-  private final Map<URI, P> providers = new HashMap<URI, P>();
+  private final Map<URI, P> providers = new HashMap<>();
 
   private final M repositoryManager;
 

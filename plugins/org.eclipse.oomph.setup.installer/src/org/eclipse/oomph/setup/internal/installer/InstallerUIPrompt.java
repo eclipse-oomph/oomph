@@ -70,6 +70,7 @@ public class InstallerUIPrompt extends PasswordProvider
     final PBEKeySpec[] result = new PBEKeySpec[1];
     UIUtil.syncExec(new Runnable()
     {
+      @Override
       public void run()
       {
         if (loginDialog.open() == Window.OK)
@@ -92,6 +93,7 @@ public class InstallerUIPrompt extends PasswordProvider
     final boolean[] result = new boolean[1];
     UIUtil.getDisplay().syncExec(new Runnable()
     {
+      @Override
       public void run()
       {
         boolean reply = MessageDialog.openConfirm(UIUtil.getShell(), SecUIMessages.exceptionTitle, SecUIMessages.exceptionDecode);

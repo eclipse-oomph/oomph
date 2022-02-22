@@ -145,6 +145,7 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage
     // Register package validator
     EValidator.Registry.INSTANCE.put(theBasePackage, new EValidator.Descriptor()
     {
+      @Override
       public EValidator getEValidator()
       {
         return BaseValidator.INSTANCE;
@@ -164,6 +165,7 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getModelElement()
   {
     return modelElementEClass;
@@ -174,6 +176,7 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getModelElement_Annotations()
   {
     return (EReference)modelElementEClass.getEStructuralFeatures().get(0);
@@ -184,6 +187,7 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EOperation getModelElement__GetAnnotation__String()
   {
     return modelElementEClass.getEOperations().get(0);
@@ -194,6 +198,7 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getAnnotation()
   {
     return annotationEClass;
@@ -204,6 +209,7 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getAnnotation_ModelElement()
   {
     return (EReference)annotationEClass.getEStructuralFeatures().get(0);
@@ -214,6 +220,7 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getAnnotation_Source()
   {
     return (EAttribute)annotationEClass.getEStructuralFeatures().get(1);
@@ -224,6 +231,7 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getAnnotation_Details()
   {
     return (EReference)annotationEClass.getEStructuralFeatures().get(2);
@@ -234,6 +242,7 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getAnnotation_Contents()
   {
     return (EReference)annotationEClass.getEStructuralFeatures().get(3);
@@ -244,6 +253,7 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getAnnotation_References()
   {
     return (EReference)annotationEClass.getEStructuralFeatures().get(4);
@@ -254,6 +264,7 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getStringToStringMapEntry()
   {
     return stringToStringMapEntryEClass;
@@ -264,6 +275,7 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getStringToStringMapEntry_Key()
   {
     return (EAttribute)stringToStringMapEntryEClass.getEStructuralFeatures().get(0);
@@ -274,6 +286,7 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getStringToStringMapEntry_Value()
   {
     return (EAttribute)stringToStringMapEntryEClass.getEStructuralFeatures().get(1);
@@ -284,6 +297,7 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EDataType getURI()
   {
     return uriEDataType;
@@ -294,6 +308,7 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EDataType getException()
   {
     return exceptionEDataType;
@@ -304,6 +319,7 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EDataType getText()
   {
     return textEDataType;
@@ -314,6 +330,7 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EDataType getID()
   {
     return idEDataType;
@@ -324,6 +341,7 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public BaseFactory getBaseFactory()
   {
     return (BaseFactory)getEFactoryInstance();

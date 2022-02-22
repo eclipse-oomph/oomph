@@ -19,6 +19,7 @@ import org.eclipse.swt.widgets.Display;
  */
 public abstract class AbstractDialogConfirmer implements Confirmer
 {
+  @Override
   public Confirmation confirm(final boolean defaultConfirmed, final Object info)
   {
     final boolean[] confirmed = { false };
@@ -26,6 +27,7 @@ public abstract class AbstractDialogConfirmer implements Confirmer
 
     Display.getDefault().syncExec(new Runnable()
     {
+      @Override
       public void run()
       {
         AbstractConfirmDialog dialog = createDialog(defaultConfirmed, info);

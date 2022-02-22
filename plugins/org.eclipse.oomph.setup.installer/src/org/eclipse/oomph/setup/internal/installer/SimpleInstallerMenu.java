@@ -143,6 +143,7 @@ public class SimpleInstallerMenu extends Shell implements Listener
 
     addDisposeListener(new DisposeListener()
     {
+      @Override
       public void widgetDisposed(DisposeEvent e)
       {
         removeDisposeListener(this);
@@ -188,6 +189,7 @@ public class SimpleInstallerMenu extends Shell implements Listener
     }
   }
 
+  @Override
   public void handleEvent(Event event)
   {
     switch (event.type)
@@ -401,6 +403,7 @@ public class SimpleInstallerMenu extends Shell implements Listener
         return new Point(wHint > 0 ? wHint : 0, height);
       }
 
+      @Override
       public void paintControl(PaintEvent e)
       {
         Rectangle clientArea = getClientArea();

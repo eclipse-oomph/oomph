@@ -16,6 +16,8 @@ import org.eclipse.oomph.setup.SetupTask;
 
 import org.eclipse.emf.common.util.EList;
 
+import org.eclipse.equinox.p2.core.UIServices;
+
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Install Task</b></em>'.
@@ -174,5 +176,13 @@ public interface P2Task extends SetupTask
    * @generated
    */
   void setProfileProperties(String value);
+
+  /**
+   * @author Ed Merks
+   */
+  public static interface UIServicesInitializer
+  {
+    public void init(UIServices serviceUI);
+  }
 
 } // InstallTask

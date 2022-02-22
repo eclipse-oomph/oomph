@@ -98,11 +98,12 @@ public class RepositoryListImpl extends ModelElementImpl implements RepositoryLi
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<Repository> getRepositories()
   {
     if (repositories == null)
     {
-      repositories = new EObjectContainmentEList<Repository>(Repository.class, this, P2Package.REPOSITORY_LIST__REPOSITORIES);
+      repositories = new EObjectContainmentEList<>(Repository.class, this, P2Package.REPOSITORY_LIST__REPOSITORIES);
     }
     return repositories;
   }
@@ -112,6 +113,7 @@ public class RepositoryListImpl extends ModelElementImpl implements RepositoryLi
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getName()
   {
     return name;
@@ -122,6 +124,7 @@ public class RepositoryListImpl extends ModelElementImpl implements RepositoryLi
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setName(String newName)
   {
     String oldName = name;

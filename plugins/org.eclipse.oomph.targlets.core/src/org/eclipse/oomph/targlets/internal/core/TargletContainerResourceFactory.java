@@ -41,6 +41,7 @@ public class TargletContainerResourceFactory implements Factory
   {
   }
 
+  @Override
   public Resource createResource(URI uri)
   {
     final String id = uri.opaquePart();

@@ -61,6 +61,7 @@ public class UserURIHandlerImpl extends URIHandlerImpl implements URIResolver
     return SetupContext.isUserScheme(uri.scheme());
   }
 
+  @Override
   public URI resolve(URI uri)
   {
     return SetupContext.GLOBAL_SETUPS_LOCATION_URI.appendSegments(uri.segments()).appendFragment(uri.fragment());

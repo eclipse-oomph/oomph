@@ -56,28 +56,30 @@ import java.util.Set;
  */
 public class SetupTaskItemProvider extends ModelElementItemProvider
 {
-  private static final Map<Set<Trigger>, IItemLabelProvider> EXCLUSION_LABEL_PROVIDERS = new HashMap<Set<Trigger>, IItemLabelProvider>();
+  private static final Map<Set<Trigger>, IItemLabelProvider> EXCLUSION_LABEL_PROVIDERS = new HashMap<>();
 
   static
   {
     for (Set<Trigger> validTriggers : Trigger.LITERALS.keySet())
     {
-      final Map<Set<Trigger>, String> exclusionLabels = new HashMap<Set<Trigger>, String>();
+      final Map<Set<Trigger>, String> exclusionLabels = new HashMap<>();
 
       for (Set<Trigger> triggers : Trigger.LITERALS.keySet())
       {
-        Set<Trigger> compliment = new LinkedHashSet<Trigger>(validTriggers);
+        Set<Trigger> compliment = new LinkedHashSet<>(validTriggers);
         compliment.removeAll(triggers);
         exclusionLabels.put(triggers, Trigger.LITERALS.get(compliment));
       }
 
       EXCLUSION_LABEL_PROVIDERS.put(validTriggers, new IItemLabelProvider()
       {
+        @Override
         public String getText(Object object)
         {
           return exclusionLabels.get(object);
         }
 
+        @Override
         public Object getImage(Object object)
         {
           return null;
@@ -342,7 +344,7 @@ public class SetupTaskItemProvider extends ModelElementItemProvider
 
   private List<Scope> getScopes(Scope scope)
   {
-    List<Scope> scopes = new ArrayList<Scope>();
+    List<Scope> scopes = new ArrayList<>();
     for (; scope != null; scope = scope.getParentScope())
     {
       scopes.add(0, scope);
@@ -428,7 +430,7 @@ public class SetupTaskItemProvider extends ModelElementItemProvider
       {
         SetupTask setupTask = (SetupTask)object;
         Set<Trigger> validTriggers = setupTask.getValidTriggers();
-        List<Set<Trigger>> result = new ArrayList<Set<Trigger>>(Trigger.LITERALS.keySet());
+        List<Set<Trigger>> result = new ArrayList<>(Trigger.LITERALS.keySet());
         for (Iterator<Set<Trigger>> it = result.iterator(); it.hasNext();)
         {
           if (!validTriggers.containsAll(it.next()))

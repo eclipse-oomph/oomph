@@ -161,7 +161,7 @@ public final class ArtifactRepositoryAdjuster
 
   private static List<String> readLines(File file, String charsetName) throws IOException
   {
-    List<String> lines = new ArrayList<String>();
+    List<String> lines = new ArrayList<>();
 
     if (file.exists())
     {

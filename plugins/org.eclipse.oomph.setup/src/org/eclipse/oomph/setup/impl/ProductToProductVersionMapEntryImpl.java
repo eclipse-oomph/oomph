@@ -270,6 +270,7 @@ public class ProductToProductVersionMapEntryImpl extends MinimalEObjectImpl.Cont
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public int getHash()
   {
     if (hash == -1)
@@ -285,6 +286,7 @@ public class ProductToProductVersionMapEntryImpl extends MinimalEObjectImpl.Cont
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setHash(int hash)
   {
     this.hash = hash;
@@ -295,6 +297,7 @@ public class ProductToProductVersionMapEntryImpl extends MinimalEObjectImpl.Cont
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Product getKey()
   {
     return getTypedKey();
@@ -305,6 +308,7 @@ public class ProductToProductVersionMapEntryImpl extends MinimalEObjectImpl.Cont
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setKey(Product key)
   {
     setTypedKey(key);
@@ -315,6 +319,7 @@ public class ProductToProductVersionMapEntryImpl extends MinimalEObjectImpl.Cont
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ProductVersion getValue()
   {
     return getTypedValue();
@@ -325,6 +330,7 @@ public class ProductToProductVersionMapEntryImpl extends MinimalEObjectImpl.Cont
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ProductVersion setValue(ProductVersion value)
   {
     ProductVersion oldValue = getValue();

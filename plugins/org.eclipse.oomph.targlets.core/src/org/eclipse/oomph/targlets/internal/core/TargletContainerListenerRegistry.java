@@ -35,7 +35,7 @@ public class TargletContainerListenerRegistry implements ITargletContainerListen
 {
   public static final TargletContainerListenerRegistry INSTANCE = new TargletContainerListenerRegistry();
 
-  private final List<ITargletContainerListener> listeners = new ArrayList<ITargletContainerListener>();
+  private final List<ITargletContainerListener> listeners = new ArrayList<>();
 
   private final ExtensionPointHandler extensionPointHandler = new ExtensionPointHandler();
 
@@ -54,6 +54,7 @@ public class TargletContainerListenerRegistry implements ITargletContainerListen
     listeners.clear();
   }
 
+  @Override
   public void addListener(ITargletContainerListener listener)
   {
     synchronized (listeners)
@@ -62,6 +63,7 @@ public class TargletContainerListenerRegistry implements ITargletContainerListen
     }
   }
 
+  @Override
   public void removeListener(ITargletContainerListener listener)
   {
     synchronized (listeners)
@@ -106,7 +108,7 @@ public class TargletContainerListenerRegistry implements ITargletContainerListen
   {
     public static final String EXTENSION_POINT = "org.eclipse.oomph.targlets.core.targletContainerListeners"; //$NON-NLS-1$
 
-    private final Map<IConfigurationElement, ITargletContainerListener> listeners = new HashMap<IConfigurationElement, ITargletContainerListener>();
+    private final Map<IConfigurationElement, ITargletContainerListener> listeners = new HashMap<>();
 
     public ExtensionPointHandler()
     {
@@ -135,16 +137,19 @@ public class TargletContainerListenerRegistry implements ITargletContainerListen
       listeners.clear();
     }
 
+    @Override
     public void added(IExtensionPoint[] extensionPoints)
     {
       // Do nothing
     }
 
+    @Override
     public void removed(IExtensionPoint[] extensionPoints)
     {
       // Do nothing
     }
 
+    @Override
     public void added(IExtension[] extensions)
     {
       for (IExtension extension : extensions)
@@ -156,6 +161,7 @@ public class TargletContainerListenerRegistry implements ITargletContainerListen
       }
     }
 
+    @Override
     public void removed(IExtension[] extensions)
     {
       for (IExtension extension : extensions)

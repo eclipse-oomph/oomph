@@ -56,6 +56,7 @@ public class VersionBuilderArguments extends HashMap<String, String> implements 
     this(getArgumentsFromProject(project));
   }
 
+  @Override
   public String getReleasePath()
   {
     return get(IVersionBuilderArguments.RELEASE_PATH_ARGUMENT);
@@ -66,6 +67,7 @@ public class VersionBuilderArguments extends HashMap<String, String> implements 
     setString(IVersionBuilderArguments.RELEASE_PATH_ARGUMENT, value);
   }
 
+  @Override
   public String getValidatorClassName()
   {
     return get(IVersionBuilderArguments.VALIDATOR_CLASS_ARGUMENT);
@@ -76,6 +78,7 @@ public class VersionBuilderArguments extends HashMap<String, String> implements 
     setString(IVersionBuilderArguments.VALIDATOR_CLASS_ARGUMENT, value);
   }
 
+  @Override
   public boolean isIgnoreMalformedVersions()
   {
     return "true".equals(get(IVersionBuilderArguments.IGNORE_MALFORMED_VERSIONS_ARGUMENT)); //$NON-NLS-1$
@@ -86,6 +89,7 @@ public class VersionBuilderArguments extends HashMap<String, String> implements 
     setBoolean(IVersionBuilderArguments.IGNORE_MALFORMED_VERSIONS_ARGUMENT, value);
   }
 
+  @Override
   public boolean isIgnoreFeatureNature()
   {
     return "true".equals(get(IVersionBuilderArguments.IGNORE_FEATURE_NATURE_ARGUMENT)); //$NON-NLS-1$
@@ -96,6 +100,7 @@ public class VersionBuilderArguments extends HashMap<String, String> implements 
     setBoolean(IVersionBuilderArguments.IGNORE_FEATURE_NATURE_ARGUMENT, value);
   }
 
+  @Override
   public boolean isIgnoreSchemaBuilder()
   {
     return "true".equals(get(IVersionBuilderArguments.IGNORE_SCHEMA_BUILDER_ARGUMENT)); //$NON-NLS-1$
@@ -106,6 +111,7 @@ public class VersionBuilderArguments extends HashMap<String, String> implements 
     setBoolean(IVersionBuilderArguments.IGNORE_SCHEMA_BUILDER_ARGUMENT, value);
   }
 
+  @Override
   public boolean isIgnoreDebugOptions()
   {
     return "true".equals(get(IVersionBuilderArguments.IGNORE_DEBUG_OPTIONS_ARGUMENT)); //$NON-NLS-1$
@@ -116,6 +122,7 @@ public class VersionBuilderArguments extends HashMap<String, String> implements 
     setBoolean(IVersionBuilderArguments.IGNORE_DEBUG_OPTIONS_ARGUMENT, value);
   }
 
+  @Override
   public boolean isIgnoreAutomaticModuleName()
   {
     return "true".equals(get(IVersionBuilderArguments.IGNORE_AUTOMATIC_MODULE_NAME_ARGUMENT)); //$NON-NLS-1$
@@ -126,6 +133,7 @@ public class VersionBuilderArguments extends HashMap<String, String> implements 
     setBoolean(IVersionBuilderArguments.IGNORE_AUTOMATIC_MODULE_NAME_ARGUMENT, value);
   }
 
+  @Override
   public boolean isIgnoreMissingDependencyRanges()
   {
     return "true".equals(get(IVersionBuilderArguments.IGNORE_DEPENDENCY_RANGES_ARGUMENT)); //$NON-NLS-1$
@@ -136,6 +144,7 @@ public class VersionBuilderArguments extends HashMap<String, String> implements 
     setBoolean(IVersionBuilderArguments.IGNORE_DEPENDENCY_RANGES_ARGUMENT, value);
   }
 
+  @Override
   public boolean isIgnoreLaxLowerBoundDependencyVersions()
   {
     return "true".equals(get(IVersionBuilderArguments.IGNORE_LAX_LOWER_BOUND_VERSIONS_ARGUMENT)); //$NON-NLS-1$
@@ -146,6 +155,7 @@ public class VersionBuilderArguments extends HashMap<String, String> implements 
     setBoolean(IVersionBuilderArguments.IGNORE_LAX_LOWER_BOUND_VERSIONS_ARGUMENT, value);
   }
 
+  @Override
   public boolean isIgnoreMissingExportVersions()
   {
     return "true".equals(get(IVersionBuilderArguments.IGNORE_EXPORT_VERSIONS_ARGUMENT)); //$NON-NLS-1$
@@ -156,6 +166,7 @@ public class VersionBuilderArguments extends HashMap<String, String> implements 
     setBoolean(IVersionBuilderArguments.IGNORE_EXPORT_VERSIONS_ARGUMENT, value);
   }
 
+  @Override
   public boolean isIgnoreFeatureContentChanges()
   {
     return "true".equals(get(IVersionBuilderArguments.IGNORE_CONTENT_CHANGES_ARGUMENT)); //$NON-NLS-1$
@@ -166,6 +177,7 @@ public class VersionBuilderArguments extends HashMap<String, String> implements 
     setBoolean(IVersionBuilderArguments.IGNORE_CONTENT_CHANGES_ARGUMENT, value);
   }
 
+  @Override
   public boolean isIgnoreFeatureContentRedundancy()
   {
     return "true".equals(get(IVersionBuilderArguments.IGNORE_CONTENT_REDUNDANCY_ARGUMENT)); //$NON-NLS-1$
@@ -176,6 +188,7 @@ public class VersionBuilderArguments extends HashMap<String, String> implements 
     setBoolean(IVersionBuilderArguments.IGNORE_CONTENT_REDUNDANCY_ARGUMENT, value);
   }
 
+  @Override
   public boolean isCheckFeatureClosureCompleteness()
   {
     return "true".equals(get(IVersionBuilderArguments.CHECK_CLOSURE_COMPLETENESS_ARGUMENT)); //$NON-NLS-1$
@@ -186,6 +199,7 @@ public class VersionBuilderArguments extends HashMap<String, String> implements 
     setBoolean(IVersionBuilderArguments.CHECK_CLOSURE_COMPLETENESS_ARGUMENT, value);
   }
 
+  @Override
   public boolean isCheckFeatureClosureContent()
   {
     return "true".equals(get(IVersionBuilderArguments.CHECK_CLOSURE_CONTENT_ARGUMENT)); //$NON-NLS-1$
@@ -196,6 +210,7 @@ public class VersionBuilderArguments extends HashMap<String, String> implements 
     setBoolean(IVersionBuilderArguments.CHECK_CLOSURE_CONTENT_ARGUMENT, value);
   }
 
+  @Override
   public boolean isCheckMavenPom()
   {
     return "true".equals(get(IVersionBuilderArguments.CHECK_MAVEN_POM_ARGUMENT)); //$NON-NLS-1$
@@ -206,6 +221,7 @@ public class VersionBuilderArguments extends HashMap<String, String> implements 
     setBoolean(IVersionBuilderArguments.CHECK_MAVEN_POM_ARGUMENT, value);
   }
 
+  @Override
   public void applyTo(IProject project) throws CoreException
   {
     IProjectDescription description = project.getDescription();
@@ -256,7 +272,7 @@ public class VersionBuilderArguments extends HashMap<String, String> implements 
   public static List<String> getOtherNatures(IProjectDescription description)
   {
     String[] natureIds = description.getNatureIds();
-    List<String> ids = new ArrayList<String>(Arrays.asList(natureIds));
+    List<String> ids = new ArrayList<>(Arrays.asList(natureIds));
     ids.remove(VersionNature.NATURE_ID);
     return ids;
   }
@@ -265,7 +281,7 @@ public class VersionBuilderArguments extends HashMap<String, String> implements 
   {
     ICommand[] buildSpec = description.getBuildSpec();
 
-    List<ICommand> commands = new ArrayList<ICommand>(Arrays.asList(buildSpec));
+    List<ICommand> commands = new ArrayList<>(Arrays.asList(buildSpec));
     for (Iterator<ICommand> it = commands.iterator(); it.hasNext();)
     {
       ICommand command = it.next();
@@ -297,6 +313,6 @@ public class VersionBuilderArguments extends HashMap<String, String> implements 
       Activator.log(ex);
     }
 
-    return new HashMap<String, String>();
+    return new HashMap<>();
   }
 }

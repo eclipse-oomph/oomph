@@ -213,6 +213,7 @@ public abstract class SetupTaskImpl extends ModelElementImpl implements SetupTas
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getID()
   {
     return iD;
@@ -223,6 +224,7 @@ public abstract class SetupTaskImpl extends ModelElementImpl implements SetupTas
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setID(String newID)
   {
     String oldID = iD;
@@ -238,11 +240,12 @@ public abstract class SetupTaskImpl extends ModelElementImpl implements SetupTas
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public EList<SetupTask> getPredecessors()
   {
     if (predecessors == null)
     {
-      predecessors = new EObjectResolvingEList<SetupTask>(SetupTaskImpl.class, this, SetupPackage.SETUP_TASK__PREDECESSORS);
+      predecessors = new EObjectResolvingEList<>(SetupTaskImpl.class, this, SetupPackage.SETUP_TASK__PREDECESSORS);
     }
     return predecessors;
   }
@@ -252,11 +255,12 @@ public abstract class SetupTaskImpl extends ModelElementImpl implements SetupTas
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public EList<SetupTask> getSuccessors()
   {
     if (successors == null)
     {
-      successors = new EObjectResolvingEList<SetupTask>(SetupTaskImpl.class, this, SetupPackage.SETUP_TASK__SUCCESSORS);
+      successors = new EObjectResolvingEList<>(SetupTaskImpl.class, this, SetupPackage.SETUP_TASK__SUCCESSORS);
     }
     return successors;
   }
@@ -266,11 +270,12 @@ public abstract class SetupTaskImpl extends ModelElementImpl implements SetupTas
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<Scope> getRestrictions()
   {
     if (restrictions == null)
     {
-      restrictions = new EObjectResolvingEList<Scope>(Scope.class, this, SetupPackage.SETUP_TASK__RESTRICTIONS);
+      restrictions = new EObjectResolvingEList<>(Scope.class, this, SetupPackage.SETUP_TASK__RESTRICTIONS);
     }
     return restrictions;
   }
@@ -280,6 +285,7 @@ public abstract class SetupTaskImpl extends ModelElementImpl implements SetupTas
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getFilter()
   {
     return filter;
@@ -290,6 +296,7 @@ public abstract class SetupTaskImpl extends ModelElementImpl implements SetupTas
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setFilter(String newFilter)
   {
     String oldFilter = filter;
@@ -305,6 +312,7 @@ public abstract class SetupTaskImpl extends ModelElementImpl implements SetupTas
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public final ScopeType getScopeType()
   {
     return getScope(this);
@@ -315,6 +323,7 @@ public abstract class SetupTaskImpl extends ModelElementImpl implements SetupTas
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public Set<Trigger> getExcludedTriggers()
   {
     return excludedTriggers == null ? Collections.<Trigger> emptySet() : excludedTriggers;
@@ -335,6 +344,7 @@ public abstract class SetupTaskImpl extends ModelElementImpl implements SetupTas
     }
   }
 
+  @Override
   public void setExcludedTriggers(Set<Trigger> newExcludedTriggers)
   {
     setExcludedTriggersGen(newExcludedTriggers == null || newExcludedTriggers.isEmpty() ? null : newExcludedTriggers);
@@ -345,6 +355,7 @@ public abstract class SetupTaskImpl extends ModelElementImpl implements SetupTas
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getDescription()
   {
     return description;
@@ -355,6 +366,7 @@ public abstract class SetupTaskImpl extends ModelElementImpl implements SetupTas
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setDescription(String newDescription)
   {
     String oldDescription = description;
@@ -370,6 +382,7 @@ public abstract class SetupTaskImpl extends ModelElementImpl implements SetupTas
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public Scope getScope()
   {
     for (EObject container = eContainer(); container != null; container = container.eContainer())
@@ -388,6 +401,7 @@ public abstract class SetupTaskImpl extends ModelElementImpl implements SetupTas
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public boolean isDisabled()
   {
     return disabled;
@@ -398,6 +412,7 @@ public abstract class SetupTaskImpl extends ModelElementImpl implements SetupTas
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setDisabled(boolean newDisabled)
   {
     boolean oldDisabled = disabled;
@@ -429,6 +444,7 @@ public abstract class SetupTaskImpl extends ModelElementImpl implements SetupTas
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public boolean requires(SetupTask setupTask)
   {
     return visitPredecessors(setupTask, new HashSet<SetupTask>()) || ((SetupTaskImpl)setupTask).visitSuccessors(this, new HashSet<SetupTask>());
@@ -444,11 +460,13 @@ public abstract class SetupTaskImpl extends ModelElementImpl implements SetupTas
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public final Set<Trigger> getValidTriggers()
   {
     return SetupUtil.getTriggers(eClass());
   }
 
+  @Override
   public int getPriority()
   {
     return PRIORITY_DEFAULT;
@@ -459,6 +477,7 @@ public abstract class SetupTaskImpl extends ModelElementImpl implements SetupTas
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public final Set<Trigger> getTriggers()
   {
     Set<Trigger> excludedTriggers = getExcludedTriggers();
@@ -467,7 +486,7 @@ public abstract class SetupTaskImpl extends ModelElementImpl implements SetupTas
       return getValidTriggers();
     }
 
-    Set<Trigger> result = new HashSet<Trigger>(getValidTriggers());
+    Set<Trigger> result = new HashSet<>(getValidTriggers());
     result.removeAll(excludedTriggers);
     return Trigger.intern(result);
   }
@@ -598,11 +617,13 @@ public abstract class SetupTaskImpl extends ModelElementImpl implements SetupTas
    *
    * @see #createToken(String)
    */
+  @Override
   public Object getOverrideToken()
   {
     return this;
   }
 
+  @Override
   public void overrideFor(SetupTask overriddenSetupTask)
   {
     EList<SetupTask> overriddenPredecessors = overriddenSetupTask.getPredecessors();
@@ -624,10 +645,12 @@ public abstract class SetupTaskImpl extends ModelElementImpl implements SetupTas
     }
   }
 
+  @Override
   public void consolidate()
   {
   }
 
+  @Override
   public int getProgressMonitorWork()
   {
     return 1;
@@ -636,6 +659,7 @@ public abstract class SetupTaskImpl extends ModelElementImpl implements SetupTas
   /**
    * Subclasses may override to reset this task to its initial state.
    */
+  @Override
   public void dispose()
   {
     // TODO Move all these framework hooks out of the public API
@@ -841,6 +865,7 @@ public abstract class SetupTaskImpl extends ModelElementImpl implements SetupTas
     UserCallback callback = context.getPrompter().getUserCallback();
     callback.execInUI(false, new Runnable()
     {
+      @Override
       public void run()
       {
         try
@@ -901,12 +926,7 @@ public abstract class SetupTaskImpl extends ModelElementImpl implements SetupTas
         return true;
       }
 
-      if (obj == null)
-      {
-        return false;
-      }
-
-      if (getClass() != obj.getClass())
+      if (obj == null || getClass() != obj.getClass())
       {
         return false;
       }

@@ -90,6 +90,7 @@ public class P2TaskUIServicesPrompter extends P2TaskUISevices
     result[0] = true;
     UIUtil.syncExec(new Runnable()
     {
+      @Override
       public void run()
       {
         Shell shell = getShell();

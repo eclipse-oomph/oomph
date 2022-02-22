@@ -142,6 +142,7 @@ public final class Request extends HashMap<String, String>
   {
     public static final Handler SYSTEM_BROWSER = new Handler()
     {
+      @Override
       public boolean handleRequest(Request request)
       {
         return OS.INSTANCE.openSystemBrowser(request.getURI().toString());
@@ -162,6 +163,7 @@ public final class Request extends HashMap<String, String>
         this.delegate = delegate;
       }
 
+      @Override
       public boolean handleRequest(Request request)
       {
         request = request.copy();

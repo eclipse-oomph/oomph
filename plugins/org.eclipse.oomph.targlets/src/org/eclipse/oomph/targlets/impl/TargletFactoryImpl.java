@@ -167,6 +167,7 @@ public class TargletFactoryImpl extends EFactoryImpl implements TargletFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public TargletContainer createTargletContainer()
   {
     TargletContainerImpl targletContainer = new TargletContainerImpl();
@@ -178,12 +179,14 @@ public class TargletFactoryImpl extends EFactoryImpl implements TargletFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Targlet createTarglet()
   {
     TargletImpl targlet = new TargletImpl();
     return targlet;
   }
 
+  @Override
   public Targlet createTarglet(String name)
   {
     Targlet targlet = createTarglet();
@@ -191,6 +194,7 @@ public class TargletFactoryImpl extends EFactoryImpl implements TargletFactory
     return targlet;
   }
 
+  @Override
   public Targlet copyTarglet(Targlet source)
   {
     String activeRepositoryList = source.getActiveRepositoryListName();
@@ -241,9 +245,10 @@ public class TargletFactoryImpl extends EFactoryImpl implements TargletFactory
     return targlet;
   }
 
+  @Override
   public EList<Targlet> copyTarglets(Collection<? extends Targlet> targlets)
   {
-    EList<Targlet> result = new BasicEList<Targlet>();
+    EList<Targlet> result = new BasicEList<>();
     for (Targlet source : targlets)
     {
       result.add(copyTarglet(source));
@@ -257,6 +262,7 @@ public class TargletFactoryImpl extends EFactoryImpl implements TargletFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ComponentExtension createComponentExtension()
   {
     ComponentExtensionImpl componentExtension = new ComponentExtensionImpl();
@@ -268,6 +274,7 @@ public class TargletFactoryImpl extends EFactoryImpl implements TargletFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ComponentDefinition createComponentDefinition()
   {
     ComponentDefinitionImpl componentDefinition = new ComponentDefinitionImpl();
@@ -279,6 +286,7 @@ public class TargletFactoryImpl extends EFactoryImpl implements TargletFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public FeatureGenerator createFeatureGenerator()
   {
     FeatureGeneratorImpl featureGenerator = new FeatureGeneratorImpl();
@@ -290,6 +298,7 @@ public class TargletFactoryImpl extends EFactoryImpl implements TargletFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public PluginGenerator createPluginGenerator()
   {
     PluginGeneratorImpl pluginGenerator = new PluginGeneratorImpl();
@@ -301,6 +310,7 @@ public class TargletFactoryImpl extends EFactoryImpl implements TargletFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ComponentDefGenerator createComponentDefGenerator()
   {
     ComponentDefGeneratorImpl componentDefGenerator = new ComponentDefGeneratorImpl();
@@ -312,6 +322,7 @@ public class TargletFactoryImpl extends EFactoryImpl implements TargletFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ComponentExtGenerator createComponentExtGenerator()
   {
     ComponentExtGeneratorImpl componentExtGenerator = new ComponentExtGeneratorImpl();
@@ -323,6 +334,7 @@ public class TargletFactoryImpl extends EFactoryImpl implements TargletFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public CSpecGenerator createCSpecGenerator()
   {
     CSpecGeneratorImpl cSpecGenerator = new CSpecGeneratorImpl();
@@ -334,6 +346,7 @@ public class TargletFactoryImpl extends EFactoryImpl implements TargletFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public CSpexGenerator createCSpexGenerator()
   {
     CSpexGeneratorImpl cSpexGenerator = new CSpexGeneratorImpl();
@@ -345,6 +358,7 @@ public class TargletFactoryImpl extends EFactoryImpl implements TargletFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public SiteGenerator createSiteGenerator()
   {
     SiteGeneratorImpl siteGenerator = new SiteGeneratorImpl();
@@ -356,6 +370,7 @@ public class TargletFactoryImpl extends EFactoryImpl implements TargletFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public CategoryGenerator createCategoryGenerator()
   {
     CategoryGeneratorImpl categoryGenerator = new CategoryGeneratorImpl();
@@ -367,6 +382,7 @@ public class TargletFactoryImpl extends EFactoryImpl implements TargletFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ProductGenerator createProductGenerator()
   {
     ProductGeneratorImpl productGenerator = new ProductGeneratorImpl();
@@ -378,6 +394,7 @@ public class TargletFactoryImpl extends EFactoryImpl implements TargletFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ProjectNameGenerator createProjectNameGenerator()
   {
     ProjectNameGeneratorImpl projectNameGenerator = new ProjectNameGeneratorImpl();
@@ -389,6 +406,7 @@ public class TargletFactoryImpl extends EFactoryImpl implements TargletFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public DropinLocation createDropinLocation()
   {
     DropinLocationImpl dropinLocation = new DropinLocationImpl();
@@ -400,6 +418,7 @@ public class TargletFactoryImpl extends EFactoryImpl implements TargletFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public TargletPackage getTargletPackage()
   {
     return (TargletPackage)getEPackage();

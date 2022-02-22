@@ -86,16 +86,16 @@ public class Pair<T1, T2>
 
   public Pair<T1, T2> copy()
   {
-    return new Pair<T1, T2>(this);
+    return new Pair<>(this);
   }
 
   public static <T1, T2> Pair<T1, T2> create()
   {
-    return new Pair<T1, T2>();
+    return new Pair<>();
   }
 
   public static <T1, T2> Pair<T1, T2> create(T1 element1, T2 element2)
   {
-    return new Pair<T1, T2>(element1, element2);
+    return new Pair<>(element1, element2);
   }
 }

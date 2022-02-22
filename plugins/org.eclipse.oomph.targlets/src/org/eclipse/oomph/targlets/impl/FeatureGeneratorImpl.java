@@ -86,11 +86,13 @@ public class FeatureGeneratorImpl extends ModelElementImpl implements FeatureGen
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public void generateIUs(IProject project, final String qualifierReplacement, final Map<String, Version> iuVersions, final EList<IInstallableUnit> result)
       throws Exception
   {
     ResourcesUtil.runWithFile(project, MANIFEST_PATH, new ResourcesUtil.RunnableWithFile()
     {
+      @Override
       public void run(File projectFolder, File file) throws Exception
       {
         FeatureGeneratorAction action = new FeatureGeneratorAction();
@@ -230,16 +232,19 @@ public class FeatureGeneratorImpl extends ModelElementImpl implements FeatureGen
                   return delegate;
                 }
 
+                @Override
                 public String getName()
                 {
                   return name;
                 }
 
+                @Override
                 public String getNamespace()
                 {
                   return namespace;
                 }
 
+                @Override
                 public VersionRange getRange()
                 {
                   if (versionRange == null)
@@ -258,36 +263,43 @@ public class FeatureGeneratorImpl extends ModelElementImpl implements FeatureGen
                   return versionRange;
                 }
 
+                @Override
                 public int getMin()
                 {
                   return getDelegate().getMin();
                 }
 
+                @Override
                 public int getMax()
                 {
                   return getDelegate().getMax();
                 }
 
+                @Override
                 public IMatchExpression<IInstallableUnit> getFilter()
                 {
                   return getDelegate().getFilter();
                 }
 
+                @Override
                 public IMatchExpression<IInstallableUnit> getMatches()
                 {
                   return getDelegate().getMatches();
                 }
 
+                @Override
                 public boolean isMatch(IInstallableUnit iu)
                 {
                   return getDelegate().isMatch(iu);
                 }
 
+                @Override
                 public boolean isGreedy()
                 {
                   return getDelegate().isGreedy();
                 }
 
+                @Override
                 public String getDescription()
                 {
                   return getDelegate().getDescription();

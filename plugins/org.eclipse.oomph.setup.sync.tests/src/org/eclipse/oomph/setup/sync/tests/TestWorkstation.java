@@ -146,7 +146,7 @@ public final class TestWorkstation
 
   public List<PreferenceTask> getPreferenceTasks()
   {
-    List<PreferenceTask> result = new ArrayList<PreferenceTask>();
+    List<PreferenceTask> result = new ArrayList<>();
     collectPreferenceTasks(getUser().getSetupTasks(), result);
     return result;
   }
@@ -269,7 +269,7 @@ public final class TestWorkstation
     RemoteData remoteData = getRemoteData();
     EMap<String, SyncPolicy> policies = remoteData.getPolicies();
 
-    Map<String, SyncPolicy> preferencePolicies = new HashMap<String, SyncPolicy>();
+    Map<String, SyncPolicy> preferencePolicies = new HashMap<>();
 
     // Make sure that even policies of remotely removed tasks can be found by preference key.
     for (TestWorkstation workstation : workstations.values())
@@ -433,6 +433,7 @@ public final class TestWorkstation
         this.expectedException = expectedException;
       }
 
+      @Override
       public final void handleFailure(Exception ex) throws Exception
       {
         assertThat(ex, CoreMatchers.is(instanceOf(expectedException)));
@@ -554,12 +555,7 @@ public final class TestWorkstation
     {
       if (action != null)
       {
-        if (isPreferenceDelta(key, action.getLocalDelta()))
-        {
-          return true;
-        }
-
-        if (isPreferenceDelta(key, action.getRemoteDelta()))
+        if (isPreferenceDelta(key, action.getLocalDelta()) || isPreferenceDelta(key, action.getRemoteDelta()))
         {
           return true;
         }
@@ -572,12 +568,7 @@ public final class TestWorkstation
     {
       if (delta != null)
       {
-        if (isPreferenceTask(key, delta.getOldTask()))
-        {
-          return true;
-        }
-
-        if (isPreferenceTask(key, delta.getNewTask()))
+        if (isPreferenceTask(key, delta.getOldTask()) || isPreferenceTask(key, delta.getNewTask()))
         {
           return true;
         }

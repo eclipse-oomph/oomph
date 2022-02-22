@@ -87,6 +87,10 @@
       </detail>
     </annotation>
     <setupTask
+        xsi:type="setup:VariableTask"
+        name="oomph.update.url"
+        value="https://download.eclipse.org/oomph/updates/release"/>
+    <setupTask
         xsi:type="setup.p2:P2Task"
         label="Eclipse SDK (4.22 - 2021-12)">
       <requirement
@@ -141,6 +145,10 @@
       </detail>
     </annotation>
     <setupTask
+        xsi:type="setup:VariableTask"
+        name="oomph.update.url"
+        value="https://download.eclipse.org/oomph/updates/release"/>
+    <setupTask
         xsi:type="setup.p2:P2Task"
         label="Eclipse SDK (4.22 - 2021-12)">
       <requirement
@@ -169,6 +177,10 @@
         <value>Eclipse SDK - 4.21 - 2021-09</value>
       </detail>
     </annotation>
+    <setupTask
+        xsi:type="setup:VariableTask"
+        name="oomph.update.url"
+        value="https://download.eclipse.org/oomph/updates/release"/>
     <setupTask
         xsi:type="setup.p2:P2Task"
         label="Eclipse SDK (4.21 - 2021-09)">
@@ -199,6 +211,10 @@
       </detail>
     </annotation>
     <setupTask
+        xsi:type="setup:VariableTask"
+        name="oomph.update.url"
+        value="https://download.eclipse.org/oomph/updates/release"/>
+    <setupTask
         xsi:type="setup.p2:P2Task"
         label="Eclipse SDK (4.20 - 2021-06)">
       <requirement
@@ -227,6 +243,10 @@
         <value>Eclipse SDK - 4.19 - 2021-03</value>
       </detail>
     </annotation>
+    <setupTask
+        xsi:type="setup:VariableTask"
+        name="oomph.update.url"
+        value="https://download.eclipse.org/oomph/updates/release"/>
     <setupTask
         xsi:type="setup.p2:P2Task"
         label="Eclipse SDK (4.19 - 2021-03)">
@@ -257,6 +277,10 @@
       </detail>
     </annotation>
     <setupTask
+        xsi:type="setup:VariableTask"
+        name="oomph.update.url"
+        value="https://download.eclipse.org/oomph/updates/release"/>
+    <setupTask
         xsi:type="setup.p2:P2Task"
         label="Eclipse SDK (4.18 - 2020-12)">
       <requirement
@@ -285,6 +309,10 @@
         <value>Eclipse SDK - 4.17 - 2020-09</value>
       </detail>
     </annotation>
+    <setupTask
+        xsi:type="setup:VariableTask"
+        name="oomph.update.url"
+        value="https://download.eclipse.org/oomph/updates/release"/>
     <setupTask
         xsi:type="setup.p2:P2Task"
         label="Eclipse SDK (4.17 - 2020-09)">
@@ -315,6 +343,10 @@
       </detail>
     </annotation>
     <setupTask
+        xsi:type="setup:VariableTask"
+        name="oomph.update.url"
+        value="https://download.eclipse.org/oomph/updates/release"/>
+    <setupTask
         xsi:type="setup.p2:P2Task"
         label="Eclipse SDK (4.16 - 2020-06)">
       <requirement
@@ -343,6 +375,10 @@
         <value>Eclipse SDK - 4.15 - 2020-03</value>
       </detail>
     </annotation>
+    <setupTask
+        xsi:type="setup:VariableTask"
+        name="oomph.update.url"
+        value="https://download.eclipse.org/oomph/updates/release"/>
     <setupTask
         xsi:type="setup.p2:P2Task"
         label="Eclipse SDK (4.15 - 2020-03)">
@@ -373,6 +409,10 @@
       </detail>
     </annotation>
     <setupTask
+        xsi:type="setup:VariableTask"
+        name="oomph.update.url"
+        value="https://download.eclipse.org/oomph/updates/release"/>
+    <setupTask
         xsi:type="setup.p2:P2Task"
         label="Eclipse SDK (4.14 - 2019-12)">
       <requirement
@@ -401,6 +441,10 @@
         <value>Eclipse SDK - 4.13 - 2019-09</value>
       </detail>
     </annotation>
+    <setupTask
+        xsi:type="setup:VariableTask"
+        name="oomph.update.url"
+        value="https://download.eclipse.org/oomph/updates/release"/>
     <setupTask
         xsi:type="setup.p2:P2Task"
         label="Eclipse SDK (4.13 - 2019-09)">
@@ -431,6 +475,10 @@
       </detail>
     </annotation>
     <setupTask
+        xsi:type="setup:VariableTask"
+        name="oomph.update.url"
+        value="https://download.eclipse.org/oomph/updates/release"/>
+    <setupTask
         xsi:type="setup.p2:P2Task"
         label="Eclipse SDK (4.12 - 2019-06)">
       <requirement
@@ -459,6 +507,10 @@
         <value>Eclipse SDK - 4.11 - 2019-03</value>
       </detail>
     </annotation>
+    <setupTask
+        xsi:type="setup:VariableTask"
+        name="oomph.update.url"
+        value="https://download.eclipse.org/oomph/updates/release"/>
     <setupTask
         xsi:type="setup.p2:P2Task"
         label="Eclipse SDK (4.11 - 2019-03)">
@@ -489,6 +541,10 @@
       </detail>
     </annotation>
     <setupTask
+        xsi:type="setup:VariableTask"
+        name="oomph.update.url"
+        value="https://download.eclipse.org/oomph/updates/release"/>
+    <setupTask
         xsi:type="setup.p2:P2Task"
         label="Eclipse SDK (4.10 - 2018-12)">
       <requirement
@@ -517,6 +573,10 @@
         <value>Eclipse SDK - 4.9 - 2018-09</value>
       </detail>
     </annotation>
+    <setupTask
+        xsi:type="setup:VariableTask"
+        name="oomph.update.url"
+        value="https://download.eclipse.org/oomph/updates/release"/>
     <setupTask
         xsi:type="setup.p2:P2Task"
         label="Eclipse SDK (4.9 - 2018-09)">
@@ -547,6 +607,10 @@
       </detail>
     </annotation>
     <setupTask
+        xsi:type="setup:VariableTask"
+        name="oomph.update.url"
+        value="https://download.eclipse.org/oomph/updates/release"/>
+    <setupTask
         xsi:type="setup.p2:P2Task"
         label="Eclipse SDK (4.8 - Photon)">
       <requirement
@@ -575,6 +639,10 @@
         <value>Eclipse SDK - 4.7 - Oxygen</value>
       </detail>
     </annotation>
+    <setupTask
+        xsi:type="setup:VariableTask"
+        name="oomph.update.url"
+        value="https://download.eclipse.org/oomph/updates/release"/>
     <setupTask
         xsi:type="setup.p2:P2Task"
         label="Eclipse SDK (4.7 - Oxygen)">
@@ -605,6 +673,10 @@
       </detail>
     </annotation>
     <setupTask
+        xsi:type="setup:VariableTask"
+        name="oomph.update.url"
+        value="https://download.eclipse.org/oomph/updates/release"/>
+    <setupTask
         xsi:type="setup.p2:P2Task"
         label="Eclipse SDK (4.6 - Neon)">
       <requirement
@@ -633,6 +705,10 @@
         <value>Eclipse SDK - 4.5 - Mars</value>
       </detail>
     </annotation>
+    <setupTask
+        xsi:type="setup:VariableTask"
+        name="oomph.update.url"
+        value="https://download.eclipse.org/oomph/updates/release"/>
     <setupTask
         xsi:type="setup.p2:P2Task"
         label="Eclipse SDK (4.5 - Mars)">
@@ -663,6 +739,10 @@
       </detail>
     </annotation>
     <setupTask
+        xsi:type="setup:VariableTask"
+        name="oomph.update.url"
+        value="https://download.eclipse.org/oomph/updates/release"/>
+    <setupTask
         xsi:type="setup.p2:P2Task"
         label="Eclipse SDK (4.4 - Luna)">
       <requirement
@@ -691,6 +771,10 @@
         <value>Eclipse SDK - 4.3 - Kepler</value>
       </detail>
     </annotation>
+    <setupTask
+        xsi:type="setup:VariableTask"
+        name="oomph.update.url"
+        value="https://download.eclipse.org/oomph/updates/release"/>
     <setupTask
         xsi:type="setup.p2:P2Task"
         label="Eclipse SDK (4.3 - Kepler)">
@@ -722,6 +806,10 @@
         <value>Eclipse SDK - 4.2 - Juno</value>
       </detail>
     </annotation>
+    <setupTask
+        xsi:type="setup:VariableTask"
+        name="oomph.update.url"
+        value="https://download.eclipse.org/oomph/updates/release"/>
     <setupTask
         xsi:type="setup.p2:P2Task"
         label="Eclipse SDK (4.2 - Juno)">

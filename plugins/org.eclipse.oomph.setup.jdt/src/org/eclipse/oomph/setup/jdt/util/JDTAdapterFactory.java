@@ -81,7 +81,7 @@ public class JDTAdapterFactory extends AdapterFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  protected JDTSwitch<Adapter> modelSwitch = new JDTSwitch<Adapter>()
+  protected JDTSwitch<Adapter> modelSwitch = new JDTSwitch<>()
   {
     @Override
     public Adapter caseJRETask(JRETask object)

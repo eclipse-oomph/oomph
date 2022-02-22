@@ -33,16 +33,19 @@ public abstract class MouseHandler
 {
   private final MouseTrackListener mouseTrackListener = new MouseTrackListener()
   {
+    @Override
     public void mouseEnter(MouseEvent e)
     {
       // Do nothing.
     }
 
+    @Override
     public void mouseHover(MouseEvent e)
     {
       // Do nothing.
     }
 
+    @Override
     public void mouseExit(MouseEvent e)
     {
       onMouseMove(e.widget, Integer.MIN_VALUE, Integer.MIN_VALUE);
@@ -51,6 +54,7 @@ public abstract class MouseHandler
 
   private final MouseMoveListener mouseMoveListener = new MouseMoveListener()
   {
+    @Override
     public void mouseMove(MouseEvent e)
     {
       onMouseMove(e.widget, e.x, e.y);
@@ -59,11 +63,13 @@ public abstract class MouseHandler
 
   private final MouseListener mouseListener = new MouseListener()
   {
+    @Override
     public void mouseDoubleClick(MouseEvent e)
     {
       // Do nothing.
     }
 
+    @Override
     public void mouseDown(MouseEvent e)
     {
       if (e.button == 1)
@@ -76,6 +82,7 @@ public abstract class MouseHandler
       }
     }
 
+    @Override
     public void mouseUp(MouseEvent e)
     {
       if (start != null)
@@ -411,6 +418,7 @@ public abstract class MouseHandler
         }
       }
 
+      @Override
       public void run()
       {
         try

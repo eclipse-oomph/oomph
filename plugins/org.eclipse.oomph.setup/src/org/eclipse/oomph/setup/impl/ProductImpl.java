@@ -81,6 +81,7 @@ public class ProductImpl extends ScopeImpl implements Product
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ProductCatalog getProductCatalog()
   {
     if (eContainerFeatureID() != SetupPackage.PRODUCT__PRODUCT_CATALOG)
@@ -120,6 +121,7 @@ public class ProductImpl extends ScopeImpl implements Product
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setProductCatalog(ProductCatalog newProductCatalog)
   {
     if (newProductCatalog != eInternalContainer() || eContainerFeatureID() != SetupPackage.PRODUCT__PRODUCT_CATALOG && newProductCatalog != null)
@@ -154,11 +156,12 @@ public class ProductImpl extends ScopeImpl implements Product
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<ProductVersion> getVersions()
   {
     if (versions == null)
     {
-      versions = new EObjectContainmentWithInverseEList.Resolving<ProductVersion>(ProductVersion.class, this, SetupPackage.PRODUCT__VERSIONS,
+      versions = new EObjectContainmentWithInverseEList.Resolving<>(ProductVersion.class, this, SetupPackage.PRODUCT__VERSIONS,
           SetupPackage.PRODUCT_VERSION__PRODUCT);
     }
     return versions;

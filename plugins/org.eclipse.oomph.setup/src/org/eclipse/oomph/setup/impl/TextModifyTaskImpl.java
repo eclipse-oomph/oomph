@@ -132,6 +132,7 @@ public class TextModifyTaskImpl extends SetupTaskImpl implements TextModifyTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getURL()
   {
     return uRL;
@@ -142,6 +143,7 @@ public class TextModifyTaskImpl extends SetupTaskImpl implements TextModifyTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setURL(String newURL)
   {
     String oldURL = uRL;
@@ -157,11 +159,12 @@ public class TextModifyTaskImpl extends SetupTaskImpl implements TextModifyTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<TextModification> getModifications()
   {
     if (modifications == null)
     {
-      modifications = new EObjectContainmentEList.Resolving<TextModification>(TextModification.class, this, SetupPackage.TEXT_MODIFY_TASK__MODIFICATIONS);
+      modifications = new EObjectContainmentEList.Resolving<>(TextModification.class, this, SetupPackage.TEXT_MODIFY_TASK__MODIFICATIONS);
     }
     return modifications;
   }
@@ -171,6 +174,7 @@ public class TextModifyTaskImpl extends SetupTaskImpl implements TextModifyTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getEncoding()
   {
     return encoding;
@@ -181,6 +185,7 @@ public class TextModifyTaskImpl extends SetupTaskImpl implements TextModifyTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setEncoding(String newEncoding)
   {
     String oldEncoding = encoding;
@@ -322,6 +327,7 @@ public class TextModifyTaskImpl extends SetupTaskImpl implements TextModifyTask
     return DownloadUtil.load(context.getURIConverter(), URI.createURI(getURL()), encoding);
   }
 
+  @Override
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     if (getURL() == null)
@@ -351,6 +357,7 @@ public class TextModifyTaskImpl extends SetupTaskImpl implements TextModifyTask
     }
   }
 
+  @Override
   public void perform(SetupTaskContext context) throws Exception
   {
     URI uri = createResolvedURI(getURL());
@@ -368,7 +375,7 @@ public class TextModifyTaskImpl extends SetupTaskImpl implements TextModifyTask
       {
         result.append(text, index, index = matcher.start());
 
-        Map<String, String> captures = new HashMap<String, String>();
+        Map<String, String> captures = new HashMap<>();
         for (int i = 1, count = matcher.groupCount(); i <= count; ++i)
         {
           captures.put("\\" + i, matcher.group(i)); //$NON-NLS-1$

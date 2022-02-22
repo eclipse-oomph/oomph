@@ -4,7 +4,7 @@
     editorDirectory="" modelPluginID="org.eclipse.oomph.predicates" modelName="Predicates"
     modelPluginClass="org.eclipse.oomph.internal.predicates.PredicatesPlugin" updateClasspath="false"
     nonNLSMarkers="true" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
-    testsDirectory="" importerID="org.eclipse.emf.importer.ecore" complianceLevel="5.0"
+    testsDirectory="" importerID="org.eclipse.emf.importer.ecore" complianceLevel="11.0"
     copyrightFields="false" runtimeVersion="2.10" usedGenPackages="../../org.eclipse.oomph.base/model/Base.genmodel#//base"
     operationReflection="true" decoration="Live" cleanup="true">
   <foreignModel>Predicates.ecore</foreignModel>

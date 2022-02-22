@@ -132,11 +132,12 @@ public class PreferenceProfileImpl extends ModelElementImpl implements Preferenc
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<PreferenceFilter> getPreferenceFilters()
   {
     if (preferenceFilters == null)
     {
-      preferenceFilters = new EObjectContainmentWithInverseEList<PreferenceFilter>(PreferenceFilter.class, this,
+      preferenceFilters = new EObjectContainmentWithInverseEList<>(PreferenceFilter.class, this,
           ProjectConfigPackage.PREFERENCE_PROFILE__PREFERENCE_FILTERS, ProjectConfigPackage.PREFERENCE_FILTER__PREFERENCE_PROFILE);
     }
     return preferenceFilters;
@@ -147,11 +148,12 @@ public class PreferenceProfileImpl extends ModelElementImpl implements Preferenc
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<Project> getReferentProjects()
   {
     if (referentProjects == null)
     {
-      referentProjects = new EObjectWithInverseResolvingEList.ManyInverse<Project>(Project.class, this,
+      referentProjects = new EObjectWithInverseResolvingEList.ManyInverse<>(Project.class, this,
           ProjectConfigPackage.PREFERENCE_PROFILE__REFERENT_PROJECTS, ProjectConfigPackage.PROJECT__PREFERENCE_PROFILE_REFERENCES);
     }
     return referentProjects;
@@ -162,6 +164,7 @@ public class PreferenceProfileImpl extends ModelElementImpl implements Preferenc
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getName()
   {
     return name;
@@ -172,6 +175,7 @@ public class PreferenceProfileImpl extends ModelElementImpl implements Preferenc
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setName(String newName)
   {
     String oldName = name;
@@ -187,6 +191,7 @@ public class PreferenceProfileImpl extends ModelElementImpl implements Preferenc
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Project getProject()
   {
     if (eContainerFeatureID() != ProjectConfigPackage.PREFERENCE_PROFILE__PROJECT)
@@ -212,6 +217,7 @@ public class PreferenceProfileImpl extends ModelElementImpl implements Preferenc
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setProject(Project newProject)
   {
     if (newProject != eInternalContainer() || eContainerFeatureID() != ProjectConfigPackage.PREFERENCE_PROFILE__PROJECT && newProject != null)
@@ -246,11 +252,12 @@ public class PreferenceProfileImpl extends ModelElementImpl implements Preferenc
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<Predicate> getPredicates()
   {
     if (predicates == null)
     {
-      predicates = new EObjectContainmentEList<Predicate>(Predicate.class, this, ProjectConfigPackage.PREFERENCE_PROFILE__PREDICATES);
+      predicates = new EObjectContainmentEList<>(Predicate.class, this, ProjectConfigPackage.PREFERENCE_PROFILE__PREDICATES);
     }
     return predicates;
   }
@@ -260,6 +267,7 @@ public class PreferenceProfileImpl extends ModelElementImpl implements Preferenc
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public boolean matches(IProject project)
   {
     if (project == null || eInternalContainer() == null)
@@ -297,6 +305,7 @@ public class PreferenceProfileImpl extends ModelElementImpl implements Preferenc
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public Property getProperty(URI path)
   {
     PreferenceNode preferenceNode = getProject().getPreferenceNode().getNode(path.trimSegments(1));

@@ -246,6 +246,7 @@ public final class ZIPUtil
       List<File> list = IOUtil.listBreadthFirst(sourceFolder);
       Collections.sort(list, new Comparator<File>()
       {
+        @Override
         public int compare(File f1, File f2)
         {
           String path1 = getPath(f1, baseLength);
@@ -338,6 +339,7 @@ public final class ZIPUtil
       }
     }
 
+    @Override
     public void handleEntry(EntryContext context) throws IOException
     {
       if (files.hasNext())
@@ -387,6 +389,7 @@ public final class ZIPUtil
       return targetFolder;
     }
 
+    @Override
     public void unzipDirectory(String name)
     {
       File directory = new File(targetFolder, name);
@@ -396,6 +399,7 @@ public final class ZIPUtil
       }
     }
 
+    @Override
     public void unzipFile(String name, InputStream zipStream)
     {
       File targetFile = new File(targetFolder, name);

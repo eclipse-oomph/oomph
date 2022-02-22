@@ -90,7 +90,7 @@ public class PredicatesAdapterFactory extends AdapterFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  protected PredicatesSwitch<Adapter> modelSwitch = new PredicatesSwitch<Adapter>()
+  protected PredicatesSwitch<Adapter> modelSwitch = new PredicatesSwitch<>()
   {
     @Override
     public Adapter casePredicate(Predicate object)

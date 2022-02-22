@@ -176,10 +176,11 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
   private static final int DOWNLOAD_RETRY_COUNT = 3;
 
-  private static final Comparator<IInstallableUnit> NAME_VERSION_COMPARATOR = new Comparator<IInstallableUnit>()
+  private static final Comparator<IInstallableUnit> NAME_VERSION_COMPARATOR = new Comparator<>()
   {
     private final Comparator<String> comparator = CommonPlugin.INSTANCE.getComparator();
 
+    @Override
     public int compare(IInstallableUnit iu1, IInstallableUnit iu2)
     {
       String name1 = iu1.getProperty(IInstallableUnit.PROP_NAME, null);
@@ -202,19 +203,19 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     }
   };
 
-  private final Map<String, Report.LicenseDetail> details = new LinkedHashMap<String, RepositoryIntegrityAnalyzer.Report.LicenseDetail>();
+  private final Map<String, Report.LicenseDetail> details = new LinkedHashMap<>();
 
-  private final Map<URI, Report> reports = new LinkedHashMap<URI, RepositoryIntegrityAnalyzer.Report>();
+  private final Map<URI, Report> reports = new LinkedHashMap<>();
 
-  private final Map<java.net.URI, IMetadataRepository> metadataRepositories = new LinkedHashMap<java.net.URI, IMetadataRepository>();
+  private final Map<java.net.URI, IMetadataRepository> metadataRepositories = new LinkedHashMap<>();
 
-  private final Map<java.net.URI, IArtifactRepository> artifactRepositories = new LinkedHashMap<java.net.URI, IArtifactRepository>();
+  private final Map<java.net.URI, IArtifactRepository> artifactRepositories = new LinkedHashMap<>();
 
-  private final Map<URI, byte[]> imageBytes = new HashMap<URI, byte[]>();
+  private final Map<URI, byte[]> imageBytes = new HashMap<>();
 
-  private final Map<Object, String> images = new HashMap<Object, String>();
+  private final Map<Object, String> images = new HashMap<>();
 
-  private final Map<File, Future<List<String>>> fileIndices = new TreeMap<File, Future<List<String>>>();
+  private final Map<File, Future<List<String>>> fileIndices = new TreeMap<>();
 
   private Agent agent;
 
@@ -224,12 +225,13 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
   private boolean aggregator;
 
+  @Override
   public Object start(IApplicationContext context) throws Exception
   {
     try
     {
       String[] arguments = (String[])context.getArguments().get(IApplicationContext.APPLICATION_ARGS);
-      Set<URI> uris = new LinkedHashSet<URI>();
+      Set<URI> uris = new LinkedHashSet<>();
       File outputLocation = new File(".").getCanonicalFile();
       File publishLocation = null;
       File testsLocation = null;
@@ -310,10 +312,10 @@ public class RepositoryIntegrityAnalyzer implements IApplication
       artifactCacheLocation.mkdir();
 
       RepositoryIndex repositoryIndex = RepositoryIndex.create("\n");
-      Set<File> reportLocations = new HashSet<File>();
-      Map<String, String> allReports = new TreeMap<String, String>();
+      Set<File> reportLocations = new HashSet<>();
+      Map<String, String> allReports = new TreeMap<>();
 
-      Set<File> reportsWithErrors = new HashSet<File>();
+      Set<File> reportsWithErrors = new HashSet<>();
 
       if (testsLocation != null)
       {
@@ -324,7 +326,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         }
       }
 
-      Map<IArtifactKey, Future<Map<IArtifactDescriptor, File>>> artifactCache = new LinkedHashMap<IArtifactKey, Future<Map<IArtifactDescriptor, File>>>();
+      Map<IArtifactKey, Future<Map<IArtifactDescriptor, File>>> artifactCache = new LinkedHashMap<>();
 
       for (URI uri : uris)
       {
@@ -403,7 +405,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     Resource aggregatorResource = resourceSet.getResource(aggregatorURI, true);
     // aggregatorResource.save(System.out, null);
 
-    Map<URI, Future<InputStream>> aggrcons = new LinkedHashMap<URI, Future<InputStream>>();
+    Map<URI, Future<InputStream>> aggrcons = new LinkedHashMap<>();
     ExecutorService executor = getExecutor();
     for (Iterator<EObject> it = aggregatorResource.getAllContents(); it.hasNext();)
     {
@@ -415,6 +417,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         final URI resolvedURI = uri.resolve(aggregatorURI);
         aggrcons.put(resolvedURI, executor.submit(new Callable<InputStream>()
         {
+          @Override
           public InputStream call() throws Exception
           {
             InputStream inputStream = null;
@@ -435,7 +438,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
       }
     }
 
-    Set<URI> composites = new LinkedHashSet<URI>();
+    Set<URI> composites = new LinkedHashSet<>();
     LOOP: for (Map.Entry<URI, Future<InputStream>> entry : aggrcons.entrySet())
     {
       URI aggrcon = entry.getKey();
@@ -451,8 +454,8 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
       aggrconResource.save(System.out, null);
 
-      Map<URI, Set<Requirement>> requirements = new LinkedHashMap<URI, Set<Requirement>>();
-      Set<String> contacts = new LinkedHashSet<String>();
+      Map<URI, Set<Requirement>> requirements = new LinkedHashMap<>();
+      Set<String> contacts = new LinkedHashSet<>();
       String label = null;
       for (Iterator<EObject> it = aggrconResource.getAllContents(); it.hasNext();)
       {
@@ -536,7 +539,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     compositeAggrconLocations.mkdirs();
     File compositeAggrconLocation = new File(compositeAggrconLocations, aggrconName);
     IOUtil.deleteBestEffort(compositeAggrconLocation);
-    Map<String, String> properties = new LinkedHashMap<String, String>();
+    Map<String, String> properties = new LinkedHashMap<>();
     for (Map.Entry<URI, Set<Requirement>> entry : requirements.entrySet())
     {
       URI uri = entry.getKey();
@@ -648,6 +651,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     final Comparator<String> comparator = CommonPlugin.INSTANCE.getComparator();
     Arrays.sort(files, new Comparator<File>()
     {
+      @Override
       public int compare(File f1, File f2)
       {
         return comparator.compare(f1.getPath(), f2.getPath());
@@ -1084,11 +1088,12 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         URI iuReportFolder = URI.createURI(relativeIndexURL).trimFileExtension();
         new File(outputLocation, iuReportFolder.toString()).mkdir();
         ExecutorService executor = getExecutor();
-        List<Future<Void>> futures = new ArrayList<Future<Void>>();
+        List<Future<Void>> futures = new ArrayList<>();
         for (final IUReport iuReport : iuReports)
         {
           futures.add(executor.submit(new Callable<Void>()
           {
+            @Override
             public Void call() throws Exception
             {
               String iuResult = repositoryIndexEmitter.generate(iuReport);
@@ -1127,6 +1132,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
   }
 
+  @Override
   public void stop()
   {
   }
@@ -1148,7 +1154,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
   private List<Report.LicenseDetail> getLicenses(IInstallableUnit installableUnit)
   {
-    List<Report.LicenseDetail> result = new ArrayList<Report.LicenseDetail>();
+    List<Report.LicenseDetail> result = new ArrayList<>();
     Collection<ILicense> licenses = installableUnit.getLicenses(null);
     if (licenses.isEmpty())
     {
@@ -1168,7 +1174,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
   private Set<IInstallableUnit> query(IMetadataRepository metadataRepository, IQuery<IInstallableUnit> query)
   {
     IQueryResult<IInstallableUnit> queryResult = metadataRepository.query(query, new NullProgressMonitor());
-    Set<IInstallableUnit> result = new TreeSet<IInstallableUnit>();
+    Set<IInstallableUnit> result = new TreeSet<>();
     for (IInstallableUnit iu : P2Util.asIterable(queryResult))
     {
       result.add(iu);
@@ -1212,7 +1218,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         }
       }
 
-      final Set<IInstallableUnit> productIUs = new TreeSet<IInstallableUnit>();
+      final Set<IInstallableUnit> productIUs = new TreeSet<>();
       for (IInstallableUnit iu : allIUs)
       {
         if ("true".equals(iu.getProperty(MetadataFactory.InstallableUnitDescription.PROP_TYPE_PRODUCT)))
@@ -1221,13 +1227,13 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         }
       }
 
-      final Map<Report.LicenseDetail, Set<IInstallableUnit>> licenseIUs = new LinkedHashMap<Report.LicenseDetail, Set<IInstallableUnit>>();
+      final Map<Report.LicenseDetail, Set<IInstallableUnit>> licenseIUs = new LinkedHashMap<>();
       for (ILicense sua : Report.SUAS)
       {
         licenseIUs.put(getLicenseDetail(sua, true), new LinkedHashSet<IInstallableUnit>());
       }
 
-      final Set<String> expectedDuplicates = new HashSet<String>();
+      final Set<String> expectedDuplicates = new HashSet<>();
       expectedDuplicates.add("a.jre.javase");
       expectedDuplicates.add("config.a.jre.javase");
       for (IInstallableUnit iu : allIUs)
@@ -1236,7 +1242,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         {
           CollectionUtil.addAll(licenseIUs, getLicenses(iu), iu);
 
-          Set<String> ids = new HashSet<String>();
+          Set<String> ids = new HashSet<>();
           for (final IRequirement requirement : iu.getRequirements())
           {
             if (requirement instanceof IRequiredCapability)
@@ -1256,7 +1262,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         }
       }
 
-      final Map<Report.LicenseDetail, Set<IInstallableUnit>> sortedLicenseIUs = new LinkedHashMap<Report.LicenseDetail, Set<IInstallableUnit>>();
+      final Map<Report.LicenseDetail, Set<IInstallableUnit>> sortedLicenseIUs = new LinkedHashMap<>();
       while (!licenseIUs.isEmpty())
       {
         Map.Entry<Report.LicenseDetail, Set<IInstallableUnit>> biggestEntry = null;
@@ -1281,12 +1287,12 @@ public class RepositoryIntegrityAnalyzer implements IApplication
           break;
         }
 
-        TreeSet<IInstallableUnit> sortedLicenseIUValues = new TreeSet<IInstallableUnit>(NAME_VERSION_COMPARATOR);
+        TreeSet<IInstallableUnit> sortedLicenseIUValues = new TreeSet<>(NAME_VERSION_COMPARATOR);
         sortedLicenseIUValues.addAll(biggestEntry.getValue());
         sortedLicenseIUs.put(biggestEntry.getKey(), sortedLicenseIUValues);
       }
 
-      final List<IInstallableUnit> featureIUs = new ArrayList<IInstallableUnit>();
+      final List<IInstallableUnit> featureIUs = new ArrayList<>();
       for (IInstallableUnit featureIU : allIUs)
       {
         if (featureIU.getId().endsWith(Requirement.FEATURE_SUFFIX))
@@ -1297,7 +1303,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
       Collections.sort(featureIUs, NAME_VERSION_COMPARATOR);
 
-      final Map<IInstallableUnit, Future<URI>> brandingImages = new LinkedHashMap<IInstallableUnit, Future<URI>>();
+      final Map<IInstallableUnit, Future<URI>> brandingImages = new LinkedHashMap<>();
       if (artifactRepository != null)
       {
         for (IInstallableUnit featureIU : featureIUs)
@@ -1306,15 +1312,15 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         }
       }
 
-      Map<IInstallableUnit, Map<File, Future<SignedContent>>> signedContentCache = new LinkedHashMap<IInstallableUnit, Map<File, Future<SignedContent>>>();
+      Map<IInstallableUnit, Map<File, Future<SignedContent>>> signedContentCache = new LinkedHashMap<>();
       for (IInstallableUnit iu : allIUs)
       {
         getSignedContent(iu, artifactCache, signedContentCache);
       }
 
-      final Map<List<String>, IRequirement> requiredCapabilities = new HashMap<List<String>, IRequirement>();
-      Map<IRequirement, Future<Set<IInstallableUnit>>> futures = new HashMap<IRequirement, Future<Set<IInstallableUnit>>>();
-      Map<IRequirement, Set<IInstallableUnit>> requiringIUs = new HashMap<IRequirement, Set<IInstallableUnit>>();
+      final Map<List<String>, IRequirement> requiredCapabilities = new HashMap<>();
+      Map<IRequirement, Future<Set<IInstallableUnit>>> futures = new HashMap<>();
+      Map<IRequirement, Set<IInstallableUnit>> requiringIUs = new HashMap<>();
       for (IInstallableUnit iu : allIUs)
       {
         for (final IRequirement requirement : iu.getRequirements())
@@ -1327,7 +1333,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
             IMatchExpression<IInstallableUnit> match = requirement.getMatches();
             if (RequiredCapability.isVersionRangeRequirement(match))
             {
-              List<String> key = new ArrayList<String>(3);
+              List<String> key = new ArrayList<>(3);
               key.add(RequiredCapability.extractNamespace(match));
               key.add(RequiredCapability.extractName(match));
               key.add(RequiredCapability.extractRange(match).toString());
@@ -1336,6 +1342,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
             futures.put(requirement, getExecutor().submit(new Callable<Set<IInstallableUnit>>()
             {
+              @Override
               public Set<IInstallableUnit> call() throws Exception
               {
                 return query(metadataRepository, QueryUtil.createMatchQuery(requirement.getMatches()));
@@ -1345,12 +1352,12 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         }
       }
 
-      final Map<List<String>, IProvidedCapability> allProvidedCapabilities = new HashMap<List<String>, IProvidedCapability>();
+      final Map<List<String>, IProvidedCapability> allProvidedCapabilities = new HashMap<>();
 
-      final Map<IRequirement, Set<IInstallableUnit>> resolvedRequirements = new HashMap<IRequirement, Set<IInstallableUnit>>();
-      final Map<IProvidedCapability, Set<IInstallableUnit>> resolvedCapabilities = new HashMap<IProvidedCapability, Set<IInstallableUnit>>();
-      final Map<IProvidedCapability, Set<IRequirement>> capabilityResolutions = new HashMap<IProvidedCapability, Set<IRequirement>>();
-      final Map<IRequirement, Set<IProvidedCapability>> requirementResolutions = new HashMap<IRequirement, Set<IProvidedCapability>>();
+      final Map<IRequirement, Set<IInstallableUnit>> resolvedRequirements = new HashMap<>();
+      final Map<IProvidedCapability, Set<IInstallableUnit>> resolvedCapabilities = new HashMap<>();
+      final Map<IProvidedCapability, Set<IRequirement>> capabilityResolutions = new HashMap<>();
+      final Map<IRequirement, Set<IProvidedCapability>> requirementResolutions = new HashMap<>();
       for (Map.Entry<IRequirement, Future<Set<IInstallableUnit>>> entry : futures.entrySet())
       {
         IRequirement requirement = entry.getKey();
@@ -1373,7 +1380,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
               String name = providedCapability.getName();
               Version version = providedCapability.getVersion();
 
-              List<String> key = new ArrayList<String>();
+              List<String> key = new ArrayList<>();
               key.add(namespace);
               key.add(name);
               key.add(version.toString());
@@ -1397,14 +1404,14 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         }
       }
 
-      final Map<IInstallableUnit, Set<File>> iuFiles = new TreeMap<IInstallableUnit, Set<File>>();
-      final Map<File, SignedContent> fileSignedContents = new TreeMap<File, SignedContent>();
-      final Map<File, List<String>> localFileIndices = new TreeMap<File, List<String>>();
-      final Set<IInstallableUnit> classContainingIUs = new TreeSet<IInstallableUnit>();
-      final Map<String, Set<Version>> iuIDVersions = new TreeMap<String, Set<Version>>();
+      final Map<IInstallableUnit, Set<File>> iuFiles = new TreeMap<>();
+      final Map<File, SignedContent> fileSignedContents = new TreeMap<>();
+      final Map<File, List<String>> localFileIndices = new TreeMap<>();
+      final Set<IInstallableUnit> classContainingIUs = new TreeSet<>();
+      final Map<String, Set<Version>> iuIDVersions = new TreeMap<>();
       for (IInstallableUnit iu : allIUs)
       {
-        Set<File> files = new LinkedHashSet<File>();
+        Set<File> files = new LinkedHashSet<>();
         for (Map.Entry<File, Future<SignedContent>> entry : signedContentCache.get(iu).entrySet())
         {
           File file = entry.getKey();
@@ -1430,14 +1437,14 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         CollectionUtil.add(iuIDVersions, iu.getId(), iu.getVersion());
       }
 
-      final List<Report> childReports = new ArrayList<Report>();
+      final List<Report> childReports = new ArrayList<>();
 
       class MyReport extends Report
       {
         @SuppressWarnings("unused")
         public void getArtifacts()
         {
-          Map<File, Set<IInstallableUnit>> artifacts = new TreeMap<File, Set<IInstallableUnit>>();
+          Map<File, Set<IInstallableUnit>> artifacts = new TreeMap<>();
           for (IInstallableUnit iu : allIUs)
           {
             for (IArtifactKey artifactKey : iu.getArtifacts())
@@ -1457,7 +1464,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         {
           if (breadcrumbs == null)
           {
-            Map<String, String> result = new LinkedHashMap<String, String>();
+            Map<String, String> result = new LinkedHashMap<>();
 
             String rootFolderName = rootOutputLocation.getName();
             result.put(rootFolderName, null);
@@ -1575,7 +1582,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         @Override
         public Map<String, Set<IInstallableUnit>> getFeatureProviders()
         {
-          Map<String, Set<IInstallableUnit>> result = new TreeMap<String, Set<IInstallableUnit>>();
+          Map<String, Set<IInstallableUnit>> result = new TreeMap<>();
           for (IInstallableUnit iu : featureIUs)
           {
             String provider = iu.getProperty(IInstallableUnit.PROP_PROVIDER, null);
@@ -1588,7 +1595,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         @Override
         public Set<String> getBrandingImages(Collection<IInstallableUnit> ius)
         {
-          Set<String> result = new LinkedHashSet<String>();
+          Set<String> result = new LinkedHashSet<>();
           for (IInstallableUnit iu : ius)
           {
             result.add(getBrandingImage(iu));
@@ -1628,7 +1635,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         {
           if (pluginsWithMissingPackGZ == null)
           {
-            pluginsWithMissingPackGZ = new TreeSet<IInstallableUnit>();
+            pluginsWithMissingPackGZ = new TreeSet<>();
             for (IInstallableUnit iu : classContainingIUs)
             {
               Set<File> files = iuFiles.get(iu);
@@ -1649,7 +1656,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         {
           if (unsignedIUs == null)
           {
-            unsignedIUs = new TreeSet<IInstallableUnit>();
+            unsignedIUs = new TreeSet<>();
             for (IInstallableUnit iu : allIUs)
             {
               Map<String, Boolean> iuArtifacts = getIUArtifacts(iu);
@@ -1669,7 +1676,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         {
           if (badProviderIUs == null)
           {
-            badProviderIUs = new TreeSet<IInstallableUnit>();
+            badProviderIUs = new TreeSet<>();
             Map<String, Set<IInstallableUnit>> featureProviders = getFeatureProviders();
             for (Map.Entry<String, Set<IInstallableUnit>> entry : featureProviders.entrySet())
             {
@@ -1690,7 +1697,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         {
           if (badLicenseIUs == null)
           {
-            badLicenseIUs = new TreeSet<IInstallableUnit>();
+            badLicenseIUs = new TreeSet<>();
             Map<LicenseDetail, Set<IInstallableUnit>> licenses = getLicenses();
             for (Map.Entry<LicenseDetail, Set<IInstallableUnit>> entry : licenses.entrySet())
             {
@@ -1710,7 +1717,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         {
           if (brokenBrandingIUs == null)
           {
-            brokenBrandingIUs = new TreeSet<IInstallableUnit>();
+            brokenBrandingIUs = new TreeSet<>();
             for (IInstallableUnit iu : getFeatureIUs())
             {
               if (hasBrokenBrandingImage(iu))
@@ -1725,7 +1732,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         @Override
         public Map<String, Boolean> getIUArtifacts(IInstallableUnit iu)
         {
-          Map<String, Boolean> result = new TreeMap<String, Boolean>();
+          Map<String, Boolean> result = new TreeMap<>();
           Set<File> files = iuFiles.get(iu);
           for (File file : files)
           {
@@ -1819,7 +1826,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
           String name = subjectX500Principal.getName();
           Pattern namePattern = Pattern.compile("([A-Za-z]+)=(([^,\\\\]|\\\\,)+),");
           Matcher matcher = namePattern.matcher(name);
-          Map<String, String> components = new LinkedHashMap<String, String>();
+          Map<String, String> components = new LinkedHashMap<>();
           while (matcher.find())
           {
             components.put(matcher.group(1), matcher.group(2).replaceAll("\\\\", ""));
@@ -1852,8 +1859,9 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         {
           if (certificates == null)
           {
-            Comparator<List<Certificate>> certificateComparator = new Comparator<List<Certificate>>()
+            Comparator<List<Certificate>> certificateComparator = new Comparator<>()
             {
+              @Override
               public int compare(List<Certificate> o1, List<Certificate> o2)
               {
                 int size = o1.size();
@@ -1870,7 +1878,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
             };
 
             int prefixLength = artifactCacheFolder.toString().length() + 1;
-            certificates = new TreeMap<List<Certificate>, Map<String, IInstallableUnit>>(certificateComparator);
+            certificates = new TreeMap<>(certificateComparator);
             for (Map.Entry<IInstallableUnit, Set<File>> entry : iuFiles.entrySet())
             {
               IInstallableUnit iu = entry.getKey();
@@ -1891,7 +1899,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
                       Map<String, IInstallableUnit> artifacts = certificates.get(certificateList);
                       if (artifacts == null)
                       {
-                        artifacts = new TreeMap<String, IInstallableUnit>();
+                        artifacts = new TreeMap<>();
                         certificates.put(certificateList, artifacts);
                       }
 
@@ -1903,7 +1911,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
                     Map<String, IInstallableUnit> artifacts = certificates.get(Collections.emptyList());
                     if (artifacts == null)
                     {
-                      artifacts = new TreeMap<String, IInstallableUnit>();
+                      artifacts = new TreeMap<>();
                       certificates.put(Collections.<Certificate> emptyList(), artifacts);
                     }
 
@@ -1924,13 +1932,13 @@ public class RepositoryIntegrityAnalyzer implements IApplication
           if (Boolean.FALSE)
           {
             Collection<IRequirement> requirements = iu.getRequirements();
-            final Map<List<String>, IRequirement> requiredCapabilities = new HashMap<List<String>, IRequirement>();
+            final Map<List<String>, IRequirement> requiredCapabilities = new HashMap<>();
             for (IRequirement requirement : requirements)
             {
               IMatchExpression<IInstallableUnit> match = requirement.getMatches();
               if (RequiredCapability.isVersionRangeRequirement(match))
               {
-                List<String> key = new ArrayList<String>(3);
+                List<String> key = new ArrayList<>(3);
                 key.add(RequiredCapability.extractNamespace(match));
                 key.add(RequiredCapability.extractName(match));
                 key.add(RequiredCapability.extractRange(match).toString());
@@ -1939,7 +1947,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
             }
           }
 
-          final Map<String, String> ids = new HashMap<String, String>();
+          final Map<String, String> ids = new HashMap<>();
           ValueHandler valueHandler = new InstallableUnitWriter.ValueHandler()
           {
             private String uuid;
@@ -2009,7 +2017,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
                 }
                 else if (XMLConstants.VERSION_ATTRIBUTE.equals(attributeName))
                 {
-                  List<String> key = new ArrayList<String>();
+                  List<String> key = new ArrayList<>();
                   key.add(namespace);
                   key.add(name);
                   key.add(attributeValue);
@@ -2031,12 +2039,12 @@ public class RepositoryIntegrityAnalyzer implements IApplication
                       + "_arrows\" style=\"font-size: 70%; bottom-margin: 1pt; \" class=\"orange bb xml-links_button\" onclick=\"expand_collapse_inline_block('"
                       + id + "');\">&#x25B7;</button>");
                   links.append("<span id=\"" + id + "\" class=\"xml-links\" style=\"display: none; margin-top: 0.2ex; vertical-align : top;\">");
-                  for (IInstallableUnit iu : new TreeSet<IInstallableUnit>(matchingIUs))
+                  for (IInstallableUnit iu : new TreeSet<>(matchingIUs))
                   {
                     links.append(" <a href=\"");
                     links.append(getIUID(iu));
                     links.append(".html");
-                    HashSet<IRequirement> requirements = new HashSet<IRequirement>(iu.getRequirements());
+                    HashSet<IRequirement> requirements = new HashSet<>(iu.getRequirements());
                     requirements.retainAll(capabilityResolutions.get(providedCapability));
                     if (!requirements.isEmpty())
                     {
@@ -2069,7 +2077,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
                 }
                 else if (XMLConstants.VERSION_RANGE_ATTRIBUTE.equals(attributeName))
                 {
-                  List<String> key = new ArrayList<String>();
+                  List<String> key = new ArrayList<>();
                   key.add(namespace);
                   key.add(name);
                   key.add(attributeValue);
@@ -2097,12 +2105,12 @@ public class RepositoryIntegrityAnalyzer implements IApplication
                       + "_arrows\" style=\"font-size: 70%; bottom-marin: 1pt;\" class=\"orange bb xml-links_button\" onclick=\"expand_collapse_inline_block('"
                       + id + "');\">&#x25B7;</button>");
                   links.append("<span id=\"" + id + "\" class=\"xml-links\" style=\"display: none; margin-top: 0.2ex; vertical-align : top;\">");
-                  for (IInstallableUnit iu : new TreeSet<IInstallableUnit>(matchingIUs))
+                  for (IInstallableUnit iu : new TreeSet<>(matchingIUs))
                   {
                     links.append(" <a href=\"");
                     links.append(getIUID(iu));
                     links.append(".html");
-                    HashSet<IProvidedCapability> providedCapabilities = new HashSet<IProvidedCapability>(iu.getProvidedCapabilities());
+                    HashSet<IProvidedCapability> providedCapabilities = new HashSet<>(iu.getProvidedCapabilities());
                     providedCapabilities.retainAll(requirementResolutions.get(requirement));
                     if (!providedCapabilities.isEmpty())
                     {
@@ -2165,18 +2173,21 @@ public class RepositoryIntegrityAnalyzer implements IApplication
           return RepositoryIntegrityAnalyzer.this.getErrorImage(outputLocation);
         }
 
+        @Override
         public String getHelpLink()
         {
           return isAggrconRepository(metadataRepository) ? "https://wiki.eclipse.org/Oomph_Repository_Analyzer#Simultaneous_Release"
               : "https://wiki.eclipse.org/Oomph_Repository_Analyzer#Update_Site_Pages";
         }
 
+        @Override
         public String getHelpImage()
         {
           return getImage(URI.createURI("https://git.eclipse.org/c/platform/eclipse.platform.ui.git/plain/bundles/org.eclipse.jface/icons/full/help@2x.png"),
               outputLocation);
         }
 
+        @Override
         public String getHelpText()
         {
           return isAggrconRepository(metadataRepository) ? "filtered aggrcon index" : "update site index";
@@ -2197,7 +2208,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         @Override
         public Map<String, String> getNavigation()
         {
-          Map<String, String> result = new LinkedHashMap<String, String>();
+          Map<String, String> result = new LinkedHashMap<>();
           for (Report report : reports.values())
           {
             String title = report.getTitle(true);
@@ -2353,7 +2364,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         @Override
         public List<String> getFeatures(Iterable<IInstallableUnit> features)
         {
-          List<String> result = new ArrayList<String>();
+          List<String> result = new ArrayList<>();
           for (IInstallableUnit iu : features)
           {
             String name = getNameAndVersion(iu);
@@ -2411,7 +2422,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         @Override
         public Set<IInstallableUnit> getResolvedRequirements(IInstallableUnit iu)
         {
-          Set<IInstallableUnit> result = new TreeSet<IInstallableUnit>();
+          Set<IInstallableUnit> result = new TreeSet<>();
           for (IRequirement requirement : iu.getRequirements())
           {
             Set<IInstallableUnit> ius = resolvedRequirements.get(requirement);
@@ -2571,11 +2582,11 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         @Override
         public Map<String, List<String>> getBundles()
         {
-          Map<String, List<String>> result = new TreeMap<String, List<String>>(CommonPlugin.INSTANCE.getComparator());
+          Map<String, List<String>> result = new TreeMap<>(CommonPlugin.INSTANCE.getComparator());
           for (IInstallableUnit iu : allIUs)
           {
             String id = iu.getId();
-            List<String> lines = new ArrayList<String>();
+            List<String> lines = new ArrayList<>();
             for (IProvidedCapability providedCapability : iu.getProvidedCapabilities())
             {
               String namespace = providedCapability.getNamespace();
@@ -2646,7 +2657,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         @Override
         public List<IUReport> getIUReports()
         {
-          List<IUReport> result = new ArrayList<IUReport>();
+          List<IUReport> result = new ArrayList<>();
           for (final IInstallableUnit iu : allIUs)
           {
             class MyIUReport extends IUReport
@@ -2657,6 +2668,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
                 return MyReport.this;
               }
 
+              @Override
               public String getNow()
               {
                 return getReport().getNow();
@@ -2682,36 +2694,43 @@ public class RepositoryIntegrityAnalyzer implements IApplication
                 return provider;
               }
 
+              @Override
               public String getReportBrandingImage()
               {
                 return "../" + getReport().getReportBrandingImage();
               }
 
+              @Override
               public String getHelpLink()
               {
                 return "https://wiki.eclipse.org/Oomph_Repository_Analyzer#Installable_Unit_Pages";
               }
 
+              @Override
               public String getHelpImage()
               {
                 return "../" + getReport().getHelpImage();
               }
 
+              @Override
               public String getHelpText()
               {
                 return "installable unit index";
               }
 
+              @Override
               public String getReportSource()
               {
                 return getReport().getReportSource();
               }
 
+              @Override
               public String getTitle()
               {
                 return iu.toString();
               }
 
+              @Override
               public String getTitle(boolean narrow)
               {
                 String id = iu.getId();
@@ -2725,9 +2744,10 @@ public class RepositoryIntegrityAnalyzer implements IApplication
                 return getRelativeIUReportURL(iu);
               }
 
+              @Override
               public Map<String, String> getBreadcrumbs()
               {
-                Map<String, String> breadcrumbs = new LinkedHashMap<String, String>(getReport().getBreadcrumbs());
+                Map<String, String> breadcrumbs = new LinkedHashMap<>(getReport().getBreadcrumbs());
                 for (Map.Entry<String, String> entry : breadcrumbs.entrySet())
                 {
                   String href = entry.getValue();
@@ -2738,9 +2758,10 @@ public class RepositoryIntegrityAnalyzer implements IApplication
                 return breadcrumbs;
               }
 
+              @Override
               public Map<String, String> getNavigation()
               {
-                Map<String, String> navigation = new LinkedHashMap<String, String>();
+                Map<String, String> navigation = new LinkedHashMap<>();
                 if (!aggregator)
                 {
                   navigation.put("../" + getReport().getRelativeIndexURL(), getReport().getTitle(true));
@@ -2780,7 +2801,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
   {
     if (isAggrconRepository(metadataRepository))
     {
-      Set<IInstallableUnit> allIUs = new TreeSet<IInstallableUnit>();
+      Set<IInstallableUnit> allIUs = new TreeSet<>();
       Map<String, String> properties = metadataRepository.getProperties();
       for (Map.Entry<String, String> entry : properties.entrySet())
       {
@@ -2856,16 +2877,19 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     {
       future = getExecutor().submit(new Callable<List<String>>()
       {
+        @Override
         public List<String> call() throws Exception
         {
-          final List<String> result = new ArrayList<String>();
+          final List<String> result = new ArrayList<>();
           ZIPUtil.unzip(effectiveFile, new ZIPUtil.UnzipHandler()
           {
+            @Override
             public void unzipFile(String name, InputStream zipStream) throws IOException
             {
               result.add(name);
             }
 
+            @Override
             public void unzipDirectory(String name) throws IOException
             {
             }
@@ -2903,7 +2927,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
       String jarID = baseID + ".feature.jar";
       Version version = iu.getVersion();
       IQueryResult<IInstallableUnit> jarQuery = metadataRepository.query(QueryUtil.createIUQuery(jarID, version), new NullProgressMonitor());
-      final List<Future<Map<IArtifactDescriptor, File>>> futures = new ArrayList<Future<Map<IArtifactDescriptor, File>>>();
+      final List<Future<Map<IArtifactDescriptor, File>>> futures = new ArrayList<>();
       for (IInstallableUnit jarIU : P2Util.asIterable(jarQuery))
       {
         Collection<IArtifactKey> artifacts = jarIU.getArtifacts();
@@ -2915,6 +2939,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
       result = getExecutor().submit(new Callable<URI>()
       {
+        @Override
         public URI call() throws Exception
         {
           for (Future<Map<IArtifactDescriptor, File>> future : futures)
@@ -3119,9 +3144,10 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     {
       result = getExecutor().submit(new Callable<Map<IArtifactDescriptor, File>>()
       {
+        @Override
         public Map<IArtifactDescriptor, File> call() throws Exception
         {
-          Map<IArtifactDescriptor, File> artifacts = new LinkedHashMap<IArtifactDescriptor, File>();
+          Map<IArtifactDescriptor, File> artifacts = new LinkedHashMap<>();
           IArtifactDescriptor[] artifactDescriptors = artifactRepository.getArtifactDescriptors(artifactKey);
           for (IArtifactDescriptor artifactDescriptor : artifactDescriptors)
           {
@@ -3288,10 +3314,12 @@ public class RepositoryIntegrityAnalyzer implements IApplication
       IOUtil.copyFile(file, copy);
       ZIPUtil.unzip(copy, new ZIPUtil.UnzipHandler()
       {
+        @Override
         public void unzipFile(String name, InputStream zipStream) throws IOException
         {
         }
 
+        @Override
         public void unzipDirectory(String name) throws IOException
         {
         }
@@ -3311,20 +3339,21 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     Map<File, Future<SignedContent>> artifactSignedContent = signedContentCache.get(iu);
     if (artifactSignedContent == null)
     {
-      Map<IInstallableUnit, Map<File, Future<SignedContent>>> result = new LinkedHashMap<IInstallableUnit, Map<File, Future<SignedContent>>>();
+      Map<IInstallableUnit, Map<File, Future<SignedContent>>> result = new LinkedHashMap<>();
       final BundleContext context = P2CorePlugin.INSTANCE.getBundleContext();
       ServiceReference<SignedContentFactory> contentFactoryRef = context.getServiceReference(SignedContentFactory.class);
       final SignedContentFactory verifierFactory = context.getService(contentFactoryRef);
       try
       {
         ExecutorService executor = getExecutor();
-        artifactSignedContent = new LinkedHashMap<File, Future<SignedContent>>();
+        artifactSignedContent = new LinkedHashMap<>();
         for (IArtifactKey artifactKey : iu.getArtifacts())
         {
           for (final File file : get(artifactCache.get(artifactKey)).values())
           {
             Future<SignedContent> signedContent = executor.submit(new Callable<SignedContent>()
             {
+              @Override
               public SignedContent call() throws Exception
               {
                 File processedFile = new File(file.toString() + PROCESSED);
@@ -3854,14 +3883,17 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
     public static final int RETAINED_NIGHTLY_BUILDS = -1;
 
+    @Override
     public abstract String getReportSource();
 
+    @Override
     public abstract String getReportBrandingImage();
 
     public abstract Map<Report.LicenseDetail, Set<IInstallableUnit>> getLicenses();
 
     public abstract List<String> getFeatures(Iterable<IInstallableUnit> features);
 
+    @Override
     public abstract Map<String, String> getBreadcrumbs();
 
     public List<String> getXML(IInstallableUnit iu)
@@ -3941,6 +3973,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
     public abstract String getDate();
 
+    @Override
     public String getNow()
     {
       return new SimpleDateFormat("yyyy'-'MM'-'dd' at 'HH':'mm ").format(System.currentTimeMillis());
@@ -3988,7 +4021,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
     public Set<IInstallableUnit> getSortedByName(Collection<? extends IInstallableUnit> ius)
     {
-      TreeSet<IInstallableUnit> result = new TreeSet<IInstallableUnit>(NAME_VERSION_COMPARATOR);
+      TreeSet<IInstallableUnit> result = new TreeSet<>(NAME_VERSION_COMPARATOR);
       result.addAll(ius);
       return result;
     }
@@ -3997,7 +4030,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
     public Set<IInstallableUnit> getCategories()
     {
-      Set<IInstallableUnit> categories = new TreeSet<IInstallableUnit>();
+      Set<IInstallableUnit> categories = new TreeSet<>();
       for (IInstallableUnit iu : getAllIUs())
       {
         if (isCategory(iu))
@@ -4055,6 +4088,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
       return "_" + new File(folder).getName().replace('.', '_').replace('\'', '_');
     }
 
+    @Override
     public abstract Map<String, String> getNavigation();
 
     public abstract String getSiteURL();
@@ -4063,8 +4097,10 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
     public abstract String getArtifactML();
 
+    @Override
     public abstract String getTitle(boolean narrow);
 
+    @Override
     public abstract String getTitle();
 
     private static ILicense load(URI licenseURI, URI uri)
@@ -4142,23 +4178,27 @@ public class RepositoryIntegrityAnalyzer implements IApplication
       this.reportsWithErrors = reportsWithErrors;
     }
 
+    @Override
     public String getHelpLink()
     {
       return parent == null && aggregator ? "https://wiki.eclipse.org/Oomph_Repository_Analyzer#Simultaneous_Release"
           : "https://wiki.eclipse.org/Oomph_Repository_Analyzer#Description";
     }
 
+    @Override
     public String getHelpImage()
     {
       return getImage(URI.createURI("https://git.eclipse.org/c/platform/eclipse.platform.ui.git/plain/bundles/org.eclipse.jface/icons/full/help@2x.png"),
           folder);
     }
 
+    @Override
     public String getHelpText()
     {
       return parent == null && aggregator ? "simrel aggregator" : "folder index";
     }
 
+    @Override
     public String getNow()
     {
       return new SimpleDateFormat("yyyy'-'MM'-'dd' at 'HH':'mm ").format(System.currentTimeMillis());
@@ -4174,14 +4214,16 @@ public class RepositoryIntegrityAnalyzer implements IApplication
       return publishLocation;
     }
 
+    @Override
     public String getTitle()
     {
       return folder.getName();
     }
 
+    @Override
     public Map<String, String> getBreadcrumbs()
     {
-      Map<String, String> result = parent == null ? new LinkedHashMap<String, String>() : parent.getBreadcrumbs();
+      Map<String, String> result = parent == null ? new LinkedHashMap<>() : parent.getBreadcrumbs();
       for (Map.Entry<String, String> entry : result.entrySet())
       {
         String href = entry.getValue();
@@ -4192,9 +4234,10 @@ public class RepositoryIntegrityAnalyzer implements IApplication
       return result;
     }
 
+    @Override
     public Map<String, String> getNavigation()
     {
-      Map<String, String> result = new LinkedHashMap<String, String>();
+      Map<String, String> result = new LinkedHashMap<>();
       for (File file : listSortedFiles(folder))
       {
         if (file.isDirectory() && (!reportLocations.contains(file) || parent != null || aggregator && file.getName().endsWith(".aggrcon")))
@@ -4219,16 +4262,19 @@ public class RepositoryIntegrityAnalyzer implements IApplication
       return result;
     }
 
+    @Override
     public String getTitle(boolean narrow)
     {
       return getTitle();
     }
 
+    @Override
     public String getReportSource()
     {
       return reportSource;
     }
 
+    @Override
     public String getReportBrandingImage()
     {
       return getImage(URI.createURI(reportBranding), folder);
@@ -4238,7 +4284,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     {
       if (children == null)
       {
-        children = new ArrayList<IndexReport>();
+        children = new ArrayList<>();
         for (File file : listSortedFiles(folder))
         {
           if (file.isDirectory() && !reportLocations.contains(file))
@@ -4256,7 +4302,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     {
       if (allReports != null)
       {
-        Map<String, String> result = new TreeMap<String, String>();
+        Map<String, String> result = new TreeMap<>();
         java.net.URI baseURI = folder.toURI();
         for (Map.Entry<String, String> entry : allReports.entrySet())
         {

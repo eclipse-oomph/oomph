@@ -110,6 +110,7 @@ public class LinkLocationTaskImpl extends SetupTaskImpl implements LinkLocationT
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getPath()
   {
     return path;
@@ -120,6 +121,7 @@ public class LinkLocationTaskImpl extends SetupTaskImpl implements LinkLocationT
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setPath(String newPath)
   {
     String oldPath = path;
@@ -135,6 +137,7 @@ public class LinkLocationTaskImpl extends SetupTaskImpl implements LinkLocationT
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getName()
   {
     return name;
@@ -145,6 +148,7 @@ public class LinkLocationTaskImpl extends SetupTaskImpl implements LinkLocationT
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setName(String newName)
   {
     String oldName = name;
@@ -259,6 +263,7 @@ public class LinkLocationTaskImpl extends SetupTaskImpl implements LinkLocationT
     return PRIORITY_INSTALLATION;
   }
 
+  @Override
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     if (context.isSelfHosting() && context.getTrigger() != Trigger.BOOTSTRAP)
@@ -279,6 +284,7 @@ public class LinkLocationTaskImpl extends SetupTaskImpl implements LinkLocationT
     return !link.exists();
   }
 
+  @Override
   public void perform(SetupTaskContext context) throws Exception
   {
     List<String> lines = Collections.singletonList("path=" + canonicalPath.toString().replace("\\", "\\\\")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$

@@ -139,7 +139,7 @@ public class LazyProfileRegistry extends SimpleProfileRegistry
 
     try
     {
-      List<Profile> result = new ArrayList<Profile>(size);
+      List<Profile> result = new ArrayList<>(size);
       for (Profile profile : profileMap.values())
       {
         monitor.subTask(NLS.bind(Messages.LazyProfileRegistry_Loading_task, profile.getProfileId()));
@@ -236,10 +236,11 @@ public class LazyProfileRegistry extends SimpleProfileRegistry
         throw new IllegalStateException(NLS.bind(Messages.LazyProfileRegistry_RegistryDirectoryNotAvailable_exception, store));
       }
 
-      profileMap = new HashMap<String, org.eclipse.equinox.internal.p2.engine.Profile>();
+      profileMap = new HashMap<>();
 
       File[] profileDirectories = store.listFiles(new FileFilter()
       {
+        @Override
         public boolean accept(File pathname)
         {
           return pathname.getName().endsWith(PROFILE_EXT) && pathname.isDirectory();
@@ -389,6 +390,7 @@ public class LazyProfileRegistry extends SimpleProfileRegistry
     long latestTimestamp = 0;
     File[] profileFiles = profileDirectory.listFiles(new FileFilter()
     {
+      @Override
       public boolean accept(File pathname)
       {
         return (pathname.getName().endsWith(PROFILE_GZ_EXT) || pathname.getName().endsWith(PROFILE_EXT)) && !pathname.isDirectory();

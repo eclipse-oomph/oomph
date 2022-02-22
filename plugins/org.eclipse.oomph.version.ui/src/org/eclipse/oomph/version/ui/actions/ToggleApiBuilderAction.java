@@ -43,19 +43,23 @@ public class ToggleApiBuilderAction implements IWorkbenchWindowActionDelegate
     }
   }
 
+  @Override
   public void init(IWorkbenchWindow window)
   {
   }
 
+  @Override
   public void dispose()
   {
   }
 
+  @Override
   public void selectionChanged(IAction action, ISelection selection)
   {
     updateCheckState(action);
   }
 
+  @Override
   public void run(IAction action)
   {
     boolean disabled = isDisabled();

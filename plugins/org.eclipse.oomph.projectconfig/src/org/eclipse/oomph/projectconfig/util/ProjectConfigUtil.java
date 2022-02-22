@@ -94,7 +94,7 @@ public final class ProjectConfigUtil
 
     public CompletenessChecker(WorkspaceConfiguration workspaceConfiguration)
     {
-      final Set<String> projectNames = new HashSet<String>();
+      final Set<String> projectNames = new HashSet<>();
       for (IProject iProject : WORKSPACE_ROOT.getProjects())
       {
         if (iProject.isAccessible())
@@ -131,7 +131,7 @@ public final class ProjectConfigUtil
 
     private Set<String> getProjectNames(final PreferenceNode projectPreferenceNode)
     {
-      Set<String> projectPreferenceNodeNames = new HashSet<String>();
+      Set<String> projectPreferenceNodeNames = new HashSet<>();
       for (PreferenceNode preferenceNode : projectPreferenceNode.getChildren())
       {
         projectPreferenceNodeNames.add(preferenceNode.getName());
@@ -151,7 +151,7 @@ public final class ProjectConfigUtil
 
   public static EList<PreferenceProfile> getDefaultPreferenceProfiles(IProject project, PreferenceNode projectPreferenceNode)
   {
-    EList<PreferenceProfile> result = new BasicEList<PreferenceProfile>();
+    EList<PreferenceProfile> result = new BasicEList<>();
 
     PreferenceNode encodingPreferenceNode = projectPreferenceNode.getNode(URI.createURI("org.eclipse.core.resources/encoding")); //$NON-NLS-1$
     if (encodingPreferenceNode != null)
@@ -278,7 +278,7 @@ public final class ProjectConfigUtil
       }
 
       EList<PreferenceProfile> profileReferences = project.getPreferenceProfileReferences();
-      ArrayList<PreferenceProfile> copy = new ArrayList<PreferenceProfile>(profileReferences);
+      ArrayList<PreferenceProfile> copy = new ArrayList<>(profileReferences);
       profileReferences.clear();
       profileReferences.addAll(copy);
     }
@@ -325,7 +325,7 @@ public final class ProjectConfigUtil
         {
           IProject iProject = WORKSPACE_ROOT.getProject(projectPreferenceNode.getName());
           List<PreferenceProfile> defaultPreferenceProfiles = getDefaultPreferenceProfiles(iProject, projectPreferenceNode);
-          List<PreferenceProfile> copiedPreferenceProfiles = new ArrayList<PreferenceProfile>(EcoreUtil.copyAll(preferenceProfiles));
+          List<PreferenceProfile> copiedPreferenceProfiles = new ArrayList<>(EcoreUtil.copyAll(preferenceProfiles));
           hasOnlyDefaultPreferenceProfiles = EcoreUtil.equals(copiedPreferenceProfiles, defaultPreferenceProfiles);
         }
 
@@ -358,7 +358,7 @@ public final class ProjectConfigUtil
             Resource resource = new XMLResourceImpl(workspaceConfiguration.eResource().getURI());
             resource.getContents().add(copy);
 
-            Map<Object, Object> options = new HashMap<Object, Object>();
+            Map<Object, Object> options = new HashMap<>();
             options.put(XMLResource.OPTION_USE_ENCODED_ATTRIBUTE_STYLE, Boolean.TRUE);
             options.put(XMLResource.OPTION_LINE_WIDTH, 10);
             options.put(XMLResource.OPTION_ENCODING, "UTF-8"); //$NON-NLS-1$
@@ -443,7 +443,7 @@ public final class ProjectConfigUtil
         {
           @SuppressWarnings("unchecked")
           EList<EObject> eObjects = (EList<EObject>)eObject.eGet(eReference);
-          List<EObject> eObjectsCopy = new ArrayList<EObject>(eObjects);
+          List<EObject> eObjectsCopy = new ArrayList<>(eObjects);
           eObjects.clear();
           for (EObject referencedEObject : eObjectsCopy)
           {

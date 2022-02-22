@@ -29,6 +29,7 @@ import java.net.URI;
  */
 public class TargetPlatformPluginLocation implements IDynamicVariableResolver
 {
+  @Override
   public String resolveValue(IDynamicVariable variable, String element) throws CoreException
   {
     try

@@ -198,20 +198,24 @@ public abstract class OomphPlugin extends EMFPlugin
     {
       return new ILog()
       {
+        @Override
         public void removeLogListener(ILogListener listener)
         {
         }
 
+        @Override
         public void log(IStatus status)
         {
           System.out.println(status);
         }
 
+        @Override
         public Bundle getBundle()
         {
           return null;
         }
 
+        @Override
         public void addLogListener(ILogListener listener)
         {
         }
@@ -580,7 +584,7 @@ public abstract class OomphPlugin extends EMFPlugin
 
   public static List<File> getClassPath(Bundle bundle) throws Exception
   {
-    final List<File> cp = new ArrayList<File>();
+    final List<File> cp = new ArrayList<>();
 
     final File file = FileLocator.getBundleFile(bundle);
     if (file.isFile())
@@ -599,6 +603,7 @@ public abstract class OomphPlugin extends EMFPlugin
         Element rootElement = XMLUtil.loadRootElement(documentBuilder, classpathFile);
         XMLUtil.handleElementsByTagName(rootElement, "classpathentry", new XMLUtil.ElementHandler() //$NON-NLS-1$
         {
+          @Override
           public void handleElement(Element element) throws Exception
           {
             if ("output".equals(element.getAttribute("kind"))) //$NON-NLS-1$ //$NON-NLS-2$
@@ -708,7 +713,7 @@ public abstract class OomphPlugin extends EMFPlugin
     {
       if (children == null)
       {
-        children = new ArrayList<BundleFile>();
+        children = new ArrayList<>();
 
         Bundle bundle = getBundle();
         String path = "/" + getPath(); //$NON-NLS-1$
@@ -882,6 +887,7 @@ public abstract class OomphPlugin extends EMFPlugin
       }
     }
 
+    @Override
     public int compareTo(BundleFile o)
     {
       return name.compareTo(o.getName());

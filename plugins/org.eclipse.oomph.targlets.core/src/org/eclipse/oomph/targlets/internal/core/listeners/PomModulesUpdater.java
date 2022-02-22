@@ -150,7 +150,7 @@ public class PomModulesUpdater extends WorkspaceUpdateListener
       IProgressMonitor monitor)
   {
     URI mainURI = URI.createFileURI(mainPom.getAbsolutePath());
-    List<String> modules = new ArrayList<String>();
+    List<String> modules = new ArrayList<>();
 
     for (WorkspaceIUInfo info : workspaceIUInfos.values())
     {

@@ -102,7 +102,7 @@ public class UpdateCopyrightsHelper
 
   private Pattern copyrightPattern;
 
-  private List<String> missingCopyrights = new ArrayList<String>();
+  private List<String> missingCopyrights = new ArrayList<>();
 
   private int rewriteCount;
 
@@ -129,7 +129,7 @@ public class UpdateCopyrightsHelper
           stateFile = new File(workTree, ".legalchecks.state");
 
           initProperties();
-          final Map<File, Boolean> files = new TreeMap<File, Boolean>();
+          final Map<File, Boolean> files = new TreeMap<>();
 
           if (inputFiles == null)
           {
@@ -141,6 +141,7 @@ public class UpdateCopyrightsHelper
               final String message = finishedFiles.size() + " files have been previously processed.\nDo you want to skip these files?";
               shell.getDisplay().syncExec(new Runnable()
               {
+                @Override
                 public void run()
                 {
                   skipFinishedFiles[0] = MessageDialog.openQuestion(shell, getTitle(), message);
@@ -173,6 +174,7 @@ public class UpdateCopyrightsHelper
 
           shell.getDisplay().syncExec(new Runnable()
           {
+            @Override
             public void run()
             {
               try
@@ -264,7 +266,7 @@ public class UpdateCopyrightsHelper
       {
         reader = new BufferedReader(new FileReader(stateFile));
 
-        Set<File> finishedFiles = new HashSet<File>();
+        Set<File> finishedFiles = new HashSet<>();
         String line;
         while ((line = reader.readLine()) != null)
         {
@@ -336,12 +338,7 @@ public class UpdateCopyrightsHelper
         String name = file.getName();
         if (file.isDirectory())
         {
-          if (name.equals(".git"))
-          {
-            continue;
-          }
-
-          if (name.equals("bin"))
+          if (name.equals(".git") || name.equals("bin"))
           {
             continue;
           }
@@ -350,12 +347,7 @@ public class UpdateCopyrightsHelper
         }
         else
         {
-          if (finishedFiles != null && finishedFiles.contains(file))
-          {
-            continue;
-          }
-
-          if (name.endsWith(".class"))
+          if ((finishedFiles != null && finishedFiles.contains(file)) || name.endsWith(".class"))
           {
             continue;
           }
@@ -453,7 +445,7 @@ public class UpdateCopyrightsHelper
   {
     String path = getWorkTreeRelativePath(file);
 
-    List<String> lines = new ArrayList<String>();
+    List<String> lines = new ArrayList<>();
     boolean copyrightFound = false;
     boolean copyrightChanged = false;
 
@@ -528,7 +520,7 @@ public class UpdateCopyrightsHelper
     }
     else
     {
-      Set<Integer> years = new HashSet<Integer>();
+      Set<Integer> years = new HashSet<>();
 
       for (RevCommit commit : git.log().addPath(path).call())
       {
@@ -600,10 +592,10 @@ public class UpdateCopyrightsHelper
       }
     }
 
-    List<Integer> list = new ArrayList<Integer>(years);
+    List<Integer> list = new ArrayList<>(years);
     Collections.sort(list);
 
-    List<YearRange> ranges = new ArrayList<YearRange>();
+    List<YearRange> ranges = new ArrayList<>();
     YearRange lastRange = null;
     for (Integer year : list)
     {
@@ -718,7 +710,7 @@ public class UpdateCopyrightsHelper
 
   private static String[] combineWords(String[] verbs, String[] nouns)
   {
-    List<String> result = new ArrayList<String>();
+    List<String> result = new ArrayList<>();
     for (String noun : nouns)
     {
       for (String verb : verbs)

@@ -99,6 +99,7 @@ public class WorkbenchFactoryImpl extends EFactoryImpl implements WorkbenchFacto
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public FileAssociationsTask createFileAssociationsTask()
   {
     FileAssociationsTaskImpl fileAssociationsTask = new FileAssociationsTaskImpl();
@@ -110,6 +111,7 @@ public class WorkbenchFactoryImpl extends EFactoryImpl implements WorkbenchFacto
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public FileMapping createFileMapping()
   {
     FileMappingImpl fileMapping = new FileMappingImpl();
@@ -121,6 +123,7 @@ public class WorkbenchFactoryImpl extends EFactoryImpl implements WorkbenchFacto
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public FileEditor createFileEditor()
   {
     FileEditorImpl fileEditor = new FileEditorImpl();
@@ -132,6 +135,7 @@ public class WorkbenchFactoryImpl extends EFactoryImpl implements WorkbenchFacto
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public KeyBindingTask createKeyBindingTask()
   {
     KeyBindingTaskImpl keyBindingTask = new KeyBindingTaskImpl();
@@ -143,6 +147,7 @@ public class WorkbenchFactoryImpl extends EFactoryImpl implements WorkbenchFacto
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public KeyBindingContext createKeyBindingContext()
   {
     KeyBindingContextImpl keyBindingContext = new KeyBindingContextImpl();
@@ -154,6 +159,7 @@ public class WorkbenchFactoryImpl extends EFactoryImpl implements WorkbenchFacto
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public CommandParameter createCommandParameter()
   {
     CommandParameterImpl commandParameter = new CommandParameterImpl();
@@ -165,6 +171,7 @@ public class WorkbenchFactoryImpl extends EFactoryImpl implements WorkbenchFacto
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public WorkbenchPackage getWorkbenchPackage()
   {
     return (WorkbenchPackage)getEPackage();

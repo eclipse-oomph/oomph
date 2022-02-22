@@ -48,6 +48,7 @@ public abstract class WorkUnit<R, E extends Throwable>
 
     display.syncExec(new Runnable()
     {
+      @Override
       public void run()
       {
         if (display.isDisposed())

@@ -215,6 +215,7 @@ public class KeyBindingTaskImpl extends SetupTaskImpl implements KeyBindingTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getScheme()
   {
     return scheme;
@@ -225,6 +226,7 @@ public class KeyBindingTaskImpl extends SetupTaskImpl implements KeyBindingTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setScheme(String newScheme)
   {
     String oldScheme = scheme;
@@ -240,11 +242,12 @@ public class KeyBindingTaskImpl extends SetupTaskImpl implements KeyBindingTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<KeyBindingContext> getContexts()
   {
     if (contexts == null)
     {
-      contexts = new EObjectContainmentEList<KeyBindingContext>(KeyBindingContext.class, this, WorkbenchPackage.KEY_BINDING_TASK__CONTEXTS);
+      contexts = new EObjectContainmentEList<>(KeyBindingContext.class, this, WorkbenchPackage.KEY_BINDING_TASK__CONTEXTS);
     }
     return contexts;
   }
@@ -254,6 +257,7 @@ public class KeyBindingTaskImpl extends SetupTaskImpl implements KeyBindingTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getPlatform()
   {
     return platform;
@@ -264,6 +268,7 @@ public class KeyBindingTaskImpl extends SetupTaskImpl implements KeyBindingTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setPlatform(String newPlatform)
   {
     String oldPlatform = platform;
@@ -279,6 +284,7 @@ public class KeyBindingTaskImpl extends SetupTaskImpl implements KeyBindingTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getLocale()
   {
     return locale;
@@ -289,6 +295,7 @@ public class KeyBindingTaskImpl extends SetupTaskImpl implements KeyBindingTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setLocale(String newLocale)
   {
     String oldLocale = locale;
@@ -304,6 +311,7 @@ public class KeyBindingTaskImpl extends SetupTaskImpl implements KeyBindingTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getKeys()
   {
     return keys;
@@ -314,6 +322,7 @@ public class KeyBindingTaskImpl extends SetupTaskImpl implements KeyBindingTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setKeys(String newKeys)
   {
     String oldKeys = keys;
@@ -329,6 +338,7 @@ public class KeyBindingTaskImpl extends SetupTaskImpl implements KeyBindingTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getCommand()
   {
     return command;
@@ -339,6 +349,7 @@ public class KeyBindingTaskImpl extends SetupTaskImpl implements KeyBindingTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setCommand(String newCommand)
   {
     String oldCommand = command;
@@ -354,11 +365,12 @@ public class KeyBindingTaskImpl extends SetupTaskImpl implements KeyBindingTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<CommandParameter> getCommandParameters()
   {
     if (commandParameters == null)
     {
-      commandParameters = new EObjectContainmentEList<CommandParameter>(CommandParameter.class, this, WorkbenchPackage.KEY_BINDING_TASK__COMMAND_PARAMETERS);
+      commandParameters = new EObjectContainmentEList<>(CommandParameter.class, this, WorkbenchPackage.KEY_BINDING_TASK__COMMAND_PARAMETERS);
     }
     return commandParameters;
   }
@@ -539,6 +551,7 @@ public class KeyBindingTaskImpl extends SetupTaskImpl implements KeyBindingTask
     return result.toString();
   }
 
+  @Override
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     IBindingService bindingService = UIUtil.getService(PlatformUI.getWorkbench(), IBindingService.class);
@@ -575,22 +588,8 @@ public class KeyBindingTaskImpl extends SetupTaskImpl implements KeyBindingTask
 
   private boolean isEqual(KeyBindingContext keyBindingContext, KeyBinding keyBinding) throws Exception
   {
-    if (!ObjectUtil.equals(keyBinding.getSchemeId(), getScheme()))
-    {
-      return false;
-    }
-
-    if (!ObjectUtil.equals(keyBinding.getContextId(), keyBindingContext.getID()))
-    {
-      return false;
-    }
-
-    if (!ObjectUtil.equals(keyBinding.getPlatform(), getPlatform()))
-    {
-      return false;
-    }
-
-    if (!ObjectUtil.equals(keyBinding.getLocale(), getLocale()))
+    if (!ObjectUtil.equals(keyBinding.getSchemeId(), getScheme()) || !ObjectUtil.equals(keyBinding.getContextId(), keyBindingContext.getID())
+        || !ObjectUtil.equals(keyBinding.getPlatform(), getPlatform()) || !ObjectUtil.equals(keyBinding.getLocale(), getLocale()))
     {
       return false;
     }
@@ -615,10 +614,11 @@ public class KeyBindingTaskImpl extends SetupTaskImpl implements KeyBindingTask
     return true;
   }
 
+  @Override
   public void perform(SetupTaskContext context) throws Exception
   {
     final IBindingService bindingService = UIUtil.getService(PlatformUI.getWorkbench(), IBindingService.class);
-    final List<Binding> bindings = new ArrayList<Binding>(Arrays.asList(bindingService.getBindings()));
+    final List<Binding> bindings = new ArrayList<>(Arrays.asList(bindingService.getBindings()));
 
     for (KeyBindingContext keyBindingContext : getContexts())
     {
@@ -630,6 +630,7 @@ public class KeyBindingTaskImpl extends SetupTaskImpl implements KeyBindingTask
     final Exception[] exception = { null };
     Display.getDefault().syncExec(new Runnable()
     {
+      @Override
       public void run()
       {
         try

@@ -151,9 +151,9 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
 
   public static final String IU_PROPERTY_SOURCE = "org.eclipse.oomph.targlet.source"; //$NON-NLS-1$
 
-  private static final ThreadLocal<Boolean> FORCE_UPDATE = new ThreadLocal<Boolean>();
+  private static final ThreadLocal<Boolean> FORCE_UPDATE = new ThreadLocal<>();
 
-  private static final ThreadLocal<Boolean> MIRRORS = new ThreadLocal<Boolean>();
+  private static final ThreadLocal<Boolean> MIRRORS = new ThreadLocal<>();
 
   private static final String A_PDE_TARGET_PLATFORM = "A.PDE.Target.Platform"; //$NON-NLS-1$
 
@@ -177,7 +177,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
 
   private ITargetDefinition targetDefinition;
 
-  private final EList<Targlet> targlets = new BasicEList<Targlet>();
+  private final EList<Targlet> targlets = new BasicEList<>();
 
   public TargletContainer(String id)
   {
@@ -204,12 +204,14 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     basicSetTarglets(targlets);
   }
 
+  @Override
   @SuppressWarnings("all")
   protected int getResolveBundlesWork()
   {
     return 999;
   }
 
+  @Override
   @SuppressWarnings("all")
   protected int getResolveFeaturesWork()
   {
@@ -228,11 +230,13 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     return false;
   }
 
+  @Override
   public String getID()
   {
     return id;
   }
 
+  @Override
   public void setID(String newID) throws CoreException
   {
     if (!ObjectUtil.equals(newID, id))
@@ -260,6 +264,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     {
       TargetPlatformUtil.runWithTargetPlatformService(new TargetPlatformRunnable<Object>()
       {
+        @Override
         public Object run(ITargetPlatformService service) throws CoreException
         {
           // Internally the latest PDE implementation represent state via org.eclipse.pde.internal.core.target.TargetDefinition.getDocument()
@@ -281,6 +286,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     return TYPE;
   }
 
+  @Override
   public TargletContainerDescriptor getDescriptor()
   {
     try
@@ -295,6 +301,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     }
   }
 
+  @Override
   public ITargetDefinition getTargetDefinition()
   {
     return targetDefinition;
@@ -304,6 +311,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
    * Returns a copy of the targlet with the given name in this targlet container. This copy can be freely modified but the modifications won't have an impact
    * on a targlet container unless the copy is set back into a container via {@link #setTarglets(Collection)}.
    */
+  @Override
   public Targlet getTarglet(String name)
   {
     int index = getTargletIndex(name);
@@ -315,6 +323,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     return null;
   }
 
+  @Override
   public int getTargletIndex(String name)
   {
     for (int i = 0; i < targlets.size(); i++)
@@ -329,6 +338,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     return -1;
   }
 
+  @Override
   public boolean hasTarglet(String name)
   {
     return getTargletIndex(name) != -1;
@@ -338,6 +348,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
    * Returns a copy of the targlets in this targlet container. This copy can be freely modified but the modifications won't have an impact
    * on a targlet container unless the copy is set back into a container via {@link #setTarglets(Collection)}.
    */
+  @Override
   public EList<Targlet> getTarglets()
   {
     return TargletFactory.eINSTANCE.copyTarglets(targlets);
@@ -347,6 +358,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
    * Copies the passed targlets into this targlet container. Modifications of the passed targlets after the call
    * to this method won't have an impact on this targlet container.
    */
+  @Override
   public void setTarglets(Collection<? extends Targlet> targlets) throws CoreException
   {
     basicSetTarglets(targlets);
@@ -376,6 +388,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     }
   }
 
+  @Override
   public boolean isIncludeSources()
   {
     for (Targlet targlet : targlets)
@@ -389,6 +402,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     return false;
   }
 
+  @Override
   public boolean isIncludeAllPlatforms()
   {
     for (Targlet targlet : targlets)
@@ -402,6 +416,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     return false;
   }
 
+  @Override
   public boolean isIncludeAllRequirements()
   {
     for (Targlet targlet : targlets)
@@ -415,6 +430,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     return true;
   }
 
+  @Override
   public boolean isIncludeBinaryEquivalents()
   {
     for (Targlet targlet : targlets)
@@ -428,6 +444,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     return true;
   }
 
+  @Override
   public String getProfileProperties()
   {
     StringBuilder result = new StringBuilder();
@@ -448,6 +465,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     return result.toString();
   }
 
+  @Override
   public String getEnvironmentProperties()
   {
     StringBuilder builder = new StringBuilder();
@@ -486,6 +504,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     return builder.toString();
   }
 
+  @Override
   public String getNLProperty()
   {
     String nl = targetDefinition.getNL();
@@ -511,6 +530,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     return descriptor.getInstallLocation().getAbsolutePath();
   }
 
+  @Override
   public String getDigest()
   {
     String environmentProperties = getEnvironmentProperties();
@@ -609,8 +629,8 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
   {
     SubMonitor progress = SubMonitor.convert(monitor, 100).detectCancelation();
 
-    List<TargetBundle> bundles = new ArrayList<TargetBundle>();
-    List<TargetFeature> features = new ArrayList<TargetFeature>();
+    List<TargetBundle> bundles = new ArrayList<>();
+    List<TargetFeature> features = new ArrayList<>();
 
     if (profile != null)
     {
@@ -776,6 +796,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     features.add(feature);
   }
 
+  @Override
   public void forceUpdate(boolean activateTargetDefinition, boolean mirrors, IProgressMonitor monitor) throws CoreException
   {
     try
@@ -824,6 +845,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     }
   }
 
+  @Override
   public IStatus updateProfile(IProgressMonitor monitor)
   {
     try
@@ -948,7 +970,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     {
       EList<IUGenerator> effectiveIUGenerators = effectiveIUGenerators(targlet);
 
-      EList<IInstallableUnit> ius = new BasicEList<IInstallableUnit>();
+      EList<IInstallableUnit> ius = new BasicEList<>();
       for (SourceLocator sourceLocator : targlet.getSourceLocators())
       {
         ius.addAll(workspaceIUAnalyzer.analyze(sourceLocator, effectiveIUGenerators, progress.newChild()));
@@ -971,7 +993,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
           // Preprocess all the IUs to build a map from workspace IU Info to filter.
           // This ensures that a requirement on a plain.project will be filtered appropriately.
           Map<IInstallableUnit, WorkspaceIUInfo> workspaceIUInfos = workspaceIUAnalyzer.getWorkspaceIUInfos();
-          Map<WorkspaceIUInfo, IMatchExpression<IInstallableUnit>> filters = new HashMap<WorkspaceIUInfo, IMatchExpression<IInstallableUnit>>();
+          Map<WorkspaceIUInfo, IMatchExpression<IInstallableUnit>> filters = new HashMap<>();
           for (IInstallableUnit iu : ius)
           {
             IMatchExpression<IInstallableUnit> filter = iu.getFilter();
@@ -1197,7 +1219,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
   private static Map<IInstallableUnit, WorkspaceIUInfo> getRequiredProjects(IProfile profile, Map<IInstallableUnit, WorkspaceIUInfo> allProjects,
       IProgressMonitor monitor)
   {
-    Map<WorkspaceIUInfo, IInstallableUnit> mainIUs = new HashMap<WorkspaceIUInfo, IInstallableUnit>();
+    Map<WorkspaceIUInfo, IInstallableUnit> mainIUs = new HashMap<>();
     for (Map.Entry<IInstallableUnit, WorkspaceIUInfo> entry : allProjects.entrySet())
     {
       IInstallableUnit iu = entry.getKey();
@@ -1207,7 +1229,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
       }
     }
 
-    Map<IInstallableUnit, WorkspaceIUInfo> result = new HashMap<IInstallableUnit, WorkspaceIUInfo>();
+    Map<IInstallableUnit, WorkspaceIUInfo> result = new HashMap<>();
     for (IInstallableUnit iu : P2Util.asIterable(profile.query(QueryUtil.createIUAnyQuery(), monitor)))
     {
       if ("true".equals(iu.getProperty(TargletContainer.IU_PROPERTY_SOURCE))) //$NON-NLS-1$
@@ -1293,10 +1315,10 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
             Map<IInstallableUnit, WorkspaceIUInfo> workspaceIUInfos = workspaceIUAnalyzer.getWorkspaceIUInfos();
             Map<String, Version> workspaceIUVersions = workspaceIUAnalyzer.getIUVersions();
 
-            Set<IInstallableUnit> originalWorkspaceIUs = new HashSet<IInstallableUnit>(workspaceIUInfos.keySet());
+            Set<IInstallableUnit> originalWorkspaceIUs = new HashSet<>(workspaceIUInfos.keySet());
 
-            Set<IInstallableUnit> ius = new LinkedHashSet<IInstallableUnit>();
-            Map<IU, IInstallableUnit> idToIUMap = new HashMap<IU, IInstallableUnit>();
+            Set<IInstallableUnit> ius = new LinkedHashSet<>();
+            Map<IU, IInstallableUnit> idToIUMap = new HashMap<>();
             generateWorkspaceSourceIUs(ius, workspaceIUVersions, idToIUMap, monitor);
 
             ius.add(createPDETargetPlatformIU());
@@ -1331,7 +1353,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
                   }
 
                   // If the workspaceIU has any requirements not in the binary IU, then include those.
-                  List<IRequirement> extraRequirements = new ArrayList<IRequirement>();
+                  List<IRequirement> extraRequirements = new ArrayList<>();
                   LOOP: for (IRequirement workspaceRequirement : workspaceIU.getRequirements())
                   {
                     if (P2Util.isSimpleRequiredCapability(workspaceRequirement))
@@ -1413,7 +1435,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
               }
             }
 
-            Set<IInstallableUnit> remainingWorkspaceIUs = new HashSet<IInstallableUnit>(ius);
+            Set<IInstallableUnit> remainingWorkspaceIUs = new HashSet<>(ius);
             remainingWorkspaceIUs.retainAll(originalWorkspaceIUs);
 
             for (IInstallableUnit iu : remainingWorkspaceIUs)
@@ -1455,7 +1477,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
               }
             }
 
-            metadata = new CollectionResult<IInstallableUnit>(ius);
+            metadata = new CollectionResult<>(ius);
           }
 
           return metadata;
@@ -1464,7 +1486,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
         private void generateWorkspaceSourceIUs(Set<IInstallableUnit> ius, Map<String, Version> ids, Map<IU, IInstallableUnit> idToIUMap,
             IProgressMonitor monitor)
         {
-          Map<IInstallableUnit, WorkspaceIUInfo> workspaceSourceIUInfos = new HashMap<IInstallableUnit, WorkspaceIUInfo>();
+          Map<IInstallableUnit, WorkspaceIUInfo> workspaceSourceIUInfos = new HashMap<>();
           Map<IInstallableUnit, WorkspaceIUInfo> workspaceIUInfos = workspaceIUAnalyzer.getWorkspaceIUInfos();
 
           for (IInstallableUnit iu : workspaceIUInfos.keySet())
@@ -1550,7 +1572,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     @Override
     public IPhaseSet getPhaseSet(ProfileTransaction transaction)
     {
-      List<Phase> phases = new ArrayList<Phase>(4);
+      List<Phase> phases = new ArrayList<>(4);
       phases.add(new Collect(100));
       phases.add(new Property(1));
       phases.add(new Uninstall(50, true)
@@ -1566,7 +1588,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
           {
             if ("true".equals(first.getProperty(WorkspaceIUAnalyzer.IU_PROPERTY_WORKSPACE)) && first instanceof ResolvedInstallableUnit) //$NON-NLS-1$
             {
-              List<ProvisioningAction> actions = new ArrayList<ProvisioningAction>(super.getActions(new InstallableUnitOperand(
+              List<ProvisioningAction> actions = new ArrayList<>(super.getActions(new InstallableUnitOperand(
                   new ResolvedInstallableUnit((IInstallableUnit)((ResolvedInstallableUnit)first).getMember(ResolvedInstallableUnit.MEMBER_ORIGINAL)), null)));
               for (Iterator<ProvisioningAction> it = actions.iterator(); it.hasNext();)
               {
@@ -1597,7 +1619,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
           {
             if ("true".equals(second.getProperty(WorkspaceIUAnalyzer.IU_PROPERTY_WORKSPACE)) && second instanceof ResolvedInstallableUnit) //$NON-NLS-1$
             {
-              List<ProvisioningAction> actions = new ArrayList<ProvisioningAction>(super.getActions(new InstallableUnitOperand(null,
+              List<ProvisioningAction> actions = new ArrayList<>(super.getActions(new InstallableUnitOperand(null,
                   new ResolvedInstallableUnit((IInstallableUnit)((ResolvedInstallableUnit)second).getMember(ResolvedInstallableUnit.MEMBER_ORIGINAL)))));
               for (Iterator<ProvisioningAction> it = actions.iterator(); it.hasNext();)
               {
@@ -1655,7 +1677,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
         IInstallableUnit installableUnit = operand.second();
         if (installableUnit != null && installableUnit.getTouchpointType().getId().equals(NATIVE_TYPE))
         {
-          List<ProvisioningAction> list = new ArrayList<ProvisioningAction>(1);
+          List<ProvisioningAction> list = new ArrayList<>(1);
           list.add(new CollectNativesAction(bundlePool));
           return list;
         }
@@ -1666,7 +1688,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
       @Override
       protected IStatus initializePhase(IProgressMonitor monitor, IProfile profile, Map<String, Object> parameters)
       {
-        parameters.put(NATIVE_ARTIFACTS, new ArrayList<Object>());
+        parameters.put(NATIVE_ARTIFACTS, new ArrayList<>());
         parameters.put(PARM_PROFILE, profile);
         return null;
       }
@@ -1793,7 +1815,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
       xmlOptions.setProcessAnyXML(true);
       xmlOptions.setProcessSchemaLocations(true);
 
-      Map<Object, Object> options = new HashMap<Object, Object>();
+      Map<Object, Object> options = new HashMap<>();
       options.put(XMLResource.OPTION_DECLARE_XML, Boolean.FALSE);
       options.put(XMLResource.OPTION_EXTENDED_META_DATA, EXTENDED_META_DATA);
       options.put(XMLResource.OPTION_LAX_FEATURE_PROCESSING, Boolean.TRUE);
@@ -1802,6 +1824,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
       XML_OPTIONS = Collections.unmodifiableMap(options);
     }
 
+    @Override
     public ITargletContainer getTargetLocation(String type, String serializedXML) throws CoreException
     {
       if (TYPE.equals(type))
@@ -1823,7 +1846,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
         AnyType location = (AnyType)documentRoot.eContents().get(0);
         String id = (String)location.eGet(LOCATION_ID_FEATURE);
 
-        EList<Targlet> targlets = new BasicEList<Targlet>();
+        EList<Targlet> targlets = new BasicEList<>();
         for (EObject eObject : location.eContents())
         {
           targlets.add((Targlet)eObject);

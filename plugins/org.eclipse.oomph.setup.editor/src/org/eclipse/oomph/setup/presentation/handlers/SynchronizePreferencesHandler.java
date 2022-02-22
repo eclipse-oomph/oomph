@@ -27,6 +27,7 @@ public class SynchronizePreferencesHandler extends AbstractDropdownItemHandler
     super("sync/Remote", Messages.SynchronizePreferencesHandler_text); //$NON-NLS-1$
   }
 
+  @Override
   public void run()
   {
     Shell shell = SetupPropertyTester.getHandlingShell();

@@ -159,7 +159,7 @@ public class MylynQueriesTaskImpl extends SetupTaskImpl implements MylynQueriesT
 
   private TaskRepository repository;
 
-  private Map<Query, RepositoryQuery> repositoryQueries = new HashMap<Query, RepositoryQuery>();
+  private Map<Query, RepositoryQuery> repositoryQueries = new HashMap<>();
 
   /**
    * <!-- begin-user-doc -->
@@ -187,6 +187,7 @@ public class MylynQueriesTaskImpl extends SetupTaskImpl implements MylynQueriesT
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getConnectorKind()
   {
     return connectorKind;
@@ -197,6 +198,7 @@ public class MylynQueriesTaskImpl extends SetupTaskImpl implements MylynQueriesT
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setConnectorKind(String newConnectorKind)
   {
     String oldConnectorKind = connectorKind;
@@ -212,6 +214,7 @@ public class MylynQueriesTaskImpl extends SetupTaskImpl implements MylynQueriesT
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getRepositoryURL()
   {
     return repositoryURL;
@@ -222,6 +225,7 @@ public class MylynQueriesTaskImpl extends SetupTaskImpl implements MylynQueriesT
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setRepositoryURL(String newRepositoryURL)
   {
     String oldRepositoryURL = repositoryURL;
@@ -237,11 +241,12 @@ public class MylynQueriesTaskImpl extends SetupTaskImpl implements MylynQueriesT
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<Query> getQueries()
   {
     if (queries == null)
     {
-      queries = new EObjectContainmentWithInverseEList<Query>(Query.class, this, MylynPackage.MYLYN_QUERIES_TASK__QUERIES, MylynPackage.QUERY__TASK);
+      queries = new EObjectContainmentWithInverseEList<>(Query.class, this, MylynPackage.MYLYN_QUERIES_TASK__QUERIES, MylynPackage.QUERY__TASK);
     }
     return queries;
   }
@@ -251,6 +256,7 @@ public class MylynQueriesTaskImpl extends SetupTaskImpl implements MylynQueriesT
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getUserID()
   {
     return userID;
@@ -261,6 +267,7 @@ public class MylynQueriesTaskImpl extends SetupTaskImpl implements MylynQueriesT
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setUserID(String newUserID)
   {
     String oldUserID = userID;
@@ -276,6 +283,7 @@ public class MylynQueriesTaskImpl extends SetupTaskImpl implements MylynQueriesT
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getPassword()
   {
     return password;
@@ -286,6 +294,7 @@ public class MylynQueriesTaskImpl extends SetupTaskImpl implements MylynQueriesT
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setPassword(String newPassword)
   {
     String oldPassword = password;
@@ -464,6 +473,7 @@ public class MylynQueriesTaskImpl extends SetupTaskImpl implements MylynQueriesT
     return result.toString();
   }
 
+  @Override
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     String connectorKind = getConnectorKind();
@@ -485,6 +495,7 @@ public class MylynQueriesTaskImpl extends SetupTaskImpl implements MylynQueriesT
     return repository == null || !repositoryQueries.isEmpty();
   }
 
+  @Override
   public void perform(SetupTaskContext context) throws Exception
   {
     String connectorKind = getConnectorKind();
@@ -537,7 +548,7 @@ public class MylynQueriesTaskImpl extends SetupTaskImpl implements MylynQueriesT
         }
       }
 
-      Set<RepositoryQuery> queries = new HashSet<RepositoryQuery>(repositoryQueries.values());
+      Set<RepositoryQuery> queries = new HashSet<>(repositoryQueries.values());
       TasksUiPlugin.getTaskList().notifyElementsChanged(queries);
 
       AbstractRepositoryConnector connector = TasksUi.getRepositoryManager().getRepositoryConnector(connectorKind);
@@ -600,7 +611,7 @@ public class MylynQueriesTaskImpl extends SetupTaskImpl implements MylynQueriesT
       }
     }
 
-    for (String key : new ArrayList<String>(repositoryAttributes.keySet()))
+    for (String key : new ArrayList<>(repositoryAttributes.keySet()))
     {
       if (!attributes.containsKey(key))
       {

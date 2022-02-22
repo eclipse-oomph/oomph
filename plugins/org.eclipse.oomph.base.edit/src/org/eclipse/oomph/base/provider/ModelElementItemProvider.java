@@ -98,7 +98,7 @@ public class ModelElementItemProvider extends ItemProviderAdapter
   {
     if (itemPropertyDescriptors == null)
     {
-      itemPropertyDescriptors = new ArrayList<IItemPropertyDescriptor>()
+      itemPropertyDescriptors = new ArrayList<>()
       {
         private static final long serialVersionUID = 1L;
 
@@ -573,6 +573,7 @@ public class ModelElementItemProvider extends ItemProviderAdapter
       this.itemDelegator = itemDelegator;
     }
 
+    @Override
     public String getText(Object object)
     {
       if (object instanceof EList<?>)
@@ -647,6 +648,7 @@ public class ModelElementItemProvider extends ItemProviderAdapter
       return parent;
     }
 
+    @Override
     public Object getImage(Object object)
     {
       return itemDelegator.getImage(object);
@@ -674,8 +676,8 @@ public class ModelElementItemProvider extends ItemProviderAdapter
 
     public Command createCommand()
     {
-      List<Object> alternativeCollection = new ArrayList<Object>();
-      Map<EObject, EObject> fullConversionMap = new HashMap<EObject, EObject>();
+      List<Object> alternativeCollection = new ArrayList<>();
+      Map<EObject, EObject> fullConversionMap = new HashMap<>();
       for (Object object : collection)
       {
         if (object instanceof EObject)
@@ -693,7 +695,7 @@ public class ModelElementItemProvider extends ItemProviderAdapter
                 EClass conversionEClass = getConversionEClass(domain, owner, URI.createURI(conversionEClassURI));
                 if (conversionEClass != null)
                 {
-                  Map<EObject, EObject> conversionMap = new HashMap<EObject, EObject>();
+                  Map<EObject, EObject> conversionMap = new HashMap<>();
                   conversionMap.put(eClass, conversionEClass);
 
                   for (EStructuralFeature eStructuralFeature : eClass.getEAllStructuralFeatures())
@@ -899,7 +901,7 @@ public class ModelElementItemProvider extends ItemProviderAdapter
         {
           if (eAttribute.isMany())
           {
-            List<Object> values = new ArrayList<Object>();
+            List<Object> values = new ArrayList<>();
             for (Object element : (Collection<?>)value)
             {
               values.add(EcoreUtil.createFromString(eType, EcoreUtil.convertToString(eAttributeType, element)));
@@ -927,6 +929,7 @@ public class ModelElementItemProvider extends ItemProviderAdapter
 
     private static final IItemLabelProvider LABEL_PROVIDER = new IItemLabelProvider()
     {
+      @Override
       public String getText(Object object)
       {
         EClass eClass = (EClass)object;
@@ -939,6 +942,7 @@ public class ModelElementItemProvider extends ItemProviderAdapter
         return EcoreUtil.getURI(eClass).toString();
       }
 
+      @Override
       public Object getImage(Object object)
       {
         return image;
@@ -953,89 +957,107 @@ public class ModelElementItemProvider extends ItemProviderAdapter
       }
     }
 
+    @Override
     public IItemLabelProvider getLabelProvider(Object object)
     {
       return LABEL_PROVIDER;
     }
 
+    @Override
     public Object getPropertyValue(Object object)
     {
       return ((EObject)object).eClass();
     }
 
+    @Override
     public boolean isPropertySet(Object object)
     {
       return true;
     }
 
+    @Override
     public boolean canSetProperty(Object object)
     {
       return false;
     }
 
+    @Override
     public void resetPropertyValue(Object object)
     {
     }
 
+    @Override
     public void setPropertyValue(Object object, Object value)
     {
     }
 
+    @Override
     public String getCategory(Object object)
     {
       return null;
     }
 
+    @Override
     public String getDescription(Object object)
     {
       return BaseEditPlugin.INSTANCE.getString("_UI_ModelClass_description"); //$NON-NLS-1$
     }
 
+    @Override
     public String getDisplayName(Object object)
     {
       return BaseEditPlugin.INSTANCE.getString("_UI_ModelClass_feature"); //$NON-NLS-1$
     }
 
+    @Override
     public String[] getFilterFlags(Object object)
     {
       return PropertiesUtil.EXPERT_FILTER;
     }
 
+    @Override
     public Object getHelpContextIds(Object object)
     {
       return null;
     }
 
+    @Override
     public String getId(Object object)
     {
       return getDisplayName(object);
     }
 
+    @Override
     public boolean isCompatibleWith(Object object, Object anotherObject, IItemPropertyDescriptor anotherPropertyDescriptor)
     {
       return false;
     }
 
+    @Override
     public Object getFeature(Object object)
     {
       return "eClass"; //$NON-NLS-1$
     }
 
+    @Override
     public boolean isMany(Object object)
     {
       return false;
     }
 
+    @Override
     public Collection<?> getChoiceOfValues(Object object)
     {
       return Collections.emptyList();
     }
 
+    @Override
     public boolean isMultiLine(Object object)
     {
       return false;
     }
 
+    @Override
     public boolean isSortChoices(Object object)
     {
       return false;

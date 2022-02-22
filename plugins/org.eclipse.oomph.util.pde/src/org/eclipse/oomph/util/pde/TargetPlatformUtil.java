@@ -36,7 +36,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public final class TargetPlatformUtil
 {
-  private static final List<TargetPlatformListener> LISTENERS = new CopyOnWriteArrayList<TargetPlatformListener>();
+  private static final List<TargetPlatformListener> LISTENERS = new CopyOnWriteArrayList<>();
 
   private static final Method GET_WORKSPACE_TARGET_DEFINITION_METHOD;
 
@@ -170,6 +170,7 @@ public final class TargetPlatformUtil
     {
       return runWithTargetPlatformService(new TargetPlatformRunnable<Boolean>()
       {
+        @Override
         public Boolean run(ITargetPlatformService service) throws CoreException
         {
           return targetDefinition.getHandle().equals(service.getWorkspaceTargetHandle());
@@ -190,6 +191,7 @@ public final class TargetPlatformUtil
     {
       return runWithTargetPlatformService(new TargetPlatformRunnable<ITargetDefinition>()
       {
+        @Override
         public ITargetDefinition run(ITargetPlatformService service) throws CoreException
         {
           return getActiveTargetDefinition(service);
@@ -249,6 +251,7 @@ public final class TargetPlatformUtil
     {
       return runWithTargetPlatformService(new TargetPlatformRunnable<ITargetDefinition>()
       {
+        @Override
         public ITargetDefinition run(ITargetPlatformService service) throws CoreException
         {
           for (ITargetHandle targetHandle : service.getTargets(new NullProgressMonitor()))
@@ -285,9 +288,10 @@ public final class TargetPlatformUtil
     {
       return runWithTargetPlatformService(new TargetPlatformRunnable<ITargetDefinition[]>()
       {
+        @Override
         public ITargetDefinition[] run(ITargetPlatformService service) throws CoreException
         {
-          List<ITargetDefinition> targetDefinitions = new ArrayList<ITargetDefinition>();
+          List<ITargetDefinition> targetDefinitions = new ArrayList<>();
 
           for (ITargetHandle targetHandle : service.getTargets(monitor))
           {

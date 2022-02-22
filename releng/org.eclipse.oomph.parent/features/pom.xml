@@ -80,6 +80,8 @@ Eike Stepper - initial API and implementation
                 <plugin id="org.apache.httpcomponents.core5.httpcore5-h2"/>
                 <plugin id="org.apache.httpcomponents.httpclient"/>
                 <plugin id="org.apache.httpcomponents.httpcore"/>
+                <plugin id="org.bouncycastle.bcpg"/>
+                <plugin id="org.bouncycastle.bcprov"/>
                 <plugin id="org.slf4j.api"/>
                 <plugin id="org.eclipse.nebula.widgets.tablecombo"/>
                 <plugin id="org.eclipse.oomph.releng.helpcenter"/>

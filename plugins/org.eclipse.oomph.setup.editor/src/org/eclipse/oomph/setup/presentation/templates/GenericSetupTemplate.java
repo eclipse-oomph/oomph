@@ -114,17 +114,17 @@ public class GenericSetupTemplate extends SetupTemplate
 
   private ModelElement setupModelElement;
 
-  private final Map<VariableTask, PropertyField> fields = new LinkedHashMap<VariableTask, PropertyField>();
+  private final Map<VariableTask, PropertyField> fields = new LinkedHashMap<>();
 
-  private Set<PropertyField> dirtyFields = new HashSet<PropertyField>();
+  private Set<PropertyField> dirtyFields = new HashSet<>();
 
-  private final Map<String, VariableTask> variables = new LinkedHashMap<String, VariableTask>();
+  private final Map<String, VariableTask> variables = new LinkedHashMap<>();
 
   private Map<VariableTask, Set<EStructuralFeature.Setting>> usages;
 
   private PropertyField focusField;
 
-  private final Map<EObject, Set<EStructuralFeature>> focusUsages = new HashMap<EObject, Set<EStructuralFeature>>();
+  private final Map<EObject, Set<EStructuralFeature>> focusUsages = new HashMap<>();
 
   private LabelDecorator decorator;
 
@@ -345,6 +345,7 @@ public class GenericSetupTemplate extends SetupTemplate
       field.setValue(variable.getValue(), false);
       field.addValueListener(new PropertyField.ValueListener()
       {
+        @Override
         public void valueChanged(String oldValue, String newValue) throws Exception
         {
           dirtyFields.add(field);
@@ -623,7 +624,7 @@ public class GenericSetupTemplate extends SetupTemplate
     ModelElement copy = (ModelElement)copier.copy(setupModelElement);
     copier.copyReferences();
 
-    Set<Resource> resources = new HashSet<Resource>();
+    Set<Resource> resources = new HashSet<>();
     for (Map.Entry<EObject, EObject> entry : copier.entrySet())
     {
       EObject key = entry.getKey();
@@ -639,7 +640,7 @@ public class GenericSetupTemplate extends SetupTemplate
       }
     }
 
-    Set<PropertyField> originalDirtyPropertyFields = new HashSet<PropertyField>(dirtyFields);
+    Set<PropertyField> originalDirtyPropertyFields = new HashSet<>(dirtyFields);
     for (VariableTask variable : variables.values())
     {
       PropertyField field = fields.get(variable);
@@ -656,9 +657,9 @@ public class GenericSetupTemplate extends SetupTemplate
       }
     }
 
-    usages = new HashMap<VariableTask, Set<EStructuralFeature.Setting>>();
-    Set<EObject> eObjectsToDelete = new HashSet<EObject>();
-    Set<Annotation> featureSubstitutions = new LinkedHashSet<Annotation>();
+    usages = new HashMap<>();
+    Set<EObject> eObjectsToDelete = new HashSet<>();
+    Set<Annotation> featureSubstitutions = new LinkedHashSet<>();
     for (Iterator<EObject> it = EcoreUtil.getAllContents(Collections.singleton(copy)); it.hasNext();)
     {
       InternalEObject eObject = (InternalEObject)it.next();
@@ -673,7 +674,7 @@ public class GenericSetupTemplate extends SetupTemplate
             String value = EcoreUtil.convertToString(eAttributeType, eObject.eGet(eAttribute));
             if (value != null)
             {
-              Set<VariableTask> usedVariables = new HashSet<VariableTask>();
+              Set<VariableTask> usedVariables = new HashSet<>();
               String replacement = expandString(value, usedVariables);
               CollectionUtil.addAll(usages, usedVariables, eObject.eSetting(eAttribute));
               eObject.eSet(eAttribute, EcoreUtil.createFromString(eAttributeType, replacement));
@@ -749,7 +750,7 @@ public class GenericSetupTemplate extends SetupTemplate
 
     final Resource resource = getResource();
 
-    final List<String> strings = new ArrayList<String>();
+    final List<String> strings = new ArrayList<>();
     final TreeViewer previewer = getContainer().getPreviewer();
     if (previewer != null)
     {
@@ -767,11 +768,12 @@ public class GenericSetupTemplate extends SetupTemplate
 
       UIUtil.asyncExec(new Runnable()
       {
+        @Override
         public void run()
         {
           if (!previewer.getControl().isDisposed())
           {
-            List<EObject> eObjects = new ArrayList<EObject>();
+            List<EObject> eObjects = new ArrayList<>();
             for (String fragment : strings)
             {
               EObject eObject = resource.getEObject(fragment);
@@ -949,6 +951,7 @@ public class GenericSetupTemplate extends SetupTemplate
           {
             File[] gitFile = file.listFiles(new FileFilter()
             {
+              @Override
               public boolean accept(File pathname)
               {
                 return ".git".equals(pathname.getName()); //$NON-NLS-1$
@@ -1002,6 +1005,7 @@ public class GenericSetupTemplate extends SetupTemplate
               {
                 File[] gitFile = file.listFiles(new FileFilter()
                 {
+                  @Override
                   public boolean accept(File pathname)
                   {
                     return ".git".equals(pathname.getName()); //$NON-NLS-1$
@@ -1088,7 +1092,7 @@ public class GenericSetupTemplate extends SetupTemplate
           List<String> qualifiedName = StringUtil.explode(firstSegment, ".-_ "); //$NON-NLS-1$
           if (!qualifiedName.isEmpty())
           {
-            ArrayList<String> domainPrefixes = new ArrayList<String>(Arrays.asList(Locale.getISOCountries()));
+            ArrayList<String> domainPrefixes = new ArrayList<>(Arrays.asList(Locale.getISOCountries()));
             domainPrefixes.add("COM"); //$NON-NLS-1$
             domainPrefixes.add("ORG"); //$NON-NLS-1$
             if (domainPrefixes.contains(qualifiedName.get(0).toUpperCase()))
@@ -1169,7 +1173,7 @@ public class GenericSetupTemplate extends SetupTemplate
     target.getAnnotations().addAll(annotationCopies);
     target.getSetupTasks().addAll(setupTaskCopies);
 
-    Set<EObject> eObjectsToDelete = new HashSet<EObject>();
+    Set<EObject> eObjectsToDelete = new HashSet<>();
     for (Iterator<EObject> it = target.eAllContents(); it.hasNext();)
     {
       EObject eObject = it.next();

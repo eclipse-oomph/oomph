@@ -87,11 +87,12 @@ public class LocationCatalogImpl extends MinimalEObjectImpl.Container implements
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EMap<Installation, EList<Workspace>> getInstallations()
   {
     if (installations == null)
     {
-      installations = new EcoreEMap<Installation, EList<Workspace>>(SetupPackage.Literals.INSTALLATION_TO_WORKSPACES_MAP_ENTRY,
+      installations = new EcoreEMap<>(SetupPackage.Literals.INSTALLATION_TO_WORKSPACES_MAP_ENTRY,
           InstallationToWorkspacesMapEntryImpl.class, this, SetupPackage.LOCATION_CATALOG__INSTALLATIONS);
     }
     return installations;
@@ -102,11 +103,12 @@ public class LocationCatalogImpl extends MinimalEObjectImpl.Container implements
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EMap<Workspace, EList<Installation>> getWorkspaces()
   {
     if (workspaces == null)
     {
-      workspaces = new EcoreEMap<Workspace, EList<Installation>>(SetupPackage.Literals.WORKSPACE_TO_INSTALLATIONS_MAP_ENTRY,
+      workspaces = new EcoreEMap<>(SetupPackage.Literals.WORKSPACE_TO_INSTALLATIONS_MAP_ENTRY,
           WorkspaceToInstallationsMapEntryImpl.class, this, SetupPackage.LOCATION_CATALOG__WORKSPACES);
     }
     return workspaces;

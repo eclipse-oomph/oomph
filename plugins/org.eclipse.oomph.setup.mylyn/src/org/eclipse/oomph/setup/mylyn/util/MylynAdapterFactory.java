@@ -85,7 +85,7 @@ public class MylynAdapterFactory extends AdapterFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  protected MylynSwitch<Adapter> modelSwitch = new MylynSwitch<Adapter>()
+  protected MylynSwitch<Adapter> modelSwitch = new MylynSwitch<>()
   {
     @Override
     public Adapter caseMylynQueriesTask(MylynQueriesTask object)

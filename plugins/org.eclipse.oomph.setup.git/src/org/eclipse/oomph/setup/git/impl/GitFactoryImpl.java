@@ -93,6 +93,7 @@ public class GitFactoryImpl extends EFactoryImpl implements GitFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public GitCloneTask createGitCloneTask()
   {
     GitCloneTaskImpl gitCloneTask = new GitCloneTaskImpl();
@@ -104,6 +105,7 @@ public class GitFactoryImpl extends EFactoryImpl implements GitFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ConfigSection createConfigSection()
   {
     ConfigSectionImpl configSection = new ConfigSectionImpl();
@@ -115,6 +117,7 @@ public class GitFactoryImpl extends EFactoryImpl implements GitFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ConfigSubsection createConfigSubsection()
   {
     ConfigSubsectionImpl configSubsection = new ConfigSubsectionImpl();
@@ -126,6 +129,7 @@ public class GitFactoryImpl extends EFactoryImpl implements GitFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ConfigProperty createConfigProperty()
   {
     ConfigPropertyImpl configProperty = new ConfigPropertyImpl();
@@ -137,6 +141,7 @@ public class GitFactoryImpl extends EFactoryImpl implements GitFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public GitPackage getGitPackage()
   {
     return (GitPackage)getEPackage();

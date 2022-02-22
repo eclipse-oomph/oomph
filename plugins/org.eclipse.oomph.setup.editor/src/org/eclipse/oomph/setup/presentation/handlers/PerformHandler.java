@@ -30,6 +30,7 @@ public class PerformHandler extends AbstractDropdownItemHandler
     manual = true;
   }
 
+  @Override
   public void run()
   {
     Shell shell = SetupPropertyTester.getHandlingShell();

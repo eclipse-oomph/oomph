@@ -35,6 +35,7 @@ public abstract class AbstractProjectHandler extends AbstractHandler
   {
   }
 
+  @Override
   public final Object execute(ExecutionEvent event) throws ExecutionException
   {
     IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);

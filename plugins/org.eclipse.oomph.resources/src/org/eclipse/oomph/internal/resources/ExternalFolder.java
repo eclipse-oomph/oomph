@@ -37,41 +37,49 @@ public final class ExternalFolder extends ExternalContainer implements IFolder
     return FOLDER;
   }
 
+  @Override
   public void create(boolean force, boolean local, IProgressMonitor monitor) throws CoreException
   {
     throw new ReadOnlyException();
   }
 
+  @Override
   public void create(int updateFlags, boolean local, IProgressMonitor monitor) throws CoreException
   {
     throw new ReadOnlyException();
   }
 
+  @Override
   public void createLink(IPath localLocation, int updateFlags, IProgressMonitor monitor) throws CoreException
   {
     throw new ReadOnlyException();
   }
 
+  @Override
   public void createLink(URI location, int updateFlags, IProgressMonitor monitor) throws CoreException
   {
     throw new ReadOnlyException();
   }
 
+  @Override
   public void delete(boolean force, boolean keepHistory, IProgressMonitor monitor) throws CoreException
   {
     throw new ReadOnlyException();
   }
 
+  @Override
   public IFile getFile(String name)
   {
     return getFile(new Path(name));
   }
 
+  @Override
   public IFolder getFolder(String name)
   {
     return getFolder(new Path(name));
   }
 
+  @Override
   public void move(IPath destination, boolean force, boolean keepHistory, IProgressMonitor monitor) throws CoreException
   {
     throw new ReadOnlyException();

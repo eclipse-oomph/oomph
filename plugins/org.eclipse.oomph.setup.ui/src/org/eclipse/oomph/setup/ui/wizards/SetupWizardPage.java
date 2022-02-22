@@ -90,6 +90,7 @@ public abstract class SetupWizardPage extends WizardPage implements HelpProvider
     return getWizard().getAdapterFactory();
   }
 
+  @Override
   public String getHelpPath()
   {
     String id = "Doc" + getClass().getSimpleName(); //$NON-NLS-1$
@@ -233,6 +234,7 @@ public abstract class SetupWizardPage extends WizardPage implements HelpProvider
     container.showPage(page);
   }
 
+  @Override
   public final void createControl(Composite parent)
   {
     GridLayout gridLayout = UIUtil.createGridLayout(1);
@@ -452,6 +454,7 @@ public abstract class SetupWizardPage extends WizardPage implements HelpProvider
           final AtomicBoolean closedAfterJobCompletion = new AtomicBoolean();
           Runnable livenessChecker = new Runnable()
           {
+            @Override
             public void run()
             {
               if (getState() == Job.NONE)

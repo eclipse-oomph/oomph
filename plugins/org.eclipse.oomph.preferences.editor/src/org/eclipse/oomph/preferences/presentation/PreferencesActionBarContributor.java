@@ -235,6 +235,7 @@ public class PreferencesActionBarContributor extends OomphEditingDomainActionBar
     //
     submenuManager.addMenuListener(new IMenuListener()
     {
+      @Override
       public void menuAboutToShow(IMenuManager menuManager)
       {
         menuManager.updateAll(true);
@@ -302,6 +303,7 @@ public class PreferencesActionBarContributor extends OomphEditingDomainActionBar
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void selectionChanged(SelectionChangedEvent event)
   {
     // Remove any menu items for old selection.
@@ -357,7 +359,7 @@ public class PreferencesActionBarContributor extends OomphEditingDomainActionBar
    */
   protected Collection<IAction> generateCreateChildActions(Collection<?> descriptors, ISelection selection)
   {
-    Collection<IAction> actions = new ArrayList<IAction>();
+    Collection<IAction> actions = new ArrayList<>();
     if (descriptors != null)
     {
       for (Object descriptor : descriptors)
@@ -377,7 +379,7 @@ public class PreferencesActionBarContributor extends OomphEditingDomainActionBar
    */
   protected Collection<IAction> generateCreateSiblingActions(Collection<?> descriptors, ISelection selection)
   {
-    Collection<IAction> actions = new ArrayList<IAction>();
+    Collection<IAction> actions = new ArrayList<>();
     if (descriptors != null)
     {
       for (Object descriptor : descriptors)

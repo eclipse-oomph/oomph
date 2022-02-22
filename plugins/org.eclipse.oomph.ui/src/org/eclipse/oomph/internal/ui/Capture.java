@@ -52,7 +52,7 @@ public abstract class Capture<T>
 
   public Image capture()
   {
-    final AtomicReference<Image> image = new AtomicReference<Image>();
+    final AtomicReference<Image> image = new AtomicReference<>();
     final Display display = PlatformUI.getWorkbench().getDisplay();
     final org.eclipse.jface.dialogs.Dialog backgroundDialog = new org.eclipse.jface.dialogs.Dialog((Shell)null)
     {
@@ -71,6 +71,7 @@ public abstract class Capture<T>
 
     UIUtil.asyncExec(new Runnable()
     {
+      @Override
       public void run()
       {
         backgroundDialog.open();
@@ -103,6 +104,7 @@ public abstract class Capture<T>
 
     UIUtil.asyncExec(new Runnable()
     {
+      @Override
       public void run()
       {
         open(element);
@@ -111,6 +113,7 @@ public abstract class Capture<T>
 
     UIUtil.asyncExec(new Runnable()
     {
+      @Override
       public void run()
       {
         Shell shell = getShell(element);
@@ -197,12 +200,7 @@ public abstract class Capture<T>
   protected boolean isReady(T element)
   {
     Shell shell = getShell(element);
-    if (shell == null)
-    {
-      return false;
-    }
-
-    if (shell.getShells().length > 1)
+    if ((shell == null) || (shell.getShells().length > 1))
     {
       return false;
     }

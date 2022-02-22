@@ -33,7 +33,7 @@ import java.util.Map;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class SynchronizerTests extends AbstractTest
 {
-  private final Map<Integer, TestWorkstation> workstations = new HashMap<Integer, TestWorkstation>();
+  private final Map<Integer, TestWorkstation> workstations = new HashMap<>();
 
   private ServerFixture serverFixture;
 
@@ -121,6 +121,7 @@ public class SynchronizerTests extends AbstractTest
 
     sync1.commitFail(new FailureHandler()
     {
+      @Override
       public void handleFailure(Exception t) throws Exception
       {
         WS(1).commit().assertCount(1).assertSet("property", "value");

@@ -93,7 +93,7 @@ public class WorkspaceToInstallationsMapEntryImpl extends MinimalEObjectImpl.Con
   {
     if (value == null)
     {
-      value = new EObjectResolvingEList<Installation>(Installation.class, this, SetupPackage.WORKSPACE_TO_INSTALLATIONS_MAP_ENTRY__VALUE);
+      value = new EObjectResolvingEList<>(Installation.class, this, SetupPackage.WORKSPACE_TO_INSTALLATIONS_MAP_ENTRY__VALUE);
     }
     return value;
   }
@@ -239,6 +239,7 @@ public class WorkspaceToInstallationsMapEntryImpl extends MinimalEObjectImpl.Con
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public int getHash()
   {
     if (hash == -1)
@@ -254,6 +255,7 @@ public class WorkspaceToInstallationsMapEntryImpl extends MinimalEObjectImpl.Con
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setHash(int hash)
   {
     this.hash = hash;
@@ -264,6 +266,7 @@ public class WorkspaceToInstallationsMapEntryImpl extends MinimalEObjectImpl.Con
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Workspace getKey()
   {
     return getTypedKey();
@@ -274,6 +277,7 @@ public class WorkspaceToInstallationsMapEntryImpl extends MinimalEObjectImpl.Con
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setKey(Workspace key)
   {
     setTypedKey(key);
@@ -284,6 +288,7 @@ public class WorkspaceToInstallationsMapEntryImpl extends MinimalEObjectImpl.Con
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<Installation> getValue()
   {
     return getTypedValue();
@@ -294,6 +299,7 @@ public class WorkspaceToInstallationsMapEntryImpl extends MinimalEObjectImpl.Con
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<Installation> setValue(EList<Installation> value)
   {
     EList<Installation> oldValue = getValue();

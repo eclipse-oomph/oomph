@@ -14,11 +14,16 @@ import org.eclipse.oomph.p2.internal.core.AgentImpl;
 import org.eclipse.oomph.p2.internal.core.AgentManagerImpl;
 import org.eclipse.oomph.p2.internal.core.CachingRepositoryManager;
 import org.eclipse.oomph.p2.internal.core.CachingTransport;
+import org.eclipse.oomph.p2.internal.core.P2CorePlugin;
+import org.eclipse.oomph.util.IOUtil;
+import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.core.runtime.URIUtil;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.equinox.p2.core.IAgentLocation;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
+import org.eclipse.equinox.p2.engine.ProfileScope;
 import org.eclipse.equinox.p2.metadata.IArtifactKey;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.IInstallableUnitFragment;
@@ -38,13 +43,28 @@ import org.eclipse.equinox.p2.metadata.expression.IMatchExpression;
 import org.eclipse.equinox.p2.query.IQueryResult;
 import org.eclipse.equinox.p2.repository.IRepositoryManager;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
+import org.eclipse.equinox.p2.repository.spi.PGPPublicKeyService;
 
+import org.bouncycastle.bcpg.ArmoredOutputStream;
+import org.bouncycastle.openpgp.PGPPublicKey;
+import org.osgi.service.prefs.BackingStoreException;
+
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URI;
+import java.nio.file.Files;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -57,6 +77,13 @@ import java.util.regex.Pattern;
  */
 public final class P2Util
 {
+
+  public static final String X509_CERTIFICATE_FILE_EXTENSION = ".der"; //$NON-NLS-1$
+
+  public static final String PGP_KEY_FILE_EXTENSION = ".asc"; //$NON-NLS-1$
+
+  private static final String PREFERENCES_FILE_NAME = "preferences.properties"; //$NON-NLS-1$
+
   private static final Pattern OSGI_PROPERTY_FILTER = Pattern.compile("(!?)\\((osgi.arch|osgi.os|osgi.ws)=([^)]+)\\)"); //$NON-NLS-1$
 
   private P2Util()
@@ -91,7 +118,7 @@ public final class P2Util
 
   public static Set<String> getKnownRepositories(IRepositoryManager<?> manager)
   {
-    Set<String> result = new HashSet<String>();
+    Set<String> result = new HashSet<>();
     for (URI uri : manager.getKnownRepositories(IRepositoryManager.REPOSITORIES_NON_SYSTEM))
     {
       result.add(uri.toString());
@@ -117,6 +144,158 @@ public final class P2Util
     return null;
   }
 
+  public static void copyTrustPreferences(Profile sourceProfile, Profile targetProfile)
+  {
+    IEclipsePreferences source = getTrustPreferences(sourceProfile);
+    IEclipsePreferences target = getTrustPreferences(targetProfile);
+    try
+    {
+      for (String key : source.keys())
+      {
+        target.put(key, source.get(key, null));
+      }
+    }
+    catch (BackingStoreException ex)
+    {
+      P2CorePlugin.INSTANCE.log(ex);
+    }
+  }
+
+  @SuppressWarnings("restriction")
+  public static IEclipsePreferences getTrustPreferences(Profile profile)
+  {
+    return new ProfileScope(profile.getProvisioningAgent().getService(IAgentLocation.class), profile.getProfileId())
+        .getNode(org.eclipse.equinox.internal.p2.engine.EngineActivator.ID);
+  }
+
+  @SuppressWarnings("restriction")
+  public static void mergeGlobalTrustPreferences(Profile profile)
+  {
+    // Copy the global preference settings into the current agent's profile preferences.
+    org.eclipse.equinox.internal.p2.engine.phases.CertificateChecker currentCertificateChecker = createCertificateCheker(profile);
+
+    File globalTrustFolder = getGlobalTrustFolder();
+
+    boolean trustAlways = "true".equals(PropertiesUtil.getProperties(new File(globalTrustFolder, PREFERENCES_FILE_NAME)) //$NON-NLS-1$
+        .getOrDefault(org.eclipse.equinox.internal.p2.engine.phases.CertificateChecker.TRUST_ALWAYS_PROPERTY, "false")); //$NON-NLS-1$
+    CertificateFactory certificateFactory = null;
+    try
+    {
+      certificateFactory = CertificateFactory.getInstance("X.509"); //$NON-NLS-1$
+    }
+    catch (CertificateException ex)
+    {
+      P2CorePlugin.INSTANCE.log(ex);
+    }
+
+    org.eclipse.equinox.internal.p2.artifact.processors.pgp.PGPPublicKeyStore trustedKeys = new org.eclipse.equinox.internal.p2.artifact.processors.pgp.PGPPublicKeyStore();
+    Set<Certificate> trustedCertificates = new LinkedHashSet<>();
+    for (File file : globalTrustFolder.listFiles())
+    {
+      String name = file.getName();
+      if (name.endsWith(PGP_KEY_FILE_EXTENSION))
+      {
+        trustedKeys.add(file);
+      }
+      else if (certificateFactory != null && name.endsWith(X509_CERTIFICATE_FILE_EXTENSION))
+      {
+        try (InputStream input = new BufferedInputStream(Files.newInputStream(file.toPath())))
+        {
+          Collection<? extends Certificate> certificates = certificateFactory.generateCertificates(input);
+          trustedCertificates.addAll(certificates);
+        }
+        catch (Exception ex)
+        {
+          P2CorePlugin.INSTANCE.log(ex);
+        }
+      }
+    }
+
+    trustedCertificates.addAll(currentCertificateChecker.getPreferenceTrustedCertificates());
+    for (PGPPublicKey key : currentCertificateChecker.getPreferenceTrustedKeys().all())
+    {
+      trustedKeys.addKey(key);
+    }
+
+    currentCertificateChecker.setTrustAlways(trustAlways);
+    currentCertificateChecker.persistTrustedCertificates(trustedCertificates);
+    currentCertificateChecker.persistTrustedKeys(trustedKeys);
+  }
+
+  @SuppressWarnings("restriction")
+  public static void saveGlobalTrustPreferences(Profile profile, boolean strict)
+  {
+    org.eclipse.equinox.internal.p2.engine.phases.CertificateChecker certificateChecker = createCertificateCheker(profile);
+
+    boolean trustAlways = certificateChecker.isTrustAlways();
+    Set<? extends Certificate> trustedCertificates = certificateChecker.getPreferenceTrustedCertificates();
+    org.eclipse.equinox.internal.p2.artifact.processors.pgp.PGPPublicKeyStore trustedKeys = certificateChecker.getPreferenceTrustedKeys();
+
+    File trustFolder = getGlobalTrustFolder();
+
+    File propertiesFile = new File(trustFolder, PREFERENCES_FILE_NAME);
+    Map<String, String> properties = PropertiesUtil.getProperties(propertiesFile);
+    properties.put(org.eclipse.equinox.internal.p2.engine.phases.CertificateChecker.TRUST_ALWAYS_PROPERTY, Boolean.toString(trustAlways));
+    PropertiesUtil.saveProperties(propertiesFile, properties, false);
+
+    Set<File> retainedFiles = new LinkedHashSet<>();
+
+    for (Certificate certificate : trustedCertificates)
+    {
+      try
+      {
+        byte[] encoded = certificate.getEncoded();
+        File certificateFile = new File(trustFolder,
+            PGPPublicKeyService.toHex(IOUtil.getSHA1(new ByteArrayInputStream(encoded))) + X509_CERTIFICATE_FILE_EXTENSION);
+        retainedFiles.add(certificateFile);
+        if (!certificateFile.isFile())
+        {
+          try (OutputStream output = Files.newOutputStream(certificateFile.toPath()))
+          {
+            output.write(encoded);
+          }
+        }
+      }
+      catch (Exception ex)
+      {
+        P2CorePlugin.INSTANCE.log(ex);
+      }
+    }
+
+    for (PGPPublicKey key : trustedKeys.all())
+    {
+      File keyFile = new File(trustFolder, PGPPublicKeyService.toHexFingerprint(key) + PGP_KEY_FILE_EXTENSION);
+      retainedFiles.add(keyFile);
+      if (!keyFile.isFile())
+      {
+        try (OutputStream output = new ArmoredOutputStream(new FileOutputStream(keyFile)))
+        {
+          key.encode(output);
+        }
+        catch (Exception ex)
+        {
+          P2CorePlugin.INSTANCE.log(ex);
+        }
+      }
+    }
+
+    if (strict)
+    {
+      for (File file : trustFolder.listFiles())
+      {
+        if (!retainedFiles.contains(file))
+        {
+
+          String name = file.getName();
+          if (name.endsWith(PGP_KEY_FILE_EXTENSION) || name.endsWith(X509_CERTIFICATE_FILE_EXTENSION))
+          {
+            IOUtil.deleteBestEffort(file, false);
+          }
+        }
+      }
+    }
+  }
+
   @SuppressWarnings("all")
   public static <T> Iterable<T> asIterable(final IQueryResult<T> queryResult)
   {
@@ -125,8 +304,9 @@ public final class P2Util
       return Iterable.class.cast(queryResult);
     }
 
-    return new Iterable<T>()
+    return new Iterable<>()
     {
+      @Override
       public Iterator<T> iterator()
       {
         return queryResult.iterator();
@@ -149,6 +329,7 @@ public final class P2Util
 
     return new Runnable()
     {
+      @Override
       public void run()
       {
         if (featuresFolderLastModified != 0L)
@@ -177,7 +358,7 @@ public final class P2Util
 
   public static Map<String, String> toProfilePropertiesMap(String profileProperties)
   {
-    Map<String, String> result = new LinkedHashMap<String, String>();
+    Map<String, String> result = new LinkedHashMap<>();
     if (!StringUtil.isEmpty(profileProperties))
     {
       String[] properties = profileProperties.split(","); //$NON-NLS-1$
@@ -450,6 +631,24 @@ public final class P2Util
     }
 
     return description;
+  }
+
+  @SuppressWarnings("restriction")
+  private static org.eclipse.equinox.internal.p2.engine.phases.CertificateChecker createCertificateCheker(Profile profile)
+  {
+    // Copy the global preference settings into the current agent's profile preferences.
+    org.eclipse.equinox.internal.p2.engine.phases.CertificateChecker certificateChecker = new org.eclipse.equinox.internal.p2.engine.phases.CertificateChecker(
+        profile.getProvisioningAgent());
+    certificateChecker.setProfile(profile);
+    return certificateChecker;
+  }
+
+  private static File getGlobalTrustFolder()
+  {
+    File folder = P2CorePlugin.getUserStateFolder(new File(PropertiesUtil.getUserHome()));
+    File trustFolder = new File(folder, "trust"); //$NON-NLS-1$
+    trustFolder.mkdirs();
+    return trustFolder;
   }
 
   /**

@@ -11,7 +11,6 @@
 package org.eclipse.oomph.p2.core;
 
 import org.eclipse.oomph.p2.ProfileDefinition;
-import org.eclipse.oomph.util.Confirmer;
 import org.eclipse.oomph.util.Pair;
 
 import org.eclipse.core.runtime.CoreException;
@@ -105,17 +104,8 @@ public interface ProfileTransaction
     /**
      * Called early during {@link Resolution#commit(IProgressMonitor) commit}.
      */
-    public Confirmer getUnsignedContentConfirmer()
+    public void init()
     {
-      return null;
-    }
-
-    /**
-     * Called early during {@link Resolution#commit(IProgressMonitor) commit}.
-     */
-    public CertificateConfirmer getCertficateConfirmer()
-    {
-      return null;
     }
 
     /**

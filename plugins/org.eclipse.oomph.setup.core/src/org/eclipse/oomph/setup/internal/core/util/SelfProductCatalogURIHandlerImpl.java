@@ -91,6 +91,7 @@ public class SelfProductCatalogURIHandlerImpl extends URIHandlerImpl
       {
         private InputStream in;
 
+        @Override
         public void loadResource(Resource resource) throws IOException
         {
           resource.getContents().add(create());
@@ -282,7 +283,7 @@ public class SelfProductCatalogURIHandlerImpl extends URIHandlerImpl
   @Override
   public Map<String, ?> getAttributes(URI uri, Map<?, ?> options)
   {
-    Map<String, Object> result = new HashMap<String, Object>();
+    Map<String, Object> result = new HashMap<>();
     Set<String> requestedAttributes = getRequestedAttributes(options);
     if (requestedAttributes == null || requestedAttributes.contains(URIConverter.ATTRIBUTE_TIME_STAMP))
     {

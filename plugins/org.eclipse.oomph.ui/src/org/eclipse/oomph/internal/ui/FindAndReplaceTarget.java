@@ -103,7 +103,7 @@ import java.util.regex.Pattern;
  */
 public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTargetExtension, IFindReplaceTargetExtension3
 {
-  private static final Map<IWorkbenchPart, FindAndReplaceTarget> FIND_AND_REPLACE_TARGETS = new WeakHashMap<IWorkbenchPart, FindAndReplaceTarget>();
+  private static final Map<IWorkbenchPart, FindAndReplaceTarget> FIND_AND_REPLACE_TARGETS = new WeakHashMap<>();
 
   private static final Field FILTER_ACTION_FIELD = ReflectUtil.getField(PropertySheetPage.class, "filterAction"); //$NON-NLS-1$
 
@@ -221,6 +221,7 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
     return null;
   }
 
+  @Override
   public boolean isEditable()
   {
     // Editing is always supported.
@@ -228,6 +229,7 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
     return true;
   }
 
+  @Override
   public boolean canPerformFind()
   {
     // As long as there is a viewer is appropriate label and content providers, we can support find.
@@ -311,6 +313,7 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
     }
   }
 
+  @Override
   public void beginSession()
   {
     // When the session start, we add our search-type control.
@@ -428,6 +431,7 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
             final Button finalSelectRangeButton = selectedRangeButton;
             sessionCleanup = new Runnable()
             {
+              @Override
               public void run()
               {
                 // Restore the grid data and dispose our control.
@@ -443,6 +447,7 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
 
                 UIUtil.asyncExec(group, new Runnable()
                 {
+                  @Override
                   public void run()
                   {
                     // Defer the layout so that when the editor is switched to another EMF editor that supports find and replace,
@@ -458,6 +463,7 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
     }
   }
 
+  @Override
   public void endSession()
   {
     // When the session ends, we clean up or search-type control.
@@ -470,6 +476,7 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
     setScope(null);
   }
 
+  @Override
   public Point getLineSelection()
   {
     // This method is used only to compute region to pass to setScope.
@@ -479,12 +486,14 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
     return new Point(0, 0);
   }
 
+  @Override
   public IRegion getScope()
   {
     // This method is kind of useless, we remember our scope when the getLineSelection is called.
     return new Region(0, 0);
   }
 
+  @Override
   public void setScope(IRegion scope)
   {
     // When the properties view is activated, it's sometimes given focus.
@@ -526,7 +535,7 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
     {
       // Record the objects in the selection scope.
       // These will be painted in a special way in the first to highlight them.
-      selectionScopeObjects = new HashSet<Object>();
+      selectionScopeObjects = new HashSet<>();
 
       int depth = -1;
       for (FindAndReplaceTarget.Data data : new TextData(viewer))
@@ -572,11 +581,13 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
     }
   }
 
+  @Override
   public void setScopeHighlightColor(Color color)
   {
     // This is never called by the find and replace dialog.
   }
 
+  @Override
   public String getSelectionText()
   {
     // This method is called for three different reasons.
@@ -610,6 +621,7 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
     return ""; //$NON-NLS-1$
   }
 
+  @Override
   public Point getSelection()
   {
     if (pendingReplacements >= 0)
@@ -655,7 +667,7 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
               Object feature = getFeature(propertyDescriptor);
 
               // Collection all features before the selected feature.
-              List<Object> features = new ArrayList<Object>();
+              List<Object> features = new ArrayList<>();
               for (final TreeItem otherTreeIem : propertySheetTree.getItems())
               {
                 PropertyDescriptor otherPropertyDescriptor = getPropertyDescriptor(otherTreeIem);
@@ -714,18 +726,21 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
     return new Point(0, 0);
   }
 
+  @Override
   public void setSelection(int offset, int length)
   {
     // This method is always called right before setScope.
     // The information it provides is not useful and can be ignored.
   }
 
+  @Override
   public int findAndSelect(int offset, String findString, boolean searchForward, boolean caseSensitive, boolean wholeWord)
   {
     // This is never called, but we forward it sensibly anyway.
     return findAndSelect(offset, findString, searchForward, caseSensitive, wholeWord, false);
   }
 
+  @Override
   public int findAndSelect(int offset, String findString, boolean searchForward, boolean caseSensitive, boolean wholeWord, boolean regExSearch)
   {
     // Clear out the text used to populate the search text field once we've done a search.
@@ -1069,6 +1084,7 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
                       }
                     }
 
+                    @Override
                     public void handleEvent(Event event)
                     {
                       // If we're painting or special item...
@@ -1088,6 +1104,7 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
                   final Action finalFilterAction = filterAction;
                   propertiesCleanup = new Runnable()
                   {
+                    @Override
                     public void run()
                     {
                       // Remove the listener.
@@ -1182,26 +1199,31 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
           }
         };
 
+        @Override
         public void removeListener(ILabelProviderListener listener)
         {
           labelProvider.removeListener(listener);
         }
 
+        @Override
         public boolean isLabelProperty(Object element, String property)
         {
           return labelProvider.isLabelProperty(element, property);
         }
 
+        @Override
         public void dispose()
         {
           labelProvider.dispose();
         }
 
+        @Override
         public void addListener(ILabelProviderListener listener)
         {
           labelProvider.addListener(listener);
         }
 
+        @Override
         public String decorateText(String text, Object element)
         {
           if (labelProvider instanceof ILabelDecorator)
@@ -1213,6 +1235,7 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
           return text;
         }
 
+        @Override
         public Image decorateImage(Image image, Object element)
         {
           if (labelProvider instanceof ILabelDecorator)
@@ -1224,6 +1247,7 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
           return image;
         }
 
+        @Override
         public StyledString decorateStyledText(StyledString styledString, Object element)
         {
           if (labelProvider instanceof IStyledLabelDecorator)
@@ -1284,12 +1308,14 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
     }
   }
 
+  @Override
   public void replaceSelection(String text)
   {
     // This is never called, but delegate it appropriately nevertheless.
     replaceSelection(text, false);
   }
 
+  @Override
   public void replaceSelection(String text, boolean regExReplace)
   {
     // If we're in replace all mode.
@@ -1380,7 +1406,7 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
       }
 
       // Compute the new overall value for the list.
-      List<Object> values = new ArrayList<Object>((List<?>)propertyValue);
+      List<Object> values = new ArrayList<>((List<?>)propertyValue);
       values.set(selectedItem.itemIndex, value);
 
       // Create a command to set the overall list value.
@@ -1422,6 +1448,7 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
     final boolean[] run = new boolean[] { true };
     display.asyncExec(new Runnable()
     {
+      @Override
       public void run()
       {
         run[0] = false;
@@ -1553,7 +1580,7 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
             }
 
             // Compute the new overall value for the list.
-            currentListValue = new ArrayList<Object>((List<?>)propertyValue);
+            currentListValue = new ArrayList<>((List<?>)propertyValue);
           }
 
           currentListValue.set(item.itemIndex, value);
@@ -1577,6 +1604,7 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
     return total;
   }
 
+  @Override
   public void setReplaceAllMode(boolean replaceAll)
   {
     if (replaceAll)
@@ -1655,7 +1683,7 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
         if (value != null)
         {
           // Always create a list.
-          List<String> result = new ArrayList<String>();
+          List<String> result = new ArrayList<>();
           if (eAttribute.isMany())
           {
             // Add the textual representation of each value.
@@ -1754,7 +1782,7 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
 
     public Object[] getPath()
     {
-      List<Object> path = new ArrayList<Object>();
+      List<Object> path = new ArrayList<>();
       for (Data data = this; data != null; data = data.parent)
       {
         path.add(0, data.object);
@@ -1842,6 +1870,7 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
       }
     }
 
+    @Override
     public Iterator<FindAndReplaceTarget.Data> iterator()
     {
       final StructuredViewerTreeIterator structuredViewerTreeIterator;
@@ -1856,18 +1885,20 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
       }
 
       // This is an iterator that delegates to an iterator that walks the structure of the viewer.
-      return new Iterator<FindAndReplaceTarget.Data>()
+      return new Iterator<>()
       {
-        private List<Data> parents = new ArrayList<Data>();
+        private List<Data> parents = new ArrayList<>();
 
         // This keeps track of the textual index as we iterate.
         private int index;
 
+        @Override
         public boolean hasNext()
         {
           return structuredViewerTreeIterator.hasNext();
         }
 
+        @Override
         public FindAndReplaceTarget.Data next()
         {
           // Keep track of the depth before calling next.
@@ -1875,7 +1906,7 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
           Object object = structuredViewerTreeIterator.next();
 
           // Create a list of items for this object and use that to create a new data representation.
-          List<Data.Item> items = new ArrayList<Data.Item>();
+          List<Data.Item> items = new ArrayList<>();
           FindAndReplaceTarget.Data data = new Data(depth - 1, object, items);
 
           if (parents.size() < depth)
@@ -1928,6 +1959,7 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
           return data;
         }
 
+        @Override
         public void remove()
         {
           throw new UnsupportedOperationException("remove"); //$NON-NLS-1$

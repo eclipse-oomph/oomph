@@ -127,8 +127,7 @@ public class CachingRepositoryManager<T>
 
   private final CachingTransport transport;
 
-  private final Map<URI, ProvisionException> failedRepositories = PropertiesUtil.isProperty(PROP_REPOSITORY_FAIL_PERMANENTLY)
-      ? new ConcurrentHashMap<URI, ProvisionException>()
+  private final Map<URI, ProvisionException> failedRepositories = PropertiesUtil.isProperty(PROP_REPOSITORY_FAIL_PERMANENTLY) ? new ConcurrentHashMap<>()
       : null;
 
   public CachingRepositoryManager(AbstractRepositoryManager<T> delegate, int repositoryType, CachingTransport transport)
@@ -424,7 +423,7 @@ public class CachingRepositoryManager<T>
 
   private String[] sortSuffixes(String[] allSuffixes, String[] preferredOrder)
   {
-    List<String> suffixes = new ArrayList<String>(Arrays.asList(allSuffixes));
+    List<String> suffixes = new ArrayList<>(Arrays.asList(allSuffixes));
 
     for (int i = preferredOrder.length - 1; i >= 0; --i)
     {
@@ -510,7 +509,7 @@ public class CachingRepositoryManager<T>
     public Metadata(IProvisioningAgent agent, CachingTransport transport)
     {
       super(agent);
-      loader = new CachingRepositoryManager<IInstallableUnit>(this, IRepository.TYPE_METADATA, transport);
+      loader = new CachingRepositoryManager<>(this, IRepository.TYPE_METADATA, transport);
     }
 
     @Override
@@ -542,7 +541,7 @@ public class CachingRepositoryManager<T>
 
     static URI[] filter(URI[] uris)
     {
-      List<URI> result = new ArrayList<URI>(uris.length);
+      List<URI> result = new ArrayList<>(uris.length);
       for (URI uri : uris)
       {
         try
@@ -574,7 +573,7 @@ public class CachingRepositoryManager<T>
     public Artifact(IProvisioningAgent agent, CachingTransport transport)
     {
       super(agent);
-      loader = new CachingRepositoryManager<IArtifactKey>(this, IRepository.TYPE_ARTIFACT, transport);
+      loader = new CachingRepositoryManager<>(this, IRepository.TYPE_ARTIFACT, transport);
     }
 
     @Override
@@ -702,6 +701,7 @@ public class CachingRepositoryManager<T>
         repositoryURI = getBaseURI();
       }
 
+      @Override
       public void notify(EventObject event)
       {
         // If we have mirror activities.
@@ -892,7 +892,7 @@ public class CachingRepositoryManager<T>
       public List<String> getStats()
       {
         // Compute statistics for the mirror speeds.
-        List<String> result = new ArrayList<String>();
+        List<String> result = new ArrayList<>();
         if (mirrorActivities != null)
         {
           // We'll create new mirror activities to summarize the result.
@@ -966,7 +966,7 @@ public class CachingRepositoryManager<T>
       private void sort()
       {
         // Compute a sorted map from the speed to the mirror activity with that speed.
-        Map<Long, Set<MirrorActivity>> sortedMap = new TreeMap<Long, Set<MirrorActivity>>();
+        Map<Long, Set<MirrorActivity>> sortedMap = new TreeMap<>();
         for (MirrorActivity mirrorActivity : mirrorActivities)
         {
           long value = mirrorActivity.getSpeed();
@@ -1001,8 +1001,8 @@ public class CachingRepositoryManager<T>
             }
           }
 
-          Set<String> locations = new HashSet<String>();
-          List<MirrorActivity> mirrorActivitiesList = new ArrayList<MirrorActivity>();
+          Set<String> locations = new HashSet<>();
+          List<MirrorActivity> mirrorActivitiesList = new ArrayList<>();
 
           // Use only the first two thirds of the list.
           int limit = (mirrors.length + 2) / 3;

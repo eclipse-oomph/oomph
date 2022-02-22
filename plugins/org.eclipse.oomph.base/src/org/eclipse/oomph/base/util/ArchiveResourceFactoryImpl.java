@@ -18,6 +18,7 @@ import org.eclipse.emf.ecore.resource.Resource;
  */
 public class ArchiveResourceFactoryImpl implements Resource.Factory
 {
+  @Override
   public Resource createResource(URI uri)
   {
     return new ArchiveResourceImpl(uri, null);

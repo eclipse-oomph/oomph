@@ -222,6 +222,7 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getPredicate()
   {
     return predicateEClass;
@@ -232,6 +233,7 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EOperation getPredicate__Matches__IResource()
   {
     return predicateEClass.getEOperations().get(0);
@@ -242,6 +244,7 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getNamePredicate()
   {
     return namePredicateEClass;
@@ -252,6 +255,7 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getNamePredicate_Pattern()
   {
     return (EAttribute)namePredicateEClass.getEStructuralFeatures().get(0);
@@ -262,6 +266,7 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getCommentPredicate()
   {
     return commentPredicateEClass;
@@ -272,6 +277,7 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getCommentPredicate_Pattern()
   {
     return (EAttribute)commentPredicateEClass.getEStructuralFeatures().get(0);
@@ -282,6 +288,7 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getLocationPredicate()
   {
     return locationPredicateEClass;
@@ -292,6 +299,7 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getLocationPredicate_Pattern()
   {
     return (EAttribute)locationPredicateEClass.getEStructuralFeatures().get(0);
@@ -302,6 +310,7 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getRepositoryPredicate()
   {
     return repositoryPredicateEClass;
@@ -312,6 +321,7 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getRepositoryPredicate_Project()
   {
     return (EAttribute)repositoryPredicateEClass.getEStructuralFeatures().get(0);
@@ -322,6 +332,7 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getRepositoryPredicate_RelativePathPattern()
   {
     return (EAttribute)repositoryPredicateEClass.getEStructuralFeatures().get(1);
@@ -332,6 +343,7 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getAndPredicate()
   {
     return andPredicateEClass;
@@ -342,6 +354,7 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getAndPredicate_Operands()
   {
     return (EReference)andPredicateEClass.getEStructuralFeatures().get(0);
@@ -352,6 +365,7 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getOrPredicate()
   {
     return orPredicateEClass;
@@ -362,6 +376,7 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getOrPredicate_Operands()
   {
     return (EReference)orPredicateEClass.getEStructuralFeatures().get(0);
@@ -372,6 +387,7 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getNotPredicate()
   {
     return notPredicateEClass;
@@ -382,6 +398,7 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getNotPredicate_Operand()
   {
     return (EReference)notPredicateEClass.getEStructuralFeatures().get(0);
@@ -392,6 +409,7 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getNaturePredicate()
   {
     return naturePredicateEClass;
@@ -402,6 +420,7 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getNaturePredicate_Nature()
   {
     return (EAttribute)naturePredicateEClass.getEStructuralFeatures().get(0);
@@ -412,6 +431,7 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getBuilderPredicate()
   {
     return builderPredicateEClass;
@@ -422,6 +442,7 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getBuilderPredicate_Builder()
   {
     return (EAttribute)builderPredicateEClass.getEStructuralFeatures().get(0);
@@ -432,6 +453,7 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getFilePredicate()
   {
     return filePredicateEClass;
@@ -442,6 +464,7 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getFilePredicate_FilePattern()
   {
     return (EAttribute)filePredicateEClass.getEStructuralFeatures().get(0);
@@ -452,6 +475,7 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getFilePredicate_ContentPattern()
   {
     return (EAttribute)filePredicateEClass.getEStructuralFeatures().get(1);
@@ -462,6 +486,7 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getImportedPredicate()
   {
     return importedPredicateEClass;
@@ -472,6 +497,7 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getImportedPredicate_Accessible()
   {
     return (EAttribute)importedPredicateEClass.getEStructuralFeatures().get(0);
@@ -482,6 +508,7 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EDataType getProject()
   {
     return projectEDataType;
@@ -492,6 +519,7 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EDataType getResource()
   {
     return resourceEDataType;
@@ -502,6 +530,7 @@ public class PredicatesPackageImpl extends EPackageImpl implements PredicatesPac
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public PredicatesFactory getPredicatesFactory()
   {
     return (PredicatesFactory)getEFactoryInstance();

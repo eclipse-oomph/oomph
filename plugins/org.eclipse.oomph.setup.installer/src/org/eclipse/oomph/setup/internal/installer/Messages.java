@@ -63,6 +63,8 @@ public class Messages extends NLS
 
   public static String InstallerApplication_NoUpdates_message;
 
+  public static String InstallerApplication_TrustPreferenceInitializerThreadName;
+
   public static String InstallerApplication_Update_label;
 
   public static String InstallerDialog_About_message;
@@ -80,6 +82,8 @@ public class Messages extends NLS
   public static String InstallerDialog_SSH2_message;
 
   public static String InstallerDialog_SwitchToSimpleModel_message;
+
+  public static String InstallerDialog_TrustSettings_message;
 
   public static String InstallerDialog_Update_message;
 
@@ -281,6 +285,10 @@ public class Messages extends NLS
 
   public static String SimpleInstallerDialog_SwitchToAdvancedMode_message;
 
+  public static String SimpleInstallerDialog_Trust_label;
+
+  public static String SimpleInstallerDialog_Trust_message;
+
   public static String SimpleInstallerDialog_Update_label;
 
   public static String SimpleInstallerDialog_UpdateSearcher_job;
@@ -450,6 +458,10 @@ public class Messages extends NLS
   public static String SimpleVariablePage_UndefinedVariables_title;
 
   public static String SimpleVariablePage_UndefinedVersiables_message;
+
+  public static String TrustDialog_description;
+
+  public static String TrustDialog_title;
 
   public static String URISchemeDialog_Application_label;
 

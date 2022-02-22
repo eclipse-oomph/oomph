@@ -42,16 +42,19 @@ public abstract class AbstractAction<ARGS> implements IObjectActionDelegate
     this.jobName = jobName;
   }
 
+  @Override
   public void setActivePart(IAction action, IWorkbenchPart targetPart)
   {
     shell = targetPart.getSite().getShell();
   }
 
+  @Override
   public void selectionChanged(IAction action, ISelection selection)
   {
     this.selection = selection;
   }
 
+  @Override
   public void run(IAction action)
   {
     try
@@ -68,6 +71,7 @@ public abstract class AbstractAction<ARGS> implements IObjectActionDelegate
             {
               ResourcesPlugin.getWorkspace().run(new IWorkspaceRunnable()
               {
+                @Override
                 public void run(IProgressMonitor monitor) throws CoreException
                 {
                   runWithArguments(arguments);

@@ -186,6 +186,7 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getProfileDefinition()
   {
     return profileDefinitionEClass;
@@ -196,6 +197,7 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getProfileDefinition_Requirements()
   {
     return (EReference)profileDefinitionEClass.getEStructuralFeatures().get(0);
@@ -206,6 +208,7 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getProfileDefinition_Repositories()
   {
     return (EReference)profileDefinitionEClass.getEStructuralFeatures().get(1);
@@ -216,6 +219,7 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getProfileDefinition_IncludeSourceBundles()
   {
     return (EAttribute)profileDefinitionEClass.getEStructuralFeatures().get(2);
@@ -226,6 +230,7 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getProfileDefinition_ProfileProperties()
   {
     return (EAttribute)profileDefinitionEClass.getEStructuralFeatures().get(3);
@@ -236,6 +241,7 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EOperation getProfileDefinition__SetRequirements__EList()
   {
     return profileDefinitionEClass.getEOperations().get(0);
@@ -246,6 +252,7 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EOperation getProfileDefinition__SetRepositories__EList()
   {
     return profileDefinitionEClass.getEOperations().get(1);
@@ -256,6 +263,7 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getConfiguration()
   {
     return configurationEClass;
@@ -266,6 +274,7 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getConfiguration_WS()
   {
     return (EAttribute)configurationEClass.getEStructuralFeatures().get(0);
@@ -276,6 +285,7 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getConfiguration_OS()
   {
     return (EAttribute)configurationEClass.getEStructuralFeatures().get(1);
@@ -286,6 +296,7 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getConfiguration_Arch()
   {
     return (EAttribute)configurationEClass.getEStructuralFeatures().get(2);
@@ -296,6 +307,7 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getRequirement()
   {
     return requirementEClass;
@@ -306,6 +318,7 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getRequirement_ID()
   {
     return (EAttribute)requirementEClass.getEStructuralFeatures().get(0);
@@ -316,6 +329,7 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getRequirement_Name()
   {
     return (EAttribute)requirementEClass.getEStructuralFeatures().get(1);
@@ -326,6 +340,7 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getRequirement_Namespace()
   {
     return (EAttribute)requirementEClass.getEStructuralFeatures().get(2);
@@ -336,6 +351,7 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getRequirement_VersionRange()
   {
     return (EAttribute)requirementEClass.getEStructuralFeatures().get(3);
@@ -346,6 +362,7 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getRequirement_Optional()
   {
     return (EAttribute)requirementEClass.getEStructuralFeatures().get(4);
@@ -356,6 +373,7 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getRequirement_Filter()
   {
     return (EAttribute)requirementEClass.getEStructuralFeatures().get(6);
@@ -366,6 +384,7 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getRequirement_Type()
   {
     return (EAttribute)requirementEClass.getEStructuralFeatures().get(7);
@@ -376,6 +395,7 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getRequirement_Min()
   {
     return (EAttribute)requirementEClass.getEStructuralFeatures().get(8);
@@ -386,6 +406,7 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getRequirement_Max()
   {
     return (EAttribute)requirementEClass.getEStructuralFeatures().get(9);
@@ -396,6 +417,7 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getRequirement_Description()
   {
     return (EAttribute)requirementEClass.getEStructuralFeatures().get(10);
@@ -406,6 +428,7 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getRequirement_Greedy()
   {
     return (EAttribute)requirementEClass.getEStructuralFeatures().get(5);
@@ -416,6 +439,7 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EOperation getRequirement__SetVersionRange__Version_VersionSegment()
   {
     return requirementEClass.getEOperations().get(0);
@@ -426,6 +450,7 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getRepositoryList()
   {
     return repositoryListEClass;
@@ -436,6 +461,7 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getRepositoryList_Repositories()
   {
     return (EReference)repositoryListEClass.getEStructuralFeatures().get(0);
@@ -446,6 +472,7 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getRepositoryList_Name()
   {
     return (EAttribute)repositoryListEClass.getEStructuralFeatures().get(1);
@@ -456,6 +483,7 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getRepository()
   {
     return repositoryEClass;
@@ -466,6 +494,7 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getRepository_URL()
   {
     return (EAttribute)repositoryEClass.getEStructuralFeatures().get(0);
@@ -476,6 +505,7 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getRepository_Type()
   {
     return (EAttribute)repositoryEClass.getEStructuralFeatures().get(1);
@@ -486,6 +516,7 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EEnum getRepositoryType()
   {
     return repositoryTypeEEnum;
@@ -496,6 +527,7 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EEnum getVersionSegment()
   {
     return versionSegmentEEnum;
@@ -506,6 +538,7 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EEnum getRequirementType()
   {
     return requirementTypeEEnum;
@@ -516,6 +549,7 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EDataType getVersion()
   {
     return versionEDataType;
@@ -526,6 +560,7 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EDataType getVersionRange()
   {
     return versionRangeEDataType;
@@ -536,6 +571,7 @@ public class P2PackageImpl extends EPackageImpl implements P2Package
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public P2Factory getP2Factory()
   {
     return (P2Factory)getEFactoryInstance();

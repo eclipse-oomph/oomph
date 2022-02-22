@@ -85,7 +85,7 @@ public class WorkbenchAdapterFactory extends AdapterFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  protected WorkbenchSwitch<Adapter> modelSwitch = new WorkbenchSwitch<Adapter>()
+  protected WorkbenchSwitch<Adapter> modelSwitch = new WorkbenchSwitch<>()
   {
     @Override
     public Adapter caseFileAssociationsTask(FileAssociationsTask object)

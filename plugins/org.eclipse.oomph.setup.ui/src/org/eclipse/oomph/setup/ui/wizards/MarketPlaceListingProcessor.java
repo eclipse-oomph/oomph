@@ -208,7 +208,7 @@ public class MarketPlaceListingProcessor
     }
 
     Point size = getSize();
-    final Set<Requirement> checkedRequirements = new LinkedHashSet<Requirement>();
+    final Set<Requirement> checkedRequirements = new LinkedHashSet<>();
     OomphDialog marketPlaceListingDialog = new OomphDialog(shell, "", size.x, size.y, SetupUIPlugin.INSTANCE, false) //$NON-NLS-1$
     {
       private ProgressMonitorPart progressMonitorPart;
@@ -248,6 +248,7 @@ public class MarketPlaceListingProcessor
 
         UIUtil.asyncExec(parent, new Runnable()
         {
+          @Override
           public void run()
           {
             getButton(IDialogConstants.OK_ID).setEnabled(false);
@@ -255,9 +256,9 @@ public class MarketPlaceListingProcessor
         });
 
         List<Requirement> requirements = marketPlaceListing.getRequirements();
-        final Set<Requirement> requiredRequirements = new HashSet<Requirement>();
-        Set<Requirement> selectedRequirements = new HashSet<Requirement>();
-        final Map<Requirement, IInstallableUnit> installableUnits = new LinkedHashMap<Requirement, IInstallableUnit>();
+        final Set<Requirement> requiredRequirements = new HashSet<>();
+        Set<Requirement> selectedRequirements = new HashSet<>();
+        final Map<Requirement, IInstallableUnit> installableUnits = new LinkedHashMap<>();
         for (Requirement requirement : requirements)
         {
           installableUnits.put(requirement, null);
@@ -285,6 +286,7 @@ public class MarketPlaceListingProcessor
         ColumnViewerInformationControlToolTipSupport toolTipSupport = new ColumnViewerInformationControlToolTipSupport(requirementsViewer,
             new LocationListener()
             {
+              @Override
               public void changing(LocationEvent event)
               {
                 if (!"about:blank".equals(event.location)) //$NON-NLS-1$
@@ -294,6 +296,7 @@ public class MarketPlaceListingProcessor
                 }
               }
 
+              @Override
               public void changed(LocationEvent event)
               {
               }
@@ -301,6 +304,7 @@ public class MarketPlaceListingProcessor
 
         checkStateListener = new ICheckStateListener()
         {
+          @Override
           public void checkStateChanged(CheckStateChangedEvent event)
           {
             checkedRequirements.clear();
@@ -530,6 +534,7 @@ public class MarketPlaceListingProcessor
               progressMonitorWrapper.done();
               UIUtil.asyncExec(parent, new Runnable()
               {
+                @Override
                 public void run()
                 {
                   handleRepository(repository, installableUnits);
@@ -542,6 +547,7 @@ public class MarketPlaceListingProcessor
             {
               UIUtil.asyncExec(parent, new Runnable()
               {
+                @Override
                 public void run()
                 {
                   new StatusDialog(parent.getShell(), Messages.MarketPlaceListingProcessor_problemDialog_title,
@@ -558,6 +564,7 @@ public class MarketPlaceListingProcessor
             {
               UIUtil.asyncExec(parent, new Runnable()
               {
+                @Override
                 public void run()
                 {
                   new StatusDialog(parent.getShell(), Messages.MarketPlaceListingProcessor_problemDialog_title,
@@ -580,6 +587,7 @@ public class MarketPlaceListingProcessor
 
             UIUtil.asyncExec(parent, new Runnable()
             {
+              @Override
               public void run()
               {
                 progressAreaGridData.exclude = true;
@@ -597,6 +605,7 @@ public class MarketPlaceListingProcessor
 
         UIUtil.asyncExec(parent, new Runnable()
         {
+          @Override
           public void run()
           {
             requirementsViewer.setSelection(new StructuredSelection(installableUnits.keySet().iterator().next()));
@@ -716,7 +725,7 @@ public class MarketPlaceListingProcessor
 
   protected MacroTask createMacroTask(SetupTaskContainer targetSetupTaskContainer, Macro macro, Set<Requirement> checkedRequirements)
   {
-    Set<String> checkedParameterNames = new HashSet<String>();
+    Set<String> checkedParameterNames = new HashSet<>();
     for (Requirement requirement : checkedRequirements)
     {
       checkedParameterNames.add(getCorrespondParameterName(requirement));
@@ -736,7 +745,7 @@ public class MarketPlaceListingProcessor
   protected IStatus createResourceStatus(Collection<? extends Resource> resources, EClass expectedEClass)
   {
     StringBuilder uris = new StringBuilder();
-    List<IStatus> childStatuses = new ArrayList<IStatus>();
+    List<IStatus> childStatuses = new ArrayList<>();
     for (Resource resource : resources)
     {
       if (uris.length() != 0)

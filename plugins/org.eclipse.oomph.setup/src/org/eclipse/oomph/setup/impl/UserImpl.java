@@ -189,11 +189,12 @@ public class UserImpl extends ScopeImpl implements User
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<LicenseInfo> getAcceptedLicenses()
   {
     if (acceptedLicenses == null)
     {
-      acceptedLicenses = new EDataTypeUniqueEList<LicenseInfo>(LicenseInfo.class, this, SetupPackage.USER__ACCEPTED_LICENSES);
+      acceptedLicenses = new EDataTypeUniqueEList<>(LicenseInfo.class, this, SetupPackage.USER__ACCEPTED_LICENSES);
     }
     return acceptedLicenses;
   }
@@ -203,11 +204,12 @@ public class UserImpl extends ScopeImpl implements User
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<CertificateInfo> getAcceptedCertificates()
   {
     if (acceptedCertificates == null)
     {
-      acceptedCertificates = new EDataTypeUniqueEList<CertificateInfo>(CertificateInfo.class, this, SetupPackage.USER__ACCEPTED_CERTIFICATES);
+      acceptedCertificates = new EDataTypeUniqueEList<>(CertificateInfo.class, this, SetupPackage.USER__ACCEPTED_CERTIFICATES);
     }
     return acceptedCertificates;
   }
@@ -217,6 +219,7 @@ public class UserImpl extends ScopeImpl implements User
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public UnsignedPolicy getUnsignedPolicy()
   {
     return unsignedPolicy;
@@ -227,6 +230,7 @@ public class UserImpl extends ScopeImpl implements User
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setUnsignedPolicy(UnsignedPolicy newUnsignedPolicy)
   {
     UnsignedPolicy oldUnsignedPolicy = unsignedPolicy;
@@ -242,6 +246,7 @@ public class UserImpl extends ScopeImpl implements User
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public CertificatePolicy getCertificatePolicy()
   {
     return certificatePolicy;
@@ -252,6 +257,7 @@ public class UserImpl extends ScopeImpl implements User
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setCertificatePolicy(CertificatePolicy newCertificatePolicy)
   {
     CertificatePolicy oldCertificatePolicy = certificatePolicy;
@@ -267,6 +273,7 @@ public class UserImpl extends ScopeImpl implements User
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Date getQuestionnaireDate()
   {
     return questionnaireDate;
@@ -277,6 +284,7 @@ public class UserImpl extends ScopeImpl implements User
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setQuestionnaireDate(Date newQuestionnaireDate)
   {
     Date oldQuestionnaireDate = questionnaireDate;
@@ -292,6 +300,7 @@ public class UserImpl extends ScopeImpl implements User
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public boolean isPreferenceRecorderDefault()
   {
     return preferenceRecorderDefault;
@@ -302,6 +311,7 @@ public class UserImpl extends ScopeImpl implements User
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setPreferenceRecorderDefault(boolean newPreferenceRecorderDefault)
   {
     boolean oldPreferenceRecorderDefault = preferenceRecorderDefault;
@@ -318,11 +328,12 @@ public class UserImpl extends ScopeImpl implements User
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<AttributeRule> getAttributeRules()
   {
     if (attributeRules == null)
     {
-      attributeRules = new EObjectContainmentEList.Resolving<AttributeRule>(AttributeRule.class, this, SetupPackage.USER__ATTRIBUTE_RULES);
+      attributeRules = new EObjectContainmentEList.Resolving<>(AttributeRule.class, this, SetupPackage.USER__ATTRIBUTE_RULES);
     }
     return attributeRules;
   }

@@ -385,6 +385,7 @@ public class SimpleInstallLaunchButton extends ImageHoverButton
       }
     }
 
+    @Override
     public void run()
     {
       if (visible && !isDisposed())

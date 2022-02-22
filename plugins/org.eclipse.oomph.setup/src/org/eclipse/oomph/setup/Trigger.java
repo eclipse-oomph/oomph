@@ -215,6 +215,7 @@ public enum Trigger implements Enumerator
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public int getValue()
   {
     return value;
@@ -225,6 +226,7 @@ public enum Trigger implements Enumerator
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getName()
   {
     return name;
@@ -235,6 +237,7 @@ public enum Trigger implements Enumerator
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getLiteral()
   {
     return literal;
@@ -254,7 +257,7 @@ public enum Trigger implements Enumerator
 
   public static Set<Trigger> toSet(Trigger... triggers)
   {
-    return intern(new HashSet<Trigger>(Arrays.asList(triggers)));
+    return intern(new HashSet<>(Arrays.asList(triggers)));
   }
 
   public static Set<Trigger> intern(Set<Trigger> triggerSet)
@@ -262,20 +265,20 @@ public enum Trigger implements Enumerator
     return CANONICAL_TRIGGER_SETS.get(triggerSet);
   }
 
-  private static final Map<Set<Trigger>, Set<Trigger>> CANONICAL_TRIGGER_SETS = new HashMap<Set<Trigger>, Set<Trigger>>();
+  private static final Map<Set<Trigger>, Set<Trigger>> CANONICAL_TRIGGER_SETS = new HashMap<>();
 
   public static final Map<Set<Trigger>, String> LITERALS;
 
   static
   {
-    Map<Set<Trigger>, String> literals = new LinkedHashMap<Set<Trigger>, String>();
+    Map<Set<Trigger>, String> literals = new LinkedHashMap<>();
     for (int i = 0; i < 2; ++i)
     {
       for (int j = 0; j < 2; ++j)
       {
         for (int k = 0; k < 2; ++k)
         {
-          Set<Trigger> value = new LinkedHashSet<Trigger>()
+          Set<Trigger> value = new LinkedHashSet<>()
           {
             private static final long serialVersionUID = 1L;
 

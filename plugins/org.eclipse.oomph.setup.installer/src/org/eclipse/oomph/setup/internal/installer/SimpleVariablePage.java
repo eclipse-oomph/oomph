@@ -23,9 +23,9 @@ import org.eclipse.oomph.jreinfo.JRE;
 import org.eclipse.oomph.jreinfo.JREManager;
 import org.eclipse.oomph.jreinfo.ui.JREController;
 import org.eclipse.oomph.p2.core.AgentManager;
-import org.eclipse.oomph.p2.core.CertificateConfirmer;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.internal.core.DownloadArtifactEvent;
+import org.eclipse.oomph.p2.internal.ui.P2UIPlugin;
 import org.eclipse.oomph.setup.AnnotationConstants;
 import org.eclipse.oomph.setup.AttributeRule;
 import org.eclipse.oomph.setup.Installation;
@@ -50,12 +50,12 @@ import org.eclipse.oomph.setup.internal.installer.SimpleInstallLaunchButton.Stat
 import org.eclipse.oomph.setup.internal.installer.SimpleMessageOverlay.Type;
 import org.eclipse.oomph.setup.internal.installer.SimpleProductPage.ProductComposite;
 import org.eclipse.oomph.setup.log.ProgressLog;
+import org.eclipse.oomph.setup.p2.P2Task;
 import org.eclipse.oomph.setup.ui.EnablementComposite;
 import org.eclipse.oomph.setup.ui.EnablementDialog;
 import org.eclipse.oomph.setup.ui.JREDownloadHandler;
 import org.eclipse.oomph.setup.ui.LicensePrePrompter;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
-import org.eclipse.oomph.setup.ui.UnsignedContentDialog;
 import org.eclipse.oomph.setup.ui.wizards.ProgressPage;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard.SelectionMemento;
 import org.eclipse.oomph.ui.StackComposite;
@@ -136,7 +136,6 @@ import org.eclipse.swt.widgets.Text;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.security.cert.Certificate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -184,7 +183,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
   private final SelectionMemento selectionMemento;
 
-  private final Map<String, ProductVersion> productVersions = new HashMap<String, ProductVersion>();
+  private final Map<String, ProductVersion> productVersions = new HashMap<>();
 
   private Product product;
 
@@ -409,6 +408,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
     javaViewer.setLabelProvider(new LabelProvider());
     javaViewer.addPostSelectionChangedListener(new ISelectionChangedListener()
     {
+      @Override
       public void selectionChanged(SelectionChangedEvent event)
       {
         UIUtil.setSelectionToEnd(javaCombo);
@@ -509,6 +509,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
       private final Validator validator = new Validator();
 
+      @Override
       public void modifyText(ModifyEvent e)
       {
         final FocusSelectionAdapter focusSelectionAdapter = (FocusSelectionAdapter)folderText.getData(FocusSelectionAdapter.ADAPTER_KEY);
@@ -572,6 +573,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
           UIUtil.getDisplay().asyncExec(new Runnable()
           {
+            @Override
             public void run()
             {
               folderText.setFocus();
@@ -758,7 +760,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
     // Exclude browser from focus traversal because otherwise we get
     // a strange traversal behavior
-    List<Control> tabList = new ArrayList<Control>(Arrays.asList(container.getTabList()));
+    List<Control> tabList = new ArrayList<>(Arrays.asList(container.getTabList()));
     tabList.remove(detailArea);
     container.setTabList(tabList.toArray(new Control[tabList.size()]));
 
@@ -941,6 +943,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
     UIUtil.asyncExec(container, new Runnable()
     {
+      @Override
       public void run()
       {
         setEnabled(true);
@@ -1192,6 +1195,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
           {
             UIUtil.syncExec(new Runnable()
             {
+              @Override
               public void run()
               {
                 try
@@ -1240,6 +1244,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
     {
       UIUtil.syncExec(new Runnable()
       {
+        @Override
         public void run()
         {
           EList<LicenseInfo> licenses = LicensePrePrompter.execute(getShell(), user);
@@ -1279,6 +1284,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
         final String variables = builder.toString();
         UIUtil.syncExec(new Runnable()
         {
+          @Override
           public void run()
           {
             String message = NLS.bind(Messages.SimpleVariablePage_UndefinedVersiables_message, variables);
@@ -1306,6 +1312,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
             getDisplay(), new Runnable()
             {
+              @Override
               public void run()
               {
                 EnablementDialog enablementDialog = new EnablementDialog(getShell(), Messages.SimpleVariablePage_Installer_message, enablementTasks);
@@ -1324,21 +1331,18 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
       performer.getUnresolvedVariables().clear();
 
-      performer.put(UIServices.class, installer.getUiServices());
+      performer.put(P2Task.UIServicesInitializer.class, new P2Task.UIServicesInitializer()
+      {
+        @Override
+        public void init(UIServices serviceUI)
+        {
+          P2UIPlugin.init(serviceUI, getShell().getDisplay());
+        }
+      });
 
       if (performer.get(ILicense.class) == null)
       {
         performer.put(ILicense.class, ProgressPage.LICENSE_CONFIRMER);
-      }
-
-      if (performer.get(Certificate.class) == null)
-      {
-        performer.put(Certificate.class, UnsignedContentDialog.createUnsignedContentConfirmer(user, false));
-      }
-
-      if (performer.get(CertificateConfirmer.class) == null)
-      {
-        performer.put(CertificateConfirmer.class, SetupCoreUtil.createCertificateConfirmer(user, false));
       }
 
       performer.setOffline(PropertiesUtil.isProperty(SetupProperties.PROP_SETUP_OFFLINE_STARTUP));
@@ -1375,6 +1379,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
     UIUtil.syncExec(getDisplay(), new Runnable()
     {
+      @Override
       public void run()
       {
         dialog.setButtonsEnabled(true);
@@ -1525,11 +1530,13 @@ public class SimpleVariablePage extends SimpleInstallerPage
     {
       action = new SimpleMessageOverlay.RunnableWithLabel()
       {
+        @Override
         public void run()
         {
           openInstallLog();
         }
 
+        @Override
         public String getLabel()
         {
           return Messages.SimpleVariablePage_ShowLog_message;
@@ -1540,11 +1547,13 @@ public class SimpleVariablePage extends SimpleInstallerPage
     {
       action = new SimpleMessageOverlay.RunnableWithLabel()
       {
+        @Override
         public void run()
         {
           openInstallerLog();
         }
 
+        @Override
         public String getLabel()
         {
           return Messages.SimpleVariablePage_ShowInstallerLog_message;
@@ -1632,6 +1641,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
         {
           preInstallAction = new Runnable()
           {
+            @Override
             public void run()
             {
               preInstallAction = null;
@@ -1839,6 +1849,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
   @SuppressWarnings("restriction")
   private class DownloadArtifactLister implements org.eclipse.equinox.internal.provisional.p2.core.eventbus.SynchronousProvisioningListener
   {
+    @Override
     public synchronized void notify(EventObject event)
     {
       if (event instanceof DownloadArtifactEvent)
@@ -1929,12 +1940,13 @@ public class SimpleVariablePage extends SimpleInstallerPage
   {
     private static final long serialVersionUID = 1L;
 
-    private final List<VariableTask> unresolvedVariables = new ArrayList<VariableTask>();
+    private final List<VariableTask> unresolvedVariables = new ArrayList<>();
 
     private final OS os;
 
     private final String vmPath;
 
+    @Override
     public OS getOS()
     {
       return os;
@@ -1946,6 +1958,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
       this.vmPath = vmPath;
     }
 
+    @Override
     public String getVMPath()
     {
       return vmPath;
@@ -1956,6 +1969,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
       return unresolvedVariables;
     }
 
+    @Override
     public boolean promptVariables(List<? extends SetupTaskContext> performers)
     {
       for (SetupTaskContext performer : performers)
@@ -1974,12 +1988,14 @@ public class SimpleVariablePage extends SimpleInstallerPage
       return unresolvedVariables.isEmpty();
     }
 
+    @Override
     public String getValue(VariableTask variable)
     {
       String name = variable.getName();
       return get(name);
     }
 
+    @Override
     public UserCallback getUserCallback()
     {
       return null;
@@ -2007,7 +2023,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
     private String lastName;
 
-    private final Set<URI> artifactURIs = new HashSet<URI>();
+    private final Set<URI> artifactURIs = new HashSet<>();
 
     private Set<URI> lastArtifactURIs;
 
@@ -2021,42 +2037,50 @@ public class SimpleVariablePage extends SimpleInstallerPage
       artifactURIs.remove(uri);
     }
 
+    @Override
     public void setTerminating()
     {
     }
 
+    @Override
     public void log(String line)
     {
       log(line, true, Severity.OK);
     }
 
+    @Override
     public void log(String line, Severity severity)
     {
       log(line, true, severity);
     }
 
+    @Override
     public void log(String line, boolean filter)
     {
       log(line, filter, Severity.OK);
     }
 
+    @Override
     public synchronized void log(String line, boolean filter, Severity severity)
     {
       name = line;
     }
 
+    @Override
     public void log(IStatus status)
     {
       String string = SetupInstallerPlugin.toString(status);
       log(string, false);
     }
 
+    @Override
     public void log(Throwable t)
     {
       String string = SetupInstallerPlugin.toString(t);
       log(string, false);
     }
 
+    @Override
     public synchronized void task(SetupTask setupTask)
     {
       if (setupTask != null)
@@ -2069,16 +2093,19 @@ public class SimpleVariablePage extends SimpleInstallerPage
       }
     }
 
+    @Override
     public synchronized boolean isCanceled()
     {
       return canceled;
     }
 
+    @Override
     public synchronized void setCanceled(boolean canceled)
     {
       this.canceled = canceled;
     }
 
+    @Override
     public synchronized void beginTask(String name, int totalWork)
     {
       performer.log(name);
@@ -2089,32 +2116,38 @@ public class SimpleVariablePage extends SimpleInstallerPage
       }
     }
 
+    @Override
     public synchronized void done()
     {
       work = totalWork;
       done = true;
     }
 
+    @Override
     public synchronized void setTaskName(String name)
     {
       performer.log(name);
     }
 
+    @Override
     public synchronized void subTask(String name)
     {
       performer.log(name);
     }
 
+    @Override
     public synchronized void internalWorked(double work)
     {
       this.work += work;
     }
 
+    @Override
     public void worked(int work)
     {
       internalWorked(work);
     }
 
+    @Override
     public void run()
     {
       String name;
@@ -2131,7 +2164,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
         work = this.work;
         canceled = this.canceled;
         done = this.done;
-        artifactURIs = new HashSet<URI>(this.artifactURIs);
+        artifactURIs = new HashSet<>(this.artifactURIs);
       }
 
       if (!canceled && !done)
@@ -2149,7 +2182,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
               if (slowArtifactDownload)
               {
                 StringBuilder message = new StringBuilder();
-                Set<URI> hosts = new HashSet<URI>();
+                Set<URI> hosts = new HashSet<>();
                 for (URI artifactURI : artifactURIs)
                 {
                   URI hostURI = URI.createHierarchicalURI(artifactURI.scheme(), artifactURI.authority(), null, null, null);
@@ -2290,6 +2323,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
       }
     }
 
+    @Override
     public void verifyText(VerifyEvent e)
     {
       if (e.keyCode == ' ' && e.stateMask == SWT.CTRL)
@@ -2309,6 +2343,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
           private ModifyListener modifyListener = new ModifyListener()
           {
+            @Override
             public void modifyText(ModifyEvent e)
             {
               updater.schedule();
@@ -2335,11 +2370,13 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
           private ControlListener controlListener = new ControlListener()
           {
+            @Override
             public void controlResized(ControlEvent e)
             {
               shell.dispose();
             }
 
+            @Override
             public void controlMoved(ControlEvent e)
             {
               shell.dispose();
@@ -2413,6 +2450,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
           {
             UIUtil.asyncExec(list, new Runnable()
             {
+              @Override
               public void run()
               {
                 if (shell.getDisplay().getActiveShell() != shell)
@@ -2477,6 +2515,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
             shell.addDisposeListener(new DisposeListener()
             {
+              @Override
               public void widgetDisposed(DisposeEvent e)
               {
                 folderText.removeModifyListener(modifyListener);
@@ -2533,6 +2572,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
                 {
                   File[] folders = searchFolder.listFiles(new FileFilter()
                   {
+                    @Override
                     public boolean accept(File file)
                     {
                       return file.isDirectory() && file.getName().toLowerCase().startsWith(nameFilter);
@@ -2560,6 +2600,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
                       {
                         File[] folders = root.listFiles(new FileFilter()
                         {
+                          @Override
                           public boolean accept(File file)
                           {
                             return file.isDirectory() && file.getName().toLowerCase().startsWith(nameFilter);

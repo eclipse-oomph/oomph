@@ -198,7 +198,7 @@ public class PreferencesEditor extends MultiPageEditorPart
    * <!-- end-user-doc -->
    * @generated
    */
-  protected List<PropertySheetPage> propertySheetPages = new ArrayList<PropertySheetPage>();
+  protected List<PropertySheetPage> propertySheetPages = new ArrayList<>();
 
   /**
    * This is the viewer that shadows the selection in the content outline.
@@ -231,7 +231,7 @@ public class PreferencesEditor extends MultiPageEditorPart
    * <!-- end-user-doc -->
    * @generated
    */
-  protected Collection<ISelectionChangedListener> selectionChangedListeners = new ArrayList<ISelectionChangedListener>();
+  protected Collection<ISelectionChangedListener> selectionChangedListeners = new ArrayList<>();
 
   /**
    * This keeps track of the selection of the editor as a whole.
@@ -258,6 +258,7 @@ public class PreferencesEditor extends MultiPageEditorPart
    */
   protected IPartListener partListener = new IPartListener()
   {
+    @Override
     public void partActivated(IWorkbenchPart p)
     {
       if (p instanceof ContentOutline)
@@ -284,21 +285,25 @@ public class PreferencesEditor extends MultiPageEditorPart
       }
     }
 
+    @Override
     public void partBroughtToTop(IWorkbenchPart p)
     {
       // Ignore.
     }
 
+    @Override
     public void partClosed(IWorkbenchPart p)
     {
       // Ignore.
     }
 
+    @Override
     public void partDeactivated(IWorkbenchPart p)
     {
       // Ignore.
     }
 
+    @Override
     public void partOpened(IWorkbenchPart p)
     {
       // Ignore.
@@ -311,7 +316,7 @@ public class PreferencesEditor extends MultiPageEditorPart
    * <!-- end-user-doc -->
    * @generated
    */
-  protected Collection<Resource> removedResources = new ArrayList<Resource>();
+  protected Collection<Resource> removedResources = new ArrayList<>();
 
   /**
    * Resources that have been changed since last activation.
@@ -319,7 +324,7 @@ public class PreferencesEditor extends MultiPageEditorPart
    * <!-- end-user-doc -->
    * @generated
    */
-  protected Collection<Resource> changedResources = new ArrayList<Resource>();
+  protected Collection<Resource> changedResources = new ArrayList<>();
 
   /**
    * Resources that have been saved.
@@ -327,7 +332,7 @@ public class PreferencesEditor extends MultiPageEditorPart
    * <!-- end-user-doc -->
    * @generated
    */
-  protected Collection<Resource> savedResources = new ArrayList<Resource>();
+  protected Collection<Resource> savedResources = new ArrayList<>();
 
   /**
    * Map to store the diagnostic associated with a resource.
@@ -335,7 +340,7 @@ public class PreferencesEditor extends MultiPageEditorPart
    * <!-- end-user-doc -->
    * @generated
    */
-  protected Map<Resource, Diagnostic> resourceToDiagnosticMap = new LinkedHashMap<Resource, Diagnostic>();
+  protected Map<Resource, Diagnostic> resourceToDiagnosticMap = new LinkedHashMap<>();
 
   /**
    * Controls whether the problem indication should be updated.
@@ -394,6 +399,7 @@ public class PreferencesEditor extends MultiPageEditorPart
         dispatching = true;
         getSite().getShell().getDisplay().asyncExec(new Runnable()
         {
+          @Override
           public void run()
           {
             dispatching = false;
@@ -426,6 +432,7 @@ public class PreferencesEditor extends MultiPageEditorPart
    */
   protected IResourceChangeListener resourceChangeListener = new IResourceChangeListener()
   {
+    @Override
     public void resourceChanged(IResourceChangeEvent event)
     {
       IResourceDelta delta = event.getDelta();
@@ -435,10 +442,11 @@ public class PreferencesEditor extends MultiPageEditorPart
         {
           protected ResourceSet resourceSet = editingDomain.getResourceSet();
 
-          protected Collection<Resource> changedResources = new ArrayList<Resource>();
+          protected Collection<Resource> changedResources = new ArrayList<>();
 
-          protected Collection<Resource> removedResources = new ArrayList<Resource>();
+          protected Collection<Resource> removedResources = new ArrayList<>();
 
+          @Override
           public boolean visit(final IResourceDelta delta)
           {
             if (delta.getResource().getType() == IResource.FILE)
@@ -492,6 +500,7 @@ public class PreferencesEditor extends MultiPageEditorPart
         {
           getSite().getShell().getDisplay().asyncExec(new Runnable()
           {
+            @Override
             public void run()
             {
               removedResources.addAll(visitor.getRemovedResources());
@@ -507,6 +516,7 @@ public class PreferencesEditor extends MultiPageEditorPart
         {
           getSite().getShell().getDisplay().asyncExec(new Runnable()
           {
+            @Override
             public void run()
             {
               changedResources.addAll(visitor.getChangedResources());
@@ -736,10 +746,12 @@ public class PreferencesEditor extends MultiPageEditorPart
     //
     commandStack.addCommandStackListener(new CommandStackListener()
     {
+      @Override
       public void commandStackChanged(final EventObject event)
       {
         getContainer().getDisplay().asyncExec(new Runnable()
         {
+          @Override
           public void run()
           {
             firePropertyChange(IEditorPart.PROP_DIRTY);
@@ -800,6 +812,7 @@ public class PreferencesEditor extends MultiPageEditorPart
     {
       Runnable runnable = new Runnable()
       {
+        @Override
         public void run()
         {
           // Try to select the items in the current content viewer of the editor.
@@ -822,6 +835,7 @@ public class PreferencesEditor extends MultiPageEditorPart
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EditingDomain getEditingDomain()
   {
     return editingDomain;
@@ -913,6 +927,7 @@ public class PreferencesEditor extends MultiPageEditorPart
         {
           // This just notifies those things that are affected by the section.
           //
+          @Override
           public void selectionChanged(SelectionChangedEvent selectionChangedEvent)
           {
             setSelection(selectionChangedEvent.getSelection());
@@ -950,6 +965,7 @@ public class PreferencesEditor extends MultiPageEditorPart
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Viewer getViewer()
   {
     return currentViewer;
@@ -989,7 +1005,7 @@ public class PreferencesEditor extends MultiPageEditorPart
       boolean dispatch = false;
       if (selection == null)
       {
-        selection = new ArrayList<Object>();
+        selection = new ArrayList<>();
         dispatch = true;
       }
 
@@ -1022,12 +1038,14 @@ public class PreferencesEditor extends MultiPageEditorPart
         final Display display = getSite().getShell().getDisplay();
         display.asyncExec(new Runnable()
         {
+          @Override
           public void run()
           {
             if (!selectionViewer.getControl().isDisposed())
             {
               display.timerExec(5000, new Runnable()
               {
+                @Override
                 public void run()
                 {
                   synchronized (SelectChangesListener.this)
@@ -1171,6 +1189,7 @@ public class PreferencesEditor extends MultiPageEditorPart
 
       getSite().getShell().getDisplay().asyncExec(new Runnable()
       {
+        @Override
         public void run()
         {
           if (!getContainer().isDisposed())
@@ -1202,6 +1221,7 @@ public class PreferencesEditor extends MultiPageEditorPart
 
     getSite().getShell().getDisplay().asyncExec(new Runnable()
     {
+      @Override
       public void run()
       {
         updateProblemIndication();
@@ -1320,7 +1340,7 @@ public class PreferencesEditor extends MultiPageEditorPart
 
     private TreeViewer selectionViewer;
 
-    private Map<Object, Object> selectionMap = new HashMap<Object, Object>();
+    private Map<Object, Object> selectionMap = new HashMap<>();
 
     public OutlinePage(AdapterFactoryEditingDomain editingDomain, TreeViewer selectionViewer)
     {
@@ -1334,6 +1354,7 @@ public class PreferencesEditor extends MultiPageEditorPart
 
     protected abstract void setSelection(IStructuredSelection selection);
 
+    @Override
     @SuppressWarnings("all")
     public Object getAdapter(Class adapter)
     {
@@ -1360,12 +1381,13 @@ public class PreferencesEditor extends MultiPageEditorPart
 
       selectionViewer.addSelectionChangedListener(new ISelectionChangedListener()
       {
+        @Override
         public void selectionChanged(SelectionChangedEvent event)
         {
           IStructuredSelection selection = (IStructuredSelection)event.getSelection();
           if (selectionViewer != null && !selection.isEmpty())
           {
-            ArrayList<Object> selectionList = new ArrayList<Object>();
+            ArrayList<Object> selectionList = new ArrayList<>();
             for (Object object : selection.toArray())
             {
               collectSelection(selectionList, object);
@@ -1385,6 +1407,7 @@ public class PreferencesEditor extends MultiPageEditorPart
       {
         // This ensures that we handle selections correctly.
         //
+        @Override
         public void selectionChanged(SelectionChangedEvent event)
         {
           TreeViewer oldSelectionViewer = selectionViewer;
@@ -1429,7 +1452,7 @@ public class PreferencesEditor extends MultiPageEditorPart
 
     public class PreferenceNodePresentation extends ItemProvider implements Wrapper
     {
-      private List<PreferenceNode> preferencesNodes = new ArrayList<PreferenceNode>();
+      private List<PreferenceNode> preferencesNodes = new ArrayList<>();
 
       public PreferenceNodePresentation(PreferenceNode preferenceNode)
       {
@@ -1471,6 +1494,7 @@ public class PreferencesEditor extends MultiPageEditorPart
         propertyPresentation.getChildren().add(new PropertyPresentation(PreferencesFactory.eINSTANCE.convertURI(absolutePath) + "=" + value, property)); //$NON-NLS-1$
       }
 
+      @Override
       public List<PreferenceNode> getWrappedObjects()
       {
         return preferencesNodes;
@@ -1479,7 +1503,7 @@ public class PreferencesEditor extends MultiPageEditorPart
 
     public class PropertyPresentation extends ItemProvider implements Wrapper
     {
-      private List<Property> properties = new ArrayList<Property>();
+      private List<Property> properties = new ArrayList<>();
 
       public PropertyPresentation(Property property)
       {
@@ -1494,17 +1518,18 @@ public class PreferencesEditor extends MultiPageEditorPart
         selectionMap.put(property, this);
       }
 
+      @Override
       public List<Property> getWrappedObjects()
       {
         return properties;
       }
     }
 
-    private Map<URI, PreferenceNodePresentation> preferencesNodes = new HashMap<URI, PreferenceNodePresentation>();
+    private Map<URI, PreferenceNodePresentation> preferencesNodes = new HashMap<>();
 
     private List<PreferenceNodePresentation> traverse(PreferenceNode preferenceNode)
     {
-      List<PreferenceNodePresentation> result = new UniqueEList<PreferenceNodePresentation>();
+      List<PreferenceNodePresentation> result = new UniqueEList<>();
       for (PreferenceNode node : preferenceNode.getChildren())
       {
         String name = node.getName();
@@ -1703,7 +1728,7 @@ public class PreferencesEditor extends MultiPageEditorPart
         //
         Object selectedElement = selectedElements.next();
 
-        ArrayList<Object> selectionList = new ArrayList<Object>();
+        ArrayList<Object> selectionList = new ArrayList<>();
         selectionList.addAll(unwrap(selectedElement));
         while (selectedElements.hasNext())
         {
@@ -1748,7 +1773,7 @@ public class PreferencesEditor extends MultiPageEditorPart
   {
     // Save only resources that have actually changed.
     //
-    final Map<Object, Object> saveOptions = new HashMap<Object, Object>();
+    final Map<Object, Object> saveOptions = new HashMap<>();
     if (!"preference".equals(editingDomain.getResourceSet().getResources().get(0).getURI().scheme())) //$NON-NLS-1$
     {
       saveOptions.put(Resource.OPTION_SAVE_ONLY_IF_CHANGED, Resource.OPTION_SAVE_ONLY_IF_CHANGED_MEMORY_BUFFER);
@@ -1887,6 +1912,7 @@ public class PreferencesEditor extends MultiPageEditorPart
     doSave(progressMonitor);
   }
 
+  @Override
   public void doRevert()
   {
     adapterFactory.dispose();
@@ -1942,6 +1968,7 @@ public class PreferencesEditor extends MultiPageEditorPart
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void gotoMarker(IMarker marker)
   {
     List<?> targetObjects = markerHelper.getTargetObjects(editingDomain, marker);
@@ -1992,6 +2019,7 @@ public class PreferencesEditor extends MultiPageEditorPart
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void addSelectionChangedListener(ISelectionChangedListener listener)
   {
     selectionChangedListeners.add(listener);
@@ -2003,6 +2031,7 @@ public class PreferencesEditor extends MultiPageEditorPart
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void removeSelectionChangedListener(ISelectionChangedListener listener)
   {
     selectionChangedListeners.remove(listener);
@@ -2014,6 +2043,7 @@ public class PreferencesEditor extends MultiPageEditorPart
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ISelection getSelection()
   {
     return editorSelection;
@@ -2026,6 +2056,7 @@ public class PreferencesEditor extends MultiPageEditorPart
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setSelection(ISelection selection)
   {
     editorSelection = selection;
@@ -2107,6 +2138,7 @@ public class PreferencesEditor extends MultiPageEditorPart
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void menuAboutToShow(IMenuManager menuManager)
   {
     ((IMenuListener)getEditorSite().getActionBarContributor()).menuAboutToShow(menuManager);

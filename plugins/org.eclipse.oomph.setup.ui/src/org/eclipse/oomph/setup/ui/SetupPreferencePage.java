@@ -50,6 +50,7 @@ public class SetupPreferencePage extends FieldEditorPreferencePage implements IW
   {
   }
 
+  @Override
   public void init(IWorkbench workbench)
   {
     this.workbench = workbench;

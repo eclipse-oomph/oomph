@@ -85,7 +85,7 @@ public class SyncAdapterFactory extends AdapterFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  protected SyncSwitch<Adapter> modelSwitch = new SyncSwitch<Adapter>()
+  protected SyncSwitch<Adapter> modelSwitch = new SyncSwitch<>()
   {
     @Override
     public Adapter caseRemoteData(RemoteData object)

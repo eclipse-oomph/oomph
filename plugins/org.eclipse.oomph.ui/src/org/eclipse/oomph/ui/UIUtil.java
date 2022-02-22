@@ -149,6 +149,7 @@ public final class UIUtil
     final Display display = getDisplay();
     display.syncExec(new Runnable()
     {
+      @Override
       public void run()
       {
         shell[0] = display.getActiveShell();
@@ -198,6 +199,7 @@ public final class UIUtil
     {
       syncExec(new Runnable()
       {
+        @Override
         public void run()
         {
           Shell shell = null;
@@ -524,6 +526,7 @@ public final class UIUtil
 
       control.getDisplay().asyncExec(new Runnable()
       {
+        @Override
         public void run()
         {
           if (!control.isDisposed())
@@ -555,6 +558,7 @@ public final class UIUtil
 
       display.asyncExec(new Runnable()
       {
+        @Override
         public void run()
         {
           if (display.isDisposed())
@@ -613,6 +617,7 @@ public final class UIUtil
 
       control.getDisplay().syncExec(new Runnable()
       {
+        @Override
         public void run()
         {
           if (!control.isDisposed())
@@ -644,6 +649,7 @@ public final class UIUtil
 
       display.syncExec(new Runnable()
       {
+        @Override
         public void run()
         {
           if (display.isDisposed())
@@ -698,6 +704,7 @@ public final class UIUtil
 
       display.timerExec(milliseconds, new Runnable()
       {
+        @Override
         public void run()
         {
           if (display.isDisposed())
@@ -879,11 +886,11 @@ public final class UIUtil
           String tagName = t.toString();
           if ("table".equals(tagName)) //$NON-NLS-1$
           {
-            table = new ArrayList<List<StringBuilder>>();
+            table = new ArrayList<>();
           }
           else if ("tr".equals(tagName)) //$NON-NLS-1$
           {
-            row = new ArrayList<StringBuilder>();
+            row = new ArrayList<>();
             table.add(row);
           }
           else if ("td".equals(tagName)) //$NON-NLS-1$
@@ -1169,6 +1176,7 @@ public final class UIUtil
     {
     }
 
+    @Override
     public void run()
     {
       if (!control.isDisposed())

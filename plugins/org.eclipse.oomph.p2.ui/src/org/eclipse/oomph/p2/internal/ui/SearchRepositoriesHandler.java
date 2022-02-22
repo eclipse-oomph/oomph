@@ -19,6 +19,7 @@ import org.eclipse.core.commands.ExecutionException;
  */
 public class SearchRepositoriesHandler extends AbstractHandler
 {
+  @Override
   public Object execute(ExecutionEvent event) throws ExecutionException
   {
     RepositoryExplorer.getSearchEclipseRepositoriesDialog();

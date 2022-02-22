@@ -63,6 +63,7 @@ public final class ProjectConfigSynchronizer implements IStartup
 
   protected IResourceChangeListener resourceChangeListener = new IResourceChangeListener()
   {
+    @Override
     public void resourceChanged(IResourceChangeEvent event)
     {
       IResourceDelta delta = event.getDelta();
@@ -72,13 +73,14 @@ public final class ProjectConfigSynchronizer implements IStartup
         {
           class ResourceDeltaVisitor implements IResourceDeltaVisitor
           {
-            private Collection<IPath> changedPaths = new HashSet<IPath>();
+            private Collection<IPath> changedPaths = new HashSet<>();
 
             public Collection<IPath> getChangedPaths()
             {
               return changedPaths;
             }
 
+            @Override
             public boolean visit(final IResourceDelta delta)
             {
               int type = delta.getResource().getType();
@@ -117,6 +119,7 @@ public final class ProjectConfigSynchronizer implements IStartup
           {
             PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable()
             {
+              @Override
               public void run()
               {
                 final WorkspaceConfiguration newWorkspaceConfiguration = ProjectConfigUtil.getWorkspaceConfiguration();
@@ -124,7 +127,7 @@ public final class ProjectConfigSynchronizer implements IStartup
                 {
                   newWorkspaceConfiguration.updatePreferenceProfileReferences();
                   Resource newWorkspaceConfigurationResource = newWorkspaceConfiguration.eResource();
-                  Map<Property, Property> propertyMap = new LinkedHashMap<Property, Property>();
+                  Map<Property, Property> propertyMap = new LinkedHashMap<>();
                   for (IPath preferenceNodePath : changedPaths)
                   {
                     String projectName = preferenceNodePath.segment(0);
@@ -174,7 +177,7 @@ public final class ProjectConfigSynchronizer implements IStartup
                       dialogCreator = true;
                     }
 
-                    Map<Property, Property> managedProperties = new HashMap<Property, Property>();
+                    Map<Property, Property> managedProperties = new HashMap<>();
                     for (Map.Entry<Property, Property> propertyEntry : propertyMap.entrySet())
                     {
                       Property property = propertyEntry.getKey();
@@ -246,6 +249,7 @@ public final class ProjectConfigSynchronizer implements IStartup
                       {
                         WORKSPACE_ROOT.getWorkspace().run(new IWorkspaceRunnable()
                         {
+                          @Override
                           public void run(IProgressMonitor monitor) throws CoreException
                           {
                             try
@@ -285,7 +289,7 @@ public final class ProjectConfigSynchronizer implements IStartup
               private Map<Property, Property> collectModifiedProperties(WorkspaceConfiguration workspaceConfiguration, PreferenceNode oldPreferenceNode,
                   PreferenceNode newPreferenceNode)
               {
-                LinkedHashMap<Property, Property> result = new LinkedHashMap<Property, Property>();
+                LinkedHashMap<Property, Property> result = new LinkedHashMap<>();
                 collectModifiedProperties(result, workspaceConfiguration, oldPreferenceNode, newPreferenceNode);
                 return result;
               }
@@ -350,6 +354,7 @@ public final class ProjectConfigSynchronizer implements IStartup
     ProjectConfigEditorPlugin.Implementation.setProjectConfigSynchronizer(this);
   }
 
+  @Override
   public void earlyStartup()
   {
     update();

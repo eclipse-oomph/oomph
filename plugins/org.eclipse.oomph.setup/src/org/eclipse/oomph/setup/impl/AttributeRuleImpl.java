@@ -101,6 +101,7 @@ public class AttributeRuleImpl extends ModelElementImpl implements AttributeRule
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public URI getAttributeURI()
   {
     return attributeURI;
@@ -111,6 +112,7 @@ public class AttributeRuleImpl extends ModelElementImpl implements AttributeRule
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setAttributeURI(URI newAttributeURI)
   {
     URI oldAttributeURI = attributeURI;
@@ -126,6 +128,7 @@ public class AttributeRuleImpl extends ModelElementImpl implements AttributeRule
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getValue()
   {
     return value;
@@ -136,6 +139,7 @@ public class AttributeRuleImpl extends ModelElementImpl implements AttributeRule
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setValue(String newValue)
   {
     String oldValue = value;

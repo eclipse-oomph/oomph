@@ -97,9 +97,9 @@ public class SetupTransferSupport
     return USER_RESOLVING_TRANSFERS.toArray(new Transfer[USER_RESOLVING_TRANSFERS.size()]);
   }
 
-  private final List<DropListener> dropListeners = new UniqueEList<SetupTransferSupport.DropListener>();
+  private final List<DropListener> dropListeners = new UniqueEList<>();
 
-  private final List<DropTarget> dropTargets = new ArrayList<DropTarget>();
+  private final List<DropTarget> dropTargets = new ArrayList<>();
 
   private final OomphEditingDomain editingDomain;
 
@@ -168,12 +168,13 @@ public class SetupTransferSupport
 
     commandStack.addCommandStackListener(new CommandStackListener()
     {
+      @Override
       public void commandStackChanged(EventObject event)
       {
         Command mostRecentCommand = commandStack.getMostRecentCommand();
         if (mostRecentCommand != null)
         {
-          Set<Resource> droppedResources = new LinkedHashSet<Resource>();
+          Set<Resource> droppedResources = new LinkedHashSet<>();
           Collection<?> affectedObjects = mostRecentCommand.getAffectedObjects();
           for (Object object : affectedObjects)
           {
@@ -254,7 +255,7 @@ public class SetupTransferSupport
   {
     try
     {
-      resources = new ArrayList<Resource>();
+      resources = new ArrayList<>();
       Command command = editingDomain.createCommand(PasteFromClipboardCommand.class, new CommandParameter(editingDomain.getResourceSet()));
       editingDomain.getCommandStack().execute(command);
       return resources;
@@ -342,16 +343,19 @@ abstract class ResourceCommand extends AbstractOverrideableCommand implements Ab
     return EMFEditPlugin.INSTANCE.getString("_UI_LoadResources_label"); //$NON-NLS-1$
   }
 
+  @Override
   public boolean validate(Object owner, float location, int operations, int operation, Collection<?> collection)
   {
     return false;
   }
 
+  @Override
   public int getFeedback()
   {
     return 0;
   }
 
+  @Override
   public int getOperation()
   {
     return DROP_COPY;
@@ -388,7 +392,7 @@ class AddToResourceCommand extends ResourceCommand
   @Override
   public void doExecute()
   {
-    resources = new ArrayList<Resource>();
+    resources = new ArrayList<>();
     ResourceSet resourceSet = domain.getResourceSet();
     for (Object object : collection)
     {
@@ -436,7 +440,7 @@ class LoadResourceCommand extends ResourceCommand
     {
       return collection;
     }
-    Collection<Object> copy = new ArrayList<Object>(collection.size());
+    Collection<Object> copy = new ArrayList<>(collection.size());
     for (Object object : collection)
     {
       copy.add(object instanceof URI ? extractSetupURLIfAutoLauncherURL((URI)object) : object);
@@ -474,7 +478,7 @@ class LoadResourceCommand extends ResourceCommand
   @Override
   public void doExecute()
   {
-    resources = new ArrayList<Resource>();
+    resources = new ArrayList<>();
     ResourceSet resourceSet = domain.getResourceSet();
     for (Object object : collection)
     {

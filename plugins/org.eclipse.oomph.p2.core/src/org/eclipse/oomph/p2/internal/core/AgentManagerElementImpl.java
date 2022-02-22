@@ -27,11 +27,13 @@ public abstract class AgentManagerElementImpl implements AgentManagerElement
 
   public abstract String getElementType();
 
+  @Override
   public final void delete()
   {
     delete(false);
   }
 
+  @Override
   public final void delete(boolean force)
   {
     if (!force && isUsed())

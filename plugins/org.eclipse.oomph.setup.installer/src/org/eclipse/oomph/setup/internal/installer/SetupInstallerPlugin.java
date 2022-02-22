@@ -144,6 +144,7 @@ public final class SetupInstallerPlugin extends OomphUIPlugin
       {
         UIUtil.syncExec(new Runnable()
         {
+          @Override
           public void run()
           {
             initializeFonts();

@@ -113,6 +113,7 @@ public class ProjectSetPackageImpl extends EPackageImpl implements ProjectSetPac
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getProjectSetImportTask()
   {
     return projectSetImportTaskEClass;
@@ -123,6 +124,7 @@ public class ProjectSetPackageImpl extends EPackageImpl implements ProjectSetPac
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getProjectSetImportTask_URL()
   {
     return (EAttribute)projectSetImportTaskEClass.getEStructuralFeatures().get(0);
@@ -133,6 +135,7 @@ public class ProjectSetPackageImpl extends EPackageImpl implements ProjectSetPac
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ProjectSetFactory getProjectSetFactory()
   {
     return (ProjectSetFactory)getEFactoryInstance();

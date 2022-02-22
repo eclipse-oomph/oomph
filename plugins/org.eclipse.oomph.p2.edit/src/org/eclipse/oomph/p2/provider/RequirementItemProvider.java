@@ -425,7 +425,7 @@ public class RequirementItemProvider extends ModelElementItemProvider
 
   public static Collection<?> filterAlternatives(Collection<?> alternatives)
   {
-    Collection<Object> result = new ArrayList<Object>();
+    Collection<Object> result = new ArrayList<>();
     for (Object object : alternatives)
     {
       if (object instanceof Requirement)
@@ -632,7 +632,7 @@ public class RequirementItemProvider extends ModelElementItemProvider
   {
     if (optional)
     {
-      List<Object> images = new ArrayList<Object>(2);
+      List<Object> images = new ArrayList<>(2);
       images.add(baseImage);
       images.add(P2EditPlugin.INSTANCE.getImage(greedy ? "full/ovr16/greedy" : "full/ovr16/optional")); //$NON-NLS-1$ //$NON-NLS-2$
       return new DecoratedImage(images);
@@ -645,7 +645,7 @@ public class RequirementItemProvider extends ModelElementItemProvider
   {
     if (max == 0)
     {
-      List<Object> images = new ArrayList<Object>(2);
+      List<Object> images = new ArrayList<>(2);
       images.add(baseImage);
       images.add(P2EditPlugin.INSTANCE.getImage("full/ovr16/excluded")); //$NON-NLS-1$
       return new DecoratedImage(images);
@@ -653,7 +653,7 @@ public class RequirementItemProvider extends ModelElementItemProvider
 
     if (min == 0)
     {
-      List<Object> images = new ArrayList<Object>(2);
+      List<Object> images = new ArrayList<>(2);
       images.add(baseImage);
       images.add(P2EditPlugin.INSTANCE.getImage(greedy ? "full/ovr16/greedy" : "full/ovr16/optional")); //$NON-NLS-1$ //$NON-NLS-2$
       return new DecoratedImage(images);

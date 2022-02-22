@@ -121,6 +121,7 @@ public class ParameterImpl extends ModelElementImpl implements Parameter
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getName()
   {
     return name;
@@ -131,6 +132,7 @@ public class ParameterImpl extends ModelElementImpl implements Parameter
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setName(String newName)
   {
     String oldName = name;
@@ -146,6 +148,7 @@ public class ParameterImpl extends ModelElementImpl implements Parameter
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getDescription()
   {
     return description;
@@ -156,6 +159,7 @@ public class ParameterImpl extends ModelElementImpl implements Parameter
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setDescription(String newDescription)
   {
     String oldDescription = description;
@@ -171,6 +175,7 @@ public class ParameterImpl extends ModelElementImpl implements Parameter
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getDefaultValue()
   {
     return defaultValue;
@@ -181,6 +186,7 @@ public class ParameterImpl extends ModelElementImpl implements Parameter
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setDefaultValue(String newDefaultValue)
   {
     String oldDefaultValue = defaultValue;

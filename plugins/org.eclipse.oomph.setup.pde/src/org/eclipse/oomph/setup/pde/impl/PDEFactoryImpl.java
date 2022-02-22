@@ -90,6 +90,7 @@ public class PDEFactoryImpl extends EFactoryImpl implements PDEFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public TargetPlatformTask createTargetPlatformTask()
   {
     TargetPlatformTaskImpl targetPlatformTask = new TargetPlatformTaskImpl();
@@ -101,6 +102,7 @@ public class PDEFactoryImpl extends EFactoryImpl implements PDEFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public APIBaselineTask createAPIBaselineTask()
   {
     APIBaselineTaskImpl apiBaselineTask = new APIBaselineTaskImpl();
@@ -112,6 +114,7 @@ public class PDEFactoryImpl extends EFactoryImpl implements PDEFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public APIBaselineFromTargetTask createAPIBaselineFromTargetTask()
   {
     APIBaselineFromTargetTaskImpl apiBaselineFromTargetTask = new APIBaselineFromTargetTaskImpl();
@@ -123,6 +126,7 @@ public class PDEFactoryImpl extends EFactoryImpl implements PDEFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public PDEPackage getPDEPackage()
   {
     return (PDEPackage)getEPackage();

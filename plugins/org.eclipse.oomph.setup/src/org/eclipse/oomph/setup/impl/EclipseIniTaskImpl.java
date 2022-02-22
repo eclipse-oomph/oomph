@@ -133,6 +133,7 @@ public class EclipseIniTaskImpl extends SetupTaskImpl implements EclipseIniTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getOption()
   {
     return option;
@@ -143,6 +144,7 @@ public class EclipseIniTaskImpl extends SetupTaskImpl implements EclipseIniTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setOption(String newOption)
   {
     String oldOption = option;
@@ -158,6 +160,7 @@ public class EclipseIniTaskImpl extends SetupTaskImpl implements EclipseIniTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getValue()
   {
     return value;
@@ -168,6 +171,7 @@ public class EclipseIniTaskImpl extends SetupTaskImpl implements EclipseIniTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setValue(String newValue)
   {
     String oldValue = value;
@@ -183,6 +187,7 @@ public class EclipseIniTaskImpl extends SetupTaskImpl implements EclipseIniTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public boolean isVm()
   {
     return vm;
@@ -193,6 +198,7 @@ public class EclipseIniTaskImpl extends SetupTaskImpl implements EclipseIniTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setVm(boolean newVm)
   {
     boolean oldVm = vm;
@@ -330,6 +336,7 @@ public class EclipseIniTaskImpl extends SetupTaskImpl implements EclipseIniTask
     return createToken(getOption());
   }
 
+  @Override
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     // Return early for bootstrap because the launcher name can't be determined until after the p2 task has performed.
@@ -352,6 +359,7 @@ public class EclipseIniTaskImpl extends SetupTaskImpl implements EclipseIniTask
     return result;
   }
 
+  @Override
   public void perform(SetupTaskContext context) throws Exception
   {
     if (file == null)
@@ -379,7 +387,7 @@ public class EclipseIniTaskImpl extends SetupTaskImpl implements EclipseIniTask
   {
     // Read the existing ini file with the system's default encoding, like the native launcher does.
     List<String> oldContents = IOUtil.readLines(file, null);
-    contents = new ArrayList<String>(oldContents);
+    contents = new ArrayList<>(oldContents);
     int vmargsIndex = contents.indexOf("-vmargs"); //$NON-NLS-1$
 
     String option = getOption();

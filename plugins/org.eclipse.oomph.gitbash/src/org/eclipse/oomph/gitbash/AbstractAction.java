@@ -39,11 +39,13 @@ public abstract class AbstractAction<TARGET> implements IObjectActionDelegate
     return targetPart;
   }
 
+  @Override
   public void setActivePart(IAction action, IWorkbenchPart targetPart)
   {
     this.targetPart = targetPart;
   }
 
+  @Override
   public void selectionChanged(IAction action, ISelection selection)
   {
     target = null;
@@ -55,6 +57,7 @@ public abstract class AbstractAction<TARGET> implements IObjectActionDelegate
     }
   }
 
+  @Override
   public void run(IAction action)
   {
     if (target != null)

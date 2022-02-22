@@ -50,16 +50,19 @@ public abstract class AbstractResolution extends WorkbenchMarkerResolution
     return marker;
   }
 
+  @Override
   public String getLabel()
   {
     return label;
   }
 
+  @Override
   public String getDescription()
   {
     return ""; //$NON-NLS-1$
   }
 
+  @Override
   public final Image getImage()
   {
     ImageRegistry imageRegistry = Activator.getPlugin().getImageRegistry();
@@ -69,7 +72,7 @@ public abstract class AbstractResolution extends WorkbenchMarkerResolution
   @Override
   public IMarker[] findOtherMarkers(IMarker[] markers)
   {
-    List<IMarker> result = new ArrayList<IMarker>();
+    List<IMarker> result = new ArrayList<>();
     for (IMarker marker : markers)
     {
       try
@@ -102,6 +105,7 @@ public abstract class AbstractResolution extends WorkbenchMarkerResolution
         {
           ResourcesPlugin.getWorkspace().run(new IWorkspaceRunnable()
           {
+            @Override
             public void run(IProgressMonitor monitor) throws CoreException
             {
               AbstractResolution.super.run(markers, monitor);
@@ -118,6 +122,7 @@ public abstract class AbstractResolution extends WorkbenchMarkerResolution
     }.schedule();
   }
 
+  @Override
   public final void run(IMarker marker)
   {
     try

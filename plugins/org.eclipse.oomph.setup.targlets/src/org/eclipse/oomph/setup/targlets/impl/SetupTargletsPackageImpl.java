@@ -130,6 +130,7 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getTargletTask()
   {
     return targletTaskEClass;
@@ -140,6 +141,7 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getTargletTask_TargetName()
   {
     return (EAttribute)targletTaskEClass.getEStructuralFeatures().get(9);
@@ -150,6 +152,7 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getTargletTask_ActivateTarget()
   {
     return (EAttribute)targletTaskEClass.getEStructuralFeatures().get(10);
@@ -160,6 +163,7 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getTargletTask_Targlets()
   {
     return (EReference)targletTaskEClass.getEStructuralFeatures().get(0);
@@ -170,6 +174,7 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getTargletTask_TargletURIs()
   {
     return (EAttribute)targletTaskEClass.getEStructuralFeatures().get(1);
@@ -180,6 +185,7 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getTargletTask_OperatingSystem()
   {
     return (EAttribute)targletTaskEClass.getEStructuralFeatures().get(2);
@@ -190,6 +196,7 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getTargletTask_WindowingSystem()
   {
     return (EAttribute)targletTaskEClass.getEStructuralFeatures().get(3);
@@ -200,6 +207,7 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getTargletTask_Architecture()
   {
     return (EAttribute)targletTaskEClass.getEStructuralFeatures().get(4);
@@ -210,6 +218,7 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getTargletTask_Locale()
   {
     return (EAttribute)targletTaskEClass.getEStructuralFeatures().get(5);
@@ -220,6 +229,7 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getTargletTask_ProgramArguments()
   {
     return (EAttribute)targletTaskEClass.getEStructuralFeatures().get(6);
@@ -230,6 +240,7 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getTargletTask_VMArguments()
   {
     return (EAttribute)targletTaskEClass.getEStructuralFeatures().get(7);
@@ -240,6 +251,7 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getTargletTask_ImplicitDependencies()
   {
     return (EReference)targletTaskEClass.getEStructuralFeatures().get(8);
@@ -250,6 +262,7 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getImplicitDependency()
   {
     return implicitDependencyEClass;
@@ -260,6 +273,7 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getImplicitDependency_ID()
   {
     return (EAttribute)implicitDependencyEClass.getEStructuralFeatures().get(0);
@@ -270,6 +284,7 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getImplicitDependency_Version()
   {
     return (EAttribute)implicitDependencyEClass.getEStructuralFeatures().get(1);
@@ -280,6 +295,7 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public SetupTargletsFactory getSetupTargletsFactory()
   {
     return (SetupTargletsFactory)getEFactoryInstance();

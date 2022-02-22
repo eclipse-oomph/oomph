@@ -84,6 +84,7 @@ public class LaunchingFactoryImpl extends EFactoryImpl implements LaunchingFacto
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public LaunchTask createLaunchTask()
   {
     LaunchTaskImpl launchTask = new LaunchTaskImpl();
@@ -95,6 +96,7 @@ public class LaunchingFactoryImpl extends EFactoryImpl implements LaunchingFacto
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public LaunchingPackage getLaunchingPackage()
   {
     return (LaunchingPackage)getEPackage();

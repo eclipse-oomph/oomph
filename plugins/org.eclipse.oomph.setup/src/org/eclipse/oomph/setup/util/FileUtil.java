@@ -147,7 +147,7 @@ public final class FileUtil
 
   private static List<File> listAllFiles(File file)
   {
-    List<File> result = new ArrayList<File>();
+    List<File> result = new ArrayList<>();
     if (file != null && file.exists())
     {
       listAllFiles(file, result);

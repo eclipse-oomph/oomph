@@ -286,7 +286,7 @@ public class NLSReport
     {
       Class<?> messagesClass = CommonPlugin.loadClass(pluginID, messagesClassName);
       Field[] fields = messagesClass.getFields();
-      Map<String, String> messages = new LinkedHashMap<String, String>();
+      Map<String, String> messages = new LinkedHashMap<>();
       for (Field field : fields)
       {
         Object value = field.get(null);

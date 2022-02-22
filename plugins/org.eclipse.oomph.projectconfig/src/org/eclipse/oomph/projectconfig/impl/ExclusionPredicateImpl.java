@@ -74,11 +74,12 @@ public class ExclusionPredicateImpl extends PredicateImpl implements ExclusionPr
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<PreferenceProfile> getExcludedPreferenceProfiles()
   {
     if (excludedPreferenceProfiles == null)
     {
-      excludedPreferenceProfiles = new EObjectResolvingEList<PreferenceProfile>(PreferenceProfile.class, this,
+      excludedPreferenceProfiles = new EObjectResolvingEList<>(PreferenceProfile.class, this,
           ProjectConfigPackage.EXCLUSION_PREDICATE__EXCLUDED_PREFERENCE_PROFILES);
     }
     return excludedPreferenceProfiles;

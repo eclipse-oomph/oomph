@@ -23,7 +23,7 @@ import java.util.Map;
  */
 public final class ServiceUtil
 {
-  private static Map<Object, ServiceReference<?>> services = new IdentityHashMap<Object, ServiceReference<?>>();
+  private static Map<Object, ServiceReference<?>> services = new IdentityHashMap<>();
 
   private ServiceUtil()
   {

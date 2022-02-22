@@ -86,7 +86,7 @@ public class BuilderPredicateItemProvider extends PredicateItemProvider
       @Override
       public Collection<?> getChoiceOfValues(Object object)
       {
-        List<String> result = new ArrayList<String>();
+        List<String> result = new ArrayList<>();
         for (IProject project : WORKSPACE_ROOT.getProjects())
         {
           try

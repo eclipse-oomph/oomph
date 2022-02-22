@@ -88,27 +88,31 @@ public class ManifestDiscovery
 {
   public static final ManifestDiscovery INSTANCE = new ManifestDiscovery();
 
-  private static final Set<DiscoverListener> DISCOVERY_LISTENERS = new HashSet<DiscoverListener>();
+  private static final Set<DiscoverListener> DISCOVERY_LISTENERS = new HashSet<>();
 
   private static List<ITargletContainer> targletContainers;
 
   private final IWindowListener windowListener = new IWindowListener()
   {
+    @Override
     public void windowOpened(IWorkbenchWindow window)
     {
       window.addPageListener(pageListener);
     }
 
+    @Override
     public void windowClosed(IWorkbenchWindow window)
     {
       window.removePageListener(pageListener);
     }
 
+    @Override
     public void windowActivated(IWorkbenchWindow window)
     {
       // Ignore.
     }
 
+    @Override
     public void windowDeactivated(IWorkbenchWindow window)
     {
       // Ignore.
@@ -117,16 +121,19 @@ public class ManifestDiscovery
 
   private final IPageListener pageListener = new IPageListener()
   {
+    @Override
     public void pageOpened(IWorkbenchPage page)
     {
       page.addPartListener(partListener);
     }
 
+    @Override
     public void pageClosed(IWorkbenchPage page)
     {
       page.removePartListener(partListener);
     }
 
+    @Override
     public void pageActivated(IWorkbenchPage page)
     {
       // Ignore.
@@ -135,6 +142,7 @@ public class ManifestDiscovery
 
   private final IPartListener partListener = new IPartListener()
   {
+    @Override
     public void partOpened(IWorkbenchPart part)
     {
       try
@@ -152,21 +160,25 @@ public class ManifestDiscovery
       }
     }
 
+    @Override
     public void partClosed(IWorkbenchPart part)
     {
       // Ignore.
     }
 
+    @Override
     public void partActivated(IWorkbenchPart part)
     {
       // Ignore.
     }
 
+    @Override
     public void partDeactivated(IWorkbenchPart part)
     {
       // Ignore.
     }
 
+    @Override
     public void partBroughtToTop(IWorkbenchPart part)
     {
       // Ignore.
@@ -175,6 +187,7 @@ public class ManifestDiscovery
 
   private final IPageChangedListener pageChangedListener = new IPageChangedListener()
   {
+    @Override
     public void pageChanged(PageChangedEvent event)
     {
       Object page = event.getSelectedPage();
@@ -192,6 +205,7 @@ public class ManifestDiscovery
 
     UIUtil.asyncExec(workbench.getDisplay(), new Runnable()
     {
+      @Override
       public void run()
       {
         try
@@ -227,6 +241,7 @@ public class ManifestDiscovery
 
           TargetPlatformUtil.addListener(new TargetPlatformListener()
           {
+            @Override
             public void targetDefinitionActivated(ITargetDefinition oldTargetDefinition, ITargetDefinition newTargetDefinition) throws Exception
             {
               handleTargetDefinition(workbench, newTargetDefinition);
@@ -308,6 +323,7 @@ public class ManifestDiscovery
 
     workbench.getDisplay().syncExec(new Runnable()
     {
+      @Override
       public void run()
       {
         for (DiscoverListener listener : DISCOVERY_LISTENERS)
@@ -320,7 +336,7 @@ public class ManifestDiscovery
 
   private List<ITargletContainer> getTargletContainers(ITargetDefinition targetDefinition)
   {
-    List<ITargletContainer> result = new ArrayList<ITargletContainer>();
+    List<ITargletContainer> result = new ArrayList<>();
 
     if (targetDefinition != null)
     {
@@ -367,6 +383,7 @@ public class ManifestDiscovery
       DISCOVERY_LISTENERS.add(this);
       button.addDisposeListener(new DisposeListener()
       {
+        @Override
         public void widgetDisposed(DisposeEvent e)
         {
           DISCOVERY_LISTENERS.remove(DiscoverListener.this);
@@ -506,7 +523,7 @@ public class ManifestDiscovery
       ImportPackageHeader header = (ImportPackageHeader)bundle.getManifestHeader(Constants.IMPORT_PACKAGE);
       if (header != null)
       {
-        Set<String> names = new HashSet<String>();
+        Set<String> names = new HashSet<>();
         for (Requirement requirement : requirements)
         {
           String name = requirement.getName();

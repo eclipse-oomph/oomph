@@ -87,6 +87,7 @@ public class CommentPredicateImpl extends PredicateImpl implements CommentPredic
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getPattern()
   {
     return pattern;
@@ -107,6 +108,7 @@ public class CommentPredicateImpl extends PredicateImpl implements CommentPredic
     }
   }
 
+  @Override
   public void setPattern(String newPattern)
   {
     setPatternGen(newPattern);

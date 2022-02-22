@@ -44,6 +44,7 @@ public class BackgroundProgressPart extends ProgressMonitorPart
   {
     updater.update(new Runnable()
     {
+      @Override
       public void run()
       {
         BackgroundProgressPart.super.beginTask(name, totalWork);
@@ -56,6 +57,7 @@ public class BackgroundProgressPart extends ProgressMonitorPart
   {
     updater.update(new Runnable()
     {
+      @Override
       public void run()
       {
         BackgroundProgressPart.super.setTaskName(name);
@@ -68,6 +70,7 @@ public class BackgroundProgressPart extends ProgressMonitorPart
   {
     updater.update(new Runnable()
     {
+      @Override
       public void run()
       {
         BackgroundProgressPart.super.subTask(name);
@@ -80,6 +83,7 @@ public class BackgroundProgressPart extends ProgressMonitorPart
   {
     updater.update(new Runnable()
     {
+      @Override
       public void run()
       {
         BackgroundProgressPart.super.done();
@@ -92,6 +96,7 @@ public class BackgroundProgressPart extends ProgressMonitorPart
   {
     updater.update(new Runnable()
     {
+      @Override
       public void run()
       {
         BackgroundProgressPart.super.internalWorked(work);
@@ -104,6 +109,7 @@ public class BackgroundProgressPart extends ProgressMonitorPart
   {
     updater.update(new Runnable()
     {
+      @Override
       public void run()
       {
         BackgroundProgressPart.super.worked(work);
@@ -118,6 +124,7 @@ public class BackgroundProgressPart extends ProgressMonitorPart
   {
     private List<Runnable> runnables;
 
+    @Override
     public void run()
     {
       List<Runnable> currentRunnables;
@@ -140,7 +147,7 @@ public class BackgroundProgressPart extends ProgressMonitorPart
       {
         if (runnables == null)
         {
-          runnables = new ArrayList<Runnable>();
+          runnables = new ArrayList<>();
           dispatch = true;
         }
         else

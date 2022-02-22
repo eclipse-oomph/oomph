@@ -151,11 +151,13 @@ public class WorkingSetsPreferencePage extends AbstractPreferencePage
     Display display = activeWorkbenchWindow.getShell().getDisplay();
     display.asyncExec(new Runnable()
     {
+      @Override
       public void run()
       {
         try
         {
-          IEditorInput editorInput = new URIEditorInput(WorkingSetsUtil.WORKING_SET_GROUP_PREFERENCE_RESOURCE_URI, Messages.WorkingSetsPreferencePage_DynamiWorkingSetPreferences_title);
+          IEditorInput editorInput = new URIEditorInput(WorkingSetsUtil.WORKING_SET_GROUP_PREFERENCE_RESOURCE_URI,
+              Messages.WorkingSetsPreferencePage_DynamiWorkingSetPreferences_title);
           IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
           activePage.openEditor(editorInput, "org.eclipse.oomph.workingsets.presentation.WorkingSetsEditorID"); //$NON-NLS-1$
           activePage.showView(IPageLayout.ID_PROP_SHEET);

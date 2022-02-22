@@ -104,8 +104,8 @@ public class TargletTests extends AbstractP2Test
 
   private static void assertImportedProjects(String... names)
   {
-    Set<String> expected = new HashSet<String>(Arrays.asList(names));
-    Set<String> actual = new HashSet<String>();
+    Set<String> expected = new HashSet<>(Arrays.asList(names));
+    Set<String> actual = new HashSet<>();
 
     IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
     for (IProject project : projects)
@@ -118,8 +118,8 @@ public class TargletTests extends AbstractP2Test
 
   private void assertTargetPlatform(String... ius)
   {
-    Set<String> expected = new HashSet<String>(Arrays.asList(ius));
-    Set<String> actual = new HashSet<String>();
+    Set<String> expected = new HashSet<>(Arrays.asList(ius));
+    Set<String> actual = new HashSet<>();
 
     TargetBundle[] bundles = target.getAllBundles();
     if (bundles != null)
@@ -151,6 +151,7 @@ public class TargletTests extends AbstractP2Test
 
     TargetPlatformUtil.runWithTargetPlatformService(new TargetPlatformRunnable<Object>()
     {
+      @Override
       public Object run(ITargetPlatformService service) throws CoreException
       {
         for (ITargetHandle targetHandle : service.getTargets(LOGGER))
@@ -201,7 +202,7 @@ public class TargletTests extends AbstractP2Test
     assertTargetPlatform();
     assertImportedProjects();
 
-    EList<Requirement> requirements = new BasicEList<Requirement>();
+    EList<Requirement> requirements = new BasicEList<>();
     requirements.add(P2Factory.eINSTANCE.createRequirement("com.foo.project1.feature.group"));
 
     Targlet targlet = setTarglet(null, requirements);

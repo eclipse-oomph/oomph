@@ -239,7 +239,7 @@ public class WorkspaceItemProvider extends ScopeItemProvider
   protected Command factorAddCommand(EditingDomain domain, CommandParameter commandParameter)
   {
     Collection<?> collection = commandParameter.getCollection();
-    Collection<Object> streams = new ArrayList<Object>();
+    Collection<Object> streams = new ArrayList<>();
     if (collection != null)
     {
       for (Object object : collection)

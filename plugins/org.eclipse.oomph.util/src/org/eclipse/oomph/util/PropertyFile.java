@@ -92,7 +92,7 @@ public class PropertyFile
       // Ignore.
     }
 
-    return new LinkedHashMap<String, String>();
+    return new LinkedHashMap<>();
   }
 
   public void saveProperties(Map<String, String> properties)

@@ -45,7 +45,7 @@ public abstract class PersistentMap<E>
 
   private final File lockFile;
 
-  private final Map<String, E> elements = new LinkedHashMap<String, E>();
+  private final Map<String, E> elements = new LinkedHashMap<>();
 
   public PersistentMap(File file)
   {
@@ -79,6 +79,7 @@ public abstract class PersistentMap<E>
       {
         load(new KeyHandler()
         {
+          @Override
           public void handleKey(String key, String extraInfo) throws Exception
           {
             E element = loadElement(key, extraInfo);
@@ -126,12 +127,12 @@ public abstract class PersistentMap<E>
 
   public final synchronized Set<String> getElementKeys()
   {
-    return new HashSet<String>(elements.keySet());
+    return new HashSet<>(elements.keySet());
   }
 
   public final synchronized Collection<E> getElements()
   {
-    return new ArrayList<E>(elements.values());
+    return new ArrayList<>(elements.values());
   }
 
   public final synchronized E getElement(String key)
@@ -281,7 +282,7 @@ public abstract class PersistentMap<E>
         tempWriter = new FileWriter(tempFile);
         BufferedWriter bufferedWriter = new BufferedWriter(tempWriter);
 
-        List<String> sortedKeys = new ArrayList<String>(elements.keySet());
+        List<String> sortedKeys = new ArrayList<>(elements.keySet());
         Collections.sort(sortedKeys);
 
         for (String key : sortedKeys)
@@ -323,13 +324,14 @@ public abstract class PersistentMap<E>
   {
     final boolean[] changed = { false };
 
-    final Set<String> fileKeys = new HashSet<String>();
+    final Set<String> fileKeys = new HashSet<>();
     fileKeys.add(addedKey);
 
     try
     {
       load(new KeyHandler()
       {
+        @Override
         public void handleKey(String key, String extraInfo) throws Exception
         {
           fileKeys.add(key);

@@ -42,21 +42,25 @@ public class EarlyStartup implements IStartup
 
   private final IWindowListener windowListener = new IWindowListener()
   {
+    @Override
     public void windowOpened(IWorkbenchWindow window)
     {
       window.addPageListener(pageListener);
     }
 
+    @Override
     public void windowClosed(IWorkbenchWindow window)
     {
       window.removePageListener(pageListener);
     }
 
+    @Override
     public void windowActivated(IWorkbenchWindow window)
     {
       // Ignore.
     }
 
+    @Override
     public void windowDeactivated(IWorkbenchWindow window)
     {
       // Ignore.
@@ -65,16 +69,19 @@ public class EarlyStartup implements IStartup
 
   private final IPageListener pageListener = new IPageListener()
   {
+    @Override
     public void pageOpened(IWorkbenchPage page)
     {
       page.addPartListener(partListener);
     }
 
+    @Override
     public void pageClosed(IWorkbenchPage page)
     {
       page.removePartListener(partListener);
     }
 
+    @Override
     public void pageActivated(IWorkbenchPage page)
     {
       // Ignore.
@@ -83,6 +90,7 @@ public class EarlyStartup implements IStartup
 
   private final IPartListener partListener = new IPartListener()
   {
+    @Override
     public void partOpened(IWorkbenchPart part)
     {
       try
@@ -98,27 +106,32 @@ public class EarlyStartup implements IStartup
       }
     }
 
+    @Override
     public void partClosed(IWorkbenchPart part)
     {
       // Ignore.
     }
 
+    @Override
     public void partActivated(IWorkbenchPart part)
     {
       // Ignore.
     }
 
+    @Override
     public void partDeactivated(IWorkbenchPart part)
     {
       // Ignore.
     }
 
+    @Override
     public void partBroughtToTop(IWorkbenchPart part)
     {
       // Ignore.
     }
   };
 
+  @Override
   public void earlyStartup()
   {
     if (DECORATE)
@@ -140,6 +153,7 @@ public class EarlyStartup implements IStartup
                 {
                   workbench.getDisplay().syncExec(new Runnable()
                   {
+                    @Override
                     public void run()
                     {
                       handleJUnitView(part);

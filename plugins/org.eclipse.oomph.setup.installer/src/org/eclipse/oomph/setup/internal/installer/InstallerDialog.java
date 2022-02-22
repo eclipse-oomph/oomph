@@ -12,6 +12,7 @@ package org.eclipse.oomph.setup.internal.installer;
 
 import org.eclipse.oomph.internal.ui.AccessUtil;
 import org.eclipse.oomph.internal.ui.UIPlugin;
+import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.ProfileTransaction.Resolution;
 import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
@@ -23,6 +24,7 @@ import org.eclipse.oomph.util.ExceptionHandler;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.equinox.p2.core.UIServices;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.IPageChangedListener;
@@ -70,7 +72,7 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
    */
   public InstallerDialog(Shell parentShell, boolean restarted)
   {
-    this(parentShell, new Installer(new SelectionMemento()), restarted);
+    this(parentShell, new Installer(new SelectionMemento(), P2Util.getCurrentProvisioningAgent().getService(UIServices.class)), restarted);
   }
 
   public InstallerDialog(Shell parentShell, Installer installer, boolean restarted)
@@ -90,6 +92,7 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
     return (Installer)getWizard();
   }
 
+  @Override
   public boolean refreshJREs()
   {
     ProductPage page = (ProductPage)getWizard().getPage(ProductPage.PAGE_NAME);
@@ -109,6 +112,7 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
     final Shell shell = getShell();
     shell.addTraverseListener(new TraverseListener()
     {
+      @Override
       public void keyTraversed(TraverseEvent e)
       {
         if (e.detail == SWT.TRAVERSE_ESCAPE)
@@ -122,6 +126,7 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
 
     shell.getDisplay().asyncExec(new Runnable()
     {
+      @Override
       public void run()
       {
         final Installer installer = getInstaller();
@@ -130,6 +135,7 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
           final Runnable checkIndex = this;
           shell.getDisplay().asyncExec(new Runnable()
           {
+            @Override
             public void run()
             {
               if (!shell.isDisposed())
@@ -203,6 +209,18 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
       }
     });
     AccessUtil.setKey(sshSettingsToolItem, "ssh"); //$NON-NLS-1$
+
+    ToolItem trustSettingsToolItem = createToolItem(toolBar, "trust.png", Messages.InstallerDialog_TrustSettings_message); //$NON-NLS-1$
+    trustSettingsToolItem.addSelectionListener(new SelectionAdapter()
+    {
+      @Override
+      public void widgetSelected(SelectionEvent e)
+      {
+        Dialog dialog = new TrustDialog(getShell());
+        dialog.open();
+      }
+    });
+    AccessUtil.setKey(trustSettingsToolItem, "trust"); //$NON-NLS-1$
 
     ToolItem simpleToolItem = createToolItem(toolBar, "simple.png", Messages.InstallerDialog_SwitchToSimpleModel_message); //$NON-NLS-1$
     simpleToolItem.addSelectionListener(new SelectionAdapter()
@@ -282,14 +300,16 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
     {
       Runnable successRunnable = new Runnable()
       {
+        @Override
         public void run()
         {
           restart();
         }
       };
 
-      ExceptionHandler<CoreException> exceptionHandler = new ExceptionHandler<CoreException>()
+      ExceptionHandler<CoreException> exceptionHandler = new ExceptionHandler<>()
       {
+        @Override
         public void handleException(CoreException ex)
         {
           updateError = ex.getStatus();
@@ -298,6 +318,7 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
 
       Runnable finalRunnable = new Runnable()
       {
+        @Override
         public void run()
         {
           updateResolution = null;
@@ -326,6 +347,7 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
     {
       updateToolItem.getDisplay().asyncExec(new Runnable()
       {
+        @Override
         public void run()
         {
           if (updateToolItem == null || updateToolItem.isDisposed())
@@ -403,6 +425,7 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
     thread.start();
   }
 
+  @Override
   public int show()
   {
     setBlockOnOpen(false);
@@ -413,6 +436,7 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
     return getReturnCode();
   }
 
+  @Override
   public void showAbout()
   {
     new AboutDialog(getShell(), version).open();
@@ -435,6 +459,7 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
    */
   private final class PageChangedListener implements IPageChangedListener
   {
+    @Override
     public void pageChanged(PageChangedEvent event)
     {
       if (event.getSelectedPage() instanceof ConfirmationPage)
@@ -480,6 +505,7 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
 
           versionLink.getDisplay().asyncExec(new Runnable()
           {
+            @Override
             public void run()
             {
               try

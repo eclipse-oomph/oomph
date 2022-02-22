@@ -78,6 +78,7 @@ public abstract class ComponentModelWizard extends Wizard implements INewWizard
   /**
    * This just records the information.
    */
+  @Override
   public void init(IWorkbench workbench, IStructuredSelection selection)
   {
     this.workbench = workbench;
@@ -170,7 +171,7 @@ public abstract class ComponentModelWizard extends Wizard implements INewWizard
               resource.getContents().add(rootObject);
             }
 
-            Map<Object, Object> options = new HashMap<Object, Object>();
+            Map<Object, Object> options = new HashMap<>();
             options.put(XMLResource.OPTION_ENCODING, "UTF-8"); //$NON-NLS-1$
             resource.save(options);
           }
@@ -196,6 +197,7 @@ public abstract class ComponentModelWizard extends Wizard implements INewWizard
         final ISelection targetSelection = new StructuredSelection(file);
         getShell().getDisplay().asyncExec(new Runnable()
         {
+          @Override
           public void run()
           {
             ((ISetSelectionTarget)activePart).selectReveal(targetSelection);
@@ -251,6 +253,7 @@ public abstract class ComponentModelWizard extends Wizard implements INewWizard
       setErrorMessage(TargletEditorPlugin.INSTANCE.getString("_UI_ErrorPage_description")); //$NON-NLS-1$
     }
 
+    @Override
     public void createControl(Composite parent)
     {
       Label label = new Label(parent, SWT.WRAP);
@@ -299,6 +302,7 @@ public abstract class ComponentModelWizard extends Wizard implements INewWizard
 
       return new WizardPage(getModelName())
       {
+        @Override
         public void createControl(Composite parent)
         {
           Composite composite = new Composite(parent, SWT.NONE);
@@ -313,6 +317,7 @@ public abstract class ComponentModelWizard extends Wizard implements INewWizard
           idText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
           idText.addModifyListener(new ModifyListener()
           {
+            @Override
             public void modifyText(ModifyEvent e)
             {
               model.setID(idText.getText());
@@ -329,6 +334,7 @@ public abstract class ComponentModelWizard extends Wizard implements INewWizard
           versionText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
           versionText.addModifyListener(new ModifyListener()
           {
+            @Override
             public void modifyText(ModifyEvent e)
             {
               try
@@ -417,6 +423,7 @@ public abstract class ComponentModelWizard extends Wizard implements INewWizard
     {
       return new WizardPage(getModelName())
       {
+        @Override
         public void createControl(Composite parent)
         {
           Label label = new Label(parent, SWT.WRAP);

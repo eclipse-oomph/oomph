@@ -81,6 +81,7 @@ public class ProjectCatalogImpl extends ScopeImpl implements ProjectCatalog
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Index getIndex()
   {
     if (eContainerFeatureID() != SetupPackage.PROJECT_CATALOG__INDEX)
@@ -120,6 +121,7 @@ public class ProjectCatalogImpl extends ScopeImpl implements ProjectCatalog
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setIndex(Index newIndex)
   {
     if (newIndex != eInternalContainer() || eContainerFeatureID() != SetupPackage.PROJECT_CATALOG__INDEX && newIndex != null)
@@ -154,6 +156,7 @@ public class ProjectCatalogImpl extends ScopeImpl implements ProjectCatalog
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public ProjectContainer getProjectContainer()
   {
     return null;
@@ -164,6 +167,7 @@ public class ProjectCatalogImpl extends ScopeImpl implements ProjectCatalog
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public ProjectCatalog getProjectCatalog()
   {
     return this;
@@ -174,11 +178,12 @@ public class ProjectCatalogImpl extends ScopeImpl implements ProjectCatalog
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<Project> getProjects()
   {
     if (projects == null)
     {
-      projects = new EObjectContainmentWithInverseEList.Resolving<Project>(Project.class, this, SetupPackage.PROJECT_CATALOG__PROJECTS,
+      projects = new EObjectContainmentWithInverseEList.Resolving<>(Project.class, this, SetupPackage.PROJECT_CATALOG__PROJECTS,
           SetupPackage.PROJECT__PROJECT_CONTAINER);
     }
     return projects;

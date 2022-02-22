@@ -35,7 +35,7 @@ public final class RootAnalyzer
 
   public static Set<IInstallableUnit> getRootUnits(IQueryable<IInstallableUnit> queryable, IProgressMonitor monitor)
   {
-    Set<IInstallableUnit> rootIUs = new HashSet<IInstallableUnit>();
+    Set<IInstallableUnit> rootIUs = new HashSet<>();
 
     for (IInstallableUnit iu : P2Util.asIterable(queryable.query(QueryUtil.createIUAnyQuery(), null)))
     {
@@ -77,9 +77,9 @@ public final class RootAnalyzer
 
   public static void removeImplicitUnits(Set<IInstallableUnit> ius, IQueryable<IInstallableUnit> queryable, IProgressMonitor monitor, boolean onlyIfRedundant)
   {
-    Set<IInstallableUnit> rootIUs = new HashSet<IInstallableUnit>(ius);
-    Set<IInstallableUnit> currentlyVisitingIUs = new HashSet<IInstallableUnit>();
-    Set<IInstallableUnit> visitedIUs = new HashSet<IInstallableUnit>();
+    Set<IInstallableUnit> rootIUs = new HashSet<>(ius);
+    Set<IInstallableUnit> currentlyVisitingIUs = new HashSet<>();
+    Set<IInstallableUnit> visitedIUs = new HashSet<>();
 
     for (IInstallableUnit iu : ius)
     {

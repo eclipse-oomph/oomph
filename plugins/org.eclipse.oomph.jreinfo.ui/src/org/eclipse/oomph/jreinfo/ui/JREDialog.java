@@ -55,6 +55,7 @@ public class JREDialog extends OomphDialog
 
     UIUtil.asyncExec(new Runnable()
     {
+      @Override
       public void run()
       {
         setMessage(getDefaultMessage());

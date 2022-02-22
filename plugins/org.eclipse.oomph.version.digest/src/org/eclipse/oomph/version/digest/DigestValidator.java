@@ -58,7 +58,7 @@ import java.util.WeakHashMap;
  */
 public class DigestValidator extends VersionValidator
 {
-  private static final Map<IRelease, ReleaseDigest> RELEASE_DIGESTS = new WeakHashMap<IRelease, ReleaseDigest>();
+  private static final Map<IRelease, ReleaseDigest> RELEASE_DIGESTS = new WeakHashMap<>();
 
   public DigestValidator()
   {
@@ -159,7 +159,7 @@ public class DigestValidator extends VersionValidator
     if (resource instanceof IContainer)
     {
       IContainer container = (IContainer)resource;
-      List<DigestValidatorState> memberStates = new ArrayList<DigestValidatorState>();
+      List<DigestValidatorState> memberStates = new ArrayList<>();
       for (IResource member : container.members())
       {
         DigestValidatorState memberState = validateFull(member, result, componentModel, monitor);
@@ -213,7 +213,7 @@ public class DigestValidator extends VersionValidator
       case IResourceDelta.CHANGED:
         if (resource instanceof IContainer)
         {
-          Set<DigestValidatorState> memberStates = new HashSet<DigestValidatorState>();
+          Set<DigestValidatorState> memberStates = new HashSet<>();
           for (IResourceDelta memberDelta : delta.getAffectedChildren())
           {
             IResource memberResource = memberDelta.getResource();
@@ -327,7 +327,7 @@ public class DigestValidator extends VersionValidator
 
   private byte[] getFolderDigest(Collection<DigestValidatorState> states) throws Exception
   {
-    List<DigestValidatorState> list = new ArrayList<DigestValidatorState>(states);
+    List<DigestValidatorState> list = new ArrayList<>(states);
     Collections.sort(list);
 
     MessageDigest digest = MessageDigest.getInstance("SHA"); //$NON-NLS-1$
@@ -540,7 +540,7 @@ public class DigestValidator extends VersionValidator
         org.eclipse.pde.internal.core.iproduct.ILauncherInfo.WIN32_48_LOW, org.eclipse.pde.internal.core.iproduct.ILauncherInfo.WIN32_48_HIGH,
         org.eclipse.pde.internal.core.iproduct.ILauncherInfo.WIN32_256_HIGH };
 
-    private Set<String> considered = new HashSet<String>();
+    private Set<String> considered = new HashSet<>();
 
     public BuildModel()
     {

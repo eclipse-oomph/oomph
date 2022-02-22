@@ -51,13 +51,14 @@ public class AnimatedCanvas extends Canvas
 
   private final Runnable runnable = new Runnable()
   {
+    @Override
     public void run()
     {
       doRun();
     }
   };
 
-  private final List<Animator> animators = new ArrayList<Animator>();
+  private final List<Animator> animators = new ArrayList<>();
 
   private int timerInterval;
 
@@ -77,11 +78,13 @@ public class AnimatedCanvas extends Canvas
 
     addFocusListener(new FocusListener()
     {
+      @Override
       public void focusGained(FocusEvent e)
       {
         redraw();
       }
 
+      @Override
       public void focusLost(FocusEvent e)
       {
         redraw();
@@ -90,6 +93,7 @@ public class AnimatedCanvas extends Canvas
 
     addPaintListener(new PaintListener()
     {
+      @Override
       public void paintControl(PaintEvent event)
       {
         doPaint(event.gc);
@@ -119,6 +123,7 @@ public class AnimatedCanvas extends Canvas
 
     addMouseMoveListener(new MouseMoveListener()
     {
+      @Override
       public void mouseMove(MouseEvent e)
       {
         onMouseMove(e.x, e.y);
@@ -323,7 +328,7 @@ public class AnimatedCanvas extends Canvas
    */
   public static abstract class Animator
   {
-    private final List<Resource> resources = new ArrayList<Resource>();
+    private final List<Resource> resources = new ArrayList<>();
 
     private final Display display;
 

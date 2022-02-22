@@ -37,6 +37,7 @@ public interface ProjectHandler
     {
     }
 
+    @Override
     public void handleProject(IProject project, BackendContainer backendContainer)
     {
       if (!projectMap.containsKey(project))

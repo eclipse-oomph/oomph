@@ -90,6 +90,7 @@ public class MacroImpl extends ScopeImpl implements Macro
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public MacroTask getLogicalContainer()
   {
     return logicalContainer;
@@ -100,6 +101,7 @@ public class MacroImpl extends ScopeImpl implements Macro
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setLogicalContainer(MacroTask newLogicalContainer)
   {
     MacroTask oldLogicalContainer = logicalContainer;
@@ -115,11 +117,12 @@ public class MacroImpl extends ScopeImpl implements Macro
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<Parameter> getParameters()
   {
     if (parameters == null)
     {
-      parameters = new EObjectContainmentEList<Parameter>(Parameter.class, this, SetupPackage.MACRO__PARAMETERS);
+      parameters = new EObjectContainmentEList<>(Parameter.class, this, SetupPackage.MACRO__PARAMETERS);
     }
     return parameters;
   }

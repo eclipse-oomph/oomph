@@ -41,7 +41,7 @@ public class Element implements IElement
 
   private boolean licenseFeature;
 
-  private final List<IElement> children = new ArrayList<IElement>();
+  private final List<IElement> children = new ArrayList<>();
 
   private Set<IElement> allChildren;
 
@@ -78,36 +78,43 @@ public class Element implements IElement
     version = Version.emptyVersion;
   }
 
+  @Override
   public Type getType()
   {
     return type;
   }
 
+  @Override
   public String getTag()
   {
     return type == Type.PLUGIN ? Release.PLUGIN_TAG : type == Type.FEATURE ? Release.FEATURE_TAG : Release.PRODUCT_TAG;
   }
 
+  @Override
   public String getName()
   {
     return name;
   }
 
+  @Override
   public String getID()
   {
     return id;
   }
 
+  @Override
   public Version getVersion()
   {
     return version;
   }
 
+  @Override
   public boolean isFragment()
   {
     return fragment;
   }
 
+  @Override
   public boolean isLicenseFeature()
   {
     return licenseFeature;
@@ -118,16 +125,18 @@ public class Element implements IElement
     this.licenseFeature = licenseFeature;
   }
 
+  @Override
   public List<IElement> getChildren()
   {
     return children;
   }
 
+  @Override
   public Set<IElement> getAllChildren(IElementResolver resolver, IElementResolver otherResolver)
   {
     if (allChildren == null)
     {
-      allChildren = new HashSet<IElement>();
+      allChildren = new HashSet<>();
       for (IElement child : children)
       {
         recurseChildren(resolver, otherResolver, child);
@@ -180,6 +189,7 @@ public class Element implements IElement
     }
   }
 
+  @Override
   public IElement getChild(IElementResolver resolver, IElementResolver otherResolver, IElement key)
   {
     Set<IElement> allChildren = getAllChildren(resolver, otherResolver);
@@ -225,12 +235,7 @@ public class Element implements IElement
       return true;
     }
 
-    if (obj == null)
-    {
-      return false;
-    }
-
-    if (!(obj instanceof Element))
+    if (obj == null || !(obj instanceof Element))
     {
       return false;
     }
@@ -276,6 +281,7 @@ public class Element implements IElement
     return true;
   }
 
+  @Override
   public IElement trimVersion()
   {
     Element element = new Element(type, name, id, fragment);
@@ -287,6 +293,7 @@ public class Element implements IElement
     return element;
   }
 
+  @Override
   public boolean isVersionUnresolved()
   {
     return version.equals(Version.emptyVersion);
@@ -297,6 +304,7 @@ public class Element implements IElement
     version = getResolvedVersion();
   }
 
+  @Override
   public Version getResolvedVersion()
   {
     if (isVersionUnresolved())

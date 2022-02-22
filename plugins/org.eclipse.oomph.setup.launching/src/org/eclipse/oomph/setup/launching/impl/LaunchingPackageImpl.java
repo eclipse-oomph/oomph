@@ -112,6 +112,7 @@ public class LaunchingPackageImpl extends EPackageImpl implements LaunchingPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getLaunchTask()
   {
     return launchTaskEClass;
@@ -122,6 +123,7 @@ public class LaunchingPackageImpl extends EPackageImpl implements LaunchingPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getLaunchTask_Launcher()
   {
     return (EAttribute)launchTaskEClass.getEStructuralFeatures().get(0);
@@ -132,6 +134,7 @@ public class LaunchingPackageImpl extends EPackageImpl implements LaunchingPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getLaunchTask_RunEveryStartup()
   {
     return (EAttribute)launchTaskEClass.getEStructuralFeatures().get(1);
@@ -142,6 +145,7 @@ public class LaunchingPackageImpl extends EPackageImpl implements LaunchingPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public LaunchingFactory getLaunchingFactory()
   {
     return (LaunchingFactory)getEFactoryInstance();

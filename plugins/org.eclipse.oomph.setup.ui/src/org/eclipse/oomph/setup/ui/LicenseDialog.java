@@ -125,6 +125,7 @@ public class LicenseDialog extends AbstractConfirmDialog
 
     viewer.addSelectionChangedListener(new ISelectionChangedListener()
     {
+      @Override
       public void selectionChanged(SelectionChangedEvent event)
       {
         handleSelectionChanged((IStructuredSelection)event.getSelection());
@@ -254,6 +255,7 @@ public class LicenseDialog extends AbstractConfirmDialog
    */
   private final class LicenseContentProvider implements ITreeContentProvider
   {
+    @Override
     public Object[] getChildren(Object element)
     {
       if (element instanceof ILicense)
@@ -275,6 +277,7 @@ public class LicenseDialog extends AbstractConfirmDialog
       return new Object[0];
     }
 
+    @Override
     public Object getParent(Object element)
     {
       if (element instanceof IUWithLicenseParent)
@@ -285,21 +288,25 @@ public class LicenseDialog extends AbstractConfirmDialog
       return null;
     }
 
+    @Override
     public boolean hasChildren(Object element)
     {
       return licensesToIUs.containsKey(element);
     }
 
+    @Override
     public Object[] getElements(Object inputElement)
     {
       return licensesToIUs.keySet().toArray();
     }
 
+    @Override
     public void dispose()
     {
       // Nothing to do
     }
 
+    @Override
     public void inputChanged(Viewer viewer, Object oldInput, Object newInput)
     {
       // Nothing to do

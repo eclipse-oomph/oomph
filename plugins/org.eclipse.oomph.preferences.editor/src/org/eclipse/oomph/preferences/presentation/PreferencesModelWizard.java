@@ -156,6 +156,7 @@ public class PreferencesModelWizard extends Wizard implements INewWizard
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public void init(IWorkbench workbench, IStructuredSelection selection)
   {
     this.workbench = workbench;
@@ -175,7 +176,7 @@ public class PreferencesModelWizard extends Wizard implements INewWizard
   {
     if (initialObjectNames == null)
     {
-      initialObjectNames = new ArrayList<String>();
+      initialObjectNames = new ArrayList<>();
       for (EClassifier eClassifier : preferencesPackage.getEClassifiers())
       {
         if (eClassifier instanceof EClass)
@@ -251,7 +252,7 @@ public class PreferencesModelWizard extends Wizard implements INewWizard
 
             // Save the contents of the resource to the file system.
             //
-            Map<Object, Object> options = new HashMap<Object, Object>();
+            Map<Object, Object> options = new HashMap<>();
             options.put(XMLResource.OPTION_ENCODING, initialObjectCreationPage.getEncoding());
             resource.save(options);
           }
@@ -278,6 +279,7 @@ public class PreferencesModelWizard extends Wizard implements INewWizard
         final ISelection targetSelection = new StructuredSelection(modelFile);
         getShell().getDisplay().asyncExec(new Runnable()
         {
+          @Override
           public void run()
           {
             ((ISetSelectionTarget)activePart).selectReveal(targetSelection);
@@ -404,6 +406,7 @@ public class PreferencesModelWizard extends Wizard implements INewWizard
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public void createControl(Composite parent)
     {
       Composite composite = new Composite(parent, SWT.NONE);
@@ -483,6 +486,7 @@ public class PreferencesModelWizard extends Wizard implements INewWizard
      */
     protected ModifyListener validator = new ModifyListener()
     {
+      @Override
       public void modifyText(ModifyEvent e)
       {
         setPageComplete(validatePage());
@@ -580,7 +584,7 @@ public class PreferencesModelWizard extends Wizard implements INewWizard
     {
       if (encodings == null)
       {
-        encodings = new ArrayList<String>();
+        encodings = new ArrayList<>();
         for (StringTokenizer stringTokenizer = new StringTokenizer(PreferencesEditorPlugin.INSTANCE.getString("_UI_XMLEncodingChoices")); stringTokenizer //$NON-NLS-1$
             .hasMoreTokens();)
         {

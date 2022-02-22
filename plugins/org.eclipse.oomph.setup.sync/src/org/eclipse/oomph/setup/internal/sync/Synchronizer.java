@@ -29,7 +29,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class Synchronizer
 {
-  private final List<SynchronizerListener> listeners = new CopyOnWriteArrayList<SynchronizerListener>();
+  private final List<SynchronizerListener> listeners = new CopyOnWriteArrayList<>();
 
   private final Snapshot localSnapshot;
 

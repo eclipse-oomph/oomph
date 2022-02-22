@@ -33,7 +33,7 @@ import java.util.Map;
  */
 public class BaseAdapterFactoryEditingDomain extends AdapterFactoryEditingDomain
 {
-  private LinkedList<CommandParameter> commandParameters = new LinkedList<CommandParameter>();
+  private LinkedList<CommandParameter> commandParameters = new LinkedList<>();
 
   public BaseAdapterFactoryEditingDomain(AdapterFactory adapterFactory, CommandStack commandStack)
   {

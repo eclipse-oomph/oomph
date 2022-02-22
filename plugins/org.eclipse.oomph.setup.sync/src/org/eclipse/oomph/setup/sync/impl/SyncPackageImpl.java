@@ -162,6 +162,7 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getRemoteData()
   {
     return remoteDataEClass;
@@ -172,6 +173,7 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getRemoteData_Policies()
   {
     return (EReference)remoteDataEClass.getEStructuralFeatures().get(0);
@@ -182,6 +184,7 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getStringToSyncPolicyMapEntry()
   {
     return stringToSyncPolicyMapEntryEClass;
@@ -192,6 +195,7 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getStringToSyncPolicyMapEntry_Key()
   {
     return (EAttribute)stringToSyncPolicyMapEntryEClass.getEStructuralFeatures().get(0);
@@ -202,6 +206,7 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getStringToSyncPolicyMapEntry_Value()
   {
     return (EAttribute)stringToSyncPolicyMapEntryEClass.getEStructuralFeatures().get(1);
@@ -212,6 +217,7 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getSyncDelta()
   {
     return syncDeltaEClass;
@@ -222,6 +228,7 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getSyncDelta_OldTask()
   {
     return (EReference)syncDeltaEClass.getEStructuralFeatures().get(1);
@@ -232,6 +239,7 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getSyncDelta_NewTask()
   {
     return (EReference)syncDeltaEClass.getEStructuralFeatures().get(2);
@@ -242,6 +250,7 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getSyncDelta_Type()
   {
     return (EAttribute)syncDeltaEClass.getEStructuralFeatures().get(3);
@@ -252,6 +261,7 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getSyncDelta_ID()
   {
     return (EAttribute)syncDeltaEClass.getEStructuralFeatures().get(0);
@@ -262,6 +272,7 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getSyncAction()
   {
     return syncActionEClass;
@@ -272,6 +283,7 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getSyncAction_ID()
   {
     return (EAttribute)syncActionEClass.getEStructuralFeatures().get(0);
@@ -282,6 +294,7 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getSyncAction_LocalDelta()
   {
     return (EReference)syncActionEClass.getEStructuralFeatures().get(1);
@@ -292,6 +305,7 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getSyncAction_RemoteDelta()
   {
     return (EReference)syncActionEClass.getEStructuralFeatures().get(2);
@@ -302,6 +316,7 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getSyncAction_ComputedType()
   {
     return (EAttribute)syncActionEClass.getEStructuralFeatures().get(3);
@@ -312,6 +327,7 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getSyncAction_ResolvedType()
   {
     return (EAttribute)syncActionEClass.getEStructuralFeatures().get(4);
@@ -322,6 +338,7 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getSyncAction_EffectiveType()
   {
     return (EAttribute)syncActionEClass.getEStructuralFeatures().get(5);
@@ -332,6 +349,7 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EEnum getSyncPolicy()
   {
     return syncPolicyEEnum;
@@ -342,6 +360,7 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EEnum getSyncDeltaType()
   {
     return syncDeltaTypeEEnum;
@@ -352,6 +371,7 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EEnum getSyncActionType()
   {
     return syncActionTypeEEnum;
@@ -362,6 +382,7 @@ public class SyncPackageImpl extends EPackageImpl implements SyncPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public SyncFactory getSyncFactory()
   {
     return (SyncFactory)getEFactoryInstance();

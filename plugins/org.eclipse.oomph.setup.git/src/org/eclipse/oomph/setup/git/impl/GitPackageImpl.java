@@ -136,6 +136,7 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getGitCloneTask()
   {
     return gitCloneTaskEClass;
@@ -146,6 +147,7 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getGitCloneTask_Location()
   {
     return (EAttribute)gitCloneTaskEClass.getEStructuralFeatures().get(0);
@@ -156,6 +158,7 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getGitCloneTask_LocationQualifier()
   {
     return (EAttribute)gitCloneTaskEClass.getEStructuralFeatures().get(1);
@@ -166,6 +169,7 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getGitCloneTask_RemoteName()
   {
     return (EAttribute)gitCloneTaskEClass.getEStructuralFeatures().get(2);
@@ -176,6 +180,7 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getGitCloneTask_RemoteURI()
   {
     return (EAttribute)gitCloneTaskEClass.getEStructuralFeatures().get(3);
@@ -186,6 +191,7 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getGitCloneTask_PushURI()
   {
     return (EAttribute)gitCloneTaskEClass.getEStructuralFeatures().get(4);
@@ -196,6 +202,7 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getGitCloneTask_CheckoutBranch()
   {
     return (EAttribute)gitCloneTaskEClass.getEStructuralFeatures().get(5);
@@ -206,6 +213,7 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getGitCloneTask_Recursive()
   {
     return (EAttribute)gitCloneTaskEClass.getEStructuralFeatures().get(6);
@@ -216,6 +224,7 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getGitCloneTask_ConfigSections()
   {
     return (EReference)gitCloneTaskEClass.getEStructuralFeatures().get(7);
@@ -226,6 +235,7 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getGitCloneTask_RestrictToCheckoutBranch()
   {
     return (EAttribute)gitCloneTaskEClass.getEStructuralFeatures().get(8);
@@ -236,6 +246,7 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getConfigSection()
   {
     return configSectionEClass;
@@ -246,6 +257,7 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getConfigSection_Subsections()
   {
     return (EReference)configSectionEClass.getEStructuralFeatures().get(0);
@@ -256,6 +268,7 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getConfigSubsection()
   {
     return configSubsectionEClass;
@@ -266,6 +279,7 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getConfigSubsection_Name()
   {
     return (EAttribute)configSubsectionEClass.getEStructuralFeatures().get(0);
@@ -276,6 +290,7 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getConfigSubsection_Properties()
   {
     return (EReference)configSubsectionEClass.getEStructuralFeatures().get(1);
@@ -286,6 +301,7 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getConfigProperty()
   {
     return configPropertyEClass;
@@ -296,6 +312,7 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getConfigProperty_Key()
   {
     return (EAttribute)configPropertyEClass.getEStructuralFeatures().get(0);
@@ -306,6 +323,7 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getConfigProperty_Value()
   {
     return (EAttribute)configPropertyEClass.getEStructuralFeatures().get(1);
@@ -316,6 +334,7 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public GitFactory getGitFactory()
   {
     return (GitFactory)getEFactoryInstance();

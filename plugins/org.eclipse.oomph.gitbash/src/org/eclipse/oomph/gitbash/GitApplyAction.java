@@ -62,16 +62,19 @@ public class GitApplyAction extends BaseSelectionListenerAction implements IObje
     super(text);
   }
 
+  @Override
   public void setActivePart(IAction action, IWorkbenchPart targetPart)
   {
     this.targetPart = targetPart;
   }
 
+  @Override
   public void run(IAction action)
   {
     action.setMenuCreator(this);
   }
 
+  @Override
   public void selectionChanged(IAction action, ISelection selection)
   {
     action.setMenuCreator(this);
@@ -92,6 +95,7 @@ public class GitApplyAction extends BaseSelectionListenerAction implements IObje
     return null;
   }
 
+  @Override
   public void dispose()
   {
     if (dropDownMenu != null)
@@ -101,6 +105,7 @@ public class GitApplyAction extends BaseSelectionListenerAction implements IObje
     }
   }
 
+  @Override
   public Menu getMenu(Control parent)
   {
     dispose();
@@ -109,6 +114,7 @@ public class GitApplyAction extends BaseSelectionListenerAction implements IObje
     return dropDownMenu;
   }
 
+  @Override
   public Menu getMenu(Menu parent)
   {
     dispose();
@@ -129,6 +135,7 @@ public class GitApplyAction extends BaseSelectionListenerAction implements IObje
     List<Repository> sorted = Arrays.asList(repositories);
     Collections.sort(sorted, new Comparator<Repository>()
     {
+      @Override
       public int compare(Repository r1, Repository r2)
       {
         String n1 = r1.getWorkTree().getName();

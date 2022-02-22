@@ -185,12 +185,7 @@ public final class Cell extends AbstractRange
       return true;
     }
 
-    if (obj == null)
-    {
-      return false;
-    }
-
-    if (Cell.class != obj.getClass())
+    if ((obj == null) || (Cell.class != obj.getClass()))
     {
       return false;
     }

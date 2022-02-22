@@ -131,6 +131,7 @@ public final class JREInfo
       DocumentBuilder documentBuilder = XMLUtil.createDocumentBuilder();
       documentBuilder.setEntityResolver(new EntityResolver()
       {
+        @Override
         public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException
         {
           return new InputSource(new StringReader("")); //$NON-NLS-1$
@@ -140,6 +141,7 @@ public final class JREInfo
       Element rootElement = XMLUtil.loadRootElement(documentBuilder, process.getInputStream());
       XMLUtil.handleElementsByTagName(rootElement, "key", new XMLUtil.ElementHandler() //$NON-NLS-1$
       {
+        @Override
         public void handleElement(Element element) throws Exception
         {
           try

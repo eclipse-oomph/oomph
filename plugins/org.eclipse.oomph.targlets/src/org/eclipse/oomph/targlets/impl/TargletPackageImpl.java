@@ -257,6 +257,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getTargletContainer()
   {
     return targletContainerEClass;
@@ -267,6 +268,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getTargletContainer_ID()
   {
     return (EAttribute)targletContainerEClass.getEStructuralFeatures().get(0);
@@ -277,6 +279,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getTargletContainer_Targlets()
   {
     return (EReference)targletContainerEClass.getEStructuralFeatures().get(1);
@@ -287,6 +290,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getTarglet()
   {
     return targletEClass;
@@ -297,6 +301,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getTarglet_Name()
   {
     return (EAttribute)targletEClass.getEStructuralFeatures().get(0);
@@ -307,6 +312,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getTarglet_Requirements()
   {
     return (EReference)targletEClass.getEStructuralFeatures().get(1);
@@ -317,6 +323,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getTarglet_SourceLocators()
   {
     return (EReference)targletEClass.getEStructuralFeatures().get(2);
@@ -327,6 +334,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getTarglet_InstallableUnitGenerators()
   {
     return (EReference)targletEClass.getEStructuralFeatures().get(3);
@@ -337,6 +345,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getTarglet_DropinLocations()
   {
     return (EReference)targletEClass.getEStructuralFeatures().get(11);
@@ -347,6 +356,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getTarglet_IncludeBinaryEquivalents()
   {
     return (EAttribute)targletEClass.getEStructuralFeatures().get(12);
@@ -357,6 +367,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getTarglet_ProfileProperties()
   {
     return (EAttribute)targletEClass.getEStructuralFeatures().get(13);
@@ -367,6 +378,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getTarglet_RepositoryLists()
   {
     return (EReference)targletEClass.getEStructuralFeatures().get(4);
@@ -377,6 +389,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getTarglet_ActiveRepositoryListName()
   {
     return (EAttribute)targletEClass.getEStructuralFeatures().get(5);
@@ -387,6 +400,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getTarglet_ActiveRepositoryList()
   {
     return (EReference)targletEClass.getEStructuralFeatures().get(6);
@@ -397,6 +411,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getTarglet_ActiveRepositories()
   {
     return (EReference)targletEClass.getEStructuralFeatures().get(7);
@@ -407,6 +422,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getTarglet_IncludeSources()
   {
     return (EAttribute)targletEClass.getEStructuralFeatures().get(8);
@@ -417,6 +433,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getTarglet_IncludeAllPlatforms()
   {
     return (EAttribute)targletEClass.getEStructuralFeatures().get(9);
@@ -427,6 +444,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getTarglet_IncludeAllRequirements()
   {
     return (EAttribute)targletEClass.getEStructuralFeatures().get(10);
@@ -437,6 +455,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getComponentExtension()
   {
     return componentExtensionEClass;
@@ -447,6 +466,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getComponentExtension_Requirements()
   {
     return (EReference)componentExtensionEClass.getEStructuralFeatures().get(0);
@@ -457,6 +477,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getComponentDefinition()
   {
     return componentDefinitionEClass;
@@ -467,6 +488,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getComponentDefinition_ID()
   {
     return (EAttribute)componentDefinitionEClass.getEStructuralFeatures().get(0);
@@ -477,6 +499,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getComponentDefinition_Version()
   {
     return (EAttribute)componentDefinitionEClass.getEStructuralFeatures().get(1);
@@ -487,6 +510,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getIUGenerator()
   {
     return iuGeneratorEClass;
@@ -497,6 +521,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EOperation getIUGenerator__GenerateIUs__IProject_String_Map_EList()
   {
     return iuGeneratorEClass.getEOperations().get(0);
@@ -507,6 +532,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getFeatureGenerator()
   {
     return featureGeneratorEClass;
@@ -517,6 +543,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getPluginGenerator()
   {
     return pluginGeneratorEClass;
@@ -527,6 +554,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getComponentDefGenerator()
   {
     return componentDefGeneratorEClass;
@@ -537,6 +565,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getComponentExtGenerator()
   {
     return componentExtGeneratorEClass;
@@ -547,6 +576,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getCSpecGenerator()
   {
     return cSpecGeneratorEClass;
@@ -557,6 +587,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getCSpexGenerator()
   {
     return cSpexGeneratorEClass;
@@ -567,6 +598,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getSiteGenerator()
   {
     return siteGeneratorEClass;
@@ -577,6 +609,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getCategoryGenerator()
   {
     return categoryGeneratorEClass;
@@ -587,6 +620,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getProductGenerator()
   {
     return productGeneratorEClass;
@@ -597,6 +631,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getProjectNameGenerator()
   {
     return projectNameGeneratorEClass;
@@ -607,6 +642,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getDropinLocation()
   {
     return dropinLocationEClass;
@@ -617,6 +653,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getDropinLocation_RootFolder()
   {
     return (EAttribute)dropinLocationEClass.getEStructuralFeatures().get(0);
@@ -627,6 +664,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getDropinLocation_Recursive()
   {
     return (EAttribute)dropinLocationEClass.getEStructuralFeatures().get(1);
@@ -637,6 +675,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EDataType getInstallableUnit()
   {
     return installableUnitEDataType;
@@ -647,6 +686,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EDataType getStringToVersionMap()
   {
     return stringToVersionMapEDataType;
@@ -657,6 +697,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public TargletFactory getTargletFactory()
   {
     return (TargletFactory)getEFactoryInstance();

@@ -224,11 +224,13 @@ public class ProjectConfigSynchronizerDialog extends TitleAreaDialog
 
   private static final class DialogLabelDecorator extends LabelProvider implements ILabelDecorator
   {
+    @Override
     public Image decorateImage(Image image, Object element)
     {
       return image;
     }
 
+    @Override
     public String decorateText(String text, Object element)
     {
       return text;

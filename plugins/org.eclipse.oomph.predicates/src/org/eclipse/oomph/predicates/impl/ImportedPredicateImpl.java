@@ -86,6 +86,7 @@ public class ImportedPredicateImpl extends PredicateImpl implements ImportedPred
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public boolean isAccessible()
   {
     return accessible;
@@ -96,6 +97,7 @@ public class ImportedPredicateImpl extends PredicateImpl implements ImportedPred
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setAccessible(boolean newAccessible)
   {
     boolean oldAccessible = accessible;

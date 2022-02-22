@@ -115,6 +115,7 @@ public class SetupP2PackageImpl extends EPackageImpl implements SetupP2Package
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getP2Task()
   {
     return p2TaskEClass;
@@ -125,6 +126,7 @@ public class SetupP2PackageImpl extends EPackageImpl implements SetupP2Package
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getP2Task_Label()
   {
     return (EAttribute)p2TaskEClass.getEStructuralFeatures().get(0);
@@ -135,6 +137,7 @@ public class SetupP2PackageImpl extends EPackageImpl implements SetupP2Package
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getP2Task_Requirements()
   {
     return (EReference)p2TaskEClass.getEStructuralFeatures().get(1);
@@ -145,6 +148,7 @@ public class SetupP2PackageImpl extends EPackageImpl implements SetupP2Package
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getP2Task_Repositories()
   {
     return (EReference)p2TaskEClass.getEStructuralFeatures().get(2);
@@ -155,6 +159,7 @@ public class SetupP2PackageImpl extends EPackageImpl implements SetupP2Package
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getP2Task_LicenseConfirmationDisabled()
   {
     return (EAttribute)p2TaskEClass.getEStructuralFeatures().get(3);
@@ -165,6 +170,7 @@ public class SetupP2PackageImpl extends EPackageImpl implements SetupP2Package
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getP2Task_MergeDisabled()
   {
     return (EAttribute)p2TaskEClass.getEStructuralFeatures().get(4);
@@ -175,6 +181,7 @@ public class SetupP2PackageImpl extends EPackageImpl implements SetupP2Package
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getP2Task_ProfileProperties()
   {
     return (EAttribute)p2TaskEClass.getEStructuralFeatures().get(5);
@@ -185,6 +192,7 @@ public class SetupP2PackageImpl extends EPackageImpl implements SetupP2Package
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public SetupP2Factory getSetupP2Factory()
   {
     return (SetupP2Factory)getEFactoryInstance();

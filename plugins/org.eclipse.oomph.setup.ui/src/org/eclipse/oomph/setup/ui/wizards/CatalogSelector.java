@@ -83,6 +83,7 @@ public class CatalogSelector
 
     toolItem.addDisposeListener(new DisposeListener()
     {
+      @Override
       public void widgetDisposed(DisposeEvent e)
       {
         menu.dispose();

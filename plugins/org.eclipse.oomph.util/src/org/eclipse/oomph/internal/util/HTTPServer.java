@@ -64,7 +64,7 @@ public final class HTTPServer
 
   private static final boolean DEBUG_RESPONSE = false;
 
-  private static final Map<String, String> CONTENT_TYPES = new HashMap<String, String>();
+  private static final Map<String, String> CONTENT_TYPES = new HashMap<>();
 
   private static final ImageContext IMAGE_CONTEXT = new ImageContext();
 
@@ -86,7 +86,7 @@ public final class HTTPServer
 
   private static final String STATUS_NOT_IMPLEMENTED = "501 Not Implemented";
 
-  private final List<Context> contexts = new ArrayList<Context>();
+  private final List<Context> contexts = new ArrayList<>();
 
   private final ExecutorService threadPool = Executors.newCachedThreadPool();
 
@@ -304,6 +304,7 @@ public final class HTTPServer
       this.socket = socket;
     }
 
+    @Override
     public void run()
     {
       InputStream inputStream = null;
@@ -486,6 +487,7 @@ public final class HTTPServer
       return allowDirectory;
     }
 
+    @Override
     public final int compareTo(Context o)
     {
       return o.path.length() - path.length();
@@ -546,6 +548,7 @@ public final class HTTPServer
             final String finalPath = path;
             Arrays.sort(children, new Comparator<String>()
             {
+              @Override
               public int compare(String n1, String n2)
               {
                 int t1 = getType(n1);
@@ -705,12 +708,7 @@ public final class HTTPServer
       }
       catch (IOException ex)
       {
-        if (ignoreExceptions)
-        {
-          return;
-        }
-
-        if (ex instanceof SocketException && ex.getMessage().equals("Software caused connection abort: socket write error"))
+        if (ignoreExceptions || (ex instanceof SocketException && ex.getMessage().equals("Software caused connection abort: socket write error")))
         {
           return;
         }

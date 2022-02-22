@@ -70,7 +70,7 @@ public class Release implements IRelease
 
   private byte[] digest;
 
-  private Map<IElement, IElement> elements = new HashMap<IElement, IElement>();
+  private Map<IElement, IElement> elements = new HashMap<>();
 
   public Release(IFile file)
   {
@@ -102,26 +102,31 @@ public class Release implements IRelease
     }
   }
 
+  @Override
   public IFile getFile()
   {
     return file;
   }
 
+  @Override
   public byte[] getDigest()
   {
     return digest;
   }
 
+  @Override
   public Map<IElement, IElement> getElements()
   {
     return elements;
   }
 
+  @Override
   public IElement resolveElement(IElement key)
   {
     return elements.get(key);
   }
 
+  @Override
   public int getSize()
   {
     return elements.size();
@@ -152,9 +157,10 @@ public class Release implements IRelease
     builder.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"); //$NON-NLS-1$
     builder.append("<" + RELEASE_TAG + ">\n"); //$NON-NLS-1$ //$NON-NLS-2$
 
-    List<IElement> list = new ArrayList<IElement>(elements.keySet());
+    List<IElement> list = new ArrayList<>(elements.keySet());
     Collections.sort(list, new Comparator<IElement>()
     {
+      @Override
       public int compare(IElement o1, IElement o2)
       {
         int result = o1.getType().compareTo(o2.getType());

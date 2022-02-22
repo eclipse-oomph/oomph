@@ -34,7 +34,7 @@ import java.util.Set;
  */
 public class ToggleDisabledAction implements IObjectActionDelegate
 {
-  private final Set<SetupTask> tasks = new HashSet<SetupTask>();
+  private final Set<SetupTask> tasks = new HashSet<>();
 
   private boolean disabled;
 
@@ -42,10 +42,12 @@ public class ToggleDisabledAction implements IObjectActionDelegate
   {
   }
 
+  @Override
   public void setActivePart(IAction action, IWorkbenchPart targetPart)
   {
   }
 
+  @Override
   public void selectionChanged(IAction action, ISelection selection)
   {
     tasks.clear();
@@ -84,6 +86,7 @@ public class ToggleDisabledAction implements IObjectActionDelegate
     action.setChecked(disabled);
   }
 
+  @Override
   public void run(IAction action)
   {
     SetupTask firstTask = tasks.iterator().next();

@@ -37,6 +37,7 @@ public abstract class ActivityAdapter
 {
   private final TraverseListener traverseListener = new TraverseListener()
   {
+    @Override
     public final void keyTraversed(TraverseEvent e)
     {
       handleActivity();
@@ -46,11 +47,13 @@ public abstract class ActivityAdapter
   private final KeyListener keyListener = new KeyListener()
   {
 
+    @Override
     public final void keyPressed(KeyEvent e)
     {
       handleActivity();
     }
 
+    @Override
     public final void keyReleased(KeyEvent e)
     {
       handleActivity();
@@ -60,16 +63,19 @@ public abstract class ActivityAdapter
   private final MouseListener mouseListener = new MouseListener()
   {
 
+    @Override
     public final void mouseUp(MouseEvent e)
     {
       handleActivity();
     }
 
+    @Override
     public final void mouseDown(MouseEvent e)
     {
       handleActivity();
     }
 
+    @Override
     public final void mouseDoubleClick(MouseEvent e)
     {
       handleActivity();
@@ -79,11 +85,13 @@ public abstract class ActivityAdapter
   private final SelectionListener selectionListener = new SelectionListener()
   {
 
+    @Override
     public final void widgetSelected(SelectionEvent e)
     {
       handleActivity();
     }
 
+    @Override
     public final void widgetDefaultSelected(SelectionEvent e)
     {
       handleActivity();
@@ -93,6 +101,7 @@ public abstract class ActivityAdapter
   private final ModifyListener modifyListener = new ModifyListener()
   {
 
+    @Override
     public final void modifyText(ModifyEvent e)
     {
       handleActivity();

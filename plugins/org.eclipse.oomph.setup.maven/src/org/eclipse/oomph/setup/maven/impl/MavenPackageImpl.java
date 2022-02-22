@@ -124,6 +124,7 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getMavenImportTask()
   {
     return mavenImportTaskEClass;
@@ -134,6 +135,7 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getMavenImportTask_SourceLocators()
   {
     return (EReference)mavenImportTaskEClass.getEStructuralFeatures().get(0);
@@ -144,6 +146,7 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getMavenImportTask_ProjectNameTemplate()
   {
     return (EAttribute)mavenImportTaskEClass.getEStructuralFeatures().get(1);
@@ -154,6 +157,7 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getMavenImportTask_Profiles()
   {
     return (EAttribute)mavenImportTaskEClass.getEStructuralFeatures().get(2);
@@ -164,6 +168,7 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getMavenUpdateTask()
   {
     return mavenUpdateTaskEClass;
@@ -174,6 +179,7 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getMavenUpdateTask_ProjectNamePatterns()
   {
     return (EAttribute)mavenUpdateTaskEClass.getEStructuralFeatures().get(0);
@@ -184,6 +190,7 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getMavenUpdateTask_Offline()
   {
     return (EAttribute)mavenUpdateTaskEClass.getEStructuralFeatures().get(1);
@@ -194,6 +201,7 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getMavenUpdateTask_UpdateSnapshots()
   {
     return (EAttribute)mavenUpdateTaskEClass.getEStructuralFeatures().get(2);
@@ -204,6 +212,7 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public MavenFactory getMavenFactory()
   {
     return (MavenFactory)getEFactoryInstance();

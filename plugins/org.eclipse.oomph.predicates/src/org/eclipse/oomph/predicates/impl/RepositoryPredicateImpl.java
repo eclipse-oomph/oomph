@@ -116,6 +116,7 @@ public class RepositoryPredicateImpl extends PredicateImpl implements Repository
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public IProject getProject()
   {
     return project;
@@ -126,6 +127,7 @@ public class RepositoryPredicateImpl extends PredicateImpl implements Repository
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setProject(IProject newProject)
   {
     IProject oldProject = project;
@@ -141,6 +143,7 @@ public class RepositoryPredicateImpl extends PredicateImpl implements Repository
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getRelativePathPattern()
   {
     return relativePathPattern;
@@ -162,6 +165,7 @@ public class RepositoryPredicateImpl extends PredicateImpl implements Repository
     }
   }
 
+  @Override
   public void setRelativePathPattern(String newRelativePathPattern)
   {
     setRelativePathPatternGen(newRelativePathPattern);

@@ -160,6 +160,7 @@ public class AgentManagerImpl implements AgentManager
     }
   }
 
+  @Override
   public synchronized Agent getCurrentAgent()
   {
     if (currentAgent == null)
@@ -197,26 +198,31 @@ public class AgentManagerImpl implements AgentManager
     return currentAgent;
   }
 
+  @Override
   public File getDefaultAgentLocation()
   {
     return defaultAgentLocation;
   }
 
+  @Override
   public Set<File> getAgentLocations()
   {
     return getLocations(agentMap.getElementKeys());
   }
 
+  @Override
   public Collection<Agent> getAgents()
   {
     return agentMap.getElements();
   }
 
+  @Override
   public Agent getAgent(File location)
   {
     return agentMap.getElement(location.getAbsolutePath());
   }
 
+  @Override
   public Agent addAgent(File location)
   {
     return agentMap.addElement(location.getAbsolutePath(), null);
@@ -229,6 +235,7 @@ public class AgentManagerImpl implements AgentManager
     // TODO Delete artifacts from disk
   }
 
+  @Override
   public void refreshAgents(IProgressMonitor monitor)
   {
     monitor.beginTask(Messages.AgentManagerImpl_RefreshingAgents_task, 1 + 20);
@@ -268,9 +275,10 @@ public class AgentManagerImpl implements AgentManager
     }
   }
 
+  @Override
   public Collection<BundlePool> getBundlePools()
   {
-    List<BundlePool> bundlePools = new ArrayList<BundlePool>();
+    List<BundlePool> bundlePools = new ArrayList<>();
     for (Agent agent : getAgents())
     {
       bundlePools.addAll(agent.getBundlePools());
@@ -279,6 +287,7 @@ public class AgentManagerImpl implements AgentManager
     return bundlePools;
   }
 
+  @Override
   public BundlePool getBundlePool(File location) throws P2Exception
   {
     for (Agent agent : getAgents())
@@ -304,6 +313,7 @@ public class AgentManagerImpl implements AgentManager
     return null;
   }
 
+  @Override
   public BundlePool getDefaultBundlePool(String client) throws P2Exception
   {
     Properties defaults = loadDefaults();
@@ -367,6 +377,7 @@ public class AgentManagerImpl implements AgentManager
     return agent.addBundlePool(defaultPoolLocation);
   }
 
+  @Override
   public void setDefaultBundlePool(String client, BundlePool bundlePool)
   {
     Properties defaults = loadDefaults();
@@ -408,7 +419,7 @@ public class AgentManagerImpl implements AgentManager
 
   public Set<String> getClientsFor(String bundlePoolLocation)
   {
-    Set<String> clients = new HashSet<String>();
+    Set<String> clients = new HashSet<>();
 
     Properties defaults = loadDefaults();
     for (Map.Entry<Object, Object> entry : defaults.entrySet())
@@ -476,7 +487,7 @@ public class AgentManagerImpl implements AgentManager
 
   public static Set<File> getLocations(Set<String> keys)
   {
-    Set<File> locations = new HashSet<File>();
+    Set<File> locations = new HashSet<>();
     for (String key : keys)
     {
       locations.add(new File(key));

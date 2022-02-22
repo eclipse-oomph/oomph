@@ -71,7 +71,7 @@ public class ShowInExplorerAction extends ActionDelegate
   {
     if (selection instanceof IStructuredSelection)
     {
-      List<IResource> resources = new ArrayList<IResource>();
+      List<IResource> resources = new ArrayList<>();
       for (Object object : ((IStructuredSelection)selection).toArray())
       {
         if (object instanceof PreferenceNode)

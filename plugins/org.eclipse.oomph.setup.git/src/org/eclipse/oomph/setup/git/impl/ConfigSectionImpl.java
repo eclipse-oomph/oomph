@@ -74,11 +74,12 @@ public class ConfigSectionImpl extends ConfigSubsectionImpl implements ConfigSec
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<ConfigSubsection> getSubsections()
   {
     if (subsections == null)
     {
-      subsections = new EObjectContainmentEList<ConfigSubsection>(ConfigSubsection.class, this, GitPackage.CONFIG_SECTION__SUBSECTIONS);
+      subsections = new EObjectContainmentEList<>(ConfigSubsection.class, this, GitPackage.CONFIG_SECTION__SUBSECTIONS);
     }
     return subsections;
   }

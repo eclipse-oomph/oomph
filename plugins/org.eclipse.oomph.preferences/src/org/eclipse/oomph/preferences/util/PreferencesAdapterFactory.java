@@ -81,7 +81,7 @@ public class PreferencesAdapterFactory extends AdapterFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  protected PreferencesSwitch<Adapter> modelSwitch = new PreferencesSwitch<Adapter>()
+  protected PreferencesSwitch<Adapter> modelSwitch = new PreferencesSwitch<>()
   {
     @Override
     public Adapter casePreferenceItem(PreferenceItem object)

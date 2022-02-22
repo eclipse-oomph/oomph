@@ -83,7 +83,7 @@ public class P2AdapterFactory extends AdapterFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  protected P2Switch<Adapter> modelSwitch = new P2Switch<Adapter>()
+  protected P2Switch<Adapter> modelSwitch = new P2Switch<>()
   {
     @Override
     public Adapter caseProfileDefinition(ProfileDefinition object)

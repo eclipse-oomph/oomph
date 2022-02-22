@@ -76,11 +76,12 @@ public class WorkingSetGroupImpl extends ModelElementImpl implements WorkingSetG
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<WorkingSet> getWorkingSets()
   {
     if (workingSets == null)
     {
-      workingSets = new EObjectContainmentEList<WorkingSet>(WorkingSet.class, this, WorkingSetsPackage.WORKING_SET_GROUP__WORKING_SETS);
+      workingSets = new EObjectContainmentEList<>(WorkingSet.class, this, WorkingSetsPackage.WORKING_SET_GROUP__WORKING_SETS);
     }
     return workingSets;
   }
@@ -90,6 +91,7 @@ public class WorkingSetGroupImpl extends ModelElementImpl implements WorkingSetG
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public WorkingSet getWorkingSet(String name)
   {
     for (WorkingSet workingSet : getWorkingSets())

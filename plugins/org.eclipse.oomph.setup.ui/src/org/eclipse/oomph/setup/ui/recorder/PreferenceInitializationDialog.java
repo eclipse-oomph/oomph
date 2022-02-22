@@ -102,32 +102,38 @@ public class PreferenceInitializationDialog extends AbstractSetupDialog
     checkboxTreeViewer = new ContainerCheckedTreeViewer(parent, SWT.NONE | SWT.MULTI);
     checkboxTreeViewer.setContentProvider(new ITreeContentProvider()
     {
+      @Override
       public void inputChanged(Viewer viewer, Object oldInput, Object newInput)
       {
       }
 
+      @Override
       public void dispose()
       {
       }
 
+      @Override
       public boolean hasChildren(Object element)
       {
         return true;
       }
 
+      @Override
       public Object getParent(Object element)
       {
         return null;
       }
 
+      @Override
       public Object[] getElements(Object inputElement)
       {
         return new Object[] { root };
       }
 
+      @Override
       public Object[] getChildren(Object parentElement)
       {
-        List<IPreferenceNode> nodes = new ArrayList<IPreferenceNode>();
+        List<IPreferenceNode> nodes = new ArrayList<>();
         if (parentElement == root)
         {
           nodes.addAll(Arrays.asList(preferenceManager.getRootSubNodes()));
@@ -235,7 +241,7 @@ public class PreferenceInitializationDialog extends AbstractSetupDialog
   protected void okPressed()
   {
     Set<String> initializedOrCheckedPreferencePages = RecorderManager.INSTANCE.getInitializedPreferencePages();
-    final Set<String> checkedPreferencePages = new LinkedHashSet<String>();
+    final Set<String> checkedPreferencePages = new LinkedHashSet<>();
 
     Object[] checkedElements = checkboxTreeViewer.getCheckedElements();
     for (Object object : checkedElements)
@@ -249,7 +255,7 @@ public class PreferenceInitializationDialog extends AbstractSetupDialog
       }
     }
 
-    final Set<String> ignoredPreferencePages = new LinkedHashSet<String>();
+    final Set<String> ignoredPreferencePages = new LinkedHashSet<>();
     @SuppressWarnings("all")
     List<IPreferenceNode> preferenceNodes = preferenceManager.getElements(PreferenceManager.PRE_ORDER);
     for (IPreferenceNode preferenceNode : preferenceNodes)
@@ -290,9 +296,9 @@ public class PreferenceInitializationDialog extends AbstractSetupDialog
 
     final Set<String> initializedPreferencePages = RecorderManager.INSTANCE.getInitializedPreferencePages();
 
-    final Map<String, IPreferenceNode> nodes = new LinkedHashMap<String, IPreferenceNode>();
+    final Map<String, IPreferenceNode> nodes = new LinkedHashMap<>();
 
-    final Set<IPreferenceNode> visitedNodes = new HashSet<IPreferenceNode>();
+    final Set<IPreferenceNode> visitedNodes = new HashSet<>();
 
     public Initializer(PreferenceDialog preferenceDialog, Set<String> checkedPreferencePages, Set<String> ignoredPreferencePages)
     {
@@ -359,6 +365,7 @@ public class PreferenceInitializationDialog extends AbstractSetupDialog
       }
     }
 
+    @Override
     public void run()
     {
       try
@@ -375,16 +382,17 @@ public class PreferenceInitializationDialog extends AbstractSetupDialog
 
         progressMonitorDialog.run(true, true, new IRunnableWithProgress()
         {
+          @Override
           public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
           {
             boolean cancel = false;
             final AtomicBoolean abort = new AtomicBoolean(false);
-            final Set<IPreferenceNode> badPages = new HashSet<IPreferenceNode>();
+            final Set<IPreferenceNode> badPages = new HashSet<>();
             try
             {
               monitor.beginTask(Messages.PreferenceInitializationDialog_visitingPreferencePagesTask_name, nodes.size());
 
-              Map<String, IPreferenceNode> remainingNodes = new LinkedHashMap<String, IPreferenceNode>(nodes);
+              Map<String, IPreferenceNode> remainingNodes = new LinkedHashMap<>(nodes);
               remainingNodes.values().removeAll(visitedNodes);
               monitor.worked(visitedNodes.size());
 
@@ -408,6 +416,7 @@ public class PreferenceInitializationDialog extends AbstractSetupDialog
                 visitedNodes.add(entry.getValue());
                 UIUtil.syncExec(new Runnable()
                 {
+                  @Override
                   public void run()
                   {
                     monitor.subTask(entry.getKey());
@@ -454,6 +463,7 @@ public class PreferenceInitializationDialog extends AbstractSetupDialog
 
               UIUtil.asyncExec(new Runnable()
               {
+                @Override
                 public void run()
                 {
                   // Don't record any preferences that are changing just because we've visited a page.
@@ -465,6 +475,7 @@ public class PreferenceInitializationDialog extends AbstractSetupDialog
                   final List<Shell> children = Arrays.asList(shell.getShells());
                   Runnable runnable = new Runnable()
                   {
+                    @Override
                     public void run()
                     {
                       Shell[] shells = shell.getShells();
@@ -483,7 +494,7 @@ public class PreferenceInitializationDialog extends AbstractSetupDialog
                   UIUtil.asyncExec(shell, runnable);
 
                   // Set the page for the bad nodes to null so we can exit the dialog with an OK.
-                  Set<IPreferencePage> pages = new HashSet<IPreferencePage>();
+                  Set<IPreferencePage> pages = new HashSet<>();
                   for (IPreferenceNode node : badPages)
                   {
                     IPreferencePage page = node.getPage();
@@ -503,6 +514,7 @@ public class PreferenceInitializationDialog extends AbstractSetupDialog
                   // Reopen the dialog.
                   UIUtil.asyncExec(new Runnable()
                   {
+                    @Override
                     public void run()
                     {
                       PreferenceDialog dialog = PreferencesUtil.createPreferenceDialogOn(null, originalID, null, null);

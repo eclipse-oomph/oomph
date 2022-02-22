@@ -122,7 +122,7 @@ public class ManifestDiscoveryDialog extends FilteredItemsSelectionDialog
 
     try
     {
-      Set<String> urls = new HashSet<String>();
+      Set<String> urls = new HashSet<>();
       for (ITargletContainer targletContainer : targletContainers)
       {
         for (Targlet targlet : targletContainer.getTarglets())
@@ -149,7 +149,7 @@ public class ManifestDiscoveryDialog extends FilteredItemsSelectionDialog
 
       SubMonitor progress = SubMonitor.convert(monitor, 10 * urls.size() + 1);
 
-      List<IQueryable<IInstallableUnit>> queryables = new ArrayList<IQueryable<IInstallableUnit>>();
+      List<IQueryable<IInstallableUnit>> queryables = new ArrayList<>();
       for (String url : urls)
       {
         try
@@ -194,7 +194,7 @@ public class ManifestDiscoveryDialog extends FilteredItemsSelectionDialog
 
       @SuppressWarnings("unchecked")
       IQueryable<IInstallableUnit>[] array = queryables.toArray(new IQueryable[queryables.size()]);
-      CompoundQueryable<IInstallableUnit> compoundQueryable = new CompoundQueryable<IInstallableUnit>(array);
+      CompoundQueryable<IInstallableUnit> compoundQueryable = new CompoundQueryable<>(array);
 
       for (IInstallableUnit iu : P2Util.asIterable(compoundQueryable.query(QueryUtil.createLatestIUQuery(), progress.newChild(1))))
       {
@@ -286,6 +286,7 @@ public class ManifestDiscoveryDialog extends FilteredItemsSelectionDialog
     {
     }
 
+    @Override
     public int compare(Object o1, Object o2)
     {
       return ((Requirement)o1).getName().compareTo(((Requirement)o2).getName());

@@ -32,6 +32,7 @@ import java.io.File;
  */
 public class TargletContainerClasspath implements IDynamicVariableResolver
 {
+  @Override
   public String resolveValue(IDynamicVariable variable, String containerID) throws CoreException
   {
     return getClasspath(containerID);

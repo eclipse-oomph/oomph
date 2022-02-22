@@ -75,8 +75,8 @@ public class OpenEditorDropdownFactory extends CompoundContributionItem
     {
       try
       {
-        Set<EObject> eObjects = new HashSet<EObject>();
-        final Set<EObject> parents = new LinkedHashSet<EObject>();
+        Set<EObject> eObjects = new HashSet<>();
+        final Set<EObject> parents = new LinkedHashSet<>();
 
         final ComposedAdapterFactory adapterFactory = BaseEditUtil.createAdapterFactory();
         SetupContext setupContext = SetupContext.getSelf();

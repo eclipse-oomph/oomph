@@ -257,6 +257,7 @@ public class StringToStringMapEntryImpl extends MinimalEObjectImpl.Container imp
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public int getHash()
   {
     if (hash == -1)
@@ -272,6 +273,7 @@ public class StringToStringMapEntryImpl extends MinimalEObjectImpl.Container imp
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setHash(int hash)
   {
     this.hash = hash;
@@ -282,6 +284,7 @@ public class StringToStringMapEntryImpl extends MinimalEObjectImpl.Container imp
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getKey()
   {
     return getTypedKey();
@@ -292,6 +295,7 @@ public class StringToStringMapEntryImpl extends MinimalEObjectImpl.Container imp
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setKey(String key)
   {
     setTypedKey(key);
@@ -302,6 +306,7 @@ public class StringToStringMapEntryImpl extends MinimalEObjectImpl.Container imp
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getValue()
   {
     return getTypedValue();
@@ -312,6 +317,7 @@ public class StringToStringMapEntryImpl extends MinimalEObjectImpl.Container imp
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String setValue(String value)
   {
     String oldValue = getValue();

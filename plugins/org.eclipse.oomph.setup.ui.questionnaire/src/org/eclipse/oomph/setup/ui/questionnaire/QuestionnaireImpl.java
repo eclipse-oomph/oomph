@@ -57,9 +57,10 @@ public class QuestionnaireImpl extends Questionnaire
         User user = (User)rootObject;
         if (user.getQuestionnaireDate() == null || force)
         {
-          final Map<URI, Pair<String, String>> preferences = new HashMap<URI, Pair<String, String>>();
+          final Map<URI, Pair<String, String>> preferences = new HashMap<>();
           UIUtil.syncExec(parentShell, new Runnable()
           {
+            @Override
             public void run()
             {
               GearShell shell = new GearShell(parentShell);
@@ -89,6 +90,7 @@ public class QuestionnaireImpl extends Questionnaire
               {
                 UIUtil.syncExec(new Runnable()
                 {
+                  @Override
                   public void run()
                   {
                     PreferenceProperty property = new PreferencesUtil.PreferenceProperty(path);

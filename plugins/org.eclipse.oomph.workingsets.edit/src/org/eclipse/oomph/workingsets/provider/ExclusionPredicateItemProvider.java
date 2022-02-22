@@ -73,7 +73,7 @@ public class ExclusionPredicateItemProvider extends PredicateItemProvider
 
   public static Set<WorkingSet> getReachableWorkingSets(WorkingSet workingSet)
   {
-    Set<WorkingSet> workingSets = new HashSet<WorkingSet>();
+    Set<WorkingSet> workingSets = new HashSet<>();
     collectReachableWorkingSets(workingSet, workingSets);
     return workingSets;
   }

@@ -10,6 +10,8 @@
  */
 package org.eclipse.oomph.setup.jdt.provider;
 
+import org.eclipse.oomph.base.BaseFactory;
+import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.setup.EAnnotationConstants;
 import org.eclipse.oomph.setup.jdt.JDTFactory;
 import org.eclipse.oomph.setup.jdt.JDTPackage;
@@ -49,7 +51,7 @@ import java.util.Map;
  */
 public class JRETaskItemProvider extends SetupTaskItemProvider
 {
-  private static Map<String, String> VERSION_VARIABLES = new LinkedHashMap<String, String>();
+  private static Map<String, String> VERSION_VARIABLES = new LinkedHashMap<>();
 
   static
   {
@@ -188,7 +190,7 @@ public class JRETaskItemProvider extends SetupTaskItemProvider
       @Override
       public Collection<?> getChoiceOfValues(Object object)
       {
-        List<String> result = new UniqueEList<String>();
+        List<String> result = new UniqueEList<>();
         IVMInstallType[] vmInstallTypes = JavaRuntime.getVMInstallTypes();
         for (IVMInstallType vmInstallType : vmInstallTypes)
         {
@@ -365,6 +367,8 @@ public class JRETaskItemProvider extends SetupTaskItemProvider
   protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object)
   {
     super.collectNewChildDescriptors(newChildDescriptors, object);
+
+    newChildDescriptors.add(createChildParameter(BasePackage.Literals.MODEL_ELEMENT__ANNOTATIONS, BaseFactory.eINSTANCE.createAnnotation()));
 
     newChildDescriptors.add(createChildParameter(JDTPackage.Literals.JRE_TASK__JRE_LIBRARIES, JDTFactory.eINSTANCE.createJRELibrary()));
   }

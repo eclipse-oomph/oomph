@@ -64,6 +64,7 @@ public class StreamImpl extends ScopeImpl implements Stream
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Project getProject()
   {
     if (eContainerFeatureID() != SetupPackage.STREAM__PROJECT)
@@ -103,6 +104,7 @@ public class StreamImpl extends ScopeImpl implements Stream
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setProject(Project newProject)
   {
     if (newProject != eInternalContainer() || eContainerFeatureID() != SetupPackage.STREAM__PROJECT && newProject != null)

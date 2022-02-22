@@ -44,7 +44,7 @@ public class BuildState implements IBuildState, Serializable
 
   private Set<String> ignoredReferences;
 
-  private Map<String, Long> validatorTimeStamps = new LinkedHashMap<String, Long>();
+  private Map<String, Long> validatorTimeStamps = new LinkedHashMap<>();
 
   private String validatorClass;
 
@@ -60,11 +60,13 @@ public class BuildState implements IBuildState, Serializable
   {
   }
 
+  @Override
   public Map<String, String> getArguments()
   {
-    return arguments == null ? new HashMap<String, String>() : arguments;
+    return arguments == null ? new HashMap<>() : arguments;
   }
 
+  @Override
   public void setArguments(Map<String, String> arguments)
   {
     this.arguments = arguments;
@@ -140,12 +142,14 @@ public class BuildState implements IBuildState, Serializable
     this.ignoredReferences = ignoredReferences;
   }
 
+  @Override
   public long getValidatorTimeStamp(IModel model)
   {
     Long result = validatorTimeStamps.get(model.getUnderlyingResource().getProjectRelativePath().toString());
     return result == null ? 0 : result;
   }
 
+  @Override
   public void setValidatorTimeStamp(IModel model, long validatorTimeStamp)
   {
     validatorTimeStamps.put(getKey(model), validatorTimeStamp);
@@ -176,11 +180,13 @@ public class BuildState implements IBuildState, Serializable
     return changedSinceRelease;
   }
 
+  @Override
   public void setChangedSinceRelease(boolean changedSinceRelease)
   {
     this.changedSinceRelease = changedSinceRelease;
   }
 
+  @Override
   @SuppressWarnings("unchecked")
   public Serializable getValidatorState(IModel model)
   {
@@ -192,24 +198,26 @@ public class BuildState implements IBuildState, Serializable
       }
       else
       {
-        validatorStates = new LinkedHashMap<String, Serializable>();
+        validatorStates = new LinkedHashMap<>();
       }
     }
 
     return validatorStates.get(getKey(model));
   }
 
+  @Override
   public void setValidatorState(IModel model, Serializable validatorState)
   {
     if (validatorStates == null)
     {
-      validatorStates = new LinkedHashMap<String, Serializable>();
+      validatorStates = new LinkedHashMap<>();
     }
 
     validatorStates.put(getKey(model), validatorState);
     validatorBytes = null;
   }
 
+  @Override
   public void clearValidatorStates()
   {
     validatorStates = null;

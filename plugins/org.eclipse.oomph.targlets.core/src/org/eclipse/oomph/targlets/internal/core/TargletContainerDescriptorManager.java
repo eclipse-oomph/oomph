@@ -108,7 +108,7 @@ public final class TargletContainerDescriptorManager
 
     if (descriptors == null)
     {
-      descriptors = new HashMap<String, TargletContainerDescriptor>();
+      descriptors = new HashMap<>();
     }
 
     // TODO must reenable this.
@@ -217,13 +217,13 @@ public final class TargletContainerDescriptorManager
 
     WORKSPACE_STATE_FILE.getParentFile().mkdirs();
     OutputStream outputStream = null;
-    List<String> ids = new ArrayList<String>();
+    List<String> ids = new ArrayList<>();
 
     try
     {
       outputStream = new FileOutputStream(WORKSPACE_STATE_FILE);
 
-      Map<Object, Object> options = new HashMap<Object, Object>();
+      Map<Object, Object> options = new HashMap<>();
       options.put(BinaryResourceImpl.OPTION_VERSION, BinaryResourceImpl.BinaryIO.Version.VERSION_1_1);
       options.put(BinaryResourceImpl.OPTION_STYLE_DATA_CONVERTER, Boolean.TRUE);
       options.put(BinaryResourceImpl.OPTION_BUFFER_CAPACITY, 8192);
@@ -284,7 +284,7 @@ public final class TargletContainerDescriptorManager
     {
       in = new FileInputStream(file);
 
-      Map<Object, Object> options = new HashMap<Object, Object>();
+      Map<Object, Object> options = new HashMap<>();
       options.put(BinaryResourceImpl.OPTION_VERSION, BinaryResourceImpl.BinaryIO.Version.VERSION_1_1);
       options.put(BinaryResourceImpl.OPTION_STYLE_DATA_CONVERTER, Boolean.TRUE);
       options.put(BinaryResourceImpl.OPTION_BUFFER_CAPACITY, 8192);
@@ -292,7 +292,7 @@ public final class TargletContainerDescriptorManager
       EObjectInputStream stream = new BinaryResourceImpl.EObjectInputStream(in, options);
       int size = stream.readInt();
 
-      Map<String, TargletContainerDescriptor> result = new HashMap<String, TargletContainerDescriptor>();
+      Map<String, TargletContainerDescriptor> result = new HashMap<>();
       for (int i = 0; i < size; i++)
       {
         TargletContainerDescriptor descriptor = new TargletContainerDescriptor(stream);
@@ -325,9 +325,10 @@ public final class TargletContainerDescriptorManager
     {
       return TargetPlatformUtil.runWithTargetPlatformService(new TargetPlatformRunnable<Set<String>>()
       {
+        @Override
         public Set<String> run(ITargetPlatformService service) throws CoreException
         {
-          Set<String> ids = new HashSet<String>();
+          Set<String> ids = new HashSet<>();
 
           for (ITargetHandle targetHandle : service.getTargets(monitor))
           {
@@ -371,6 +372,7 @@ public final class TargletContainerDescriptorManager
     {
       return TargetPlatformUtil.runWithTargetPlatformService(new TargetPlatformRunnable<ITargletContainer>()
       {
+        @Override
         public ITargletContainer run(ITargetPlatformService service) throws CoreException
         {
           for (ITargetHandle targetHandle : service.getTargets(new NullProgressMonitor()))

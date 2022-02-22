@@ -76,11 +76,11 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
 
   private boolean mirrors = true;
 
-  private Set<String> restartReasons = new LinkedHashSet<String>();
+  private Set<String> restartReasons = new LinkedHashSet<>();
 
   private URIConverter uriConverter;
 
-  private Map<Object, Object> map = new LinkedHashMap<Object, Object>();
+  private Map<Object, Object> map = new LinkedHashMap<>();
 
   private String launcherName;
 
@@ -99,7 +99,7 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
   {
     setSetupContext(setupContext);
 
-    Map<String, String> filterContext = new LinkedHashMap<String, String>();
+    Map<String, String> filterContext = new LinkedHashMap<>();
     Map<String, String> env = System.getenv();
     synchronized (env)
     {
@@ -158,6 +158,7 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
     return map;
   }
 
+  @Override
   public SetupPrompter getPrompter()
   {
     return prompter;
@@ -168,11 +169,13 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
     this.prompter = prompter;
   }
 
+  @Override
   public Trigger getTrigger()
   {
     return trigger;
   }
 
+  @Override
   public void checkCancelation()
   {
     if (isCanceled())
@@ -181,6 +184,7 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
     }
   }
 
+  @Override
   public boolean isOffline()
   {
     return OfflineMode.isEnabled();
@@ -192,6 +196,7 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
     OfflineMode.setEnabled(offline);
   }
 
+  @Override
   public boolean isMirrors()
   {
     return mirrors;
@@ -202,6 +207,7 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
     this.mirrors = mirrors;
   }
 
+  @Override
   public boolean isSelfHosting()
   {
     if (selfHosting == null)
@@ -228,16 +234,19 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
     return selfHosting;
   }
 
+  @Override
   public boolean isPerforming()
   {
     return performing;
   }
 
+  @Override
   public boolean isRestartNeeded()
   {
     return !restartReasons.isEmpty();
   }
 
+  @Override
   public void setRestartNeeded(String reason)
   {
     restartReasons.add(reason);
@@ -248,6 +257,7 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
     return restartReasons;
   }
 
+  @Override
   public URI redirect(URI uri)
   {
     if (uri == null)
@@ -258,6 +268,7 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
     return getURIConverter().normalize(uri);
   }
 
+  @Override
   public String redirect(String uri)
   {
     if (!StringUtil.isEmpty(uri))
@@ -275,16 +286,19 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
     return uri;
   }
 
+  @Override
   public URIConverter getURIConverter()
   {
     return uriConverter;
   }
 
+  @Override
   public OS getOS()
   {
     return getPrompter().getOS();
   }
 
+  @Override
   public boolean matchesFilterContext(String filter)
   {
     if (StringUtil.isEmpty(filter))
@@ -309,6 +323,7 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
     filterContextIU.setProperty(key, value);
   }
 
+  @Override
   public File getProductLocation()
   {
     File installationLocation = getInstallationLocation();
@@ -321,6 +336,7 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
     return new File(installationLocation, relativeProductFolder);
   }
 
+  @Override
   public File getProductConfigurationLocation()
   {
     File productLocation = getProductLocation();
@@ -332,6 +348,7 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
     return new File(productLocation, InstallationTaskImpl.CONFIGURATION_FOLDER_NAME);
   }
 
+  @Override
   public String getRelativeProductFolder()
   {
     String productFolderName = getProductFolderName();
@@ -388,6 +405,7 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
     return getProductFolderName(scope.getParentScope(), keys);
   }
 
+  @Override
   public String getLauncherName()
   {
     if (launcherName == null)
@@ -441,6 +459,7 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
     return profile;
   }
 
+  @Override
   public Workspace getWorkspace()
   {
     return setupContext.getWorkspace();
@@ -456,11 +475,13 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
     this.setupContext = setupContext;
   }
 
+  @Override
   public User getUser()
   {
     return setupContext.getUser();
   }
 
+  @Override
   public Installation getInstallation()
   {
     return setupContext.getInstallation();
@@ -471,6 +492,7 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
     this.performing = performing;
   }
 
+  @Override
   public Object get(Object key)
   {
     Object value = map.get(key);
@@ -487,11 +509,13 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
     return value;
   }
 
+  @Override
   public Object put(Object key, Object value)
   {
     return map.put(key, value);
   }
 
+  @Override
   public Set<Object> keySet()
   {
     return map.keySet();

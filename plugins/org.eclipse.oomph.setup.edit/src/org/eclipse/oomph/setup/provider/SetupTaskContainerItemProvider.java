@@ -281,7 +281,7 @@ public class SetupTaskContainerItemProvider extends ModelElementItemProvider
       EObject eOwner = commandParameter.getEOwner();
       if (eOwner != null)
       {
-        List<Object> augmentedCollection = new ArrayList<Object>();
+        List<Object> augmentedCollection = new ArrayList<>();
         for (Object object : collection)
         {
           Object unwrappedObject = AdapterFactoryEditingDomain.unwrap(object);

@@ -81,7 +81,7 @@ public class SetupTargletsAdapterFactory extends AdapterFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  protected SetupTargletsSwitch<Adapter> modelSwitch = new SetupTargletsSwitch<Adapter>()
+  protected SetupTargletsSwitch<Adapter> modelSwitch = new SetupTargletsSwitch<>()
   {
     @Override
     public Adapter caseTargletTask(TargletTask object)

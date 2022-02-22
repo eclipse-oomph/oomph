@@ -264,7 +264,7 @@ public class StringExpanderTests extends AbstractTest
    */
   private static final class WindowsStringExpander extends StringExpander
   {
-    private final Map<String, String> variables = new HashMap<String, String>();
+    private final Map<String, String> variables = new HashMap<>();
 
     public WindowsStringExpander()
     {

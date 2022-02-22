@@ -74,11 +74,12 @@ public class InclusionPredicateImpl extends PredicateImpl implements InclusionPr
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<WorkingSet> getIncludedWorkingSets()
   {
     if (includedWorkingSets == null)
     {
-      includedWorkingSets = new EObjectResolvingEList<WorkingSet>(WorkingSet.class, this, WorkingSetsPackage.INCLUSION_PREDICATE__INCLUDED_WORKING_SETS);
+      includedWorkingSets = new EObjectResolvingEList<>(WorkingSet.class, this, WorkingSetsPackage.INCLUSION_PREDICATE__INCLUDED_WORKING_SETS);
     }
     return includedWorkingSets;
   }

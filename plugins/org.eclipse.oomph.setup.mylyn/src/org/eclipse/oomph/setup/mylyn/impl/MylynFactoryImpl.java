@@ -97,6 +97,7 @@ public class MylynFactoryImpl extends EFactoryImpl implements MylynFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public MylynQueriesTask createMylynQueriesTask()
   {
     MylynQueriesTaskImpl mylynQueriesTask = new MylynQueriesTaskImpl();
@@ -108,6 +109,7 @@ public class MylynFactoryImpl extends EFactoryImpl implements MylynFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public MylynBuildsTask createMylynBuildsTask()
   {
     MylynBuildsTaskImpl mylynBuildsTask = new MylynBuildsTaskImpl();
@@ -119,6 +121,7 @@ public class MylynFactoryImpl extends EFactoryImpl implements MylynFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public BuildPlan createBuildPlan()
   {
     BuildPlanImpl buildPlan = new BuildPlanImpl();
@@ -130,6 +133,7 @@ public class MylynFactoryImpl extends EFactoryImpl implements MylynFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Query createQuery()
   {
     QueryImpl query = new QueryImpl();
@@ -152,6 +156,7 @@ public class MylynFactoryImpl extends EFactoryImpl implements MylynFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public MylynPackage getMylynPackage()
   {
     return (MylynPackage)getEPackage();

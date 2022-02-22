@@ -185,7 +185,7 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
     final boolean includeSource = isAnnotationDetail(annotation, ANNOTATION_INCLUDE_SOURCE, targlet.isIncludeSources());
     final boolean generateServerXML = isAnnotationDetail(annotation, ANNOTATION_GENERATE_SERVER_XML, false);
 
-    final Map<String, String> repositoryIDs = new LinkedHashMap<String, String>();
+    final Map<String, String> repositoryIDs = new LinkedHashMap<>();
     Annotation repositoryIDsAnnotation = annotation.getAnnotation(NESTED_ANNOTATION_REPOSITORY_IDS);
     if (repositoryIDsAnnotation != null)
     {
@@ -237,8 +237,8 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
           {
             if (!set.isEmpty())
             {
-              List<IInstallableUnit> list = new ArrayList<IInstallableUnit>(set);
-              Collection<String> elements = new LinkedHashSet<String>();
+              List<IInstallableUnit> list = new ArrayList<>(set);
+              Collection<String> elements = new LinkedHashSet<>();
               Collections.sort(list);
 
               for (IInstallableUnit iu : list)
@@ -283,14 +283,14 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
             IMetadataRepository repository = entry.getKey();
             Set<IInstallableUnit> set = entry.getValue();
 
-            List<IInstallableUnit> list = new ArrayList<IInstallableUnit>(set);
+            List<IInstallableUnit> list = new ArrayList<>(set);
             if (!list.isEmpty())
             {
               builder.append("    <location includeAllPlatforms=\"" + includeAllPlatforms + "\" includeConfigurePhase=\"" + includeConfigurePhase //$NON-NLS-1$ //$NON-NLS-2$
                   + "\" includeMode=\"" + includeMode + "\" includeSource=\"" + includeSource + "\" type=\"InstallableUnit\">"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
               builder.append(nl);
 
-              Collection<String> elements = new LinkedHashSet<String>();
+              Collection<String> elements = new LinkedHashSet<>();
               Collections.sort(list);
 
               for (IInstallableUnit iu : list)
@@ -581,7 +581,7 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
 
   private static Set<IVersionedId> getExtraUnits(Annotation annotation)
   {
-    Set<IVersionedId> extraUnits = new HashSet<IVersionedId>();
+    Set<IVersionedId> extraUnits = new HashSet<>();
 
     String values = annotation.getDetails().get(ANNOTATION_EXTRA_UNITS);
     if (!StringUtil.isEmpty(values))
@@ -603,7 +603,7 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
 
   private static List<String> getPreferredRepositories(Annotation annotation)
   {
-    List<String> preferredRepositories = new ArrayList<String>();
+    List<String> preferredRepositories = new ArrayList<>();
 
     String values = annotation.getDetails().get(ANNOTATION_PREFERRED_REPOSITORIES);
     if (!StringUtil.isEmpty(values))
@@ -626,13 +626,13 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
       IProgressMonitor monitor)
   {
 
-    Set<String> workspaceIDs = new HashSet<String>();
+    Set<String> workspaceIDs = new HashSet<>();
     for (IInstallableUnit iu : workspaceIUInfos.keySet())
     {
       workspaceIDs.add(iu.getId());
     }
 
-    Set<IInstallableUnit> profileIUs = new HashSet<IInstallableUnit>();
+    Set<IInstallableUnit> profileIUs = new HashSet<>();
     for (IInstallableUnit iu : P2Util.asIterable(profile.query(QueryUtil.createIUAnyQuery(), monitor)))
     {
       String id = iu.getId();
@@ -668,7 +668,7 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
   private static Map<String, IMetadataRepository> sortMetadataRepositories(Targlet targlet, List<IMetadataRepository> metadataRepositories,
       List<String> preferredURLs, IProgressMonitor monitor)
   {
-    Map<String, IMetadataRepository> queryables = new LinkedHashMap<String, IMetadataRepository>();
+    Map<String, IMetadataRepository> queryables = new LinkedHashMap<>();
     for (String urlPrefix : preferredURLs)
     {
       for (IMetadataRepository metadataRepository : metadataRepositories)
@@ -729,14 +729,15 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
       IProgressMonitor monitor)
   {
     Map<IMetadataRepository, Set<IInstallableUnit>> result = sortLocations
-        ? new TreeMap<IMetadataRepository, Set<IInstallableUnit>>(new Comparator<IMetadataRepository>()
+        ? new TreeMap<>(new Comparator<IMetadataRepository>()
         {
+          @Override
           public int compare(IMetadataRepository o1, IMetadataRepository o2)
           {
             return o1.getLocation().compareTo(o2.getLocation());
           }
         })
-        : new LinkedHashMap<IMetadataRepository, Set<IInstallableUnit>>();
+        : new LinkedHashMap<>();
 
     if (singleLocation)
     {

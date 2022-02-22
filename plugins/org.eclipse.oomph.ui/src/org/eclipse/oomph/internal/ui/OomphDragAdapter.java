@@ -37,6 +37,7 @@ public class OomphDragAdapter implements DragSourceListener
     this.delegates = delegates;
   }
 
+  @Override
   public void dragStart(DragSourceEvent event)
   {
     ISelection selection = selectionProvider.getSelection();
@@ -51,6 +52,7 @@ public class OomphDragAdapter implements DragSourceListener
     }
   }
 
+  @Override
   public void dragSetData(DragSourceEvent event)
   {
     for (OomphTransferDelegate delegate : delegates)
@@ -69,6 +71,7 @@ public class OomphDragAdapter implements DragSourceListener
     }
   }
 
+  @Override
   public void dragFinished(DragSourceEvent event)
   {
     for (OomphTransferDelegate delegate : delegates)

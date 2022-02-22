@@ -10,6 +10,8 @@
  */
 package org.eclipse.oomph.setup.workbench.provider;
 
+import org.eclipse.oomph.base.BaseFactory;
+import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.setup.provider.SetupTaskItemProvider;
 import org.eclipse.oomph.setup.workbench.FileAssociationsTask;
 import org.eclipse.oomph.setup.workbench.WorkbenchFactory;
@@ -161,6 +163,8 @@ public class FileAssociationsTaskItemProvider extends SetupTaskItemProvider
   protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object)
   {
     super.collectNewChildDescriptors(newChildDescriptors, object);
+
+    newChildDescriptors.add(createChildParameter(BasePackage.Literals.MODEL_ELEMENT__ANNOTATIONS, BaseFactory.eINSTANCE.createAnnotation()));
 
     newChildDescriptors.add(createChildParameter(WorkbenchPackage.Literals.FILE_ASSOCIATIONS_TASK__MAPPINGS, WorkbenchFactory.eINSTANCE.createFileMapping()));
   }

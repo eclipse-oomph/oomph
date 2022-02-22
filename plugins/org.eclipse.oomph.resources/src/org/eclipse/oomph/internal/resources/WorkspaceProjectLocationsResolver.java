@@ -21,6 +21,7 @@ import java.io.File;
 
 public class WorkspaceProjectLocationsResolver implements IDynamicVariableResolver
 {
+  @Override
   public String resolveValue(IDynamicVariable variable, String argument) throws CoreException
   {
     StringBuilder result = new StringBuilder();

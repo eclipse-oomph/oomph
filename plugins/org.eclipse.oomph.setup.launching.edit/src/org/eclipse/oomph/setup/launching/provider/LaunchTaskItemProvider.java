@@ -10,6 +10,8 @@
  */
 package org.eclipse.oomph.setup.launching.provider;
 
+import org.eclipse.oomph.base.BaseFactory;
+import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.setup.launching.LaunchTask;
 import org.eclipse.oomph.setup.launching.LaunchingPackage;
 import org.eclipse.oomph.setup.provider.SetupTaskItemProvider;
@@ -161,6 +163,8 @@ public class LaunchTaskItemProvider extends SetupTaskItemProvider
   protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object)
   {
     super.collectNewChildDescriptors(newChildDescriptors, object);
+
+    newChildDescriptors.add(createChildParameter(BasePackage.Literals.MODEL_ELEMENT__ANNOTATIONS, BaseFactory.eINSTANCE.createAnnotation()));
   }
 
   /**

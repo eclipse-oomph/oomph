@@ -153,6 +153,7 @@ public class WorkbenchPackageImpl extends EPackageImpl implements WorkbenchPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getFileAssociationsTask()
   {
     return fileAssociationsTaskEClass;
@@ -163,6 +164,7 @@ public class WorkbenchPackageImpl extends EPackageImpl implements WorkbenchPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getFileAssociationsTask_Mappings()
   {
     return (EReference)fileAssociationsTaskEClass.getEStructuralFeatures().get(0);
@@ -173,6 +175,7 @@ public class WorkbenchPackageImpl extends EPackageImpl implements WorkbenchPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getFileMapping()
   {
     return fileMappingEClass;
@@ -183,6 +186,7 @@ public class WorkbenchPackageImpl extends EPackageImpl implements WorkbenchPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getFileMapping_FilePattern()
   {
     return (EAttribute)fileMappingEClass.getEStructuralFeatures().get(0);
@@ -193,6 +197,7 @@ public class WorkbenchPackageImpl extends EPackageImpl implements WorkbenchPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getFileMapping_DefaultEditorID()
   {
     return (EAttribute)fileMappingEClass.getEStructuralFeatures().get(1);
@@ -203,6 +208,7 @@ public class WorkbenchPackageImpl extends EPackageImpl implements WorkbenchPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getFileMapping_Editors()
   {
     return (EReference)fileMappingEClass.getEStructuralFeatures().get(2);
@@ -213,6 +219,7 @@ public class WorkbenchPackageImpl extends EPackageImpl implements WorkbenchPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getFileEditor()
   {
     return fileEditorEClass;
@@ -223,6 +230,7 @@ public class WorkbenchPackageImpl extends EPackageImpl implements WorkbenchPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getFileEditor_ID()
   {
     return (EAttribute)fileEditorEClass.getEStructuralFeatures().get(0);
@@ -233,6 +241,7 @@ public class WorkbenchPackageImpl extends EPackageImpl implements WorkbenchPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getKeyBindingTask()
   {
     return keyBindingTaskEClass;
@@ -243,6 +252,7 @@ public class WorkbenchPackageImpl extends EPackageImpl implements WorkbenchPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getKeyBindingTask_Scheme()
   {
     return (EAttribute)keyBindingTaskEClass.getEStructuralFeatures().get(0);
@@ -253,6 +263,7 @@ public class WorkbenchPackageImpl extends EPackageImpl implements WorkbenchPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getKeyBindingTask_Contexts()
   {
     return (EReference)keyBindingTaskEClass.getEStructuralFeatures().get(1);
@@ -263,6 +274,7 @@ public class WorkbenchPackageImpl extends EPackageImpl implements WorkbenchPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getKeyBindingTask_Platform()
   {
     return (EAttribute)keyBindingTaskEClass.getEStructuralFeatures().get(2);
@@ -273,6 +285,7 @@ public class WorkbenchPackageImpl extends EPackageImpl implements WorkbenchPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getKeyBindingTask_Locale()
   {
     return (EAttribute)keyBindingTaskEClass.getEStructuralFeatures().get(3);
@@ -283,6 +296,7 @@ public class WorkbenchPackageImpl extends EPackageImpl implements WorkbenchPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getKeyBindingTask_Keys()
   {
     return (EAttribute)keyBindingTaskEClass.getEStructuralFeatures().get(4);
@@ -293,6 +307,7 @@ public class WorkbenchPackageImpl extends EPackageImpl implements WorkbenchPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getKeyBindingTask_Command()
   {
     return (EAttribute)keyBindingTaskEClass.getEStructuralFeatures().get(5);
@@ -303,6 +318,7 @@ public class WorkbenchPackageImpl extends EPackageImpl implements WorkbenchPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getKeyBindingTask_CommandParameters()
   {
     return (EReference)keyBindingTaskEClass.getEStructuralFeatures().get(6);
@@ -313,6 +329,7 @@ public class WorkbenchPackageImpl extends EPackageImpl implements WorkbenchPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getKeyBindingContext()
   {
     return keyBindingContextEClass;
@@ -323,6 +340,7 @@ public class WorkbenchPackageImpl extends EPackageImpl implements WorkbenchPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getKeyBindingContext_ID()
   {
     return (EAttribute)keyBindingContextEClass.getEStructuralFeatures().get(0);
@@ -333,6 +351,7 @@ public class WorkbenchPackageImpl extends EPackageImpl implements WorkbenchPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getCommandParameter()
   {
     return commandParameterEClass;
@@ -343,6 +362,7 @@ public class WorkbenchPackageImpl extends EPackageImpl implements WorkbenchPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getCommandParameter_ID()
   {
     return (EAttribute)commandParameterEClass.getEStructuralFeatures().get(0);
@@ -353,6 +373,7 @@ public class WorkbenchPackageImpl extends EPackageImpl implements WorkbenchPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getCommandParameter_Value()
   {
     return (EAttribute)commandParameterEClass.getEStructuralFeatures().get(1);
@@ -363,6 +384,7 @@ public class WorkbenchPackageImpl extends EPackageImpl implements WorkbenchPacka
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public WorkbenchFactory getWorkbenchFactory()
   {
     return (WorkbenchFactory)getEFactoryInstance();

@@ -64,9 +64,9 @@ public class ProjectCatalogGenerator
 
   private static final String VERSION = "version";
 
-  private final Map<String, EObject> items = new HashMap<String, EObject>();
+  private final Map<String, EObject> items = new HashMap<>();
 
-  private final Map<EObject, String> ids = new HashMap<EObject, String>();
+  private final Map<EObject, String> ids = new HashMap<>();
 
   public static void main(String[] args) throws IOException
   {
@@ -111,7 +111,7 @@ public class ProjectCatalogGenerator
   {
     ResourceSet resourceSet = createResourceSet();
 
-    EList<ProjectCatalog> catalogs = new BasicEList<ProjectCatalog>();
+    EList<ProjectCatalog> catalogs = new BasicEList<>();
     for (File file : PROJECT_CATALOGS.listFiles())
     {
       URI uri = local ? URI.createFileURI(file.toString())
@@ -209,7 +209,7 @@ public class ProjectCatalogGenerator
 
   private EList<ProjectCatalog> addClassifications()
   {
-    EList<ProjectCatalog> catalogs = new BasicEList<ProjectCatalog>();
+    EList<ProjectCatalog> catalogs = new BasicEList<>();
     catalogs.add((ProjectCatalog)addItem(CLASSIFICATION, "3", "BIRT"));
     catalogs.add((ProjectCatalog)addItem(CLASSIFICATION, "9", "DataTools"));
     catalogs.add((ProjectCatalog)addItem(CLASSIFICATION, "2", "Eclipse"));

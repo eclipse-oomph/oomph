@@ -61,6 +61,7 @@ public abstract class AbstractP2Test extends AbstractTest
 
   private static final VersionedIdFilter CDO_FILTER = new VersionedIdFilter()
   {
+    @Override
     public boolean matches(IVersionedId versionedId)
     {
       String id = versionedId.getId();
@@ -70,6 +71,7 @@ public abstract class AbstractP2Test extends AbstractTest
 
   private static final VersionedIdFilter PLATFORM_FILTER = new VersionedIdFilter()
   {
+    @Override
     public boolean matches(IVersionedId versionedId)
     {
       String id = versionedId.getId();
@@ -151,7 +153,7 @@ public abstract class AbstractP2Test extends AbstractTest
 
   public static void mirrorArtifactRepository(URI sourceURI, URI targetURI, VersionedIdFilter filter, IProgressMonitor monitor) throws CoreException
   {
-    List<URI> repositoriesToRemove = new ArrayList<URI>();
+    List<URI> repositoriesToRemove = new ArrayList<>();
     repositoriesToRemove.add(targetURI);
 
     Agent agent = P2Util.getAgentManager().getCurrentAgent();
@@ -173,7 +175,7 @@ public abstract class AbstractP2Test extends AbstractTest
       IArtifactRepository targetRepository = manager.createRepository(targetURI, name, SIMPLE_ARTIFACT_REPOSITORY, sourceRepository.getProperties());
       targetRepository.setProperty(IRepository.PROP_COMPRESSED, "true");
 
-      List<IArtifactKey> keys = new ArrayList<IArtifactKey>();
+      List<IArtifactKey> keys = new ArrayList<>();
       for (IArtifactKey key : P2Util.asIterable(sourceRepository.query(ArtifactKeyQuery.ALL_KEYS, null)))
       {
         if (filter == null || filter.matches(key))
@@ -210,7 +212,7 @@ public abstract class AbstractP2Test extends AbstractTest
 
   public static void mirrorMetadataRepository(URI sourceURI, URI targetURI, VersionedIdFilter filter, IProgressMonitor monitor) throws CoreException
   {
-    List<URI> repositoriesToRemove = new ArrayList<URI>();
+    List<URI> repositoriesToRemove = new ArrayList<>();
     repositoriesToRemove.add(targetURI);
 
     IMetadataRepositoryManager manager = P2Util.getAgentManager().getCurrentAgent().getMetadataRepositoryManager();
@@ -231,7 +233,7 @@ public abstract class AbstractP2Test extends AbstractTest
       IMetadataRepository targetRepository = manager.createRepository(targetURI, name, SIMPLE_METADATA_REPOSITORY, sourceRepository.getProperties());
       targetRepository.setProperty(IRepository.PROP_COMPRESSED, "true");
 
-      List<IInstallableUnit> ius = new ArrayList<IInstallableUnit>();
+      List<IInstallableUnit> ius = new ArrayList<>();
       for (IInstallableUnit iu : P2Util.asIterable(sourceRepository.query(QueryUtil.createIUAnyQuery(), null)))
       {
         if (filter == null || filter.matches(iu))

@@ -47,7 +47,7 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public final class AdditionalURIPrompterDialog extends OomphDialog implements ICheckStateListener
 {
-  private final Set<URI> checkedRepositories = new HashSet<URI>();
+  private final Set<URI> checkedRepositories = new HashSet<>();
 
   private boolean firstTime;
 
@@ -186,7 +186,7 @@ public final class AdditionalURIPrompterDialog extends OomphDialog implements IC
     Label uriLabel = new Label(uriComposite, SWT.NONE);
     uriLabel.setText(Messages.AdditionalURIPrompterDialog_uriLabel);
 
-    final AtomicReference<URI> enteredURI = new AtomicReference<URI>();
+    final AtomicReference<URI> enteredURI = new AtomicReference<>();
     final Text uriText = new Text(uriComposite, SWT.BORDER);
     uriText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
@@ -213,6 +213,7 @@ public final class AdditionalURIPrompterDialog extends OomphDialog implements IC
 
     uriText.addModifyListener(new ModifyListener()
     {
+      @Override
       public void modifyText(ModifyEvent e)
       {
         URI uri;
@@ -243,6 +244,7 @@ public final class AdditionalURIPrompterDialog extends OomphDialog implements IC
 
   }
 
+  @Override
   public void checkStateChanged(CheckStateChangedEvent event)
   {
     checkedRepositories.clear();

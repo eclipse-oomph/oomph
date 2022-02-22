@@ -76,11 +76,12 @@ public class AndPredicateImpl extends PredicateImpl implements AndPredicate
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<Predicate> getOperands()
   {
     if (operands == null)
     {
-      operands = new EObjectContainmentEList<Predicate>(Predicate.class, this, PredicatesPackage.AND_PREDICATE__OPERANDS);
+      operands = new EObjectContainmentEList<>(Predicate.class, this, PredicatesPackage.AND_PREDICATE__OPERANDS);
     }
     return operands;
   }

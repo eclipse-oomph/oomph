@@ -4,7 +4,7 @@
     modelPluginID="org.eclipse.oomph.setup" modelName="Setup" modelPluginClass="org.eclipse.oomph.internal.setup.SetupPlugin"
     updateClasspath="false" nonNLSMarkers="true" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
     testsDirectory="" importerID="org.eclipse.emf.importer.ecore" containmentProxies="true"
-    complianceLevel="5.0" optimizedHasChildren="true" runtimeVersion="2.10" usedGenPackages="../../org.eclipse.oomph.base/model/Base.genmodel#//base"
+    complianceLevel="11.0" optimizedHasChildren="true" runtimeVersion="2.10" usedGenPackages="../../org.eclipse.oomph.base/model/Base.genmodel#//base"
     decoration="Live" cleanup="true">
   <foreignModel>Setup.ecore</foreignModel>
   <genPackages prefix="Setup" basePackage="org.eclipse.oomph" disposableProviderFactory="true"

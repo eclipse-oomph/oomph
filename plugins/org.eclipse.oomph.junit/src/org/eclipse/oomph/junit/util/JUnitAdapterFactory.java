@@ -85,7 +85,7 @@ public class JUnitAdapterFactory extends AdapterFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  protected JUnitSwitch<Adapter> modelSwitch = new JUnitSwitch<Adapter>()
+  protected JUnitSwitch<Adapter> modelSwitch = new JUnitSwitch<>()
   {
     @Override
     public Adapter caseJUnitDocumentRoot(JUnitDocumentRoot object)

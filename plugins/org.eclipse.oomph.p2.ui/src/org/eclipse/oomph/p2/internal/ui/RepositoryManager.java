@@ -38,9 +38,9 @@ public final class RepositoryManager
 
   private final IDialogSettings settings;
 
-  private final List<RepositoryManagerListener> listeners = new ArrayList<RepositoryManagerListener>();
+  private final List<RepositoryManagerListener> listeners = new ArrayList<>();
 
-  private final LinkedList<String> repositories = new LinkedList<String>();
+  private final LinkedList<String> repositories = new LinkedList<>();
 
   private String currentProfileLocation;
 
@@ -100,7 +100,7 @@ public final class RepositoryManager
   {
     String[] array;
 
-    List<String> filteredRepositories = new ArrayList<String>(repositories);
+    List<String> filteredRepositories = new ArrayList<>(repositories);
     filteredRepositories.remove(currentProfileLocation);
     filteredRepositories.remove("platform:/resource/"); //$NON-NLS-1$
     int size = filteredRepositories.size();

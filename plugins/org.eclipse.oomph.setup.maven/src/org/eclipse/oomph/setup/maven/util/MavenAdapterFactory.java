@@ -81,7 +81,7 @@ public class MavenAdapterFactory extends AdapterFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  protected MavenSwitch<Adapter> modelSwitch = new MavenSwitch<Adapter>()
+  protected MavenSwitch<Adapter> modelSwitch = new MavenSwitch<>()
   {
     @Override
     public Adapter caseMavenImportTask(MavenImportTask object)

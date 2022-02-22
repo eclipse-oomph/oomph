@@ -111,6 +111,7 @@ public class FilePredicateImpl extends PredicateImpl implements FilePredicate
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getFilePattern()
   {
     return filePattern;
@@ -121,6 +122,7 @@ public class FilePredicateImpl extends PredicateImpl implements FilePredicate
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setFilePattern(String newFilePattern)
   {
     String oldFilePattern = filePattern;
@@ -136,6 +138,7 @@ public class FilePredicateImpl extends PredicateImpl implements FilePredicate
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getContentPattern()
   {
     return contentPattern;
@@ -146,6 +149,7 @@ public class FilePredicateImpl extends PredicateImpl implements FilePredicate
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setContentPattern(String newContentPattern)
   {
     String oldContentPattern = contentPattern;
@@ -210,6 +214,7 @@ public class FilePredicateImpl extends PredicateImpl implements FilePredicate
         {
           resource.accept(new IResourceVisitor()
           {
+            @Override
             public boolean visit(IResource resource) throws CoreException
             {
               String path = resource.getProjectRelativePath().toString();

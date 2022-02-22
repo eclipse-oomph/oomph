@@ -115,11 +115,11 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
 
   private static final Pattern AUTOMATIC_MODULE_NAME_PATTERN = Pattern.compile(AUTOMATIC_MODULE_NAME_HEADER + ":( *)(.*)"); //$NON-NLS-1$
 
-  private static final Set<String> releasePaths = new HashSet<String>();
+  private static final Set<String> releasePaths = new HashSet<>();
 
-  private static final Map<IElement, IElement> elementCache = new HashMap<IElement, IElement>();
+  private static final Map<IElement, IElement> elementCache = new HashMap<>();
 
-  private static final Map<IElement, Set<IElement>> elementReferences = new HashMap<IElement, Set<IElement>>();
+  private static final Map<IElement, Set<IElement>> elementReferences = new HashMap<>();
 
   private static IResourceChangeListener postBuildListener;
 
@@ -143,6 +143,7 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
   {
   }
 
+  @Override
   public IElement resolveElement(IElement key)
   {
     try
@@ -189,7 +190,7 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
               Set<IElement> references = elementReferences.get(child);
               if (references == null)
               {
-                references = new HashSet<IElement>();
+                references = new HashSet<>();
                 elementReferences.put(child, references);
               }
 
@@ -223,7 +224,7 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
   @Override
   protected final IProject[] build(int kind, Map<String, String> args, IProgressMonitor monitor) throws CoreException
   {
-    List<IProject> buildDependencies = new UniqueEList<IProject>();
+    List<IProject> buildDependencies = new UniqueEList<>();
     build(kind, args, monitor, buildDependencies);
     return buildDependencies.toArray(new IProject[buildDependencies.size()]);
   }
@@ -240,6 +241,7 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
     {
       postBuildListener = new IResourceChangeListener()
       {
+        @Override
         public void resourceChanged(IResourceChangeEvent event)
         {
           elementCache.clear();
@@ -618,7 +620,7 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
 
           if (!arguments.isIgnoreFeatureContentChanges())
           {
-            List<Problem> problems = new ArrayList<Problem>();
+            List<Problem> problems = new ArrayList<>();
             checkFeatureReferences(componentModelFile, element, problems);
             if (!problems.isEmpty())
             {
@@ -820,13 +822,13 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
 
         deviations = Boolean.valueOf(properties.getProperty(DEVIATIONS_PROPERTY_KEY, "false")); //$NON-NLS-1$
 
-        rootProjects = new HashSet<String>();
+        rootProjects = new HashSet<>();
         for (String rootProject : Arrays.asList(properties.getProperty(ROOT_PROJECTS_KEY, "").split(" "))) //$NON-NLS-1$ //$NON-NLS-2$
         {
           rootProjects.add(rootProject.replace("\\ ", " ").replace("\\\\", "\\")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
         }
 
-        ignoredReferences = new HashSet<String>();
+        ignoredReferences = new HashSet<>();
         for (String ignoredReference : Arrays.asList(properties.getProperty(IGNORED_REFERENCES_KEY, "").split(" "))) //$NON-NLS-1$ //$NON-NLS-2$
         {
           ignoredReferences.add(ignoredReference.replace("\\ ", " ").replace("\\\\", "\\")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
@@ -857,8 +859,8 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
     deviations = false;
     integration = true;
     service = true;
-    rootProjects = new HashSet<String>();
-    ignoredReferences = new HashSet<String>();
+    rootProjects = new HashSet<>();
+    ignoredReferences = new HashSet<>();
 
     String lineDelimiter = VersionUtil.getLineDelimiter(propertiesFile);
     String contents = INTEGRATION_PROPERTY_KEY + " = " + integration + lineDelimiter + SERVICE_PROPERTY_KEY + " = " + service + lineDelimiter //$NON-NLS-1$ //$NON-NLS-2$
@@ -922,7 +924,7 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
 
   private void checkFeatureRedundancy(IFile file, IElement element)
   {
-    Map<IElement, IElement> allFeatureChildren = new HashMap<IElement, IElement>();
+    Map<IElement, IElement> allFeatureChildren = new HashMap<>();
     List<IElement> children = element.getChildren();
     for (IElement child : children)
     {
@@ -968,8 +970,8 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
   private void checkFeatureClosureCompleteness(IFile file, IElement element)
   {
     List<IElement> children = element.getChildren();
-    Set<IElement> plugins = new HashSet<IElement>();
-    Map<IElement, IElement> closure = new HashMap<IElement, IElement>();
+    Set<IElement> plugins = new HashSet<>();
+    Map<IElement, IElement> closure = new HashMap<>();
 
     for (IElement child : children)
     {

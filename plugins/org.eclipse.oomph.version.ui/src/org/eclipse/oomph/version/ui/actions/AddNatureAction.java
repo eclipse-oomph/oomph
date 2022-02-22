@@ -61,7 +61,7 @@ public class AddNatureAction extends AbstractAction<IVersionBuilderArguments>
   @Override
   protected IVersionBuilderArguments promptArguments()
   {
-    List<IProject> projects = new ArrayList<IProject>();
+    List<IProject> projects = new ArrayList<>();
     for (Iterator<?> it = ((IStructuredSelection)selection).iterator(); it.hasNext();)
     {
       Object element = it.next();
@@ -71,8 +71,8 @@ public class AddNatureAction extends AbstractAction<IVersionBuilderArguments>
       }
     }
 
-    List<IProject> basePlugins = new ArrayList<IProject>();
-    List<IProject> baseFeatures = new ArrayList<IProject>();
+    List<IProject> basePlugins = new ArrayList<>();
+    List<IProject> baseFeatures = new ArrayList<>();
     for (int i = 0; i < projects.size(); ++i)
     {
       IProject project = projects.get(i);
@@ -227,7 +227,7 @@ public class AddNatureAction extends AbstractAction<IVersionBuilderArguments>
                 }
 
                 String[] tokens = entry.getTokens();
-                Set<String> value = new HashSet<String>();
+                Set<String> value = new HashSet<>();
                 if (tokens != null)
                 {
                   value.addAll(Arrays.asList(tokens));

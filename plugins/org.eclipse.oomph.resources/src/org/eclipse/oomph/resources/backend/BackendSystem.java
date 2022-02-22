@@ -146,7 +146,7 @@ public abstract class BackendSystem extends BackendContainer
       return NO_MEMBERS;
     }
 
-    List<BackendResource> result = new ArrayList<BackendResource>(delegateMembers.length);
+    List<BackendResource> result = new ArrayList<>(delegateMembers.length);
     for (int i = 0; i < delegateMembers.length; i++)
     {
       ResourcesPlugin.checkCancelation(monitor);
@@ -164,6 +164,7 @@ public abstract class BackendSystem extends BackendContainer
 
     Collections.sort(result, new Comparator<BackendResource>()
     {
+      @Override
       public int compare(BackendResource r1, BackendResource r2)
       {
         int t1 = r1 instanceof BackendContainer ? 0 : 1;
@@ -241,7 +242,7 @@ public abstract class BackendSystem extends BackendContainer
   {
     SynchronizedCounter counter = new SynchronizedCounter();
 
-    Queue<BackendResource> queue = new ConcurrentLinkedQueue<BackendResource>();
+    Queue<BackendResource> queue = new ConcurrentLinkedQueue<>();
     queue.offer(backendResource);
 
     for (;;)
@@ -524,9 +525,9 @@ public abstract class BackendSystem extends BackendContainer
 
     private static final int SKIP_THRESHOLD = PropertiesUtil.getProperty(PROP_SKIP_THRESHOLD, DEFAULT_SKIP_THRESHOLD);
 
-    private final LinkedList<VisitorThread> threads = new LinkedList<VisitorThread>();
+    private final LinkedList<VisitorThread> threads = new LinkedList<>();
 
-    private final Set<VisitorThread> checkouts = new HashSet<VisitorThread>();
+    private final Set<VisitorThread> checkouts = new HashSet<>();
 
     private final BackendSystem backendSystem;
 
@@ -612,7 +613,7 @@ public abstract class BackendSystem extends BackendContainer
   {
     public static final Registry INSTANCE = new Registry();
 
-    private final Map<URI, BackendSystem> backendSystems = new WeakHashMap<URI, BackendSystem>();
+    private final Map<URI, BackendSystem> backendSystems = new WeakHashMap<>();
 
     private Registry()
     {
@@ -651,7 +652,7 @@ public abstract class BackendSystem extends BackendContainer
     {
       public static final Registry INSTANCE = new Registry();
 
-      private final Map<String, IFactory> factories = new HashMap<String, IFactory>();
+      private final Map<String, IFactory> factories = new HashMap<>();
 
       private Registry()
       {
@@ -716,7 +717,7 @@ public abstract class BackendSystem extends BackendContainer
 
       public synchronized Set<String> removeFactory(IFactory factory) throws BackendException
       {
-        Set<String> schemes = new HashSet<String>();
+        Set<String> schemes = new HashSet<>();
         for (Iterator<Map.Entry<String, IFactory>> it = factories.entrySet().iterator(); it.hasNext();)
         {
           Map.Entry<String, IFactory> entry = it.next();

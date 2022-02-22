@@ -119,7 +119,7 @@ public final class SetupUtil
     Set<String> targetDefinitions = (Set<String>)context.get(RESOLVING_TARGET_PLATFORM_DEFINITIONS);
     if (targetDefinitions == null)
     {
-      targetDefinitions = new LinkedHashSet<String>();
+      targetDefinitions = new LinkedHashSet<>();
       context.put(RESOLVING_TARGET_PLATFORM_DEFINITIONS, targetDefinitions);
     }
 

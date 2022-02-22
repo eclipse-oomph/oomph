@@ -60,6 +60,7 @@ public abstract class PredicateImpl extends ModelElementImpl implements Predicat
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public abstract boolean matches(IResource resource);
 
   protected Pattern getPattern(String pattern)

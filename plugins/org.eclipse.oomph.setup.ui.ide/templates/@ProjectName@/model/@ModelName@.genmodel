@@ -7,7 +7,7 @@
     modelName="@TaskName@"
     rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
     importerID="org.eclipse.emf.importer.ecore"
-    complianceLevel="5.0"
+    complianceLevel="11.0"
     copyrightFields="false"
     optimizedHasChildren="true"
     usedGenPackages="../../org.eclipse.oomph.base/model/Base.genmodel#//base ../../org.eclipse.oomph.setup/model/Setup.genmodel#//setup"

@@ -122,11 +122,12 @@ public class WorkingSetImpl extends ModelElementImpl implements WorkingSet
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<Predicate> getPredicates()
   {
     if (predicates == null)
     {
-      predicates = new EObjectContainmentEList<Predicate>(Predicate.class, this, WorkingSetsPackage.WORKING_SET__PREDICATES);
+      predicates = new EObjectContainmentEList<>(Predicate.class, this, WorkingSetsPackage.WORKING_SET__PREDICATES);
     }
     return predicates;
   }
@@ -136,6 +137,7 @@ public class WorkingSetImpl extends ModelElementImpl implements WorkingSet
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getID()
   {
     return iD;
@@ -146,6 +148,7 @@ public class WorkingSetImpl extends ModelElementImpl implements WorkingSet
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setID(String newID)
   {
     String oldID = iD;
@@ -161,6 +164,7 @@ public class WorkingSetImpl extends ModelElementImpl implements WorkingSet
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public boolean matches(IResource resource)
   {
     for (Predicate predicate : getPredicates())
@@ -179,6 +183,7 @@ public class WorkingSetImpl extends ModelElementImpl implements WorkingSet
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getName()
   {
     return name;
@@ -189,6 +194,7 @@ public class WorkingSetImpl extends ModelElementImpl implements WorkingSet
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setName(String newName)
   {
     String oldName = name;

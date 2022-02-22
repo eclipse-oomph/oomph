@@ -107,11 +107,11 @@ public abstract class RecorderTransaction
 
   private final Resource resource;
 
-  private final Map<String, Boolean> cleanPolicies = new HashMap<String, Boolean>();
+  private final Map<String, Boolean> cleanPolicies = new HashMap<>();
 
-  private final Map<String, Boolean> policies = new HashMap<String, Boolean>();
+  private final Map<String, Boolean> policies = new HashMap<>();
 
-  private final Set<URI> preferencesToRemove = new HashSet<URI>();
+  private final Set<URI> preferencesToRemove = new HashSet<>();
 
   private Map<URI, Pair<String, String>> preferences;
 
@@ -183,17 +183,7 @@ public abstract class RecorderTransaction
 
   public boolean isDirty()
   {
-    if (forceDirty)
-    {
-      return true;
-    }
-
-    if (!policies.isEmpty())
-    {
-      return true;
-    }
-
-    if (preferences != null && !preferences.isEmpty())
+    if (forceDirty || !policies.isEmpty() || preferences != null && !preferences.isEmpty())
     {
       return true;
     }
@@ -320,7 +310,7 @@ public abstract class RecorderTransaction
   {
     if (commitResult == null)
     {
-      commitResult = new HashMap<String, PreferenceTask>();
+      commitResult = new HashMap<>();
 
       if (isDirty())
       {
@@ -335,7 +325,7 @@ public abstract class RecorderTransaction
 
   protected final List<? extends Object> applyChanges(Map<String, PreferenceTask> preferenceTasks)
   {
-    List<Object> recorderObjects = new ArrayList<Object>();
+    List<Object> recorderObjects = new ArrayList<>();
 
     if (recorderAnnotation == null)
     {
@@ -421,7 +411,7 @@ public abstract class RecorderTransaction
     {
       if (preferences == null)
       {
-        preferences = new HashMap<URI, Pair<String, String>>();
+        preferences = new HashMap<>();
       }
 
       for (URI key : preferencesToRemove)
@@ -477,7 +467,7 @@ public abstract class RecorderTransaction
 
   private static Map<String, String> getPoliciesFromProperties()
   {
-    Map<String, String> policies = new LinkedHashMap<String, String>();
+    Map<String, String> policies = new LinkedHashMap<>();
     BundleFile policiesFile = SetupUIPlugin.INSTANCE.getRootFile().getChild(POLICIES_FILE_NAME);
     if (policiesFile != null)
     {
@@ -511,7 +501,7 @@ public abstract class RecorderTransaction
 
   private static Map<String, String> getPoliciesFromExtensions()
   {
-    Map<String, String> policies = new LinkedHashMap<String, String>();
+    Map<String, String> policies = new LinkedHashMap<>();
     IExtensionRegistry extensionRegistry = Platform.getExtensionRegistry();
     for (IConfigurationElement configurationElement : extensionRegistry.getConfigurationElementsFor(POLICIES_EXT_POINT))
     {
@@ -585,6 +575,7 @@ public abstract class RecorderTransaction
     EList<SetupTask> pluginCompounds = preferenceContainer.getSetupTasks();
     ECollections.sort(pluginCompounds, new Comparator<SetupTask>()
     {
+      @Override
       public int compare(SetupTask o1, SetupTask o2)
       {
         if (o1 instanceof CompoundTask)
@@ -615,6 +606,7 @@ public abstract class RecorderTransaction
         EList<SetupTask> preferenceTasks = ((CompoundTask)pluginCompound).getSetupTasks();
         ECollections.sort(preferenceTasks, new Comparator<SetupTask>()
         {
+          @Override
           public int compare(SetupTask o1, SetupTask o2)
           {
             if (o1 instanceof PreferenceTask)
@@ -822,8 +814,8 @@ public abstract class RecorderTransaction
 
   public static List<SetupTask> record(Map<URI, Pair<String, String>> preferences)
   {
-    EList<SetupTask> setupTasks = new BasicEList<SetupTask>();
-    List<Object> recorderObjects = new ArrayList<Object>();
+    EList<SetupTask> setupTasks = new BasicEList<>();
+    List<Object> recorderObjects = new ArrayList<>();
     record(preferences, setupTasks, recorderObjects, null);
     return setupTasks;
   }
@@ -867,6 +859,7 @@ public abstract class RecorderTransaction
         {
           UIUtil.syncExec(new Runnable()
           {
+            @Override
             public void run()
             {
               editor[0] = SetupEditorSupport.getEditor(page, targetResourceURI, false, new SetupEditorSupport.LoadHandler()
@@ -1028,6 +1021,7 @@ public abstract class RecorderTransaction
 
       UIUtil.syncExec(new Runnable()
       {
+        @Override
         public void run()
         {
           CommandStack commandStack = domain.getCommandStack();

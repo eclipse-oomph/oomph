@@ -214,6 +214,7 @@ public class PerformStatusControl extends WorkbenchWindowControlContribution
       {
         UIUtil.timerExec(15000, new Runnable()
         {
+          @Override
           public void run()
           {
             if (!toolItem.isDisposed() && !shell.isDisposed() && !shell.isVisible())

@@ -107,6 +107,7 @@ public class APIBaselineFromTargetTaskImpl extends AbstractAPIBaselineTaskImpl i
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getTargetName()
   {
     return targetName;
@@ -117,6 +118,7 @@ public class APIBaselineFromTargetTaskImpl extends AbstractAPIBaselineTaskImpl i
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setTargetName(String newTargetName)
   {
     String oldTargetName = targetName;
@@ -214,6 +216,7 @@ public class APIBaselineFromTargetTaskImpl extends AbstractAPIBaselineTaskImpl i
     return result.toString();
   }
 
+  @Override
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     Method isDerivedFromTargetMethod;
@@ -277,6 +280,7 @@ public class APIBaselineFromTargetTaskImpl extends AbstractAPIBaselineTaskImpl i
     return backupRequired || target == null || !wasActive && isActivate() || hasTargetDefinitionUpdates;
   }
 
+  @Override
   public void perform(SetupTaskContext context) throws Exception
   {
     if (backupRequired)

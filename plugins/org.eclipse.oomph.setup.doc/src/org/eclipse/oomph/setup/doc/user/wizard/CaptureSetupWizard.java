@@ -157,7 +157,7 @@ public abstract class CaptureSetupWizard extends Capture.Window<WizardDialog>
 
   protected void postProcessUser(WizardDialog wizardDialog)
   {
-    List<EObject> objectsToRemove = new ArrayList<EObject>();
+    List<EObject> objectsToRemove = new ArrayList<>();
     for (TreeIterator<EObject> it = getSetupContext(wizardDialog).getUser().eAllContents(); it.hasNext();)
     {
       EObject eObject = it.next();

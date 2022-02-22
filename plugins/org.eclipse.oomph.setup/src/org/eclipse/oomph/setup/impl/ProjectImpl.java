@@ -106,11 +106,12 @@ public class ProjectImpl extends ScopeImpl implements Project
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<Stream> getStreams()
   {
     if (streams == null)
     {
-      streams = new EObjectContainmentWithInverseEList.Resolving<Stream>(Stream.class, this, SetupPackage.PROJECT__STREAMS, SetupPackage.STREAM__PROJECT);
+      streams = new EObjectContainmentWithInverseEList.Resolving<>(Stream.class, this, SetupPackage.PROJECT__STREAMS, SetupPackage.STREAM__PROJECT);
     }
     return streams;
   }
@@ -120,6 +121,7 @@ public class ProjectImpl extends ScopeImpl implements Project
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ProjectContainer getProjectContainer()
   {
     if (eContainerFeatureID() != SetupPackage.PROJECT__PROJECT_CONTAINER)
@@ -159,6 +161,7 @@ public class ProjectImpl extends ScopeImpl implements Project
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setProjectContainer(ProjectContainer newProjectContainer)
   {
     if (newProjectContainer != eInternalContainer() || eContainerFeatureID() != SetupPackage.PROJECT__PROJECT_CONTAINER && newProjectContainer != null)
@@ -193,6 +196,7 @@ public class ProjectImpl extends ScopeImpl implements Project
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ProjectContainer getLogicalProjectContainer()
   {
     if (logicalProjectContainer != null && logicalProjectContainer.eIsProxy())
@@ -226,6 +230,7 @@ public class ProjectImpl extends ScopeImpl implements Project
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setLogicalProjectContainer(ProjectContainer newLogicalProjectContainer)
   {
     ProjectContainer oldLogicalProjectContainer = logicalProjectContainer;
@@ -242,6 +247,7 @@ public class ProjectImpl extends ScopeImpl implements Project
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public Project getParentProject()
   {
     ProjectContainer projectContainer = getProjectContainer();
@@ -269,6 +275,7 @@ public class ProjectImpl extends ScopeImpl implements Project
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public ProjectCatalog getProjectCatalog()
   {
     ProjectContainer projectContainer = getProjectContainer();
@@ -291,11 +298,12 @@ public class ProjectImpl extends ScopeImpl implements Project
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<Project> getProjects()
   {
     if (projects == null)
     {
-      projects = new EObjectContainmentWithInverseEList.Resolving<Project>(Project.class, this, SetupPackage.PROJECT__PROJECTS,
+      projects = new EObjectContainmentWithInverseEList.Resolving<>(Project.class, this, SetupPackage.PROJECT__PROJECTS,
           SetupPackage.PROJECT__PROJECT_CONTAINER);
     }
     return projects;

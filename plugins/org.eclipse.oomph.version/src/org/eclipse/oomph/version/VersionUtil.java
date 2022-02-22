@@ -196,7 +196,7 @@ public final class VersionUtil
 
   public static List<IModel> getComponentModels(IProject project)
   {
-    List<IModel> result = new ArrayList<IModel>();
+    List<IModel> result = new ArrayList<>();
     IModel componentModel = PluginRegistry.findModel(project);
     if (componentModel == null)
     {
@@ -249,11 +249,12 @@ public final class VersionUtil
   @SuppressWarnings("restriction")
   public static List<org.eclipse.pde.internal.core.iproduct.IProductModel> getProductModels(IProject project)
   {
-    final List<org.eclipse.pde.internal.core.iproduct.IProductModel> productModels = new ArrayList<org.eclipse.pde.internal.core.iproduct.IProductModel>();
+    final List<org.eclipse.pde.internal.core.iproduct.IProductModel> productModels = new ArrayList<>();
     try
     {
       project.accept(new IResourceProxyVisitor()
       {
+        @Override
         public boolean visit(IResourceProxy proxy) throws CoreException
         {
           if (proxy.getType() == IResource.FILE)
@@ -319,7 +320,7 @@ public final class VersionUtil
       {
         try
         {
-          Set<IBuildConfiguration> allBuildConfigurations = new LinkedHashSet<IBuildConfiguration>();
+          Set<IBuildConfiguration> allBuildConfigurations = new LinkedHashSet<>();
           for (String releasePath : releasePaths)
           {
             if (Activator.getReleaseCheckMode(releasePath) == ReleaseCheckMode.NONE)
@@ -368,7 +369,7 @@ public final class VersionUtil
 
   private static IBuildConfiguration[] getBuildConfigs(String releasePath)
   {
-    List<IBuildConfiguration> buildConfigs = new ArrayList<IBuildConfiguration>();
+    List<IBuildConfiguration> buildConfigs = new ArrayList<>();
     for (IProject project : WORKSPACE.getRoot().getProjects())
     {
       if (project.isAccessible())
@@ -451,12 +452,8 @@ public final class VersionUtil
       return pluginModel.getBundleDescription().getSymbolicName();
     }
 
-    if (componentModel instanceof org.eclipse.pde.internal.core.ifeature.IFeatureModel)
-    {
-      return ((org.eclipse.pde.internal.core.ifeature.IFeatureModel)componentModel).getFeature().getId();
-    }
-
-    if (componentModel instanceof org.eclipse.pde.internal.core.iproduct.IProductModel)
+    if (componentModel instanceof org.eclipse.pde.internal.core.ifeature.IFeatureModel
+        || componentModel instanceof org.eclipse.pde.internal.core.iproduct.IProductModel)
     {
       return ((org.eclipse.pde.internal.core.ifeature.IFeatureModel)componentModel).getFeature().getId();
     }

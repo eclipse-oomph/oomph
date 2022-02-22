@@ -26,34 +26,42 @@ public class SynchronizerAdapter implements SynchronizerListener
   {
   }
 
+  @Override
   public void syncStarted(Synchronization synchronization)
   {
   }
 
+  @Override
   public void workingCopyCreated(Synchronization synchronization, WorkingCopy workingCopy)
   {
   }
 
+  @Override
   public void tasksCollected(Synchronization synchronization, Location location, Map<String, SetupTask> oldTasks, Map<String, SetupTask> newTasks)
   {
   }
 
+  @Override
   public void actionsComputed(Synchronization synchronization, Map<String, SyncAction> actions)
   {
   }
 
+  @Override
   public void actionResolved(Synchronization synchronization, SyncAction action, String id)
   {
   }
 
+  @Override
   public void commitStarted(Synchronization synchronization)
   {
   }
 
+  @Override
   public void commitFinished(Synchronization synchronization, Throwable t)
   {
   }
 
+  @Override
   public void lockReleased(Synchronization synchronization)
   {
   }

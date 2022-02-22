@@ -10,6 +10,8 @@
  */
 package org.eclipse.oomph.setup.projects.provider;
 
+import org.eclipse.oomph.base.BaseFactory;
+import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.resources.ResourcesFactory;
 import org.eclipse.oomph.setup.projects.ProjectsImportTask;
 import org.eclipse.oomph.setup.projects.ProjectsPackage;
@@ -181,6 +183,8 @@ public class ProjectsImportTaskItemProvider extends SetupTaskItemProvider
   protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object)
   {
     super.collectNewChildDescriptors(newChildDescriptors, object);
+
+    newChildDescriptors.add(createChildParameter(BasePackage.Literals.MODEL_ELEMENT__ANNOTATIONS, BaseFactory.eINSTANCE.createAnnotation()));
 
     newChildDescriptors
         .add(createChildParameter(ProjectsPackage.Literals.PROJECTS_IMPORT_TASK__SOURCE_LOCATORS, ResourcesFactory.eINSTANCE.createSourceLocator()));

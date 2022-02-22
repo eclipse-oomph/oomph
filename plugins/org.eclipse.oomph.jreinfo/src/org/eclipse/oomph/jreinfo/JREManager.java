@@ -63,9 +63,9 @@ public final class JREManager
 
   private static final String PROP_DEFAULT_JRE = "oomph.default.jres"; //$NON-NLS-1$
 
-  private final List<String> javaHomes = new ArrayList<String>();
+  private final List<String> javaHomes = new ArrayList<>();
 
-  private final List<JRE.Descriptor> descriptors = new ArrayList<JRE.Descriptor>();
+  private final List<JRE.Descriptor> descriptors = new ArrayList<>();
 
   private String systemJavaHome;
 
@@ -88,7 +88,7 @@ public final class JREManager
 
   private Set<File> getDefaultJavaHomes()
   {
-    Set<File> result = new LinkedHashSet<File>();
+    Set<File> result = new LinkedHashSet<>();
     String defaultJREs = PropertiesUtil.getProperty(PROP_DEFAULT_JRE);
     if (defaultJREs != null)
     {
@@ -115,6 +115,7 @@ public final class JREManager
 
     File[] childFolders = folder.listFiles(new FileFilter()
     {
+      @Override
       public boolean accept(File pathname)
       {
         return pathname.isDirectory();
@@ -166,7 +167,7 @@ public final class JREManager
 
   public synchronized Set<JRE> addExtraJavaHomes(String rootFolder, IProgressMonitor monitor)
   {
-    Set<JRE> result = new HashSet<JRE>();
+    Set<JRE> result = new HashSet<>();
 
     File folder = new File(rootFolder);
     if (folder.isDirectory())
@@ -269,7 +270,7 @@ public final class JREManager
         // The native launcher augments the system PATH.
         // It optionally prefixes the PATH with folder entries based on the JVM it has decided to use.
         // These entries always use '/' instead of '\' so we can recognize the entries added by the native launcher.
-        List<String> folders = new ArrayList<String>();
+        List<String> folders = new ArrayList<>();
         String path = System.getenv("PATH"); //$NON-NLS-1$
         for (String folder : path.split(File.pathSeparator))
         {
@@ -344,7 +345,7 @@ public final class JREManager
     Set<File> folders = getJavaHomes();
     List<JRE> jres = getJREs(filter, folders);
 
-    LinkedHashMap<File, JRE> result = new LinkedHashMap<File, JRE>();
+    LinkedHashMap<File, JRE> result = new LinkedHashMap<>();
     for (JRE jre : jres)
     {
       result.put(jre.getJavaHome(), jre);
@@ -362,7 +363,7 @@ public final class JREManager
 
   public JRE[] getAllJREs(JREFilter filter)
   {
-    List<JRE> jres = new ArrayList<JRE>();
+    List<JRE> jres = new ArrayList<>();
     for (JRE.Descriptor descriptor : descriptors)
     {
       JRE jre = new JRE(descriptor);
@@ -381,7 +382,7 @@ public final class JREManager
 
   private synchronized Set<File> getJavaHomes()
   {
-    Set<File> all = new HashSet<File>();
+    Set<File> all = new HashSet<>();
     all.addAll(toFile(javaHomes));
     all.addAll(toFile(loadExtraJavaHomes()));
     return all;
@@ -432,7 +433,7 @@ public final class JREManager
       }
     }
 
-    return new ArrayList<String>();
+    return new ArrayList<>();
   }
 
   private static void saveExtraJavaHomes(List<String> paths)
@@ -474,7 +475,7 @@ public final class JREManager
 
   private static List<JRE> getJREs(JREFilter filter, Collection<File> javaHomes)
   {
-    List<JRE> list = new ArrayList<JRE>();
+    List<JRE> list = new ArrayList<>();
     for (File javaHome : javaHomes)
     {
       try
@@ -502,7 +503,7 @@ public final class JREManager
 
   private static Set<File> toFile(Collection<String> paths)
   {
-    Set<File> result = new HashSet<File>();
+    Set<File> result = new HashSet<>();
     for (String javaHome : paths)
     {
       result.add(new File(javaHome));

@@ -74,11 +74,12 @@ public class ExclusionPredicateImpl extends PredicateImpl implements ExclusionPr
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<WorkingSet> getExcludedWorkingSets()
   {
     if (excludedWorkingSets == null)
     {
-      excludedWorkingSets = new EObjectResolvingEList<WorkingSet>(WorkingSet.class, this, WorkingSetsPackage.EXCLUSION_PREDICATE__EXCLUDED_WORKING_SETS);
+      excludedWorkingSets = new EObjectResolvingEList<>(WorkingSet.class, this, WorkingSetsPackage.EXCLUSION_PREDICATE__EXCLUDED_WORKING_SETS);
     }
     return excludedWorkingSets;
   }

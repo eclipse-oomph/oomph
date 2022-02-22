@@ -99,7 +99,7 @@ public class AgentAnalyzerComposite extends Composite
 
   private static final String SHOW_BY_ARTIFACT = Messages.AgentAnalyzerComposite_showByArtifact;
 
-  private final Set<ISelectionProvider> changingSelection = new HashSet<ISelectionProvider>();
+  private final Set<ISelectionProvider> changingSelection = new HashSet<>();
 
   private final Agent agent;
 
@@ -167,6 +167,7 @@ public class AgentAnalyzerComposite extends Composite
 
     addDisposeListener(new DisposeListener()
     {
+      @Override
       public void widgetDisposed(DisposeEvent e)
       {
         if (analyzer != null)
@@ -359,13 +360,13 @@ public class AgentAnalyzerComposite extends Composite
       {
         if (!changingSelection.contains(artifactViewer))
         {
-          Set<AnalyzedArtifact> artifacts = new HashSet<AnalyzedArtifact>();
+          Set<AnalyzedArtifact> artifacts = new HashSet<>();
           for (AnalyzedProfile profile : getSelectedProfiles())
           {
             artifacts.addAll(profile.getArtifacts());
           }
 
-          artifactViewer.setSelection(new StructuredSelection(new ArrayList<AnalyzedArtifact>(artifacts)));
+          artifactViewer.setSelection(new StructuredSelection(new ArrayList<>(artifacts)));
         }
       }
     });
@@ -496,7 +497,7 @@ public class AgentAnalyzerComposite extends Composite
         {
           if (!changingSelection.contains(profileViewer))
           {
-            Set<AnalyzedProfile> profiles = new HashSet<AnalyzedProfile>();
+            Set<AnalyzedProfile> profiles = new HashSet<>();
             for (AnalyzedArtifact artifact : getSelectedArtifacts())
             {
               profiles.addAll(artifact.getProfiles());
@@ -585,16 +586,19 @@ public class AgentAnalyzerComposite extends Composite
       ProgressMonitorDialog dialog = new ProgressMonitorDialog(getShell());
       dialog.run(true, true, new IRunnableWithProgress()
       {
+        @Override
         public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
         {
           analyzer = new AgentAnalyzer(agent, true, new Handler()
           {
+            @Override
             public void analyzerChanged(final AgentAnalyzer analyzer)
             {
               if (analyzer == AgentAnalyzerComposite.this.analyzer)
               {
                 asyncExec(new Runnable()
                 {
+                  @Override
                   public void run()
                   {
                     bundlePoolContentProvider.refresh();
@@ -607,6 +611,7 @@ public class AgentAnalyzerComposite extends Composite
 
                     getDisplay().asyncExec(new Runnable()
                     {
+                      @Override
                       public void run()
                       {
                         Object[] elements = bundlePoolContentProvider.getElements(analyzer);
@@ -621,10 +626,12 @@ public class AgentAnalyzerComposite extends Composite
               }
             }
 
+            @Override
             public void bundlePoolChanged(final AnalyzedBundlePool bundlePool, final boolean artifacts, final boolean profiles)
             {
               asyncExec(new Runnable()
               {
+                @Override
                 public void run()
                 {
                   bundlePoolViewer.update(bundlePool, null);
@@ -652,6 +659,7 @@ public class AgentAnalyzerComposite extends Composite
               });
             }
 
+            @Override
             public void profileChanged(final AnalyzedProfile profile)
             {
               if (deletingArtifacts)
@@ -663,6 +671,7 @@ public class AgentAnalyzerComposite extends Composite
               {
                 asyncExec(new Runnable()
                 {
+                  @Override
                   public void run()
                   {
                     profileViewer.update(profile, null);
@@ -671,6 +680,7 @@ public class AgentAnalyzerComposite extends Composite
               }
             }
 
+            @Override
             public void artifactChanged(final AnalyzedArtifact artifact)
             {
               if (deletingArtifacts)
@@ -682,6 +692,7 @@ public class AgentAnalyzerComposite extends Composite
               {
                 asyncExec(new Runnable()
                 {
+                  @Override
                   public void run()
                   {
                     if (artifact != null && ObjectUtil.equals(artifactContentProvider.getFilter(), SHOW_ALL))
@@ -882,6 +893,7 @@ public class AgentAnalyzerComposite extends Composite
       {
         UIUtil.runInProgressDialog(getShell(), new IRunnableWithProgress()
         {
+          @Override
           public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
           {
             SubMonitor progress = SubMonitor.convert(monitor, Messages.AgentAnalyzerComposite_profile_deletingProfiles, profiles.length).detectCancelation();
@@ -933,6 +945,7 @@ public class AgentAnalyzerComposite extends Composite
         deletingArtifacts = true;
         UIUtil.runInProgressDialog(getShell(), new IRunnableWithProgress()
         {
+          @Override
           public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
           {
             SubMonitor progress = SubMonitor.convert(monitor, Messages.AgentAnalyzerComposite_artifact_deletingArtifacts, artifacts.length).detectCancelation();
@@ -969,10 +982,11 @@ public class AgentAnalyzerComposite extends Composite
   {
     try
     {
-      final List<AnalyzedArtifact> remainingArtifacts = new ArrayList<AnalyzedArtifact>();
+      final List<AnalyzedArtifact> remainingArtifacts = new ArrayList<>();
 
       UIUtil.runInProgressDialog(getShell(), new IRunnableWithProgress()
       {
+        @Override
         public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
         {
           SubMonitor progress = SubMonitor.convert(monitor, AnalyzedArtifact.REPAIR_TASK_NAME, artifacts.length).detectCancelation();
@@ -991,7 +1005,7 @@ public class AgentAnalyzerComposite extends Composite
       artifactViewer.setSelection(StructuredSelection.EMPTY);
 
       boolean firstTime = true;
-      Set<URI> repositories = new HashSet<URI>(analyzer.getRepositoryURIs());
+      Set<URI> repositories = new HashSet<>(analyzer.getRepositoryURIs());
 
       while (!remainingArtifacts.isEmpty())
       {
@@ -1007,6 +1021,7 @@ public class AgentAnalyzerComposite extends Composite
         final Set<URI> checkedRepositories = dialog.getCheckedRepositories();
         UIUtil.runInProgressDialog(getShell(), new IRunnableWithProgress()
         {
+          @Override
           public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
           {
             SubMonitor progress = SubMonitor.convert(monitor, AnalyzedArtifact.REPAIR_TASK_NAME, artifacts.length).detectCancelation();
@@ -1041,6 +1056,7 @@ public class AgentAnalyzerComposite extends Composite
    */
   private abstract class SelectionChangedListener implements ISelectionChangedListener
   {
+    @Override
     public final void selectionChanged(SelectionChangedEvent event)
     {
       doSelectionChanged(event);
@@ -1113,6 +1129,7 @@ public class AgentAnalyzerComposite extends Composite
       this(control, false);
     }
 
+    @Override
     public String getColumnText(Object element, int columnIndex)
     {
       if (element instanceof AnalyzedBundlePool)
@@ -1174,6 +1191,7 @@ public class AgentAnalyzerComposite extends Composite
       return String.valueOf(element);
     }
 
+    @Override
     public Image getColumnImage(Object element, int columnIndex)
     {
       if (columnIndex == 0)
@@ -1223,6 +1241,7 @@ public class AgentAnalyzerComposite extends Composite
       return null;
     }
 
+    @Override
     public Font getFont(Object element, int columnIndex)
     {
       if (columnIndex == 0 && element instanceof AnalyzedBundlePool && ((AnalyzedBundlePool)element).isDownloadCache())
@@ -1233,6 +1252,7 @@ public class AgentAnalyzerComposite extends Composite
       return null;
     }
 
+    @Override
     public Color getForeground(Object element)
     {
       if (element instanceof AnalyzedArtifact)
@@ -1256,12 +1276,13 @@ public class AgentAnalyzerComposite extends Composite
       return null;
     }
 
+    @Override
     public Color getBackground(Object element)
     {
       return null;
     }
 
-    static Set<String> keys = new HashSet<String>();
+    static Set<String> keys = new HashSet<>();
 
     private static Image getPluginImage(String key)
     {
@@ -1316,17 +1337,20 @@ public class AgentAnalyzerComposite extends Composite
       resizeColumns();
     }
 
+    @Override
     public void inputChanged(Viewer viewer, Object oldInput, Object newInput)
     {
       input = newInput;
     }
 
+    @Override
     public void dispose()
     {
       input = null;
       tableViewer = null;
     }
 
+    @Override
     public void updateElement(int index)
     {
       Object[] elements = getElements(input);
@@ -1359,6 +1383,7 @@ public class AgentAnalyzerComposite extends Composite
       this.filter = filter;
       UIUtil.asyncExec(tableViewer.getTable().getDisplay(), new Runnable()
       {
+        @Override
         public void run()
         {
           tableViewer.setSelection(StructuredSelection.EMPTY);
@@ -1381,6 +1406,7 @@ public class AgentAnalyzerComposite extends Composite
       {
         UIUtil.asyncExec(table.getDisplay(), new Runnable()
         {
+          @Override
           public void run()
           {
             resizeColumns(true);
@@ -1426,6 +1452,7 @@ public class AgentAnalyzerComposite extends Composite
    */
   private final class BundlePoolContentProvider extends TableContentProvider
   {
+    @Override
     public Object[] getElements(Object input)
     {
       Map<File, AnalyzedBundlePool> map = ((AgentAnalyzer)input).getBundlePools();
@@ -1447,6 +1474,7 @@ public class AgentAnalyzerComposite extends Composite
    */
   private final class ProfileContentProvider extends TableContentProvider
   {
+    @Override
     public Object[] getElements(Object input)
     {
       String filter = getFilter();
@@ -1457,7 +1485,7 @@ public class AgentAnalyzerComposite extends Composite
 
       if (ObjectUtil.equals(filter, SHOW_BY_ARTIFACT))
       {
-        Set<AnalyzedProfile> profiles = new HashSet<AnalyzedProfile>();
+        Set<AnalyzedProfile> profiles = new HashSet<>();
         for (AnalyzedArtifact artifact : getSelectedArtifacts())
         {
           profiles.addAll(artifact.getProfiles());
@@ -1484,6 +1512,7 @@ public class AgentAnalyzerComposite extends Composite
    */
   private final class ArtifactContentProvider extends TableContentProvider
   {
+    @Override
     public Object[] getElements(Object input)
     {
       String filter = getFilter();

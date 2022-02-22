@@ -197,7 +197,7 @@ public class RecorderPreferencePage extends AbstractPreferencePage
 
     ComposedAdapterFactory adapterFactory = BaseEditUtil.createAdapterFactory();
     SetupContext setupContext = SetupContext.getSelf();
-    Set<Scope> targets = new HashSet<Scope>();
+    Set<Scope> targets = new HashSet<>();
 
     addTarget(adapterFactory, targets, setupContext.getUser());
 
@@ -258,6 +258,7 @@ public class RecorderPreferencePage extends AbstractPreferencePage
 
     FilterHandler filterHandler = new FilterHandler()
     {
+      @Override
       public void handleFilter(String filter)
       {
         ViewerFilter viewerFilter = null;
@@ -295,6 +296,7 @@ public class RecorderPreferencePage extends AbstractPreferencePage
     policiesComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, columns, 1));
     policiesComposite.addCheckStateListener(new ICheckStateListener()
     {
+      @Override
       public void checkStateChanged(CheckStateChangedEvent event)
       {
         updateEnablement();
@@ -368,6 +370,7 @@ public class RecorderPreferencePage extends AbstractPreferencePage
             {
               UIUtil.syncExec(policiesComposite, new Runnable()
               {
+                @Override
                 public void run()
                 {
                   if (!monitor.isCanceled())

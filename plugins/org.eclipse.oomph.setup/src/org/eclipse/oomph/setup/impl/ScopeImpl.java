@@ -136,6 +136,7 @@ public abstract class ScopeImpl extends SetupTaskContainerImpl implements Scope
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getName()
   {
     return name;
@@ -146,6 +147,7 @@ public abstract class ScopeImpl extends SetupTaskContainerImpl implements Scope
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setName(String newName)
   {
     String oldName = name;
@@ -161,6 +163,7 @@ public abstract class ScopeImpl extends SetupTaskContainerImpl implements Scope
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getLabel()
   {
     return label;
@@ -171,6 +174,7 @@ public abstract class ScopeImpl extends SetupTaskContainerImpl implements Scope
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setLabel(String newLabel)
   {
     String oldLabel = label;
@@ -186,6 +190,7 @@ public abstract class ScopeImpl extends SetupTaskContainerImpl implements Scope
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getDescription()
   {
     return description;
@@ -196,6 +201,7 @@ public abstract class ScopeImpl extends SetupTaskContainerImpl implements Scope
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setDescription(String newDescription)
   {
     String oldDescription = description;
@@ -211,6 +217,7 @@ public abstract class ScopeImpl extends SetupTaskContainerImpl implements Scope
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public String getQualifiedName()
   {
     StringBuilder result = new StringBuilder();
@@ -229,6 +236,7 @@ public abstract class ScopeImpl extends SetupTaskContainerImpl implements Scope
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public abstract ScopeType getType();
 
   /**
@@ -236,6 +244,7 @@ public abstract class ScopeImpl extends SetupTaskContainerImpl implements Scope
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public String getQualifiedLabel()
   {
     String label = getLabel();
@@ -244,7 +253,7 @@ public abstract class ScopeImpl extends SetupTaskContainerImpl implements Scope
       label = getName();
     }
 
-    List<String> labelQualifiers = new ArrayList<String>();
+    List<String> labelQualifiers = new ArrayList<>();
     for (Scope parentScope = getParentScope(); parentScope != null; parentScope = parentScope.getParentScope())
     {
       String parentLabel = parentScope.getLabel();
@@ -406,6 +415,7 @@ public abstract class ScopeImpl extends SetupTaskContainerImpl implements Scope
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public Scope getParentScope()
   {
     return null;

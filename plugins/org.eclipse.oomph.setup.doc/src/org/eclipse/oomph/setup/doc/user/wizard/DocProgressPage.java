@@ -202,7 +202,7 @@ public class DocProgressPage
     {
       IWizardPage page = wizardDialog.getCurrentPage();
 
-      Map<Control, Image> decorations = new LinkedHashMap<Control, Image>();
+      Map<Control, Image> decorations = new LinkedHashMap<>();
       tree = getCalloutImage(1);
       decorations.put(getViewerControl(wizardDialog, "treeViewer"), tree);
       log = getCalloutImage(2);
@@ -245,6 +245,7 @@ public class DocProgressPage
         instance = this;
       }
 
+      @Override
       public void task(SetupTask setupTask)
       {
         log.task(setupTask);
@@ -255,31 +256,37 @@ public class DocProgressPage
         }
       }
 
+      @Override
       public void setTerminating()
       {
         log.setTerminating();
       }
 
+      @Override
       public void log(Throwable t)
       {
         log.log(t);
       }
 
+      @Override
       public void log(IStatus status)
       {
         log.log(status);
       }
 
+      @Override
       public void log(String line, Severity severity)
       {
         log.log(line, severity);
       }
 
+      @Override
       public void log(String line, boolean filter, Severity severity)
       {
         log.log(line, filter, severity);
       }
 
+      @Override
       public void log(String line, boolean filter)
       {
         log.log(line, filter);
@@ -302,11 +309,13 @@ public class DocProgressPage
         }
       }
 
+      @Override
       public void log(String line)
       {
         log.log(line);
       }
 
+      @Override
       public boolean isCanceled()
       {
         return log.isCanceled();

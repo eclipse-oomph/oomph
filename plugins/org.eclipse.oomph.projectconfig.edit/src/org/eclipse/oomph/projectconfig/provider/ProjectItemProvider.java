@@ -177,6 +177,7 @@ public class ProjectItemProvider extends ModelElementItemProvider
     {
       IItemLabelProvider labelProvider = new IItemLabelProvider()
       {
+        @Override
         public String getText(Object object)
         {
           String result = itemDelegator.getText(object);
@@ -200,6 +201,7 @@ public class ProjectItemProvider extends ModelElementItemProvider
           return result;
         }
 
+        @Override
         public Object getImage(Object object)
         {
           return itemDelegator.getImage(object);
@@ -380,14 +382,14 @@ public class ProjectItemProvider extends ModelElementItemProvider
       this.project = project;
     }
 
-    Map<PreferenceProfile, IWrapperItemProvider> wrappers = new HashMap<PreferenceProfile, IWrapperItemProvider>();
+    Map<PreferenceProfile, IWrapperItemProvider> wrappers = new HashMap<>();
 
     public void update()
     {
       /*
        * for (Object child : getChildren()) { ((IDisposable)child).dispose(); }
        */
-      List<Object> children = new ArrayList<Object>();
+      List<Object> children = new ArrayList<>();
       EList<PreferenceProfile> referentProjects = project.getPreferenceProfileReferences();
       for (int i = 0, size = referentProjects.size(); i < size; ++i)
       {
@@ -437,7 +439,7 @@ public class ProjectItemProvider extends ModelElementItemProvider
           public Object getImage(Object object)
           {
             Object image = super.getImage(object);
-            List<Object> images = new ArrayList<Object>(2);
+            List<Object> images = new ArrayList<>(2);
             images.add(image);
             images.add(EMFEditPlugin.INSTANCE.getImage("full/ovr16/ControlledObject")); //$NON-NLS-1$
             return image = new ComposedImage(images);
@@ -513,7 +515,7 @@ public class ProjectItemProvider extends ModelElementItemProvider
       }
       else if (commandClass == AddCommand.class && collection != null)
       {
-        final Collection<Object> wrappers = new ArrayList<Object>();
+        final Collection<Object> wrappers = new ArrayList<>();
         for (Object value : collection)
         {
           if (value instanceof PreferenceProfile)
@@ -582,7 +584,7 @@ public class ProjectItemProvider extends ModelElementItemProvider
   @Override
   public Collection<?> getChildren(Object object)
   {
-    Collection<Object> result = new ArrayList<Object>(super.getChildren(object));
+    Collection<Object> result = new ArrayList<>(super.getChildren(object));
     Project project = (Project)object;
     if (references == null)
     {
@@ -605,9 +607,9 @@ public class ProjectItemProvider extends ModelElementItemProvider
     return super.createPrimaryDragAndDropCommand(domain, owner, location, operations, operation, collection);
   }
 
-  private static final Set<String> IGNORE_NAME_COMPONENTS = new HashSet<String>(Arrays.asList("org", "eclipse", "com")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+  private static final Set<String> IGNORE_NAME_COMPONENTS = new HashSet<>(Arrays.asList("org", "eclipse", "com")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-  private static final Map<String, String> ACRYONYMS = new HashMap<String, String>();
+  private static final Map<String, String> ACRYONYMS = new HashMap<>();
 
   static
   {
@@ -703,7 +705,7 @@ public class ProjectItemProvider extends ModelElementItemProvider
         }
         else
         {
-          Set<Property> inverse = new HashSet<Property>(realProperties);
+          Set<Property> inverse = new HashSet<>(realProperties);
           inverse.removeAll(properties);
           preferenceFilter.setExclusions(Pattern.compile(getPattern(inverse)));
         }
@@ -885,8 +887,8 @@ public class ProjectItemProvider extends ModelElementItemProvider
           WorkspaceConfiguration workspaceConfiguration = project.getConfiguration();
           for (PreferenceFilter preferenceFilter : preferenceProfile.getPreferenceFilters())
           {
-            Map<PreferenceFilter, Set<Property>> incomingCollisions = new LinkedHashMap<PreferenceFilter, Set<Property>>();
-            Map<PreferenceFilter, Set<Property>> outgoingCollisions = new LinkedHashMap<PreferenceFilter, Set<Property>>();
+            Map<PreferenceFilter, Set<Property>> incomingCollisions = new LinkedHashMap<>();
+            Map<PreferenceFilter, Set<Property>> outgoingCollisions = new LinkedHashMap<>();
             URI preferenceFilterNodeRelativePath = preferenceFilter.getPreferenceNode().getRelativePath();
             for (Property property : preferenceFilter.getProperties())
             {
@@ -903,7 +905,7 @@ public class ProjectItemProvider extends ModelElementItemProvider
                       Set<Property> properties = incomingCollisions.get(preferenceFilterReference);
                       if (properties == null)
                       {
-                        properties = new LinkedHashSet<Property>();
+                        properties = new LinkedHashSet<>();
                         incomingCollisions.put(preferenceFilterReference, properties);
                       }
                       properties.add(property);
@@ -912,7 +914,7 @@ public class ProjectItemProvider extends ModelElementItemProvider
                 }
               }
 
-              Set<Project> collidingProjects = new HashSet<Project>();
+              Set<Project> collidingProjects = new HashSet<>();
               for (Project otherProject : workspaceConfiguration.getProjects())
               {
                 if (otherProject != project)
@@ -943,7 +945,7 @@ public class ProjectItemProvider extends ModelElementItemProvider
                       Set<Property> properties = outgoingCollisions.get(collidingPreferenceFilter);
                       if (properties == null)
                       {
-                        properties = new LinkedHashSet<Property>();
+                        properties = new LinkedHashSet<>();
                         outgoingCollisions.put(collidingPreferenceFilter, properties);
                       }
                       properties.add(property);
@@ -1001,12 +1003,12 @@ public class ProjectItemProvider extends ModelElementItemProvider
                   SetCommand.create(domain, collidingPreferenceFilter, ProjectConfigPackage.Literals.PREFERENCE_FILTER__EXCLUSIONS, exclusions));
             }
 
-            Set<String> union = new LinkedHashSet<String>();
-            Set<PreferenceProfile> excludedPreferenceProfiles = new LinkedHashSet<PreferenceProfile>();
-            Map<Set<String>, Set<PreferenceFilter>> exclusionCombinations = new LinkedHashMap<Set<String>, Set<PreferenceFilter>>();
+            Set<String> union = new LinkedHashSet<>();
+            Set<PreferenceProfile> excludedPreferenceProfiles = new LinkedHashSet<>();
+            Map<Set<String>, Set<PreferenceFilter>> exclusionCombinations = new LinkedHashMap<>();
             for (Map.Entry<PreferenceFilter, Set<Property>> entry : outgoingCollisions.entrySet())
             {
-              Set<String> properties = new LinkedHashSet<String>();
+              Set<String> properties = new LinkedHashSet<>();
               for (Property property : entry.getValue())
               {
                 String name = property.getName();
@@ -1017,7 +1019,7 @@ public class ProjectItemProvider extends ModelElementItemProvider
               Set<PreferenceFilter> filters = exclusionCombinations.get(properties);
               if (filters == null)
               {
-                filters = new LinkedHashSet<PreferenceFilter>();
+                filters = new LinkedHashSet<>();
                 exclusionCombinations.put(properties, filters);
               }
               PreferenceFilter collidingPreferenceFilter = entry.getKey();
@@ -1070,7 +1072,7 @@ public class ProjectItemProvider extends ModelElementItemProvider
               int count = 0;
               for (Map.Entry<Set<String>, Set<PreferenceFilter>> entry : exclusionCombinations.entrySet())
               {
-                Set<String> properties = new LinkedHashSet<String>(union);
+                Set<String> properties = new LinkedHashSet<>(union);
                 properties.removeAll(entry.getKey());
                 if (!properties.isEmpty())
                 {
@@ -1082,7 +1084,7 @@ public class ProjectItemProvider extends ModelElementItemProvider
                   partialPreferenceFilter.setPreferenceNode(preferenceFilter.getPreferenceNode());
                   partialPreferenceProfile.getPreferenceFilters().add(partialPreferenceFilter);
 
-                  Set<String> projectNames = new LinkedHashSet<String>();
+                  Set<String> projectNames = new LinkedHashSet<>();
                   for (PreferenceFilter excludedPreferenceFilter : entry.getValue())
                   {
                     projectNames.add(excludedPreferenceFilter.getPreferenceProfile().getProject().getPreferenceNode().getName());
@@ -1105,7 +1107,7 @@ public class ProjectItemProvider extends ModelElementItemProvider
 
         if (command != null)
         {
-          HashSet<Object> combinedAffectedObjects = new HashSet<Object>(affectedObjects);
+          HashSet<Object> combinedAffectedObjects = new HashSet<>(affectedObjects);
           combinedAffectedObjects.addAll(command.getAffectedObjects());
           affectedObjects = combinedAffectedObjects;
         }
@@ -1121,7 +1123,7 @@ public class ProjectItemProvider extends ModelElementItemProvider
 
         super.undo();
 
-        HashSet<Object> combinedAffectedObjects = new HashSet<Object>(affectedObjects);
+        HashSet<Object> combinedAffectedObjects = new HashSet<>(affectedObjects);
         combinedAffectedObjects.addAll(command.getAffectedObjects());
         affectedObjects = combinedAffectedObjects;
       }
@@ -1136,7 +1138,7 @@ public class ProjectItemProvider extends ModelElementItemProvider
           command.redo();
         }
 
-        HashSet<Object> combinedAffectedObjects = new HashSet<Object>(affectedObjects);
+        HashSet<Object> combinedAffectedObjects = new HashSet<>(affectedObjects);
         combinedAffectedObjects.addAll(command.getAffectedObjects());
         affectedObjects = combinedAffectedObjects;
       }

@@ -435,7 +435,7 @@ public class TestSuite extends MinimalEObjectImpl.Container
   {
     if (testCases == null)
     {
-      testCases = new EObjectContainmentEList<TestCaseType>(TestCaseType.class, this, JUnitPackage.TEST_SUITE__TEST_CASES);
+      testCases = new EObjectContainmentEList<>(TestCaseType.class, this, JUnitPackage.TEST_SUITE__TEST_CASES);
     }
     return testCases;
   }

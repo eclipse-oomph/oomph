@@ -128,6 +128,7 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
   {
     SetupTransferSupport.DropListener dropListener = new SetupTransferSupport.DropListener()
     {
+      @Override
       public void resourcesDropped(Collection<? extends Resource> resources)
       {
         dialog.getInstaller().setConfigurationResources(resources);
@@ -186,12 +187,14 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
     {
       private final AtomicBoolean selectionMementoTried = new AtomicBoolean();
 
+      @Override
       public void run()
       {
         handleFilter(""); //$NON-NLS-1$
 
         UIUtil.asyncExec(container, new Runnable()
         {
+          @Override
           public void run()
           {
             if (!selectionMementoTried.getAndSet(true))
@@ -222,6 +225,7 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
     selection.eAdapters().add(selectionAdapter);
     container.addDisposeListener(new DisposeListener()
     {
+      @Override
       public void widgetDisposed(DisposeEvent e)
       {
         selection.eAdapters().remove(selectionAdapter);
@@ -259,6 +263,7 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
     return productList.getControl().setFocus();
   }
 
+  @Override
   public void handleFilter(String filter)
   {
     String filterText = searchField.getFilterText();
@@ -579,6 +584,7 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
         // Setting the focus on the scroller doesn't work, that is why we forward the mouse wheel event.
         scrolledContent.addListener(SWT.MouseVerticalWheel, new Listener()
         {
+          @Override
           public void handleEvent(Event event)
           {
             int value = event.count * SimpleInstallationLogPage.SCROLL_SPEED;
@@ -856,6 +862,7 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
       return contentHeight + 2 * BORDER;
     }
 
+    @Override
     public void mouseEnter(MouseEvent e)
     {
       if (list != null)
@@ -864,6 +871,7 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
       }
     }
 
+    @Override
     public void mouseExit(MouseEvent e)
     {
       if (list != null)
@@ -872,21 +880,25 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
       }
     }
 
+    @Override
     public void mouseHover(MouseEvent e)
     {
       // Do nothing.
     }
 
+    @Override
     public void mouseDoubleClick(MouseEvent e)
     {
       // Do nothing.
     }
 
+    @Override
     public void mouseDown(MouseEvent e)
     {
       // Do nothing.
     }
 
+    @Override
     public void mouseUp(MouseEvent e)
     {
       if (list != null && product != null && getClientArea().contains(e.x, e.y))
@@ -969,6 +981,7 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
         this.decoratorImage = decoratorImage;
       }
 
+      @Override
       public void paintControl(PaintEvent e)
       {
         Rectangle rect = getClientArea();
@@ -1094,6 +1107,7 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
         {
           private int count;
 
+          @Override
           public void run()
           {
             IndexLoader indexLoader = getWizard().getIndexLoader();

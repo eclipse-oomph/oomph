@@ -81,11 +81,12 @@ public abstract class ProjectFactoryImpl extends ModelElementImpl implements Pro
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public EList<String> getExcludedPaths()
   {
     if (excludedPaths == null)
     {
-      excludedPaths = new EDataTypeUniqueEList<String>(String.class, this, ResourcesPackage.PROJECT_FACTORY__EXCLUDED_PATHS)
+      excludedPaths = new EDataTypeUniqueEList<>(String.class, this, ResourcesPackage.PROJECT_FACTORY__EXCLUDED_PATHS)
       {
         private static final long serialVersionUID = 1L;
 
@@ -107,6 +108,7 @@ public abstract class ProjectFactoryImpl extends ModelElementImpl implements Pro
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public final IProject createProject(BackendContainer rootContainer, BackendContainer backendContainer, IProgressMonitor monitor)
   {
     if (isExcludedPath(rootContainer, backendContainer))
@@ -124,11 +126,12 @@ public abstract class ProjectFactoryImpl extends ModelElementImpl implements Pro
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public synchronized boolean isExcludedPath(BackendContainer rootContainer, BackendContainer backendContainer)
   {
     if (excludedURIs == null)
     {
-      excludedURIs = new HashSet<URI>();
+      excludedURIs = new HashSet<>();
       for (String path : getExcludedPaths())
       {
         while (path.startsWith("/")) //$NON-NLS-1$

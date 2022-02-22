@@ -104,6 +104,7 @@ public class ImplicitDependencyImpl extends MinimalEObjectImpl.Container impleme
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getID()
   {
     return iD;
@@ -114,6 +115,7 @@ public class ImplicitDependencyImpl extends MinimalEObjectImpl.Container impleme
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setID(String newID)
   {
     String oldID = iD;
@@ -129,6 +131,7 @@ public class ImplicitDependencyImpl extends MinimalEObjectImpl.Container impleme
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Version getVersion()
   {
     return version;
@@ -139,6 +142,7 @@ public class ImplicitDependencyImpl extends MinimalEObjectImpl.Container impleme
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setVersion(Version newVersion)
   {
     Version oldVersion = version;

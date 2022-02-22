@@ -99,11 +99,12 @@ public class FileAssociationsTaskImpl extends SetupTaskImpl implements FileAssoc
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<FileMapping> getMappings()
   {
     if (mappings == null)
     {
-      mappings = new EObjectContainmentEList<FileMapping>(FileMapping.class, this, WorkbenchPackage.FILE_ASSOCIATIONS_TASK__MAPPINGS);
+      mappings = new EObjectContainmentEList<>(FileMapping.class, this, WorkbenchPackage.FILE_ASSOCIATIONS_TASK__MAPPINGS);
     }
     return mappings;
   }
@@ -210,7 +211,7 @@ public class FileAssociationsTaskImpl extends SetupTaskImpl implements FileAssoc
   @Override
   public void consolidate()
   {
-    Map<String, FileMapping> existingMappings = new HashMap<String, FileMapping>();
+    Map<String, FileMapping> existingMappings = new HashMap<>();
     for (Iterator<FileMapping> it = getMappings().iterator(); it.hasNext();)
     {
       FileMapping mapping = it.next();
@@ -221,7 +222,7 @@ public class FileAssociationsTaskImpl extends SetupTaskImpl implements FileAssoc
       {
         EList<FileEditor> existingEditors = existingMapping.getEditors();
 
-        LinkedHashSet<FileEditor> editors = new LinkedHashSet<FileEditor>(existingEditors);
+        LinkedHashSet<FileEditor> editors = new LinkedHashSet<>(existingEditors);
         editors.addAll(mapping.getEditors());
 
         existingEditors.clear();
@@ -248,6 +249,7 @@ public class FileAssociationsTaskImpl extends SetupTaskImpl implements FileAssoc
     return 0;
   }
 
+  @Override
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     Map<String, FileEditorMapping> fileEditorMappings = getFileEditorMappings();
@@ -291,6 +293,7 @@ public class FileAssociationsTaskImpl extends SetupTaskImpl implements FileAssoc
     return false;
   }
 
+  @Override
   public void perform(SetupTaskContext context) throws Exception
   {
     final EditorRegistry registry = (EditorRegistry)PlatformUI.getWorkbench().getEditorRegistry();
@@ -354,6 +357,7 @@ public class FileAssociationsTaskImpl extends SetupTaskImpl implements FileAssoc
 
     performUI(context, new RunnableWithContext()
     {
+      @Override
       public void run(SetupTaskContext context) throws Exception
       {
         registry.setFileEditorMappings(fileEditorMappings.values().toArray(new FileEditorMapping[fileEditorMappings.size()]));
@@ -391,7 +395,7 @@ public class FileAssociationsTaskImpl extends SetupTaskImpl implements FileAssoc
 
   private static Map<String, FileEditorMapping> getFileEditorMappings()
   {
-    Map<String, FileEditorMapping> result = new HashMap<String, FileEditorMapping>();
+    Map<String, FileEditorMapping> result = new HashMap<>();
     IFileEditorMapping[] mappings = PlatformUI.getWorkbench().getEditorRegistry().getFileEditorMappings();
     for (int i = 0; i < mappings.length; i++)
     {
@@ -411,7 +415,7 @@ public class FileAssociationsTaskImpl extends SetupTaskImpl implements FileAssoc
 
   private Set<String> getEditorIDs(IFileEditorMapping mapping)
   {
-    Set<String> ids = new HashSet<String>();
+    Set<String> ids = new HashSet<>();
 
     IEditorDescriptor[] editors = mapping.getEditors();
     for (int i = 0; i < editors.length; i++)

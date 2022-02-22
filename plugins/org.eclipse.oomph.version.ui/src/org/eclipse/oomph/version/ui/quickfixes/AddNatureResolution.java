@@ -59,7 +59,7 @@ public class AddNatureResolution extends AbstractResolution
     else
     {
       IProjectDescription description = project.getDescription();
-      ArrayList<String> natures = new ArrayList<String>(Arrays.asList(description.getNatureIds()));
+      ArrayList<String> natures = new ArrayList<>(Arrays.asList(description.getNatureIds()));
       if (natures.contains(nature))
       {
         natures.remove(nature);

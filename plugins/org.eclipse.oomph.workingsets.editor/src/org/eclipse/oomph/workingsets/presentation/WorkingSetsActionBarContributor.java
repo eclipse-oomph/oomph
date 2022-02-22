@@ -263,6 +263,7 @@ public class WorkingSetsActionBarContributor extends OomphEditingDomainActionBar
     //
     submenuManager.addMenuListener(new IMenuListener()
     {
+      @Override
       public void menuAboutToShow(IMenuManager menuManager)
       {
         menuManager.updateAll(true);
@@ -318,6 +319,7 @@ public class WorkingSetsActionBarContributor extends OomphEditingDomainActionBar
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void selectionChanged(SelectionChangedEvent event)
   {
     // Remove any menu items for old selection.
@@ -373,7 +375,7 @@ public class WorkingSetsActionBarContributor extends OomphEditingDomainActionBar
    */
   protected Collection<IAction> generateCreateChildActions(Collection<?> descriptors, ISelection selection)
   {
-    Collection<IAction> actions = new ArrayList<IAction>();
+    Collection<IAction> actions = new ArrayList<>();
     if (descriptors != null)
     {
       for (Object descriptor : descriptors)
@@ -393,7 +395,7 @@ public class WorkingSetsActionBarContributor extends OomphEditingDomainActionBar
    */
   protected Collection<IAction> generateCreateSiblingActions(Collection<?> descriptors, ISelection selection)
   {
-    Collection<IAction> actions = new ArrayList<IAction>();
+    Collection<IAction> actions = new ArrayList<>();
     if (descriptors != null)
     {
       for (Object descriptor : descriptors)
@@ -616,7 +618,7 @@ public class WorkingSetsActionBarContributor extends OomphEditingDomainActionBar
             previewDialog.getTree().expandAll();
           }
 
-          Set<Object> selectedObjects = new HashSet<Object>();
+          Set<Object> selectedObjects = new HashSet<>();
           for (Object value : structuredSelection.toArray())
           {
             if (value instanceof EObject)
@@ -654,7 +656,7 @@ public class WorkingSetsActionBarContributor extends OomphEditingDomainActionBar
 
           if (!selectedObjects.isEmpty())
           {
-            previewDialog.tree.setSelection(new StructuredSelection(new ArrayList<Object>(selectedObjects)));
+            previewDialog.tree.setSelection(new StructuredSelection(new ArrayList<>(selectedObjects)));
           }
         }
       }
@@ -684,6 +686,7 @@ public class WorkingSetsActionBarContributor extends OomphEditingDomainActionBar
 
     private ISelectionListener selectionListener = new ISelectionListener()
     {
+      @Override
       public void selectionChanged(IWorkbenchPart part, ISelection selection)
       {
         getDockable().setWorkbenchPart(part);
@@ -696,6 +699,7 @@ public class WorkingSetsActionBarContributor extends OomphEditingDomainActionBar
 
     private CommandStackListener commandStackListener = new CommandStackListener()
     {
+      @Override
       public void commandStackChanged(EventObject event)
       {
         PreviewDialog.this.commandStackChanged(event);
@@ -863,8 +867,8 @@ public class WorkingSetsActionBarContributor extends OomphEditingDomainActionBar
       ItemProvider otherProjects = new WorkingSetPresentation(otherProjectsWorkingSet);
       children.add(otherProjects);
 
-      Set<IProject> projects = new LinkedHashSet<IProject>(Arrays.asList(ResourcesPlugin.getWorkspace().getRoot().getProjects()));
-      Set<IProject> unmatchedProjects = new LinkedHashSet<IProject>(projects);
+      Set<IProject> projects = new LinkedHashSet<>(Arrays.asList(ResourcesPlugin.getWorkspace().getRoot().getProjects()));
+      Set<IProject> unmatchedProjects = new LinkedHashSet<>(projects);
       for (WorkingSet workingSet : workingSetsProvider.getWorkingSets())
       {
         ItemProvider child = new WorkingSetPresentation(workingSet);
@@ -930,8 +934,9 @@ public class WorkingSetsActionBarContributor extends OomphEditingDomainActionBar
      */
     public static PreviewDialog openFor(final IWorkbenchWindow workbenchWindow)
     {
-      Factory<PreviewDialog> factory = new Factory<PreviewDialog>()
+      Factory<PreviewDialog> factory = new Factory<>()
       {
+        @Override
         public PreviewDialog create(IWorkbenchWindow workbenchWindow)
         {
           return new PreviewDialog(workbenchWindow);

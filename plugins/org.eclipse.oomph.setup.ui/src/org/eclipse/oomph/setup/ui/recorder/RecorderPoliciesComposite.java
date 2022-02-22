@@ -73,6 +73,7 @@ public class RecorderPoliciesComposite extends Composite implements ISelectionPr
     viewer.setLabelProvider(new LabelProvider());
     viewer.addCheckStateListener(new ICheckStateListener()
     {
+      @Override
       public void checkStateChanged(CheckStateChangedEvent event)
       {
         String path = (String)event.getElement();
@@ -83,11 +84,13 @@ public class RecorderPoliciesComposite extends Composite implements ISelectionPr
 
     viewer.setCheckStateProvider(new ICheckStateProvider()
     {
+      @Override
       public boolean isGrayed(Object element)
       {
         return false;
       }
 
+      @Override
       public boolean isChecked(Object element)
       {
         return Boolean.TRUE.equals(transaction.getPolicy(element.toString()));
@@ -103,8 +106,9 @@ public class RecorderPoliciesComposite extends Composite implements ISelectionPr
     this.transaction = transaction;
     Map<String, Boolean> policies = transaction.getPolicies(clean);
 
-    PreferenceNode rootPreferenceNode = PreferencesUtil.getRootPreferenceNode(Collections.unmodifiableSet(new LinkedHashSet<String>(
-        Arrays.asList(new String[] { PreferencesUtil.BUNDLE_DEFAULTS_NODE, PreferencesUtil.DEFAULT_NODE, PreferencesUtil.INSTANCE_NODE }))), false);
+    PreferenceNode rootPreferenceNode = PreferencesUtil.getRootPreferenceNode(Collections.unmodifiableSet(
+        new LinkedHashSet<>(Arrays.asList(new String[] { PreferencesUtil.BUNDLE_DEFAULTS_NODE, PreferencesUtil.DEFAULT_NODE, PreferencesUtil.INSTANCE_NODE }))),
+        false);
 
     collectPolicies(policies, rootPreferenceNode);
 
@@ -183,21 +187,25 @@ public class RecorderPoliciesComposite extends Composite implements ISelectionPr
     viewer.getTable().setSelection(0);
   }
 
+  @Override
   public void addSelectionChangedListener(ISelectionChangedListener listener)
   {
     viewer.addSelectionChangedListener(listener);
   }
 
+  @Override
   public void removeSelectionChangedListener(ISelectionChangedListener listener)
   {
     viewer.removeSelectionChangedListener(listener);
   }
 
+  @Override
   public IStructuredSelection getSelection()
   {
     return (IStructuredSelection)viewer.getSelection();
   }
 
+  @Override
   public void setSelection(ISelection selection)
   {
     viewer.setSelection(selection);

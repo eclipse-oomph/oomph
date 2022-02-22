@@ -40,7 +40,7 @@ public class OomphEditingDomain extends BaseAdapterFactoryEditingDomain
       List<? extends OomphTransferDelegate> delegates)
   {
     super(adapterFactory, commandStack, resourceToReadOnlyMap);
-    this.delegates = new ArrayList<OomphTransferDelegate>(delegates);
+    this.delegates = new ArrayList<>(delegates);
   }
 
   public void registerDragAndDrop(StructuredViewer viewer)
@@ -70,7 +70,7 @@ public class OomphEditingDomain extends BaseAdapterFactoryEditingDomain
               Collection<?> value = delegate.getValue(this, data);
               if (!value.isEmpty())
               {
-                return new ArrayList<Object>(value);
+                return new ArrayList<>(value);
               }
             }
           }
@@ -93,8 +93,8 @@ public class OomphEditingDomain extends BaseAdapterFactoryEditingDomain
     {
       super.setClipboard(clipboard);
 
-      List<Object> data = new ArrayList<Object>();
-      List<Transfer> dataTransfers = new ArrayList<Transfer>();
+      List<Object> data = new ArrayList<>();
+      List<Transfer> dataTransfers = new ArrayList<>();
       for (OomphTransferDelegate delegate : delegates)
       {
         delegate.setSelection(this, clipboard == null ? new StructuredSelection() : new StructuredSelection(clipboard.toArray()));

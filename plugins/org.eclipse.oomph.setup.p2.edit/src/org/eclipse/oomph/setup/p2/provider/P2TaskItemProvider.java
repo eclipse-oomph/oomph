@@ -10,6 +10,8 @@
  */
 package org.eclipse.oomph.setup.p2.provider;
 
+import org.eclipse.oomph.base.BaseFactory;
+import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.Requirement;
 import org.eclipse.oomph.p2.provider.RequirementItemProvider;
@@ -252,6 +254,8 @@ public class P2TaskItemProvider extends SetupTaskItemProvider
   {
     super.collectNewChildDescriptors(newChildDescriptors, object);
 
+    newChildDescriptors.add(createChildParameter(BasePackage.Literals.MODEL_ELEMENT__ANNOTATIONS, BaseFactory.eINSTANCE.createAnnotation()));
+
     newChildDescriptors.add(createChildParameter(SetupP2Package.Literals.P2_TASK__REQUIREMENTS, P2Factory.eINSTANCE.createRequirement()));
 
     newChildDescriptors.add(createChildParameter(SetupP2Package.Literals.P2_TASK__REPOSITORIES, P2Factory.eINSTANCE.createRepository()));
@@ -288,8 +292,8 @@ public class P2TaskItemProvider extends SetupTaskItemProvider
   @Override
   protected Command createAddCommand(EditingDomain domain, EObject owner, EStructuralFeature feature, Collection<?> collection, int index)
   {
-    List<Object> filteredCollection = new ArrayList<Object>();
-    List<Requirement> requirements = new ArrayList<Requirement>();
+    List<Object> filteredCollection = new ArrayList<>();
+    List<Requirement> requirements = new ArrayList<>();
     if (collection != null)
     {
       for (Object object : collection)

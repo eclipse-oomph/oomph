@@ -74,7 +74,7 @@ public class BaseResourceImpl extends XMIResourceImpl implements org.eclipse.oom
     if (options.get(OPTION_EXTENDED_META_DATA) instanceof Boolean)
     {
       ResourceSet resourceSet = getResourceSet();
-      Map<Object, Object> effectiveOptions = new HashMap<Object, Object>(options);
+      Map<Object, Object> effectiveOptions = new HashMap<>(options);
       effectiveOptions.put(OPTION_EXTENDED_META_DATA,
           new BasicExtendedMetaData(resourceSet == null ? EPackage.Registry.INSTANCE : resourceSet.getPackageRegistry())
           {

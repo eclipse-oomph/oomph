@@ -94,11 +94,12 @@ public class WorkspaceIUAnalyzer
 
     sourceLocator.handleProjects(EclipseProjectFactory.LIST, new ProjectHandler()
     {
+      @Override
       public void handleProject(IProject project, BackendContainer backendContainer)
       {
         try
         {
-          EList<IInstallableUnit> ius = new BasicEList<IInstallableUnit>();
+          EList<IInstallableUnit> ius = new BasicEList<>();
 
           for (IUGenerator generator : generators)
           {
@@ -148,7 +149,7 @@ public class WorkspaceIUAnalyzer
 
     if (qualifierReplacement != null)
     {
-      omniRootRequirements = new HashMap<String, Requirement>();
+      omniRootRequirements = new HashMap<>();
       for (Requirement requirement : rootRequirements)
       {
         if (VersionRange.emptyRange.equals(requirement.getVersionRange()))

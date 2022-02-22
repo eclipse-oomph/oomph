@@ -111,6 +111,7 @@ public class InstallationTaskImpl extends SetupTaskImpl implements InstallationT
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getLocation()
   {
     return location;
@@ -121,6 +122,7 @@ public class InstallationTaskImpl extends SetupTaskImpl implements InstallationT
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setLocation(String newLocation)
   {
     String oldLocation = location;
@@ -136,6 +138,7 @@ public class InstallationTaskImpl extends SetupTaskImpl implements InstallationT
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getRelativeProductFolder()
   {
     return relativeProductFolder;
@@ -146,6 +149,7 @@ public class InstallationTaskImpl extends SetupTaskImpl implements InstallationT
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setRelativeProductFolder(String newRelativeProductFolder)
   {
     String oldRelativeProductFolder = relativeProductFolder;
@@ -268,6 +272,7 @@ public class InstallationTaskImpl extends SetupTaskImpl implements InstallationT
     return 0;
   }
 
+  @Override
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     String relativeProductFolder = context.getRelativeProductFolder();
@@ -326,6 +331,7 @@ public class InstallationTaskImpl extends SetupTaskImpl implements InstallationT
     }
   }
 
+  @Override
   public void perform(SetupTaskContext context) throws Exception
   {
   }

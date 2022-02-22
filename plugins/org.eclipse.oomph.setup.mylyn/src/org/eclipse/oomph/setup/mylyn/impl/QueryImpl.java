@@ -120,6 +120,7 @@ public class QueryImpl extends ModelElementImpl implements Query
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public MylynQueriesTask getTask()
   {
     if (eContainerFeatureID() != MylynPackage.QUERY__TASK)
@@ -145,6 +146,7 @@ public class QueryImpl extends ModelElementImpl implements Query
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setTask(MylynQueriesTask newTask)
   {
     if (newTask != eInternalContainer() || eContainerFeatureID() != MylynPackage.QUERY__TASK && newTask != null)
@@ -179,6 +181,7 @@ public class QueryImpl extends ModelElementImpl implements Query
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getSummary()
   {
     return summary;
@@ -189,6 +192,7 @@ public class QueryImpl extends ModelElementImpl implements Query
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setSummary(String newSummary)
   {
     String oldSummary = summary;
@@ -204,6 +208,7 @@ public class QueryImpl extends ModelElementImpl implements Query
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getURL()
   {
     return uRL;
@@ -214,6 +219,7 @@ public class QueryImpl extends ModelElementImpl implements Query
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setURL(String newURL)
   {
     String oldURL = uRL;
@@ -229,11 +235,12 @@ public class QueryImpl extends ModelElementImpl implements Query
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EMap<String, String> getAttributes()
   {
     if (attributes == null)
     {
-      attributes = new EcoreEMap<String, String>(MylynPackage.Literals.QUERY_ATTRIBUTE, QueryAttributeImpl.class, this, MylynPackage.QUERY__ATTRIBUTES);
+      attributes = new EcoreEMap<>(MylynPackage.Literals.QUERY_ATTRIBUTE, QueryAttributeImpl.class, this, MylynPackage.QUERY__ATTRIBUTES);
     }
     return attributes;
   }

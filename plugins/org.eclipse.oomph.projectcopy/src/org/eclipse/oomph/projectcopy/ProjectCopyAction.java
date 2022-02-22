@@ -65,16 +65,19 @@ public class ProjectCopyAction implements IObjectActionDelegate
   {
   }
 
+  @Override
   public void setActivePart(IAction action, IWorkbenchPart targetPart)
   {
     shell = targetPart.getSite().getShell();
   }
 
+  @Override
   public void selectionChanged(IAction action, ISelection selection)
   {
     this.selection = selection;
   }
 
+  @Override
   public void run(IAction action)
   {
     final IProject source = (IProject)((IStructuredSelection)selection).getFirstElement();
@@ -88,6 +91,7 @@ public class ProjectCopyAction implements IObjectActionDelegate
       InputDialog dialog = new InputDialog(shell, Messages.ProjectCopyAction_dialog_title, Messages.ProjectCopyAction_dialog_message, source.getName(),
           new IInputValidator()
           {
+            @Override
             public String isValid(String newName)
             {
               try
@@ -126,6 +130,7 @@ public class ProjectCopyAction implements IObjectActionDelegate
             {
               ResourcesPlugin.getWorkspace().run(new IWorkspaceRunnable()
               {
+                @Override
                 public void run(IProgressMonitor monitor) throws CoreException
                 {
                   try
@@ -239,6 +244,7 @@ public class ProjectCopyAction implements IObjectActionDelegate
     final IWorkspace workspace = ResourcesPlugin.getWorkspace();
     workspace.run(new IWorkspaceRunnable()
     {
+      @Override
       public void run(IProgressMonitor monitor) throws CoreException
       {
         Path locationPath = new Path(folder.getAbsolutePath());
@@ -266,7 +272,7 @@ public class ProjectCopyAction implements IObjectActionDelegate
    */
   public static class Replacer
   {
-    private final Map<String, String> substitutions = new LinkedHashMap<String, String>();
+    private final Map<String, String> substitutions = new LinkedHashMap<>();
 
     private final boolean multi;
 

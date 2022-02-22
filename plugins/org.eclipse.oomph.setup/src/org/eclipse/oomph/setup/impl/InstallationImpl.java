@@ -71,6 +71,7 @@ public class InstallationImpl extends ScopeImpl implements Installation
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ProductVersion getProductVersion()
   {
     if (productVersion != null && productVersion.eIsProxy())
@@ -103,6 +104,7 @@ public class InstallationImpl extends ScopeImpl implements Installation
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setProductVersion(ProductVersion newProductVersion)
   {
     ProductVersion oldProductVersion = productVersion;

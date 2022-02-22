@@ -34,6 +34,7 @@ import java.util.StringTokenizer;
  */
 public class TargetPlatformClasspathFile implements IDynamicVariableResolver
 {
+  @Override
   public String resolveValue(IDynamicVariable variable, String argument) throws CoreException
   {
     try

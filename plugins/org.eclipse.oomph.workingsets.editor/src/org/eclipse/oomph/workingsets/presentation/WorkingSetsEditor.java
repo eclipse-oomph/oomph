@@ -190,7 +190,7 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
    * <!-- end-user-doc -->
    * @generated
    */
-  protected List<PropertySheetPage> propertySheetPages = new ArrayList<PropertySheetPage>();
+  protected List<PropertySheetPage> propertySheetPages = new ArrayList<>();
 
   /**
    * This is the viewer that shadows the selection in the content outline.
@@ -223,7 +223,7 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
    * <!-- end-user-doc -->
    * @generated
    */
-  protected Collection<ISelectionChangedListener> selectionChangedListeners = new ArrayList<ISelectionChangedListener>();
+  protected Collection<ISelectionChangedListener> selectionChangedListeners = new ArrayList<>();
 
   /**
    * This keeps track of the selection of the editor as a whole.
@@ -250,6 +250,7 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
    */
   protected IPartListener partListener = new IPartListener()
   {
+    @Override
     public void partActivated(IWorkbenchPart p)
     {
       if (p instanceof ContentOutline)
@@ -275,21 +276,25 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
       }
     }
 
+    @Override
     public void partBroughtToTop(IWorkbenchPart p)
     {
       // Ignore.
     }
 
+    @Override
     public void partClosed(IWorkbenchPart p)
     {
       // Ignore.
     }
 
+    @Override
     public void partDeactivated(IWorkbenchPart p)
     {
       // Ignore.
     }
 
+    @Override
     public void partOpened(IWorkbenchPart p)
     {
       // Ignore.
@@ -302,7 +307,7 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
    * <!-- end-user-doc -->
    * @generated
    */
-  protected Collection<Resource> removedResources = new ArrayList<Resource>();
+  protected Collection<Resource> removedResources = new ArrayList<>();
 
   /**
    * Resources that have been changed since last activation.
@@ -310,7 +315,7 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
    * <!-- end-user-doc -->
    * @generated
    */
-  protected Collection<Resource> changedResources = new ArrayList<Resource>();
+  protected Collection<Resource> changedResources = new ArrayList<>();
 
   /**
    * Resources that have been saved.
@@ -318,7 +323,7 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
    * <!-- end-user-doc -->
    * @generated
    */
-  protected Collection<Resource> savedResources = new ArrayList<Resource>();
+  protected Collection<Resource> savedResources = new ArrayList<>();
 
   /**
    * Map to store the diagnostic associated with a resource.
@@ -326,7 +331,7 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
    * <!-- end-user-doc -->
    * @generated
    */
-  protected Map<Resource, Diagnostic> resourceToDiagnosticMap = new LinkedHashMap<Resource, Diagnostic>();
+  protected Map<Resource, Diagnostic> resourceToDiagnosticMap = new LinkedHashMap<>();
 
   /**
    * Controls whether the problem indication should be updated.
@@ -385,6 +390,7 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
         dispatching = true;
         getSite().getShell().getDisplay().asyncExec(new Runnable()
         {
+          @Override
           public void run()
           {
             dispatching = false;
@@ -417,6 +423,7 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
    */
   protected IResourceChangeListener resourceChangeListener = new IResourceChangeListener()
   {
+    @Override
     public void resourceChanged(IResourceChangeEvent event)
     {
       IResourceDelta delta = event.getDelta();
@@ -426,10 +433,11 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
         {
           protected ResourceSet resourceSet = editingDomain.getResourceSet();
 
-          protected Collection<Resource> changedResources = new ArrayList<Resource>();
+          protected Collection<Resource> changedResources = new ArrayList<>();
 
-          protected Collection<Resource> removedResources = new ArrayList<Resource>();
+          protected Collection<Resource> removedResources = new ArrayList<>();
 
+          @Override
           public boolean visit(final IResourceDelta delta)
           {
             if (delta.getResource().getType() == IResource.FILE)
@@ -483,6 +491,7 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
         {
           getSite().getShell().getDisplay().asyncExec(new Runnable()
           {
+            @Override
             public void run()
             {
               removedResources.addAll(visitor.getRemovedResources());
@@ -498,6 +507,7 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
         {
           getSite().getShell().getDisplay().asyncExec(new Runnable()
           {
+            @Override
             public void run()
             {
               changedResources.addAll(visitor.getChangedResources());
@@ -530,6 +540,7 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
     initializeEditingDomain();
   }
 
+  @Override
   public WorkingSetsProvider getWorkingSetsProvider()
   {
     return workingSetsProvider;
@@ -726,10 +737,12 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
     //
     commandStack.addCommandStackListener(new CommandStackListener()
     {
+      @Override
       public void commandStackChanged(final EventObject event)
       {
         getContainer().getDisplay().asyncExec(new Runnable()
         {
+          @Override
           public void run()
           {
             firePropertyChange(IEditorPart.PROP_DIRTY);
@@ -790,6 +803,7 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
     {
       Runnable runnable = new Runnable()
       {
+        @Override
         public void run()
         {
           // Try to select the items in the current content viewer of the editor.
@@ -812,6 +826,7 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EditingDomain getEditingDomain()
   {
     return editingDomain;
@@ -903,6 +918,7 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
         {
           // This just notifies those things that are affected by the section.
           //
+          @Override
           public void selectionChanged(SelectionChangedEvent selectionChangedEvent)
           {
             setSelection(selectionChangedEvent.getSelection());
@@ -940,6 +956,7 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Viewer getViewer()
   {
     return currentViewer;
@@ -969,8 +986,8 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
       @Override
       protected Collection<?> extractDragSource(Object object)
       {
-        List<Object> dragSource = new ArrayList<Object>(super.extractDragSource(object));
-        List<Object> result = new ArrayList<Object>();
+        List<Object> dragSource = new ArrayList<>(super.extractDragSource(object));
+        List<Object> result = new ArrayList<>();
         for (Object value : dragSource)
         {
           if (value instanceof URI)
@@ -1155,6 +1172,7 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
 
       getSite().getShell().getDisplay().asyncExec(new Runnable()
       {
+        @Override
         public void run()
         {
           if (!getContainer().isDisposed())
@@ -1186,6 +1204,7 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
 
     getSite().getShell().getDisplay().asyncExec(new Runnable()
     {
+      @Override
       public void run()
       {
         updateProblemIndication();
@@ -1347,6 +1366,7 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
       {
         // This ensures that we handle selections correctly.
         //
+        @Override
         public void selectionChanged(SelectionChangedEvent event)
         {
           handleContentOutlineSelection(event.getSelection());
@@ -1405,7 +1425,7 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
         //
         Object selectedElement = selectedElements.next();
 
-        ArrayList<Object> selectionList = new ArrayList<Object>();
+        ArrayList<Object> selectionList = new ArrayList<>();
         selectionList.add(selectedElement);
         while (selectedElements.hasNext())
         {
@@ -1442,7 +1462,7 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
   {
     // Save only resources that have actually changed.
     //
-    final Map<Object, Object> saveOptions = new HashMap<Object, Object>();
+    final Map<Object, Object> saveOptions = new HashMap<>();
     saveOptions.put(Resource.OPTION_SAVE_ONLY_IF_CHANGED, Resource.OPTION_SAVE_ONLY_IF_CHANGED_MEMORY_BUFFER);
     saveOptions.put(Resource.OPTION_LINE_DELIMITER, Resource.OPTION_LINE_DELIMITER_UNSPECIFIED);
 
@@ -1585,6 +1605,7 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void gotoMarker(IMarker marker)
   {
     List<?> targetObjects = markerHelper.getTargetObjects(editingDomain, marker);
@@ -1628,6 +1649,7 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void addSelectionChangedListener(ISelectionChangedListener listener)
   {
     selectionChangedListeners.add(listener);
@@ -1639,6 +1661,7 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void removeSelectionChangedListener(ISelectionChangedListener listener)
   {
     selectionChangedListeners.remove(listener);
@@ -1650,6 +1673,7 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ISelection getSelection()
   {
     return editorSelection;
@@ -1662,6 +1686,7 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setSelection(ISelection selection)
   {
     editorSelection = selection;
@@ -1743,6 +1768,7 @@ public class WorkingSetsEditor extends MultiPageEditorPart implements IEditingDo
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void menuAboutToShow(IMenuManager menuManager)
   {
     ((IMenuListener)getEditorSite().getActionBarContributor()).menuAboutToShow(menuManager);

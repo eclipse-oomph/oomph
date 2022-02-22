@@ -189,7 +189,7 @@ public abstract class PropertyField
 
   private final GridData helperGridData = new GridData(SWT.FILL, SWT.TOP, false, false);
 
-  private final List<ValueListener> valueListeners = new CopyOnWriteArrayList<ValueListener>();
+  private final List<ValueListener> valueListeners = new CopyOnWriteArrayList<>();
 
   private String value = EMPTY;
 
@@ -797,6 +797,7 @@ public abstract class PropertyField
 
       linkField.addValueListener(new ValueListener()
       {
+        @Override
         public void valueChanged(String oldValue, String newValue) throws Exception
         {
           if (linked)
@@ -846,6 +847,7 @@ public abstract class PropertyField
 
       text.addModifyListener(new ModifyListener()
       {
+        @Override
         public void modifyText(ModifyEvent e)
         {
           String value = text.getText();
@@ -899,6 +901,7 @@ public abstract class PropertyField
       comboViewer.setInput(choices);
       comboViewer.getCombo().addModifyListener(new ModifyListener()
       {
+        @Override
         public void modifyText(ModifyEvent e)
         {
           String value = comboViewer.getCombo().getText();
@@ -909,6 +912,7 @@ public abstract class PropertyField
 
       comboViewer.getCombo().addVerifyListener(new VerifyListener()
       {
+        @Override
         public void verifyText(VerifyEvent e)
         {
           if (e.character == 0)
@@ -1281,7 +1285,7 @@ public abstract class PropertyField
 
     private static List<? extends VariableChoice> getJREChoices(JREFilter jreFilter)
     {
-      List<VariableChoice> choices = new ArrayList<VariableChoice>();
+      List<VariableChoice> choices = new ArrayList<>();
       Map<File, JRE> jres = JREManager.INSTANCE.getJREs(jreFilter);
       for (Map.Entry<File, JRE> entry : jres.entrySet())
       {
@@ -1341,7 +1345,7 @@ public abstract class PropertyField
    */
   public static class AuthenticatedField extends TextButtonField
   {
-    private Set<Authenticator> authenticators = new LinkedHashSet<Authenticator>();
+    private Set<Authenticator> authenticators = new LinkedHashSet<>();
 
     public AuthenticatedField()
     {

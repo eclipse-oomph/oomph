@@ -25,6 +25,7 @@ import org.eclipse.ui.handlers.HandlerUtil;
  */
 public class SearchRequirementsHandler extends AbstractHandler
 {
+  @Override
   public Object execute(ExecutionEvent event) throws ExecutionException
   {
     SearchEclipseDialog.Requirements searchEclipseRequirementsDialog = RepositoryExplorer.getSearchEclipseRequirementDialog();

@@ -87,6 +87,7 @@ public class MavenFactoryImpl extends EFactoryImpl implements MavenFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public MavenImportTask createMavenImportTask()
   {
     MavenImportTaskImpl mavenImportTask = new MavenImportTaskImpl();
@@ -98,6 +99,7 @@ public class MavenFactoryImpl extends EFactoryImpl implements MavenFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public MavenUpdateTask createMavenUpdateTask()
   {
     MavenUpdateTaskImpl mavenUpdateTask = new MavenUpdateTaskImpl();
@@ -109,6 +111,7 @@ public class MavenFactoryImpl extends EFactoryImpl implements MavenFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public MavenPackage getMavenPackage()
   {
     return (MavenPackage)getEPackage();

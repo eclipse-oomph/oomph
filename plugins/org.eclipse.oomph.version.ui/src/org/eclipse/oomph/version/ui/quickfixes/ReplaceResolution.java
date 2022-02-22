@@ -98,12 +98,7 @@ public class ReplaceResolution extends AbstractDocumentResolution
   @Override
   protected boolean isApplicable(IMarker marker)
   {
-    if (!problemType.equals(Markers.getProblemType(marker)))
-    {
-      return false;
-    }
-
-    if (Markers.getQuickFixPattern(marker) == null)
+    if (!problemType.equals(Markers.getProblemType(marker)) || (Markers.getQuickFixPattern(marker) == null))
     {
       return false;
     }

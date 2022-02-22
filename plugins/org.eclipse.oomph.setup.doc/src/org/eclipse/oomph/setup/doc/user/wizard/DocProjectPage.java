@@ -182,7 +182,7 @@ public abstract class DocProjectPage
       table.notifyListeners(SWT.MouseDown, event);
       AccessUtil.busyWait(100);
 
-      Map<Control, Image> decorations = new LinkedHashMap<Control, Image>();
+      Map<Control, Image> decorations = new LinkedHashMap<>();
       decorations.put(tree, treeImageDecoration);
       decorations.put(table, tableImageDecoration);
       Image result = capture(page, decorations);

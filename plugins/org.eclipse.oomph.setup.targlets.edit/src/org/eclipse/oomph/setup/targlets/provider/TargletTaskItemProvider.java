@@ -10,6 +10,8 @@
  */
 package org.eclipse.oomph.setup.targlets.provider;
 
+import org.eclipse.oomph.base.BaseFactory;
+import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.p2.Configuration;
 import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.Repository;
@@ -319,7 +321,7 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
 
   private static Set<String> getChoices(String[] values, String extraValuesPreference)
   {
-    Set<String> result = new HashSet<String>();
+    Set<String> result = new HashSet<>();
     result.addAll(Arrays.asList(values));
 
     IEclipsePreferences node = InstanceScope.INSTANCE.getNode("org.eclipse.pde.core"); //$NON-NLS-1$
@@ -406,7 +408,7 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
     TargletTask targletTask = (TargletTask)object;
 
     StringBuilder builder = new StringBuilder();
-    Set<String> added = new HashSet<String>();
+    Set<String> added = new HashSet<>();
 
     String targetNameLabel = ""; //$NON-NLS-1$
     String targetName = targletTask.getTargetName();
@@ -507,6 +509,8 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
   {
     super.collectNewChildDescriptors(newChildDescriptors, object);
 
+    newChildDescriptors.add(createChildParameter(BasePackage.Literals.MODEL_ELEMENT__ANNOTATIONS, BaseFactory.eINSTANCE.createAnnotation()));
+
     newChildDescriptors.add(createChildParameter(SetupTargletsPackage.Literals.TARGLET_TASK__TARGLETS, TargletFactory.eINSTANCE.createTarglet()));
 
     newChildDescriptors.add(
@@ -534,6 +538,7 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
               // Use PDE to analyze the syntactic contents of this *.target file.
               Command result = TargetPlatformUtil.runWithTargetPlatformService(new TargetPlatformRunnable<Command>()
               {
+                @Override
                 @SuppressWarnings("restriction")
                 public Command run(ITargetPlatformService service) throws CoreException
                 {
@@ -549,8 +554,9 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
                       if (path.equals(targetFile.getFullPath()))
                       {
                         // Maintain the requirements in a sorted list.
-                        final Set<Requirement> requirements = new TreeSet<Requirement>(new Comparator<Requirement>()
+                        final Set<Requirement> requirements = new TreeSet<>(new Comparator<Requirement>()
                         {
+                          @Override
                           public int compare(Requirement requirement1, Requirement requirement2)
                           {
                             String name1 = requirement1.getName();
@@ -560,8 +566,9 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
                         });
 
                         // Maintain the repositories in a sorted list.
-                        final Set<Repository> repos = new TreeSet<Repository>(new Comparator<Repository>()
+                        final Set<Repository> repos = new TreeSet<>(new Comparator<Repository>()
                         {
+                          @Override
                           public int compare(Repository repository1, Repository repository2)
                           {
                             String url1 = repository1.getURL();
@@ -810,7 +817,7 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
   protected Command createPrimaryDragAndDropCommand(EditingDomain domain, Object owner, float location, int operations, int operation, Collection<?> collection)
   {
     // Reflectively gather the paths associated with the EGit repository nodes.
-    final List<IPath> paths = new ArrayList<IPath>();
+    final List<IPath> paths = new ArrayList<>();
     for (Object value : collection)
     {
       if ("org.eclipse.egit.ui.internal.repository.tree.RepositoryNode".equals(value.getClass().getName())) //$NON-NLS-1$
@@ -836,7 +843,7 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
             {
               // Keep track of the requirements of any existing targlets.
               final TargletTask targletTask = (TargletTask)owner;
-              List<Requirement> requirements = new ArrayList<Requirement>();
+              List<Requirement> requirements = new ArrayList<>();
               for (Targlet otherTarglet : targletTask.getTarglets())
               {
                 for (Requirement requirement : otherTarglet.getRequirements())
@@ -880,9 +887,9 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
                 }
 
                 // Filter out any IU that's matched by a requirement of another IU, i.e., compute root IUs.
-                HashSet<IInstallableUnit> allIUs = new HashSet<IInstallableUnit>(ius);
-                final Set<Requirement> redundant = new HashSet<Requirement>();
-                IQueryable<IInstallableUnit> queryable = new CollectionResult<IInstallableUnit>(allIUs);
+                HashSet<IInstallableUnit> allIUs = new HashSet<>(ius);
+                final Set<Requirement> redundant = new HashSet<>();
+                IQueryable<IInstallableUnit> queryable = new CollectionResult<>(allIUs);
                 for (IInstallableUnit rootIU : allIUs)
                 {
                   for (IRequirement requirement : rootIU.getRequirements())
@@ -916,7 +923,7 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
                 // Compute a nice name for the targlet and create requirements for all the root IUs.
                 targlet.setName(getTargletName("Default")); //$NON-NLS-1$
                 EList<Requirement> targletRequirements = targlet.getRequirements();
-                for (IInstallableUnit iu : new TreeSet<IInstallableUnit>(ius))
+                for (IInstallableUnit iu : new TreeSet<>(ius))
                 {
                   Requirement requirement = P2Factory.eINSTANCE.createRequirement(iu.getId());
                   IMatchExpression<IInstallableUnit> filter = iu.getFilter();
@@ -1090,11 +1097,13 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
       this.itemDelegator = itemDelegator;
     }
 
+    @Override
     public Object getImage(Object object)
     {
       return itemDelegator.getImage(object);
     }
 
+    @Override
     public String getText(Object object)
     {
       return getLocaleMap().get(object);
@@ -1104,7 +1113,7 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
     {
       if (localeMap == null)
       {
-        localeMap = new HashMap<String, String>();
+        localeMap = new HashMap<>();
         for (Locale locale : Locale.getAvailableLocales())
         {
           localeMap.put(locale.toString(), locale.toString() + " - " + locale.getDisplayName()); //$NON-NLS-1$

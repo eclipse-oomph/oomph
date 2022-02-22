@@ -148,6 +148,7 @@ public class EnablementComposite extends Composite
 
     addDisposeListener(new DisposeListener()
     {
+      @Override
       public void widgetDisposed(DisposeEvent e)
       {
         adapterFactory.dispose();
@@ -181,7 +182,7 @@ public class EnablementComposite extends Composite
 
     inputData = new InputData();
 
-    final Map<EClass, ClassItemProvider> classItemProviders = new HashMap<EClass, ClassItemProvider>();
+    final Map<EClass, ClassItemProvider> classItemProviders = new HashMap<>();
     ItemProvider root = new ItemProvider(adapterFactory);
     EList<Object> children = root.getChildren();
 
@@ -223,11 +224,12 @@ public class EnablementComposite extends Composite
     final Tree tree = treeViewer.getTree();
     UIUtil.asyncExec(tree, new Runnable()
     {
+      @Override
       public void run()
       {
         treeViewer.expandAll();
 
-        final Queue<ClassItemProvider> queue = new ConcurrentLinkedQueue<ClassItemProvider>(classItemProviders.values());
+        final Queue<ClassItemProvider> queue = new ConcurrentLinkedQueue<>(classItemProviders.values());
         int jobs = Math.max(queue.size(), 10);
 
         for (int i = 0; i < jobs; i++)
@@ -339,6 +341,7 @@ public class EnablementComposite extends Composite
 
           UIUtil.syncExec(new Runnable()
           {
+            @Override
             public void run()
             {
               try
@@ -403,7 +406,7 @@ public class EnablementComposite extends Composite
 
   public static Map<EClass, EList<SetupTask>> getEnablementTasks(EList<SetupTask> tasks)
   {
-    Map<EClass, EList<SetupTask>> result = new HashMap<EClass, EList<SetupTask>>();
+    Map<EClass, EList<SetupTask>> result = new HashMap<>();
 
     for (SetupTask task : tasks)
     {
@@ -437,8 +440,8 @@ public class EnablementComposite extends Composite
           SetupUIPlugin.INSTANCE.getImage(SetupPackage.Literals.SETUP_TASK.isSuperTypeOf(eClass) ? "full/obj16/SetupTask" : "full/obj16/EObject")); //$NON-NLS-1$ //$NON-NLS-2$
       this.eClass = eClass;
 
-      Map<String, Set<Requirement>> requirements = new HashMap<String, Set<Requirement>>();
-      List<Requirement> extraRequirements = new ArrayList<Requirement>();
+      Map<String, Set<Requirement>> requirements = new HashMap<>();
+      List<Requirement> extraRequirements = new ArrayList<>();
 
       int size = enablementTasks.size();
       for (int i = 0; i < size; i++)
@@ -481,7 +484,7 @@ public class EnablementComposite extends Composite
         }
       }
 
-      List<String> urls = new ArrayList<String>(requirements.keySet());
+      List<String> urls = new ArrayList<>(requirements.keySet());
       Collections.sort(urls);
       inputData.repositories.addAll(urls);
 
@@ -514,11 +517,11 @@ public class EnablementComposite extends Composite
    */
   public static final class InputData
   {
-    final EList<SetupTask> enablementTasks = new BasicEList<SetupTask>();
+    final EList<SetupTask> enablementTasks = new BasicEList<>();
 
-    final Set<String> repositories = new HashSet<String>();
+    final Set<String> repositories = new HashSet<>();
 
-    final Set<Requirement> requirements = new HashSet<Requirement>();
+    final Set<Requirement> requirements = new HashSet<>();
 
     public InputData()
     {

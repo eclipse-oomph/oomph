@@ -352,7 +352,7 @@ public final class StringUtil
 
   public static List<String> explode(String string, String separators, char escapeCharacter)
   {
-    List<String> tokens = new ArrayList<String>();
+    List<String> tokens = new ArrayList<>();
 
     StringBuilder builder = new StringBuilder();
     boolean separator = false;

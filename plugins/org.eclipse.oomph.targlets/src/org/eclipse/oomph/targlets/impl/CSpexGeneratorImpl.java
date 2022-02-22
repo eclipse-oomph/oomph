@@ -73,6 +73,7 @@ public class CSpexGeneratorImpl extends ModelElementImpl implements CSpexGenerat
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public void generateIUs(IProject project, String qualifierReplacement, Map<String, Version> iuVersions, EList<IInstallableUnit> result) throws Exception
   {
     if (!result.isEmpty())

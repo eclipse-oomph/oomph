@@ -57,7 +57,7 @@ public class HelpSupport
 
   private final TitleAreaDialog dialog;
 
-  private final Set<Control> calloutControls = new HashSet<Control>();
+  private final Set<Control> calloutControls = new HashSet<>();
 
   private final Image[] calloutImages = new Image[10];
 
@@ -94,6 +94,7 @@ public class HelpSupport
     Shell shell = dialog.getShell();
     shell.addHelpListener(new HelpListener()
     {
+      @Override
       public void helpRequested(HelpEvent e)
       {
         if (UIUtil.isBrowserAvailable())
@@ -127,6 +128,7 @@ public class HelpSupport
               helpBrowser.setLayoutData(gridData);
               helpBrowser.addDisposeListener(new DisposeListener()
               {
+                @Override
                 public void widgetDisposed(DisposeEvent e)
                 {
                   helpBrowser = null;
@@ -188,6 +190,7 @@ public class HelpSupport
   {
     control.addPaintListener(new PaintListener()
     {
+      @Override
       public void paintControl(PaintEvent e)
       {
         if (isHelpOpen())

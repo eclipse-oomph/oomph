@@ -62,6 +62,7 @@ public interface Generator
       return value;
     }
 
+    @Override
     public Object nextValue()
     {
       try
@@ -108,6 +109,7 @@ public interface Generator
       return repeat;
     }
 
+    @Override
     public T nextValue()
     {
       if (iterator.hasNext())

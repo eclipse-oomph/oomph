@@ -145,6 +145,7 @@ public class MylynPackageImpl extends EPackageImpl implements MylynPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getMylynQueriesTask()
   {
     return mylynQueriesTaskEClass;
@@ -155,6 +156,7 @@ public class MylynPackageImpl extends EPackageImpl implements MylynPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getMylynQueriesTask_ConnectorKind()
   {
     return (EAttribute)mylynQueriesTaskEClass.getEStructuralFeatures().get(0);
@@ -165,6 +167,7 @@ public class MylynPackageImpl extends EPackageImpl implements MylynPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getMylynQueriesTask_RepositoryURL()
   {
     return (EAttribute)mylynQueriesTaskEClass.getEStructuralFeatures().get(1);
@@ -175,6 +178,7 @@ public class MylynPackageImpl extends EPackageImpl implements MylynPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getMylynQueriesTask_UserID()
   {
     return (EAttribute)mylynQueriesTaskEClass.getEStructuralFeatures().get(2);
@@ -185,6 +189,7 @@ public class MylynPackageImpl extends EPackageImpl implements MylynPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getMylynQueriesTask_Password()
   {
     return (EAttribute)mylynQueriesTaskEClass.getEStructuralFeatures().get(3);
@@ -195,6 +200,7 @@ public class MylynPackageImpl extends EPackageImpl implements MylynPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getMylynQueriesTask_Queries()
   {
     return (EReference)mylynQueriesTaskEClass.getEStructuralFeatures().get(4);
@@ -205,6 +211,7 @@ public class MylynPackageImpl extends EPackageImpl implements MylynPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getMylynBuildsTask()
   {
     return mylynBuildsTaskEClass;
@@ -215,6 +222,7 @@ public class MylynPackageImpl extends EPackageImpl implements MylynPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getMylynBuildsTask_ConnectorKind()
   {
     return (EAttribute)mylynBuildsTaskEClass.getEStructuralFeatures().get(0);
@@ -225,6 +233,7 @@ public class MylynPackageImpl extends EPackageImpl implements MylynPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getMylynBuildsTask_ServerURL()
   {
     return (EAttribute)mylynBuildsTaskEClass.getEStructuralFeatures().get(1);
@@ -235,6 +244,7 @@ public class MylynPackageImpl extends EPackageImpl implements MylynPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getMylynBuildsTask_UserID()
   {
     return (EAttribute)mylynBuildsTaskEClass.getEStructuralFeatures().get(2);
@@ -245,6 +255,7 @@ public class MylynPackageImpl extends EPackageImpl implements MylynPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getMylynBuildsTask_Password()
   {
     return (EAttribute)mylynBuildsTaskEClass.getEStructuralFeatures().get(3);
@@ -255,6 +266,7 @@ public class MylynPackageImpl extends EPackageImpl implements MylynPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getMylynBuildsTask_BuildPlans()
   {
     return (EReference)mylynBuildsTaskEClass.getEStructuralFeatures().get(4);
@@ -265,6 +277,7 @@ public class MylynPackageImpl extends EPackageImpl implements MylynPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getBuildPlan()
   {
     return buildPlanEClass;
@@ -275,6 +288,7 @@ public class MylynPackageImpl extends EPackageImpl implements MylynPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getBuildPlan_Name()
   {
     return (EAttribute)buildPlanEClass.getEStructuralFeatures().get(0);
@@ -285,6 +299,7 @@ public class MylynPackageImpl extends EPackageImpl implements MylynPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getQuery()
   {
     return queryEClass;
@@ -295,6 +310,7 @@ public class MylynPackageImpl extends EPackageImpl implements MylynPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getQuery_Task()
   {
     return (EReference)queryEClass.getEStructuralFeatures().get(0);
@@ -305,6 +321,7 @@ public class MylynPackageImpl extends EPackageImpl implements MylynPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getQuery_Summary()
   {
     return (EAttribute)queryEClass.getEStructuralFeatures().get(1);
@@ -315,6 +332,7 @@ public class MylynPackageImpl extends EPackageImpl implements MylynPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getQuery_URL()
   {
     return (EAttribute)queryEClass.getEStructuralFeatures().get(2);
@@ -325,6 +343,7 @@ public class MylynPackageImpl extends EPackageImpl implements MylynPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getQuery_Attributes()
   {
     return (EReference)queryEClass.getEStructuralFeatures().get(3);
@@ -335,6 +354,7 @@ public class MylynPackageImpl extends EPackageImpl implements MylynPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getQueryAttribute()
   {
     return queryAttributeEClass;
@@ -345,6 +365,7 @@ public class MylynPackageImpl extends EPackageImpl implements MylynPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getQueryAttribute_Key()
   {
     return (EAttribute)queryAttributeEClass.getEStructuralFeatures().get(0);
@@ -355,6 +376,7 @@ public class MylynPackageImpl extends EPackageImpl implements MylynPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getQueryAttribute_Value()
   {
     return (EAttribute)queryAttributeEClass.getEStructuralFeatures().get(1);
@@ -365,6 +387,7 @@ public class MylynPackageImpl extends EPackageImpl implements MylynPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public MylynFactory getMylynFactory()
   {
     return (MylynFactory)getEFactoryInstance();

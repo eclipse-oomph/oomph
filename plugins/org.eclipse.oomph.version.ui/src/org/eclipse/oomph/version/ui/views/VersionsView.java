@@ -105,6 +105,7 @@ public class VersionsView extends ViewPart
     menuMgr.setRemoveAllWhenShown(true);
     menuMgr.addMenuListener(new IMenuListener()
     {
+      @Override
       public void menuAboutToShow(IMenuManager manager)
       {
         VersionsView.this.fillContextMenu(manager);
@@ -184,6 +185,7 @@ public class VersionsView extends ViewPart
   {
     viewer.addDoubleClickListener(new IDoubleClickListener()
     {
+      @Override
       public void doubleClick(DoubleClickEvent event)
       {
         doubleClickAction.run();
@@ -201,9 +203,9 @@ public class VersionsView extends ViewPart
    */
   class ViewContentProvider implements ITreeContentProvider
   {
-    private final Map<String, Set<BundleDescription>> bundles = new HashMap<String, Set<BundleDescription>>();
+    private final Map<String, Set<BundleDescription>> bundles = new HashMap<>();
 
-    private final Map<String, Set<ExportPackageDescription>> packages = new HashMap<String, Set<ExportPackageDescription>>();
+    private final Map<String, Set<ExportPackageDescription>> packages = new HashMap<>();
 
     public ViewContentProvider()
     {
@@ -222,17 +224,20 @@ public class VersionsView extends ViewPart
       }
     }
 
+    @Override
     public void inputChanged(Viewer v, Object oldInput, Object newInput)
     {
     }
 
+    @Override
     public void dispose()
     {
     }
 
+    @Override
     public Object[] getChildren(Object parent)
     {
-      List<Object> result = new ArrayList<Object>();
+      List<Object> result = new ArrayList<>();
       if (parent instanceof IPluginModelBase)
       {
         IPluginModelBase pluginModel = (IPluginModelBase)parent;
@@ -267,10 +272,11 @@ public class VersionsView extends ViewPart
       return result.toArray();
     }
 
+    @Override
     public Object[] getElements(Object parent)
     {
 
-      List<IModel> allComponentModels = new ArrayList<IModel>();
+      List<IModel> allComponentModels = new ArrayList<>();
       for (IProject project : ResourcesPlugin.getWorkspace().getRoot().getProjects())
       {
         if (project.isAccessible())
@@ -289,11 +295,13 @@ public class VersionsView extends ViewPart
       return allComponentModels.toArray();
     }
 
+    @Override
     public boolean hasChildren(Object element)
     {
       return getChildren(element).length > 0;
     }
 
+    @Override
     public Object getParent(Object element)
     {
       return null;
@@ -305,11 +313,13 @@ public class VersionsView extends ViewPart
    */
   class ViewLabelProvider extends LabelProvider implements ITableLabelProvider
   {
+    @Override
     public String getColumnText(Object obj, int index)
     {
       return getText(obj);
     }
 
+    @Override
     public Image getColumnImage(Object obj, int index)
     {
       return getImage(obj);

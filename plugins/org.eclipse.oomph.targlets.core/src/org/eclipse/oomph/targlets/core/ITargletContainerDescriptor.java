@@ -133,46 +133,55 @@ public interface ITargletContainerDescriptor
       return new UpdateProblem(status);
     }
 
+    @Override
     public String getPlugin()
     {
       return plugin;
     }
 
+    @Override
     public String getMessage()
     {
       return message;
     }
 
+    @Override
     public int getSeverity()
     {
       return severity;
     }
 
+    @Override
     public int getCode()
     {
       return code;
     }
 
+    @Override
     public Throwable getException()
     {
       return exception;
     }
 
+    @Override
     public UpdateProblem[] getChildren()
     {
       return isMultiStatus() ? children : NO_CHILDREN;
     }
 
+    @Override
     public boolean isMultiStatus()
     {
       return children != null;
     }
 
+    @Override
     public boolean isOK()
     {
       return severity == OK;
     }
 
+    @Override
     public boolean matches(int severityMask)
     {
       return (severity & severityMask) != 0;

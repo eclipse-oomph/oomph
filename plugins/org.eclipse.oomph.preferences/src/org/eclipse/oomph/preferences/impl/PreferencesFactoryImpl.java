@@ -138,6 +138,7 @@ public class PreferencesFactoryImpl extends EFactoryImpl implements PreferencesF
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public PreferenceNode createPreferenceNode()
   {
     PreferenceNodeImpl preferenceNode = new PreferenceNodeImpl();
@@ -149,6 +150,7 @@ public class PreferencesFactoryImpl extends EFactoryImpl implements PreferencesF
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Property createProperty()
   {
     PropertyImpl property = new PropertyImpl();
@@ -160,6 +162,7 @@ public class PreferencesFactoryImpl extends EFactoryImpl implements PreferencesF
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public String createEscapedString(String literal)
   {
     return StringUtil.unescape(literal);
@@ -215,6 +218,7 @@ public class PreferencesFactoryImpl extends EFactoryImpl implements PreferencesF
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public String convertEscapedString(String instanceValue)
   {
     if (instanceValue == null)
@@ -262,6 +266,7 @@ public class PreferencesFactoryImpl extends EFactoryImpl implements PreferencesF
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public URI createURI(String literal)
   {
     if (literal == null)
@@ -353,6 +358,7 @@ public class PreferencesFactoryImpl extends EFactoryImpl implements PreferencesF
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public String convertURI(URI instanceValue)
   {
     if (instanceValue == null)
@@ -402,6 +408,7 @@ public class PreferencesFactoryImpl extends EFactoryImpl implements PreferencesF
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String createPreferenceNodeName(String literal)
   {
     return (String)super.createFromString(PreferencesPackage.Literals.PREFERENCE_NODE_NAME, literal);
@@ -422,6 +429,7 @@ public class PreferencesFactoryImpl extends EFactoryImpl implements PreferencesF
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String convertPreferenceNodeName(String instanceValue)
   {
     return super.convertToString(PreferencesPackage.Literals.PREFERENCE_NODE_NAME, instanceValue);
@@ -442,6 +450,7 @@ public class PreferencesFactoryImpl extends EFactoryImpl implements PreferencesF
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public PreferencesPackage getPreferencesPackage()
   {
     return (PreferencesPackage)getEPackage();

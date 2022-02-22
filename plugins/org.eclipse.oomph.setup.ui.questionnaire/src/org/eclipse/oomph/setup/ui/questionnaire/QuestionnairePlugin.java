@@ -66,9 +66,10 @@ public final class QuestionnairePlugin extends OomphUIPlugin
         User user = (User)rootObject;
         if (user.getQuestionnaireDate() == null || force)
         {
-          final Map<URI, Pair<String, String>> preferences = new HashMap<URI, Pair<String, String>>();
+          final Map<URI, Pair<String, String>> preferences = new HashMap<>();
           UIUtil.syncExec(new Runnable()
           {
+            @Override
             public void run()
             {
               GearShell shell = new GearShell(parentShell);

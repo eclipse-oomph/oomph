@@ -57,38 +57,46 @@ public abstract class AbstractTest extends CoreMatchers
   {
     private String message = "";
 
+    @Override
     public void beginTask(String name, int totalWork)
     {
       filter(name);
     }
 
+    @Override
     public void done()
     {
     }
 
+    @Override
     public void internalWorked(double work)
     {
     }
 
+    @Override
     public boolean isCanceled()
     {
       return false;
     }
 
+    @Override
     public void setCanceled(boolean value)
     {
     }
 
+    @Override
     public void setTaskName(String name)
     {
       filter(name);
     }
 
+    @Override
     public void subTask(String name)
     {
       filter(name);
     }
 
+    @Override
     public void worked(int work)
     {
     }

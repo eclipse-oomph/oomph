@@ -53,16 +53,19 @@ public class BundlePoolImpl extends AgentManagerElementImpl implements BundlePoo
     return "bundle pool"; //$NON-NLS-1$
   }
 
+  @Override
   public AgentManager getAgentManager()
   {
     return agent.getAgentManager();
   }
 
+  @Override
   public Agent getAgent()
   {
     return agent;
   }
 
+  @Override
   public File getLocation()
   {
     return location;
@@ -74,16 +77,19 @@ public class BundlePoolImpl extends AgentManagerElementImpl implements BundlePoo
     path = location.getAbsolutePath();
   }
 
+  @Override
   public Set<String> getClients()
   {
     return ((AgentManagerImpl)agent.getAgentManager()).getClientsFor(path);
   }
 
+  @Override
   public boolean isValid()
   {
     return true;
   }
 
+  @Override
   public boolean isCurrent()
   {
     if (!agent.isCurrent())
@@ -95,6 +101,7 @@ public class BundlePoolImpl extends AgentManagerElementImpl implements BundlePoo
     return currentProfile != null && currentProfile.getBundlePool() == this;
   }
 
+  @Override
   public boolean isUsed()
   {
     if (!getProfiles().isEmpty())
@@ -111,6 +118,7 @@ public class BundlePoolImpl extends AgentManagerElementImpl implements BundlePoo
     ((AgentImpl)agent).deleteBundlePool(this);
   }
 
+  @Override
   public synchronized IFileArtifactRepository getFileArtifactRepository()
   {
     if (fileArtifactRepository == null)
@@ -147,16 +155,19 @@ public class BundlePoolImpl extends AgentManagerElementImpl implements BundlePoo
     return fileArtifactRepository;
   }
 
+  @Override
   public Set<String> getProfileIDs()
   {
     return ((AgentImpl)agent).getProfileIDs(this);
   }
 
+  @Override
   public Collection<Profile> getProfiles()
   {
     return ((AgentImpl)agent).getProfiles(this);
   }
 
+  @Override
   public Profile getProfile(String id)
   {
     Profile profile = agent.getProfile(id);
@@ -168,6 +179,7 @@ public class BundlePoolImpl extends AgentManagerElementImpl implements BundlePoo
     return null;
   }
 
+  @Override
   public Profile getProfile(File installFolder)
   {
     Profile profile = agent.getProfile(installFolder);
@@ -179,6 +191,7 @@ public class BundlePoolImpl extends AgentManagerElementImpl implements BundlePoo
     return null;
   }
 
+  @Override
   public ProfileCreator addProfile(String id, String type)
   {
     return new ProfileCreatorImpl(this, id, type)

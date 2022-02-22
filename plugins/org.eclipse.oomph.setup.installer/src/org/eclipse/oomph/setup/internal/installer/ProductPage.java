@@ -248,6 +248,7 @@ public class ProductPage extends SetupWizardPage
         final Collection<?> affectedObjects = command.getAffectedObjects();
         UIUtil.asyncExec(new Runnable()
         {
+          @Override
           public void run()
           {
             productViewer.setSelection(new StructuredSelection(affectedObjects.toArray()), true);
@@ -284,6 +285,7 @@ public class ProductPage extends SetupWizardPage
 
     versionComboViewer.addSelectionChangedListener(new ISelectionChangedListener()
     {
+      @Override
       public void selectionChanged(SelectionChangedEvent event)
       {
         updateProductVersionDetails(false);
@@ -321,6 +323,7 @@ public class ProductPage extends SetupWizardPage
 
       osComboViewer.addSelectionChangedListener(new ISelectionChangedListener()
       {
+        @Override
         public void selectionChanged(SelectionChangedEvent event)
         {
           IStructuredSelection selection = (IStructuredSelection)event.getSelection();
@@ -489,6 +492,7 @@ public class ProductPage extends SetupWizardPage
       poolComboViewer.setInput(P2Util.getAgentManager());
       poolComboViewer.addSelectionChangedListener(new ISelectionChangedListener()
       {
+        @Override
         public void selectionChanged(SelectionChangedEvent event)
         {
           if (currentBundlePoolChanging)
@@ -530,6 +534,7 @@ public class ProductPage extends SetupWizardPage
     final CatalogManager catalogManager = catalogSelector.getCatalogManager();
     versionComboViewer.addSelectionChangedListener(new ISelectionChangedListener()
     {
+      @Override
       public void selectionChanged(SelectionChangedEvent event)
       {
         ProductVersion version = getSelectedProductVersion();
@@ -677,6 +682,7 @@ public class ProductPage extends SetupWizardPage
         {
           getShell().getDisplay().asyncExec(new Runnable()
           {
+            @Override
             public void run()
             {
               if (!selectionMementoTried.getAndSet(true))
@@ -765,6 +771,7 @@ public class ProductPage extends SetupWizardPage
 
     productViewer.addDoubleClickListener(new IDoubleClickListener()
     {
+      @Override
       public void doubleClick(DoubleClickEvent event)
       {
         IStructuredSelection selection = (IStructuredSelection)productViewer.getSelection();
@@ -786,6 +793,7 @@ public class ProductPage extends SetupWizardPage
 
     productViewer.addSelectionChangedListener(new ISelectionChangedListener()
     {
+      @Override
       public void selectionChanged(SelectionChangedEvent event)
       {
         userProductCatalogs.clear();
@@ -834,6 +842,7 @@ public class ProductPage extends SetupWizardPage
 
     dropListener = new SetupTransferSupport.DropListener()
     {
+      @Override
       public void resourcesDropped(Collection<? extends Resource> resources)
       {
         SetupWizard setupWizard = getWizard();
@@ -924,6 +933,7 @@ public class ProductPage extends SetupWizardPage
       {
         private int count;
 
+        @Override
         public void run()
         {
           IndexLoader indexLoader = getWizard().getIndexLoader();
@@ -1987,6 +1997,7 @@ public class ProductPage extends SetupWizardPage
 
       catalogViewer.addSelectionChangedListener(new ISelectionChangedListener()
       {
+        @Override
         public void selectionChanged(SelectionChangedEvent event)
         {
           validate();
@@ -2004,6 +2015,7 @@ public class ProductPage extends SetupWizardPage
 
       parent.getDisplay().asyncExec(new Runnable()
       {
+        @Override
         public void run()
         {
           validate();

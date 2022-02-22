@@ -286,7 +286,7 @@ public class CatalogManager
 
   private <T extends Scope> void filter(EList<T> selectionScopes, EList<T> indexScopes)
   {
-    List<T> scopes = new ArrayList<T>(indexScopes);
+    List<T> scopes = new ArrayList<>(indexScopes);
     scopes.retainAll(selectionScopes);
     for (Iterator<T> it = scopes.iterator(); it.hasNext();)
     {
@@ -328,7 +328,7 @@ public class CatalogManager
 
   private <K extends EObject, V extends EObject> void updateProxyKeyedMap(EMap<K, V> eMap)
   {
-    EMap<K, V> originalEMap = new BasicEMap<K, V>(eMap.map());
+    EMap<K, V> originalEMap = new BasicEMap<>(eMap.map());
     eMap.clear();
     eMap.putAll(originalEMap);
   }

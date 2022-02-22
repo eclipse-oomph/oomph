@@ -215,12 +215,12 @@ public final class PropertiesUtil
           Collection<String> keys = properties.keySet();
           if (sort)
           {
-            List<String> keyList = new ArrayList<String>(keys);
+            List<String> keyList = new ArrayList<>(keys);
             Collections.sort(keyList);
             keys = keyList;
           }
 
-          LinkedHashMap<Object, Object> objectMap = new LinkedHashMap<Object, Object>();
+          LinkedHashMap<Object, Object> objectMap = new LinkedHashMap<>();
           for (String key : keys)
           {
             objectMap.put(key, properties.get(key));
@@ -235,12 +235,12 @@ public final class PropertiesUtil
           Collection<String> keys = properties.keySet();
           if (sort)
           {
-            List<String> keyList = new ArrayList<String>(keys);
+            List<String> keyList = new ArrayList<>(keys);
             Collections.sort(keyList);
             keys = keyList;
           }
 
-          Vector<Object> keyVector = new Vector<Object>();
+          Vector<Object> keyVector = new Vector<>();
           for (String key : keys)
           {
             keyVector.add(key);
@@ -340,6 +340,6 @@ public final class PropertiesUtil
       return loadProperties(file);
     }
 
-    return new LinkedHashMap<String, String>();
+    return new LinkedHashMap<>();
   }
 }

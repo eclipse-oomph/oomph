@@ -82,7 +82,7 @@ public final class LazyProfile extends org.eclipse.equinox.internal.p2.engine.Pr
     }
 
     referent.setParent(parent);
-    delegate = new SoftReference<org.eclipse.equinox.internal.p2.engine.Profile>(referent);
+    delegate = new SoftReference<>(referent);
 
     // Keep a strong reference to the referenced profile if this is the self profile.
     if (getProfileId().equals(registry.self))

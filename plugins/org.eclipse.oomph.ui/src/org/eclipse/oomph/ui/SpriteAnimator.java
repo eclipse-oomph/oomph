@@ -109,6 +109,7 @@ public class SpriteAnimator extends Canvas implements Runnable, PaintListener
 
     getDisplay().asyncExec(new Runnable()
     {
+      @Override
       public void run()
       {
         try
@@ -129,6 +130,7 @@ public class SpriteAnimator extends Canvas implements Runnable, PaintListener
     });
   }
 
+  @Override
   public final synchronized void run()
   {
     try
@@ -154,6 +156,7 @@ public class SpriteAnimator extends Canvas implements Runnable, PaintListener
     }
   }
 
+  @Override
   public final void paintControl(PaintEvent e)
   {
     int index = this.index;

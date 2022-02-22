@@ -32,9 +32,9 @@ import java.util.Map;
  */
 public abstract class AbstractDropdownHandler extends AbstractHandler implements IElementUpdater
 {
-  private static final Map<String, ActionDescriptor> ACTION_DESCRIPTORS = new HashMap<String, ActionDescriptor>();
+  private static final Map<String, ActionDescriptor> ACTION_DESCRIPTORS = new HashMap<>();
 
-  private static final ThreadLocal<Boolean> EAGER_LOAD = new ThreadLocal<Boolean>();
+  private static final ThreadLocal<Boolean> EAGER_LOAD = new ThreadLocal<>();
 
   private final String commandID;
 
@@ -48,6 +48,7 @@ public abstract class AbstractDropdownHandler extends AbstractHandler implements
     return commandID;
   }
 
+  @Override
   public void updateElement(UIElement element, @SuppressWarnings("rawtypes") Map parameters)
   {
     ActionDescriptor actionDescriptor = getActionDescriptor();
@@ -63,6 +64,7 @@ public abstract class AbstractDropdownHandler extends AbstractHandler implements
     element.setTooltip(text);
   }
 
+  @Override
   public Object execute(ExecutionEvent event) throws ExecutionException
   {
     if (Boolean.TRUE.equals(EAGER_LOAD.get()))

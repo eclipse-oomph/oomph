@@ -317,11 +317,12 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<Targlet> getTarglets()
   {
     if (targlets == null)
     {
-      targlets = new EObjectContainmentEList<Targlet>(Targlet.class, this, SetupTargletsPackage.TARGLET_TASK__TARGLETS);
+      targlets = new EObjectContainmentEList<>(Targlet.class, this, SetupTargletsPackage.TARGLET_TASK__TARGLETS);
     }
     return targlets;
   }
@@ -331,11 +332,12 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<String> getTargletURIs()
   {
     if (targletURIs == null)
     {
-      targletURIs = new EDataTypeUniqueEList<String>(String.class, this, SetupTargletsPackage.TARGLET_TASK__TARGLET_UR_IS);
+      targletURIs = new EDataTypeUniqueEList<>(String.class, this, SetupTargletsPackage.TARGLET_TASK__TARGLET_UR_IS);
     }
     return targletURIs;
   }
@@ -345,6 +347,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getOperatingSystem()
   {
     return operatingSystem;
@@ -355,6 +358,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setOperatingSystem(String newOperatingSystem)
   {
     String oldOperatingSystem = operatingSystem;
@@ -370,6 +374,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getWindowingSystem()
   {
     return windowingSystem;
@@ -380,6 +385,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setWindowingSystem(String newWindowingSystem)
   {
     String oldWindowingSystem = windowingSystem;
@@ -395,6 +401,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getArchitecture()
   {
     return architecture;
@@ -405,6 +412,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setArchitecture(String newArchitecture)
   {
     String oldArchitecture = architecture;
@@ -420,6 +428,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getLocale()
   {
     return locale;
@@ -430,6 +439,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setLocale(String newLocale)
   {
     String oldLocale = locale;
@@ -445,6 +455,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getProgramArguments()
   {
     return programArguments;
@@ -455,6 +466,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setProgramArguments(String newProgramArguments)
   {
     String oldProgramArguments = programArguments;
@@ -470,6 +482,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getVMArguments()
   {
     return vMArguments;
@@ -480,6 +493,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setVMArguments(String newVMArguments)
   {
     String oldVMArguments = vMArguments;
@@ -495,11 +509,12 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<ImplicitDependency> getImplicitDependencies()
   {
     if (implicitDependencies == null)
     {
-      implicitDependencies = new EObjectContainmentEList<ImplicitDependency>(ImplicitDependency.class, this,
+      implicitDependencies = new EObjectContainmentEList<>(ImplicitDependency.class, this,
           SetupTargletsPackage.TARGLET_TASK__IMPLICIT_DEPENDENCIES);
     }
     return implicitDependencies;
@@ -510,6 +525,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getTargetName()
   {
     return targetName;
@@ -520,6 +536,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setTargetName(String newTargetName)
   {
     String oldTargetName = targetName;
@@ -535,6 +552,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public boolean isActivateTarget()
   {
     return activateTarget;
@@ -545,6 +563,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setActivateTarget(boolean newActivateTarget)
   {
     boolean oldActivateTarget = activateTarget;
@@ -860,7 +879,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
   {
     super.consolidate();
 
-    Set<String> targletNames = new HashSet<String>();
+    Set<String> targletNames = new HashSet<>();
     EList<Targlet> targlets = getTarglets();
 
     LOOP: for (Iterator<Targlet> it = targlets.iterator(); it.hasNext();)
@@ -893,6 +912,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
 
     ECollections.sort(targlets, new Comparator<Targlet>()
     {
+      @Override
       public int compare(Targlet o1, Targlet o2)
       {
         return StringUtil.safe(o1.getName()).compareTo(StringUtil.safe(o2.getName()));
@@ -915,6 +935,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
 
     ECollections.sort(implicitDependencies, new Comparator<ImplicitDependency>()
     {
+      @Override
       public int compare(ImplicitDependency o1, ImplicitDependency o2)
       {
         int result = StringUtil.safe(o1.getID()).compareTo(StringUtil.safe(o2.getID()));
@@ -949,12 +970,14 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
     return 100;
   }
 
+  @Override
   public boolean isNeeded(final SetupTaskContext context) throws Exception
   {
     copyTarglets = TargletFactory.eINSTANCE.copyTarglets(getTarglets());
 
     boolean isNeeded = TargetPlatformUtil.runWithTargetPlatformService(new TargetPlatformRunnable<Boolean>()
     {
+      @Override
       public Boolean run(ITargetPlatformService service) throws CoreException
       {
         ITargetHandle activeTargetHandle = service.getWorkspaceTargetHandle();
@@ -976,17 +999,8 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
           return false;
         }
 
-        if (!EcoreUtil.equals(targletContainer.getTarglets(), copyTarglets))
-        {
-          return true;
-        }
-
-        if (context.getTrigger() == Trigger.MANUAL)
-        {
-          return true;
-        }
-
-        if (isActivateTarget() && !targetDefinition.getHandle().equals(activeTargetHandle))
+        if (!EcoreUtil.equals(targletContainer.getTarglets(), copyTarglets) || context.getTrigger() == Trigger.MANUAL
+            || isActivateTarget() && !targetDefinition.getHandle().equals(activeTargetHandle))
         {
           return true;
         }
@@ -1016,6 +1030,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
     return false;
   }
 
+  @Override
   public void perform(final SetupTaskContext context) throws Exception
   {
     for (Targlet targlet : copyTarglets)
@@ -1034,6 +1049,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
 
     TargetPlatformUtil.runWithTargetPlatformService(new TargetPlatformRunnable<Object>()
     {
+      @Override
       public Object run(ITargetPlatformService service) throws CoreException
       {
         IProgressMonitor monitor = context.getProgressMonitor(true);
@@ -1096,7 +1112,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
             ITargetLocation[] oldLocations = targetDefinition.getTargetLocations();
             if (oldLocations != null && oldLocations.length != 0)
             {
-              List<ITargetLocation> list = new ArrayList<ITargetLocation>(Arrays.asList(oldLocations));
+              List<ITargetLocation> list = new ArrayList<>(Arrays.asList(oldLocations));
               for (Iterator<ITargetLocation> it = list.iterator(); it.hasNext();)
               {
                 ITargetLocation location = it.next();
@@ -1264,7 +1280,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
 
   private static Set<NameVersionDescriptor> createNameVersionDescriptors(Collection<ImplicitDependency> implicitDependencies)
   {
-    Set<NameVersionDescriptor> result = new LinkedHashSet<NameVersionDescriptor>();
+    Set<NameVersionDescriptor> result = new LinkedHashSet<>();
     for (ImplicitDependency implicitDependency : implicitDependencies)
     {
       String id = implicitDependency.getID();
@@ -1280,7 +1296,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
 
   private static boolean equalNameVersionDescriptors(NameVersionDescriptor[] targetImplicitDependencies, EList<ImplicitDependency> targletImplicitDependencies)
   {
-    Set<NameVersionDescriptor> targetSet = new HashSet<NameVersionDescriptor>();
+    Set<NameVersionDescriptor> targetSet = new HashSet<>();
     if (targetImplicitDependencies != null)
     {
       for (int i = 0; i < targetImplicitDependencies.length; i++)

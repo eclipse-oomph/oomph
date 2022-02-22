@@ -66,7 +66,7 @@ public class ExclusionPredicateItemProvider extends PredicateItemProvider
 
   public static Set<PreferenceProfile> getReachablePreferenceProfiles(PreferenceProfile preferenceProfile)
   {
-    Set<PreferenceProfile> workingSets = new HashSet<PreferenceProfile>();
+    Set<PreferenceProfile> workingSets = new HashSet<>();
     collectReachablePreferenceProfiles(preferenceProfile, workingSets);
     return workingSets;
   }

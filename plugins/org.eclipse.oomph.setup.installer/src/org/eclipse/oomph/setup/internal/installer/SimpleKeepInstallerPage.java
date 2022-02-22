@@ -100,6 +100,7 @@ public class SimpleKeepInstallerPage extends SimpleInstallerPage
     final Text locationText = createTextField(varContainer);
     locationText.addModifyListener(new ModifyListener()
     {
+      @Override
       public void modifyText(ModifyEvent e)
       {
         location = locationText.getText();
@@ -208,6 +209,7 @@ public class SimpleKeepInstallerPage extends SimpleInstallerPage
           {
             progressMonitorDialog.run(true, false, new IRunnableWithProgress()
             {
+              @Override
               public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
               {
                 monitor.beginTask(NLS.bind(Messages.SimpleKeepInstallerPage_CopyingInstaller_task, location), IProgressMonitor.UNKNOWN);
@@ -215,6 +217,7 @@ public class SimpleKeepInstallerPage extends SimpleInstallerPage
 
                 UIUtil.getDisplay().asyncExec(new Runnable()
                 {
+                  @Override
                   public void run()
                   {
                     if (startPermanentInstaller)

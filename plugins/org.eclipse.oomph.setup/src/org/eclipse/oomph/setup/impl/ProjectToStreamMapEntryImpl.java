@@ -346,6 +346,7 @@ public class ProjectToStreamMapEntryImpl extends MinimalEObjectImpl.Container im
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public int getHash()
   {
     if (hash == -1)
@@ -361,6 +362,7 @@ public class ProjectToStreamMapEntryImpl extends MinimalEObjectImpl.Container im
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setHash(int hash)
   {
     this.hash = hash;
@@ -371,6 +373,7 @@ public class ProjectToStreamMapEntryImpl extends MinimalEObjectImpl.Container im
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Project getKey()
   {
     return getTypedKey();
@@ -381,6 +384,7 @@ public class ProjectToStreamMapEntryImpl extends MinimalEObjectImpl.Container im
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setKey(Project key)
   {
     setTypedKey(key);
@@ -391,6 +395,7 @@ public class ProjectToStreamMapEntryImpl extends MinimalEObjectImpl.Container im
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Stream getValue()
   {
     return getTypedValue();
@@ -401,6 +406,7 @@ public class ProjectToStreamMapEntryImpl extends MinimalEObjectImpl.Container im
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Stream setValue(Stream value)
   {
     Stream oldValue = getValue();

@@ -336,7 +336,7 @@ public class ConfigurationProcessor
   protected IStatus createResourceStatus(Collection<? extends Resource> resources, EClass expectedEClass)
   {
     StringBuilder uris = new StringBuilder();
-    List<IStatus> childStatuses = new ArrayList<IStatus>();
+    List<IStatus> childStatuses = new ArrayList<>();
     for (Resource resource : resources)
     {
       if (uris.length() != 0)
@@ -438,7 +438,7 @@ public class ConfigurationProcessor
       }
     }
 
-    List<Stream> projectStreams = new ArrayList<Stream>();
+    List<Stream> projectStreams = new ArrayList<>();
     for (Stream stream : workspace.getStreams())
     {
       if (stream.eIsProxy())

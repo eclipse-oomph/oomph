@@ -13,15 +13,13 @@ package org.eclipse.oomph.setup.internal.installer;
 
 import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.jreinfo.JREManager;
-import org.eclipse.oomph.p2.core.CertificateConfirmer;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.ProfileTransaction.Resolution;
-import org.eclipse.oomph.p2.internal.ui.P2ServiceUI;
+import org.eclipse.oomph.p2.internal.ui.P2UIPlugin;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard.SelectionMemento;
 import org.eclipse.oomph.ui.ErrorDialog;
 import org.eclipse.oomph.ui.UIUtil;
-import org.eclipse.oomph.util.Confirmer;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.OomphPlugin.Preference;
@@ -80,29 +78,9 @@ public class InstallerApplication implements IApplication
   protected Integer run(final IApplicationContext context) throws Exception
   {
     // This must come very early, before the first model is accessed, so that HTTPS can be authorized.
-    IProvisioningAgent agent = P2Util.getCurrentProvisioningAgent();
     final AtomicReference<Installer> currentInstaller = new AtomicReference<Installer>();
-    agent.registerService(UIServices.SERVICE_NAME, new P2ServiceUI()
-    {
-      @Override
-      protected UIServices getDelegate()
-      {
-        Installer installer = currentInstaller.get();
-        return installer == null ? null : installer.getUiServices();
-      }
-
-      @Override
-      protected CertificateConfirmer getCertificateConfirmer()
-      {
-        return null;
-      }
-
-      @Override
-      protected Confirmer getUnsignedContentConfirmer()
-      {
-        return null;
-      }
-    });
+    IProvisioningAgent agent = P2Util.getCurrentProvisioningAgent();
+    UIServices serviceUI = agent.getService(UIServices.class);
 
     Location location = Platform.getInstanceLocation();
     if (location != null && !location.isSet())
@@ -150,6 +128,18 @@ public class InstallerApplication implements IApplication
 
     jreInitializer.setDaemon(true);
     jreInitializer.start();
+
+    Thread trustPreferencesInitializer = new Thread(Messages.InstallerApplication_TrustPreferenceInitializerThreadName)
+    {
+      @Override
+      public void run()
+      {
+        P2Util.mergeGlobalTrustPreferences(P2Util.getAgentManager().getCurrentAgent().getCurrentProfile());
+      }
+    };
+
+    trustPreferencesInitializer.setDaemon(true);
+    trustPreferencesInitializer.start();
 
     String windowImages = context.getBrandingProperty("windowImages"); //$NON-NLS-1$
     if (windowImages != null)
@@ -213,8 +203,11 @@ public class InstallerApplication implements IApplication
     final Display display = Display.getDefault();
     handleCocoaMenu(display, installerDialog);
 
+    P2UIPlugin.init(serviceUI, display);
+
     display.asyncExec(new Runnable()
     {
+      @Override
       public void run()
       {
         // End the splash screen once the dialog is up.
@@ -239,7 +232,7 @@ public class InstallerApplication implements IApplication
         selectionMemento = new SelectionMemento();
       }
 
-      Installer installer = new Installer(selectionMemento);
+      Installer installer = new Installer(selectionMemento, serviceUI);
       currentInstaller.set(installer);
 
       if (configurationResources == null)
@@ -273,8 +266,7 @@ public class InstallerApplication implements IApplication
         if (KeepInstallerUtil.canKeepInstaller())
         {
           Shell shell = new Shell(display);
-          if (MessageDialog.openQuestion(shell, PropertiesUtil.getProductName(),
-              Messages.InstallerApplication_KeepInstaller_message))
+          if (MessageDialog.openQuestion(shell, PropertiesUtil.getProductName(), Messages.InstallerApplication_KeepInstaller_message))
           {
             if (new KeepInstallerDialog(shell, true).open() == KeepInstallerDialog.OK)
             {
@@ -354,6 +346,7 @@ public class InstallerApplication implements IApplication
     {
       Runnable about = new Runnable()
       {
+        @Override
         public void run()
         {
           if (installerDialog[0] != null)
@@ -365,6 +358,7 @@ public class InstallerApplication implements IApplication
 
       Runnable preferences = new Runnable()
       {
+        @Override
         public void run()
         {
           if (installerDialog[0] != null)
@@ -377,6 +371,7 @@ public class InstallerApplication implements IApplication
 
       Runnable quit = new Runnable()
       {
+        @Override
         public void run()
         {
           if (installerDialog[0] != null)
@@ -390,6 +385,7 @@ public class InstallerApplication implements IApplication
     }
   }
 
+  @Override
   public Object start(IApplicationContext context) throws Exception
   {
     try
@@ -401,7 +397,8 @@ public class InstallerApplication implements IApplication
       SetupInstallerPlugin.INSTANCE.log(t);
       final AtomicInteger exitCode = new AtomicInteger(EXIT_ERROR);
 
-      ErrorDialog dialog = new ErrorDialog(Messages.InstallerApplication_Error_title, t, 0, 2, IDialogConstants.OK_LABEL, Messages.InstallerApplication_Update_label, IDialogConstants.SHOW_DETAILS_LABEL)
+      ErrorDialog dialog = new ErrorDialog(Messages.InstallerApplication_Error_title, t, 0, 2, IDialogConstants.OK_LABEL,
+          Messages.InstallerApplication_Update_label, IDialogConstants.SHOW_DETAILS_LABEL)
       {
         @Override
         protected void buttonPressed(int buttonId)
@@ -420,8 +417,7 @@ public class InstallerApplication implements IApplication
           {
             final Shell shell = getShell();
 
-            if (!MessageDialog.openQuestion(shell, Messages.InstallerApplication_EmergencyUpdate_title,
-                Messages.InstallerApplication_EmergencyUpdate_message))
+            if (!MessageDialog.openQuestion(shell, Messages.InstallerApplication_EmergencyUpdate_title, Messages.InstallerApplication_EmergencyUpdate_message))
             {
               return;
             }
@@ -445,6 +441,7 @@ public class InstallerApplication implements IApplication
             {
               dialog.run(true, true, new IRunnableWithProgress()
               {
+                @Override
                 public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
                 {
                   SubMonitor progress = SubMonitor.convert(monitor, 2);
@@ -456,6 +453,7 @@ public class InstallerApplication implements IApplication
                     {
                       UIUtil.syncExec(new Runnable()
                       {
+                        @Override
                         public void run()
                         {
                           MessageDialog.openInformation(shell, Messages.InstallerApplication_Update_label, Messages.InstallerApplication_NoUpdates_message);
@@ -505,6 +503,7 @@ public class InstallerApplication implements IApplication
     }
   }
 
+  @Override
   public void stop()
   {
     // Do nothing.

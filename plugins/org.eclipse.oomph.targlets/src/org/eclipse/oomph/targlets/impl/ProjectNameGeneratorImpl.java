@@ -64,6 +64,7 @@ public class ProjectNameGeneratorImpl extends ModelElementImpl implements Projec
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public void generateIUs(IProject project, String qualifierReplacement, Map<String, Version> iuVersions, EList<IInstallableUnit> result) throws Exception
   {
     ComponentDefinition componentDefinition = TargletFactory.eINSTANCE.createComponentDefinition();

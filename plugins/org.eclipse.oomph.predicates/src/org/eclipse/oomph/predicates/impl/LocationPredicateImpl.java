@@ -85,6 +85,7 @@ public class LocationPredicateImpl extends PredicateImpl implements LocationPred
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getPattern()
   {
     return pattern;
@@ -105,6 +106,7 @@ public class LocationPredicateImpl extends PredicateImpl implements LocationPred
     }
   }
 
+  @Override
   public void setPattern(String newPattern)
   {
     setPatternGen(newPattern);

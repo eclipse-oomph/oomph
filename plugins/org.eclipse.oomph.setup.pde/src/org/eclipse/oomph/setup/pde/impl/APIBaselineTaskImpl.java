@@ -144,6 +144,7 @@ public class APIBaselineTaskImpl extends AbstractAPIBaselineTaskImpl implements 
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getVersion()
   {
     return version;
@@ -154,6 +155,7 @@ public class APIBaselineTaskImpl extends AbstractAPIBaselineTaskImpl implements 
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setVersion(String newVersion)
   {
     String oldVersion = version;
@@ -169,6 +171,7 @@ public class APIBaselineTaskImpl extends AbstractAPIBaselineTaskImpl implements 
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getLocation()
   {
     return location;
@@ -179,6 +182,7 @@ public class APIBaselineTaskImpl extends AbstractAPIBaselineTaskImpl implements 
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setLocation(String newLocation)
   {
     String oldLocation = location;
@@ -194,6 +198,7 @@ public class APIBaselineTaskImpl extends AbstractAPIBaselineTaskImpl implements 
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getRemoteURI()
   {
     return remoteURI;
@@ -204,6 +209,7 @@ public class APIBaselineTaskImpl extends AbstractAPIBaselineTaskImpl implements 
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setRemoteURI(String newRemoteURI)
   {
     String oldRemoteURI = remoteURI;
@@ -329,6 +335,7 @@ public class APIBaselineTaskImpl extends AbstractAPIBaselineTaskImpl implements 
 
   protected transient boolean createBaseline;
 
+  @Override
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     ApiPlugin apiPlugin = ApiPlugin.getDefault();
@@ -362,12 +369,7 @@ public class APIBaselineTaskImpl extends AbstractAPIBaselineTaskImpl implements 
 
     this.baseline = baseline;
 
-    if (isActivate() && baselineManager.getDefaultApiBaseline() != baseline)
-    {
-      return true;
-    }
-
-    if (isDifferentRemoteURI())
+    if (isActivate() && baselineManager.getDefaultApiBaseline() != baseline || isDifferentRemoteURI())
     {
       return true;
     }
@@ -375,6 +377,7 @@ public class APIBaselineTaskImpl extends AbstractAPIBaselineTaskImpl implements 
     return false;
   }
 
+  @Override
   public void perform(SetupTaskContext context) throws Exception
   {
     IApiBaselineManager baselineManager = ApiPlugin.getDefault().getApiBaselineManager();

@@ -218,6 +218,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
       final Display display = Display.getDefault();
       display.asyncExec(new Runnable()
       {
+        @Override
         public void run()
         {
           if (!SetupUtil.INSTALLER_APPLICATION)
@@ -355,6 +356,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
           {
             UIUtil.asyncExec(new Runnable()
             {
+              @Override
               public void run()
               {
                 ICommandService commandService = PlatformUI.getWorkbench().getService(ICommandService.class);
@@ -389,7 +391,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
   private static boolean rememberNotificationURI(String notificationURI)
   {
     File file = new File(SetupContext.GLOBAL_SETUPS_LOCATION_URI.toFileString(), "brandingNotificationURIs.txt"); //$NON-NLS-1$
-    Set<String> brandingNotificationURIs = new LinkedHashSet<String>();
+    Set<String> brandingNotificationURIs = new LinkedHashSet<>();
     try
     {
       if (file.isFile())
@@ -407,7 +409,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
     {
       try
       {
-        IOUtil.writeLines(file, "UTF-8", new ArrayList<String>(brandingNotificationURIs)); //$NON-NLS-1$
+        IOUtil.writeLines(file, "UTF-8", new ArrayList<>(brandingNotificationURIs)); //$NON-NLS-1$
       }
       catch (RuntimeException ex)
       {
@@ -484,7 +486,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
       @Override
       protected void run(String taskName, IProgressMonitor monitor)
       {
-        List<URI> uris = new ArrayList<URI>();
+        List<URI> uris = new ArrayList<>();
         URIConverter uriConverter = resourceSet.getURIConverter();
         for (URI uri : new URI[] { SetupContext.INSTALLATION_SETUP_URI, SetupContext.WORKSPACE_SETUP_URI, SetupContext.USER_SETUP_URI })
         {
@@ -504,7 +506,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
 
   private static Set<? extends EObject> checkCrossReferences(ResourceSet resourceSet, URI uri)
   {
-    Set<EObject> result = new HashSet<EObject>();
+    Set<EObject> result = new HashSet<>();
 
     Resource resource = resourceSet.getResource(uri, false);
     if (resource != null)
@@ -586,7 +588,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
     monitor.beginTask("", 105); //$NON-NLS-1$
     Trigger trigger = Trigger.STARTUP;
     boolean restarting = false;
-    Set<URI> neededRestartTasks = new HashSet<URI>();
+    Set<URI> neededRestartTasks = new HashSet<>();
 
     try
     {
@@ -667,7 +669,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
 
       // Check the installation and workspace resources for cross references.
       // This unloads the cross referenced resources and returns the container objects of the root object(s) of those resources.
-      Set<EObject> eContainers = new HashSet<EObject>();
+      Set<EObject> eContainers = new HashSet<>();
       eContainers.addAll(checkCrossReferences(resourceSet, SetupContext.INSTALLATION_SETUP_URI));
       if (SetupContext.WORKSPACE_SETUP_URI != null)
       {
@@ -714,16 +716,19 @@ public final class SetupUIPlugin extends OomphUIPlugin
       // Create a prompter that generally cancels except if all prompted variables are passwords.
       SetupPrompter prompter = new SetupPrompter()
       {
+        @Override
         public OS getOS()
         {
           return OS.INSTANCE;
         }
 
+        @Override
         public String getVMPath()
         {
           return null;
         }
 
+        @Override
         public boolean promptVariables(List<? extends SetupTaskContext> contexts)
         {
           @SuppressWarnings("unchecked")
@@ -747,11 +752,13 @@ public final class SetupUIPlugin extends OomphUIPlugin
           return true;
         }
 
+        @Override
         public String getValue(VariableTask variable)
         {
           return null;
         }
 
+        @Override
         public UserCallback getUserCallback()
         {
           return null;
@@ -839,6 +846,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
     final SetupTaskPerformer finalPerfomer = performer;
     UIUtil.asyncExec(new Runnable()
     {
+      @Override
       public void run()
       {
         if (finalPerfomer != null)

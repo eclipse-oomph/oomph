@@ -118,6 +118,7 @@ public class SetupWorkingSetsPackageImpl extends EPackageImpl implements SetupWo
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getWorkingSetTask()
   {
     return workingSetTaskEClass;
@@ -128,6 +129,7 @@ public class SetupWorkingSetsPackageImpl extends EPackageImpl implements SetupWo
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getWorkingSetTask_Prefix()
   {
     return (EAttribute)workingSetTaskEClass.getEStructuralFeatures().get(0);
@@ -138,6 +140,7 @@ public class SetupWorkingSetsPackageImpl extends EPackageImpl implements SetupWo
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getWorkingSetTask_WorkingSets()
   {
     return (EReference)workingSetTaskEClass.getEStructuralFeatures().get(1);
@@ -148,6 +151,7 @@ public class SetupWorkingSetsPackageImpl extends EPackageImpl implements SetupWo
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public SetupWorkingSetsFactory getSetupWorkingSetsFactory()
   {
     return (SetupWorkingSetsFactory)getEFactoryInstance();

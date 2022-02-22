@@ -325,6 +325,7 @@ public abstract class SearchEclipseDialog extends OomphDialog
 
     capabilitiesViewer.addDoubleClickListener(new IDoubleClickListener()
     {
+      @Override
       public void doubleClick(DoubleClickEvent event)
       {
         IStructuredSelection selection = (IStructuredSelection)capabilitiesViewer.getSelection();
@@ -359,6 +360,7 @@ public abstract class SearchEclipseDialog extends OomphDialog
 
     capabilitiesViewer.addSelectionChangedListener(new ISelectionChangedListener()
     {
+      @Override
       public void selectionChanged(SelectionChangedEvent event)
       {
         IStructuredSelection selection = (IStructuredSelection)event.getSelection();
@@ -381,9 +383,10 @@ public abstract class SearchEclipseDialog extends OomphDialog
     capabilitiesViewer.addDragSupport(RepositoryExplorer.DND_OPERATIONS, RepositoryExplorer.DND_TRANSFERS,
         new GeneralDragAdapter(capabilitiesViewer, new GeneralDragAdapter.DraggedObjectsFactory()
         {
+          @Override
           public List<Object> createDraggedObjects(ISelection selection) throws Exception
           {
-            List<Object> result = new ArrayList<Object>();
+            List<Object> result = new ArrayList<>();
             for (Object object : ((IStructuredSelection)selection).toArray())
             {
               if (object instanceof Item)
@@ -417,6 +420,7 @@ public abstract class SearchEclipseDialog extends OomphDialog
 
     detailsViewer.addSelectionChangedListener(new ISelectionChangedListener()
     {
+      @Override
       public void selectionChanged(SelectionChangedEvent event)
       {
         IStructuredSelection selection = (IStructuredSelection)event.getSelection();
@@ -427,6 +431,7 @@ public abstract class SearchEclipseDialog extends OomphDialog
 
     detailsViewer.addDoubleClickListener(new IDoubleClickListener()
     {
+      @Override
       public void doubleClick(DoubleClickEvent event)
       {
         handleDetailsDoubleClick();
@@ -436,9 +441,10 @@ public abstract class SearchEclipseDialog extends OomphDialog
     detailsViewer.addDragSupport(RepositoryExplorer.DND_OPERATIONS, RepositoryExplorer.DND_TRANSFERS,
         new GeneralDragAdapter(detailsViewer, new GeneralDragAdapter.DraggedObjectsFactory()
         {
+          @Override
           public List<Object> createDraggedObjects(ISelection selection) throws Exception
           {
-            List<Object> result = new ArrayList<Object>();
+            List<Object> result = new ArrayList<>();
             for (Object object : ((IStructuredSelection)selection).toArray())
             {
               if (object instanceof Item)
@@ -505,6 +511,7 @@ public abstract class SearchEclipseDialog extends OomphDialog
 
     UIUtil.asyncExec(composite, new Runnable()
     {
+      @Override
       public void run()
       {
         setSelected(null);
@@ -565,7 +572,7 @@ public abstract class SearchEclipseDialog extends OomphDialog
       {
         final Item root = Item.createItem();
         EList<Object> children = root.getChildren();
-        Map<String, Set<String>> capabilities = new LinkedHashMap<String, Set<String>>(P2Index.INSTANCE.getCapabilities());
+        Map<String, Set<String>> capabilities = new LinkedHashMap<>(P2Index.INSTANCE.getCapabilities());
         if (capabilities.isEmpty())
         {
           children.add(Item.createNamespaceItem(Messages.SearchEclipseDialog_indexUnavailableItem_namespace));
@@ -583,7 +590,7 @@ public abstract class SearchEclipseDialog extends OomphDialog
             Item namespaceItem = Item.createNamespaceItem(namespace);
             children.add(namespaceItem);
 
-            Map<SegmentSequence, Item> hierarchicalChildren = new LinkedHashMap<SegmentSequence, Item>();
+            Map<SegmentSequence, Item> hierarchicalChildren = new LinkedHashMap<>();
             SegmentSequence baseName = SegmentSequence.create("."); //$NON-NLS-1$
             hierarchicalChildren.put(baseName, namespaceItem);
             for (String value : entry.getValue())
@@ -614,6 +621,7 @@ public abstract class SearchEclipseDialog extends OomphDialog
 
         UIUtil.asyncExec(capabilitiesViewer.getControl(), new Runnable()
         {
+          @Override
           public void run()
           {
             capabilitiesViewer.setInput(root);
@@ -657,6 +665,7 @@ public abstract class SearchEclipseDialog extends OomphDialog
         {
           UIUtil.asyncExec(detailsViewer.getControl(), new Runnable()
           {
+            @Override
             public void run()
             {
               detailsViewer.setInput(input);
@@ -792,7 +801,7 @@ public abstract class SearchEclipseDialog extends OomphDialog
       }
       else
       {
-        prefixFilterPatterns = new ArrayList<Pattern>();
+        prefixFilterPatterns = new ArrayList<>();
         StringBuffer pattern = new StringBuffer("(\\Q"); //$NON-NLS-1$
         if (patternString.indexOf('/') == -1)
         {
@@ -893,6 +902,7 @@ public abstract class SearchEclipseDialog extends OomphDialog
       return filterPattern.matcher(text).find();
     }
 
+    @Override
     public boolean shouldExpand(Object element)
     {
       // Don't expand an item if that item directly matches the pattern, unless it's not a capability item.
@@ -908,8 +918,9 @@ public abstract class SearchEclipseDialog extends OomphDialog
   {
     private static final Comparator<String> STRING_COMPARATOR = CommonPlugin.INSTANCE.getComparator();
 
-    private static final Comparator<Item> COMPARATOR = new Comparator<Item>()
+    private static final Comparator<Item> COMPARATOR = new Comparator<>()
     {
+      @Override
       public int compare(Item item1, Item item2)
       {
         if (item1.versionRange != null && item2.versionRange != null)
@@ -1240,33 +1251,40 @@ public abstract class SearchEclipseDialog extends OomphDialog
           }
         };
 
+        @Override
         public void removeListener(ILabelProviderListener listener)
         {
         }
 
+        @Override
         public boolean isLabelProperty(Object element, String property)
         {
           return true;
         }
 
+        @Override
         public void dispose()
         {
         }
 
+        @Override
         public void addListener(ILabelProviderListener listener)
         {
         }
 
+        @Override
         public String decorateText(String text, Object element)
         {
           return text;
         }
 
+        @Override
         public Image decorateImage(Image image, Object element)
         {
           return image;
         }
 
+        @Override
         public StyledString decorateStyledText(StyledString styledString, Object element)
         {
           if (itemFilter != null)
@@ -1463,7 +1481,7 @@ public abstract class SearchEclipseDialog extends OomphDialog
           .generateCapabilitiesFromComposedRepositories(capabilitiesFromSimpleRepositories);
       CollectionUtil.addAll(capabilitiesFromComposedRepositories, capabilitiesFromSimpleRepositories);
 
-      Map<Version, Item> versionItems = new TreeMap<Version, Item>();
+      Map<Version, Item> versionItems = new TreeMap<>();
       for (Map.Entry<Repository, Set<Version>> entry : capabilitiesFromComposedRepositories.entrySet())
       {
         Repository key = entry.getKey();
@@ -1570,8 +1588,9 @@ public abstract class SearchEclipseDialog extends OomphDialog
      */
     public static Repositories openFor(final IWorkbenchWindow workbenchWindow)
     {
-      Factory<Repositories> factory = new Factory<Repositories>()
+      Factory<Repositories> factory = new Factory<>()
       {
+        @Override
         public Repositories create(IWorkbenchWindow workbenchWindow)
         {
           return new Repositories(workbenchWindow);
@@ -1686,7 +1705,7 @@ public abstract class SearchEclipseDialog extends OomphDialog
     {
       Map<Repository, Set<Version>> capabilitiesFromSimpleRepositories = P2Index.INSTANCE.lookupCapabilities(capabilityItem.getNamespace(),
           capabilityItem.getName());
-      Map<VersionRange, Item> versionRangeItems = new LinkedHashMap<VersionRange, Item>();
+      Map<VersionRange, Item> versionRangeItems = new LinkedHashMap<>();
       for (Set<Version> versions : capabilitiesFromSimpleRepositories.values())
       {
         for (Version version : versions)
@@ -1819,8 +1838,9 @@ public abstract class SearchEclipseDialog extends OomphDialog
      */
     public static Requirements openFor(final IWorkbenchWindow workbenchWindow)
     {
-      Factory<Requirements> factory = new Factory<Requirements>()
+      Factory<Requirements> factory = new Factory<>()
       {
+        @Override
         public Requirements create(IWorkbenchWindow workbenchWindow)
         {
           return new Requirements(workbenchWindow);
@@ -1869,6 +1889,7 @@ public abstract class SearchEclipseDialog extends OomphDialog
 
     protected abstract void selectionChanged(IWorkbenchPart part, ISelection selection);
 
+    @Override
     public void pageActivated(IWorkbenchPage page)
     {
       if (workbenchPage != null)
@@ -1883,14 +1904,17 @@ public abstract class SearchEclipseDialog extends OomphDialog
       }
     }
 
+    @Override
     public void pageClosed(IWorkbenchPage page)
     {
     }
 
+    @Override
     public void pageOpened(IWorkbenchPage page)
     {
     }
 
+    @Override
     public void partActivated(IWorkbenchPart part)
     {
       if (workbenchPart instanceof ISelectionProvider)
@@ -1912,22 +1936,27 @@ public abstract class SearchEclipseDialog extends OomphDialog
       }
     }
 
+    @Override
     public void partBroughtToTop(IWorkbenchPart part)
     {
     }
 
+    @Override
     public void partClosed(IWorkbenchPart part)
     {
     }
 
+    @Override
     public void partDeactivated(IWorkbenchPart part)
     {
     }
 
+    @Override
     public void partOpened(IWorkbenchPart part)
     {
     }
 
+    @Override
     public void selectionChanged(SelectionChangedEvent event)
     {
       selectionChanged(workbenchPart, event.getSelection());

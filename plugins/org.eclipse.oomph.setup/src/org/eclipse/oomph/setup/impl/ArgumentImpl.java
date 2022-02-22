@@ -122,6 +122,7 @@ public class ArgumentImpl extends ModelElementImpl implements Argument
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public MacroTask getMacroTask()
   {
     if (eContainerFeatureID() != SetupPackage.ARGUMENT__MACRO_TASK)
@@ -276,6 +277,7 @@ public class ArgumentImpl extends ModelElementImpl implements Argument
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Parameter getParameter()
   {
     if (parameter != null && parameter.eIsProxy())
@@ -320,6 +322,7 @@ public class ArgumentImpl extends ModelElementImpl implements Argument
     }
   }
 
+  @Override
   public void setParameter(Parameter newParameter)
   {
     if (newParameter == null)
@@ -371,6 +374,7 @@ public class ArgumentImpl extends ModelElementImpl implements Argument
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getValue()
   {
     return value;
@@ -381,6 +385,7 @@ public class ArgumentImpl extends ModelElementImpl implements Argument
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setValue(String newValue)
   {
     String oldValue = value;

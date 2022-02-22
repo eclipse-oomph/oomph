@@ -126,6 +126,7 @@ public class AnnotationImpl extends ModelElementImpl implements Annotation
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ModelElement getModelElement()
   {
     if (eContainerFeatureID() != BasePackage.ANNOTATION__MODEL_ELEMENT)
@@ -151,6 +152,7 @@ public class AnnotationImpl extends ModelElementImpl implements Annotation
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setModelElement(ModelElement newModelElement)
   {
     if (newModelElement != eInternalContainer() || eContainerFeatureID() != BasePackage.ANNOTATION__MODEL_ELEMENT && newModelElement != null)
@@ -185,6 +187,7 @@ public class AnnotationImpl extends ModelElementImpl implements Annotation
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getSource()
   {
     return source;
@@ -195,6 +198,7 @@ public class AnnotationImpl extends ModelElementImpl implements Annotation
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setSource(String newSource)
   {
     String oldSource = source;
@@ -210,11 +214,12 @@ public class AnnotationImpl extends ModelElementImpl implements Annotation
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EMap<String, String> getDetails()
   {
     if (details == null)
     {
-      details = new EcoreEMap<String, String>(BasePackage.Literals.STRING_TO_STRING_MAP_ENTRY, StringToStringMapEntryImpl.class, this,
+      details = new EcoreEMap<>(BasePackage.Literals.STRING_TO_STRING_MAP_ENTRY, StringToStringMapEntryImpl.class, this,
           BasePackage.ANNOTATION__DETAILS);
     }
     return details;
@@ -225,11 +230,12 @@ public class AnnotationImpl extends ModelElementImpl implements Annotation
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<EObject> getContents()
   {
     if (contents == null)
     {
-      contents = new EObjectContainmentEList<EObject>(EObject.class, this, BasePackage.ANNOTATION__CONTENTS);
+      contents = new EObjectContainmentEList<>(EObject.class, this, BasePackage.ANNOTATION__CONTENTS);
     }
     return contents;
   }
@@ -239,11 +245,12 @@ public class AnnotationImpl extends ModelElementImpl implements Annotation
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<EObject> getReferences()
   {
     if (references == null)
     {
-      references = new EObjectResolvingEList<EObject>(EObject.class, this, BasePackage.ANNOTATION__REFERENCES);
+      references = new EObjectResolvingEList<>(EObject.class, this, BasePackage.ANNOTATION__REFERENCES);
     }
     return references;
   }

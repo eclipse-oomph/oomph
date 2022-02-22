@@ -166,7 +166,7 @@ public class MacroTaskItemProvider extends SetupTaskItemProvider
     CompoundTask expandedMacroTask = expandMacroTask(object);
     if (expandedMacroTask != null)
     {
-      List<Object> extendedChildren = new ArrayList<Object>(children);
+      List<Object> extendedChildren = new ArrayList<>(children);
       String name = expandedMacroTask.getName();
       expandedMacroTask
           .setName(StringUtil.isEmpty(name) ? getString("_UI_MacroPreview_label") : getString("_UI_MacroPrefixedPreview_label", new Object[] { name })); //$NON-NLS-1$ //$NON-NLS-2$
@@ -210,7 +210,7 @@ public class MacroTaskItemProvider extends SetupTaskItemProvider
         public Object getImage(Object object)
         {
           Object image = super.getImage(object);
-          List<Object> images = new ArrayList<Object>(2);
+          List<Object> images = new ArrayList<>(2);
           images.add(image);
           images.add(SetupEditPlugin.INSTANCE.getImage("MacroOverlay.png")); //$NON-NLS-1$
           images.add(SetupEditPlugin.INSTANCE.getImage("LinkOverlay")); //$NON-NLS-1$
@@ -275,7 +275,7 @@ public class MacroTaskItemProvider extends SetupTaskItemProvider
 
   protected static Object getRecursiveOverlayImage(boolean isRecursive, boolean isMacro, Object image)
   {
-    List<Object> images = new ArrayList<Object>(2);
+    List<Object> images = new ArrayList<>(2);
     images.add(image);
     if (isRecursive)
     {
@@ -375,7 +375,7 @@ public class MacroTaskItemProvider extends SetupTaskItemProvider
     Macro macro = macroTask.getMacro();
     if (macro != null)
     {
-      Set<Parameter> boundParameters = new HashSet<Parameter>();
+      Set<Parameter> boundParameters = new HashSet<>();
       for (Argument argument : macroTask.getArguments())
       {
         boundParameters.add(argument.getParameter());
@@ -551,7 +551,7 @@ public class MacroTaskItemProvider extends SetupTaskItemProvider
     public Object getImage(Object object)
     {
       Object image = super.getImage(object);
-      List<Object> images = new ArrayList<Object>(2);
+      List<Object> images = new ArrayList<>(2);
       images.add(image);
       images.add(SetupEditPlugin.INSTANCE.getImage("PreviewOverlay.png")); //$NON-NLS-1$
       return new ComposedImage(images);

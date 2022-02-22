@@ -361,6 +361,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
       itemsViewer.addSelectionChangedListener(new ISelectionChangedListener()
       {
+        @Override
         public void selectionChanged(SelectionChangedEvent event)
         {
           IStructuredSelection selection = (IStructuredSelection)itemsViewer.getSelection();
@@ -377,6 +378,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
       itemsViewer.addDoubleClickListener(new IDoubleClickListener()
       {
+        @Override
         public void doubleClick(DoubleClickEvent event)
         {
           String id = getSelectedCapatiblityID(itemsViewer);
@@ -415,6 +417,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     return filter == null || string == null || filterPattern.matcher(string).find();
   }
 
+  @Override
   public void handleFilter(String filter)
   {
     if (filter == null || filter.length() == 0)
@@ -512,9 +515,10 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
     final GeneralDragAdapter generalDragAdapter = new GeneralDragAdapter(repositoryViewer, new GeneralDragAdapter.DraggedObjectsFactory()
     {
+      @Override
       public List<Object> createDraggedObjects(ISelection selection) throws Exception
       {
-        List<Object> result = new ArrayList<Object>();
+        List<Object> result = new ArrayList<>();
         String text = repositoryCombo.getText();
         Point selectionRange = repositoryCombo.getSelection();
         if (selectionRange.y - selectionRange.x > 0)
@@ -532,6 +536,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     GeneralDropAdapter generalDropAdapter = new GeneralDropAdapter(repositoryViewer, repositoryList, P2Package.Literals.REPOSITORY_LIST__REPOSITORIES,
         new DroppedObjectHandler()
         {
+          @Override
           public void handleDroppedObject(Object object) throws Exception
           {
             if (object instanceof Repository)
@@ -573,7 +578,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
             @Override
             protected Command createAddCommand(EditingDomain domain, EObject owner, EStructuralFeature feature, Collection<?> collection, int index)
             {
-              List<Object> filteredCollection = new ArrayList<Object>();
+              List<Object> filteredCollection = new ArrayList<>();
               if (collection != null)
               {
                 for (Object object : collection)
@@ -631,6 +636,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     MenuManager contextMenu = generalDragAdapter.getContextMenu();
     contextMenu.addMenuListener(new IMenuListener()
     {
+      @Override
       public void menuAboutToShow(IMenuManager manager)
       {
         ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
@@ -776,6 +782,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
     versionsViewer.addDoubleClickListener(new IDoubleClickListener()
     {
+      @Override
       public void doubleClick(DoubleClickEvent event)
       {
         String id = getSelectedCapatiblityID(versionsViewer);
@@ -994,7 +1001,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       IMatchExpression<IInstallableUnit> matches = requirement.getMatches();
       IQueryResult<IInstallableUnit> query = installableUnits.query(QueryUtil.createMatchQuery(matches), new NullProgressMonitor());
 
-      List<Version> versions = new ArrayList<Version>();
+      List<Version> versions = new ArrayList<>();
       int count = 0;
       int limit = 100;
       for (IInstallableUnit iu : P2Util.asIterable(query))
@@ -1047,9 +1054,10 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
   {
     final GeneralDragAdapter.DraggedObjectsFactory draggedObjectsFactory = new GeneralDragAdapter.DraggedObjectsFactory()
     {
+      @Override
       public List<Object> createDraggedObjects(ISelection selection) throws Exception
       {
-        List<Object> result = new ArrayList<Object>();
+        List<Object> result = new ArrayList<>();
 
         IStructuredSelection ssel = (IStructuredSelection)selection;
         for (Iterator<?> it = ssel.iterator(); it.hasNext();)
@@ -1082,7 +1090,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
               if (filter == null && item instanceof VersionedItem)
               {
                 VersionedItem versionedItem = (VersionedItem)item;
-                Set<IMatchExpression<IInstallableUnit>> allFilters = new LinkedHashSet<IMatchExpression<IInstallableUnit>>();
+                Set<IMatchExpression<IInstallableUnit>> allFilters = new LinkedHashSet<>();
                 for (Set<IMatchExpression<IInstallableUnit>> filterSets : versionedItem.getVersions().values())
                 {
                   allFilters.addAll(filterSets);
@@ -1128,11 +1136,13 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
     viewer.getControl().addFocusListener(new FocusListener()
     {
+      @Override
       public void focusLost(FocusEvent e)
       {
         getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), null);
       }
 
+      @Override
       public void focusGained(FocusEvent e)
       {
         getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), simpleCopyAction);
@@ -1141,9 +1151,10 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
     viewer.addSelectionChangedListener(new ISelectionChangedListener()
     {
+      @Override
       public void selectionChanged(SelectionChangedEvent event)
       {
-        List<Object> selectedObjects = new ArrayList<Object>();
+        List<Object> selectedObjects = new ArrayList<>();
         try
         {
           selectedObjects.addAll(draggedObjectsFactory.createDraggedObjects(event.getSelection()));
@@ -1172,10 +1183,11 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
         }
       };
 
+      @Override
       public void menuAboutToShow(IMenuManager manager)
       {
         IStructuredSelection selection = (IStructuredSelection)viewer.getSelection();
-        List<Object> versionItems = new ArrayList<Object>();
+        List<Object> versionItems = new ArrayList<>();
         for (Object object : selection.toArray())
         {
           Object[] elements = versionProvider.getElements(object);
@@ -1212,7 +1224,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       return null;
     }
 
-    Set<String> expressions = new LinkedHashSet<String>();
+    Set<String> expressions = new LinkedHashSet<>();
     for (IMatchExpression<IInstallableUnit> filter : filters)
     {
       expressions.add(RequirementImpl.formatMatchExpression(filter));
@@ -1503,7 +1515,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       text.setText(xml);
       text.setEditable(false);
 
-      List<StyleRange> styleRanges = new ArrayList<StyleRange>();
+      List<StyleRange> styleRanges = new ArrayList<>();
       for (Matcher matcher = pattern.matcher(xml); matcher.find();)
       {
         StyleRange styleRange = new StyleRange();
@@ -1577,6 +1589,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
         searchEclipseRepositoryDialog.getDockable().associate(this);
         searchEclipseRepositoryDialog.getShell().addDisposeListener(new DisposeListener()
         {
+          @Override
           public void widgetDisposed(DisposeEvent e)
           {
             if (searchEclipseRepositoryDialog.getReturnCode() == Dialog.OK)
@@ -1659,6 +1672,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
         repositoryFinderDialog.getDockable().associate(this);
         repositoryFinderDialog.getShell().addDisposeListener(new DisposeListener()
         {
+          @Override
           public void widgetDisposed(DisposeEvent e)
           {
             if (repositoryFinderDialog.getReturnCode() == Dialog.OK)
@@ -1723,6 +1737,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
         final IStatus status = P2UIPlugin.INSTANCE.getStatus(ex);
         UIUtil.asyncExec(new Runnable()
         {
+          @Override
           public void run()
           {
             setItems(new StatusItem(status));
@@ -1809,7 +1824,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
         if (ius != null)
         {
-          installableUnits = new CollectionResult<IInstallableUnit>(ius);
+          installableUnits = new CollectionResult<>(ius);
           analyzeJob.reschedule();
           return;
         }
@@ -1835,8 +1850,8 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
         boolean shouldFailOnChildFailure = shouldFailOnChildFailure(state);
         int count = 0;
 
-        final List<Item> errors = new ArrayList<Item>();
-        Set<String> messages = new HashSet<String>();
+        final List<Item> errors = new ArrayList<>();
+        Set<String> messages = new HashSet<>();
 
         URI[] children = state.getChildren();
         for (URI child : children)
@@ -1866,6 +1881,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
         {
           UIUtil.asyncExec(new Runnable()
           {
+            @Override
             public void run()
             {
               setItems(errors.toArray(new Item[errors.size()]));
@@ -2025,9 +2041,9 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     public void analyzeInstallableUnits(IProgressMonitor monitor)
     {
       // IU.id -> value
-      Map<String, String> names = new HashMap<String, String>();
-      Map<String, Set<IInstallableUnit>> ius = new HashMap<String, Set<IInstallableUnit>>();
-      Map<String, Set<IRequirement>> categories = new HashMap<String, Set<IRequirement>>();
+      Map<String, String> names = new HashMap<>();
+      Map<String, Set<IInstallableUnit>> ius = new HashMap<>();
+      Map<String, Set<IRequirement>> categories = new HashMap<>();
 
       for (IInstallableUnit iu : P2Util.asIterable(installableUnits))
       {
@@ -2043,7 +2059,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
         }
       }
 
-      Set<String> rootIDs = new HashSet<String>();
+      Set<String> rootIDs = new HashSet<>();
 
       for (String categoryID : categories.keySet())
       {
@@ -2068,7 +2084,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
         }
       }
 
-      Set<CategoryItem> rootCategories = new HashSet<CategoryItem>();
+      Set<CategoryItem> rootCategories = new HashSet<>();
       for (String rootID : rootIDs)
       {
         P2UIPlugin.checkCancelation(monitor);
@@ -2083,6 +2099,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       final CategoryItem[] roots = rootCategories.toArray(new CategoryItem[rootCategories.size()]);
       UIUtil.asyncExec(new Runnable()
       {
+        @Override
         public void run()
         {
           if (roots.length == 0)
@@ -2104,8 +2121,8 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     private CategoryItem analyzeCategory(Map<String, String> names, Map<String, Set<IInstallableUnit>> ius, Map<String, Set<IRequirement>> categories,
         String categoryID, IProgressMonitor monitor)
     {
-      Map<String, Item> children = new HashMap<String, Item>();
-      Map<Item, Map<Version, Set<IMatchExpression<IInstallableUnit>>>> versions = new HashMap<Item, Map<Version, Set<IMatchExpression<IInstallableUnit>>>>();
+      Map<String, Item> children = new HashMap<>();
+      Map<Item, Map<Version, Set<IMatchExpression<IInstallableUnit>>>> versions = new HashMap<>();
 
       for (IRequirement requirement : categories.get(categoryID))
       {
@@ -2188,7 +2205,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
                       Map<Version, Set<IMatchExpression<IInstallableUnit>>> map = versions.get(child);
                       if (map == null)
                       {
-                        map = new HashMap<Version, Set<IMatchExpression<IInstallableUnit>>>();
+                        map = new HashMap<>();
                         versions.put(child, map);
                       }
 
@@ -2220,7 +2237,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       }
 
       CategoryItem categoryItem = new CategoryItem(categoryID);
-      Map<Version, Set<IMatchExpression<IInstallableUnit>>> map = new LinkedHashMap<Version, Set<IMatchExpression<IInstallableUnit>>>();
+      Map<Version, Set<IMatchExpression<IInstallableUnit>>> map = new LinkedHashMap<>();
       for (IInstallableUnit categoryIU : ius.get(categoryID))
       {
         CollectionUtil.add(map, categoryIU.getVersion(), categoryIU.getFilter());
@@ -2261,8 +2278,8 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     @Override
     public void analyzeInstallableUnits(IProgressMonitor monitor)
     {
-      Map<String, String> names = new HashMap<String, String>();
-      Map<String, Map<Version, Set<IMatchExpression<IInstallableUnit>>>> versions = new HashMap<String, Map<Version, Set<IMatchExpression<IInstallableUnit>>>>();
+      Map<String, String> names = new HashMap<>();
+      Map<String, Map<Version, Set<IMatchExpression<IInstallableUnit>>>> versions = new HashMap<>();
 
       for (IInstallableUnit iu : P2Util.asIterable(installableUnits))
       {
@@ -2282,7 +2299,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
             Map<Version, Set<IMatchExpression<IInstallableUnit>>> map = versions.get(id);
             if (map == null)
             {
-              map = new HashMap<Version, Set<IMatchExpression<IInstallableUnit>>>();
+              map = new HashMap<>();
               versions.put(id, map);
             }
 
@@ -2308,6 +2325,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
       UIUtil.asyncExec(new Runnable()
       {
+        @Override
         public void run()
         {
           if (featureItems.length == 0)
@@ -2350,6 +2368,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       namespaceViewer.setInput(new String[] { currentNamespace });
       namespaceViewer.addSelectionChangedListener(new ISelectionChangedListener()
       {
+        @Override
         public void selectionChanged(SelectionChangedEvent event)
         {
           IStructuredSelection selection = (IStructuredSelection)namespaceViewer.getSelection();
@@ -2382,9 +2401,9 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     @Override
     public void analyzeInstallableUnits(IProgressMonitor monitor)
     {
-      final Set<String> flavors = new HashSet<String>();
-      final Set<String> namespaces = new HashSet<String>();
-      Map<String, Map<Version, Set<IMatchExpression<IInstallableUnit>>>> versions = new HashMap<String, Map<Version, Set<IMatchExpression<IInstallableUnit>>>>();
+      final Set<String> flavors = new HashSet<>();
+      final Set<String> namespaces = new HashSet<>();
+      Map<String, Map<Version, Set<IMatchExpression<IInstallableUnit>>>> versions = new HashMap<>();
 
       for (IInstallableUnit iu : P2Util.asIterable(installableUnits))
       {
@@ -2416,7 +2435,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
             Map<Version, Set<IMatchExpression<IInstallableUnit>>> map = versions.get(name);
             if (map == null)
             {
-              map = new LinkedHashMap<Version, Set<IMatchExpression<IInstallableUnit>>>();
+              map = new LinkedHashMap<>();
               versions.put(name, map);
             }
 
@@ -2463,6 +2482,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
       UIUtil.asyncExec(new Runnable()
       {
+        @Override
         public void run()
         {
           if (!container.isDisposed())
@@ -2484,6 +2504,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
             UIUtil.asyncExec(new Runnable()
             {
+              @Override
               public void run()
               {
                 if (!container.isDisposed() && currentNamespace != null)
@@ -2529,6 +2550,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       return activeRepository == null && !repositoryCombo.isFocusControl() ? initialTextForegroundColor : originalForeground;
     }
 
+    @Override
     public void focusGained(FocusEvent e)
     {
       if (repositoryCombo.getText().equals(Messages.RepositoryExplorer_repositoryCombo_initialText))
@@ -2537,6 +2559,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       }
     }
 
+    @Override
     public void focusLost(FocusEvent e)
     {
       if (StringUtil.isEmpty(repositoryCombo.getText().trim()))
@@ -2580,6 +2603,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       listVisible = currentListVisible;
     }
 
+    @Override
     public void selectionChanged(SelectionChangedEvent event)
     {
       listVisible = repositoryCombo.getListVisible();
@@ -2632,30 +2656,36 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       RepositoryManager.INSTANCE.addListener(this);
     }
 
+    @Override
     public void inputChanged(Viewer viewer, Object oldInput, Object newInput)
     {
     }
 
+    @Override
     public void dispose()
     {
       RepositoryManager.INSTANCE.removeListener(this);
     }
 
+    @Override
     public Object[] getElements(Object element)
     {
       return RepositoryManager.INSTANCE.getRepositories();
     }
 
+    @Override
     public void repositoriesChanged(RepositoryManager repositoryManager)
     {
       UIUtil.asyncExec(container, new Runnable()
       {
+        @Override
         public void run()
         {
           repositoryViewer.refresh();
 
           UIUtil.asyncExec(container, new Runnable()
           {
+            @Override
             public void run()
             {
               String activeRepository = RepositoryManager.INSTANCE.getActiveRepository();
@@ -2677,6 +2707,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       });
     }
 
+    @Override
     public void activeRepositoryChanged(RepositoryManager repositoryManager, String repository)
     {
       repositoryComboHandler.setActiveRepository(repository);
@@ -2688,24 +2719,29 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
    */
   private final class ItemContentProvider implements ITreeContentProvider
   {
+    @Override
     public void inputChanged(Viewer viewer, Object oldInput, Object newInput)
     {
     }
 
+    @Override
     public void dispose()
     {
     }
 
+    @Override
     public Object getParent(Object element)
     {
       return null;
     }
 
+    @Override
     public Object[] getElements(Object element)
     {
       return getChildren(element);
     }
 
+    @Override
     public Object[] getChildren(Object element)
     {
       Item[] children = ((Item)element).getChildren();
@@ -2717,6 +2753,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       return NO_ELEMENTS;
     }
 
+    @Override
     public boolean hasChildren(Object element)
     {
       return ((Item)element).hasChildren();
@@ -2743,23 +2780,28 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
           }
         };
 
+        @Override
         public void removeListener(ILabelProviderListener listener)
         {
         }
 
+        @Override
         public boolean isLabelProperty(Object element, String property)
         {
           return true;
         }
 
+        @Override
         public void dispose()
         {
         }
 
+        @Override
         public void addListener(ILabelProviderListener listener)
         {
         }
 
+        @Override
         public StyledString getStyledText(Object element)
         {
           Item item = (Item)element;
@@ -2791,6 +2833,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
           return new StyledString(text);
         }
 
+        @Override
         public Image getImage(Object element)
         {
           Item item = (Item)element;
@@ -2847,6 +2890,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       }
     }
 
+    @Override
     public void inputChanged(Viewer viewer, Object oldInput, Object newInput)
     {
       versionsViewer = (TableViewer)viewer;
@@ -2857,6 +2901,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     {
     }
 
+    @Override
     public Object[] getElements(Object inputElement)
     {
       if (inputElement instanceof VersionedItem)
@@ -2865,7 +2910,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
         Map<Version, Set<IMatchExpression<IInstallableUnit>>> versions = versionedItem.getVersions();
         if (versions != null)
         {
-          Set<ItemVersion> itemVersions = new HashSet<ItemVersion>();
+          Set<ItemVersion> itemVersions = new HashSet<>();
           for (Map.Entry<Version, Set<IMatchExpression<IInstallableUnit>>> entry : versions.entrySet())
           {
             ItemVersion itemVersion = getItemVersion(versionedItem, entry.getKey(), entry.getValue());
@@ -2960,6 +3005,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
         return filters;
       }
 
+      @Override
       public int compareTo(ItemVersion o)
       {
         return -version.compareTo(o.version);
@@ -3052,6 +3098,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
       return super.equals(obj);
     }
 
+    @Override
     public int compareTo(Item o)
     {
       Integer category1 = getCategoryOrder();

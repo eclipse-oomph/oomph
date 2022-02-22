@@ -50,7 +50,7 @@ public class URISchemeDialog extends AbstractSetupDialog
 
   private static final int APPLY_ID = IDialogConstants.CLIENT_ID + 1;
 
-  private Map<String, String> registrations = new LinkedHashMap<String, String>();
+  private Map<String, String> registrations = new LinkedHashMap<>();
 
   private CheckboxTableViewer registrationViewer;
 
@@ -95,16 +95,19 @@ public class URISchemeDialog extends AbstractSetupDialog
 
     registrationViewer.setContentProvider(new IStructuredContentProvider()
     {
+      @Override
       public void inputChanged(Viewer viewer, Object oldInput, Object newInput)
       {
         // Do nothing.
       }
 
+      @Override
       public void dispose()
       {
         // Do nothing.
       }
 
+      @Override
       public Object[] getElements(Object inputElement)
       {
         return registrations.entrySet().toArray();
@@ -148,6 +151,7 @@ public class URISchemeDialog extends AbstractSetupDialog
 
     registrationViewer.addCheckStateListener(new ICheckStateListener()
     {
+      @Override
       public void checkStateChanged(CheckStateChangedEvent event)
       {
         updateEnablement();
@@ -157,7 +161,7 @@ public class URISchemeDialog extends AbstractSetupDialog
 
   protected Map<String, String> getCurrentSelfRegistrations()
   {
-    Map<String, String> result = new LinkedHashMap<String, String>();
+    Map<String, String> result = new LinkedHashMap<>();
     String selfLauncher = URISchemeUtil.getSelfLauncher();
     Set<String> selfRegistrations = URISchemeUtil.getSelfRegistrations();
     for (String scheme : selfRegistrations)
@@ -170,7 +174,7 @@ public class URISchemeDialog extends AbstractSetupDialog
 
   protected void updateEnablement()
   {
-    Set<Object> checkedElements = new HashSet<Object>(Arrays.asList(registrationViewer.getCheckedElements()));
+    Set<Object> checkedElements = new HashSet<>(Arrays.asList(registrationViewer.getCheckedElements()));
     boolean selectionChanged = !checkedElements.equals(getCurrentSelfRegistrations().entrySet());
     boolean applyEnabled = selectionChanged;
     applyButton.setEnabled(applyEnabled);
@@ -208,8 +212,8 @@ public class URISchemeDialog extends AbstractSetupDialog
   {
     if (buttonId == APPLY_ID || buttonId == IDialogConstants.OK_ID)
     {
-      Map<String, String> newRegistrations = new LinkedHashMap<String, String>(registrations);
-      Set<Object> checkedElements = new HashSet<Object>(Arrays.asList(registrationViewer.getCheckedElements()));
+      Map<String, String> newRegistrations = new LinkedHashMap<>(registrations);
+      Set<Object> checkedElements = new HashSet<>(Arrays.asList(registrationViewer.getCheckedElements()));
       String selfLauncher = URISchemeUtil.getSelfLauncher();
       for (Map.Entry<String, String> entry : newRegistrations.entrySet())
       {

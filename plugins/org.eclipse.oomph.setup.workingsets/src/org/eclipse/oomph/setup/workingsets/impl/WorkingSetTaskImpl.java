@@ -111,6 +111,7 @@ public class WorkingSetTaskImpl extends SetupTaskImpl implements WorkingSetTask
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public String getPrefix()
   {
     return prefix == null ? getWorkingSetPrefix() : prefix;
@@ -121,6 +122,7 @@ public class WorkingSetTaskImpl extends SetupTaskImpl implements WorkingSetTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setPrefix(String newPrefix)
   {
     String oldPrefix = prefix;
@@ -136,11 +138,12 @@ public class WorkingSetTaskImpl extends SetupTaskImpl implements WorkingSetTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<WorkingSet> getWorkingSets()
   {
     if (workingSets == null)
     {
-      workingSets = new EObjectContainmentEList<WorkingSet>(WorkingSet.class, this, SetupWorkingSetsPackage.WORKING_SET_TASK__WORKING_SETS);
+      workingSets = new EObjectContainmentEList<>(WorkingSet.class, this, SetupWorkingSetsPackage.WORKING_SET_TASK__WORKING_SETS);
     }
     return workingSets;
   }
@@ -287,7 +290,7 @@ public class WorkingSetTaskImpl extends SetupTaskImpl implements WorkingSetTask
     WorkingSetTask workingSetTask = (WorkingSetTask)overriddenSetupTask;
     EList<WorkingSet> workingSets = getWorkingSets();
     int count = 0;
-    LOOP: for (WorkingSet overriddenWorkingSet : new ArrayList<WorkingSet>(workingSetTask.getWorkingSets()))
+    LOOP: for (WorkingSet overriddenWorkingSet : new ArrayList<>(workingSetTask.getWorkingSets()))
     {
       for (WorkingSet workingSet : workingSets)
       {
@@ -303,7 +306,7 @@ public class WorkingSetTaskImpl extends SetupTaskImpl implements WorkingSetTask
 
   private Map<String, WorkingSet> getExistingWorkingSets(String prefix, EList<WorkingSet> workingSets)
   {
-    Map<String, WorkingSet> existingWorkingSets = new HashMap<String, WorkingSet>();
+    Map<String, WorkingSet> existingWorkingSets = new HashMap<>();
     for (WorkingSet workingSet : workingSets)
     {
       String id = workingSet.getID();
@@ -316,6 +319,7 @@ public class WorkingSetTaskImpl extends SetupTaskImpl implements WorkingSetTask
     return existingWorkingSets;
   }
 
+  @Override
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     String prefix = getPrefix();
@@ -342,6 +346,7 @@ public class WorkingSetTaskImpl extends SetupTaskImpl implements WorkingSetTask
     return !existingWorkingSets.isEmpty();
   }
 
+  @Override
   public void perform(SetupTaskContext context) throws Exception
   {
     String prefix = getPrefix();
@@ -367,7 +372,7 @@ public class WorkingSetTaskImpl extends SetupTaskImpl implements WorkingSetTask
       }
     }
 
-    for (WorkingSet workingSet : new ArrayList<WorkingSet>(newWorkingSetGroups))
+    for (WorkingSet workingSet : new ArrayList<>(newWorkingSetGroups))
     {
       context.checkCancelation();
 
@@ -380,7 +385,7 @@ public class WorkingSetTaskImpl extends SetupTaskImpl implements WorkingSetTask
     workingSets.removeAll(existingWorkingSets.values());
 
     Resource resource = defaultWorkingSetGroup.eResource();
-    Map<Object, Object> options = new HashMap<Object, Object>();
+    Map<Object, Object> options = new HashMap<>();
     options.put(Resource.OPTION_SAVE_ONLY_IF_CHANGED, Resource.OPTION_SAVE_ONLY_IF_CHANGED_MEMORY_BUFFER);
     options.put(XMLResource.OPTION_PROCESS_DANGLING_HREF, XMLResource.OPTION_PROCESS_DANGLING_HREF_DISCARD);
     resource.save(Collections.singletonMap(Resource.OPTION_SAVE_ONLY_IF_CHANGED, options));

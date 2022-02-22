@@ -74,11 +74,12 @@ public class InclusionPredicateImpl extends PredicateImpl implements InclusionPr
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<PreferenceProfile> getIncludedPreferenceProfiles()
   {
     if (includedPreferenceProfiles == null)
     {
-      includedPreferenceProfiles = new EObjectResolvingEList<PreferenceProfile>(PreferenceProfile.class, this,
+      includedPreferenceProfiles = new EObjectResolvingEList<>(PreferenceProfile.class, this,
           ProjectConfigPackage.INCLUSION_PREDICATE__INCLUDED_PREFERENCE_PROFILES);
     }
     return includedPreferenceProfiles;

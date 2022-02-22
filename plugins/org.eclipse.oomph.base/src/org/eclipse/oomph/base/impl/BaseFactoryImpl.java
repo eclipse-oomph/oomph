@@ -151,12 +151,14 @@ public class BaseFactoryImpl extends EFactoryImpl implements BaseFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Annotation createAnnotation()
   {
     AnnotationImpl annotation = new AnnotationImpl();
     return annotation;
   }
 
+  @Override
   public Annotation createAnnotation(String source)
   {
     Annotation annotation = createAnnotation();
@@ -164,6 +166,7 @@ public class BaseFactoryImpl extends EFactoryImpl implements BaseFactory
     return annotation;
   }
 
+  @Override
   public Annotation createErrorAnnotation(String diagnostic)
   {
     Annotation annotation = createAnnotation(BaseAnnotationConstants.ANNOTATION_ERROR);
@@ -171,6 +174,7 @@ public class BaseFactoryImpl extends EFactoryImpl implements BaseFactory
     return annotation;
   }
 
+  @Override
   public Annotation createWarningAnnotation(String diagnostic)
   {
     Annotation annotation = createAnnotation(BaseAnnotationConstants.ANNOTATION_WARNING);
@@ -178,6 +182,7 @@ public class BaseFactoryImpl extends EFactoryImpl implements BaseFactory
     return annotation;
   }
 
+  @Override
   public Annotation createInfoAnnotation(String diagnostic)
   {
     Annotation annotation = createAnnotation(BaseAnnotationConstants.ANNOTATION_INFO);
@@ -190,6 +195,7 @@ public class BaseFactoryImpl extends EFactoryImpl implements BaseFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Map.Entry<String, String> createStringToStringMapEntry()
   {
     StringToStringMapEntryImpl stringToStringMapEntry = new StringToStringMapEntryImpl();
@@ -201,6 +207,7 @@ public class BaseFactoryImpl extends EFactoryImpl implements BaseFactory
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public URI createURI(String literal)
   {
     return literal == null ? null : URI.createURI(literal);
@@ -221,6 +228,7 @@ public class BaseFactoryImpl extends EFactoryImpl implements BaseFactory
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public String convertURI(URI instanceValue)
   {
     return instanceValue == null ? null : instanceValue.toString();
@@ -241,6 +249,7 @@ public class BaseFactoryImpl extends EFactoryImpl implements BaseFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Exception createException(String literal)
   {
     return (Exception)super.createFromString(BasePackage.Literals.EXCEPTION, literal);
@@ -261,6 +270,7 @@ public class BaseFactoryImpl extends EFactoryImpl implements BaseFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String convertException(Exception instanceValue)
   {
     return super.convertToString(BasePackage.Literals.EXCEPTION, instanceValue);
@@ -287,6 +297,7 @@ public class BaseFactoryImpl extends EFactoryImpl implements BaseFactory
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public String createText(String literal)
   {
     return literal == null ? null : NEEDS_CONVERSION ? OS_SPECIFIC_LINE_SEPARATOR_PATTERN.matcher(literal).replaceAll("\n") : literal; //$NON-NLS-1$
@@ -307,6 +318,7 @@ public class BaseFactoryImpl extends EFactoryImpl implements BaseFactory
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public String convertText(String instanceValue)
   {
     return instanceValue == null ? null : NEEDS_CONVERSION ? NORMALIZED_LINE_SEPARATOR_PATTERN.matcher(instanceValue).replaceAll(StringUtil.NL) : instanceValue;
@@ -327,6 +339,7 @@ public class BaseFactoryImpl extends EFactoryImpl implements BaseFactory
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public String createID(String literal)
   {
     return StringUtil.isEmpty(literal) ? null : literal;
@@ -347,6 +360,7 @@ public class BaseFactoryImpl extends EFactoryImpl implements BaseFactory
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public String convertID(String instanceValue)
   {
     return instanceValue;
@@ -367,6 +381,7 @@ public class BaseFactoryImpl extends EFactoryImpl implements BaseFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public BasePackage getBasePackage()
   {
     return (BasePackage)getEPackage();

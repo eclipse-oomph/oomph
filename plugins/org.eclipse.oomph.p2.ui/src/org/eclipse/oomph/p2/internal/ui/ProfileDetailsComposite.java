@@ -157,6 +157,7 @@ public class ProfileDetailsComposite extends Composite
 
     UIUtil.asyncExec(new Runnable()
     {
+      @Override
       public void run()
       {
         ProfileDefinition definition = profile.getDefinition();
@@ -198,9 +199,10 @@ public class ProfileDetailsComposite extends Composite
 
     UIUtil.asyncExec(viewer.getControl(), new Runnable()
     {
+      @Override
       public void run()
       {
-        EList<Requirement> children = new BasicEList<Requirement>();
+        EList<Requirement> children = new BasicEList<>();
 
         for (IInstallableUnit iu : P2Util.asIterable(profile.query(QueryUtil.createIUAnyQuery(), null)))
         {
@@ -248,6 +250,7 @@ public class ProfileDetailsComposite extends Composite
 
     UIUtil.asyncExec(viewer.getControl(), new Runnable()
     {
+      @Override
       public void run()
       {
         viewer.setInput(profile.getProperties().entrySet());
@@ -260,6 +263,7 @@ public class ProfileDetailsComposite extends Composite
    */
   private static final class PropertiesLabelProvider extends LabelProvider implements ITableLabelProvider
   {
+    @Override
     public String getColumnText(Object element, int columnIndex)
     {
       if (element instanceof Map.Entry<?, ?>)
@@ -287,6 +291,7 @@ public class ProfileDetailsComposite extends Composite
       return null;
     }
 
+    @Override
     public Image getColumnImage(Object element, int columnIndex)
     {
       return null;

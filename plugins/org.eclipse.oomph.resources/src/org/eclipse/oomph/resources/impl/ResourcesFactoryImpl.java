@@ -121,6 +121,7 @@ public class ResourcesFactoryImpl extends EFactoryImpl implements ResourcesFacto
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public SourceLocator createSourceLocator()
   {
     SourceLocatorImpl sourceLocator = new SourceLocatorImpl();
@@ -132,6 +133,7 @@ public class ResourcesFactoryImpl extends EFactoryImpl implements ResourcesFacto
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EclipseProjectFactory createEclipseProjectFactory()
   {
     EclipseProjectFactoryImpl eclipseProjectFactory = new EclipseProjectFactoryImpl();
@@ -143,12 +145,14 @@ public class ResourcesFactoryImpl extends EFactoryImpl implements ResourcesFacto
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public MavenProjectFactory createMavenProjectFactory()
   {
     MavenProjectFactoryImpl mavenProjectFactory = new MavenProjectFactoryImpl();
     return mavenProjectFactory;
   }
 
+  @Override
   public SourceLocator createSourceLocator(String rootFolder)
   {
     SourceLocator sourceLocator = createSourceLocator();
@@ -156,6 +160,7 @@ public class ResourcesFactoryImpl extends EFactoryImpl implements ResourcesFacto
     return sourceLocator;
   }
 
+  @Override
   public SourceLocator createSourceLocator(String rootFolder, boolean locateNestedProjects)
   {
     SourceLocator sourceLocator = createSourceLocator(rootFolder);
@@ -168,6 +173,7 @@ public class ResourcesFactoryImpl extends EFactoryImpl implements ResourcesFacto
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ResourcesPackage getResourcesPackage()
   {
     return (ResourcesPackage)getEPackage();

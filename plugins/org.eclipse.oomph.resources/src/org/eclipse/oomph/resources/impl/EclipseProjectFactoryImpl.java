@@ -60,6 +60,7 @@ public class EclipseProjectFactoryImpl extends XMLProjectFactoryImpl implements 
   {
     XMLUtil.handleChildElements(rootElement, new XMLUtil.ElementHandler()
     {
+      @Override
       public void handleElement(Element element) throws Exception
       {
         if ("name".equals(element.getTagName())) //$NON-NLS-1$
@@ -76,10 +77,12 @@ public class EclipseProjectFactoryImpl extends XMLProjectFactoryImpl implements 
         {
           XMLUtil.handleChildElements(element, new XMLUtil.ElementHandler()
           {
+            @Override
             public void handleElement(Element buildCommandElement) throws Exception
             {
               XMLUtil.handleChildElements(buildCommandElement, new XMLUtil.ElementHandler()
               {
+                @Override
                 public void handleElement(Element nameElement) throws Exception
                 {
                   String builderName = nameElement.getTextContent().trim();
@@ -93,6 +96,7 @@ public class EclipseProjectFactoryImpl extends XMLProjectFactoryImpl implements 
         {
           XMLUtil.handleChildElements(element, new XMLUtil.ElementHandler()
           {
+            @Override
             public void handleElement(Element natureElement) throws Exception
             {
               String natureID = natureElement.getTextContent().trim();

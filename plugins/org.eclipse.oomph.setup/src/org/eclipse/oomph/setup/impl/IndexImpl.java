@@ -123,6 +123,7 @@ public class IndexImpl extends ModelElementImpl implements Index
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getName()
   {
     return name;
@@ -133,6 +134,7 @@ public class IndexImpl extends ModelElementImpl implements Index
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setName(String newName)
   {
     String oldName = name;
@@ -148,11 +150,12 @@ public class IndexImpl extends ModelElementImpl implements Index
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<EPackage> getDiscoverablePackages()
   {
     if (discoverablePackages == null)
     {
-      discoverablePackages = new EObjectResolvingEList<EPackage>(EPackage.class, this, SetupPackage.INDEX__DISCOVERABLE_PACKAGES);
+      discoverablePackages = new EObjectResolvingEList<>(EPackage.class, this, SetupPackage.INDEX__DISCOVERABLE_PACKAGES);
     }
     return discoverablePackages;
   }
@@ -162,11 +165,12 @@ public class IndexImpl extends ModelElementImpl implements Index
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<ProjectCatalog> getProjectCatalogs()
   {
     if (projectCatalogs == null)
     {
-      projectCatalogs = new EObjectContainmentWithInverseEList.Resolving<ProjectCatalog>(ProjectCatalog.class, this, SetupPackage.INDEX__PROJECT_CATALOGS,
+      projectCatalogs = new EObjectContainmentWithInverseEList.Resolving<>(ProjectCatalog.class, this, SetupPackage.INDEX__PROJECT_CATALOGS,
           SetupPackage.PROJECT_CATALOG__INDEX);
     }
     return projectCatalogs;
@@ -177,11 +181,12 @@ public class IndexImpl extends ModelElementImpl implements Index
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<ProductCatalog> getProductCatalogs()
   {
     if (productCatalogs == null)
     {
-      productCatalogs = new EObjectContainmentWithInverseEList.Resolving<ProductCatalog>(ProductCatalog.class, this, SetupPackage.INDEX__PRODUCT_CATALOGS,
+      productCatalogs = new EObjectContainmentWithInverseEList.Resolving<>(ProductCatalog.class, this, SetupPackage.INDEX__PRODUCT_CATALOGS,
           SetupPackage.PRODUCT_CATALOG__INDEX);
     }
     return productCatalogs;

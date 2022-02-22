@@ -48,26 +48,31 @@ public interface SetupPrompter
       this.ok = ok;
     }
 
+    @Override
     public OS getOS()
     {
       return OS.INSTANCE;
     }
 
+    @Override
     public String getVMPath()
     {
       return null;
     }
 
+    @Override
     public UserCallback getUserCallback()
     {
       return null;
     }
 
+    @Override
     public String getValue(VariableTask variable)
     {
       return null;
     }
 
+    @Override
     public boolean promptVariables(List<? extends SetupTaskContext> performers)
     {
       return ok;

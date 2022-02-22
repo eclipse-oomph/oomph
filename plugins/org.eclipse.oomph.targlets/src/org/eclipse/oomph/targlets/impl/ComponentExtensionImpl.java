@@ -75,11 +75,12 @@ public class ComponentExtensionImpl extends ModelElementImpl implements Componen
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<Requirement> getRequirements()
   {
     if (requirements == null)
     {
-      requirements = new EObjectContainmentEList<Requirement>(Requirement.class, this, TargletPackage.COMPONENT_EXTENSION__REQUIREMENTS);
+      requirements = new EObjectContainmentEList<>(Requirement.class, this, TargletPackage.COMPONENT_EXTENSION__REQUIREMENTS);
     }
     return requirements;
   }

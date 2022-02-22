@@ -145,9 +145,9 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
 
   private Configuration configuration;
 
-  private final List<Resource> configurationResources = new ArrayList<Resource>();
+  private final List<Resource> configurationResources = new ArrayList<>();
 
-  private final List<Resource> appliedConfigurationResources = new UniqueEList<Resource>();
+  private final List<Resource> appliedConfigurationResources = new UniqueEList<>();
 
   private SetupContext setupContext;
 
@@ -292,12 +292,12 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
 
   public Collection<? extends Resource> getConfigurationResources()
   {
-    return new ArrayList<Resource>(configurationResources);
+    return new ArrayList<>(configurationResources);
   }
 
   public Collection<? extends Resource> getUnappliedConfigurationResources()
   {
-    List<Resource> result = new ArrayList<Resource>();
+    List<Resource> result = new ArrayList<>();
 
     LOOP: for (Resource configurationResource : configurationResources)
     {
@@ -328,7 +328,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
 
   public Collection<? extends Resource> getAppliedConfigurationResources()
   {
-    return new ArrayList<Resource>(appliedConfigurationResources);
+    return new ArrayList<>(appliedConfigurationResources);
   }
 
   public void addAppliedConfigurationResource(Resource configurationResource)
@@ -616,6 +616,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     addPage(new ProgressPage());
   }
 
+  @Override
   public void pageChanged(PageChangedEvent event)
   {
     Object targetPage = event.getSelectedPage();
@@ -789,6 +790,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     indexLoader.reloaded = false;
     UIUtil.asyncExec(getShell(), new Runnable()
     {
+      @Override
       public void run()
       {
         indexLoader.reloadIndex(indexLocationURI);
@@ -798,12 +800,12 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
 
   protected void reloadIndexResources(Set<Resource> updatedResources)
   {
-    Set<Resource> excludedResources = new LinkedHashSet<Resource>();
+    Set<Resource> excludedResources = new LinkedHashSet<>();
 
     Resource selectionResource = getCatalogManager().getSelection().eResource();
     excludedResources.add(selectionResource);
 
-    Set<URI> excludedResourceURIs = new LinkedHashSet<URI>();
+    Set<URI> excludedResourceURIs = new LinkedHashSet<>();
 
     Installation installation = setupContext.getInstallation();
     if (installation != null)
@@ -831,7 +833,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     excludedResources.add(user.eResource());
 
     boolean ecoreChanged = false;
-    Set<Resource> retainedResources = new HashSet<Resource>();
+    Set<Resource> retainedResources = new HashSet<>();
     EList<Resource> resources = resourceSet.getResources();
     for (Iterator<Resource> it = resources.iterator(); it.hasNext();)
     {
@@ -881,7 +883,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
       resourceSet.getLoadOptions().put(ECFURIHandlerImpl.OPTION_CACHE_HANDLING, ECFURIHandlerImpl.CacheHandling.CACHE_WITH_ETAG_CHECKING);
       resourceSet.getPackageRegistry().clear();
 
-      Set<URI> uris = new LinkedHashSet<URI>();
+      Set<URI> uris = new LinkedHashSet<>();
       uris.add(SetupContext.INDEX_SETUP_URI);
       uris.add(SetupContext.USER_SETUP_URI);
       uris.addAll(excludedResourceURIs);
@@ -890,7 +892,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     }
     else
     {
-      Set<URI> uris = new LinkedHashSet<URI>();
+      Set<URI> uris = new LinkedHashSet<>();
       for (Resource resource : resources)
       {
         uris.add(resource.getURI());
@@ -916,6 +918,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     // Do this later so that the modal context of the progress dialog, if there is one, is within IndexLoader.awaitIndexLoad() event loop.
     UIUtil.asyncExec(getShell(), new Runnable()
     {
+      @Override
       public void run()
       {
         indexLoader.loadIndex(configure, resourceSet, uris);
@@ -1002,7 +1005,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
       return true;
     }
 
-    Map<String, String> filterContext = new LinkedHashMap<String, String>();
+    Map<String, String> filterContext = new LinkedHashMap<>();
     filterContext.put("osgi.ws", os.getOsgiWS()); //$NON-NLS-1$
     filterContext.put("osgi.os", os.getOsgiOS()); //$NON-NLS-1$
     filterContext.put("osgi.arch", os.getOsgiArch()); //$NON-NLS-1$
@@ -1112,6 +1115,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     {
       loadIndex(new IRunnableWithProgress()
       {
+        @Override
         public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
         {
           if (configure)
@@ -1146,10 +1150,11 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
         Display display = wizard.getShell().getDisplay();
         display.asyncExec(new Runnable()
         {
+          @Override
           public void run()
           {
             resourceSet.getLoadOptions().put(ECFURIHandlerImpl.OPTION_CACHE_HANDLING, ECFURIHandlerImpl.CacheHandling.CACHE_WITHOUT_ETAG_CHECKING);
-            Set<URI> uris = new LinkedHashSet<URI>();
+            Set<URI> uris = new LinkedHashSet<>();
             for (Resource resource : resourceSet.getResources())
             {
               URI uri = resource.getURI();
@@ -1175,6 +1180,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
         Display display = wizard.getShell().getDisplay();
         display.asyncExec(new Runnable()
         {
+          @Override
           public void run()
           {
             indexLoaded(index);
@@ -1214,6 +1220,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
 
               UIUtil.asyncExec(new Runnable()
               {
+                @Override
                 public void run()
                 {
                   if (hasModalChild(shell, null))
@@ -1228,11 +1235,12 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
                   {
                     progressMonitorDialog.run(true, true, new IRunnableWithProgress()
                     {
+                      @Override
                       public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
                       {
                         // Collect a map of the remote URIs.
-                        Map<EClass, Set<URI>> uriMap = new LinkedHashMap<EClass, Set<URI>>();
-                        final Map<URI, Set<Resource>> resourceMap = new LinkedHashMap<URI, Set<Resource>>();
+                        Map<EClass, Set<URI>> uriMap = new LinkedHashMap<>();
+                        final Map<URI, Set<Resource>> resourceMap = new LinkedHashMap<>();
                         URIConverter uriConverter = resourceSet.getURIConverter();
                         for (Resource resource : resourceSet.getResources())
                         {
@@ -1279,7 +1287,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
                         }
 
                         // Collect the URIs is order of importance.
-                        Set<URI> resourceURIs = new LinkedHashSet<URI>();
+                        Set<URI> resourceURIs = new LinkedHashSet<>();
                         for (EClass eClass : new EClass[] { SetupPackage.Literals.INDEX, SetupPackage.Literals.PRODUCT_CATALOG, SetupPackage.Literals.PRODUCT,
                             SetupPackage.Literals.PROJECT_CATALOG, SetupPackage.Literals.PROJECT })
                         {
@@ -1303,10 +1311,12 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
                           {
                             UIUtil.asyncExec(new Runnable()
                             {
+                              @Override
                               public void run()
                               {
                                 UIUtil.timerExec(1000, new Runnable()
                                 {
+                                  @Override
                                   public void run()
                                   {
                                     setProgressMonitorVisible(shell, progressMonitorDialog, this);
@@ -1317,7 +1327,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
                           }
 
                           // Remember which resource actually need updating based on detected remote changes by the ETag mirror.
-                          final Set<Resource> updatedResources = new HashSet<Resource>();
+                          final Set<Resource> updatedResources = new HashSet<>();
                           new ECFURIHandlerImpl.ETagMirror()
                           {
                             @Override
@@ -1336,6 +1346,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
                           {
                             shell.getDisplay().asyncExec(new Runnable()
                             {
+                              @Override
                               public void run()
                               {
                                 // Reload only the affected resources.
@@ -1379,6 +1390,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     {
       loadIndex(new IRunnableWithProgress()
       {
+        @Override
         public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
         {
           if (indexLocationURI != null)
@@ -1397,7 +1409,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
 
       if (index != null)
       {
-        List<JRE.Descriptor> jreDescriptors = new ArrayList<JRE.Descriptor>();
+        List<JRE.Descriptor> jreDescriptors = new ArrayList<>();
         Annotation jresAnnotation = index.getAnnotation(AnnotationConstants.ANNOTATION_JRE);
         if (jresAnnotation != null)
         {
@@ -1547,6 +1559,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
         // Delay showing the progress dialog for three seconds.
         UIUtil.timerExec(delay, new Runnable()
         {
+          @Override
           public void run()
           {
             setProgressMonitorVisible(shell, progressMonitorDialog, this);
@@ -1598,6 +1611,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
       return HELP_FOLDER + "DocImportWizard.html"; //$NON-NLS-1$
     }
 
+    @Override
     public void init(IWorkbench workbench, IStructuredSelection selection)
     {
     }
@@ -1618,6 +1632,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
 
       UIUtil.getDisplay().timerExec(500, new Runnable()
       {
+        @Override
         public void run()
         {
           getResourceSet().getLoadOptions().put(ECFURIHandlerImpl.OPTION_CACHE_HANDLING, ECFURIHandlerImpl.CacheHandling.CACHE_WITHOUT_ETAG_CHECKING);
@@ -1645,6 +1660,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
         setErrorMessage(NLS.bind(Messages.SetupWizard_ExistingProcessPage_errorMessage, title));
       }
 
+      @Override
       public void createControl(Composite parent)
       {
         Composite container = new Composite(parent, SWT.NULL);
@@ -1836,6 +1852,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
       this.streams = streams;
     }
 
+    @Override
     public void writeExternal(ObjectOutput out) throws IOException
     {
       if (productVersion != null)
@@ -1862,6 +1879,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
       }
     }
 
+    @Override
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException
     {
       if (in.readBoolean())
@@ -1872,7 +1890,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
       int size = in.readInt();
       if (size != -1)
       {
-        streams = new ArrayList<URI>();
+        streams = new ArrayList<>();
         for (int i = 0; i < size; i++)
         {
           URI stream = URI.createURI(in.readUTF());

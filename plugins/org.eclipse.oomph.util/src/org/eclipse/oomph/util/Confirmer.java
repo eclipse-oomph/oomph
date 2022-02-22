@@ -17,6 +17,7 @@ public interface Confirmer
 {
   public static final Confirmer ACCEPT = new Confirmer()
   {
+    @Override
     public Confirmation confirm(boolean defaultConfirmed, Object info)
     {
       return new Confirmation(true, false);
@@ -25,6 +26,7 @@ public interface Confirmer
 
   public static final Confirmer DECLINE = new Confirmer()
   {
+    @Override
     public Confirmation confirm(boolean defaultConfirmed, Object info)
     {
       return new Confirmation(false, false);
@@ -33,6 +35,7 @@ public interface Confirmer
 
   public static final Confirmer DEFAULT = new Confirmer()
   {
+    @Override
     public Confirmation confirm(boolean defaultConfirmed, Object info)
     {
       return new Confirmation(defaultConfirmed, false);

@@ -85,6 +85,7 @@ public class ProductVersionImpl extends ScopeImpl implements ProductVersion
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Product getProduct()
   {
     if (eContainerFeatureID() != SetupPackage.PRODUCT_VERSION__PRODUCT)
@@ -124,6 +125,7 @@ public class ProductVersionImpl extends ScopeImpl implements ProductVersion
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setProduct(Product newProduct)
   {
     if (newProduct != eInternalContainer() || eContainerFeatureID() != SetupPackage.PRODUCT_VERSION__PRODUCT && newProduct != null)
@@ -158,6 +160,7 @@ public class ProductVersionImpl extends ScopeImpl implements ProductVersion
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getRequiredJavaVersion()
   {
     return requiredJavaVersion;
@@ -168,6 +171,7 @@ public class ProductVersionImpl extends ScopeImpl implements ProductVersion
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setRequiredJavaVersion(String newRequiredJavaVersion)
   {
     String oldRequiredJavaVersion = requiredJavaVersion;

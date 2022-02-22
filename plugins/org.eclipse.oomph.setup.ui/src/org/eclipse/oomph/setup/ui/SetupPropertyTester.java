@@ -62,6 +62,7 @@ public class SetupPropertyTester extends PropertyTester
   {
     ((IEclipsePreferences)PREFERENCES).addPreferenceChangeListener(new IEclipsePreferences.IPreferenceChangeListener()
     {
+      @Override
       public void preferenceChange(final IEclipsePreferences.PreferenceChangeEvent event)
       {
         if (SHOW_TOOL_BAR_CONTRIBUTIONS.equals(event.getKey()))
@@ -74,6 +75,7 @@ public class SetupPropertyTester extends PropertyTester
     // This is a nasty workaround for bug 464582 (Toolbar contributions are missing after startup).
     UIUtil.timerExec(2000, new Runnable()
     {
+      @Override
       public void run()
       {
         UIPropertyTester.requestEvaluation(PREFIX + SHOW_TOOL_BAR_CONTRIBUTIONS, true);
@@ -85,6 +87,7 @@ public class SetupPropertyTester extends PropertyTester
   {
   }
 
+  @Override
   public boolean test(Object receiver, String property, Object[] args, Object expectedValue)
   {
     if (STARTING.equals(property))
@@ -221,6 +224,7 @@ public class SetupPropertyTester extends PropertyTester
     {
       shell.addDisposeListener(new DisposeListener()
       {
+        @Override
         public void widgetDisposed(DisposeEvent e)
         {
           setPerformingStatus(null);
@@ -245,6 +249,7 @@ public class SetupPropertyTester extends PropertyTester
     {
       shell.addDisposeListener(new DisposeListener()
       {
+        @Override
         public void widgetDisposed(DisposeEvent e)
         {
           setHandlingShell(null);

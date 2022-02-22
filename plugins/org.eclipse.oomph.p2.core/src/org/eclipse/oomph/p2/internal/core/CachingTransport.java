@@ -53,7 +53,7 @@ public class CachingTransport extends Transport
 {
   public static final String SERVICE_NAME = Transport.SERVICE_NAME;
 
-  private static final ThreadLocal<LocationStack> REPOSITORY_LOCATIONS = new ThreadLocal<LocationStack>()
+  private static final ThreadLocal<LocationStack> REPOSITORY_LOCATIONS = new ThreadLocal<>()
   {
     @Override
     protected LocationStack initialValue()
@@ -62,7 +62,7 @@ public class CachingTransport extends Transport
     }
   };
 
-  private static final Map<URI, Object> URI_LOCKS = new HashMap<URI, Object>();
+  private static final Map<URI, Object> URI_LOCKS = new HashMap<>();
 
   private static boolean DEBUG = false;
 
@@ -549,11 +549,13 @@ public class CachingTransport extends Transport
       super(file);
     }
 
+    @Override
     public IStatus getStatus()
     {
       return status;
     }
 
+    @Override
     public void setStatus(IStatus status)
     {
       this.status = status;

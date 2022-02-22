@@ -150,6 +150,7 @@ public class VersionBuilderExecutor extends TestCase
   {
     WORKSPACE.run(new IWorkspaceRunnable()
     {
+      @Override
       public void run(IProgressMonitor monitor) throws CoreException
       {
         try
@@ -293,6 +294,7 @@ public class VersionBuilderExecutor extends TestCase
 
     Arrays.sort(markers, new Comparator<IMarker>()
     {
+      @Override
       public int compare(IMarker m1, IMarker m2)
       {
         int result = Markers.compareAttributes(Markers.RESOURCE_ATTRIBUTE, m1, m2);
@@ -332,7 +334,7 @@ public class VersionBuilderExecutor extends TestCase
       addAttribute(builder, Markers.RESOURCE_ATTRIBUTE + " ", file.getFullPath().makeRelative(), true);
 
       Map<String, Object> attributes = marker.getAttributes();
-      List<String> keys = new ArrayList<String>(attributes.keySet());
+      List<String> keys = new ArrayList<>(attributes.keySet());
       keys.remove(IMarker.LINE_NUMBER);
 
       addLocationAttributes(builder, attributes, keys, file, fileContentsProvider, true);
@@ -503,7 +505,7 @@ public class VersionBuilderExecutor extends TestCase
         if (VersionUtil.equals(markerProblemType, problemType))
         {
           Map<String, Object> attributes = marker.getAttributes();
-          List<String> keys = new ArrayList<String>();
+          List<String> keys = new ArrayList<>();
           keys.add(IMarker.CHAR_START);
 
           StringBuilder builder = new StringBuilder();

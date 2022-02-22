@@ -135,6 +135,7 @@ public class ResourceCopyTaskImpl extends SetupTaskImpl implements ResourceCopyT
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public boolean isForce()
   {
     return force;
@@ -145,6 +146,7 @@ public class ResourceCopyTaskImpl extends SetupTaskImpl implements ResourceCopyT
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setForce(boolean newForce)
   {
     boolean oldForce = force;
@@ -160,6 +162,7 @@ public class ResourceCopyTaskImpl extends SetupTaskImpl implements ResourceCopyT
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getSourceURL()
   {
     return sourceURL;
@@ -170,6 +173,7 @@ public class ResourceCopyTaskImpl extends SetupTaskImpl implements ResourceCopyT
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setSourceURL(String newSourceURL)
   {
     String oldSourceURL = sourceURL;
@@ -185,6 +189,7 @@ public class ResourceCopyTaskImpl extends SetupTaskImpl implements ResourceCopyT
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getTargetURL()
   {
     return targetURL;
@@ -195,6 +200,7 @@ public class ResourceCopyTaskImpl extends SetupTaskImpl implements ResourceCopyT
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setTargetURL(String newTargetURL)
   {
     String oldTargetURL = targetURL;
@@ -353,6 +359,7 @@ public class ResourceCopyTaskImpl extends SetupTaskImpl implements ResourceCopyT
     return uri.hasTrailingPathSeparator() || uri.lastSegment() == null;
   }
 
+  @Override
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     URI sourceURI = createResolvedURI(getSourceURL());
@@ -400,6 +407,7 @@ public class ResourceCopyTaskImpl extends SetupTaskImpl implements ResourceCopyT
     }
   }
 
+  @Override
   public void perform(SetupTaskContext context) throws Exception
   {
     URI sourceURI = createResolvedURI(getSourceURL());

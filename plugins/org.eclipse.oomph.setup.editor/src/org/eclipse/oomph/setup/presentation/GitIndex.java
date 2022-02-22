@@ -45,9 +45,9 @@ public class GitIndex
 
     File target = new File(args[1]);
 
-    Map<String, Map<String, Map<String, Map<String, Set<String>>>>> repositoryIndices = new TreeMap<String, Map<String, Map<String, Map<String, Set<String>>>>>();
+    Map<String, Map<String, Map<String, Map<String, Set<String>>>>> repositoryIndices = new TreeMap<>();
 
-    Map<String, Map<String, Map<String, Set<String>>>> gitEclipseRepositoryIndex = new TreeMap<String, Map<String, Map<String, Set<String>>>>();
+    Map<String, Map<String, Map<String, Set<String>>>> gitEclipseRepositoryIndex = new TreeMap<>();
     repositoryIndices.put("https://git.eclipse.org/c/${0}/tree/${1} https://git.eclipse.org/c/${0}/plain/${1}", gitEclipseRepositoryIndex); //$NON-NLS-1$
     for (Enumeration<? extends ZipEntry> entries = zipFile.entries(); entries.hasMoreElements();)
     {
@@ -355,7 +355,7 @@ public class GitIndex
 
     if (Boolean.TRUE)
     {
-      Map<String, Map<String, Map<String, Set<String>>>> githubEclipseRepositoryIndex = new TreeMap<String, Map<String, Map<String, Set<String>>>>();
+      Map<String, Map<String, Map<String, Set<String>>>> githubEclipseRepositoryIndex = new TreeMap<>();
       repositoryIndices.put("https://github.com/${0}/tree/master/${1} https://raw.githubusercontent.com/${0}/master/${1}", githubEclipseRepositoryIndex); //$NON-NLS-1$
       for (String githubEclipseRepository : githubEclipseRepositories)
       {
@@ -461,21 +461,21 @@ public class GitIndex
       Map<String, Map<String, Set<String>>> sourceFolders = repositoryIndex.get(repo);
       if (sourceFolders == null)
       {
-        sourceFolders = new TreeMap<String, Map<String, Set<String>>>();
+        sourceFolders = new TreeMap<>();
         repositoryIndex.put(repo, sourceFolders);
       }
 
       Map<String, Set<String>> packages = sourceFolders.get(sourceFolder);
       if (packages == null)
       {
-        packages = new TreeMap<String, Set<String>>();
+        packages = new TreeMap<>();
         sourceFolders.put(sourceFolder, packages);
       }
 
       Set<String> classes = packages.get(packageName);
       if (classes == null)
       {
-        classes = new TreeSet<String>();
+        classes = new TreeSet<>();
         packages.put(packageName, classes);
       }
 
@@ -489,7 +489,7 @@ public class GitIndex
 
   private static Set<String> getGithubEclipseRepositoryIndex() throws Exception
   {
-    Map<String, String> repos = new TreeMap<String, String>();
+    Map<String, String> repos = new TreeMap<>();
     for (int i = 1; i < 500; ++i)
     {
       URL url = new URL("https://api.github.com/users/eclipse/repos?page=" + i); //$NON-NLS-1$
@@ -591,7 +591,7 @@ public class GitIndex
 
   private static List<String> readLines(InputStream in, String charsetName) throws IOException
   {
-    List<String> lines = new ArrayList<String>();
+    List<String> lines = new ArrayList<>();
 
     Reader reader = null;
     BufferedReader bufferedReader = null;

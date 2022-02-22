@@ -702,14 +702,14 @@ public class SetupValidator extends EObjectValidator
    */
   public boolean validateMacro_NoRecursion(Macro macro, DiagnosticChain diagnostics, Map<Object, Object> context)
   {
-    Map<Macro, MacroTask> visitedMacros = new LinkedHashMap<Macro, MacroTask>();
+    Map<Macro, MacroTask> visitedMacros = new LinkedHashMap<>();
     MacroTask fakeRootMacroTask = SetupFactory.eINSTANCE.createMacroTask();
     if (isRecursive(visitedMacros, macro, fakeRootMacroTask))
     {
       if (diagnostics != null)
       {
-        List<String> choices = new ArrayList<String>();
-        List<Object> data = new ArrayList<Object>();
+        List<String> choices = new ArrayList<>();
+        List<Object> data = new ArrayList<>();
         data.add(macro);
         data.add(SetupPackage.Literals.SETUP_TASK_CONTAINER__SETUP_TASKS);
 
@@ -877,13 +877,13 @@ public class SetupValidator extends EObjectValidator
     {
       EList<Parameter> parameters = macro.getParameters();
       EList<Argument> arguments = macroTask.getArguments();
-      Set<Parameter> boundParameters = new LinkedHashSet<Parameter>();
+      Set<Parameter> boundParameters = new LinkedHashSet<>();
       for (Argument argument : arguments)
       {
         boundParameters.add(argument.getParameter());
       }
 
-      Set<String> unboundParameters = new LinkedHashSet<String>();
+      Set<String> unboundParameters = new LinkedHashSet<>();
       for (Parameter parameter : parameters)
       {
         if (!boundParameters.contains(parameter) && parameter.getDefaultValue() == null)

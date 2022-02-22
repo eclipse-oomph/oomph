@@ -32,6 +32,7 @@ public class OpenLogHandler extends AbstractDropdownItemHandler
     super("Log", Messages.OpenLogHandler_text); //$NON-NLS-1$
   }
 
+  @Override
   public void run()
   {
     try

@@ -70,6 +70,7 @@ public class WorkingSetManager
 
   private final IEclipsePreferences.IPreferenceChangeListener preferencesListener = new IEclipsePreferences.IPreferenceChangeListener()
   {
+    @Override
     public void preferenceChange(PreferenceChangeEvent event)
     {
       if (WorkingSetsUtil.WORKING_SET_GROUP_PREFERENCE_KEY.equals(event.getKey()))
@@ -81,6 +82,7 @@ public class WorkingSetManager
 
   private final IResourceChangeListener resourceChangeListener = new IResourceChangeListener()
   {
+    @Override
     public void resourceChanged(IResourceChangeEvent event)
     {
       if (!workingSetGroup.getWorkingSets().isEmpty())
@@ -94,10 +96,11 @@ public class WorkingSetManager
             // removed projects.
             class ResourceDeltaVisitor implements IResourceDeltaVisitor
             {
-              List<IProject> addedProjects = new ArrayList<IProject>();
+              List<IProject> addedProjects = new ArrayList<>();
 
-              List<IProject> removedProjects = new ArrayList<IProject>();
+              List<IProject> removedProjects = new ArrayList<>();
 
+              @Override
               public boolean visit(IResourceDelta delta) throws CoreException
               {
                 IResource resource = delta.getResource();
@@ -171,12 +174,12 @@ public class WorkingSetManager
    */
   private EMap<String, Set<IAdaptable>> getWorkingSets()
   {
-    EMap<String, Set<IAdaptable>> workingSets = new BasicEMap<String, Set<IAdaptable>>();
+    EMap<String, Set<IAdaptable>> workingSets = new BasicEMap<>();
     for (WorkingSet workingSet : workingSetGroup.getWorkingSets())
     {
       String name = workingSet.getName();
       IWorkingSet iWorkingSet = MANAGER.getWorkingSet(name);
-      workingSets.put(name, iWorkingSet == null ? new LinkedHashSet<IAdaptable>() : new LinkedHashSet<IAdaptable>(Arrays.asList(iWorkingSet.getElements())));
+      workingSets.put(name, iWorkingSet == null ? new LinkedHashSet<IAdaptable>() : new LinkedHashSet<>(Arrays.asList(iWorkingSet.getElements())));
     }
 
     return workingSets;
@@ -259,7 +262,7 @@ public class WorkingSetManager
                       IWorkingSet[] activeWorkingSets = oldWorkingSet == null ? new IWorkingSet[0]
                           : oldWorkingSet.isAggregateWorkingSet() ? ((IAggregateWorkingSet)oldWorkingSet).getComponents() : new IWorkingSet[] { oldWorkingSet };
 
-                      Set<IWorkingSet> allWorkingSets = new LinkedHashSet<IWorkingSet>(Arrays.asList(activeWorkingSets));
+                      Set<IWorkingSet> allWorkingSets = new LinkedHashSet<>(Arrays.asList(activeWorkingSets));
                       allWorkingSets.addAll(Arrays.asList(MANAGER.getAllWorkingSets()));
 
                       List<IWorkingSet> newActiveWorkingSets = getActiveWorkingSets(allWorkingSets.toArray(new IWorkingSet[allWorkingSets.size()]),
@@ -354,7 +357,7 @@ public class WorkingSetManager
 
   private List<IWorkingSet> getActiveWorkingSets(IWorkingSet[] allWorkingSets, IWorkingSet[] activeWorkingSets)
   {
-    Map<WorkingSet, IWorkingSet> managedWorkingSets = new HashMap<WorkingSet, IWorkingSet>();
+    Map<WorkingSet, IWorkingSet> managedWorkingSets = new HashMap<>();
     for (int i = 0; i < allWorkingSets.length; ++i)
     {
       IWorkingSet iWorkingSet = allWorkingSets[i];
@@ -365,16 +368,16 @@ public class WorkingSetManager
       }
     }
 
-    Map<IWorkingSet, List<IWorkingSet>> orderedWorkingSetGroups = new LinkedHashMap<IWorkingSet, List<IWorkingSet>>();
+    Map<IWorkingSet, List<IWorkingSet>> orderedWorkingSetGroups = new LinkedHashMap<>();
     for (WorkingSet workingSet : workingSetGroup.getWorkingSets())
     {
       IWorkingSet iWorkingSet = managedWorkingSets.get(workingSet);
-      List<IWorkingSet> group = new ArrayList<IWorkingSet>();
+      List<IWorkingSet> group = new ArrayList<>();
       group.add(iWorkingSet);
       orderedWorkingSetGroups.put(iWorkingSet, group);
     }
 
-    List<IWorkingSet> newActiveWorkingSets = new ArrayList<IWorkingSet>();
+    List<IWorkingSet> newActiveWorkingSets = new ArrayList<>();
     List<IWorkingSet> group = newActiveWorkingSets;
     for (IWorkingSet iWorkingSet : activeWorkingSets)
     {
@@ -401,6 +404,7 @@ public class WorkingSetManager
     // Do this on the UI thread to avoid problems with JDT's getting out of sync with respect to our updates.
     Display.getDefault().asyncExec(new Runnable()
     {
+      @Override
       public void run()
       {
         EMap<String, Set<IAdaptable>> workingSets = getWorkingSets();
@@ -461,7 +465,7 @@ public class WorkingSetManager
         Set<IAdaptable> elements = workingSets.get(name);
         if (elements == null)
         {
-          elements = new LinkedHashSet<IAdaptable>();
+          elements = new LinkedHashSet<>();
           workingSets.put(name, elements);
         }
 
@@ -502,7 +506,7 @@ public class WorkingSetManager
     // Compute the working sets for the new working group.
     workingSetGroup = WorkingSetsUtil.getWorkingSetGroup();
 
-    final EMap<String, Set<IAdaptable>> workingSets = new BasicEMap<String, Set<IAdaptable>>();
+    final EMap<String, Set<IAdaptable>> workingSets = new BasicEMap<>();
 
     // Update the map to include null (to cause an delete) for any old working set not present in the new ones
     for (WorkingSet workingSet : oldWorkingSetGroup.getWorkingSets())
@@ -523,6 +527,7 @@ public class WorkingSetManager
     {
       Display.getDefault().asyncExec(new Runnable()
       {
+        @Override
         public void run()
         {
           updateProjects(workingSets);

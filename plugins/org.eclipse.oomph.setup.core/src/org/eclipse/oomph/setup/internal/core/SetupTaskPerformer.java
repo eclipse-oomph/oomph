@@ -188,7 +188,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   private static final Pattern FILTER_MEMBER_PATTERN = Pattern.compile("(\\(\\s*)([^|&!~<>=\\(\\)]+)([~<>=\\\\(\\\\)][^\\)]+\\))"); //$NON-NLS-1$
 
-  private static final Map<String, ValueConverter> CONVERTERS = new LinkedHashMap<String, ValueConverter>();
+  private static final Map<String, ValueConverter> CONVERTERS = new LinkedHashMap<>();
 
   static
   {
@@ -202,9 +202,9 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   private static final Pattern ATTRIBUTE_REFERENCE_PATTERN = Pattern.compile("@[\\p{Alpha}_][\\p{Alnum}_]*"); //$NON-NLS-1$
 
-  private static final ThreadLocal<IProgressMonitor> CREATION_MONITOR = new ThreadLocal<IProgressMonitor>();
+  private static final ThreadLocal<IProgressMonitor> CREATION_MONITOR = new ThreadLocal<>();
 
-  private final Set<String> filterProperties = new LinkedHashSet<String>();
+  private final Set<String> filterProperties = new LinkedHashSet<>();
 
   private ProgressLog progress;
 
@@ -214,13 +214,13 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   private EList<SetupTask> triggeredSetupTasks;
 
-  private final Map<EObject, Set<EObject>> copyMap = new LinkedHashMap<EObject, Set<EObject>>();
+  private final Map<EObject, Set<EObject>> copyMap = new LinkedHashMap<>();
 
-  private final Map<EObject, Set<EObject>> macroCopyMap = new LinkedHashMap<EObject, Set<EObject>>();
+  private final Map<EObject, Set<EObject>> macroCopyMap = new LinkedHashMap<>();
 
   private EList<SetupTask> neededSetupTasks;
 
-  private final Set<Bundle> bundles = new LinkedHashSet<Bundle>();
+  private final Set<Bundle> bundles = new LinkedHashSet<>();
 
   /**
    * A list that contains instances of String and/or Pair<String, ProgressLog.Severity>.
@@ -235,27 +235,27 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   private IProgressMonitor progressMonitor;
 
-  private final List<EStructuralFeature.Setting> unresolvedSettings = new ArrayList<EStructuralFeature.Setting>();
+  private final List<EStructuralFeature.Setting> unresolvedSettings = new ArrayList<>();
 
-  private final List<VariableTask> passwordVariables = new ArrayList<VariableTask>();
+  private final List<VariableTask> passwordVariables = new ArrayList<>();
 
-  private final Map<URI, String> passwords = new LinkedHashMap<URI, String>();
+  private final Map<URI, String> passwords = new LinkedHashMap<>();
 
-  private final List<VariableTask> unresolvedVariables = new UniqueEList<VariableTask>();
+  private final List<VariableTask> unresolvedVariables = new UniqueEList<>();
 
-  private final List<VariableTask> resolvedVariables = new UniqueEList<VariableTask>();
+  private final List<VariableTask> resolvedVariables = new UniqueEList<>();
 
-  private final List<VariableTask> appliedRuleVariables = new UniqueEList<VariableTask>();
+  private final List<VariableTask> appliedRuleVariables = new UniqueEList<>();
 
-  private final Map<String, VariableTask> allVariables = new LinkedHashMap<String, VariableTask>();
+  private final Map<String, VariableTask> allVariables = new LinkedHashMap<>();
 
-  private final Set<String> undeclaredVariables = new LinkedHashSet<String>();
+  private final Set<String> undeclaredVariables = new LinkedHashSet<>();
 
-  private final Map<VariableTask, EAttribute> ruleAttributes = new LinkedHashMap<VariableTask, EAttribute>();
+  private final Map<VariableTask, EAttribute> ruleAttributes = new LinkedHashMap<>();
 
-  private final Map<VariableTask, EAttribute> ruleBasedAttributes = new LinkedHashMap<VariableTask, EAttribute>();
+  private final Map<VariableTask, EAttribute> ruleBasedAttributes = new LinkedHashMap<>();
 
-  private final List<AttributeRule> attributeRules = new UniqueEList<AttributeRule>();
+  private final List<AttributeRule> attributeRules = new UniqueEList<>();
 
   private final ComposedAdapterFactory adapterFactory = BaseEditUtil.createAdapterFactory();
 
@@ -311,7 +311,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     Trigger trigger = getTrigger();
     User user = getUser();
 
-    Map<Object, Object> originalMap = new LinkedHashMap<Object, Object>(getMap());
+    Map<Object, Object> originalMap = new LinkedHashMap<>(getMap());
     SetupContext originalSetupContext = getSetupContext();
 
     // Gather all possible tasks.
@@ -319,13 +319,13 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     // This approach ensures that implicit variables for all tasks (even for untriggered tasks) are created with the right values.
     if (phase != Phase.COMPOSE_PHASE)
     {
-      triggeredSetupTasks = new BasicEList<SetupTask>(getSetupTasks(stream));
+      triggeredSetupTasks = new BasicEList<>(getSetupTasks(stream));
       bundles.add(SetupCorePlugin.INSTANCE.getBundle());
 
       // 1. Collect and flatten all tasks
-      Set<EClass> eClasses = new LinkedHashSet<EClass>();
-      Map<EClass, Set<SetupTask>> instances = new LinkedHashMap<EClass, Set<SetupTask>>();
-      Set<String> keys = new LinkedHashSet<String>();
+      Set<EClass> eClasses = new LinkedHashSet<>();
+      Map<EClass, Set<SetupTask>> instances = new LinkedHashMap<>();
+      Set<String> keys = new LinkedHashSet<>();
       for (SetupTask setupTask : triggeredSetupTasks)
       {
         try
@@ -481,7 +481,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       Map<SetupTask, SetupTask> substitutions = getSubstitutions(triggeredSetupTasks);
 
       // Shorten the paths through the substitutions map
-      Map<SetupTask, SetupTask> directSubstitutions = new LinkedHashMap<SetupTask, SetupTask>(substitutions);
+      Map<SetupTask, SetupTask> directSubstitutions = new LinkedHashMap<>(substitutions);
       for (Map.Entry<SetupTask, SetupTask> entry : directSubstitutions.entrySet())
       {
         SetupTask task = entry.getValue();
@@ -502,7 +502,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       if (phase == Phase.COMPOSE_PHASE)
       {
         // Perform override merging.
-        Map<SetupTask, SetupTask> overrides = new LinkedHashMap<SetupTask, SetupTask>();
+        Map<SetupTask, SetupTask> overrides = new LinkedHashMap<>();
         for (Map.Entry<SetupTask, SetupTask> entry : substitutions.entrySet())
         {
           SetupTask overriddenSetupTask = entry.getKey();
@@ -575,7 +575,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
           }
         }
 
-        EList<SetupTask> remainingSetupTasks = new UniqueEList.FastCompare<SetupTask>();
+        EList<SetupTask> remainingSetupTasks = new UniqueEList.FastCompare<>();
         for (SetupTask setupTask : triggeredSetupTasks)
         {
           SetupTask overridingSetupTask = directSubstitutions.get(setupTask);
@@ -637,7 +637,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         copySetup(stream, triggeredSetupTasks, substitutions, directSubstitutions);
 
         // 2.4. Build variable map in the context
-        Map<String, VariableTask> explicitKeys = new LinkedHashMap<String, VariableTask>();
+        Map<String, VariableTask> explicitKeys = new LinkedHashMap<>();
         for (SetupTask setupTask : triggeredSetupTasks)
         {
           if (setupTask instanceof VariableTask)
@@ -768,7 +768,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         }
 
         // 2.4. Build variable map in the context
-        Set<String> keys = new LinkedHashSet<String>();
+        Set<String> keys = new LinkedHashSet<>();
         boolean fullPromptUser = isFullPromptUser(user);
         VariableAdapter variableAdapter = new VariableAdapter(this);
         for (SetupTask setupTask : triggeredSetupTasks)
@@ -1009,7 +1009,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
                 else
                 {
                   EList<VariableChoice> choices = targetChoices;
-                  Map<String, String> substitutions = new LinkedHashMap<String, String>();
+                  Map<String, String> substitutions = new LinkedHashMap<>();
                   for (Map.Entry<String, String> detail : annotation.getDetails().entrySet())
                   {
                     String detailKey = detail.getKey();
@@ -1404,6 +1404,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     return logFile;
   }
 
+  @Override
   public File getInstallationLocation()
   {
     for (SetupTask setupTask : triggeredSetupTasks)
@@ -1417,6 +1418,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     return null;
   }
 
+  @Override
   public File getWorkspaceLocation()
   {
     for (SetupTask setupTask : triggeredSetupTasks)
@@ -1449,7 +1451,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   public EList<SetupTask> getSetupTasks(Stream stream)
   {
-    EList<SetupTask> result = new BasicEList<SetupTask>();
+    EList<SetupTask> result = new BasicEList<>();
     addBootstrapTasks(result);
 
     User user = getUser();
@@ -1459,8 +1461,8 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
     if (productVersion != null && !productVersion.eIsProxy())
     {
-      List<Scope> configurableItems = new ArrayList<Scope>();
-      List<Scope> scopes = new ArrayList<Scope>();
+      List<Scope> configurableItems = new ArrayList<>();
+      List<Scope> scopes = new ArrayList<>();
 
       Product product = productVersion.getProduct();
       configurableItems.add(product);
@@ -1512,7 +1514,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       Scope rootProject = null;
 
       // Expand all the macros, effectively to make a deep recursive copy of all the tasks.
-      Map<MacroTask, Macro> expandedMacros = new LinkedHashMap<MacroTask, Macro>();
+      Map<MacroTask, Macro> expandedMacros = new LinkedHashMap<>();
       for (Scope scope : scopes)
       {
         expandMacroTasks(macroCopyMap, expandedMacros, scope);
@@ -1686,7 +1688,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     task.setVm(vm);
     task.setOption(option);
     task.setValue(value);
-    task.setExcludedTriggers(new LinkedHashSet<Trigger>(Arrays.asList(new Trigger[] { Trigger.STARTUP, Trigger.MANUAL })));
+    task.setExcludedTriggers(new LinkedHashSet<>(Arrays.asList(new Trigger[] { Trigger.STARTUP, Trigger.MANUAL })));
     result.add(task);
   }
 
@@ -1813,7 +1815,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         @Override
         public <T> Collection<T> copyAll(Collection<? extends T> eObjects)
         {
-          Collection<T> result = new ArrayList<T>(eObjects.size());
+          Collection<T> result = new ArrayList<>(eObjects.size());
           for (Object object : eObjects)
           {
             // A macro might not be expanded, i.e., if it's circular.
@@ -1907,7 +1909,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
           Set<EObject> copies = macroCopies.get(key);
           if (copies == null)
           {
-            copies = new LinkedHashSet<EObject>();
+            copies = new LinkedHashSet<>();
             macroCopies.put(key, copies);
           }
           copies.add(value);
@@ -1931,8 +1933,8 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     EList<Argument> arguments = macroTask.getArguments();
 
     // These are variable names that will be redirected to used qualified names.
-    final Map<String, String> variableSubstitutions = new LinkedHashMap<String, String>();
-    final Set<VariableTask> parameterVariables = new LinkedHashSet<VariableTask>();
+    final Map<String, String> variableSubstitutions = new LinkedHashMap<>();
+    final Set<VariableTask> parameterVariables = new LinkedHashSet<>();
     if (!parameters.isEmpty())
     {
       // Add variable tasks to bind arguments to parameters.
@@ -1972,13 +1974,13 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
           // Map the argument to the variable used to bind its value.
           if (correspondingArgument != null)
           {
-            Set<EObject> set = new LinkedHashSet<EObject>();
+            Set<EObject> set = new LinkedHashSet<>();
             set.add(variable);
             macroCopies.put(correspondingArgument, set);
           }
 
           // Map the parameter to the variable used to bind its value.
-          Set<EObject> set = new LinkedHashSet<EObject>();
+          Set<EObject> set = new LinkedHashSet<>();
           set.add(variable);
           macroCopies.put(parameter, set);
 
@@ -1995,7 +1997,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     }
 
     // Any variable references that start with an ID as a qualifier will be redirected to use a more uniquely qualified ID.
-    final Set<String> ids = new LinkedHashSet<String>();
+    final Set<String> ids = new LinkedHashSet<>();
     for (Iterator<EObject> it = macro.eAllContents(); it.hasNext();)
     {
       EObject eObject = it.next();
@@ -2127,7 +2129,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
               if (attribute.isMany())
               {
                 List<?> values = (List<?>)eObject.eGet(attribute);
-                List<Object> newValues = new ArrayList<Object>();
+                List<Object> newValues = new ArrayList<>();
                 for (Object value : values)
                 {
                   String newValue = valueTransformer.transform(valueConverter.convertToString(value));
@@ -2202,12 +2204,13 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   private static Set<String> getFilterProperties(SetupTask setupTask)
   {
-    final Set<String> filterProperties = new LinkedHashSet<String>();
+    final Set<String> filterProperties = new LinkedHashSet<>();
     LDAPFilter ldapFilter = getLDAPFilter(setupTask);
     if (ldapFilter != null)
     {
       ldapFilter.accept(new IExpressionVisitor()
       {
+        @Override
         public boolean visit(IExpression expression)
         {
           if (expression.getExpressionType() == IExpression.TYPE_MEMBER)
@@ -2253,7 +2256,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
   {
     if (neededSetupTasks == null)
     {
-      neededSetupTasks = new BasicEList<SetupTask>();
+      neededSetupTasks = new BasicEList<>();
 
       if (!undeclaredVariables.isEmpty())
       {
@@ -2321,6 +2324,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     return macroCopyMap;
   }
 
+  @Override
   public IProgressMonitor getProgressMonitor(boolean working)
   {
     if (!working || progressMonitor == null)
@@ -2331,6 +2335,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     return progressMonitor;
   }
 
+  @Override
   public boolean isCanceled()
   {
     if (canceled)
@@ -2361,6 +2366,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     this.skipConfirmation = skipConfirmation;
   }
 
+  @Override
   public void setTerminating()
   {
     if (progress != null)
@@ -2369,37 +2375,44 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     }
   }
 
+  @Override
   public void task(SetupTask setupTask)
   {
     progress.task(setupTask);
     log(NLS.bind(Messages.SetupTaskPerformer_Performing_message, getLabel(setupTask)), false, Severity.INFO);
   }
 
+  @Override
   public void log(Throwable t)
   {
     log(SetupCorePlugin.toString(t), false, Severity.ERROR);
   }
 
+  @Override
   public void log(IStatus status)
   {
     log(SetupCorePlugin.toString(status), false, Severity.fromStatus(status));
   }
 
+  @Override
   public void log(String line)
   {
     log(line, true, Severity.OK);
   }
 
+  @Override
   public void log(String line, Severity severity)
   {
     log(line, true, severity);
   }
 
+  @Override
   public void log(String line, boolean filter)
   {
     log(line, filter, Severity.OK);
   }
 
+  @Override
   public void log(String line, boolean filter, Severity severity)
   {
     if (progress != null)
@@ -2436,7 +2449,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     {
       if (logMessageBuffer == null)
       {
-        logMessageBuffer = new ArrayList<Object>();
+        logMessageBuffer = new ArrayList<>();
       }
 
       if (severity == Severity.OK)
@@ -2629,7 +2642,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
           if (attribute.isMany())
           {
             List<?> values = (List<?>)eObject.eGet(attribute);
-            List<Object> newValues = new ArrayList<Object>();
+            List<Object> newValues = new ArrayList<>();
             boolean changed = false;
 
             for (Object value : values)
@@ -2669,7 +2682,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   private void expandStrings(EList<SetupTask> setupTasks)
   {
-    Set<String> keys = new LinkedHashSet<String>();
+    Set<String> keys = new LinkedHashSet<>();
     for (SetupTask setupTask : setupTasks)
     {
       expandVariableTaskValue(keys, setupTask);
@@ -2863,7 +2876,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       return null;
     }
 
-    Set<String> result = new LinkedHashSet<String>();
+    Set<String> result = new LinkedHashSet<>();
     for (Matcher matcher = STRING_EXPANSION_PATTERN.matcher(string); matcher.find();)
     {
       String key = matcher.group(1);
@@ -3071,9 +3084,9 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
   public void resolveSettings()
   {
     // Do this before expanding any more strings.
-    List<Setting> unresolvedSettings = new ArrayList<EStructuralFeature.Setting>(this.unresolvedSettings);
+    List<Setting> unresolvedSettings = new ArrayList<>(this.unresolvedSettings);
     this.unresolvedSettings.clear();
-    Set<String> keys = new LinkedHashSet<String>();
+    Set<String> keys = new LinkedHashSet<>();
     for (VariableTask unspecifiedVariable : unresolvedVariables)
     {
       String name = unspecifiedVariable.getName();
@@ -3163,7 +3176,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   private void expandVariableKeys(Set<String> keys, boolean addUnresolvedSettings)
   {
-    Map<String, Set<String>> variables = new LinkedHashMap<String, Set<String>>();
+    Map<String, Set<String>> variables = new LinkedHashMap<>();
     for (Map.Entry<Object, Object> entry : getMap().entrySet())
     {
       Object entryKey = entry.getKey();
@@ -3265,8 +3278,8 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
     if (!appliedRuleVariables.isEmpty())
     {
-      List<VariableTask> productCatalogScopedVariables = new ArrayList<VariableTask>();
-      List<VariableTask> projectCatalogScopedVariables = new ArrayList<VariableTask>();
+      List<VariableTask> productCatalogScopedVariables = new ArrayList<>();
+      List<VariableTask> projectCatalogScopedVariables = new ArrayList<>();
       EList<SetupTask> workspaceScopeTasks = null;
       EList<SetupTask> installationScopeTasks = null;
       for (VariableTask unspecifiedVariable : appliedRuleVariables)
@@ -3384,7 +3397,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     Resource installationResource = installation.eResource();
     Resource workspaceResource = workspace == null ? null : workspace.eResource();
     Resource userResource = user.eResource();
-    List<VariableTask> unspecifiedVariables = new ArrayList<VariableTask>();
+    List<VariableTask> unspecifiedVariables = new ArrayList<>();
     for (VariableTask variable : variables)
     {
       URI storageURI = getEffectiveStorage(variable);
@@ -3535,7 +3548,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
           if (attribute.isMany())
           {
             List<?> values = (List<?>)eObject.eGet(attribute);
-            List<Object> newValues = new ArrayList<Object>();
+            List<Object> newValues = new ArrayList<>();
             boolean failed = false;
             for (Object value : values)
             {
@@ -3966,7 +3979,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   private void logBundleInfos()
   {
-    List<String> bundleInfos = new ArrayList<String>();
+    List<String> bundleInfos = new ArrayList<>();
     for (Bundle bundle : bundles)
     {
       StringBuilder builder = new StringBuilder("Bundle "); //$NON-NLS-1$
@@ -4029,8 +4042,8 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   private Map<SetupTask, SetupTask> getSubstitutions(EList<SetupTask> setupTasks)
   {
-    Map<Object, SetupTask> overrides = new LinkedHashMap<Object, SetupTask>();
-    Map<SetupTask, SetupTask> substitutions = new LinkedHashMap<SetupTask, SetupTask>();
+    Map<Object, SetupTask> overrides = new LinkedHashMap<>();
+    Map<SetupTask, SetupTask> substitutions = new LinkedHashMap<>();
 
     for (SetupTask setupTask : setupTasks)
     {
@@ -4084,8 +4097,8 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   private void copySetup(Stream stream, EList<SetupTask> setupTasks, Map<SetupTask, SetupTask> substitutions, Map<SetupTask, SetupTask> directSubstitutions)
   {
-    Set<EObject> roots = new LinkedHashSet<EObject>();
-    final Set<Scope> scopesToCopy = new LinkedHashSet<Scope>();
+    Set<EObject> roots = new LinkedHashSet<>();
+    final Set<Scope> scopesToCopy = new LinkedHashSet<>();
 
     Workspace originalWorkspace = getWorkspace();
     if (originalWorkspace != null)
@@ -4130,7 +4143,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       @Override
       public <T> Collection<T> copyAll(Collection<? extends T> eObjects)
       {
-        Collection<T> result = new ArrayList<T>(eObjects.size());
+        Collection<T> result = new ArrayList<>(eObjects.size());
         for (Object object : eObjects)
         {
           @SuppressWarnings("unchecked")
@@ -4210,7 +4223,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
     // Determine all the copied objects for which the original object is directly contained in a resource.
     // For each such resource, create a copy of that resource.
-    Map<Resource, Resource> resourceCopies = new LinkedHashMap<Resource, Resource>();
+    Map<Resource, Resource> resourceCopies = new LinkedHashMap<>();
 
     @SuppressWarnings("unchecked")
     Set<InternalEObject> originals = (Set<InternalEObject>)(Set<?>)copier.keySet();
@@ -4252,7 +4265,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
     // Must determine mapping from original setup's references (ProductVersion and Streams) to their copies currently in the copier.
 
-    Map<URI, EObject> originalCrossReferences = new LinkedHashMap<URI, EObject>();
+    Map<URI, EObject> originalCrossReferences = new LinkedHashMap<>();
     if (originalWorkspace != null)
     {
       for (EObject eObject : originalWorkspace.eCrossReferences())
@@ -4261,7 +4274,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       }
     }
 
-    for (EObject copiedObject : new ArrayList<EObject>(copier.values()))
+    for (EObject copiedObject : new ArrayList<>(copier.values()))
     {
       if (copiedObject instanceof Stream)
       {
@@ -4274,7 +4287,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       }
     }
 
-    Map<EObject, EObject> originalCopier = new LinkedHashMap<EObject, EObject>(copier);
+    Map<EObject, EObject> originalCopier = new LinkedHashMap<>(copier);
     for (Map.Entry<SetupTask, SetupTask> entry : directSubstitutions.entrySet())
     {
       SetupTask overriddenTask = entry.getKey();
@@ -4286,7 +4299,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
     for (Map.Entry<EObject, EObject> entry : copier.entrySet())
     {
-      Set<EObject> copies = new LinkedHashSet<EObject>();
+      Set<EObject> copies = new LinkedHashSet<>();
       copies.add(entry.getValue());
       copyMap.put(entry.getKey(), copies);
     }
@@ -4335,13 +4348,14 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   private EList<Map.Entry<String, Set<String>>> reorderVariables(final Map<String, Set<String>> variables)
   {
-    EList<Map.Entry<String, Set<String>>> list = new BasicEList<Map.Entry<String, Set<String>>>(variables.entrySet());
+    EList<Map.Entry<String, Set<String>>> list = new BasicEList<>(variables.entrySet());
 
     SetupCoreUtil.reorder(list, new SetupCoreUtil.DependencyProvider<Map.Entry<String, Set<String>>>()
     {
+      @Override
       public Collection<Map.Entry<String, Set<String>>> getDependencies(Map.Entry<String, Set<String>> variable)
       {
-        Collection<Map.Entry<String, Set<String>>> result = new ArrayList<Map.Entry<String, Set<String>>>();
+        Collection<Map.Entry<String, Set<String>>> result = new ArrayList<>();
         for (String key : variable.getValue())
         {
           for (Map.Entry<String, Set<String>> entry : variables.entrySet())
@@ -4364,13 +4378,14 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
   {
     ECollections.sort(setupTasks, new Comparator<SetupTask>()
     {
+      @Override
       public int compare(SetupTask setupTask1, SetupTask setupTask2)
       {
         return setupTask1.getPriority() - setupTask2.getPriority();
       }
     });
 
-    final Map<SetupTask, Set<SetupTask>> dependencies = new LinkedHashMap<SetupTask, Set<SetupTask>>();
+    final Map<SetupTask, Set<SetupTask>> dependencies = new LinkedHashMap<>();
     for (SetupTask setupTask : setupTasks)
     {
       CollectionUtil.addAll(dependencies, setupTask, setupTask.getPredecessors());
@@ -4383,6 +4398,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
     SetupCoreUtil.reorder(setupTasks, new SetupCoreUtil.DependencyProvider<SetupTask>()
     {
+      @Override
       public Collection<SetupTask> getDependencies(SetupTask setupTask)
       {
         return dependencies.get(setupTask);
@@ -4485,16 +4501,16 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
   public static SetupTaskPerformer create(URIConverter uriConverter, final SetupPrompter prompter, Trigger trigger, SetupContext setupContext,
       boolean fullPrompt, boolean fullComposition) throws Exception
   {
-    List<SetupTaskPerformer> performers = new ArrayList<SetupTaskPerformer>();
+    List<SetupTaskPerformer> performers = new ArrayList<>();
     boolean needsPrompt = false;
 
-    Map<Object, Set<Object>> composedMap = new LinkedHashMap<Object, Set<Object>>();
-    List<VariableTask> allAppliedRuleVariables = new ArrayList<VariableTask>();
-    Set<String> allUndeclaredVariables = new LinkedHashSet<String>();
-    List<VariableTask> allUnresolvedVariables = new ArrayList<VariableTask>();
-    List<VariableTask> allResolvedVariables = new ArrayList<VariableTask>();
-    List<VariableTask> allPasswordVariables = new ArrayList<VariableTask>();
-    Map<VariableTask, EAttribute> allRuleAttributes = new LinkedHashMap<VariableTask, EAttribute>();
+    Map<Object, Set<Object>> composedMap = new LinkedHashMap<>();
+    List<VariableTask> allAppliedRuleVariables = new ArrayList<>();
+    Set<String> allUndeclaredVariables = new LinkedHashSet<>();
+    List<VariableTask> allUnresolvedVariables = new ArrayList<>();
+    List<VariableTask> allResolvedVariables = new ArrayList<>();
+    List<VariableTask> allPasswordVariables = new ArrayList<>();
+    Map<VariableTask, EAttribute> allRuleAttributes = new LinkedHashMap<>();
 
     Workspace workspace = setupContext.getWorkspace();
     List<Stream> streams = workspace == null ? null : workspace.getStreams();
@@ -4511,7 +4527,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       {
         SetupTaskPerformer performer = new SetupTaskPerformer(uriConverter, prompter, null, setupContext, stream);
         Set<String> undeclaredVariables = performer.getUndeclaredVariables();
-        final Set<VariableTask> demandCreatedUnresolvedVariables = new LinkedHashSet<VariableTask>();
+        final Set<VariableTask> demandCreatedUnresolvedVariables = new LinkedHashSet<>();
         if (!undeclaredVariables.isEmpty())
         {
           List<VariableTask> unresolvedVariables = performer.getUnresolvedVariables();
@@ -4540,7 +4556,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         {
           SetupContext fullPromptContext = SetupContext.createCopy(setupContext.getInstallation(), setupContext.getWorkspace(), setupContext.getUser());
 
-          Set<VariableTask> variables = new LinkedHashSet<VariableTask>();
+          Set<VariableTask> variables = new LinkedHashSet<>();
           final SetupTaskPerformer partialPromptPerformer = performer;
 
           prepareFullPrompt(variables, fullPromptContext.getInstallation());
@@ -4554,21 +4570,25 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
           {
             private boolean first = true;
 
+            @Override
             public OS getOS()
             {
               return prompter.getOS();
             }
 
+            @Override
             public String getVMPath()
             {
               return prompter.getVMPath();
             }
 
+            @Override
             public UserCallback getUserCallback()
             {
               return prompter.getUserCallback();
             }
 
+            @Override
             public String getValue(VariableTask variable)
             {
               if (!first)
@@ -4579,6 +4599,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
               return null;
             }
 
+            @Override
             public boolean promptVariables(List<? extends SetupTaskContext> performers)
             {
               for (SetupTaskContext context : performers)
@@ -4655,8 +4676,8 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     // We need a single performer for all streams.
     // The per-stream performers from above have triggered task lists that must be composed into a single setup for multiple streams.
 
-    EList<SetupTask> setupTasks = new BasicEList<SetupTask>();
-    Set<Bundle> bundles = new LinkedHashSet<Bundle>();
+    EList<SetupTask> setupTasks = new BasicEList<>();
+    Set<Bundle> bundles = new LinkedHashSet<>();
     for (SetupTaskPerformer performer : performers)
     {
       setupTasks.addAll(performer.getTriggeredSetupTasks());
@@ -4897,7 +4918,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
       {
         if (enablementTasks == null)
         {
-          enablementTasks = new BasicEList<SetupTask>();
+          enablementTasks = new BasicEList<>();
         }
 
         EMap<String, String> details = eAnnotation.getDetails();
@@ -5171,6 +5192,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     {
       ResourcesPlugin.getWorkspace().run(new IWorkspaceRunnable()
       {
+        @Override
         public void run(IProgressMonitor monitor) throws CoreException
         {
           try

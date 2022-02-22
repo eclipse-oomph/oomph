@@ -773,6 +773,7 @@ public class JUnitPackage extends EPackageImpl
     // Register package validator
     EValidator.Registry.INSTANCE.put(theJUnitPackage, new EValidator.Descriptor()
     {
+      @Override
       public EValidator getEValidator()
       {
         return JUnitValidator.INSTANCE;

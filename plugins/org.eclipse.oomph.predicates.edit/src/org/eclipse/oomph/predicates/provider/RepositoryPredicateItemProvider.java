@@ -89,7 +89,7 @@ public class RepositoryPredicateItemProvider extends PredicateItemProvider
       @Override
       public Collection<?> getChoiceOfValues(Object object)
       {
-        List<IProject> result = new ArrayList<IProject>();
+        List<IProject> result = new ArrayList<>();
         for (IProject project : WORKSPACE_ROOT.getProjects())
         {
           result.add(project);

@@ -77,6 +77,7 @@ public class ComponentExtGeneratorImpl extends ModelElementImpl implements Compo
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public void generateIUs(IProject project, String qualifierReplacement, Map<String, Version> iuVersions, EList<IInstallableUnit> result) throws Exception
   {
     if (!result.isEmpty())
@@ -137,7 +138,7 @@ public class ComponentExtGeneratorImpl extends ModelElementImpl implements Compo
     if (host instanceof org.eclipse.equinox.internal.p2.metadata.InstallableUnit)
     {
       org.eclipse.equinox.internal.p2.metadata.InstallableUnit iu = (org.eclipse.equinox.internal.p2.metadata.InstallableUnit)host;
-      List<IRequirement> requirements = new ArrayList<IRequirement>(iu.getRequirements());
+      List<IRequirement> requirements = new ArrayList<>(iu.getRequirements());
 
       for (Requirement requirement : componentExtension.getRequirements())
       {

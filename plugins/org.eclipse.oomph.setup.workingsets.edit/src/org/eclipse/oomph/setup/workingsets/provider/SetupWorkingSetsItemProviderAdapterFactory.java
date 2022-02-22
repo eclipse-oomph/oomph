@@ -77,7 +77,7 @@ public class SetupWorkingSetsItemProviderAdapterFactory extends SetupWorkingSets
    * <!-- end-user-doc -->
    * @generated
    */
-  protected Collection<Object> supportedTypes = new ArrayList<Object>();
+  protected Collection<Object> supportedTypes = new ArrayList<>();
 
   /**
    * This constructs an instance.
@@ -125,6 +125,7 @@ public class SetupWorkingSetsItemProviderAdapterFactory extends SetupWorkingSets
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ComposeableAdapterFactory getRootAdapterFactory()
   {
     return parentAdapterFactory == null ? this : parentAdapterFactory.getRootAdapterFactory();
@@ -136,6 +137,7 @@ public class SetupWorkingSetsItemProviderAdapterFactory extends SetupWorkingSets
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setParentAdapterFactory(ComposedAdapterFactory parentAdapterFactory)
   {
     this.parentAdapterFactory = parentAdapterFactory;
@@ -190,6 +192,7 @@ public class SetupWorkingSetsItemProviderAdapterFactory extends SetupWorkingSets
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void addListener(INotifyChangedListener notifyChangedListener)
   {
     changeNotifier.addListener(notifyChangedListener);
@@ -201,6 +204,7 @@ public class SetupWorkingSetsItemProviderAdapterFactory extends SetupWorkingSets
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void removeListener(INotifyChangedListener notifyChangedListener)
   {
     changeNotifier.removeListener(notifyChangedListener);
@@ -212,6 +216,7 @@ public class SetupWorkingSetsItemProviderAdapterFactory extends SetupWorkingSets
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void fireNotifyChanged(Notification notification)
   {
     changeNotifier.fireNotifyChanged(notification);
@@ -228,6 +233,7 @@ public class SetupWorkingSetsItemProviderAdapterFactory extends SetupWorkingSets
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void dispose()
   {
     if (workingSetTaskItemProvider != null)
@@ -310,9 +316,10 @@ public class SetupWorkingSetsItemProviderAdapterFactory extends SetupWorkingSets
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public Collection<Object> getNewChildDescriptors(Object object, EditingDomain editingDomain)
     {
-      ArrayList<Object> result = new ArrayList<Object>();
+      ArrayList<Object> result = new ArrayList<>();
       new CreationSwitch(result, editingDomain).doSwitch((EObject)object);
       return result;
     }
@@ -322,6 +329,7 @@ public class SetupWorkingSetsItemProviderAdapterFactory extends SetupWorkingSets
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public ResourceLocator getResourceLocator()
     {
       return SetupWorkingSetsEditPlugin.INSTANCE;
@@ -403,9 +411,10 @@ public class SetupWorkingSetsItemProviderAdapterFactory extends SetupWorkingSets
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public Collection<Object> getNewChildDescriptors(Object object, EditingDomain editingDomain)
     {
-      ArrayList<Object> result = new ArrayList<Object>();
+      ArrayList<Object> result = new ArrayList<>();
       new CreationSwitch(result, editingDomain).doSwitch((EObject)object);
       return result;
     }
@@ -415,6 +424,7 @@ public class SetupWorkingSetsItemProviderAdapterFactory extends SetupWorkingSets
      * <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public ResourceLocator getResourceLocator()
     {
       return SetupWorkingSetsEditPlugin.INSTANCE;

@@ -42,6 +42,7 @@ public class CacheUsageConfirmerUI extends CacheUsageConfirmer
         {
           UIUtil.getDisplay().syncExec(new Runnable()
           {
+            @Override
             public void run()
             {
               String message;

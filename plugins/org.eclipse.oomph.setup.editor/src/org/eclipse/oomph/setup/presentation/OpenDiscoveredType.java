@@ -297,6 +297,7 @@ public class OpenDiscoveredType extends OomphDialog
 
     masterViewer.addDoubleClickListener(new IDoubleClickListener()
     {
+      @Override
       public void doubleClick(DoubleClickEvent event)
       {
         IStructuredSelection selection = (IStructuredSelection)masterViewer.getSelection();
@@ -333,6 +334,7 @@ public class OpenDiscoveredType extends OomphDialog
 
     masterViewer.addSelectionChangedListener(new ISelectionChangedListener()
     {
+      @Override
       public void selectionChanged(SelectionChangedEvent event)
       {
         IStructuredSelection selection = (IStructuredSelection)event.getSelection();
@@ -352,6 +354,7 @@ public class OpenDiscoveredType extends OomphDialog
 
     detailsViewer.addSelectionChangedListener(new ISelectionChangedListener()
     {
+      @Override
       public void selectionChanged(SelectionChangedEvent event)
       {
         IStructuredSelection selection = (IStructuredSelection)event.getSelection();
@@ -362,6 +365,7 @@ public class OpenDiscoveredType extends OomphDialog
 
     detailsViewer.addDoubleClickListener(new IDoubleClickListener()
     {
+      @Override
       public void doubleClick(DoubleClickEvent event)
       {
         if (selectedLink != null)
@@ -377,9 +381,10 @@ public class OpenDiscoveredType extends OomphDialog
     detailsViewer.addDragSupport(DND.DROP_COPY | DND.DROP_MOVE | DND.DROP_LINK, dndTransfers,
         new GeneralDragAdapter(detailsViewer, new GeneralDragAdapter.DraggedObjectsFactory()
         {
+          @Override
           public List<Object> createDraggedObjects(ISelection selection) throws Exception
           {
-            List<Object> result = new ArrayList<Object>();
+            List<Object> result = new ArrayList<>();
             for (Object object : ((IStructuredSelection)selection).toArray())
             {
               if (object instanceof Item)
@@ -401,6 +406,7 @@ public class OpenDiscoveredType extends OomphDialog
     MenuManager contextMenu = (MenuManager)menu.getData(MenuManager.MANAGER_KEY);
     contextMenu.addMenuListener(new IMenuListener()
     {
+      @Override
       public void menuAboutToShow(IMenuManager manager)
       {
         manager.add(new Separator());
@@ -493,6 +499,7 @@ public class OpenDiscoveredType extends OomphDialog
 
     UIUtil.asyncExec(composite, new Runnable()
     {
+      @Override
       public void run()
       {
         setSelectedItem(null);
@@ -511,7 +518,7 @@ public class OpenDiscoveredType extends OomphDialog
 
   private List<URI> getProjectSetups(Item item)
   {
-    List<URI> result = new ArrayList<URI>();
+    List<URI> result = new ArrayList<>();
     if (repositoryProjectSetups != null)
     {
       for (String repo : item.getRepos())
@@ -535,8 +542,8 @@ public class OpenDiscoveredType extends OomphDialog
   private void decorate(Item item)
   {
     EList<Item> items = item.getItems();
-    Set<String> decorations = new HashSet<String>();
-    List<Item> visibleChildren = new ArrayList<Item>();
+    Set<String> decorations = new HashSet<>();
+    List<Item> visibleChildren = new ArrayList<>();
     for (Item child : items)
     {
       if (filter.isElementVisible(masterViewer, child))
@@ -549,7 +556,7 @@ public class OpenDiscoveredType extends OomphDialog
 
     if (visibleChildren.isEmpty())
     {
-      Set<String> labels = new LinkedHashSet<String>();
+      Set<String> labels = new LinkedHashSet<>();
       for (URI projectSetupURI : getProjectSetups(item))
       {
         labels.add(projectSetupURI.lastSegment());
@@ -716,6 +723,7 @@ public class OpenDiscoveredType extends OomphDialog
 
         UIUtil.asyncExec(masterViewer.getControl(), new Runnable()
         {
+          @Override
           public void run()
           {
             masterViewer.setInput(root);
@@ -723,7 +731,7 @@ public class OpenDiscoveredType extends OomphDialog
           }
         });
 
-        Map<String, URI> remoteURIs = new HashMap<String, URI>();
+        Map<String, URI> remoteURIs = new HashMap<>();
         Resource resource = resourceSet.getResource(SetupContext.INDEX_SETUP_URI, true);
         for (Iterator<EObject> it = resource.getAllContents(); it.hasNext();)
         {
@@ -787,6 +795,7 @@ public class OpenDiscoveredType extends OomphDialog
 
         UIUtil.asyncExec(masterViewer.getControl(), new Runnable()
         {
+          @Override
           public void run()
           {
             masterViewer.refresh();
@@ -830,7 +839,7 @@ public class OpenDiscoveredType extends OomphDialog
           Item javaItem = Item.create(item.getType(), item.getName());
           input.getChildren().add(javaItem);
 
-          Map<String, Set<String>> unfilteredGroups = new HashMap<String, Set<String>>();
+          Map<String, Set<String>> unfilteredGroups = new HashMap<>();
           collectUnfilteredGroups(unfilteredGroups, item);
 
           EList<Object> children = javaItem.getChildren();
@@ -838,7 +847,7 @@ public class OpenDiscoveredType extends OomphDialog
           Item.Type type = item.getType();
           Item.Type linkType = type == Item.Type.CLASS ? Item.Type.CLASS_LINK : Item.Type.PACKAGE_LINK;
           int count = 0;
-          Map<String, String> rawLinks = type == Item.Type.CLASS ? new HashMap<String, String>() : null;
+          Map<String, String> rawLinks = type == Item.Type.CLASS ? new HashMap<>() : null;
 
           Map<String, Map<String, Set<String>>> groupLinks = item.getGroupLinks(unfilteredGroups, rawLinks);
           for (Entry<String, Map<String, Set<String>>> groupEntry : groupLinks.entrySet())
@@ -881,6 +890,7 @@ public class OpenDiscoveredType extends OomphDialog
             final int limit = count;
             UIUtil.asyncExec(detailsViewer.getControl(), new Runnable()
             {
+              @Override
               public void run()
               {
                 detailsViewer.setInput(input);
@@ -905,6 +915,7 @@ public class OpenDiscoveredType extends OomphDialog
 
         UIUtil.asyncExec(masterViewer.getControl(), new Runnable()
         {
+          @Override
           public void run()
           {
             masterViewer.refresh(true);
@@ -1034,62 +1045,74 @@ public class OpenDiscoveredType extends OomphDialog
 
               class StorageEditorInput implements IStorageEditorInput
               {
+                @Override
                 @SuppressWarnings("all")
                 public Object getAdapter(Class adapter)
                 {
                   return null;
                 }
 
+                @Override
                 public String getToolTipText()
                 {
                   return rawLink;
                 }
 
+                @Override
                 public IPersistableElement getPersistable()
                 {
                   return null;
                 }
 
+                @Override
                 public String getName()
                 {
                   return URI.createURI(rawLink).lastSegment();
                 }
 
+                @Override
                 public ImageDescriptor getImageDescriptor()
                 {
                   return null;
                 }
 
+                @Override
                 public boolean exists()
                 {
                   return true;
                 }
 
+                @Override
                 public IStorage getStorage() throws CoreException
                 {
                   return new IStorage()
                   {
+                    @Override
                     @SuppressWarnings("all")
                     public Object getAdapter(Class adapter)
                     {
                       return null;
                     }
 
+                    @Override
                     public boolean isReadOnly()
                     {
                       return true;
                     }
 
+                    @Override
                     public String getName()
                     {
                       return URI.createURI(rawLink).lastSegment();
                     }
 
+                    @Override
                     public IPath getFullPath()
                     {
                       return new Path(rawLink);
                     }
 
+                    @Override
                     public InputStream getContents() throws CoreException
                     {
                       if (ioException != null)
@@ -1106,6 +1129,7 @@ public class OpenDiscoveredType extends OomphDialog
 
               UIUtil.asyncExec(getShell(), new Runnable()
               {
+                @Override
                 public void run()
                 {
                   try
@@ -1230,12 +1254,12 @@ public class OpenDiscoveredType extends OomphDialog
           patternLiteral.append(".*?"); //$NON-NLS-1$
         }
 
-        List<Integer> packageIndices = new ArrayList<Integer>();
+        List<Integer> packageIndices = new ArrayList<>();
 
         boolean previousUpperCase = false;
         boolean grouped = false;
-        for (int i = Character.offsetByCodePoints(patternString, 0, 0), length = patternString.length(); i < length; i = Character
-            .offsetByCodePoints(patternString, i, 1))
+        for (int i = Character.offsetByCodePoints(patternString, 0, 0),
+            length = patternString.length(); i < length; i = Character.offsetByCodePoints(patternString, i, 1))
         {
           int codePoint = patternString.codePointAt(i);
           if (Character.isJavaIdentifierStart(codePoint) || Character.isJavaIdentifierPart(codePoint))
@@ -1395,6 +1419,7 @@ public class OpenDiscoveredType extends OomphDialog
       return wordMatches(text);
     }
 
+    @Override
     public boolean shouldExpand(Object element)
     {
       return !isLeafMatch(null, element);
@@ -1446,8 +1471,9 @@ public class OpenDiscoveredType extends OomphDialog
 
     private static final Comparator<String> STRING_COMPARATOR = CommonPlugin.INSTANCE.getComparator();
 
-    private static final Comparator<Item> COMPARATOR = new Comparator<Item>()
+    private static final Comparator<Item> COMPARATOR = new Comparator<>()
     {
+      @Override
       public int compare(Item item1, Item item2)
       {
         int result = item1.getType().compareTo(item2.getType());
@@ -1469,7 +1495,7 @@ public class OpenDiscoveredType extends OomphDialog
 
     private String decoration;
 
-    private Map<String, Map<String, Set<String>>> groupLinks = new TreeMap<String, Map<String, Set<String>>>();
+    private Map<String, Map<String, Set<String>>> groupLinks = new TreeMap<>();
 
     private Map<String, String> rawLinks;
 
@@ -1498,7 +1524,7 @@ public class OpenDiscoveredType extends OomphDialog
       {
         if (rawLinks == null)
         {
-          rawLinks = new HashMap<String, String>();
+          rawLinks = new HashMap<>();
         }
         rawLinks.put(sourceFolderLink, rawSourceFolderLink);
       }
@@ -1511,7 +1537,7 @@ public class OpenDiscoveredType extends OomphDialog
       Map<String, Set<String>> map = groupLinks.get(repoLink);
       if (map == null)
       {
-        map = new TreeMap<String, Set<String>>();
+        map = new TreeMap<>();
         groupLinks.put(repoLink, map);
       }
 
@@ -1520,7 +1546,7 @@ public class OpenDiscoveredType extends OomphDialog
 
     public Map<String, Map<String, Set<String>>> getGroupLinks(Map<String, Set<String>> filter, Map<String, String> rawLinks)
     {
-      Map<String, Map<String, Set<String>>> result = new LinkedHashMap<String, Map<String, Set<String>>>();
+      Map<String, Map<String, Set<String>>> result = new LinkedHashMap<>();
 
       for (Map.Entry<String, Map<String, Set<String>>> groupEntry : groupLinks.entrySet())
       {
@@ -1528,7 +1554,7 @@ public class OpenDiscoveredType extends OomphDialog
         Set<String> sourceLinks = filter.get(key);
         if (sourceLinks != null)
         {
-          Map<String, Set<String>> links = new LinkedHashMap<String, Set<String>>();
+          Map<String, Set<String>> links = new LinkedHashMap<>();
           String path = type == Type.CLASS ? name.replace('.', '/') + ".java" : name.replace('.', '/'); //$NON-NLS-1$
           for (Map.Entry<String, Set<String>> entry : groupEntry.getValue().entrySet())
           {
@@ -1562,7 +1588,7 @@ public class OpenDiscoveredType extends OomphDialog
 
     public Set<String> getRepos()
     {
-      Set<String> result = new TreeSet<String>();
+      Set<String> result = new TreeSet<>();
       for (Map.Entry<String, Map<String, Set<String>>> groupEntry : groupLinks.entrySet())
       {
         for (Map.Entry<String, Set<String>> entry : groupEntry.getValue().entrySet())
@@ -1769,33 +1795,40 @@ public class OpenDiscoveredType extends OomphDialog
     {
       super(new AdapterFactoryLabelProvider.StyledLabelProvider(adapterFactory, viewer), new IStyledLabelDecorator()
       {
+        @Override
         public void removeListener(ILabelProviderListener listener)
         {
         }
 
+        @Override
         public boolean isLabelProperty(Object element, String property)
         {
           return true;
         }
 
+        @Override
         public void dispose()
         {
         }
 
+        @Override
         public void addListener(ILabelProviderListener listener)
         {
         }
 
+        @Override
         public String decorateText(String text, Object element)
         {
           return text;
         }
 
+        @Override
         public Image decorateImage(Image image, Object element)
         {
           return image;
         }
 
+        @Override
         public StyledString decorateStyledText(StyledString styledString, Object element)
         {
           return styledString;
@@ -1837,7 +1870,7 @@ public class OpenDiscoveredType extends OomphDialog
 
       if (!projectSetups.isEmpty())
       {
-        Set<URI> uris = new HashSet<URI>();
+        Set<URI> uris = new HashSet<>();
         for (URI uri : projectSetups)
         {
           uris.add(uri.trimFragment());
@@ -1894,8 +1927,9 @@ public class OpenDiscoveredType extends OomphDialog
    */
   public static OpenDiscoveredType openFor(final IWorkbenchWindow workbenchWindow)
   {
-    Factory<OpenDiscoveredType> factory = new Factory<OpenDiscoveredType>()
+    Factory<OpenDiscoveredType> factory = new Factory<>()
     {
+      @Override
       public OpenDiscoveredType create(IWorkbenchWindow workbenchWindow)
       {
         return new OpenDiscoveredType(workbenchWindow.getShell());

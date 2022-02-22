@@ -26,6 +26,7 @@ public class OpenDiscoveredTypeHandler extends AbstractDropdownItemHandler
     super("BrowseType", Messages.OpenDiscoveredTypeHandler_text); //$NON-NLS-1$
   }
 
+  @Override
   public void run()
   {
     try

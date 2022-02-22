@@ -75,6 +75,7 @@ public class ActiveMylynTaskArgumentSelector
    */
   public static class ExtensionFactory implements IExecutableExtensionFactory
   {
+    @Override
     public Object create() throws CoreException
     {
       Class<?> argumentSelectorInterface = null;
@@ -99,6 +100,7 @@ public class ActiveMylynTaskArgumentSelector
       {
         private final ActiveMylynTaskArgumentSelector activeMylynTaskArgumentSelector = new ActiveMylynTaskArgumentSelector();
 
+        @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable
         {
           return activeMylynTaskArgumentSelector.selectArgument((IStringVariable)args[0], (Shell)args[1]);

@@ -366,6 +366,7 @@ public class ProjectConfigActionBarContributor extends EditingDomainActionBarCon
     //
     submenuManager.addMenuListener(new IMenuListener()
     {
+      @Override
       public void menuAboutToShow(IMenuManager menuManager)
       {
         menuManager.updateAll(true);
@@ -419,6 +420,7 @@ public class ProjectConfigActionBarContributor extends EditingDomainActionBarCon
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void selectionChanged(SelectionChangedEvent event)
   {
     // Remove any menu items for old selection.
@@ -518,7 +520,7 @@ public class ProjectConfigActionBarContributor extends EditingDomainActionBarCon
    */
   protected Collection<IAction> generateCreateChildActionsGen(Collection<?> descriptors, ISelection selection)
   {
-    Collection<IAction> actions = new ArrayList<IAction>();
+    Collection<IAction> actions = new ArrayList<>();
     if (descriptors != null)
     {
       for (Object descriptor : descriptors)
@@ -544,7 +546,7 @@ public class ProjectConfigActionBarContributor extends EditingDomainActionBarCon
    */
   protected Collection<IAction> generateCreateSiblingActionsGen(Collection<?> descriptors, ISelection selection)
   {
-    Collection<IAction> actions = new ArrayList<IAction>();
+    Collection<IAction> actions = new ArrayList<>();
     if (descriptors != null)
     {
       for (Object descriptor : descriptors)
@@ -646,7 +648,7 @@ public class ProjectConfigActionBarContributor extends EditingDomainActionBarCon
       ISelection selection = selectionProvider.getSelection();
       IStructuredSelection structuredSelection = selection instanceof IStructuredSelection ? (IStructuredSelection)selection : StructuredSelection.EMPTY;
 
-      final List<PreferenceNode> preferenceNodes = new ArrayList<PreferenceNode>();
+      final List<PreferenceNode> preferenceNodes = new ArrayList<>();
       for (Object object : structuredSelection.toArray())
       {
         if (object instanceof Project)

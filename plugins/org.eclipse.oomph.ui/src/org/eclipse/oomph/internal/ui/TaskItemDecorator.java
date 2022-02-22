@@ -43,6 +43,7 @@ public class TaskItemDecorator
     {
       IDE_PREFERENCES.addPreferenceChangeListener(new IEclipsePreferences.IPreferenceChangeListener()
       {
+        @Override
         public void preferenceChange(PreferenceChangeEvent event)
         {
           if (WORKSPACE_NAME.equals(event.getKey()))
@@ -55,6 +56,7 @@ public class TaskItemDecorator
 
       WORKBENCH.addWindowListener(new IWindowListener()
       {
+        @Override
         public void windowOpened(IWorkbenchWindow window)
         {
           Shell shell = window.getShell();
@@ -64,14 +66,17 @@ public class TaskItemDecorator
           }
         }
 
+        @Override
         public void windowDeactivated(IWorkbenchWindow window)
         {
         }
 
+        @Override
         public void windowClosed(IWorkbenchWindow window)
         {
         }
 
+        @Override
         public void windowActivated(IWorkbenchWindow window)
         {
         }

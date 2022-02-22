@@ -87,6 +87,7 @@ public class JDTFactoryImpl extends EFactoryImpl implements JDTFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public JRETask createJRETask()
   {
     JRETaskImpl jreTask = new JRETaskImpl();
@@ -98,6 +99,7 @@ public class JDTFactoryImpl extends EFactoryImpl implements JDTFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public JRELibrary createJRELibrary()
   {
     JRELibraryImpl jreLibrary = new JRELibraryImpl();
@@ -109,6 +111,7 @@ public class JDTFactoryImpl extends EFactoryImpl implements JDTFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public JDTPackage getJDTPackage()
   {
     return (JDTPackage)getEPackage();

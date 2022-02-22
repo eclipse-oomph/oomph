@@ -135,6 +135,7 @@ public class PDEPackageImpl extends EPackageImpl implements PDEPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getTargetPlatformTask()
   {
     return targetPlatformTaskEClass;
@@ -145,6 +146,7 @@ public class PDEPackageImpl extends EPackageImpl implements PDEPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getTargetPlatformTask_Name()
   {
     return (EAttribute)targetPlatformTaskEClass.getEStructuralFeatures().get(0);
@@ -155,6 +157,7 @@ public class PDEPackageImpl extends EPackageImpl implements PDEPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getTargetPlatformTask_Activate()
   {
     return (EAttribute)targetPlatformTaskEClass.getEStructuralFeatures().get(1);
@@ -165,6 +168,7 @@ public class PDEPackageImpl extends EPackageImpl implements PDEPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getAbstractAPIBaselineTask()
   {
     return abstractAPIBaselineTaskEClass;
@@ -175,6 +179,7 @@ public class PDEPackageImpl extends EPackageImpl implements PDEPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getAbstractAPIBaselineTask_Name()
   {
     return (EAttribute)abstractAPIBaselineTaskEClass.getEStructuralFeatures().get(0);
@@ -185,6 +190,7 @@ public class PDEPackageImpl extends EPackageImpl implements PDEPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getAbstractAPIBaselineTask_Activate()
   {
     return (EAttribute)abstractAPIBaselineTaskEClass.getEStructuralFeatures().get(1);
@@ -195,6 +201,7 @@ public class PDEPackageImpl extends EPackageImpl implements PDEPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getAPIBaselineTask()
   {
     return apiBaselineTaskEClass;
@@ -205,6 +212,7 @@ public class PDEPackageImpl extends EPackageImpl implements PDEPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getAPIBaselineTask_Version()
   {
     return (EAttribute)apiBaselineTaskEClass.getEStructuralFeatures().get(0);
@@ -215,6 +223,7 @@ public class PDEPackageImpl extends EPackageImpl implements PDEPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getAPIBaselineTask_Location()
   {
     return (EAttribute)apiBaselineTaskEClass.getEStructuralFeatures().get(1);
@@ -225,6 +234,7 @@ public class PDEPackageImpl extends EPackageImpl implements PDEPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getAPIBaselineTask_RemoteURI()
   {
     return (EAttribute)apiBaselineTaskEClass.getEStructuralFeatures().get(2);
@@ -235,6 +245,7 @@ public class PDEPackageImpl extends EPackageImpl implements PDEPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getAPIBaselineFromTargetTask()
   {
     return apiBaselineFromTargetTaskEClass;
@@ -245,6 +256,7 @@ public class PDEPackageImpl extends EPackageImpl implements PDEPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getAPIBaselineFromTargetTask_TargetName()
   {
     return (EAttribute)apiBaselineFromTargetTaskEClass.getEStructuralFeatures().get(0);
@@ -255,6 +267,7 @@ public class PDEPackageImpl extends EPackageImpl implements PDEPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public PDEFactory getPDEFactory()
   {
     return (PDEFactory)getEFactoryInstance();

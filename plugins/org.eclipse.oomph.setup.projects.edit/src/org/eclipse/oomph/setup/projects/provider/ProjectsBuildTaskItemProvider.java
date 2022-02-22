@@ -10,6 +10,8 @@
  */
 package org.eclipse.oomph.setup.projects.provider;
 
+import org.eclipse.oomph.base.BaseFactory;
+import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.predicates.PredicatesFactory;
 import org.eclipse.oomph.setup.projects.ProjectsBuildTask;
 import org.eclipse.oomph.setup.projects.ProjectsPackage;
@@ -192,7 +194,7 @@ public class ProjectsBuildTaskItemProvider extends SetupTaskItemProvider
   {
     ProjectsBuildTask projectsBuildTask = (ProjectsBuildTask)object;
     String label = getString("_UI_ProjectsBuildTask_type"); //$NON-NLS-1$
-    List<String> tags = new ArrayList<String>();
+    List<String> tags = new ArrayList<>();
     if (projectsBuildTask.isOnlyNewProjects())
     {
       tags.add(getFeatureText(ProjectsPackage.Literals.PROJECTS_BUILD_TASK__ONLY_NEW_PROJECTS));
@@ -259,6 +261,8 @@ public class ProjectsBuildTaskItemProvider extends SetupTaskItemProvider
   protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object)
   {
     super.collectNewChildDescriptors(newChildDescriptors, object);
+
+    newChildDescriptors.add(createChildParameter(BasePackage.Literals.MODEL_ELEMENT__ANNOTATIONS, BaseFactory.eINSTANCE.createAnnotation()));
 
     newChildDescriptors.add(createChildParameter(ProjectsPackage.Literals.PROJECTS_BUILD_TASK__PREDICATES, PredicatesFactory.eINSTANCE.createNamePredicate()));
 

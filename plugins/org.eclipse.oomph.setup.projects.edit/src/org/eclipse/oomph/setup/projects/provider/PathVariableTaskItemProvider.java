@@ -10,6 +10,8 @@
  */
 package org.eclipse.oomph.setup.projects.provider;
 
+import org.eclipse.oomph.base.BaseFactory;
+import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.setup.projects.PathVariableTask;
 import org.eclipse.oomph.setup.projects.ProjectsPackage;
 import org.eclipse.oomph.setup.provider.SetupTaskItemProvider;
@@ -182,6 +184,8 @@ public class PathVariableTaskItemProvider extends SetupTaskItemProvider
   protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object)
   {
     super.collectNewChildDescriptors(newChildDescriptors, object);
+
+    newChildDescriptors.add(createChildParameter(BasePackage.Literals.MODEL_ELEMENT__ANNOTATIONS, BaseFactory.eINSTANCE.createAnnotation()));
   }
 
   /**

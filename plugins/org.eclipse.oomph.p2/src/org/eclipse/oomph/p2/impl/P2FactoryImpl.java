@@ -155,6 +155,7 @@ public class P2FactoryImpl extends EFactoryImpl implements P2Factory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ProfileDefinition createProfileDefinition()
   {
     ProfileDefinitionImpl profileDefinition = new ProfileDefinitionImpl();
@@ -166,6 +167,7 @@ public class P2FactoryImpl extends EFactoryImpl implements P2Factory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Configuration createConfiguration()
   {
     ConfigurationImpl configuration = new ConfigurationImpl();
@@ -177,12 +179,14 @@ public class P2FactoryImpl extends EFactoryImpl implements P2Factory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Requirement createRequirement()
   {
     RequirementImpl requirement = new RequirementImpl();
     return requirement;
   }
 
+  @Override
   public Requirement createRequirement(String id)
   {
     Requirement requirement = createRequirement();
@@ -190,6 +194,7 @@ public class P2FactoryImpl extends EFactoryImpl implements P2Factory
     return requirement;
   }
 
+  @Override
   public Requirement createRequirement(String id, VersionRange versionRange)
   {
     Requirement requirement = createRequirement(id);
@@ -197,6 +202,7 @@ public class P2FactoryImpl extends EFactoryImpl implements P2Factory
     return requirement;
   }
 
+  @Override
   public Requirement createRequirement(String id, VersionRange versionRange, boolean optional)
   {
     Requirement requirement = createRequirement(id, versionRange);
@@ -204,6 +210,7 @@ public class P2FactoryImpl extends EFactoryImpl implements P2Factory
     return requirement;
   }
 
+  @Override
   public Requirement createRequirement(String id, VersionRange versionRange, boolean optional, boolean greedy)
   {
     Requirement requirement = createRequirement(id, versionRange);
@@ -212,6 +219,7 @@ public class P2FactoryImpl extends EFactoryImpl implements P2Factory
     return requirement;
   }
 
+  @Override
   public Requirement createRequirement(String id, Version version)
   {
     if (version == null)
@@ -223,6 +231,7 @@ public class P2FactoryImpl extends EFactoryImpl implements P2Factory
     return createRequirement(id, versionRange);
   }
 
+  @Override
   public Requirement createRequirement(String id, Version version, boolean optional)
   {
     Requirement requirement = createRequirement(id, version);
@@ -230,6 +239,7 @@ public class P2FactoryImpl extends EFactoryImpl implements P2Factory
     return requirement;
   }
 
+  @Override
   public Requirement createRequirement(String id, Version version, boolean optional, boolean greedy)
   {
     Requirement requirement = createRequirement(id, version);
@@ -243,6 +253,7 @@ public class P2FactoryImpl extends EFactoryImpl implements P2Factory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public RepositoryList createRepositoryList()
   {
     RepositoryListImpl repositoryList = new RepositoryListImpl();
@@ -254,12 +265,14 @@ public class P2FactoryImpl extends EFactoryImpl implements P2Factory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Repository createRepository()
   {
     RepositoryImpl repository = new RepositoryImpl();
     return repository;
   }
 
+  @Override
   public Repository createRepository(String url)
   {
     Repository repository = createRepository();
@@ -362,11 +375,13 @@ public class P2FactoryImpl extends EFactoryImpl implements P2Factory
     return instanceValue == null ? null : ((Version)instanceValue).toString();
   }
 
+  @Override
   public VersionRange createVersionRange(Version version, VersionSegment segment)
   {
     return createVersionRange(version, segment, false);
   }
 
+  @Override
   public VersionRange createVersionRange(Version version, VersionSegment segment, boolean compatible)
   {
     if (version == null || version.equals(Version.emptyVersion))
@@ -442,6 +457,7 @@ public class P2FactoryImpl extends EFactoryImpl implements P2Factory
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public P2Package getP2Package()
   {
     return (P2Package)getEPackage();

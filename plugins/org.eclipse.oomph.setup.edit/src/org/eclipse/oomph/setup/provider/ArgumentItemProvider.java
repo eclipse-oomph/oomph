@@ -150,7 +150,7 @@ public class ArgumentItemProvider extends ModelElementItemProvider
         Macro macro = macroTask.getMacro();
         if (macro != null)
         {
-          List<Object> result = new ArrayList<Object>(macro.getParameters());
+          List<Object> result = new ArrayList<>(macro.getParameters());
           EList<Argument> arguments = macroTask.getArguments();
           for (Argument otherArgument : arguments)
           {

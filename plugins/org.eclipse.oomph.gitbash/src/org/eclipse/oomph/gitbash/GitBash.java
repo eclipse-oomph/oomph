@@ -130,6 +130,7 @@ public class GitBash
   {
     InputDialog dialog = new InputDialog(shell, Messages.GitBash_GitBash_title, Messages.GitBash_Location_label, initial, new IInputValidator()
     {
+      @Override
       public String isValid(String newText)
       {
         return new File(newText).isFile() ? null : Messages.GitBash_NotFile_imessage;

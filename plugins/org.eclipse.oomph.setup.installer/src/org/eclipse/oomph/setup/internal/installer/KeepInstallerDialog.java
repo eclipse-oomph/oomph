@@ -91,6 +91,7 @@ public final class KeepInstallerDialog extends AbstractSetupDialog
     locationText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
     locationText.addModifyListener(new ModifyListener()
     {
+      @Override
       public void modifyText(ModifyEvent e)
       {
         location = locationText.getText();
@@ -193,6 +194,7 @@ public final class KeepInstallerDialog extends AbstractSetupDialog
       {
         progressMonitorDialog.run(true, false, new IRunnableWithProgress()
         {
+          @Override
           public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
           {
             monitor.beginTask(NLS.bind(Messages.KeepInstallerDialog_CopyingInstaller_task, location), IProgressMonitor.UNKNOWN);
@@ -224,6 +226,7 @@ public final class KeepInstallerDialog extends AbstractSetupDialog
   {
     UIUtil.asyncExec(locationText, new Runnable()
     {
+      @Override
       public void run()
       {
         File home = new File(PropertiesUtil.getUserHome());

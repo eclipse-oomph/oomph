@@ -145,8 +145,7 @@ public class PomArtifactUpdater extends WorkspaceUpdateListener
           @Override
           protected void setContents(URI uri, String encoding, String contents) throws IOException
           {
-            monitor.subTask(
-                NLS.bind(Messages.PomArtifactUpdater_Updating_task, uri.isPlatformResource() ? uri.toPlatformString(true) : uri.toFileString()));
+            monitor.subTask(NLS.bind(Messages.PomArtifactUpdater_Updating_task, uri.isPlatformResource() ? uri.toPlatformString(true) : uri.toFileString()));
             super.setContents(uri, encoding, contents);
           }
         }.update(pom);

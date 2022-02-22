@@ -65,6 +65,7 @@ public class SimpleSearchField extends Composite
     searchField.setBackground(getDisplay().getSystemColor(SWT.COLOR_WHITE));
     searchField.addModifyListener(new ModifyListener()
     {
+      @Override
       public void modifyText(ModifyEvent e)
       {
         filterHandler.handleFilter(searchField.getText());
@@ -74,6 +75,7 @@ public class SimpleSearchField extends Composite
 
     searchField.addTraverseListener(new TraverseListener()
     {
+      @Override
       public void keyTraversed(TraverseEvent e)
       {
         if (e.keyCode == SWT.ESC)

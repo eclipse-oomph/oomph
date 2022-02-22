@@ -94,6 +94,7 @@ public class ExtensionPage extends SetupWizardPage
   {
     return new WizardFinisher()
     {
+      @Override
       public boolean performFinish()
       {
         install();
@@ -238,6 +239,7 @@ public class ExtensionPage extends SetupWizardPage
 
     installOperation = enablementComposite.install(new InstallHandler()
     {
+      @Override
       public void installSucceeded()
       {
         installOperation = null;
@@ -250,12 +252,14 @@ public class ExtensionPage extends SetupWizardPage
         }
       }
 
+      @Override
       public void installFailed(Throwable t)
       {
         ErrorDialog.open(t);
         installCanceled();
       }
 
+      @Override
       public void installCanceled()
       {
         setButtonState(IDialogConstants.FINISH_ID, true);

@@ -99,11 +99,12 @@ public class CompoundTaskImpl extends SetupTaskImpl implements CompoundTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<SetupTask> getSetupTasks()
   {
     if (setupTasks == null)
     {
-      setupTasks = new EObjectContainmentEList.Resolving<SetupTask>(SetupTask.class, this, SetupPackage.COMPOUND_TASK__SETUP_TASKS);
+      setupTasks = new EObjectContainmentEList.Resolving<>(SetupTask.class, this, SetupPackage.COMPOUND_TASK__SETUP_TASKS);
     }
     return setupTasks;
   }
@@ -113,6 +114,7 @@ public class CompoundTaskImpl extends SetupTaskImpl implements CompoundTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getName()
   {
     return name;
@@ -123,6 +125,7 @@ public class CompoundTaskImpl extends SetupTaskImpl implements CompoundTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setName(String newName)
   {
     String oldName = name;
@@ -295,11 +298,13 @@ public class CompoundTaskImpl extends SetupTaskImpl implements CompoundTask
     throw new UnsupportedOperationException();
   }
 
+  @Override
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     throw new UnsupportedOperationException();
   }
 
+  @Override
   public void perform(SetupTaskContext context) throws Exception
   {
     throw new UnsupportedOperationException();

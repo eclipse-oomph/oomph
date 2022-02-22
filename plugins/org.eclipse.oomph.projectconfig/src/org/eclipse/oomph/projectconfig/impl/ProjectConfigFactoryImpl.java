@@ -136,6 +136,7 @@ public class ProjectConfigFactoryImpl extends EFactoryImpl implements ProjectCon
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public WorkspaceConfiguration createWorkspaceConfiguration()
   {
     WorkspaceConfigurationImpl workspaceConfiguration = new WorkspaceConfigurationImpl();
@@ -147,6 +148,7 @@ public class ProjectConfigFactoryImpl extends EFactoryImpl implements ProjectCon
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Project createProject()
   {
     ProjectImpl project = new ProjectImpl();
@@ -158,6 +160,7 @@ public class ProjectConfigFactoryImpl extends EFactoryImpl implements ProjectCon
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public PreferenceProfile createPreferenceProfile()
   {
     PreferenceProfileImpl preferenceProfile = new PreferenceProfileImpl();
@@ -169,6 +172,7 @@ public class ProjectConfigFactoryImpl extends EFactoryImpl implements ProjectCon
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public PreferenceFilter createPreferenceFilter()
   {
     PreferenceFilterImpl preferenceFilter = new PreferenceFilterImpl();
@@ -180,6 +184,7 @@ public class ProjectConfigFactoryImpl extends EFactoryImpl implements ProjectCon
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public InclusionPredicate createInclusionPredicate()
   {
     InclusionPredicateImpl inclusionPredicate = new InclusionPredicateImpl();
@@ -191,6 +196,7 @@ public class ProjectConfigFactoryImpl extends EFactoryImpl implements ProjectCon
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ExclusionPredicate createExclusionPredicate()
   {
     ExclusionPredicateImpl exclusionPredicate = new ExclusionPredicateImpl();
@@ -222,6 +228,7 @@ public class ProjectConfigFactoryImpl extends EFactoryImpl implements ProjectCon
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ProjectConfigPackage getProjectConfigPackage()
   {
     return (ProjectConfigPackage)getEPackage();

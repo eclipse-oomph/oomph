@@ -43,6 +43,7 @@ public final class Version implements Comparable<Version>
     return compareTo(other) > 0;
   }
 
+  @Override
   public int compareTo(Version o)
   {
     int result = major.compareTo(o.major);

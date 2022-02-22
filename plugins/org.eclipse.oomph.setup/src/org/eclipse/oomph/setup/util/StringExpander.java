@@ -59,7 +59,7 @@ public abstract class StringExpander
       "${0x1F}" //$NON-NLS-1$
   };
 
-  protected static final Map<String, String> CONTROL_CHARACTER_VALUES = new HashMap<String, String>();
+  protected static final Map<String, String> CONTROL_CHARACTER_VALUES = new HashMap<>();
 
   static
   {

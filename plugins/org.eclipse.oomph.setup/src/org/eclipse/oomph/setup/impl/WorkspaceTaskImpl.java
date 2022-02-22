@@ -81,6 +81,7 @@ public class WorkspaceTaskImpl extends SetupTaskImpl implements WorkspaceTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getLocation()
   {
     return location;
@@ -91,6 +92,7 @@ public class WorkspaceTaskImpl extends SetupTaskImpl implements WorkspaceTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setLocation(String newLocation)
   {
     String oldLocation = location;
@@ -200,11 +202,13 @@ public class WorkspaceTaskImpl extends SetupTaskImpl implements WorkspaceTask
     return 0;
   }
 
+  @Override
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     return !new File(getLocation()).isDirectory();
   }
 
+  @Override
   public void perform(SetupTaskContext context) throws Exception
   {
     new File(getLocation()).mkdirs();

@@ -49,6 +49,7 @@ public class NavigateHandler extends AbstractHandler
    * the command has been executed, so extract extract the needed information
    * from the application context.
    */
+  @Override
   public Object execute(ExecutionEvent event) throws ExecutionException
   {
     if (viewer != null)
@@ -80,7 +81,7 @@ public class NavigateHandler extends AbstractHandler
 
   public boolean updateSelection(IStructuredSelection selection)
   {
-    List<Object> targets = new ArrayList<Object>();
+    List<Object> targets = new ArrayList<>();
     for (Object object : selection.toArray())
     {
       if (object instanceof PreferenceNode)

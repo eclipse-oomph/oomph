@@ -83,6 +83,7 @@ public class BuilderPredicateImpl extends PredicateImpl implements BuilderPredic
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getBuilder()
   {
     return builder;
@@ -93,6 +94,7 @@ public class BuilderPredicateImpl extends PredicateImpl implements BuilderPredic
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setBuilder(String newBuilder)
   {
     String oldBuilder = builder;

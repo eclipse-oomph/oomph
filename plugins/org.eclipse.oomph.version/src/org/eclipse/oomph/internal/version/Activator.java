@@ -139,7 +139,7 @@ public class Activator extends Plugin
       if (root.nodeExists(PREFERENCE_NODE))
       {
         Preferences node = root.node(PREFERENCE_NODE);
-        return new HashSet<String>(Arrays.asList(node.keys()));
+        return new HashSet<>(Arrays.asList(node.keys()));
       }
     }
     catch (BackingStoreException ex)

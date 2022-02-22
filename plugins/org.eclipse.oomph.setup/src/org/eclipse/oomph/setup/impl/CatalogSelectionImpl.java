@@ -129,11 +129,12 @@ public class CatalogSelectionImpl extends ModelElementImpl implements CatalogSel
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<ProductCatalog> getProductCatalogs()
   {
     if (productCatalogs == null)
     {
-      productCatalogs = new EObjectResolvingEList<ProductCatalog>(ProductCatalog.class, this, SetupPackage.CATALOG_SELECTION__PRODUCT_CATALOGS);
+      productCatalogs = new EObjectResolvingEList<>(ProductCatalog.class, this, SetupPackage.CATALOG_SELECTION__PRODUCT_CATALOGS);
     }
     return productCatalogs;
   }
@@ -143,11 +144,12 @@ public class CatalogSelectionImpl extends ModelElementImpl implements CatalogSel
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<ProjectCatalog> getProjectCatalogs()
   {
     if (projectCatalogs == null)
     {
-      projectCatalogs = new EObjectResolvingEList<ProjectCatalog>(ProjectCatalog.class, this, SetupPackage.CATALOG_SELECTION__PROJECT_CATALOGS);
+      projectCatalogs = new EObjectResolvingEList<>(ProjectCatalog.class, this, SetupPackage.CATALOG_SELECTION__PROJECT_CATALOGS);
     }
     return projectCatalogs;
   }
@@ -157,11 +159,12 @@ public class CatalogSelectionImpl extends ModelElementImpl implements CatalogSel
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EMap<Product, ProductVersion> getDefaultProductVersions()
   {
     if (defaultProductVersions == null)
     {
-      defaultProductVersions = new EcoreEMap<Product, ProductVersion>(SetupPackage.Literals.PRODUCT_TO_PRODUCT_VERSION_MAP_ENTRY,
+      defaultProductVersions = new EcoreEMap<>(SetupPackage.Literals.PRODUCT_TO_PRODUCT_VERSION_MAP_ENTRY,
           ProductToProductVersionMapEntryImpl.class, this, SetupPackage.CATALOG_SELECTION__DEFAULT_PRODUCT_VERSIONS);
     }
     return defaultProductVersions;
@@ -172,11 +175,12 @@ public class CatalogSelectionImpl extends ModelElementImpl implements CatalogSel
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EMap<Project, Stream> getDefaultStreams()
   {
     if (defaultStreams == null)
     {
-      defaultStreams = new EcoreEMap<Project, Stream>(SetupPackage.Literals.PROJECT_TO_STREAM_MAP_ENTRY, ProjectToStreamMapEntryImpl.class, this,
+      defaultStreams = new EcoreEMap<>(SetupPackage.Literals.PROJECT_TO_STREAM_MAP_ENTRY, ProjectToStreamMapEntryImpl.class, this,
           SetupPackage.CATALOG_SELECTION__DEFAULT_STREAMS);
     }
     return defaultStreams;
@@ -189,6 +193,7 @@ public class CatalogSelectionImpl extends ModelElementImpl implements CatalogSel
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public EList<Stream> getSelectedStreams()
   {
     if (selectedStreams == null)
@@ -208,7 +213,7 @@ public class CatalogSelectionImpl extends ModelElementImpl implements CatalogSel
         @Override
         protected List<Stream> delegateBasicList()
         {
-          return new AbstractSequentialList<Stream>()
+          return new AbstractSequentialList<>()
           {
             @Override
             public ListIterator<Stream> listIterator(int index)
@@ -274,7 +279,7 @@ public class CatalogSelectionImpl extends ModelElementImpl implements CatalogSel
         @Override
         protected void delegateClear()
         {
-          for (Stream stream : new ArrayList<Stream>(this))
+          for (Stream stream : new ArrayList<>(this))
           {
             ProjectToStreamMapEntryImpl entry = getEntry(stream, true);
             entry.setSelection(false);

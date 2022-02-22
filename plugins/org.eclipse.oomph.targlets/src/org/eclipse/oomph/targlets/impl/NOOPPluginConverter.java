@@ -27,18 +27,21 @@ import java.util.Dictionary;
  */
 public final class NOOPPluginConverter implements PluginConverter
 {
+  @Override
   public File convertManifest(File pluginBaseLocation, File bundleManifestLocation, boolean compatibilityManifest, String target, boolean analyseJars,
       Dictionary<String, String> devProperties) throws PluginConversionException
   {
     return null;
   }
 
+  @Override
   public Dictionary<String, String> convertManifest(File pluginBaseLocation, boolean compatibility, String target, boolean analyseJars,
       Dictionary<String, String> devProperties) throws PluginConversionException
   {
     return null;
   }
 
+  @Override
   public void writeManifest(File generationLocation, Dictionary<String, String> manifestToWrite, boolean compatibilityManifest) throws PluginConversionException
   {
     // Do nothing.

@@ -60,6 +60,7 @@ import org.eclipse.emf.edit.ui.provider.ExtendedColorRegistry;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -130,6 +131,10 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
   private static final String WEB_LINKS_MENU_ITEM_TEXT = Messages.SimpleInstallerDialog_WebLinks_label + StringUtil.HORIZONTAL_ELLIPSIS;
 
   static final String WEB_LINKS_MENU_ITEM_DESCRIPTION = Messages.SimpleInstallerDialog_WebLinks_message;
+
+  private static final String TRUST_MENU_ITEM_TEXT = Messages.SimpleInstallerDialog_Trust_label + StringUtil.HORIZONTAL_ELLIPSIS;
+
+  static final String TRUST_MENU_ITEM_DESCRIPTION = Messages.SimpleInstallerDialog_Trust_message;
 
   private static final String MARKET_PLACE_MENU_ITEM_TEXT = Messages.SimpleInstallerDialog_Marketplace_label + StringUtil.HORIZONTAL_ELLIPSIS;
 
@@ -383,6 +388,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
 
     display.timerExec(500, new Runnable()
     {
+      @Override
       public void run()
       {
         installer.getResourceSet().getLoadOptions().put(ECFURIHandlerImpl.OPTION_CACHE_HANDLING, ECFURIHandlerImpl.CacheHandling.CACHE_WITHOUT_ETAG_CHECKING);
@@ -395,6 +401,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
 
     final PropertyChangeListener catalogManagerListener = new PropertyChangeListener()
     {
+      @Override
       public void propertyChange(PropertyChangeEvent evt)
       {
         if (CatalogManager.PROPERTY_INDEX.equals(evt.getPropertyName()))
@@ -407,6 +414,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
 
     addDisposeListener(new DisposeListener()
     {
+      @Override
       public void widgetDisposed(DisposeEvent e)
       {
         catalogManager.removePropertyChangeListener(catalogManagerListener);
@@ -598,6 +606,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
       {
         Runnable successRunnable = new Runnable()
         {
+          @Override
           public void run()
           {
             restart();
@@ -606,6 +615,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
 
         ExceptionHandler<CoreException> exceptionHandler = new ExceptionHandler<CoreException>()
         {
+          @Override
           public void handleException(CoreException ex)
           {
             ErrorDialog.open(ex);
@@ -781,6 +791,21 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
       }
     });
 
+    {
+      SimpleInstallerMenu.InstallerMenuItem trustMenuItem = new SimpleInstallerMenu.InstallerMenuItem(menu);
+      trustMenuItem.setText(TRUST_MENU_ITEM_TEXT);
+      trustMenuItem.setToolTipText(TRUST_MENU_ITEM_DESCRIPTION);
+      trustMenuItem.addSelectionListener(new SelectionAdapter()
+      {
+        @Override
+        public void widgetSelected(SelectionEvent e)
+        {
+          Dialog dialog = new TrustDialog(getShell());
+          dialog.open();
+        }
+      });
+    }
+
     if (MARKETPLACE_MENU_ITEM_ENABLED)
     {
       SimpleInstallerMenu.InstallerMenuItem marketPlaceItem = new SimpleInstallerMenu.InstallerMenuItem(menu);
@@ -941,6 +966,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
     }
   }
 
+  @Override
   public boolean refreshJREs()
   {
     if (variablePage != null)
@@ -951,6 +977,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
     return false;
   }
 
+  @Override
   public void showAbout()
   {
     String version = SelfUpdate.getProductVersion();
@@ -1084,6 +1111,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
       {
         UIUtil.asyncExec(originalFocusControl, new Runnable()
         {
+          @Override
           public void run()
           {
             Control focusControl = getShell().getDisplay().getFocusControl();
@@ -1097,6 +1125,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
 
       currentMessage = new SimpleMessageOverlay(this, type, new ControlRelocator()
       {
+        @Override
         public void relocate(Control control)
         {
           Rectangle bounds = SimpleInstallerDialog.this.getBounds();
@@ -1798,6 +1827,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
      */
     private class Animator implements Runnable
     {
+      @Override
       public void run()
       {
         if (animator == this && !isDisposed())
@@ -1865,6 +1895,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
         {
           display.asyncExec(new Runnable()
           {
+            @Override
             public void run()
             {
               updateAvailable(true);

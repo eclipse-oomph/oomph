@@ -25,19 +25,15 @@ import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.P2Package;
 import org.eclipse.oomph.p2.Repository;
 import org.eclipse.oomph.p2.Requirement;
-import org.eclipse.oomph.p2.core.CertificateConfirmer;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.preferences.impl.PreferencesURIHandlerImpl;
 import org.eclipse.oomph.preferences.util.PreferencesUtil;
 import org.eclipse.oomph.setup.AnnotationConstants;
-import org.eclipse.oomph.setup.CertificateInfo;
-import org.eclipse.oomph.setup.CertificatePolicy;
 import org.eclipse.oomph.setup.Configuration;
 import org.eclipse.oomph.setup.Macro;
 import org.eclipse.oomph.setup.Parameter;
 import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.SetupFactory;
-import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.impl.ResourceCopyTaskImpl;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupCorePlugin;
@@ -98,7 +94,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
-import java.security.cert.Certificate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -299,7 +294,7 @@ public final class SetupCoreUtil
       protected Map<?, ?> getContentDescriptionOptions()
       {
         Map<?, ?> contentDescriptionOptions = super.getContentDescriptionOptions();
-        Map<Object, Object> result = new HashMap<Object, Object>(contentDescriptionOptions);
+        Map<Object, Object> result = new HashMap<>(contentDescriptionOptions);
         result.putAll(resourceSet.getLoadOptions());
         return result;
       }
@@ -315,7 +310,7 @@ public final class SetupCoreUtil
 
     class ModelResourceSet extends ResourceSetImpl
     {
-      private Map<Resource, Resource> redirectedResources = new HashMap<Resource, Resource>();
+      private Map<Resource, Resource> redirectedResources = new HashMap<>();
 
       public ModelResourceSet()
       {
@@ -519,7 +514,7 @@ public final class SetupCoreUtil
             {
               IOUtil.copy(in, out);
               byte[] bytes = out.toByteArray();
-              ZIPS.put(uri, new WeakReference<byte[]>(bytes));
+              ZIPS.put(uri, new WeakReference<>(bytes));
               return new ByteArrayInputStream(bytes);
             }
             catch (IORuntimeException ex)
@@ -574,7 +569,7 @@ public final class SetupCoreUtil
               {
                 IOUtil.copy(zipInputStream, output);
                 byte[] bytes = output.toByteArray();
-                ZIPS.put(entryURI, new WeakReference<byte[]>(bytes));
+                ZIPS.put(entryURI, new WeakReference<>(bytes));
                 if (entryURI.equals(uri))
                 {
                   result = bytes;
@@ -612,7 +607,7 @@ public final class SetupCoreUtil
     Map<Object, Object> safeProperties;
     synchronized (properties)
     {
-      safeProperties = new HashMap<Object, Object>(properties);
+      safeProperties = new HashMap<>(properties);
     }
 
     for (Map.Entry<Object, Object> entry : safeProperties.entrySet())
@@ -682,10 +677,10 @@ public final class SetupCoreUtil
     URI indexSetupArchiveLocation = uriConverter.normalize(SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI);
     if (archiveExpectedETag == null || !archiveExpectedETag.equals(ECFURIHandlerImpl.getExpectedETag(indexSetupArchiveLocation)))
     {
-      Map<Object, Object> options = new HashMap<Object, Object>();
+      Map<Object, Object> options = new HashMap<>();
       options.put(ECFURIHandlerImpl.OPTION_CACHE_HANDLING, ECFURIHandlerImpl.CacheHandling.CACHE_WITH_ETAG_CHECKING);
 
-      final Map<URI, URI> redirections = new HashMap<URI, URI>();
+      final Map<URI, URI> redirections = new HashMap<>();
       Resource archiveResource = new ArchiveResourceImpl(SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI, uriConverter)
       {
         @Override
@@ -802,7 +797,7 @@ public final class SetupCoreUtil
 
     URI statusURI = null;
 
-    List<String> names = new ArrayList<String>();
+    List<String> names = new ArrayList<>();
     for (Scope x = scope; x != null; x = x.getParentScope())
     {
       if (SetupContext.isUserScheme(EcoreUtil.getURI(x).scheme()))
@@ -857,66 +852,6 @@ public final class SetupCoreUtil
     }
 
     return null;
-  }
-
-  public static CertificateConfirmer createCertificateConfirmer(final User user, final boolean saveChangedUser)
-  {
-    Boolean propPolicy = PropertiesUtil.getBoolean(SetupProperties.PROP_SETUP_CERTIFICATE_POLICY);
-    if (propPolicy != null)
-    {
-      return propPolicy ? CertificateConfirmer.ACCEPT : CertificateConfirmer.DECLINE;
-    }
-
-    if (user != null)
-    {
-      CertificatePolicy userPolicy = user.getCertificatePolicy();
-      if (userPolicy == CertificatePolicy.ACCEPT)
-      {
-        return CertificateConfirmer.ACCEPT;
-      }
-
-      return new CertificateConfirmer()
-      {
-        @Override
-        public boolean isTrusted(Certificate[] certificateChain)
-        {
-          EList<CertificateInfo> acceptedCertificates = user.getAcceptedCertificates();
-          for (Certificate certificate : certificateChain)
-          {
-            if (acceptedCertificates.contains(new CertificateInfo(certificate)))
-            {
-              return true;
-            }
-          }
-
-          return false;
-        }
-
-        @Override
-        public void trust(Certificate[] certificateChain)
-        {
-          if (certificateChain == null)
-          {
-            user.setCertificatePolicy(CertificatePolicy.ACCEPT);
-          }
-          else
-          {
-            EList<CertificateInfo> acceptedCertificates = user.getAcceptedCertificates();
-            for (Certificate certificate : certificateChain)
-            {
-              acceptedCertificates.add(new CertificateInfo(certificate));
-            }
-          }
-
-          if (saveChangedUser)
-          {
-            BaseUtil.saveEObject(user);
-          }
-        }
-      };
-    }
-
-    return CertificateConfirmer.ALWAYS_PROMPT;
   }
 
   /**
@@ -1185,6 +1120,7 @@ public final class SetupCoreUtil
                   targetContainer = demandCreatedTargetContainer;
                   addToContainer = new Runnable()
                   {
+                    @Override
                     public void run()
                     {
                       targetValues.add(demandCreatedTargetContainer);
@@ -1203,6 +1139,7 @@ public final class SetupCoreUtil
                 addToContainer = new Runnable()
                 {
 
+                  @Override
                   public void run()
                   {
                     copyEObject.eSet(eReference, demandCreatedTargetContainer);
@@ -1334,8 +1271,8 @@ public final class SetupCoreUtil
     public Collection<? extends EObject> migrate(Collection<EObject> result)
     {
       MigrationCopier migrationCopier = new MigrationCopier(resource.getResourceSet().getPackageRegistry());
-      Set<EObject> allContainedObjects = new HashSet<EObject>();
-      Set<EObject> allCrossReferencedObjects = new HashSet<EObject>();
+      Set<EObject> allContainedObjects = new HashSet<>();
+      Set<EObject> allCrossReferencedObjects = new HashSet<>();
       for (Iterator<EObject> it = resource.getAllContents(); it.hasNext();)
       {
         EObject containedEObject = it.next();
@@ -1392,7 +1329,7 @@ public final class SetupCoreUtil
         throw runtimeException;
       }
 
-      Set<ModelElement> annotatedModelElements = new LinkedHashSet<ModelElement>();
+      Set<ModelElement> annotatedModelElements = new LinkedHashSet<>();
       for (TreeIterator<Object> it = EcoreUtil.getAllContents(result); it.hasNext();)
       {
         Object object = it.next();

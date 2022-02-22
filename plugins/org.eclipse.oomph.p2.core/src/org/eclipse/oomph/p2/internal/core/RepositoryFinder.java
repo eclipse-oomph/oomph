@@ -29,11 +29,12 @@ public class RepositoryFinder implements IApplication
 {
   private static final boolean SUPPRESS_STATS = PropertiesUtil.isProperty("suppress.stats"); //$NON-NLS-1$
 
+  @Override
   public Object start(IApplicationContext context) throws Exception
   {
     String[] arguments = (String[])context.getArguments().get(IApplicationContext.APPLICATION_ARGS);
     Pattern pattern = Pattern.compile(arguments[0]);
-    List<String> urls = new ArrayList<String>();
+    List<String> urls = new ArrayList<>();
 
     Repository[] repositories = P2Index.INSTANCE.getRepositories();
     if (repositories != null)
@@ -62,6 +63,7 @@ public class RepositoryFinder implements IApplication
     return null;
   }
 
+  @Override
   public void stop()
   {
   }

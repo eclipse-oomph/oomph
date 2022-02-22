@@ -88,12 +88,12 @@ public final class PreferencesUtil
 
   public static final String SECURE_NODE = "secure"; //$NON-NLS-1$
 
-  public static final Set<String> ALL_CHILD_NODES = Collections.unmodifiableSet(new LinkedHashSet<String>(
+  public static final Set<String> ALL_CHILD_NODES = Collections.unmodifiableSet(new LinkedHashSet<>(
       Arrays.asList(new String[] { SECURE_NODE, BUNDLE_DEFAULTS_NODE, DEFAULT_NODE, CONFIRGURATION_NODE, INSTANCE_NODE, PROJECT_NODE })));
 
   private static final IEclipsePreferences ROOT = Platform.getPreferencesService().getRootNode();
 
-  private static final Map<ISecurePreferences, ISecurePreferences> WRAPPERS = new HashMap<ISecurePreferences, ISecurePreferences>();
+  private static final Map<ISecurePreferences, ISecurePreferences> WRAPPERS = new HashMap<>();
 
   @SuppressWarnings("restriction")
   public static ISecurePreferences getSecurePreferences()
@@ -231,8 +231,8 @@ public final class PreferencesUtil
       throws BackingStoreException
   {
     boolean isModified = false;
-    Set<IEclipsePreferences> result = new LinkedHashSet<IEclipsePreferences>();
-    Set<String> childNames = new HashSet<String>(Arrays.asList(preferences.childrenNames()));
+    Set<IEclipsePreferences> result = new LinkedHashSet<>();
+    Set<String> childNames = new HashSet<>(Arrays.asList(preferences.childrenNames()));
     for (PreferenceNode child : preferenceNode.getChildren())
     {
       String name = child.getName();
@@ -257,7 +257,7 @@ public final class PreferencesUtil
       preferences.node(name).removeNode();
     }
 
-    Set<String> propertyNames = new HashSet<String>(Arrays.asList(preferences.keys()));
+    Set<String> propertyNames = new HashSet<>(Arrays.asList(preferences.keys()));
     for (Property property : preferenceNode.getProperties())
     {
       String name = property.getName();
@@ -1012,7 +1012,7 @@ public final class PreferencesUtil
    */
   private static class SecurePreferenceWapper implements IEclipsePreferences, ISecurePreferences
   {
-    private static final WeakHashMap<ISecurePreferences, SecurePreferenceWapper> WRAPPERS = new WeakHashMap<ISecurePreferences, PreferencesUtil.SecurePreferenceWapper>();
+    private static final WeakHashMap<ISecurePreferences, SecurePreferenceWapper> WRAPPERS = new WeakHashMap<>();
 
     public static SecurePreferenceWapper create(ISecurePreferences preferences)
     {
@@ -1034,36 +1034,43 @@ public final class PreferencesUtil
 
     private final ISecurePreferences preferences;
 
+    @Override
     public void put(String key, String value, boolean encrypt) throws StorageException
     {
       preferences.put(key, value, encrypt);
     }
 
+    @Override
     public void putInt(String key, int value, boolean encrypt) throws StorageException
     {
       preferences.putInt(key, value, encrypt);
     }
 
+    @Override
     public void putLong(String key, long value, boolean encrypt) throws StorageException
     {
       preferences.putLong(key, value, encrypt);
     }
 
+    @Override
     public void putBoolean(String key, boolean value, boolean encrypt) throws StorageException
     {
       preferences.putBoolean(key, value, encrypt);
     }
 
+    @Override
     public void putFloat(String key, float value, boolean encrypt) throws StorageException
     {
       preferences.putFloat(key, value, encrypt);
     }
 
+    @Override
     public void putDouble(String key, double value, boolean encrypt) throws StorageException
     {
       preferences.putDouble(key, value, encrypt);
     }
 
+    @Override
     public void putByteArray(String key, byte[] value, boolean encrypt) throws StorageException
     {
       preferences.putByteArray(key, value, encrypt);
@@ -1074,6 +1081,7 @@ public final class PreferencesUtil
       this.preferences = preferences;
     }
 
+    @Override
     public boolean isEncrypted(String key)
     {
       try
@@ -1091,6 +1099,7 @@ public final class PreferencesUtil
       return new RuntimeException(exception);
     }
 
+    @Override
     public void put(String key, String value)
     {
       try
@@ -1103,6 +1112,7 @@ public final class PreferencesUtil
       }
     }
 
+    @Override
     public String get(String key, String def)
     {
       try
@@ -1115,24 +1125,29 @@ public final class PreferencesUtil
       }
     }
 
+    @Override
     public void remove(String key)
     {
       preferences.remove(key);
     }
 
+    @Override
     public void addNodeChangeListener(INodeChangeListener listener)
     {
     }
 
+    @Override
     public void removeNodeChangeListener(INodeChangeListener listener)
     {
     }
 
+    @Override
     public void clear()
     {
       preferences.clear();
     }
 
+    @Override
     public void putInt(String key, int value)
     {
       try
@@ -1145,14 +1160,17 @@ public final class PreferencesUtil
       }
     }
 
+    @Override
     public void addPreferenceChangeListener(IPreferenceChangeListener listener)
     {
     }
 
+    @Override
     public void removePreferenceChangeListener(IPreferenceChangeListener listener)
     {
     }
 
+    @Override
     public int getInt(String key, int def)
     {
       try
@@ -1165,16 +1183,19 @@ public final class PreferencesUtil
       }
     }
 
+    @Override
     public void removeNode()
     {
       preferences.removeNode();
     }
 
+    @Override
     public SecurePreferenceWapper node(String path)
     {
       return create(preferences.node(path));
     }
 
+    @Override
     public void putLong(String key, long value)
     {
       try
@@ -1187,6 +1208,7 @@ public final class PreferencesUtil
       }
     }
 
+    @Override
     public void accept(IPreferenceNodeVisitor visitor) throws BackingStoreException
     {
       if (visitor.visit(this))
@@ -1198,6 +1220,7 @@ public final class PreferencesUtil
       }
     }
 
+    @Override
     public long getLong(String key, long def)
     {
       try
@@ -1210,6 +1233,7 @@ public final class PreferencesUtil
       }
     }
 
+    @Override
     public void putBoolean(String key, boolean value)
     {
       try
@@ -1222,6 +1246,7 @@ public final class PreferencesUtil
       }
     }
 
+    @Override
     public boolean getBoolean(String key, boolean def)
     {
       try
@@ -1234,6 +1259,7 @@ public final class PreferencesUtil
       }
     }
 
+    @Override
     public void putFloat(String key, float value)
     {
       try
@@ -1246,6 +1272,7 @@ public final class PreferencesUtil
       }
     }
 
+    @Override
     public float getFloat(String key, float def)
     {
       try
@@ -1258,6 +1285,7 @@ public final class PreferencesUtil
       }
     }
 
+    @Override
     public void putDouble(String key, double value)
     {
       try
@@ -1270,6 +1298,7 @@ public final class PreferencesUtil
       }
     }
 
+    @Override
     public double getDouble(String key, double def)
     {
       try
@@ -1282,6 +1311,7 @@ public final class PreferencesUtil
       }
     }
 
+    @Override
     public void putByteArray(String key, byte[] value)
     {
       try
@@ -1294,6 +1324,7 @@ public final class PreferencesUtil
       }
     }
 
+    @Override
     public byte[] getByteArray(String key, byte[] def)
     {
       try
@@ -1306,36 +1337,43 @@ public final class PreferencesUtil
       }
     }
 
+    @Override
     public String[] keys()
     {
       return preferences.keys();
     }
 
+    @Override
     public String[] childrenNames()
     {
       return preferences.childrenNames();
     }
 
+    @Override
     public SecurePreferenceWapper parent()
     {
       return create(preferences.parent());
     }
 
+    @Override
     public boolean nodeExists(String pathName)
     {
       return preferences.nodeExists(pathName);
     }
 
+    @Override
     public String name()
     {
       return preferences.name();
     }
 
+    @Override
     public String absolutePath()
     {
       return preferences.absolutePath();
     }
 
+    @Override
     public void flush()
     {
       try
@@ -1348,6 +1386,7 @@ public final class PreferencesUtil
       }
     }
 
+    @Override
     public void sync() throws BackingStoreException
     {
       flush();
@@ -1482,6 +1521,7 @@ public final class PreferencesUtil
       return type == PreferencesAdapter.class;
     }
 
+    @Override
     public void preferenceChange(PreferenceChangeEvent event)
     {
       for (StackTraceElement stackTraceElement : Thread.currentThread().getStackTrace())
@@ -1573,6 +1613,7 @@ public final class PreferencesUtil
       }
     }
 
+    @Override
     public void added(NodeChangeEvent event)
     {
       PreferenceNode preferenceNode = (PreferenceNode)target;
@@ -1618,6 +1659,7 @@ public final class PreferencesUtil
       }
     }
 
+    @Override
     public void removed(NodeChangeEvent event)
     {
       PreferenceNode preferenceNode = (PreferenceNode)target;

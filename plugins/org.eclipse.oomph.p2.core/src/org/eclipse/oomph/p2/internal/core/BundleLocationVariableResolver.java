@@ -28,6 +28,7 @@ import java.io.IOException;
  */
 public class BundleLocationVariableResolver implements IDynamicVariableResolver
 {
+  @Override
   public String resolveValue(IDynamicVariable variable, String symbolicName) throws CoreException
   {
     if (!StringUtil.isEmpty(symbolicName))

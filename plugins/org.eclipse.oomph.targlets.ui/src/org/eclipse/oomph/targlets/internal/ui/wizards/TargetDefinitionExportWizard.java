@@ -43,6 +43,7 @@ public class TargetDefinitionExportWizard extends Wizard implements IExportWizar
     setDefaultPageImageDescriptor(TargletsUIPlugin.INSTANCE.getImageDescriptor("target_wiz.png")); //$NON-NLS-1$
   }
 
+  @Override
   public void init(IWorkbench workbench, IStructuredSelection selection)
   {
   }

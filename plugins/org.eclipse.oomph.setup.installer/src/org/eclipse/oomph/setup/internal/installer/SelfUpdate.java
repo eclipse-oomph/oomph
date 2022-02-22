@@ -146,6 +146,7 @@ public class SelfUpdate
     final UICallback callback = new UICallback(shell, NLS.bind(Messages.SelfUpdate_Update_title, shellText));
     callback.runInProgressDialog(false, new IRunnable()
     {
+      @Override
       public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
       {
         boolean originalBetterMirrorSelection = CachingRepositoryManager.enableBetterMirrorSelection();
@@ -156,6 +157,7 @@ public class SelfUpdate
 
           callback.execInUI(true, new Runnable()
           {
+            @Override
             public void run()
             {
               if (successRunnable != null)

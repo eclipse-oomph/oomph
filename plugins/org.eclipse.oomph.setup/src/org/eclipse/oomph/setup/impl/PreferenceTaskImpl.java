@@ -162,6 +162,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getKey()
   {
     return key;
@@ -182,6 +183,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
     }
   }
 
+  @Override
   public void setKey(String newKey)
   {
     setKeyGen(CommonUtil.intern(newKey));
@@ -193,6 +195,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getValue()
   {
     return value;
@@ -203,6 +206,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setValue(String newValue)
   {
     String oldValue = value;
@@ -352,6 +356,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
     return 0;
   }
 
+  @Override
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     if (StringUtil.isEmpty(key))
@@ -366,6 +371,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
     return getPreferenceHandler().isNeeded(oldValue, newValue);
   }
 
+  @Override
   public void perform(SetupTaskContext context) throws Exception
   {
     final String key = getKey();
@@ -389,6 +395,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
 
     performUI(context, new RunnableWithContext()
     {
+      @Override
       public void run(SetupTaskContext context) throws Exception
       {
         String mergedValue = preferenceHandler.merge();
@@ -405,80 +412,96 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
   {
     SetupTaskContext context = new SetupTaskContext()
     {
+      @Override
       public boolean isCanceled()
       {
         return false;
       }
 
+      @Override
       public void log(String line)
       {
         // Do nothing.
       }
 
+      @Override
       public void log(String line, Severity severity)
       {
         // Do nothing.
       }
 
+      @Override
       public void log(String line, boolean filter)
       {
         // Do nothing.
       }
 
+      @Override
       public void log(String line, boolean filter, Severity severity)
       {
         // Do nothing.
       }
 
+      @Override
       public void log(IStatus status)
       {
         // Do nothing.
       }
 
+      @Override
       public void log(Throwable t)
       {
         // Do nothing.
       }
 
+      @Override
       public void task(SetupTask setupTask)
       {
         // Do nothing.
       }
 
+      @Override
       public void setTerminating()
       {
         // Do nothing.
       }
 
+      @Override
       public IProgressMonitor getProgressMonitor(boolean working)
       {
         return new NullProgressMonitor();
       }
 
+      @Override
       public SetupPrompter getPrompter()
       {
         return new SetupPrompter()
         {
+          @Override
           public OS getOS()
           {
             return OS.INSTANCE;
           }
 
+          @Override
           public String getVMPath()
           {
             return null;
           }
 
+          @Override
           public UserCallback getUserCallback()
           {
             return callback;
           }
 
+          @Override
           public String getValue(VariableTask variable)
           {
             throw new UnsupportedOperationException();
           }
 
+          @Override
           public boolean promptVariables(List<? extends SetupTaskContext> performers)
           {
             throw new UnsupportedOperationException();
@@ -486,126 +509,151 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
         };
       }
 
+      @Override
       public Trigger getTrigger()
       {
         throw new UnsupportedOperationException();
       }
 
+      @Override
       public void checkCancelation()
       {
         // Do nothing.
       }
 
+      @Override
       public boolean isSelfHosting()
       {
         throw new UnsupportedOperationException();
       }
 
+      @Override
       public boolean isPerforming()
       {
         throw new UnsupportedOperationException();
       }
 
+      @Override
       public boolean isOffline()
       {
         throw new UnsupportedOperationException();
       }
 
+      @Override
       public boolean isMirrors()
       {
         throw new UnsupportedOperationException();
       }
 
+      @Override
       public boolean isRestartNeeded()
       {
         throw new UnsupportedOperationException();
       }
 
+      @Override
       public void setRestartNeeded(String reason)
       {
         // Do nothing.
       }
 
+      @Override
       public User getUser()
       {
         throw new UnsupportedOperationException();
       }
 
+      @Override
       public Workspace getWorkspace()
       {
         throw new UnsupportedOperationException();
       }
 
+      @Override
       public Installation getInstallation()
       {
         throw new UnsupportedOperationException();
       }
 
+      @Override
       public File getInstallationLocation()
       {
         throw new UnsupportedOperationException();
       }
 
+      @Override
       public File getProductLocation()
       {
         throw new UnsupportedOperationException();
       }
 
+      @Override
       public File getProductConfigurationLocation()
       {
         throw new UnsupportedOperationException();
       }
 
+      @Override
       public File getWorkspaceLocation()
       {
         throw new UnsupportedOperationException();
       }
 
+      @Override
       public String getRelativeProductFolder()
       {
         throw new UnsupportedOperationException();
       }
 
+      @Override
       public OS getOS()
       {
         throw new UnsupportedOperationException();
       }
 
+      @Override
       public URIConverter getURIConverter()
       {
         throw new UnsupportedOperationException();
       }
 
+      @Override
       public URI redirect(URI uri)
       {
         return uri;
       }
 
+      @Override
       public String redirect(String uri)
       {
         return uri;
       }
 
+      @Override
       public Object get(Object key)
       {
         return null;
       }
 
+      @Override
       public Object put(Object key, Object value)
       {
         throw new UnsupportedOperationException();
       }
 
+      @Override
       public Set<Object> keySet()
       {
         return Collections.emptySet();
       }
 
+      @Override
       public String getLauncherName()
       {
         throw new UnsupportedOperationException();
       }
 
+      @Override
       public boolean matchesFilterContext(String filter)
       {
         return false;
@@ -683,15 +731,18 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
           DocumentBuilder documentBuilder = XMLUtil.createDocumentBuilder();
           documentBuilder.setErrorHandler(new ErrorHandler()
           {
+            @Override
             public void warning(SAXParseException exception) throws SAXException
             {
             }
 
+            @Override
             public void fatalError(SAXParseException exception) throws SAXException
             {
               throw exception;
             }
 
+            @Override
             public void error(SAXParseException exception) throws SAXException
             {
             }
@@ -741,6 +792,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
       uriMappingRegistryImpl.put(URI.createURI("//instance/foo/bar/"), null); //$NON-NLS-1$
       uriMappingRegistryImpl.put(URI.createURI("//instance"), new Factory() //$NON-NLS-1$
       {
+        @Override
         public PreferenceHandler create(URI key)
         {
           return null;
@@ -803,6 +855,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
       PreferenceHandlerFactoryRegistry registry = (PreferenceHandlerFactoryRegistry)Factory.Registry.INSTANCE;
       registry.put(URI.createURI(key), new Factory()
       {
+        @Override
         public PreferenceHandler create(URI key)
         {
           return new ListPreferenceHandler(key, itemPattern, keyPattern, itemSeparatorStr);
@@ -820,6 +873,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
       PreferenceHandlerFactoryRegistry registry = (PreferenceHandlerFactoryRegistry)Factory.Registry.INSTANCE;
       registry.put(URI.createURI("//"), new Factory() //$NON-NLS-1$
       {
+        @Override
         public PreferenceHandler create(URI key)
         {
           return new PreferenceHandler(key);
@@ -836,6 +890,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
 
       registry.put(URI.createURI("//instance/org.eclipse.ui.workbench/"), new Factory() //$NON-NLS-1$
       {
+        @Override
         public PreferenceHandler create(URI key)
         {
           String lastSegment = key.lastSegment();
@@ -867,6 +922,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
 
       registry.put(URI.createURI("//instance/org.eclipse.core.runtime/content-types/"), new Factory() //$NON-NLS-1$
       {
+        @Override
         public PreferenceHandler create(URI key)
         {
           if (key.segmentCount() == 4)
@@ -889,6 +945,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
 
       registry.put(URI.createURI("//instance/org.eclipse.jdt.core/"), new Factory() //$NON-NLS-1$
       {
+        @Override
         public PreferenceHandler create(URI key)
         {
           String lastSegment = key.lastSegment();
@@ -903,6 +960,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
 
       registry.put(URI.createURI("//instance/org.eclipse.jdt.ui/"), new Factory() //$NON-NLS-1$
       {
+        @Override
         public PreferenceHandler create(URI key)
         {
           String lastSegment = key.lastSegment();
@@ -924,6 +982,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
 
       registry.put(URI.createURI("//instance/org.eclipse.jdt.ui/org.eclipse.jdt.ui.formatterprofiles"), new Factory() //$NON-NLS-1$
       {
+        @Override
         public PreferenceHandler create(URI key)
         {
           return new XMLPreferenceHandler(key, "profile", new String[] { "name" }, null); //$NON-NLS-1$ //$NON-NLS-2$
@@ -932,6 +991,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
 
       registry.put(URI.createURI("//instance/org.eclipse.jdt.ui/formatter_profile"), new Factory() //$NON-NLS-1$
       {
+        @Override
         public PreferenceHandler create(URI key)
         {
           return new JDTProfileChoicePreferenceHandler(key, "formatter"); //$NON-NLS-1$
@@ -940,6 +1000,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
 
       registry.put(URI.createURI("//instance/org.eclipse.jdt.ui/org.eclipse.jdt.ui.cleanupprofiles"), new Factory() //$NON-NLS-1$
       {
+        @Override
         public PreferenceHandler create(URI key)
         {
           return new XMLPreferenceHandler(key, "profile", new String[] { "name" }, null); //$NON-NLS-1$ //$NON-NLS-2$
@@ -948,6 +1009,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
 
       registry.put(URI.createURI("//instance/org.eclipse.jdt.ui/cleanup_profile"), new Factory() //$NON-NLS-1$
       {
+        @Override
         public PreferenceHandler create(URI key)
         {
           return new JDTProfileChoicePreferenceHandler(key, "cleanup"); //$NON-NLS-1$
@@ -956,6 +1018,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
 
       registry.put(URI.createURI("//instance/org.eclipse.team.core/file_types"), new Factory() //$NON-NLS-1$
       {
+        @Override
         public PreferenceHandler create(URI key)
         {
           return new TeamFileModePreferenceHandler(key);
@@ -964,6 +1027,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
 
       registry.put(URI.createURI("//instance/org.eclipse.team.core/cvs_mode_for_file_without_extensions"), new Factory() //$NON-NLS-1$
       {
+        @Override
         public PreferenceHandler create(URI key)
         {
           return new TeamFileModePreferenceHandler(key);
@@ -972,6 +1036,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
 
       registry.put(URI.createURI("//instance/org.eclipse.jdt.ui/org.eclipse.jdt.ui.text.custom_templates"), new Factory() //$NON-NLS-1$
       {
+        @Override
         public PreferenceHandler create(URI key)
         {
           return new XMLPreferenceHandler(key, "template", new String[] { "name" }, null); //$NON-NLS-1$ //$NON-NLS-2$
@@ -980,6 +1045,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
 
       registry.put(URI.createURI("//instance/org.eclipse.jdt.ui/org.eclipse.jdt.ui.text.custom_code_templates"), new Factory() //$NON-NLS-1$
       {
+        @Override
         public PreferenceHandler create(URI key)
         {
           return new XMLPreferenceHandler(key, "template", new String[] { "context", "description", "name" }, null); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
@@ -988,6 +1054,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
 
       registry.put(URI.createURI("//instance/org.eclipse.ant.ui/org.eclipse.ant.ui.customtemplates"), new Factory() //$NON-NLS-1$
       {
+        @Override
         public PreferenceHandler create(URI key)
         {
           return new XMLPreferenceHandler(key, "template", new String[] { "context", "description", "name" }, new String[] { "id" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
@@ -996,6 +1063,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
 
       registry.put(URI.createURI("//instance/org.eclipse.core.variables/org.eclipse.core.variables.valueVariables"), new Factory() //$NON-NLS-1$
       {
+        @Override
         public PreferenceHandler create(URI key)
         {
           return new XMLPreferenceHandler(key, "valueVariable", new String[] { "name" }, null); //$NON-NLS-1$ //$NON-NLS-2$
@@ -1004,6 +1072,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
 
       registry.put(URI.createURI("//instance/org.eclipse.m2e.editor.xml/org.eclipse.m2e.editor.xml.templates"), new Factory() //$NON-NLS-1$
       {
+        @Override
         public PreferenceHandler create(URI key)
         {
           return new XMLPreferenceHandler(key, "template", new String[] { "context", "description", "name" }, new String[] { "id" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
@@ -1012,6 +1081,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
 
       registry.put(URI.createURI("//instance/org.eclipse.cdt.ui/org.eclipse.cdt.ui.formatterprofiles"), new Factory() //$NON-NLS-1$
       {
+        @Override
         public PreferenceHandler create(URI key)
         {
           return new XMLPreferenceHandler(key, "profile", new String[] { "name" }, null); //$NON-NLS-1$ //$NON-NLS-2$
@@ -1020,6 +1090,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
 
       registry.put(URI.createURI("//instance/org.eclipse.cdt.ui/formatter_profile"), new Factory() //$NON-NLS-1$
       {
+        @Override
         public PreferenceHandler create(URI key)
         {
           return new CDTProfileChoicePreferenceHandler(key);
@@ -1028,6 +1099,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
 
       registry.put(URI.createURI("//instance/org.eclipse.cdt.core/"), new Factory() //$NON-NLS-1$
       {
+        @Override
         public PreferenceHandler create(URI key)
         {
           String lastSegment = key.lastSegment();
@@ -1088,13 +1160,13 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
 
     protected final String separator;
 
-    protected final Set<String> changedItems = new LinkedHashSet<String>();
+    protected final Set<String> changedItems = new LinkedHashSet<>();
 
-    protected final Map<String, Item> oldItems = new LinkedHashMap<String, Item>();
+    protected final Map<String, Item> oldItems = new LinkedHashMap<>();
 
-    protected final Map<String, Item> newItems = new LinkedHashMap<String, Item>();
+    protected final Map<String, Item> newItems = new LinkedHashMap<>();
 
-    protected final Map<String, Item> mergedItems = new LinkedHashMap<String, Item>();
+    protected final Map<String, Item> mergedItems = new LinkedHashMap<>();
 
     private boolean keyCollision;
 
@@ -1148,7 +1220,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
         }
       }
 
-      List<Item> oldItemValues = new ArrayList<Item>(oldItems.values());
+      List<Item> oldItemValues = new ArrayList<>(oldItems.values());
       StringBuilder result = new StringBuilder(oldItemValues.get(0).getHead());
       for (Iterator<Item> it = mergedItems.values().iterator(); it.hasNext();)
       {
@@ -1175,7 +1247,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
         return newValue;
       }
 
-      List<Item> itemValues = new ArrayList<Item>(oldItems.values());
+      List<Item> itemValues = new ArrayList<>(oldItems.values());
       StringBuilder result = new StringBuilder(itemValues.get(0).getHead());
       for (Iterator<String> it = changedItems.iterator(); it.hasNext();)
       {
@@ -1194,7 +1266,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
 
     private Map<String, Item> getItems(String value)
     {
-      Map<String, Item> items = new LinkedHashMap<String, Item>();
+      Map<String, Item> items = new LinkedHashMap<>();
       if (value != null)
       {
         for (Matcher matcher = itemPattern.matcher(value); matcher.find();)
@@ -1284,7 +1356,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
 
     private static String getKeyPattern(String[] requiredAttributes, String[] optionalAttributes)
     {
-      Set<String> attributes = new TreeSet<String>(Arrays.asList(requiredAttributes));
+      Set<String> attributes = new TreeSet<>(Arrays.asList(requiredAttributes));
       List<String> optional = optionalAttributes == null ? Collections.<String> emptyList() : Arrays.asList(optionalAttributes);
       attributes.addAll(optional);
 
@@ -1322,9 +1394,9 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
    */
   public static class TeamFileModePreferenceHandler extends ListPreferenceHandler
   {
-    protected static final Set<String> DEFAULT_NAME_MAPPINGS = new LinkedHashSet<String>();
+    protected static final Set<String> DEFAULT_NAME_MAPPINGS = new LinkedHashSet<>();
 
-    protected static final Set<String> DEFAULT_EXTENSION_MAPPINGS = new LinkedHashSet<String>();
+    protected static final Set<String> DEFAULT_EXTENSION_MAPPINGS = new LinkedHashSet<>();
 
     protected static final Object FILE_CONTENT_MANAGER;
 
@@ -1609,6 +1681,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
       }
     }
 
+    @Override
     public PreferenceHandler.Factory getFactory(URI uri)
     {
       PreferenceHandler.Factory result = get(uri);
@@ -1686,7 +1759,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
         int length = entry.getKey().segmentCount();
         if (prefixMaps == null)
         {
-          prefixMaps = new BasicEList<List<Map.Entry<URI, PreferenceHandler.Factory>>>();
+          prefixMaps = new BasicEList<>();
         }
 
         for (int i = prefixMaps.size() - 1; i <= length; ++i)

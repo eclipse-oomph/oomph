@@ -70,7 +70,7 @@ public abstract class DockableDialog extends Dialog
    */
   public static class Dockable
   {
-    private final List<WeakReference<IAction>> actions = new ArrayList<WeakReference<IAction>>();
+    private final List<WeakReference<IAction>> actions = new ArrayList<>();
 
     private Dialog dialog;
 
@@ -101,14 +101,14 @@ public abstract class DockableDialog extends Dialog
     {
       if (!getActions().contains(action))
       {
-        actions.add(new WeakReference<IAction>(action));
+        actions.add(new WeakReference<>(action));
         action.setChecked(true);
       }
     }
 
     public List<IAction> getActions()
     {
-      List<IAction> result = new ArrayList<IAction>();
+      List<IAction> result = new ArrayList<>();
       for (Iterator<WeakReference<IAction>> it = actions.iterator(); it.hasNext();)
       {
         WeakReference<IAction> actionReference = it.next();
@@ -172,18 +172,19 @@ public abstract class DockableDialog extends Dialog
   /**
    * There can be at most one per workbench window.
    */
-  private static final Map<IWorkbenchWindow, Map<Class<?>, Dockable>> DIALOGS = new HashMap<IWorkbenchWindow, Map<Class<?>, Dockable>>();
+  private static final Map<IWorkbenchWindow, Map<Class<?>, Dockable>> DIALOGS = new HashMap<>();
 
   /**
    * Remember where the dialog is docked per workbench window.
    */
-  private static final Map<IWorkbenchWindow, Map<Class<?>, Set<IWorkbenchPartReference>>> DOCKED_PARTS = new HashMap<IWorkbenchWindow, Map<Class<?>, Set<IWorkbenchPartReference>>>();
+  private static final Map<IWorkbenchWindow, Map<Class<?>, Set<IWorkbenchPartReference>>> DOCKED_PARTS = new HashMap<>();
 
   /**
    * Be sure to clean the workbench from the map when the workbench window.
    */
   private static final DisposeListener WORKBENCH_DISPOSE_LISTENER = new DisposeListener()
   {
+    @Override
     public void widgetDisposed(DisposeEvent e)
     {
       DIALOGS.remove(e.getSource());
@@ -273,7 +274,7 @@ public abstract class DockableDialog extends Dialog
       return null;
     }
 
-    List<Image> images = new ArrayList<Image>();
+    List<Image> images = new ArrayList<>();
     images.add(image);
     images.add(UIPlugin.INSTANCE.getSWTImage("docked_overlay")); //$NON-NLS-1$
     return ExtendedImageRegistry.INSTANCE.getImage(new DockedOverlayImage(images));
@@ -292,7 +293,7 @@ public abstract class DockableDialog extends Dialog
     @Override
     public List<Point> getDrawPoints(Size size)
     {
-      List<Point> result = new ArrayList<Point>();
+      List<Point> result = new ArrayList<>();
       result.add(new Point());
       Point overlay = new Point();
       overlay.x = size.width - 7;
@@ -353,7 +354,7 @@ public abstract class DockableDialog extends Dialog
       dockable = ReflectUtil.invokeMethod("getDockable", factory.create(workbenchWindow)); //$NON-NLS-1$
       if (typedDialogs == null)
       {
-        typedDialogs = new HashMap<Class<?>, Dockable>();
+        typedDialogs = new HashMap<>();
         DIALOGS.put(workbenchWindow, typedDialogs);
       }
 
@@ -367,10 +368,10 @@ public abstract class DockableDialog extends Dialog
       if (dockedParts == null)
       {
         isInitial = true;
-        dockedParts = new HashSet<IWorkbenchPartReference>();
+        dockedParts = new HashSet<>();
         if (typedDockedParts == null)
         {
-          typedDockedParts = new HashMap<Class<?>, Set<IWorkbenchPartReference>>();
+          typedDockedParts = new HashMap<>();
           DOCKED_PARTS.put(workbenchWindow, typedDockedParts);
         }
 
@@ -398,12 +399,12 @@ public abstract class DockableDialog extends Dialog
         /**
          * A map from a tab folder (corresponding to a part stack) to the absolute display bounds where it is located.
          */
-        private final Map<CTabFolder, Rectangle> tabFolders = new HashMap<CTabFolder, Rectangle>();
+        private final Map<CTabFolder, Rectangle> tabFolders = new HashMap<>();
 
         /**
          * A map from a tab folder to the part references in that part stack.
          */
-        private final Map<CTabFolder, Set<IWorkbenchPartReference>> tabFolderParts = new HashMap<CTabFolder, Set<IWorkbenchPartReference>>();
+        private final Map<CTabFolder, Set<IWorkbenchPartReference>> tabFolderParts = new HashMap<>();
 
         /**
          * The cursor we show when in a docking location.
@@ -415,11 +416,13 @@ public abstract class DockableDialog extends Dialog
          */
         private final ControlListener dockingListener = new ControlListener()
         {
+          @Override
           public void controlResized(ControlEvent e)
           {
             update();
           }
 
+          @Override
           public void controlMoved(ControlEvent e)
           {
             update();
@@ -547,6 +550,7 @@ public abstract class DockableDialog extends Dialog
           }
         }
 
+        @Override
         public void controlResized(ControlEvent e)
         {
           if (OS.INSTANCE.isMac() && !ignoreControlMoved)
@@ -555,6 +559,7 @@ public abstract class DockableDialog extends Dialog
           }
         }
 
+        @Override
         public void controlMoved(ControlEvent e)
         {
           // When the shell is maximized, we get a moved event, and we can use that to clear the snap bounds
@@ -666,6 +671,7 @@ public abstract class DockableDialog extends Dialog
         /**
          * This is the heart beat runnable that's started once we've hovered over a hot zone for a short period of time.
          */
+        @Override
         public void run()
         {
           if (shell.isDisposed())
@@ -809,6 +815,7 @@ public abstract class DockableDialog extends Dialog
           }
         }
 
+        @Override
         public void widgetDisposed(DisposeEvent e)
         {
           Map<Class<?>, Dockable> typedDialogs = DIALOGS.get(workbenchWindow);
@@ -1014,6 +1021,7 @@ public abstract class DockableDialog extends Dialog
         {
           UIUtil.asyncExec(shell, new Runnable()
           {
+            @Override
             public void run()
             {
               shellHandler.update();
@@ -1026,6 +1034,7 @@ public abstract class DockableDialog extends Dialog
 
       shell.addDisposeListener(new DisposeListener()
       {
+        @Override
         public void widgetDisposed(DisposeEvent e)
         {
           workbenchWindow.removePerspectiveListener(perspectiveListener);

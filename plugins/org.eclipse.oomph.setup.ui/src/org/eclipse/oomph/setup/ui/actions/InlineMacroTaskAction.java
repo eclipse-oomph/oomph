@@ -45,16 +45,18 @@ import java.util.Set;
  */
 public class InlineMacroTaskAction implements IObjectActionDelegate
 {
-  private final Set<MacroTask> macroTasks = new HashSet<MacroTask>();
+  private final Set<MacroTask> macroTasks = new HashSet<>();
 
   public InlineMacroTaskAction()
   {
   }
 
+  @Override
   public void setActivePart(IAction action, IWorkbenchPart targetPart)
   {
   }
 
+  @Override
   public void selectionChanged(IAction action, ISelection selection)
   {
     macroTasks.clear();
@@ -78,6 +80,7 @@ public class InlineMacroTaskAction implements IObjectActionDelegate
     action.setImageDescriptor(SetupUIPlugin.INSTANCE.getImageDescriptor("inline")); //$NON-NLS-1$
   }
 
+  @Override
   public void run(IAction action)
   {
     MacroTask firstTask = macroTasks.iterator().next();

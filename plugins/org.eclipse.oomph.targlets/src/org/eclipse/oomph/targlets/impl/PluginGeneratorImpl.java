@@ -82,11 +82,13 @@ public class PluginGeneratorImpl extends ModelElementImpl implements PluginGener
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public void generateIUs(IProject project, final String qualifierReplacement, final Map<String, Version> iuVersions, final EList<IInstallableUnit> result)
       throws Exception
   {
     ResourcesUtil.runWithFile(project, MANIFEST_PATH, new ResourcesUtil.RunnableWithFile()
     {
+      @Override
       public void run(File projectFolder, File file) throws Exception
       {
         BundleGeneratorAction action = new BundleGeneratorAction();
@@ -156,7 +158,7 @@ public class PluginGeneratorImpl extends ModelElementImpl implements PluginGener
         InstallableUnit installableUnit = (InstallableUnit)iu;
         installableUnit.setArtifacts(new IArtifactKey[0]);
 
-        List<IRequirement> requirements = new ArrayList<IRequirement>(iu.getRequirements());
+        List<IRequirement> requirements = new ArrayList<>(iu.getRequirements());
         boolean relaxed = false;
         for (ListIterator<IRequirement> it = requirements.listIterator(); it.hasNext();)
         {
@@ -188,7 +190,7 @@ public class PluginGeneratorImpl extends ModelElementImpl implements PluginGener
           String additionalBundles = properties.get("additional.bundles"); //$NON-NLS-1$
           if (additionalBundles != null)
           {
-            List<IRequirement> additionalRequirements = new ArrayList<IRequirement>();
+            List<IRequirement> additionalRequirements = new ArrayList<>();
             for (String bundle : additionalBundles.trim().split("\\s*,\\s*")) //$NON-NLS-1$
             {
               additionalRequirements

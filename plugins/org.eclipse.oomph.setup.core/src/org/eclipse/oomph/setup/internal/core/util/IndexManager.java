@@ -256,7 +256,7 @@ public class IndexManager
 
   public Map<URI, String> getIndexNames(boolean local)
   {
-    Map<URI, String> result = new LinkedHashMap<URI, String>();
+    Map<URI, String> result = new LinkedHashMap<>();
     Annotation annotation = getAnnotation();
     for (Map.Entry<String, String> detail : annotation.getDetails())
     {
@@ -288,9 +288,9 @@ public class IndexManager
     Annotation annotation = getAnnotation();
     Annotation labelsAnnotation = annotation.getAnnotation("labels"); //$NON-NLS-1$
 
-    Map<URI, String> result = new LinkedHashMap<URI, String>();
-    Set<String> labels = new HashSet<String>();
-    Set<String> duplicates = new HashSet<String>();
+    Map<URI, String> result = new LinkedHashMap<>();
+    Set<String> labels = new HashSet<>();
+    Set<String> duplicates = new HashSet<>();
     for (Map.Entry<String, String> detail : annotation.getDetails())
     {
       String label = null;
@@ -348,7 +348,7 @@ public class IndexManager
 
   public Map<URI, Boolean> getIndexAvailability(boolean local)
   {
-    Map<URI, Boolean> result = new LinkedHashMap<URI, Boolean>();
+    Map<URI, Boolean> result = new LinkedHashMap<>();
     Set<URI> indexLocations = getIndexNames(local).keySet();
     URIConverter uriConverter = resourceSet.getURIConverter();
     for (URI indexLocation : indexLocations)
@@ -363,6 +363,7 @@ public class IndexManager
   {
     BaseUtil.execute(5000, new Runnable()
     {
+      @Override
       public void run()
       {
         loadIndices();
@@ -436,6 +437,7 @@ public class IndexManager
   {
     BaseUtil.execute(5000, new Runnable()
     {
+      @Override
       public void run()
       {
         BaseUtil.saveEObject(annotation);

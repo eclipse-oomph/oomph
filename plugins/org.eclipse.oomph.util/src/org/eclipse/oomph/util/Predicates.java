@@ -24,17 +24,17 @@ public final class Predicates
 
   public static <T> Predicate<T> included(Set<T> inclusions)
   {
-    return new IncludedPredicate<T>(inclusions);
+    return new IncludedPredicate<>(inclusions);
   }
 
   public static <T> Predicate<T> excluded(Set<T> exclusions)
   {
-    return new ExcludedPredicate<T>(exclusions);
+    return new ExcludedPredicate<>(exclusions);
   }
 
   public static <T> Predicate<T> unique()
   {
-    return new UniquePredicate<T>();
+    return new UniquePredicate<>();
   }
 
   @SuppressWarnings("unchecked")
@@ -61,6 +61,7 @@ public final class Predicates
       this.inclusions = inclusions;
     }
 
+    @Override
     public boolean apply(T element)
     {
       return inclusions.contains(element);
@@ -79,6 +80,7 @@ public final class Predicates
       this.exclusions = exclusions;
     }
 
+    @Override
     public boolean apply(T element)
     {
       return !exclusions.contains(element);
@@ -90,8 +92,9 @@ public final class Predicates
    */
   public static final class UniquePredicate<T> implements Predicate<T>
   {
-    private final Set<T> applied = new HashSet<T>();
+    private final Set<T> applied = new HashSet<>();
 
+    @Override
     public boolean apply(T element)
     {
       return applied.add(element);
@@ -105,6 +108,7 @@ public final class Predicates
   {
     private static final Predicate<Object> INSTANCE = new FalsePredicate();
 
+    @Override
     public boolean apply(Object element)
     {
       return false;
@@ -118,6 +122,7 @@ public final class Predicates
   {
     private static final Predicate<Object> INSTANCE = new TruePredicate();
 
+    @Override
     public boolean apply(Object element)
     {
       return true;

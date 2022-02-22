@@ -40,7 +40,7 @@ final class InfoManager
 
   private static final String LIB_CLASS_PATH;
 
-  private final Map<File, JRE> infos = new HashMap<File, JRE>();
+  private final Map<File, JRE> infos = new HashMap<>();
 
   private InfoManager()
   {
@@ -80,7 +80,7 @@ final class InfoManager
 
             try
             {
-              List<String> lines = new ArrayList<String>();
+              List<String> lines = new ArrayList<>();
               for (JRE info : infos.values())
               {
                 lines.add(info.toLine());

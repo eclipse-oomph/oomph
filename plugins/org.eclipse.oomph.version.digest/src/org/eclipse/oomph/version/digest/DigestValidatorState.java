@@ -89,6 +89,7 @@ public class DigestValidatorState implements Serializable, Comparable<DigestVali
     return null;
   }
 
+  @Override
   public int compareTo(DigestValidatorState o)
   {
     return name.compareTo(o.name);

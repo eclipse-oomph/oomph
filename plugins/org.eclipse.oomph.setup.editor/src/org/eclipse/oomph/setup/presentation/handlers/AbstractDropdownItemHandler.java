@@ -43,6 +43,7 @@ public abstract class AbstractDropdownItemHandler extends AbstractHandler implem
     return text;
   }
 
+  @Override
   public final Object execute(ExecutionEvent event) throws ExecutionException
   {
     // PerformDropdownHandler.setAction(PerformDropdownHandler.COMMAND_ID, getImageDescriptor(), text, this);

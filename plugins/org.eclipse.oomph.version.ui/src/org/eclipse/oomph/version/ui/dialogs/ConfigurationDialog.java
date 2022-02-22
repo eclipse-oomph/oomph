@@ -108,6 +108,7 @@ public class ConfigurationDialog extends TitleAreaDialog implements IVersionBuil
 
     releasePathText.addModifyListener(new ModifyListener()
     {
+      @Override
       public void modifyText(ModifyEvent e)
       {
         validate();
@@ -231,141 +232,169 @@ public class ConfigurationDialog extends TitleAreaDialog implements IVersionBuil
     super.okPressed();
   }
 
+  @Override
   public String getReleasePath()
   {
     return values.getReleasePath();
   }
 
+  @Override
   public String getValidatorClassName()
   {
     return values.getValidatorClassName();
   }
 
+  @Override
   public boolean isIgnoreMalformedVersions()
   {
     return values.isIgnoreMalformedVersions();
   }
 
+  @Override
   public boolean isIgnoreFeatureNature()
   {
     return values.isIgnoreFeatureNature();
   }
 
+  @Override
   public boolean isIgnoreSchemaBuilder()
   {
     return values.isIgnoreSchemaBuilder();
   }
 
+  @Override
   public boolean isIgnoreDebugOptions()
   {
     return values.isIgnoreDebugOptions();
   }
 
+  @Override
   public boolean isIgnoreAutomaticModuleName()
   {
     return values.isIgnoreAutomaticModuleName();
   }
 
+  @Override
   public boolean isIgnoreMissingDependencyRanges()
   {
     return values.isIgnoreMissingDependencyRanges();
   }
 
+  @Override
   public boolean isIgnoreLaxLowerBoundDependencyVersions()
   {
     return values.isIgnoreLaxLowerBoundDependencyVersions();
   }
 
+  @Override
   public boolean isIgnoreMissingExportVersions()
   {
     return values.isIgnoreMissingExportVersions();
   }
 
+  @Override
   public boolean isIgnoreFeatureContentChanges()
   {
     return values.isIgnoreFeatureContentChanges();
   }
 
+  @Override
   public boolean isIgnoreFeatureContentRedundancy()
   {
     return values.isIgnoreFeatureContentRedundancy();
   }
 
+  @Override
   public boolean isCheckFeatureClosureCompleteness()
   {
     return values.isCheckFeatureClosureCompleteness();
   }
 
+  @Override
   public boolean isCheckFeatureClosureContent()
   {
     return values.isCheckFeatureClosureContent();
   }
 
+  @Override
   public boolean isCheckMavenPom()
   {
     return values.isCheckMavenPom();
   }
 
+  @Override
   public void applyTo(IProject project) throws CoreException
   {
     values.applyTo(project);
   }
 
+  @Override
   public int size()
   {
     return values.size();
   }
 
+  @Override
   public boolean isEmpty()
   {
     return values.isEmpty();
   }
 
+  @Override
   public String get(Object key)
   {
     return values.get(key);
   }
 
+  @Override
   public boolean containsKey(Object key)
   {
     return values.containsKey(key);
   }
 
+  @Override
   public String put(String key, String value)
   {
     return values.put(key, value);
   }
 
+  @Override
   public void putAll(Map<? extends String, ? extends String> m)
   {
     values.putAll(m);
   }
 
+  @Override
   public String remove(Object key)
   {
     return values.remove(key);
   }
 
+  @Override
   public void clear()
   {
     values.clear();
   }
 
+  @Override
   public boolean containsValue(Object value)
   {
     return values.containsValue(value);
   }
 
+  @Override
   public Set<String> keySet()
   {
     return values.keySet();
   }
 
+  @Override
   public Collection<String> values()
   {
     return values.values();
   }
 
+  @Override
   public Set<java.util.Map.Entry<String, String>> entrySet()
   {
     return values.entrySet();

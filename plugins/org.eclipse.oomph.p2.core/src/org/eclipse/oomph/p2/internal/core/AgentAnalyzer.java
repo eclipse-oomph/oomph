@@ -71,11 +71,11 @@ public final class AgentAnalyzer
 {
   private final Agent agent;
 
-  private final Map<File, AnalyzedBundlePool> bundlePools = new HashMap<File, AnalyzedBundlePool>();
+  private final Map<File, AnalyzedBundlePool> bundlePools = new HashMap<>();
 
   private final CountDownLatch analyzeLatch;
 
-  private final List<Job> analyzeProfileJobs = new ArrayList<Job>();
+  private final List<Job> analyzeProfileJobs = new ArrayList<>();
 
   private Set<URI> repositoryURIs;
 
@@ -203,7 +203,7 @@ public final class AgentAnalyzer
   {
     if (repositoryURIs == null)
     {
-      repositoryURIs = new HashSet<URI>();
+      repositoryURIs = new HashSet<>();
 
       IArtifactRepositoryManager repositoryManager = agent.getArtifactRepositoryManager();
       // addURIs(repositoryURIs, repositoryManager, IRepositoryManager.REPOSITORIES_ALL);
@@ -288,15 +288,15 @@ public final class AgentAnalyzer
 
     private final boolean downloadCache;
 
-    private final Set<URI> repositoryURIs = new LinkedHashSet<URI>();
+    private final Set<URI> repositoryURIs = new LinkedHashSet<>();
 
-    private final List<AnalyzedProfile> profiles = new ArrayList<AnalyzedProfile>();
+    private final List<AnalyzedProfile> profiles = new ArrayList<>();
 
-    private final Map<IArtifactKey, AnalyzedArtifact> artifacts = new HashMap<IArtifactKey, AnalyzedArtifact>();
+    private final Map<IArtifactKey, AnalyzedArtifact> artifacts = new HashMap<>();
 
-    private final Set<AnalyzedArtifact> unusedArtifacts = new HashSet<AnalyzedArtifact>();
+    private final Set<AnalyzedArtifact> unusedArtifacts = new HashSet<>();
 
-    private final Set<AnalyzedArtifact> damagedArtifacts = new HashSet<AnalyzedArtifact>();
+    private final Set<AnalyzedArtifact> damagedArtifacts = new HashSet<>();
 
     private int damagedArtifactsPercent;
 
@@ -362,7 +362,7 @@ public final class AgentAnalyzer
 
     public AnalyzedProfile[] getUnusedProfiles()
     {
-      List<AnalyzedProfile> unusedProfiles = new ArrayList<AnalyzedProfile>();
+      List<AnalyzedProfile> unusedProfiles = new ArrayList<>();
 
       synchronized (this)
       {
@@ -480,6 +480,7 @@ public final class AgentAnalyzer
       return analyzingDamage;
     }
 
+    @Override
     public int compareTo(AnalyzedBundlePool o)
     {
       if (o.isDownloadCache() == isDownloadCache())
@@ -809,11 +810,11 @@ public final class AgentAnalyzer
 
     private final int roots;
 
-    private final Set<URI> repositoryURIs = new LinkedHashSet<URI>();
+    private final Set<URI> repositoryURIs = new LinkedHashSet<>();
 
-    private final Set<AnalyzedArtifact> artifacts = new HashSet<AnalyzedArtifact>();
+    private final Set<AnalyzedArtifact> artifacts = new HashSet<>();
 
-    private final Set<AnalyzedArtifact> damagedArtifacts = new HashSet<AnalyzedArtifact>();
+    private final Set<AnalyzedArtifact> damagedArtifacts = new HashSet<>();
 
     private AnalyzedArtifact[] damagedArtifactsArray;
 
@@ -927,6 +928,7 @@ public final class AgentAnalyzer
       }
     }
 
+    @Override
     public int compareTo(AnalyzedProfile o)
     {
       return getID().compareTo(o.getID());
@@ -1018,7 +1020,7 @@ public final class AgentAnalyzer
 
     private final File file;
 
-    private final List<AnalyzedProfile> profiles = new ArrayList<AnalyzedProfile>();
+    private final List<AnalyzedProfile> profiles = new ArrayList<>();
 
     private boolean damaged;
 
@@ -1088,6 +1090,7 @@ public final class AgentAnalyzer
       return profiles;
     }
 
+    @Override
     public int compareTo(AnalyzedArtifact o)
     {
       int result = key.getId().compareTo(o.key.getId());
@@ -1120,12 +1123,7 @@ public final class AgentAnalyzer
         return true;
       }
 
-      if (obj == null)
-      {
-        return false;
-      }
-
-      if (getClass() != obj.getClass())
+      if (obj == null || getClass() != obj.getClass())
       {
         return false;
       }
@@ -1276,7 +1274,7 @@ public final class AgentAnalyzer
       Set<URI> repositoryURIs = bundlePool.getRepositoryURIs();
       SubMonitor progress = SubMonitor.convert(monitor, 1 + repositoryURIs.size()).detectCancelation();
 
-      Set<URI> poolURIs = new HashSet<URI>();
+      Set<URI> poolURIs = new HashSet<>();
       for (AnalyzedBundlePool pool : bundlePool.analyzer.getBundlePools().values())
       {
         if (pool != bundlePool)

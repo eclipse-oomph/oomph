@@ -127,6 +127,7 @@ public class AllPreferencesPreferencePage extends AbstractPreferencePage
     Display display = activeWorkbenchWindow.getShell().getDisplay();
     display.asyncExec(new Runnable()
     {
+      @Override
       public void run()
       {
         try

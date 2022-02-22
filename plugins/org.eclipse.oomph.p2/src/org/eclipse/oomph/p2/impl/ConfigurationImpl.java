@@ -121,6 +121,7 @@ public class ConfigurationImpl extends ModelElementImpl implements Configuration
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getWS()
   {
     return wS;
@@ -131,6 +132,7 @@ public class ConfigurationImpl extends ModelElementImpl implements Configuration
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setWS(String newWS)
   {
     String oldWS = wS;
@@ -146,6 +148,7 @@ public class ConfigurationImpl extends ModelElementImpl implements Configuration
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getOS()
   {
     return oS;
@@ -156,6 +159,7 @@ public class ConfigurationImpl extends ModelElementImpl implements Configuration
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setOS(String newOS)
   {
     String oldOS = oS;
@@ -171,6 +175,7 @@ public class ConfigurationImpl extends ModelElementImpl implements Configuration
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getArch()
   {
     return arch;
@@ -181,6 +186,7 @@ public class ConfigurationImpl extends ModelElementImpl implements Configuration
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setArch(String newArch)
   {
     String oldArch = arch;

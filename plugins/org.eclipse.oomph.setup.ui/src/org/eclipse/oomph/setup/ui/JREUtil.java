@@ -28,7 +28,7 @@ public class JREUtil
 
   public static List<URI> getPath()
   {
-    List<URI> result = new UniqueEList<URI>();
+    List<URI> result = new UniqueEList<>();
     String path = System.getenv("PATH"); //$NON-NLS-1$
     for (String folder : path.split(File.pathSeparator))
     {

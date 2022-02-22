@@ -89,6 +89,7 @@ public class SetupTargletsFactoryImpl extends EFactoryImpl implements SetupTargl
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public TargletTask createTargletTask()
   {
     TargletTaskImpl targletTask = new TargletTaskImpl();
@@ -100,12 +101,14 @@ public class SetupTargletsFactoryImpl extends EFactoryImpl implements SetupTargl
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ImplicitDependency createImplicitDependency()
   {
     ImplicitDependencyImpl implicitDependency = new ImplicitDependencyImpl();
     return implicitDependency;
   }
 
+  @Override
   public ImplicitDependency createImplicitDependency(String id, Version version)
   {
     ImplicitDependency implicitDependency = createImplicitDependency();
@@ -119,6 +122,7 @@ public class SetupTargletsFactoryImpl extends EFactoryImpl implements SetupTargl
     return implicitDependency;
   }
 
+  @Override
   public ImplicitDependency createImplicitDependency(String id, String versionString)
   {
     Version version = versionString == null ? null : Version.parseVersion(versionString);
@@ -130,6 +134,7 @@ public class SetupTargletsFactoryImpl extends EFactoryImpl implements SetupTargl
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public SetupTargletsPackage getSetupTargletsPackage()
   {
     return (SetupTargletsPackage)getEPackage();

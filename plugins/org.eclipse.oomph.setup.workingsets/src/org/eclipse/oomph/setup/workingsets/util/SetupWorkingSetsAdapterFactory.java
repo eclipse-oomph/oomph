@@ -80,7 +80,7 @@ public class SetupWorkingSetsAdapterFactory extends AdapterFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  protected SetupWorkingSetsSwitch<Adapter> modelSwitch = new SetupWorkingSetsSwitch<Adapter>()
+  protected SetupWorkingSetsSwitch<Adapter> modelSwitch = new SetupWorkingSetsSwitch<>()
   {
     @Override
     public Adapter caseWorkingSetTask(WorkingSetTask object)

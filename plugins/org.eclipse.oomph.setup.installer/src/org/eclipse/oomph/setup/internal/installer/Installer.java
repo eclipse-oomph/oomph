@@ -11,8 +11,7 @@
 package org.eclipse.oomph.setup.internal.installer;
 
 import org.eclipse.oomph.internal.ui.AccessUtil;
-import org.eclipse.oomph.p2.core.CertificateConfirmer;
-import org.eclipse.oomph.p2.internal.ui.P2ServiceUI;
+import org.eclipse.oomph.p2.internal.ui.P2UIPlugin;
 import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.Macro;
@@ -22,14 +21,12 @@ import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl;
-import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
+import org.eclipse.oomph.setup.p2.P2Task;
 import org.eclipse.oomph.setup.p2.util.MarketPlaceListing;
-import org.eclipse.oomph.setup.ui.UnsignedContentDialog;
 import org.eclipse.oomph.setup.ui.wizards.ExtensionsDialog;
 import org.eclipse.oomph.setup.ui.wizards.ProjectPage;
 import org.eclipse.oomph.setup.ui.wizards.ProjectPage.ConfigurationListener;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
-import org.eclipse.oomph.util.Confirmer;
 import org.eclipse.oomph.util.PropertiesUtil;
 
 import org.eclipse.emf.common.util.URI;
@@ -67,8 +64,6 @@ public class Installer extends SetupWizard
 {
   private final SelectionMemento selectionMemento;
 
-  public final UIServices uiServices;
-
   private final Set<URI> delayedResourceURIs = new LinkedHashSet<URI>();
 
   private final Map<ConfigurationListener, ToolItem> extensionButtons = new HashMap<ConfigurationListener, ToolItem>();
@@ -77,36 +72,17 @@ public class Installer extends SetupWizard
 
   private boolean indexLoaded;
 
-  public Installer(SelectionMemento theSelectionMemento)
+  public Installer(SelectionMemento theSelectionMemento, UIServices serviceUI)
   {
     selectionMemento = theSelectionMemento;
     setTrigger(Trigger.BOOTSTRAP);
     getResourceSet().getLoadOptions().put(ECFURIHandlerImpl.OPTION_CACHE_HANDLING, ECFURIHandlerImpl.CacheHandling.CACHE_WITHOUT_ETAG_CHECKING);
     setSetupContext(SetupContext.createUserOnly(getResourceSet()));
     setWindowTitle(PropertiesUtil.getProductName());
-    uiServices = new P2ServiceUI()
-    {
-      @Override
-      protected Confirmer getUnsignedContentConfirmer()
-      {
-        return UnsignedContentDialog.createUnsignedContentConfirmer(getUser(), false);
-      }
-
-      @Override
-      protected CertificateConfirmer getCertificateConfirmer()
-      {
-        return SetupCoreUtil.createCertificateConfirmer(getUser(), false);
-      }
-
-      @Override
-      protected UIServices getDelegate()
-      {
-        return null;
-      }
-    };
 
     openListener = new Listener()
     {
+      @Override
       public void handleEvent(Event event)
       {
         handleArgument(event.text);
@@ -148,11 +124,6 @@ public class Installer extends SetupWizard
     return currentPage instanceof ProductPage || currentPage instanceof ProjectPage;
   }
 
-  public UIServices getUiServices()
-  {
-    return uiServices;
-  }
-
   public SelectionMemento getSelectionMemento()
   {
     return selectionMemento;
@@ -174,6 +145,7 @@ public class Installer extends SetupWizard
 
     getShell().getDisplay().asyncExec(new Runnable()
     {
+      @Override
       public void run()
       {
         loadIndex();
@@ -326,7 +298,14 @@ public class Installer extends SetupWizard
 
     if (performer != null)
     {
-      performer.put(UIServices.class, getUiServices());
+      performer.put(P2Task.UIServicesInitializer.class, new P2Task.UIServicesInitializer()
+      {
+        @Override
+        public void init(UIServices serviceUI)
+        {
+          P2UIPlugin.init(serviceUI, getShell().getDisplay());
+        }
+      });
     }
   }
 

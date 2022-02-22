@@ -125,6 +125,7 @@ public class LaunchTaskImpl extends SetupTaskImpl implements LaunchTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getLauncher()
   {
     return launcher;
@@ -135,6 +136,7 @@ public class LaunchTaskImpl extends SetupTaskImpl implements LaunchTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setLauncher(String newLauncher)
   {
     String oldLauncher = launcher;
@@ -150,6 +152,7 @@ public class LaunchTaskImpl extends SetupTaskImpl implements LaunchTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public boolean isRunEveryStartup()
   {
     return runEveryStartup;
@@ -160,6 +163,7 @@ public class LaunchTaskImpl extends SetupTaskImpl implements LaunchTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setRunEveryStartup(boolean newRunEveryStartup)
   {
     boolean oldRunEveryStartup = runEveryStartup;
@@ -274,6 +278,7 @@ public class LaunchTaskImpl extends SetupTaskImpl implements LaunchTask
     return 10;
   }
 
+  @Override
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     String launcher = getLauncher();
@@ -291,6 +296,7 @@ public class LaunchTaskImpl extends SetupTaskImpl implements LaunchTask
     return true;
   }
 
+  @Override
   @SuppressWarnings("restriction")
   public void perform(final SetupTaskContext context) throws Exception
   {
@@ -346,6 +352,7 @@ public class LaunchTaskImpl extends SetupTaskImpl implements LaunchTask
             {
               outputStreamMonitor.addListener(new IStreamListener()
               {
+                @Override
                 public void streamAppended(String text, IStreamMonitor monitor)
                 {
                   context.log(text.replace('\r', ' '));
@@ -358,6 +365,7 @@ public class LaunchTaskImpl extends SetupTaskImpl implements LaunchTask
             {
               errorStreamMonitor.addListener(new IStreamListener()
               {
+                @Override
                 public void streamAppended(String text, IStreamMonitor monitor)
                 {
                   context.log(text.replace('\r', ' '), Severity.ERROR);

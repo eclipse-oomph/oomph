@@ -82,6 +82,7 @@ public class NaturePredicateImpl extends PredicateImpl implements NaturePredicat
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getNature()
   {
     return nature;
@@ -92,6 +93,7 @@ public class NaturePredicateImpl extends PredicateImpl implements NaturePredicat
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setNature(String newNature)
   {
     String oldNature = nature;

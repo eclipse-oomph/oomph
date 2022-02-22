@@ -126,11 +126,12 @@ public class MavenUpdateTaskImpl extends SetupTaskImpl implements MavenUpdateTas
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<String> getProjectNamePatterns()
   {
     if (projectNamePatterns == null)
     {
-      projectNamePatterns = new EDataTypeUniqueEList<String>(String.class, this, MavenPackage.MAVEN_UPDATE_TASK__PROJECT_NAME_PATTERNS);
+      projectNamePatterns = new EDataTypeUniqueEList<>(String.class, this, MavenPackage.MAVEN_UPDATE_TASK__PROJECT_NAME_PATTERNS);
     }
     return projectNamePatterns;
   }
@@ -140,6 +141,7 @@ public class MavenUpdateTaskImpl extends SetupTaskImpl implements MavenUpdateTas
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public boolean isOffline()
   {
     return offline;
@@ -150,6 +152,7 @@ public class MavenUpdateTaskImpl extends SetupTaskImpl implements MavenUpdateTas
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setOffline(boolean newOffline)
   {
     boolean oldOffline = offline;
@@ -165,6 +168,7 @@ public class MavenUpdateTaskImpl extends SetupTaskImpl implements MavenUpdateTas
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public boolean isUpdateSnapshots()
   {
     return updateSnapshots;
@@ -175,6 +179,7 @@ public class MavenUpdateTaskImpl extends SetupTaskImpl implements MavenUpdateTas
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setUpdateSnapshots(boolean newUpdateSnapshots)
   {
     boolean oldUpdateSnapshots = updateSnapshots;
@@ -297,6 +302,7 @@ public class MavenUpdateTaskImpl extends SetupTaskImpl implements MavenUpdateTas
     return result.toString();
   }
 
+  @Override
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     return true;
@@ -322,7 +328,7 @@ public class MavenUpdateTaskImpl extends SetupTaskImpl implements MavenUpdateTas
 
   private List<IProject> getFilteredProjects() throws CoreException
   {
-    List<IProject> projects = new ArrayList<IProject>();
+    List<IProject> projects = new ArrayList<>();
     for (IMavenProjectFacade projectFacade : MavenPlugin.getMavenProjectRegistry().getProjects())
     {
       if (matchesNameFilter(projectFacade.getProject().getName()))
@@ -334,6 +340,7 @@ public class MavenUpdateTaskImpl extends SetupTaskImpl implements MavenUpdateTas
     return projects;
   }
 
+  @Override
   public void perform(SetupTaskContext context) throws Exception
   {
     List<IProject> projects = getFilteredProjects();

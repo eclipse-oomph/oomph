@@ -136,11 +136,12 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<SourceLocator> getSourceLocators()
   {
     if (sourceLocators == null)
     {
-      sourceLocators = new EObjectContainmentEList<SourceLocator>(SourceLocator.class, this, MavenPackage.MAVEN_IMPORT_TASK__SOURCE_LOCATORS);
+      sourceLocators = new EObjectContainmentEList<>(SourceLocator.class, this, MavenPackage.MAVEN_IMPORT_TASK__SOURCE_LOCATORS);
     }
     return sourceLocators;
   }
@@ -150,6 +151,7 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getProjectNameTemplate()
   {
     return projectNameTemplate;
@@ -160,6 +162,7 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setProjectNameTemplate(String newProjectNameTemplate)
   {
     String oldProjectNameTemplate = projectNameTemplate;
@@ -176,11 +179,12 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<String> getProfiles()
   {
     if (profiles == null)
     {
-      profiles = new EDataTypeUniqueEList<String>(String.class, this, MavenPackage.MAVEN_IMPORT_TASK__PROFILES);
+      profiles = new EDataTypeUniqueEList<>(String.class, this, MavenPackage.MAVEN_IMPORT_TASK__PROFILES);
     }
     return profiles;
   }
@@ -318,6 +322,7 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
     return 100;
   }
 
+  @Override
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     EList<SourceLocator> sourceLocators = getSourceLocators();
@@ -346,6 +351,7 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
     return true;
   }
 
+  @Override
   public void perform(SetupTaskContext context) throws Exception
   {
     EList<SourceLocator> sourceLocators = getSourceLocators();
@@ -358,7 +364,7 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
     {
       MavenModelManager modelManager = MavenPlugin.getMavenModelManager();
 
-      Set<MavenProjectInfo> projectInfos = new LinkedHashSet<MavenProjectInfo>();
+      Set<MavenProjectInfo> projectInfos = new LinkedHashSet<>();
       for (SourceLocator sourceLocator : sourceLocators)
       {
         LocalProjectScanner projectScanner = new LocalProjectScanner(null, Collections.singletonList(sourceLocator.getRootFolder()), false, modelManager);

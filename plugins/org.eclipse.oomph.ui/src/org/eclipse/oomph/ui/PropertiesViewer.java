@@ -156,6 +156,7 @@ public class PropertiesViewer extends TableViewer
     table.addControlListener(columnResizer);
     UIUtil.asyncExec(table, new Runnable()
     {
+      @Override
       public void run()
       {
         columnResizer.controlResized(null);
@@ -164,6 +165,7 @@ public class PropertiesViewer extends TableViewer
 
     addDoubleClickListener(new IDoubleClickListener()
     {
+      @Override
       public void doubleClick(DoubleClickEvent event)
       {
         IStructuredSelection selection = (IStructuredSelection)event.getSelection();
@@ -173,6 +175,7 @@ public class PropertiesViewer extends TableViewer
           final String value = (String)(element[5] == null ? element[1] : element[5]);
           UIUtil.asyncExec(table, new Runnable()
           {
+            @Override
             public void run()
             {
               PopupDialog popupDialog = new InformationPopupDialog(table.getShell(), (String)element[0], value);
@@ -214,6 +217,7 @@ public class PropertiesViewer extends TableViewer
         // Otherwise the pop up won't disappear upon losing focus.
         UIUtil.asyncExec(getShell(), new Runnable()
         {
+          @Override
           public void run()
           {
             ReflectUtil.setValue("listenToDeactivate", InformationPopupDialog.this, true); //$NON-NLS-1$
@@ -275,6 +279,7 @@ public class PropertiesViewer extends TableViewer
       itemDelegator = new AdapterFactoryItemDelegator(adapterFactory);
     }
 
+    @Override
     public void dispose()
     {
       if (adapterFactory instanceof IDisposable)
@@ -283,10 +288,12 @@ public class PropertiesViewer extends TableViewer
       }
     }
 
+    @Override
     public void inputChanged(Viewer viewer, Object oldInput, Object newInput)
     {
       UIUtil.asyncExec(viewer.getControl(), new Runnable()
       {
+        @Override
         public void run()
         {
           columnResizer.controlResized(null);
@@ -294,10 +301,11 @@ public class PropertiesViewer extends TableViewer
       });
     }
 
+    @Override
     public Object[] getElements(Object element)
     {
-      List<Object[]> properties = new ArrayList<Object[]>();
-      List<Object[]> expertProperties = new ArrayList<Object[]>();
+      List<Object[]> properties = new ArrayList<>();
+      List<Object[]> expertProperties = new ArrayList<>();
 
       List<IItemPropertyDescriptor> propertyDescriptors = itemDelegator.getPropertyDescriptors(element);
       if (propertyDescriptors != null)
@@ -416,26 +424,31 @@ public class PropertiesViewer extends TableViewer
       this.control = control;
     }
 
+    @Override
     public Image getColumnImage(Object element, int columnIndex)
     {
       return propertiesLabelProvider.getColumnImage(element, columnIndex);
     }
 
+    @Override
     public String getColumnText(Object element, int columnIndex)
     {
       return propertiesLabelProvider.getColumnText(element, columnIndex);
     }
 
+    @Override
     public Font getFont(Object element, int columnIndex)
     {
       return labelDecorator.decorateFont(control.getFont(), ((Object[])element)[4]);
     }
 
+    @Override
     public Color getForeground(Object element, int columnIndex)
     {
       return labelDecorator.decorateForeground(control.getForeground(), ((Object[])element)[4]);
     }
 
+    @Override
     public Color getBackground(Object element, int columnIndex)
     {
       return labelDecorator.decorateBackground(control.getBackground(), ((Object[])element)[4]);
@@ -451,11 +464,13 @@ public class PropertiesViewer extends TableViewer
     {
     }
 
+    @Override
     public String getColumnText(Object element, int columnIndex)
     {
       return (String)((Object[])element)[columnIndex];
     }
 
+    @Override
     public Image getColumnImage(Object element, int columnIndex)
     {
       if (columnIndex == 1)

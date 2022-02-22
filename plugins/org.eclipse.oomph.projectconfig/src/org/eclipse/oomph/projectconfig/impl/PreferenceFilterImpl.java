@@ -129,6 +129,7 @@ public class PreferenceFilterImpl extends ModelElementImpl implements Preference
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public PreferenceNode getPreferenceNode()
   {
     if (preferenceNode != null && preferenceNode.eIsProxy())
@@ -162,6 +163,7 @@ public class PreferenceFilterImpl extends ModelElementImpl implements Preference
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setPreferenceNode(PreferenceNode newPreferenceNode)
   {
     PreferenceNode oldPreferenceNode = preferenceNode;
@@ -177,6 +179,7 @@ public class PreferenceFilterImpl extends ModelElementImpl implements Preference
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public PreferenceProfile getPreferenceProfile()
   {
     if (eContainerFeatureID() != ProjectConfigPackage.PREFERENCE_FILTER__PREFERENCE_PROFILE)
@@ -202,6 +205,7 @@ public class PreferenceFilterImpl extends ModelElementImpl implements Preference
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setPreferenceProfile(PreferenceProfile newPreferenceProfile)
   {
     if (newPreferenceProfile != eInternalContainer()
@@ -239,6 +243,7 @@ public class PreferenceFilterImpl extends ModelElementImpl implements Preference
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Pattern getInclusions()
   {
     return inclusions;
@@ -249,6 +254,7 @@ public class PreferenceFilterImpl extends ModelElementImpl implements Preference
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setInclusions(Pattern newInclusions)
   {
     Pattern oldInclusions = inclusions;
@@ -264,6 +270,7 @@ public class PreferenceFilterImpl extends ModelElementImpl implements Preference
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Pattern getExclusions()
   {
     return exclusions;
@@ -274,6 +281,7 @@ public class PreferenceFilterImpl extends ModelElementImpl implements Preference
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setExclusions(Pattern newExclusions)
   {
     Pattern oldExclusions = exclusions;
@@ -289,9 +297,10 @@ public class PreferenceFilterImpl extends ModelElementImpl implements Preference
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public EList<Property> getProperties()
   {
-    List<Property> properties = new ArrayList<Property>();
+    List<Property> properties = new ArrayList<>();
     for (Property property : getPreferenceNode().getProperties())
     {
       if (matches(property.getName()))
@@ -301,8 +310,7 @@ public class PreferenceFilterImpl extends ModelElementImpl implements Preference
     }
 
     int size = properties.size();
-    return new EcoreEList.UnmodifiableEList<Property>(this, ProjectConfigPackage.Literals.PREFERENCE_FILTER__PROPERTIES, size,
-        properties.toArray(new Property[size]));
+    return new EcoreEList.UnmodifiableEList<>(this, ProjectConfigPackage.Literals.PREFERENCE_FILTER__PROPERTIES, size, properties.toArray(new Property[size]));
   }
 
   /**
@@ -310,6 +318,7 @@ public class PreferenceFilterImpl extends ModelElementImpl implements Preference
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public boolean matches(String value)
   {
     return getInclusions().matcher(value).matches() && !getExclusions().matcher(value).matches();
@@ -320,6 +329,7 @@ public class PreferenceFilterImpl extends ModelElementImpl implements Preference
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public Property getProperty(String name)
   {
     for (Property property : getProperties())

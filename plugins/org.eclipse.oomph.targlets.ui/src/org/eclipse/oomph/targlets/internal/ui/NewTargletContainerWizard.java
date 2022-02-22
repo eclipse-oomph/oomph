@@ -32,6 +32,7 @@ public class NewTargletContainerWizard extends Wizard implements ITargetLocation
     setWindowTitle(Messages.NewTargletContainerWizard_title);
   }
 
+  @Override
   public void setTarget(ITargetDefinition target)
   {
   }
@@ -51,6 +52,7 @@ public class NewTargletContainerWizard extends Wizard implements ITargetLocation
     return true;
   }
 
+  @Override
   public ITargetLocation[] getLocations()
   {
     return new ITargetLocation[] { targletContainer };

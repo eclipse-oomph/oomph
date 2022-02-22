@@ -147,7 +147,7 @@ public interface Configuration extends ModelElement
 
     private static Set<String> getChoices(String[] values, String extraValuesPreference)
     {
-      Set<String> result = new HashSet<String>();
+      Set<String> result = new HashSet<>();
       result.addAll(Arrays.asList(values));
 
       IEclipsePreferences node = InstanceScope.INSTANCE.getNode("org.eclipse.pde.core"); //$NON-NLS-1$

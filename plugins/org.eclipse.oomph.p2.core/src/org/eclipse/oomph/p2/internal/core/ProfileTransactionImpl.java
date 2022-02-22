@@ -17,15 +17,12 @@ import org.eclipse.oomph.p2.Requirement;
 import org.eclipse.oomph.p2.core.Agent;
 import org.eclipse.oomph.p2.core.AgentManager;
 import org.eclipse.oomph.p2.core.BundlePool;
-import org.eclipse.oomph.p2.core.CertificateConfirmer;
-import org.eclipse.oomph.p2.core.DelegatingUIServices;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.p2.core.ProfileTransaction;
 import org.eclipse.oomph.p2.core.ProfileTransaction.CommitContext.DeltaType;
 import org.eclipse.oomph.p2.core.ProfileTransaction.CommitContext.ResolutionInfo;
 import org.eclipse.oomph.p2.internal.core.CachingRepositoryManager.Artifact.BetterMirrorSelector;
-import org.eclipse.oomph.util.Confirmer;
 import org.eclipse.oomph.util.MonitorUtil;
 import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.util.Pair;
@@ -68,7 +65,6 @@ import org.eclipse.equinox.internal.provisional.p2.core.eventbus.SynchronousProv
 import org.eclipse.equinox.internal.provisional.p2.director.PlanExecutionHelper;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.core.ProvisionException;
-import org.eclipse.equinox.p2.core.UIServices;
 import org.eclipse.equinox.p2.engine.IEngine;
 import org.eclipse.equinox.p2.engine.IPhaseSet;
 import org.eclipse.equinox.p2.engine.IProfile;
@@ -96,6 +92,7 @@ import org.eclipse.equinox.p2.repository.artifact.IArtifactRepository;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRequest;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
+import org.eclipse.equinox.p2.repository.spi.PGPPublicKeyService;
 import org.eclipse.osgi.service.datalocation.Location;
 import org.eclipse.osgi.util.NLS;
 
@@ -138,7 +135,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
   private static final IRequirement BUNDLE_REQUIREMENT = MetadataFactory.createRequirement("org.eclipse.equinox.p2.eclipse.type", "bundle", null, null, false, //$NON-NLS-1$ //$NON-NLS-2$
       false, false);
 
-  private static final Set<String> IMMUTABLE_PROPERTIES = new HashSet<String>(Arrays.asList(Profile.PROP_INSTALL_FEATURES, Profile.PROP_INSTALL_FOLDER,
+  private static final Set<String> IMMUTABLE_PROPERTIES = new HashSet<>(Arrays.asList(Profile.PROP_INSTALL_FEATURES, Profile.PROP_INSTALL_FOLDER,
       Profile.PROP_CACHE, Profile.PROP_PROFILE_TYPE, Profile.PROP_PROFILE_DEFINITION));
 
   private final Profile profile;
@@ -147,13 +144,13 @@ public class ProfileTransactionImpl implements ProfileTransaction
 
   private final ProfileDefinition cleanProfileDefinition;
 
-  private final Map<String, String> profileProperties = new HashMap<String, String>();
+  private final Map<String, String> profileProperties = new HashMap<>();
 
-  private final Map<String, String> cleanProfileProperties = new HashMap<String, String>();
+  private final Map<String, String> cleanProfileProperties = new HashMap<>();
 
-  private final Map<IUPropertyKey, String> iuProperties = new HashMap<IUPropertyKey, String>();
+  private final Map<IUPropertyKey, String> iuProperties = new HashMap<>();
 
-  private final Map<IUPropertyKey, String> cleanIUProperties = new HashMap<IUPropertyKey, String>();
+  private final Map<IUPropertyKey, String> cleanIUProperties = new HashMap<>();
 
   private boolean removeAll;
 
@@ -193,21 +190,25 @@ public class ProfileTransactionImpl implements ProfileTransaction
     mirrors = SimpleArtifactRepository.MIRRORS_ENABLED;
   }
 
+  @Override
   public Profile getProfile()
   {
     return profile;
   }
 
+  @Override
   public ProfileDefinition getProfileDefinition()
   {
     return profileDefinition;
   }
 
+  @Override
   public String getProfileProperty(String key)
   {
     return profileProperties.get(key);
   }
 
+  @Override
   public ProfileTransaction setProfileProperty(String key, String value)
   {
     if (IMMUTABLE_PROPERTIES.contains(key) && !ObjectUtil.equals(profileProperties.get(key), value))
@@ -227,16 +228,19 @@ public class ProfileTransactionImpl implements ProfileTransaction
     return this;
   }
 
+  @Override
   public ProfileTransaction removeProfileProperty(String key)
   {
     return setProfileProperty(key, null);
   }
 
+  @Override
   public String getInstallableUnitProperty(IInstallableUnit iu, String key)
   {
     return iuProperties.get(new IUPropertyKey(iu, key));
   }
 
+  @Override
   public ProfileTransaction setInstallableUnitProperty(IInstallableUnit iu, String key, String value)
   {
     IUPropertyKey propertyKey = new IUPropertyKey(iu, key);
@@ -252,46 +256,42 @@ public class ProfileTransactionImpl implements ProfileTransaction
     return this;
   }
 
+  @Override
   public ProfileTransaction removeInstallableUnitProperty(IInstallableUnit iu, String key)
   {
     return setInstallableUnitProperty(iu, key, null);
   }
 
+  @Override
   public boolean isRemoveExistingInstallableUnits()
   {
     return removeAll;
   }
 
+  @Override
   public ProfileTransaction setRemoveExistingInstallableUnits(boolean removeAll)
   {
     this.removeAll = removeAll;
     return this;
   }
 
+  @Override
   public boolean isMirrors()
   {
     return mirrors;
   }
 
+  @Override
   public ProfileTransaction setMirrors(boolean mirrors)
   {
     this.mirrors = mirrors;
     return this;
   }
 
+  @Override
   public boolean isDirty()
   {
-    if (removeAll)
-    {
-      return true;
-    }
-
-    if (!profileProperties.equals(cleanProfileProperties))
-    {
-      return true;
-    }
-
-    if (!iuProperties.equals(cleanIUProperties))
+    if (removeAll || !profileProperties.equals(cleanProfileProperties) || !iuProperties.equals(cleanIUProperties))
     {
       return true;
     }
@@ -307,12 +307,8 @@ public class ProfileTransactionImpl implements ProfileTransaction
     }
 
     EqualityHelper equalityHelper = new EqualityHelper();
-    if (!equals(equalityHelper, profileDefinition.getRequirements(), cleanProfileDefinition.getRequirements()))
-    {
-      return true;
-    }
-
-    if (!equals(equalityHelper, profileDefinition.getRepositories(), cleanProfileDefinition.getRepositories()))
+    if (!equals(equalityHelper, profileDefinition.getRequirements(), cleanProfileDefinition.getRequirements())
+        || !equals(equalityHelper, profileDefinition.getRepositories(), cleanProfileDefinition.getRepositories()))
     {
       return true;
     }
@@ -320,16 +316,19 @@ public class ProfileTransactionImpl implements ProfileTransaction
     return false;
   }
 
+  @Override
   public boolean commit() throws CoreException
   {
     return commit(null, null);
   }
 
+  @Override
   public boolean commit(IProgressMonitor monitor) throws CoreException
   {
     return commit(null, monitor);
   }
 
+  @Override
   public boolean commit(CommitContext commitContext, IProgressMonitor monitor) throws CoreException
   {
     if (!committed)
@@ -356,11 +355,13 @@ public class ProfileTransactionImpl implements ProfileTransaction
     return false;
   }
 
+  @Override
   public Resolution resolve(IProgressMonitor monitor) throws CoreException
   {
     return resolve(null, monitor);
   }
 
+  @Override
   public Resolution resolve(CommitContext commitContext, IProgressMonitor monitor) throws CoreException
   {
     final CommitContext context = commitContext == null ? new CommitContext() : commitContext;
@@ -370,7 +371,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
     }
 
     final Agent agent = profile.getAgent();
-    final List<Runnable> cleanup = new ArrayList<Runnable>();
+    final List<Runnable> cleanup = new ArrayList<>();
 
     boolean includeSourceBundles = profileDefinition.isIncludeSourceBundles();
     monitor.beginTask("", includeSourceBundles ? 75 : 70); //$NON-NLS-1$
@@ -379,8 +380,8 @@ public class ProfileTransactionImpl implements ProfileTransaction
     {
       initMirrors(cleanup);
 
-      final List<IMetadataRepository> metadataRepositories = new ArrayList<IMetadataRepository>();
-      Set<URI> artifactURIs = new HashSet<URI>();
+      final List<IMetadataRepository> metadataRepositories = new ArrayList<>();
+      Set<URI> artifactURIs = new HashSet<>();
       URI[] metadataURIs = collectRepositories(metadataRepositories, artifactURIs, cleanup, MonitorUtil.create(monitor, 50));
 
       final ProfileImpl profileImpl = (ProfileImpl)profile;
@@ -452,44 +453,44 @@ public class ProfileTransactionImpl implements ProfileTransaction
         provisioningPlan.setInstallableUnitProfileProperty(sourceContainerIU, Profile.PROP_PROFILE_ROOT_IU, Boolean.TRUE.toString());
       }
 
-      final Map<IInstallableUnit, CommitContext.DeltaType> iuDeltas = new HashMap<IInstallableUnit, CommitContext.DeltaType>();
-      final Map<IInstallableUnit, Map<String, Pair<Object, Object>>> propertyDeltas = new HashMap<IInstallableUnit, Map<String, Pair<Object, Object>>>();
+      final Map<IInstallableUnit, CommitContext.DeltaType> iuDeltas = new HashMap<>();
+      final Map<IInstallableUnit, Map<String, Pair<Object, Object>>> propertyDeltas = new HashMap<>();
       computeOperandDeltas(provisioningPlan, iuDeltas, propertyDeltas);
 
       ResolutionInfo resolutionInfo = new ResolutionInfo()
       {
+        @Override
         public IProvisioningPlan getProvisioningPlan()
         {
           return provisioningPlan;
         }
 
+        @Override
         public IInstallableUnit getArtificialRoot()
         {
           return rootIU;
         }
 
+        @Override
         public Map<IInstallableUnit, DeltaType> getIUDeltas()
         {
           return iuDeltas;
         }
 
+        @Override
         public Map<IInstallableUnit, Map<String, Pair<Object, Object>>> getPropertyDeltas()
         {
           return propertyDeltas;
         }
 
+        @Override
         public List<IMetadataRepository> getMetadataRepositories()
         {
           return metadataRepositories;
         }
       };
 
-      if (!context.handleProvisioningPlan(resolutionInfo))
-      {
-        return null;
-      }
-
-      if (iuDeltas.isEmpty() && propertyDeltas.isEmpty())
+      if (!context.handleProvisioningPlan(resolutionInfo) || iuDeltas.isEmpty() && propertyDeltas.isEmpty())
       {
         return null;
       }
@@ -498,21 +499,25 @@ public class ProfileTransactionImpl implements ProfileTransaction
       {
         private final ProvisioningListener provisioningListener = new ProvisioningListener();
 
+        @Override
         public ProfileTransaction getProfileTransaction()
         {
           return ProfileTransactionImpl.this;
         }
 
+        @Override
         public IProvisioningPlan getProvisioningPlan()
         {
           return provisioningPlan;
         }
 
+        @Override
         public boolean commit(IProgressMonitor monitor) throws CoreException
         {
           final String oldUsesMode = System.setProperty(OSGI_RESOLVER_USES_MODE, "ignore"); //$NON-NLS-1$
           cleanup.add(new Runnable()
           {
+            @Override
             public void run()
             {
               if (oldUsesMode == null)
@@ -541,7 +546,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
 
             IPhaseSet phaseSet = context.getPhaseSet(ProfileTransactionImpl.this);
 
-            initUnsignedContentConfirmer(context, agent, cleanup);
+            init(context, agent, cleanup);
 
             IEngine engine = agent.getEngine();
             ensureSameBackupDevice(provisioningPlan);
@@ -566,6 +571,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
           }
         }
 
+        @Override
         public void rollback()
         {
           cleanup(cleanup);
@@ -672,8 +678,8 @@ public class ProfileTransactionImpl implements ProfileTransaction
     Map<String, Pair<Object, Object>> propertyDelta = propertyDeltas.get(operandIU);
     if (propertyDelta == null)
     {
-      propertyDelta = new HashMap<String, Pair<Object, Object>>();
-      propertyDelta.put(key, new Pair<Object, Object>(first, second));
+      propertyDelta = new HashMap<>();
+      propertyDelta.put(key, new Pair<>(first, second));
       propertyDeltas.put(operandIU, propertyDelta);
     }
     else
@@ -681,7 +687,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
       Pair<Object, Object> pair = propertyDelta.get(key);
       if (pair == null)
       {
-        propertyDelta.put(key, new Pair<Object, Object>(first, second));
+        propertyDelta.put(key, new Pair<>(first, second));
       }
       else
       {
@@ -702,6 +708,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
 
         cleanup.add(new Runnable()
         {
+          @Override
           public void run()
           {
             try
@@ -722,48 +729,35 @@ public class ProfileTransactionImpl implements ProfileTransaction
     }
   }
 
-  private void initUnsignedContentConfirmer(final CommitContext context, final Agent agent, final List<Runnable> cleanup)
+  private void init(final CommitContext context, final Agent agent, final List<Runnable> cleanup)
   {
-    final Confirmer unsignedContentConfirmer = context.getUnsignedContentConfirmer();
-    final CertificateConfirmer certificateConfirmer = context.getCertficateConfirmer();
-    if (unsignedContentConfirmer != null || certificateConfirmer != null)
+    context.init();
+
+    // Check if the provisioning agent is the same one as the current (self) agent.
+    final IProvisioningAgent provisioningAgent = agent.getProvisioningAgent();
+    IProvisioningAgent selfAgent = P2Util.getCurrentProvisioningAgent();
+    if (selfAgent != provisioningAgent)
     {
-      final IProvisioningAgent provisioningAgent = agent.getProvisioningAgent();
-      final UIServices oldUIServices = (UIServices)provisioningAgent.getService(UIServices.SERVICE_NAME);
-      final UIServices newUIServices = new DelegatingUIServices()
+      // If not, then make sure the self agent uses the agent's key service because the latter is where new keys will be added and the former is where the UI
+      // services will look them up.
+      PGPPublicKeyService provisioningAgentKeyService = provisioningAgent.getService(PGPPublicKeyService.class);
+      PGPPublicKeyService selfAgentKeyService = selfAgent.getService(PGPPublicKeyService.class);
+      if (provisioningAgentKeyService != null)
       {
-        @Override
-        protected UIServices getDelegate()
-        {
-          return oldUIServices;
-        }
+        selfAgent.registerService(PGPPublicKeyService.SERVICE_NAME, provisioningAgentKeyService);
 
-        @Override
-        protected CertificateConfirmer getCertificateConfirmer()
-        {
-          return certificateConfirmer;
-        }
-
-        @Override
-        protected Confirmer getUnsignedContentConfirmer()
-        {
-          return unsignedContentConfirmer;
-        }
-      };
-
-      provisioningAgent.registerService(UIServices.SERVICE_NAME, newUIServices);
-
-      cleanup.add(new Runnable()
-      {
-        public void run()
-        {
-          provisioningAgent.unregisterService(UIServices.SERVICE_NAME, newUIServices);
-          if (oldUIServices != null)
+        cleanup.add(() -> {
+          // Restore the key service to how it was.
+          if (selfAgentKeyService == null)
           {
-            provisioningAgent.registerService(UIServices.SERVICE_NAME, oldUIServices);
+            selfAgent.unregisterService(PGPPublicKeyService.SERVICE_NAME, provisioningAgentKeyService);
           }
-        }
-      });
+          else
+          {
+            selfAgent.registerService(PGPPublicKeyService.SERVICE_NAME, selfAgentKeyService);
+          }
+        });
+      }
     }
   }
 
@@ -783,7 +777,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
 
     EList<Repository> repositories = profileDefinition.getRepositories();
     URI[] metadataURIs = new URI[repositories.size()];
-    Set<URI> addedArtifactURIs = new HashSet<URI>();
+    Set<URI> addedArtifactURIs = new HashSet<>();
 
     for (int i = 0; i < metadataURIs.length; i++)
     {
@@ -797,6 +791,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
         {
           cleanup.add(new Runnable()
           {
+            @Override
             public void run()
             {
               metadataRepositoryManager.removeRepository(uri);
@@ -866,10 +861,10 @@ public class ProfileTransactionImpl implements ProfileTransaction
     rootDescription.setProperty(InstallableUnitDescription.PROP_TYPE_GROUP, Boolean.TRUE.toString());
     rootDescription.setCapabilities(new IProvidedCapability[] {
         MetadataFactory.createProvidedCapability(IInstallableUnit.NAMESPACE_IU_ID, rootDescription.getId(), rootDescription.getVersion()) });
-    List<IRequirement> rootRequirements = new ArrayList<IRequirement>();
+    List<IRequirement> rootRequirements = new ArrayList<>();
 
-    Map<String, IInstallableUnit> rootIUs = new HashMap<String, IInstallableUnit>();
-    Map<String, IRequirement> singletonRootRequirements = new HashMap<String, IRequirement>();
+    Map<String, IInstallableUnit> rootIUs = new HashMap<>();
+    Map<String, IRequirement> singletonRootRequirements = new HashMap<>();
     for (IInstallableUnit rootIU : P2Util.asIterable(profile.query(new UserVisibleRootQuery(), null)))
     {
       if (!removeAll)
@@ -930,10 +925,11 @@ public class ProfileTransactionImpl implements ProfileTransaction
       request.setProfileProperty(Profile.PROP_PROFILE_DEFINITION, ProfileImpl.definitionToXML(profileDefinition));
     }
 
-    Map<String, String> mergedProfileProperties = new LinkedHashMap<String, String>(profileProperties);
+    Map<String, String> mergedProfileProperties = new LinkedHashMap<>(profileProperties);
     mergedProfileProperties.putAll(P2Util.toProfilePropertiesMap(profileDefinition.getProfileProperties()));
     compare(cleanProfileProperties, mergedProfileProperties, new CompareHandler<String>()
     {
+      @Override
       public void handleAddition(String key, String value)
       {
         if (!IMMUTABLE_PROPERTIES.contains(key))
@@ -942,6 +938,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
         }
       }
 
+      @Override
       public void handleRemoval(String key)
       {
         if (!IMMUTABLE_PROPERTIES.contains(key))
@@ -953,11 +950,13 @@ public class ProfileTransactionImpl implements ProfileTransaction
 
     compare(cleanIUProperties, iuProperties, new CompareHandler<IUPropertyKey>()
     {
+      @Override
       public void handleAddition(IUPropertyKey key, String value)
       {
         request.setInstallableUnitProfileProperty(key.getInstallableUnit(), key.getPropertyKey(), value);
       }
 
+      @Override
       public void handleRemoval(IUPropertyKey key)
       {
         request.removeInstallableUnitProfileProperty(key.getInstallableUnit(), key.getPropertyKey());
@@ -1014,18 +1013,21 @@ public class ProfileTransactionImpl implements ProfileTransaction
           {
             private IBackupStore delegate;
 
+            @Override
             public boolean backup(File file) throws IOException
             {
               loadDelegate();
               return delegate.backup(file);
             }
 
+            @Override
             public boolean backupDirectory(File file) throws IOException
             {
               loadDelegate();
               return delegate.backupDirectory(file);
             }
 
+            @Override
             public void discard()
             {
               if (delegate == null)
@@ -1035,6 +1037,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
               delegate.discard();
             }
 
+            @Override
             public void restore() throws IOException
             {
               if (delegate == null)
@@ -1053,24 +1056,28 @@ public class ProfileTransactionImpl implements ProfileTransaction
               delegate = (IBackupStore)ReflectUtil.newInstance(backStoreConstructor, localTempFolder, NativeTouchpoint.escape(planProfile.getProfileId()));
             }
 
+            @Override
             public String getBackupName()
             {
               loadDelegate();
               return delegate.getBackupName();
             }
 
+            @Override
             public boolean backupCopy(File file) throws IOException
             {
               loadDelegate();
               return delegate.backupCopy(file);
             }
 
+            @Override
             public void backupCopyAll(File file) throws IOException
             {
               loadDelegate();
               delegate.backupCopyAll(file);
             }
 
+            @Override
             public void backupAll(File file) throws IOException
             {
               loadDelegate();
@@ -1115,7 +1122,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
   {
     // Create and return an IU that has optional and greedy requirements on all source bundles
     // related to bundle IUs in the profile
-    List<IRequirement> requirements = new ArrayList<IRequirement>();
+    List<IRequirement> requirements = new ArrayList<>();
 
     IQueryResult<IInstallableUnit> ius = provisioningPlan.getFutureState().query(QueryUtil.createIUAnyQuery(), monitor);
     for (IInstallableUnit iu : P2Util.asIterable(ius))
@@ -1253,18 +1260,32 @@ public class ProfileTransactionImpl implements ProfileTransaction
       this.monitor = monitor;
     }
 
+    @Override
     public void notify(EventObject event)
     {
       if (event instanceof CollectEvent)
       {
         CollectEvent collectEvent = (CollectEvent)event;
+        final IArtifactRepository repository = collectEvent.getRepository();
+        // PGPSignatureVerifier.KNOWN_KEYS.add(new File("D:/Users/merks/pgp-keys/platform-rootkey.asc"));
+        // PGPSignatureVerifier.KNOWN_KEYS.add(new File("D:/Users/merks/pgp-keys/platform-subkey.asc"));
+        // if (repository != null)
+        // {
+        // System.err.println("###" + repository.getLocation());
+        // Set<PGPPublicKey> repositoryPGPKeys = getRepositoryPGPKeys(repository);
+        // for (PGPPublicKey pgpPublicKey : repositoryPGPKeys)
+        // {
+        // PGPSignatureVerifier.KNOWN_KEYS.addKey(pgpPublicKey);
+        // }
+        // System.err.println("###" + repositoryPGPKeys);
+        // }
+
         IArtifactRequest[] requests = collectEvent.getDownloadRequests();
         if (requests != null && requests.length > 0)
         {
           if (collectEvent.getType() == CollectEvent.TYPE_REPOSITORY_START)
           {
             startTime = System.currentTimeMillis();
-            final IArtifactRepository repository = collectEvent.getRepository();
             if (repository != null)
             {
               monitor.subTask(NLS.bind(Messages.ProfileTransactionImpl_CollectingArtifacts_task, requests.length, repository.getLocation()));
@@ -1274,6 +1295,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
                 // so that phase 1 probing on bad mirrors can't block for too long.
                 Arrays.sort(requests, new Comparator<IArtifactRequest>()
                 {
+                  @Override
                   public int compare(IArtifactRequest o1, IArtifactRequest o2)
                   {
                     int size1 = getDownloadSize(o1);
@@ -1328,7 +1350,6 @@ public class ProfileTransactionImpl implements ProfileTransaction
           }
           else if (collectEvent.getType() == CollectEvent.TYPE_REPOSITORY_END)
           {
-            IArtifactRepository repository = collectEvent.getRepository();
             if (repository != null)
             {
               processStats(repository);
@@ -1374,7 +1395,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
   {
     private static final String INSTALLING_PREFIX = Messages.ProfileTransactionImpl_Installing_task + " "; //$NON-NLS-1$
 
-    private final Map<String, LinkedList<Version>> versions = new HashMap<String, LinkedList<Version>>();
+    private final Map<String, LinkedList<Version>> versions = new HashMap<>();
 
     private final IQueryable<IInstallableUnit> additions;
 
@@ -1429,7 +1450,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
           {
             if (list == null)
             {
-              list = new LinkedList<Version>();
+              list = new LinkedList<>();
               versions.put(id, list);
             }
 
@@ -1497,12 +1518,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
       }
 
       IUPropertyKey other = (IUPropertyKey)obj;
-      if (!iu.equals(other.iu))
-      {
-        return false;
-      }
-
-      if (!propertyKey.equals(other.propertyKey))
+      if (!iu.equals(other.iu) || !propertyKey.equals(other.propertyKey))
       {
         return false;
       }

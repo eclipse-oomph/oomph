@@ -16,7 +16,6 @@ import org.eclipse.oomph.p2.Requirement;
 import org.eclipse.oomph.p2.core.Agent;
 import org.eclipse.oomph.p2.core.AgentManager;
 import org.eclipse.oomph.p2.core.BundlePool;
-import org.eclipse.oomph.p2.core.CertificateConfirmer;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.p2.core.ProfileCreator;
@@ -85,7 +84,6 @@ import org.eclipse.osgi.util.NLS;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.security.cert.Certificate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -250,6 +248,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getLabel()
   {
     return label;
@@ -260,6 +259,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setLabel(String newLabel)
   {
     String oldLabel = label;
@@ -275,11 +275,12 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<Requirement> getRequirements()
   {
     if (requirements == null)
     {
-      requirements = new EObjectContainmentEList<Requirement>(Requirement.class, this, SetupP2Package.P2_TASK__REQUIREMENTS);
+      requirements = new EObjectContainmentEList<>(Requirement.class, this, SetupP2Package.P2_TASK__REQUIREMENTS);
     }
     return requirements;
   }
@@ -289,11 +290,12 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<Repository> getRepositories()
   {
     if (repositories == null)
     {
-      repositories = new EObjectContainmentEList<Repository>(Repository.class, this, SetupP2Package.P2_TASK__REPOSITORIES);
+      repositories = new EObjectContainmentEList<>(Repository.class, this, SetupP2Package.P2_TASK__REPOSITORIES);
     }
     return repositories;
   }
@@ -303,6 +305,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public boolean isLicenseConfirmationDisabled()
   {
     return licenseConfirmationDisabled;
@@ -313,6 +316,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setLicenseConfirmationDisabled(boolean newLicenseConfirmationDisabled)
   {
     boolean oldLicenseConfirmationDisabled = licenseConfirmationDisabled;
@@ -329,6 +333,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public boolean isMergeDisabled()
   {
     return mergeDisabled;
@@ -339,6 +344,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setMergeDisabled(boolean newMergeDisabled)
   {
     boolean oldMergeDisabled = mergeDisabled;
@@ -354,6 +360,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getProfileProperties()
   {
     return profileProperties;
@@ -364,6 +371,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setProfileProperties(String newProfileProperties)
   {
     String oldProfileProperties = profileProperties;
@@ -553,7 +561,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
 
     // This ensures that he p2 tasks with different excluded triggers don't merge early.
     // In SetupTaskPerformer.getSubstitutions(EList<SetupTask>), this list is modified to ensure that merging happens later.
-    List<Object> token = new ArrayList<Object>();
+    List<Object> token = new ArrayList<>();
     token.add(getClass());
     token.addAll(getTriggers());
     return token;
@@ -588,7 +596,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
       String label = getLabel();
       if (!StringUtil.isEmpty(label))
       {
-        List<String> labelSegments = new UniqueEList<String>(SegmentSequence.create(" + ", overriddenLabel).segmentsList()); //$NON-NLS-1$
+        List<String> labelSegments = new UniqueEList<>(SegmentSequence.create(" + ", overriddenLabel).segmentsList()); //$NON-NLS-1$
         labelSegments.addAll(SegmentSequence.create(" + ", label).segmentsList()); //$NON-NLS-1$
         overriddenLabel = SegmentSequence.create(" + ", labelSegments.toArray(new String[labelSegments.size()])).toString(); //$NON-NLS-1$
       }
@@ -600,7 +608,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
   @Override
   public void consolidate()
   {
-    Set<String> installableUnitKeys = new HashSet<String>();
+    Set<String> installableUnitKeys = new HashSet<>();
     for (Iterator<Requirement> it = getRequirements().iterator(); it.hasNext();)
     {
       Requirement requirement = it.next();
@@ -612,8 +620,8 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     }
 
     EList<Repository> repositories = getRepositories();
-    Set<String> repositoryKeys = new HashSet<String>();
-    Set<Repository> releaseTrainAlternates = new HashSet<Repository>();
+    Set<String> repositoryKeys = new HashSet<>();
+    Set<Repository> releaseTrainAlternates = new HashSet<>();
     boolean containsReleaseTrain = false;
     for (Iterator<Repository> it = repositories.iterator(); it.hasNext();)
     {
@@ -661,6 +669,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     }
   }
 
+  @Override
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     if (SKIP)
@@ -674,13 +683,14 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
       return true;
     }
 
-    if (context.isSelfHosting())
+    Agent agent = P2Util.getAgentManager().getCurrentAgent();
+    Profile profile = agent.getCurrentProfile();
+
+    if (context.isSelfHosting() && trigger != Trigger.MANUAL)
     {
       return false;
     }
 
-    Agent agent = P2Util.getAgentManager().getCurrentAgent();
-    Profile profile = agent.getCurrentProfile();
     if (profile == null)
     {
       // We're most likely in self hosting mode, where software updates are not really well supported.
@@ -717,7 +727,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
       }
     }
 
-    Set<Requirement> unsatisifiedRequirements = new LinkedHashSet<Requirement>();
+    Set<Requirement> unsatisifiedRequirements = new LinkedHashSet<>();
     for (Requirement requirement : getRequirements())
     {
       if (context.matchesFilterContext(requirement.getFilter()) && (!requirement.isOptional() || requirement.getMax() == 0))
@@ -740,6 +750,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     return !unsatisifiedRequirements.isEmpty();
   }
 
+  @Override
   public void perform(final SetupTaskContext context) throws Exception
   {
     boolean offline = context.isOffline();
@@ -811,7 +822,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
             public IQueryable<IInstallableUnit> getMetadata(IProgressMonitor monitor)
             {
               IMetadataRepositoryManager repositoryManager = provisioningAgent.getService(IMetadataRepositoryManager.class);
-              Set<IMetadataRepository> loadedRepositories = new LinkedHashSet<IMetadataRepository>();
+              Set<IMetadataRepository> loadedRepositories = new LinkedHashSet<>();
               if (metadataRepositories != null && repositoryManager instanceof MetadataRepositoryManager)
               {
                 MetadataRepositoryManager metadataRepositoryManager = (MetadataRepositoryManager)repositoryManager;
@@ -853,18 +864,6 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
 
         result.setProperty(ProvisioningContext.FOLLOW_REPOSITORY_REFERENCES, Boolean.TRUE.toString());
         return result;
-      }
-
-      @Override
-      public Confirmer getUnsignedContentConfirmer()
-      {
-        return (Confirmer)context.get(Certificate.class);
-      }
-
-      @Override
-      public CertificateConfirmer getCertficateConfirmer()
-      {
-        return (CertificateConfirmer)context.get(CertificateConfirmer.class);
       }
     };
 
@@ -937,6 +936,16 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
           provisioningAgent.registerService(CacheUsageConfirmer.SERVICE_NAME, oldCacheUsageConfirmer);
         }
       }
+
+      // Copy the trust preferences of the profile to the self profile if the agents are different, i.e., in the installer.
+      Profile selfProfile = P2Util.getAgentManager().getCurrentAgent().getCurrentProfile();
+      if (selfProfile.getAgent() != profile.getAgent())
+      {
+        P2Util.copyTrustPreferences(profile, selfProfile);
+      }
+
+      // Save them globally as well, but don't remove anything from the global preferences.
+      P2Util.saveGlobalTrustPreferences(profile, false);
     }
   }
 
@@ -1014,13 +1023,20 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
         profileCreator.set(Profile.PROP_PROFILE_SHARED_POOL, sharedPool);
 
         profile = profileCreator.create();
+
+        // Copy the trust preferences of the current profile (installer) to the new installation profile.
+        P2Util.copyTrustPreferences(P2Util.getAgentManager().getCurrentAgent().getCurrentProfile(), profile);
       }
 
-      UIServices uiServices = (UIServices)context.get(UIServices.class);
-      if (uiServices != null)
+      UIServicesInitializer initializer = (UIServicesInitializer)context.get(UIServicesInitializer.class);
+      if (initializer != null)
       {
         IProvisioningAgent provisioningAgent = profile.getAgent().getProvisioningAgent();
-        provisioningAgent.registerService(UIServices.SERVICE_NAME, uiServices);
+        UIServices uiServices = provisioningAgent.getService(UIServices.class);
+        if (uiServices != null)
+        {
+          initializer.init(uiServices);
+        }
       }
 
       return profile;
@@ -1050,14 +1066,14 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
   public static void processLicenses(IProvisioningPlan provisioningPlan, Confirmer licenseConfirmer, final User user, boolean saveChangedUser,
       IProgressMonitor monitor)
   {
-    Set<LicenseInfo> acceptedLicenses = new HashSet<LicenseInfo>();
+    Set<LicenseInfo> acceptedLicenses = new HashSet<>();
     if (user != null)
     {
       acceptedLicenses.addAll(user.getAcceptedLicenses());
     }
 
-    final Map<ILicense, List<IInstallableUnit>> licensesToIUs = new HashMap<ILicense, List<IInstallableUnit>>();
-    Set<Pair<ILicense, String>> set = new HashSet<Pair<ILicense, String>>();
+    final Map<ILicense, List<IInstallableUnit>> licensesToIUs = new HashMap<>();
+    Set<Pair<ILicense, String>> set = new HashSet<>();
 
     IQueryable<IInstallableUnit> queryable = provisioningPlan.getAdditions();
     IQueryResult<IInstallableUnit> result = queryable.query(QueryUtil.ALL_UNITS, monitor);
@@ -1092,7 +1108,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
         List<IInstallableUnit> ius = licensesToIUs.get(license);
         if (ius == null)
         {
-          ius = new ArrayList<IInstallableUnit>();
+          ius = new ArrayList<>();
           licensesToIUs.put(license, ius);
         }
 
@@ -1149,7 +1165,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
 
   private static Set<IInstallableUnit> getInstalledUnits(Agent agent)
   {
-    Set<IInstallableUnit> result = new HashSet<IInstallableUnit>();
+    Set<IInstallableUnit> result = new HashSet<>();
     IProfile profile = getProfile(agent);
     if (profile != null)
     {

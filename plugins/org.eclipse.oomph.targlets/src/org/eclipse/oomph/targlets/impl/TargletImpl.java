@@ -276,6 +276,7 @@ public class TargletImpl extends ModelElementImpl implements Targlet
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getName()
   {
     return name;
@@ -286,6 +287,7 @@ public class TargletImpl extends ModelElementImpl implements Targlet
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setName(String newName)
   {
     String oldName = name;
@@ -301,11 +303,12 @@ public class TargletImpl extends ModelElementImpl implements Targlet
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<Requirement> getRequirements()
   {
     if (requirements == null)
     {
-      requirements = new EObjectContainmentEList<Requirement>(Requirement.class, this, TargletPackage.TARGLET__REQUIREMENTS);
+      requirements = new EObjectContainmentEList<>(Requirement.class, this, TargletPackage.TARGLET__REQUIREMENTS);
     }
     return requirements;
   }
@@ -315,11 +318,12 @@ public class TargletImpl extends ModelElementImpl implements Targlet
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<SourceLocator> getSourceLocators()
   {
     if (sourceLocators == null)
     {
-      sourceLocators = new EObjectContainmentEList<SourceLocator>(SourceLocator.class, this, TargletPackage.TARGLET__SOURCE_LOCATORS);
+      sourceLocators = new EObjectContainmentEList<>(SourceLocator.class, this, TargletPackage.TARGLET__SOURCE_LOCATORS);
     }
     return sourceLocators;
   }
@@ -329,11 +333,12 @@ public class TargletImpl extends ModelElementImpl implements Targlet
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<IUGenerator> getInstallableUnitGenerators()
   {
     if (installableUnitGenerators == null)
     {
-      installableUnitGenerators = new EObjectContainmentEList<IUGenerator>(IUGenerator.class, this, TargletPackage.TARGLET__INSTALLABLE_UNIT_GENERATORS);
+      installableUnitGenerators = new EObjectContainmentEList<>(IUGenerator.class, this, TargletPackage.TARGLET__INSTALLABLE_UNIT_GENERATORS);
     }
     return installableUnitGenerators;
   }
@@ -343,11 +348,12 @@ public class TargletImpl extends ModelElementImpl implements Targlet
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<DropinLocation> getDropinLocations()
   {
     if (dropinLocations == null)
     {
-      dropinLocations = new EObjectContainmentEList<DropinLocation>(DropinLocation.class, this, TargletPackage.TARGLET__DROPIN_LOCATIONS);
+      dropinLocations = new EObjectContainmentEList<>(DropinLocation.class, this, TargletPackage.TARGLET__DROPIN_LOCATIONS);
     }
     return dropinLocations;
   }
@@ -357,6 +363,7 @@ public class TargletImpl extends ModelElementImpl implements Targlet
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public boolean isIncludeBinaryEquivalents()
   {
     return includeBinaryEquivalents;
@@ -367,6 +374,7 @@ public class TargletImpl extends ModelElementImpl implements Targlet
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setIncludeBinaryEquivalents(boolean newIncludeBinaryEquivalents)
   {
     boolean oldIncludeBinaryEquivalents = includeBinaryEquivalents;
@@ -383,6 +391,7 @@ public class TargletImpl extends ModelElementImpl implements Targlet
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getProfileProperties()
   {
     return profileProperties;
@@ -393,6 +402,7 @@ public class TargletImpl extends ModelElementImpl implements Targlet
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setProfileProperties(String newProfileProperties)
   {
     String oldProfileProperties = profileProperties;
@@ -408,11 +418,12 @@ public class TargletImpl extends ModelElementImpl implements Targlet
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<RepositoryList> getRepositoryLists()
   {
     if (repositoryLists == null)
     {
-      repositoryLists = new EObjectContainmentEList<RepositoryList>(RepositoryList.class, this, TargletPackage.TARGLET__REPOSITORY_LISTS);
+      repositoryLists = new EObjectContainmentEList<>(RepositoryList.class, this, TargletPackage.TARGLET__REPOSITORY_LISTS);
     }
     return repositoryLists;
   }
@@ -422,6 +433,7 @@ public class TargletImpl extends ModelElementImpl implements Targlet
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getActiveRepositoryListName()
   {
     return activeRepositoryListName;
@@ -432,6 +444,7 @@ public class TargletImpl extends ModelElementImpl implements Targlet
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setActiveRepositoryListName(String newActiveRepositoryListName)
   {
     String oldActiveRepositoryListName = activeRepositoryListName;
@@ -448,6 +461,7 @@ public class TargletImpl extends ModelElementImpl implements Targlet
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public RepositoryList getActiveRepositoryList()
   {
     EList<RepositoryList> repositoryLists = getRepositoryLists();
@@ -476,9 +490,10 @@ public class TargletImpl extends ModelElementImpl implements Targlet
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public EList<Repository> getActiveRepositories()
   {
-    EList<Repository> result = new EObjectEList<Repository>(Repository.class, this, TargletPackage.TARGLET__ACTIVE_REPOSITORIES);
+    EList<Repository> result = new EObjectEList<>(Repository.class, this, TargletPackage.TARGLET__ACTIVE_REPOSITORIES);
 
     RepositoryList activeRepositoryList = getActiveRepositoryList();
     if (activeRepositoryList != null)
@@ -494,6 +509,7 @@ public class TargletImpl extends ModelElementImpl implements Targlet
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public boolean isIncludeSources()
   {
     return includeSources;
@@ -504,6 +520,7 @@ public class TargletImpl extends ModelElementImpl implements Targlet
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setIncludeSources(boolean newIncludeSources)
   {
     boolean oldIncludeSources = includeSources;
@@ -519,6 +536,7 @@ public class TargletImpl extends ModelElementImpl implements Targlet
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public boolean isIncludeAllPlatforms()
   {
     return includeAllPlatforms;
@@ -529,6 +547,7 @@ public class TargletImpl extends ModelElementImpl implements Targlet
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setIncludeAllPlatforms(boolean newIncludeAllPlatforms)
   {
     boolean oldIncludeAllPlatforms = includeAllPlatforms;
@@ -544,6 +563,7 @@ public class TargletImpl extends ModelElementImpl implements Targlet
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public boolean isIncludeAllRequirements()
   {
     return includeAllRequirements;
@@ -554,6 +574,7 @@ public class TargletImpl extends ModelElementImpl implements Targlet
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setIncludeAllRequirements(boolean newIncludeAllRequirements)
   {
     boolean oldIncludeAllRequirements = includeAllRequirements;

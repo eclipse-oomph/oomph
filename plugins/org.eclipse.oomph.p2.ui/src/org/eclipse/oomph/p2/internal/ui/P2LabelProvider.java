@@ -41,7 +41,7 @@ public final class P2LabelProvider extends LabelProvider implements IColorProvid
 {
   private static final String EXTENSION_POINT_ID = P2UIPlugin.INSTANCE.getSymbolicName() + ".profileTypes"; //$NON-NLS-1$
 
-  private static final Map<String, Image> profileImages = new HashMap<String, Image>();
+  private static final Map<String, Image> profileImages = new HashMap<>();
 
   private IFontProvider fontProvider;
 
@@ -114,6 +114,7 @@ public final class P2LabelProvider extends LabelProvider implements IColorProvid
     return element.toString();
   }
 
+  @Override
   public Color getForeground(Object element)
   {
     if (element instanceof AgentManagerElement)
@@ -128,11 +129,13 @@ public final class P2LabelProvider extends LabelProvider implements IColorProvid
     return null;
   }
 
+  @Override
   public Color getBackground(Object element)
   {
     return null;
   }
 
+  @Override
   public Font getFont(Object element)
   {
     return fontProvider == null ? null : fontProvider.getFont(element);

@@ -287,7 +287,7 @@ public class ConfirmationPage extends SetupWizardPage
     }
     else
     {
-      Set<URI> checkedElements = new HashSet<URI>();
+      Set<URI> checkedElements = new HashSet<>();
       SetupTaskPerformer performer = getPerformer();
       for (SetupTask setupTask : performer.getTriggeredSetupTasks())
       {
@@ -358,6 +358,7 @@ public class ConfirmationPage extends SetupWizardPage
     {
       UIUtil.asyncExec(new Runnable()
       {
+        @Override
         public void run()
         {
           ErrorDialog.open(ex);
@@ -493,19 +494,23 @@ public class ConfirmationPage extends SetupWizardPage
 
     viewer.setContentProvider(new ITreeContentProvider()
     {
+      @Override
       public void inputChanged(Viewer viewer, Object oldInput, Object newInput)
       {
       }
 
+      @Override
       public void dispose()
       {
       }
 
+      @Override
       public boolean hasChildren(Object element)
       {
         return element == ConfirmationPage.this || element == ROOT_ELEMENT;
       }
 
+      @Override
       public Object getParent(Object element)
       {
         if (element instanceof SetupTask)
@@ -521,14 +526,16 @@ public class ConfirmationPage extends SetupWizardPage
         return null;
       }
 
+      @Override
       public Object[] getElements(Object element)
       {
         return getChildren(element);
       }
 
+      @Override
       public Object[] getChildren(Object element)
       {
-        List<Object> children = new ArrayList<Object>();
+        List<Object> children = new ArrayList<>();
 
         if (element == INPUT)
         {
@@ -585,6 +592,7 @@ public class ConfirmationPage extends SetupWizardPage
 
     viewer.addCheckStateListener(new ICheckStateListener()
     {
+      @Override
       public void checkStateChanged(CheckStateChangedEvent event)
       {
         boolean checked = event.getChecked();
@@ -601,6 +609,7 @@ public class ConfirmationPage extends SetupWizardPage
 
     viewer.addDoubleClickListener(new IDoubleClickListener()
     {
+      @Override
       public void doubleClick(DoubleClickEvent event)
       {
         Object element = ((IStructuredSelection)event.getSelection()).getFirstElement();
@@ -626,6 +635,7 @@ public class ConfirmationPage extends SetupWizardPage
 
     final ISelectionProvider selectionProvider = new ISelectionProvider()
     {
+      @Override
       public ISelection getSelection()
       {
         Object[] selection = ((IStructuredSelection)viewer.getSelection()).toArray();
@@ -640,15 +650,18 @@ public class ConfirmationPage extends SetupWizardPage
         return new StructuredSelection(selection);
       }
 
+      @Override
       public void setSelection(ISelection selection)
       {
       }
 
+      @Override
       public void removeSelectionChangedListener(ISelectionChangedListener listener)
       {
         // Ignore
       }
 
+      @Override
       public void addSelectionChangedListener(ISelectionChangedListener listener)
       {
       }
@@ -657,6 +670,7 @@ public class ConfirmationPage extends SetupWizardPage
     MenuManager contextMenu = new MenuManager("#PopUp"); //$NON-NLS-1$
     contextMenu.addMenuListener(new IMenuListener()
     {
+      @Override
       public void menuAboutToShow(IMenuManager manager)
       {
         final IStructuredSelection selection = (IStructuredSelection)selectionProvider.getSelection();
@@ -714,7 +728,7 @@ public class ConfirmationPage extends SetupWizardPage
       @Override
       public Object[] getElements(Object object)
       {
-        List<Object> result = new ArrayList<Object>();
+        List<Object> result = new ArrayList<>();
         for (Object child : super.getElements(object))
         {
           if (!(child instanceof SetupTask))
@@ -775,6 +789,7 @@ public class ConfirmationPage extends SetupWizardPage
     tree.addControlListener(columnResizer);
     tree.getDisplay().asyncExec(new Runnable()
     {
+      @Override
       public void run()
       {
         columnResizer.controlResized(null);
@@ -788,6 +803,7 @@ public class ConfirmationPage extends SetupWizardPage
   {
     master.addSelectionChangedListener(new ISelectionChangedListener()
     {
+      @Override
       public void selectionChanged(SelectionChangedEvent event)
       {
         if (detail != null)
@@ -811,7 +827,7 @@ public class ConfirmationPage extends SetupWizardPage
 
   private Set<SetupTask> getCheckedTasks()
   {
-    Set<SetupTask> tasks = new HashSet<SetupTask>();
+    Set<SetupTask> tasks = new HashSet<>();
     for (Object object : viewer.getCheckedElements())
     {
       if (object instanceof SetupTask)
@@ -913,6 +929,7 @@ public class ConfirmationPage extends SetupWizardPage
     final boolean[] result = { false };
     UIUtil.syncExec(new Runnable()
     {
+      @Override
       public void run()
       {
         result[0] = button.getSelection();

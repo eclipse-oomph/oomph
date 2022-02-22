@@ -139,6 +139,7 @@ public class WorkingSetsPackageImpl extends EPackageImpl implements WorkingSetsP
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getWorkingSet()
   {
     return workingSetEClass;
@@ -149,6 +150,7 @@ public class WorkingSetsPackageImpl extends EPackageImpl implements WorkingSetsP
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getWorkingSet_Predicates()
   {
     return (EReference)workingSetEClass.getEStructuralFeatures().get(1);
@@ -159,6 +161,7 @@ public class WorkingSetsPackageImpl extends EPackageImpl implements WorkingSetsP
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getWorkingSet_ID()
   {
     return (EAttribute)workingSetEClass.getEStructuralFeatures().get(2);
@@ -169,6 +172,7 @@ public class WorkingSetsPackageImpl extends EPackageImpl implements WorkingSetsP
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EOperation getWorkingSet__Matches__IResource()
   {
     return workingSetEClass.getEOperations().get(0);
@@ -179,6 +183,7 @@ public class WorkingSetsPackageImpl extends EPackageImpl implements WorkingSetsP
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getWorkingSet_Name()
   {
     return (EAttribute)workingSetEClass.getEStructuralFeatures().get(0);
@@ -189,6 +194,7 @@ public class WorkingSetsPackageImpl extends EPackageImpl implements WorkingSetsP
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getWorkingSetGroup()
   {
     return workingSetGroupEClass;
@@ -199,6 +205,7 @@ public class WorkingSetsPackageImpl extends EPackageImpl implements WorkingSetsP
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getWorkingSetGroup_WorkingSets()
   {
     return (EReference)workingSetGroupEClass.getEStructuralFeatures().get(0);
@@ -209,6 +216,7 @@ public class WorkingSetsPackageImpl extends EPackageImpl implements WorkingSetsP
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EOperation getWorkingSetGroup__GetWorkingSet__String()
   {
     return workingSetGroupEClass.getEOperations().get(0);
@@ -219,6 +227,7 @@ public class WorkingSetsPackageImpl extends EPackageImpl implements WorkingSetsP
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getExclusionPredicate()
   {
     return exclusionPredicateEClass;
@@ -229,6 +238,7 @@ public class WorkingSetsPackageImpl extends EPackageImpl implements WorkingSetsP
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getExclusionPredicate_ExcludedWorkingSets()
   {
     return (EReference)exclusionPredicateEClass.getEStructuralFeatures().get(0);
@@ -239,6 +249,7 @@ public class WorkingSetsPackageImpl extends EPackageImpl implements WorkingSetsP
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getInclusionPredicate()
   {
     return inclusionPredicateEClass;
@@ -249,6 +260,7 @@ public class WorkingSetsPackageImpl extends EPackageImpl implements WorkingSetsP
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getInclusionPredicate_IncludedWorkingSets()
   {
     return (EReference)inclusionPredicateEClass.getEStructuralFeatures().get(0);
@@ -259,6 +271,7 @@ public class WorkingSetsPackageImpl extends EPackageImpl implements WorkingSetsP
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public WorkingSetsFactory getWorkingSetsFactory()
   {
     return (WorkingSetsFactory)getEFactoryInstance();

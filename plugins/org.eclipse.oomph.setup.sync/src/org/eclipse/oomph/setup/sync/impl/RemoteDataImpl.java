@@ -74,11 +74,12 @@ public class RemoteDataImpl extends SetupTaskContainerImpl implements RemoteData
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EMap<String, SyncPolicy> getPolicies()
   {
     if (policies == null)
     {
-      policies = new EcoreEMap<String, SyncPolicy>(SyncPackage.Literals.STRING_TO_SYNC_POLICY_MAP_ENTRY, StringToSyncPolicyMapEntryImpl.class, this,
+      policies = new EcoreEMap<>(SyncPackage.Literals.STRING_TO_SYNC_POLICY_MAP_ENTRY, StringToSyncPolicyMapEntryImpl.class, this,
           SyncPackage.REMOTE_DATA__POLICIES);
     }
     return policies;

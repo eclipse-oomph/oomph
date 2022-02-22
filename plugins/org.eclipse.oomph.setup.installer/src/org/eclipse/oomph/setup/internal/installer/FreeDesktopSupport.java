@@ -41,11 +41,13 @@ public class FreeDesktopSupport implements DesktopSupport
     }
   }
 
+  @Override
   public void pinToTaskBar(String location, String launcherName) throws IOException
   {
     // Not supported yet
   }
 
+  @Override
   @SuppressWarnings("nls")
   public boolean createShortCut(ShortcutType type, String groupName, File executable, String shortcutName, String description, String id) throws IOException
   {

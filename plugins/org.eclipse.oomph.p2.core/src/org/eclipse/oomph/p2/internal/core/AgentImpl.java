@@ -119,7 +119,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
     this.agentManager = agentManager;
     this.location = location;
 
-    bundlePoolMap = new PersistentMap<BundlePool>(new File(location, "pools.info")) //$NON-NLS-1$
+    bundlePoolMap = new PersistentMap<>(new File(location, "pools.info")) //$NON-NLS-1$
     {
       @Override
       protected BundlePool createElement(String key, String extraInfo)
@@ -149,7 +149,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
       }
     };
 
-    profileMap = new PersistentMap<Profile>(new File(location, "profiles.info")) //$NON-NLS-1$
+    profileMap = new PersistentMap<>(new File(location, "profiles.info")) //$NON-NLS-1$
     {
       @Override
       protected Profile createElement(String profileID, String extraInfo)
@@ -225,26 +225,31 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
     }
   }
 
+  @Override
   public AgentManager getAgentManager()
   {
     return agentManager;
   }
 
+  @Override
   public File getLocation()
   {
     return location;
   }
 
+  @Override
   public boolean isValid()
   {
     return isValid(location);
   }
 
+  @Override
   public boolean isCurrent()
   {
     return agentManager.getCurrentAgent() == this;
   }
 
+  @Override
   public boolean isUsed()
   {
     for (BundlePool bundlePool : getBundlePools())
@@ -277,11 +282,13 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
     return bundlePoolMap;
   }
 
+  @Override
   public Set<File> getBundlePoolLocations()
   {
     return AgentManagerImpl.getLocations(bundlePoolMap.getElementKeys());
   }
 
+  @Override
   public Collection<BundlePool> getBundlePools()
   {
     return bundlePoolMap.getElements();
@@ -292,11 +299,13 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
     return bundlePoolMap.getElement(path);
   }
 
+  @Override
   public BundlePool getBundlePool(File location)
   {
     return bundlePoolMap.getElement(location.getAbsolutePath());
   }
 
+  @Override
   public BundlePool addBundlePool(File location)
   {
     return bundlePoolMap.addElement(location.getAbsolutePath(), null);
@@ -309,6 +318,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
     // TODO Delete artifacts from disk
   }
 
+  @Override
   public void refreshBundlePools(IProgressMonitor monitor)
   {
     monitor.subTask(NLS.bind(Messages.AgentImpl_Refreshing_task, getLocation()));
@@ -316,6 +326,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
     monitor.done();
   }
 
+  @Override
   public synchronized IProfileRegistry getProfileRegistry()
   {
     getProvisioningAgent();
@@ -327,16 +338,19 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
     return profileMap;
   }
 
+  @Override
   public Set<String> getAllProfileIDs()
   {
     return profileMap.getElementKeys();
   }
 
+  @Override
   public Collection<Profile> getAllProfiles()
   {
     return profileMap.getElements();
   }
 
+  @Override
   public Set<String> getProfileIDs()
   {
     return getProfileIDs(null);
@@ -344,7 +358,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
 
   public Set<String> getProfileIDs(BundlePool bundlePool)
   {
-    Set<String> ids = new HashSet<String>();
+    Set<String> ids = new HashSet<>();
     for (Profile profile : getAllProfiles())
     {
       if (profile.getBundlePool() == bundlePool)
@@ -356,6 +370,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
     return ids;
   }
 
+  @Override
   public Collection<Profile> getProfiles()
   {
     return getProfiles(null);
@@ -376,6 +391,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
     return profiles;
   }
 
+  @Override
   public Profile getCurrentProfile()
   {
     IProfile delegate = getProfileRegistry().getProfile(IProfileRegistry.SELF);
@@ -388,6 +404,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
     return null;
   }
 
+  @Override
   public Profile getProfile(String id)
   {
     Profile profile = profileMap.getElement(id);
@@ -415,6 +432,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
     return profile;
   }
 
+  @Override
   public Profile getProfile(File installFolder)
   {
     Profile profile = getProfileFromProfileMap(installFolder);
@@ -459,6 +477,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
     return null;
   }
 
+  @Override
   public ProfileCreator addProfile(String id, String type)
   {
     return new ProfileCreatorImpl(this, id, type)
@@ -507,6 +526,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
     getProfileRegistry().removeProfile(profileID);
   }
 
+  @Override
   public void refreshProfiles(IProgressMonitor monitor)
   {
     monitor.beginTask("", 10); //$NON-NLS-1$
@@ -578,6 +598,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
         {
           private Runnable restoreBundlePoolTimestamps;
 
+          @Override
           public void notify(EventObject event)
           {
             if (event instanceof TransactionEvent)
@@ -658,6 +679,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
     }
   }
 
+  @Override
   public synchronized IProvisioningAgent getProvisioningAgent()
   {
     if (provisioningAgent == null)
@@ -669,18 +691,21 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
     return provisioningAgent;
   }
 
+  @Override
   public synchronized IMetadataRepositoryManager getMetadataRepositoryManager()
   {
     getProvisioningAgent();
     return metadataRepositoryManager;
   }
 
+  @Override
   public synchronized IArtifactRepositoryManager getArtifactRepositoryManager()
   {
     getProvisioningAgent();
     return artifactRepositoryManager;
   }
 
+  @Override
   public synchronized IEngine getEngine()
   {
     if (engine == null)
@@ -695,6 +720,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
     return engine;
   }
 
+  @Override
   public synchronized IPlanner getPlanner()
   {
     if (planner == null)
@@ -709,6 +735,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
     return planner;
   }
 
+  @Override
   public void flushCachedRepositories()
   {
     IMetadataRepositoryManager metadataRepositoryManager = getMetadataRepositoryManager();
@@ -726,6 +753,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
     }
   }
 
+  @Override
   public IFileArtifactRepository getDownloadCacheRepository()
   {
     try
@@ -738,9 +766,10 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
     }
   }
 
+  @Override
   public void clearRepositoryCaches(IProgressMonitor monitor)
   {
-    Set<File> cacheFiles = new LinkedHashSet<File>();
+    Set<File> cacheFiles = new LinkedHashSet<>();
 
     IAgentLocation location = (IAgentLocation)getProvisioningAgent().getService(IAgentLocation.SERVICE_NAME);
     File p2Cache = URIUtil.toFile(location.getDataArea(org.eclipse.equinox.internal.p2.repository.Activator.ID + "/cache/")); //$NON-NLS-1$
@@ -942,7 +971,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
     String contents = new String(IOUtil.readFile(iniFile));
 
     // We will process all the sections, keeping them in a map from which we'll compute the modified contents.
-    Map<String, String> map = new LinkedHashMap<String, String>();
+    Map<String, String> map = new LinkedHashMap<>();
     for (Matcher matcher = ECLIPSE_INI_SECTION_PATTERN.matcher(contents); matcher.find();)
     {
       // Depending on which part of the pattern matched, we'll need to select the argument and extension from the constituent parts.
@@ -1080,7 +1109,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
 
     // Read all the lines as UTF-8 as documented in a comment in that file.
     List<String> lines = IOUtil.readLines(bundlesInfoFile, "UTF-8"); //$NON-NLS-1$
-    List<String> result = new ArrayList<String>();
+    List<String> result = new ArrayList<>();
     boolean changed = false;
     URI configurationFolderURI = URI.createFileURI(configurationFolder.toString());
 
@@ -1204,7 +1233,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
 
   public static String getProfileExtraInfo(IProfile delegate)
   {
-    List<String> tokens = new ArrayList<String>();
+    List<String> tokens = new ArrayList<>();
     tokens.add(getProfileType(delegate));
     tokens.add(delegate.getProperty(Profile.PROP_CACHE));
     tokens.add(delegate.getProperty(Profile.PROP_INSTALL_FOLDER));

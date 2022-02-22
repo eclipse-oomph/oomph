@@ -143,6 +143,7 @@ public class AgentManagerComposite extends Composite
     treeViewer.setContentProvider(contentProvider);
     treeViewer.setLabelProvider(new P2LabelProvider(poolSelection ? new IFontProvider()
     {
+      @Override
       public Font getFont(Object element)
       {
         if (element == selectedPool)
@@ -156,6 +157,7 @@ public class AgentManagerComposite extends Composite
     treeViewer.setComparator(new P2ViewerSorter());
     treeViewer.addSelectionChangedListener(new ISelectionChangedListener()
     {
+      @Override
       public void selectionChanged(SelectionChangedEvent event)
       {
         selectedElement = ((IStructuredSelection)treeViewer.getSelection()).getFirstElement();
@@ -244,6 +246,7 @@ public class AgentManagerComposite extends Composite
           {
             UIUtil.runInProgressDialog(getShell(), new IRunnableWithProgress()
             {
+              @Override
               public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
               {
                 agent.clearRepositoryCaches(monitor);
@@ -367,6 +370,7 @@ public class AgentManagerComposite extends Composite
           ProgressMonitorDialog dialog = new ProgressMonitorDialog(getShell());
           dialog.run(true, true, new IRunnableWithProgress()
           {
+            @Override
             public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
             {
               P2Util.getAgentManager().refreshAgents(monitor);
@@ -438,12 +442,14 @@ public class AgentManagerComposite extends Composite
 
     UIUtil.asyncExec(new Runnable()
     {
+      @Override
       public void run()
       {
         final AgentManager agentManager = P2Util.getAgentManager();
 
         BusyIndicator.showWhile(getShell().getDisplay(), new Runnable()
         {
+          @Override
           public void run()
           {
             treeViewer.setInput(agentManager);
@@ -586,6 +592,7 @@ public class AgentManagerComposite extends Composite
       ProgressMonitorDialog dialog = new ProgressMonitorDialog(getShell());
       dialog.run(true, true, new IRunnableWithProgress()
       {
+        @Override
         public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
         {
           SubMonitor progress = SubMonitor.convert(monitor, Messages.AgentManagerComposite_cleanup_analyzing, 100).detectCancelation();
@@ -601,8 +608,8 @@ public class AgentManagerComposite extends Composite
       return;
     }
 
-    final Map<AnalyzedProfile, AnalyzedProfile> unusedProfiles = new IdentityHashMap<AnalyzedProfile, AnalyzedProfile>();
-    final Map<AnalyzedArtifact, AnalyzedArtifact> unusedArtifacts = new IdentityHashMap<AnalyzedArtifact, AnalyzedArtifact>();
+    final Map<AnalyzedProfile, AnalyzedProfile> unusedProfiles = new IdentityHashMap<>();
+    final Map<AnalyzedArtifact, AnalyzedArtifact> unusedArtifacts = new IdentityHashMap<>();
 
     for (AnalyzedBundlePool bundlePool : analyzer[0].getBundlePools().values())
     {
@@ -642,6 +649,7 @@ public class AgentManagerComposite extends Composite
       {
         UIUtil.runInProgressDialog(getShell(), new IRunnableWithProgress()
         {
+          @Override
           public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
           {
             SubMonitor progress = SubMonitor.convert(monitor, Messages.AgentManagerComposite_cleanup_deleting, profiles + artifacts).detectCancelation();
@@ -657,6 +665,7 @@ public class AgentManagerComposite extends Composite
                 {
                   UIUtil.syncExec(new Runnable()
                   {
+                    @Override
                     public void run()
                     {
                       treeViewer.refresh();
@@ -815,9 +824,10 @@ public class AgentManagerComposite extends Composite
   {
     viewer.addDragSupport(DND_OPERATIONS, DND_TRANSFERS, new GeneralDragAdapter(viewer, new GeneralDragAdapter.DraggedObjectsFactory()
     {
+      @Override
       public List<Object> createDraggedObjects(ISelection selection) throws Exception
       {
-        List<Object> result = new ArrayList<Object>();
+        List<Object> result = new ArrayList<>();
         for (Object object : ((IStructuredSelection)selection).toArray())
         {
           if (object instanceof AgentAnalyzer.AnalyzedProfile)

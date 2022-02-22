@@ -182,6 +182,7 @@ public class MylynBuildsTaskImpl extends SetupTaskImpl implements MylynBuildsTas
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getConnectorKind()
   {
     return connectorKind;
@@ -192,6 +193,7 @@ public class MylynBuildsTaskImpl extends SetupTaskImpl implements MylynBuildsTas
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setConnectorKind(String newConnectorKind)
   {
     String oldConnectorKind = connectorKind;
@@ -207,6 +209,7 @@ public class MylynBuildsTaskImpl extends SetupTaskImpl implements MylynBuildsTas
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getServerURL()
   {
     return serverURL;
@@ -217,6 +220,7 @@ public class MylynBuildsTaskImpl extends SetupTaskImpl implements MylynBuildsTas
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setServerURL(String newServerURL)
   {
     String oldServerURL = serverURL;
@@ -232,11 +236,12 @@ public class MylynBuildsTaskImpl extends SetupTaskImpl implements MylynBuildsTas
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<BuildPlan> getBuildPlans()
   {
     if (buildPlans == null)
     {
-      buildPlans = new EObjectContainmentEList<BuildPlan>(BuildPlan.class, this, MylynPackage.MYLYN_BUILDS_TASK__BUILD_PLANS);
+      buildPlans = new EObjectContainmentEList<>(BuildPlan.class, this, MylynPackage.MYLYN_BUILDS_TASK__BUILD_PLANS);
     }
     return buildPlans;
   }
@@ -246,6 +251,7 @@ public class MylynBuildsTaskImpl extends SetupTaskImpl implements MylynBuildsTas
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getUserID()
   {
     return userID;
@@ -256,6 +262,7 @@ public class MylynBuildsTaskImpl extends SetupTaskImpl implements MylynBuildsTas
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setUserID(String newUserID)
   {
     String oldUserID = userID;
@@ -271,6 +278,7 @@ public class MylynBuildsTaskImpl extends SetupTaskImpl implements MylynBuildsTas
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getPassword()
   {
     return password;
@@ -281,6 +289,7 @@ public class MylynBuildsTaskImpl extends SetupTaskImpl implements MylynBuildsTas
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setPassword(String newPassword)
   {
     String oldPassword = password;
@@ -442,6 +451,7 @@ public class MylynBuildsTaskImpl extends SetupTaskImpl implements MylynBuildsTas
     return result.toString();
   }
 
+  @Override
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     IBuildServer server = getServer();
@@ -462,11 +472,13 @@ public class MylynBuildsTaskImpl extends SetupTaskImpl implements MylynBuildsTas
     return !getMissingBuildPlans(server).isEmpty();
   }
 
+  @Override
   public void perform(final SetupTaskContext context) throws Exception
   {
     UserCallback callback = context.getPrompter().getUserCallback();
     callback.execInUI(false, new Runnable()
     {
+      @Override
       public void run()
       {
         BuildModel buildModel = BuildsUiInternal.getModel();
@@ -543,7 +555,7 @@ public class MylynBuildsTaskImpl extends SetupTaskImpl implements MylynBuildsTas
 
   private Set<String> getMissingBuildPlans(IBuildServer server)
   {
-    Set<String> buildPlanNames = new LinkedHashSet<String>();
+    Set<String> buildPlanNames = new LinkedHashSet<>();
     for (BuildPlan buildPlan : getBuildPlans())
     {
       buildPlanNames.add(buildPlan.getName());

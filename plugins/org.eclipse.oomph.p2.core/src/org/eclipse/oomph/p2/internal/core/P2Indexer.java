@@ -74,21 +74,21 @@ public final class P2Indexer implements IApplication
 {
   private static final String CHARSET = "UTF-8";
 
-  private final Map<URI, Repository> repositories = new ConcurrentHashMap<URI, Repository>();
+  private final Map<URI, Repository> repositories = new ConcurrentHashMap<>();
 
   /**
    * The map from repository URL to the list of capabilities in that repository.
    */
-  private final Map<String, List<Capability>> capabilities = new HashMap<String, List<Capability>>();
+  private final Map<String, List<Capability>> capabilities = new HashMap<>();
 
   /**
    * The map from capability namespace to the set of capability names in that namespace.
    */
-  private final Map<String, Set<String>> capabilityIndex = new HashMap<String, Set<String>>();
+  private final Map<String, Set<String>> capabilityIndex = new HashMap<>();
 
   private final SAXParserFactory parserFactory = SAXParserFactory.newInstance();
 
-  private final Queue<SAXParser> parserPool = new ConcurrentLinkedQueue<SAXParser>();
+  private final Queue<SAXParser> parserPool = new ConcurrentLinkedQueue<>();
 
   private final ThreadPool threadPool = new ThreadPool();
 
@@ -106,11 +106,12 @@ public final class P2Indexer implements IApplication
 
   private Reporter reporter;
 
+  @Override
   public Object start(IApplicationContext context) throws Exception
   {
     long start = System.currentTimeMillis();
     String[] args = (String[])context.getArguments().get(IApplicationContext.APPLICATION_ARGS);
-    LinkedList<String> arguments = new LinkedList<String>(Arrays.asList(args));
+    LinkedList<String> arguments = new LinkedList<>(Arrays.asList(args));
 
     try
     {
@@ -181,6 +182,7 @@ public final class P2Indexer implements IApplication
     return null;
   }
 
+  @Override
   public void stop()
   {
   }
@@ -194,6 +196,7 @@ public final class P2Indexer implements IApplication
 
     threadPool.submit(new Runnable()
     {
+      @Override
       public void run()
       {
         File metadataFile = getMetadataFile(folder);
@@ -218,6 +221,7 @@ public final class P2Indexer implements IApplication
 
     File[] children = folder.listFiles(new FileFilter()
     {
+      @Override
       public boolean accept(File file)
       {
         return isValidFolder(file);
@@ -236,6 +240,7 @@ public final class P2Indexer implements IApplication
         {
           threadPool.submit(new Runnable()
           {
+            @Override
             public void run()
             {
               scanFolder(child, uri.appendSegment(encodedName));
@@ -333,6 +338,7 @@ public final class P2Indexer implements IApplication
     {
       threadPool.submit(new Runnable()
       {
+        @Override
         public void run()
         {
           if (verbose)
@@ -421,7 +427,7 @@ public final class P2Indexer implements IApplication
       File capabilitiesFile = new File(outputFolder, "capabilities");
       outputStream = new FileOutputStream(capabilitiesFile);
 
-      Map<Object, Object> options = new HashMap<Object, Object>();
+      Map<Object, Object> options = new HashMap<>();
       options.put(BinaryResourceImpl.OPTION_VERSION, BinaryResourceImpl.BinaryIO.Version.VERSION_1_1);
       options.put(BinaryResourceImpl.OPTION_STYLE_DATA_CONVERTER, Boolean.TRUE);
       options.put(BinaryResourceImpl.OPTION_BUFFER_CAPACITY, 8192);
@@ -458,7 +464,7 @@ public final class P2Indexer implements IApplication
       File repositoriesFile = new File(outputFolder, "repositories");
       outputStream = new FileOutputStream(repositoriesFile);
 
-      Map<Object, Object> options = new HashMap<Object, Object>();
+      Map<Object, Object> options = new HashMap<>();
       options.put(BinaryResourceImpl.OPTION_VERSION, BinaryResourceImpl.BinaryIO.Version.VERSION_1_1);
       options.put(BinaryResourceImpl.OPTION_STYLE_DATA_CONVERTER, Boolean.TRUE);
       options.put(BinaryResourceImpl.OPTION_BUFFER_CAPACITY, 8192);
@@ -468,7 +474,7 @@ public final class P2Indexer implements IApplication
       stream.writeInt(refreshHours);
       stream.writeInt(repositories.size());
 
-      List<Repository> problematicRepositories = new ArrayList<Repository>();
+      List<Repository> problematicRepositories = new ArrayList<>();
       for (Repository repository : repositories.values())
       {
         repository.write(stream);
@@ -500,6 +506,7 @@ public final class P2Indexer implements IApplication
     {
       threadPool.submit(new Runnable()
       {
+        @Override
         public void run()
         {
           writeCapability(outputFolder, entry.getKey(), entry.getValue());
@@ -518,7 +525,7 @@ public final class P2Indexer implements IApplication
       System.out.println("Capability " + name);
     }
 
-    Map<Repository, Set<String>> versions = new HashMap<Repository, Set<String>>();
+    Map<Repository, Set<String>> versions = new HashMap<>();
     for (Capability capability : capabilities)
     {
       Repository repository = capability.getRepository();
@@ -527,7 +534,7 @@ public final class P2Indexer implements IApplication
         Set<String> set = versions.get(repository);
         if (set == null)
         {
-          set = new HashSet<String>();
+          set = new HashSet<>();
           versions.put(repository, set);
         }
 
@@ -535,7 +542,7 @@ public final class P2Indexer implements IApplication
       }
     }
 
-    List<String> lines = new ArrayList<String>();
+    List<String> lines = new ArrayList<>();
     lines.add(Long.toString(timeStamp));
 
     for (Map.Entry<Repository, Set<String>> versionEntry : versions.entrySet())
@@ -606,7 +613,7 @@ public final class P2Indexer implements IApplication
 
     private static final long NO_TIMESTAMP = 0;
 
-    protected final List<Composite> composites = new ArrayList<Composite>();
+    protected final List<Composite> composites = new ArrayList<>();
 
     protected final P2Indexer indexer;
 
@@ -830,12 +837,7 @@ public final class P2Indexer implements IApplication
         return true;
       }
 
-      if (obj == null)
-      {
-        return false;
-      }
-
-      if (getClass() != obj.getClass())
+      if (obj == null || getClass() != obj.getClass())
       {
         return false;
       }
@@ -930,7 +932,7 @@ public final class P2Indexer implements IApplication
             List<Capability> list = indexer.capabilities.get(qualifiedName);
             if (list == null)
             {
-              list = new ArrayList<Capability>();
+              list = new ArrayList<>();
               indexer.capabilities.put(qualifiedName, list);
             }
 
@@ -1068,9 +1070,9 @@ public final class P2Indexer implements IApplication
 
     private final ProjectMapper projectMapper;
 
-    private final Map<String, Project> projectsByID = new HashMap<String, Project>();
+    private final Map<String, Project> projectsByID = new HashMap<>();
 
-    private final Map<Repository, Project> projectsByRepository = new HashMap<Repository, Project>();
+    private final Map<Repository, Project> projectsByRepository = new HashMap<>();
 
     private final Project unassigned = new Project("_unassigned", "Unassigned Repositories");
 
@@ -1126,8 +1128,8 @@ public final class P2Indexer implements IApplication
 
     public void writeReport(P2Indexer indexer, long start, long duration) throws IOException
     {
-      Map<Repository, Set<Repository>> childrenMap = new HashMap<Repository, Set<Repository>>();
-      Map<Repository, Pair<Project, Integer>> ids = new HashMap<Repository, Pair<Project, Integer>>();
+      Map<Repository, Set<Repository>> childrenMap = new HashMap<>();
+      Map<Repository, Pair<Project, Integer>> ids = new HashMap<>();
       int nextID = 0;
 
       for (Repository repository : indexer.repositories.values())
@@ -1141,9 +1143,10 @@ public final class P2Indexer implements IApplication
         }
       }
 
-      List<Project> projects = new ArrayList<Project>(projectsByID.values());
+      List<Project> projects = new ArrayList<>(projectsByID.values());
       Collections.sort(projects, new Comparator<Project>()
       {
+        @Override
         public int compare(Project o1, Project o2)
         {
           return o1.getLabel().toLowerCase().compareTo(o2.getLabel().toLowerCase());
@@ -1318,7 +1321,7 @@ public final class P2Indexer implements IApplication
       private static final String PROJECTS_TXT = System.getProperty("projects.txt",
           "/home/data/httpd/download.eclipse.org/oomph/archive/projects/projects.txt");
 
-      private final Map<String, String> names = new HashMap<String, String>();
+      private final Map<String, String> names = new HashMap<>();
 
       public ProjectRegistry()
       {
@@ -1500,9 +1503,10 @@ public final class P2Indexer implements IApplication
 
         try
         {
-          List<Map.Entry<Repository, List<String>>> entries = new ArrayList<Map.Entry<Repository, List<String>>>(repositories.entrySet());
+          List<Map.Entry<Repository, List<String>>> entries = new ArrayList<>(repositories.entrySet());
           Collections.sort(entries, new Comparator<Map.Entry<Repository, List<String>>>()
           {
+            @Override
             public int compare(Map.Entry<Repository, List<String>> o1, Map.Entry<Repository, List<String>> o2)
             {
               return o1.getKey().getURI().toString().compareTo(o2.getKey().getURI().toString());

@@ -83,7 +83,7 @@ public class NaturePredicateItemProvider extends PredicateItemProvider
       @Override
       public Collection<?> getChoiceOfValues(Object object)
       {
-        List<String> result = new ArrayList<String>();
+        List<String> result = new ArrayList<>();
         for (IProjectNatureDescriptor descriptor : WORKSPACE.getNatureDescriptors())
         {
           result.add(descriptor.getNatureId());

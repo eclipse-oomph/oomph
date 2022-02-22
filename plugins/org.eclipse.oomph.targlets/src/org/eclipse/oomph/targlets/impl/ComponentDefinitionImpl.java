@@ -103,6 +103,7 @@ public class ComponentDefinitionImpl extends ComponentExtensionImpl implements C
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getID()
   {
     return iD;
@@ -113,6 +114,7 @@ public class ComponentDefinitionImpl extends ComponentExtensionImpl implements C
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setID(String newID)
   {
     String oldID = iD;
@@ -128,6 +130,7 @@ public class ComponentDefinitionImpl extends ComponentExtensionImpl implements C
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Version getVersion()
   {
     return version;
@@ -138,6 +141,7 @@ public class ComponentDefinitionImpl extends ComponentExtensionImpl implements C
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setVersion(Version newVersion)
   {
     Version oldVersion = version;

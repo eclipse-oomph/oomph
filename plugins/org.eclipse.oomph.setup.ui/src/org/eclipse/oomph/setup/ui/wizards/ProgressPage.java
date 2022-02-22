@@ -16,7 +16,6 @@ import org.eclipse.oomph.internal.ui.AccessUtil;
 import org.eclipse.oomph.internal.ui.OomphAdapterFactoryContentProvider;
 import org.eclipse.oomph.jreinfo.JRE;
 import org.eclipse.oomph.jreinfo.JREManager;
-import org.eclipse.oomph.p2.core.CertificateConfirmer;
 import org.eclipse.oomph.setup.CertificatePolicy;
 import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.LicenseInfo;
@@ -44,7 +43,6 @@ import org.eclipse.oomph.setup.ui.LicensePrePrompter;
 import org.eclipse.oomph.setup.ui.SetupPropertyTester;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.ToolTipLabelProvider;
-import org.eclipse.oomph.setup.ui.UnsignedContentDialog;
 import org.eclipse.oomph.setup.util.FileUtil;
 import org.eclipse.oomph.ui.BackgroundProgressPart;
 import org.eclipse.oomph.ui.ButtonBar;
@@ -123,7 +121,6 @@ import org.eclipse.ui.themes.ColorUtil;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
-import java.security.cert.Certificate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -142,7 +139,7 @@ public class ProgressPage extends SetupWizardPage
 
   public static final String PAGE_NAME = "ProgressPage"; //$NON-NLS-1$
 
-  private final Map<SetupTask, Point> setupTaskSelections = new HashMap<SetupTask, Point>();
+  private final Map<SetupTask, Point> setupTaskSelections = new HashMap<>();
 
   private Constructor<? extends ProgressLog> progressLogWrapper;
 
@@ -150,6 +147,7 @@ public class ProgressPage extends SetupWizardPage
 
   private final ISelectionChangedListener treeViewerSelectionChangedListener = new ISelectionChangedListener()
   {
+    @Override
     public void selectionChanged(SelectionChangedEvent event)
     {
       IStructuredSelection selection = (IStructuredSelection)event.getSelection();
@@ -228,7 +226,7 @@ public class ProgressPage extends SetupWizardPage
 
   private StyledText logText;
 
-  private Map<Severity, Color> logTextColors = new HashMap<ProgressLog.Severity, Color>();
+  private Map<Severity, Color> logTextColors = new HashMap<>();
 
   private ProgressMonitorPart progressMonitorPart;
 
@@ -288,10 +286,12 @@ public class ProgressPage extends SetupWizardPage
 
     ColumnViewerInformationControlToolTipSupport toolTipSupport = new ColumnViewerInformationControlToolTipSupport(treeViewer, new LocationListener()
     {
+      @Override
       public void changing(LocationEvent event)
       {
       }
 
+      @Override
       public void changed(LocationEvent event)
       {
       }
@@ -448,6 +448,7 @@ public class ProgressPage extends SetupWizardPage
       {
         UIUtil.syncExec(new Runnable()
         {
+          @Override
           public void run()
           {
             fProgressIndicator.sendRemainingWork();
@@ -502,16 +503,6 @@ public class ProgressPage extends SetupWizardPage
         performer.put(ILicense.class, LICENSE_CONFIRMER);
       }
 
-      if (performer.get(Certificate.class) == null)
-      {
-        performer.put(Certificate.class, UnsignedContentDialog.createUnsignedContentConfirmer(performerUser, false));
-      }
-
-      if (performer.get(CertificateConfirmer.class) == null)
-      {
-        performer.put(CertificateConfirmer.class, SetupCoreUtil.createCertificateConfirmer(performerUser, false));
-      }
-
       File renamed = null;
       if (getTrigger() == Trigger.BOOTSTRAP)
       {
@@ -564,6 +555,7 @@ public class ProgressPage extends SetupWizardPage
 
       run(jobName, new ProgressLogRunnable()
       {
+        @Override
         public Set<String> run(ProgressLog log) throws Exception
         {
           final ProgressManager oldProgressProvider = ProgressManager.getInstance();
@@ -684,6 +676,7 @@ public class ProgressPage extends SetupWizardPage
 
       Runnable jobRunnable = new Runnable()
       {
+        @Override
         public void run()
         {
           final SetupWizard wizard = getWizard();
@@ -706,6 +699,7 @@ public class ProgressPage extends SetupWizardPage
 
               UIUtil.syncExec(new Runnable()
               {
+                @Override
                 public void run()
                 {
                   shell.setData(PROGRESS_STATUS, null);
@@ -746,46 +740,55 @@ public class ProgressPage extends SetupWizardPage
                 final IStatus status = SetupUIPlugin.INSTANCE.getStatus(ex);
                 SetupUIPlugin.INSTANCE.log(new IStatus()
                 {
+                  @Override
                   public IStatus[] getChildren()
                   {
                     return status.getChildren();
                   }
 
+                  @Override
                   public int getCode()
                   {
                     return status.getCode();
                   }
 
+                  @Override
                   public Throwable getException()
                   {
                     return status.getException();
                   }
 
+                  @Override
                   public String getMessage()
                   {
                     return status.getMessage();
                   }
 
+                  @Override
                   public String getPlugin()
                   {
                     return status.getPlugin();
                   }
 
+                  @Override
                   public int getSeverity()
                   {
                     return IStatus.WARNING;
                   }
 
+                  @Override
                   public boolean isMultiStatus()
                   {
                     return status.isMultiStatus();
                   }
 
+                  @Override
                   public boolean isOK()
                   {
                     return false;
                   }
 
+                  @Override
                   public boolean matches(int severityMask)
                   {
                     return (severityMask & IStatus.WARNING) != 0;
@@ -864,18 +867,20 @@ public class ProgressPage extends SetupWizardPage
 
                   wizard.setFinishAction(new Runnable()
                   {
+                    @Override
                     public void run()
                     {
                       progressLog.done();
 
                       UIUtil.asyncExec(new Runnable()
                       {
+                        @Override
                         public void run()
                         {
                           // Also include any triggered task whose implementation is currently unavailable.
                           // Such tasks will not be needed by are likely needed after the restart when their implementations have been installed.
                           SetupTaskPerformer performer = getPerformer();
-                          EList<SetupTask> remainingTasks = new BasicEList<SetupTask>(performer.getNeededTasks());
+                          EList<SetupTask> remainingTasks = new BasicEList<>(performer.getNeededTasks());
                           for (SetupTask setupTask : performer.getTriggeredSetupTasks())
                           {
                             if (setupTask instanceof DynamicSetupTaskImpl)
@@ -906,6 +911,7 @@ public class ProgressPage extends SetupWizardPage
                   {
                     wizard.setFinishAction(new Runnable()
                     {
+                      @Override
                       public void run()
                       {
                         IWizardContainer container = getContainer();
@@ -931,6 +937,7 @@ public class ProgressPage extends SetupWizardPage
                     {
                       wizard.setFinishAction(new Runnable()
                       {
+                        @Override
                         public void run()
                         {
                           if (launchAutomatically)
@@ -968,6 +975,7 @@ public class ProgressPage extends SetupWizardPage
                 final boolean finalSuccess = success;
                 UIUtil.syncExec(new Runnable()
                 {
+                  @Override
                   public void run()
                   {
                     progressLog.done();
@@ -1094,7 +1102,7 @@ public class ProgressPage extends SetupWizardPage
       performer.log(Messages.ProgressPage_log_launchingProduct);
       ExecutableInfo info = performer.getExecutableInfo();
 
-      List<String> command = new ArrayList<String>();
+      List<String> command = new ArrayList<>();
       File executable = info.getExecutable();
       command.add(executable.toString());
 
@@ -1182,6 +1190,7 @@ public class ProgressPage extends SetupWizardPage
       this.progressMonitor = progressMonitor;
     }
 
+    @Override
     public void setTerminating()
     {
       terminating = true;
@@ -1193,6 +1202,7 @@ public class ProgressPage extends SetupWizardPage
       done = true;
     }
 
+    @Override
     public boolean isCanceled()
     {
       if (!canceled)
@@ -1211,6 +1221,7 @@ public class ProgressPage extends SetupWizardPage
       return done;
     }
 
+    @Override
     public void done()
     {
       done = true;
@@ -1222,6 +1233,7 @@ public class ProgressPage extends SetupWizardPage
       }
     }
 
+    @Override
     public void beginTask(final String name, final int totalWork)
     {
       progressMonitorPart.beginTask(name, totalWork);
@@ -1233,6 +1245,7 @@ public class ProgressPage extends SetupWizardPage
       }
     }
 
+    @Override
     public void internalWorked(final double work)
     {
       progressMonitorPart.internalWorked(work);
@@ -1242,6 +1255,7 @@ public class ProgressPage extends SetupWizardPage
       }
     }
 
+    @Override
     public void setCanceled(boolean canceled)
     {
       this.canceled = canceled;
@@ -1251,6 +1265,7 @@ public class ProgressPage extends SetupWizardPage
       }
     }
 
+    @Override
     public void setTaskName(String name)
     {
       logTaskName(name);
@@ -1261,6 +1276,7 @@ public class ProgressPage extends SetupWizardPage
       }
     }
 
+    @Override
     public void subTask(String name)
     {
       logTaskName(name);
@@ -1271,6 +1287,7 @@ public class ProgressPage extends SetupWizardPage
       }
     }
 
+    @Override
     public void worked(final int work)
     {
       progressMonitorPart.worked(work);
@@ -1280,10 +1297,12 @@ public class ProgressPage extends SetupWizardPage
       }
     }
 
+    @Override
     public void task(final SetupTask setupTask)
     {
       UIUtil.syncExec(new Runnable()
       {
+        @Override
         public void run()
         {
           SetupTask previousCurrentTask = currentTask;
@@ -1311,33 +1330,39 @@ public class ProgressPage extends SetupWizardPage
       });
     }
 
+    @Override
     public void log(String line)
     {
       log(line, true);
     }
 
+    @Override
     public void log(IStatus status)
     {
       String string = SetupUIPlugin.toString(status);
       log(string, false, Severity.fromStatus(status));
     }
 
+    @Override
     public void log(Throwable t)
     {
       String string = SetupUIPlugin.toString(t);
       log(string, false, Severity.ERROR);
     }
 
+    @Override
     public void log(String line, Severity severity)
     {
       log(line, true, severity);
     }
 
+    @Override
     public void log(String line, boolean filter)
     {
       log(line, filter, Severity.OK);
     }
 
+    @Override
     public void log(String line, boolean filter, Severity severity)
     {
       if (done && !terminating)
@@ -1380,6 +1405,7 @@ public class ProgressPage extends SetupWizardPage
       {
         UIUtil.asyncExec(new Runnable()
         {
+          @Override
           public void run()
           {
             List<Object> lines = dequeue();
@@ -1394,7 +1420,7 @@ public class ProgressPage extends SetupWizardPage
       boolean wasEmpty = queue == null;
       if (wasEmpty)
       {
-        queue = new ArrayList<Object>();
+        queue = new ArrayList<>();
       }
 
       if (severity == Severity.OK)

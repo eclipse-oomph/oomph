@@ -32,6 +32,7 @@ public class TargetPlatformBundlePoolInitializer extends ClasspathVariableInitia
 
   private static final TargetPlatformListener TARGET_PLATFORM_LISTENER = new TargetPlatformListener()
   {
+    @Override
     public void targetDefinitionActivated(ITargetDefinition oldTargetDefinition, ITargetDefinition newTargetDefinition) throws Exception
     {
       resetVariable();

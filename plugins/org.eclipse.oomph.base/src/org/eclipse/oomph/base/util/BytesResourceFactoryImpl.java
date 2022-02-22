@@ -18,6 +18,7 @@ import org.eclipse.emf.ecore.resource.Resource;
  */
 public class BytesResourceFactoryImpl implements Resource.Factory
 {
+  @Override
   public Resource createResource(URI uri)
   {
     return new BytesResourceImpl(uri);

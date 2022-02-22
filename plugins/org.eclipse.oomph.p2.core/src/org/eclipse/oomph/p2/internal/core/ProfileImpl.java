@@ -94,7 +94,7 @@ public class ProfileImpl extends AgentManagerElementImpl implements Profile, Per
       INTERNAL_GET_PROFILE_METHOD = null;
     }
 
-    Map<Object, Object> options = new HashMap<Object, Object>();
+    Map<Object, Object> options = new HashMap<>();
     options.put(XMLResource.OPTION_DECLARE_XML, Boolean.FALSE);
     options.put(XMLResource.OPTION_EXTENDED_META_DATA, new BasicExtendedMetaData()
     {
@@ -157,36 +157,43 @@ public class ProfileImpl extends AgentManagerElementImpl implements Profile, Per
     return "profile"; //$NON-NLS-1$
   }
 
+  @Override
   public AgentManager getAgentManager()
   {
     return agent.getAgentManager();
   }
 
+  @Override
   public Agent getAgent()
   {
     return agent;
   }
 
+  @Override
   public BundlePool getBundlePool()
   {
     return bundlePool;
   }
 
+  @Override
   public String getProfileId()
   {
     return id;
   }
 
+  @Override
   public boolean isSelfHosting()
   {
     return "SelfHostingProfile".equals(id); //$NON-NLS-1$
   }
 
+  @Override
   public String getType()
   {
     return type;
   }
 
+  @Override
   public File getLocation()
   {
     File engineLocation = new File(agent.getLocation(), AgentImpl.ENGINE_PATH);
@@ -194,6 +201,7 @@ public class ProfileImpl extends AgentManagerElementImpl implements Profile, Per
     return new File(registryLocation, id + ".profile"); //$NON-NLS-1$
   }
 
+  @Override
   public File getInstallFolder()
   {
     return installFolder;
@@ -214,9 +222,10 @@ public class ProfileImpl extends AgentManagerElementImpl implements Profile, Per
     this.referencer = referencer;
   }
 
+  @Override
   public String getExtraInfo()
   {
-    List<String> tokens = new ArrayList<String>();
+    List<String> tokens = new ArrayList<>();
     tokens.add(type);
     tokens.add(bundlePool != null ? bundlePool.getLocation().getAbsolutePath() : ""); //$NON-NLS-1$
     tokens.add(installFolder != null ? installFolder.getAbsolutePath() : ""); //$NON-NLS-1$
@@ -298,6 +307,7 @@ public class ProfileImpl extends AgentManagerElementImpl implements Profile, Per
     this.delegate = delegate;
   }
 
+  @Override
   public synchronized ProfileDefinition getDefinition()
   {
     if (definition == null)
@@ -322,16 +332,19 @@ public class ProfileImpl extends AgentManagerElementImpl implements Profile, Per
     this.definition = definition;
   }
 
+  @Override
   public boolean isValid()
   {
     return getLocation().isDirectory();
   }
 
+  @Override
   public boolean isCurrent()
   {
     return agent.getCurrentProfile() == this;
   }
 
+  @Override
   public boolean isUsed()
   {
     File referencer = this.referencer;
@@ -372,46 +385,55 @@ public class ProfileImpl extends AgentManagerElementImpl implements Profile, Per
     ((AgentImpl)agent).deleteProfile(this);
   }
 
+  @Override
   public ProfileTransaction change()
   {
     return new ProfileTransactionImpl(this);
   }
 
+  @Override
   public IQueryResult<IInstallableUnit> query(IQuery<IInstallableUnit> query, IProgressMonitor monitor)
   {
     return getDelegate().query(query, monitor);
   }
 
+  @Override
   public IProvisioningAgent getProvisioningAgent()
   {
     return getDelegate().getProvisioningAgent();
   }
 
+  @Override
   public String getProperty(String key)
   {
     return getDelegate().getProperty(key);
   }
 
+  @Override
   public String getInstallableUnitProperty(IInstallableUnit iu, String key)
   {
     return getDelegate().getInstallableUnitProperty(iu, key);
   }
 
+  @Override
   public Map<String, String> getProperties()
   {
     return getDelegate().getProperties();
   }
 
+  @Override
   public Map<String, String> getInstallableUnitProperties(IInstallableUnit iu)
   {
     return getDelegate().getInstallableUnitProperties(iu);
   }
 
+  @Override
   public long getTimestamp()
   {
     return getDelegate().getTimestamp();
   }
 
+  @Override
   public IQueryResult<IInstallableUnit> available(IQuery<IInstallableUnit> query, IProgressMonitor monitor)
   {
     return getDelegate().available(query, monitor);

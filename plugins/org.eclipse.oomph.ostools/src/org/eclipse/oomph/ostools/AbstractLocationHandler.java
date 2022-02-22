@@ -32,6 +32,7 @@ public abstract class AbstractLocationHandler extends AbstractHandler
   {
   }
 
+  @Override
   public Object execute(ExecutionEvent event) throws ExecutionException
   {
     ISelection selection = HandlerUtil.getActiveMenuSelection(event);

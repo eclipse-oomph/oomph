@@ -26,12 +26,14 @@ public class WindowsPowerShell implements DesktopSupport
     this.executable = executable;
   }
 
+  @Override
   public void pinToTaskBar(String location, String launcherName) throws IOException
   {
     Runtime.getRuntime().exec(new String[] { executable, "-command",
         "& { (new-object -c shell.application).namespace('" + location + "').parsename('" + launcherName + "').invokeverb('taskbarpin') }" });
   }
 
+  @Override
   public boolean createShortCut(ShortcutType type, String groupName, File target, String shortcutName, String description, String id) throws IOException
   {
     String specialFolder;

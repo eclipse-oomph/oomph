@@ -100,6 +100,7 @@ public class RedirectionTaskImpl extends SetupTaskImpl implements RedirectionTas
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getSourceURL()
   {
     return sourceURL;
@@ -110,6 +111,7 @@ public class RedirectionTaskImpl extends SetupTaskImpl implements RedirectionTas
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setSourceURL(String newSourceURL)
   {
     String oldSourceURL = sourceURL;
@@ -125,6 +127,7 @@ public class RedirectionTaskImpl extends SetupTaskImpl implements RedirectionTas
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getTargetURL()
   {
     return targetURL;
@@ -135,6 +138,7 @@ public class RedirectionTaskImpl extends SetupTaskImpl implements RedirectionTas
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setTargetURL(String newTargetURL)
   {
     String oldTargetURL = targetURL;
@@ -255,11 +259,13 @@ public class RedirectionTaskImpl extends SetupTaskImpl implements RedirectionTas
     return 0;
   }
 
+  @Override
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     return false;
   }
 
+  @Override
   public void perform(SetupTaskContext context) throws Exception
   {
     throw new UnsupportedOperationException(Messages.RedirectionTaskImpl_NoExecutable_exception);

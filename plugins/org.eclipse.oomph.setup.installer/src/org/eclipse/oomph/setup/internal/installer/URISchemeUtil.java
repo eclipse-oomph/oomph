@@ -53,18 +53,20 @@ public final class URISchemeUtil
 
   static
   {
-    Collection<IScheme> schemes = new ArrayList<IScheme>();
+    Collection<IScheme> schemes = new ArrayList<>();
     for (final String scheme : new String[] { INSTALLER_SCHEME, MARKETPLACE_SCHEME })
     {
       if (URI.validScheme(scheme))
       {
         schemes.add(new IScheme()
         {
+          @Override
           public String getName()
           {
             return scheme;
           }
 
+          @Override
           public String getDescription()
           {
             return scheme;
@@ -141,6 +143,7 @@ public final class URISchemeUtil
       System.setProperty("eclipse.home.location", eclipseHome); //$NON-NLS-1$
       return new Runnable()
       {
+        @Override
         public void run()
         {
           System.setProperty("eclipse.home.location", originalHomeLocation); //$NON-NLS-1$
@@ -407,7 +410,7 @@ public final class URISchemeUtil
    */
   public static Map<String, String> getConflictingRegistrations()
   {
-    Map<String, String> result = new LinkedHashMap<String, String>();
+    Map<String, String> result = new LinkedHashMap<>();
     try
     {
       List<ISchemeInformation> schemesInformation = OPERATING_SYSTEM_REGISTRATION.getSchemesInformation(SCHEMES);
@@ -433,7 +436,7 @@ public final class URISchemeUtil
    */
   public static Set<String> getSelfRegistrations()
   {
-    Set<String> result = new LinkedHashSet<String>();
+    Set<String> result = new LinkedHashSet<>();
     String eclipseLauncher = getSelfLauncher();
     if (!StringUtil.isEmpty(eclipseLauncher))
     {
@@ -462,7 +465,7 @@ public final class URISchemeUtil
    */
   public static Map<String, String> getRegistrations()
   {
-    Map<String, String> result = new LinkedHashMap<String, String>();
+    Map<String, String> result = new LinkedHashMap<>();
     try
     {
       List<ISchemeInformation> schemesInformation = OPERATING_SYSTEM_REGISTRATION.getSchemesInformation(SCHEMES);

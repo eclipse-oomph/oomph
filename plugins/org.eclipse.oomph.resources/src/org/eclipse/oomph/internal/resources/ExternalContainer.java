@@ -47,17 +47,20 @@ public abstract class ExternalContainer extends ExternalResource implements ICon
     return (BackendContainer)super.getBackendResource();
   }
 
+  @Override
   public int getType()
   {
     return 0;
   }
 
+  @Override
   public boolean exists(IPath path)
   {
     IResource member = findMember(path);
     return member.exists();
   }
 
+  @Override
   public IResource findMember(IPath path)
   {
     if (path.isEmpty())
@@ -70,7 +73,7 @@ public abstract class ExternalContainer extends ExternalResource implements ICon
     {
       BackendResource thisBackendResource = getBackendResource();
 
-      LinkedList<BackendResource> backendResources = new LinkedList<BackendResource>();
+      LinkedList<BackendResource> backendResources = new LinkedList<>();
       for (BackendResource it = member; it != thisBackendResource; it = it.getParent())
       {
         backendResources.addFirst(it);
@@ -91,46 +94,54 @@ public abstract class ExternalContainer extends ExternalResource implements ICon
     return null;
   }
 
+  @Override
   public IResource findMember(IPath path, boolean includePhantoms)
   {
     return findMember(path);
   }
 
+  @Override
   public IResource findMember(String path, boolean includePhantoms)
   {
     return findMember(path);
   }
 
+  @Override
   public IResource findMember(String path)
   {
     return findMember(new Path(path));
   }
 
+  @Override
   public String getDefaultCharset() throws CoreException
   {
     return "UTF-8"; //$NON-NLS-1$
   }
 
+  @Override
   public String getDefaultCharset(boolean checkImplicit) throws CoreException
   {
     return getDefaultCharset();
   }
 
+  @Override
   public IFile getFile(IPath path)
   {
     BackendFile childBackendFile = getBackendResource().getFile(path);
     return new ExternalFile(this, childBackendFile);
   }
 
+  @Override
   public IFolder getFolder(IPath path)
   {
     BackendFolder childBackendFolder = getBackendResource().getFolder(path);
     return new ExternalFolder(this, childBackendFolder);
   }
 
+  @Override
   public IResource[] members() throws CoreException
   {
-    List<IResource> members = new ArrayList<IResource>();
+    List<IResource> members = new ArrayList<>();
     for (BackendResource member : getBackendResource().getMembers(null))
     {
       if (member.isContainer())
@@ -146,38 +157,45 @@ public abstract class ExternalContainer extends ExternalResource implements ICon
     return members.toArray(new IResource[members.size()]);
   }
 
+  @Override
   public IResource[] members(boolean includePhantoms) throws CoreException
   {
     return members();
   }
 
+  @Override
   public IResource[] members(int memberFlags) throws CoreException
   {
     return members();
   }
 
+  @Override
   public IFile[] findDeletedMembersWithHistory(int depth, IProgressMonitor monitor) throws CoreException
   {
     return new IFile[0];
   }
 
+  @Override
   @Deprecated
   public void setDefaultCharset(String charset) throws CoreException
   {
     throw new ReadOnlyException();
   }
 
+  @Override
   public void setDefaultCharset(String charset, IProgressMonitor monitor) throws CoreException
   {
     throw new ReadOnlyException();
   }
 
+  @Override
   public IResourceFilterDescription createFilter(int type, FileInfoMatcherDescription matcherDescription, int updateFlags, IProgressMonitor monitor)
       throws CoreException
   {
     throw new ReadOnlyException();
   }
 
+  @Override
   public IResourceFilterDescription[] getFilters() throws CoreException
   {
     return new IResourceFilterDescription[0];
@@ -202,12 +220,7 @@ public abstract class ExternalContainer extends ExternalResource implements ICon
   @Override
   protected boolean visit(IResourceVisitor visitor, int depth) throws CoreException
   {
-    if (!super.visit(visitor, depth))
-    {
-      return false;
-    }
-
-    if (depth < 1)
+    if (!super.visit(visitor, depth) || (depth < 1))
     {
       return false;
     }

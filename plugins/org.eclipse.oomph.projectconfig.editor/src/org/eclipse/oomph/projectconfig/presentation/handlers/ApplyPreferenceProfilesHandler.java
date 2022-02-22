@@ -31,6 +31,7 @@ public class ApplyPreferenceProfilesHandler extends AbstractHandler
    * the command has been executed, so extract extract the needed information
    * from the application context.
    */
+  @Override
   public Object execute(ExecutionEvent event) throws ExecutionException
   {
     ProjectConfigUtil.getWorkspaceConfiguration().applyPreferenceProfiles();

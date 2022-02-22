@@ -99,7 +99,7 @@ public class IndexManagerDialog extends AbstractSetupDialog
     super(parentShell, Messages.IndexManagerDialog_dialogTitle, 750, 300, SetupUIPlugin.INSTANCE, true);
     indexChoices = indexManager.getIndexLabels(true);
 
-    originalIndexChoices = new LinkedHashMap<URI, String>(indexChoices);
+    originalIndexChoices = new LinkedHashMap<>(indexChoices);
     if (!originalIndexChoices.isEmpty())
     {
       originalIndexLocation = originalIndexChoices.keySet().iterator().next();
@@ -113,6 +113,7 @@ public class IndexManagerDialog extends AbstractSetupDialog
         indexAvailability = indexManager.getIndexAvailability(false);
         UIUtil.asyncExec(indexViewer.getControl(), new Runnable()
         {
+          @Override
           public void run()
           {
             indexViewer.refresh();
@@ -143,16 +144,19 @@ public class IndexManagerDialog extends AbstractSetupDialog
     indexViewer.getTable().setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
     indexViewer.setContentProvider(new IStructuredContentProvider()
     {
+      @Override
       public void inputChanged(Viewer viewer, Object oldInput, Object newInput)
       {
         // Do nothing.
       }
 
+      @Override
       public void dispose()
       {
         // Do nothing.
       }
 
+      @Override
       public Object[] getElements(Object inputElement)
       {
         return indexChoices.entrySet().toArray();
@@ -162,10 +166,12 @@ public class IndexManagerDialog extends AbstractSetupDialog
     final ColumnViewerInformationControlToolTipSupport columnViewerInformationControlToolTipSupport = new ColumnViewerInformationControlToolTipSupport(
         indexViewer, new LocationListener()
         {
+          @Override
           public void changing(LocationEvent event)
           {
           }
 
+          @Override
           public void changed(LocationEvent event)
           {
           }
@@ -181,11 +187,13 @@ public class IndexManagerDialog extends AbstractSetupDialog
 
       private final Font boldFont = ExtendedFontRegistry.INSTANCE.getFont(normalFont, IItemFontProvider.BOLD_FONT);
 
+      @Override
       public String getText(Object element)
       {
         return asMapEntry(element).getValue();
       }
 
+      @Override
       public Image getImage(Object element)
       {
         return SetupUIPlugin.INSTANCE.getSWTImage("full/obj16/Index"); //$NON-NLS-1$
@@ -264,6 +272,7 @@ public class IndexManagerDialog extends AbstractSetupDialog
 
     indexViewer.addSelectionChangedListener(new ISelectionChangedListener()
     {
+      @Override
       public void selectionChanged(SelectionChangedEvent event)
       {
         focusCellManager.getFocusCell();
@@ -290,17 +299,20 @@ public class IndexManagerDialog extends AbstractSetupDialog
     TableViewerEditor.create(indexViewer, focusCellManager, editorActivationStrategy, ColumnViewerEditor.KEYBOARD_ACTIVATION);
     indexViewer.setCellModifier(new ICellModifier()
     {
+      @Override
       public void modify(Object element, String property, Object value)
       {
         asMapEntry(((TableItem)element).getData()).setValue((String)value);
         indexViewer.refresh(true);
       }
 
+      @Override
       public Object getValue(Object element, String property)
       {
         return labelProvider.getText(element).trim();
       }
 
+      @Override
       public boolean canModify(Object element, String property)
       {
         return true;
@@ -468,14 +480,14 @@ public class IndexManagerDialog extends AbstractSetupDialog
     boolean local = indexScope != IndexScope.LOCAL_AND_GLOBAL;
 
     Map<URI, String> indexChoices = indexManager.getIndexLabels(true);
-    Set<URI> removedURIs = new LinkedHashSet<URI>(indexChoices.keySet());
+    Set<URI> removedURIs = new LinkedHashSet<>(indexChoices.keySet());
     removedURIs.removeAll(this.indexChoices.keySet());
     for (URI indexLocation : removedURIs)
     {
       indexManager.remove(indexLocation, local);
     }
 
-    Set<URI> addedURIs = new LinkedHashSet<URI>(this.indexChoices.keySet());
+    Set<URI> addedURIs = new LinkedHashSet<>(this.indexChoices.keySet());
     addedURIs.removeAll(indexChoices.keySet());
     if (!addedURIs.isEmpty())
     {

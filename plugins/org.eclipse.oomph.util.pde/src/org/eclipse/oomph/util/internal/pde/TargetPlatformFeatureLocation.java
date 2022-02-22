@@ -25,6 +25,7 @@ import org.eclipse.pde.core.target.TargetFeature;
  */
 public class TargetPlatformFeatureLocation implements IDynamicVariableResolver
 {
+  @Override
   public String resolveValue(IDynamicVariable variable, String element) throws CoreException
   {
     try

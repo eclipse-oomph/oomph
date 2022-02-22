@@ -47,7 +47,7 @@ public class EarlyStart implements IStartup
 
   static
   {
-    Map<String, Integer> priorities = new LinkedHashMap<String, Integer>();
+    Map<String, Integer> priorities = new LinkedHashMap<>();
     priorities.put("INTERACTIVE", Job.INTERACTIVE); //$NON-NLS-1$
     priorities.put("SHORT", Job.SHORT); //$NON-NLS-1$
     priorities.put("LONG", Job.LONG); //$NON-NLS-1$
@@ -85,6 +85,7 @@ public class EarlyStart implements IStartup
     SCHEDULE = schedule;
   }
 
+  @Override
   public void earlyStartup()
   {
     if (DEFERR)
@@ -133,6 +134,7 @@ public class EarlyStart implements IStartup
         final File report = nlsReport.report();
         UIUtil.asyncExec(new Runnable()
         {
+          @Override
           public void run()
           {
             try

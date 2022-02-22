@@ -133,11 +133,12 @@ public class ProfileDefinitionImpl extends ModelElementImpl implements ProfileDe
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<Requirement> getRequirements()
   {
     if (requirements == null)
     {
-      requirements = new EObjectContainmentEList<Requirement>(Requirement.class, this, P2Package.PROFILE_DEFINITION__REQUIREMENTS);
+      requirements = new EObjectContainmentEList<>(Requirement.class, this, P2Package.PROFILE_DEFINITION__REQUIREMENTS);
     }
     return requirements;
   }
@@ -147,11 +148,12 @@ public class ProfileDefinitionImpl extends ModelElementImpl implements ProfileDe
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<Repository> getRepositories()
   {
     if (repositories == null)
     {
-      repositories = new EObjectContainmentEList<Repository>(Repository.class, this, P2Package.PROFILE_DEFINITION__REPOSITORIES);
+      repositories = new EObjectContainmentEList<>(Repository.class, this, P2Package.PROFILE_DEFINITION__REPOSITORIES);
     }
     return repositories;
   }
@@ -161,6 +163,7 @@ public class ProfileDefinitionImpl extends ModelElementImpl implements ProfileDe
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public boolean isIncludeSourceBundles()
   {
     return includeSourceBundles;
@@ -171,6 +174,7 @@ public class ProfileDefinitionImpl extends ModelElementImpl implements ProfileDe
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setIncludeSourceBundles(boolean newIncludeSourceBundles)
   {
     boolean oldIncludeSourceBundles = includeSourceBundles;
@@ -187,6 +191,7 @@ public class ProfileDefinitionImpl extends ModelElementImpl implements ProfileDe
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getProfileProperties()
   {
     return profileProperties;
@@ -197,6 +202,7 @@ public class ProfileDefinitionImpl extends ModelElementImpl implements ProfileDe
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setProfileProperties(String newProfileProperties)
   {
     String oldProfileProperties = profileProperties;
@@ -212,6 +218,7 @@ public class ProfileDefinitionImpl extends ModelElementImpl implements ProfileDe
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public void setRequirements(EList<Requirement> requirements)
   {
     EList<Requirement> list = getRequirements();
@@ -224,6 +231,7 @@ public class ProfileDefinitionImpl extends ModelElementImpl implements ProfileDe
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public void setRepositories(EList<Repository> repositories)
   {
     EList<Repository> list = getRepositories();

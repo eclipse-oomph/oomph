@@ -79,6 +79,7 @@ public class CSpecGeneratorImpl extends ModelElementImpl implements CSpecGenerat
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public void generateIUs(IProject project, String qualifierReplacement, Map<String, Version> iuVersions, EList<IInstallableUnit> result) throws Exception
   {
     IFile file = project.getFile(CSPEC_PATH);
@@ -164,10 +165,12 @@ public class CSpecGeneratorImpl extends ModelElementImpl implements CSpecGenerat
     {
       XMLUtil.handleElementsByTagName(rootElement, "cs:dependencies", new ElementHandler() //$NON-NLS-1$
       {
+        @Override
         public void handleElement(Element dependencies) throws Exception
         {
           XMLUtil.handleElementsByTagName(dependencies, "cs:dependency", new ElementHandler() //$NON-NLS-1$
           {
+            @Override
             public void handleElement(Element dependency) throws Exception
             {
               String id = dependency.getAttribute("name"); //$NON-NLS-1$

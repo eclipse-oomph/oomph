@@ -47,6 +47,7 @@ public interface Property extends PreferenceItem
    * @model opposite="properties" transient="false"
    * @generated
    */
+  @Override
   PreferenceNode getParent();
 
   /**
@@ -137,6 +138,7 @@ public interface Property extends PreferenceItem
    * @model kind="operation"
    * @generated
    */
+  @Override
   Property getAncestor();
 
 } // Property

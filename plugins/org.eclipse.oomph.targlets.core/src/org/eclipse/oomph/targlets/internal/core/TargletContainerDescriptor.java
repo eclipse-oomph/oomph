@@ -98,7 +98,7 @@ public final class TargletContainerDescriptor implements ITargletContainerDescri
     int size = stream.readInt();
     if (size != 0)
     {
-      workingProjects = new ArrayList<WorkspaceIUInfo>();
+      workingProjects = new ArrayList<>();
       for (int i = 0; i < size; i++)
       {
         WorkspaceIUInfo workspaceIUInfo = new WorkspaceIUInfo(stream);
@@ -165,11 +165,13 @@ public final class TargletContainerDescriptor implements ITargletContainerDescri
     }
   }
 
+  @Override
   public String getID()
   {
     return id;
   }
 
+  @Override
   public File getPoolLocation()
   {
     return poolLocation;
@@ -190,21 +192,25 @@ public final class TargletContainerDescriptor implements ITargletContainerDescri
     return DEFAULT_INSTALL_FOLDER;
   }
 
+  @Override
   public String getWorkingDigest()
   {
     return workingDigest;
   }
 
+  @Override
   public Collection<WorkspaceIUInfo> getWorkingProjects()
   {
     return workingProjects;
   }
 
+  @Override
   public UpdateProblem getUpdateProblem()
   {
     return updateProblem;
   }
 
+  @Override
   public synchronized BundlePool getBundlePool()
   {
     if (bundlePool == null)
@@ -216,6 +222,7 @@ public final class TargletContainerDescriptor implements ITargletContainerDescri
     return bundlePool;
   }
 
+  @Override
   public int compareTo(TargletContainerDescriptor o)
   {
     return id.compareTo(o.getID());
@@ -238,12 +245,7 @@ public final class TargletContainerDescriptor implements ITargletContainerDescri
       return true;
     }
 
-    if (obj == null)
-    {
-      return false;
-    }
-
-    if (getClass() != obj.getClass())
+    if (obj == null || getClass() != obj.getClass())
     {
       return false;
     }
@@ -326,6 +328,7 @@ public final class TargletContainerDescriptor implements ITargletContainerDescri
     updateProblem = null;
   }
 
+  @Override
   public String getWorkingProfileID()
   {
     if (workingDigest == null)
@@ -336,6 +339,7 @@ public final class TargletContainerDescriptor implements ITargletContainerDescri
     return getProfileID(workingDigest);
   }
 
+  @Override
   public Profile getWorkingProfile()
   {
     String profileID = getWorkingProfileID();

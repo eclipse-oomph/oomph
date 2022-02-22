@@ -57,6 +57,7 @@ public class UICallback extends UserCallback
   {
     final IRunnableWithProgress runnableWithProgress = new IRunnableWithProgress()
     {
+      @Override
       public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
       {
         runnable.run(monitor);
@@ -65,6 +66,7 @@ public class UICallback extends UserCallback
 
     UIUtil.exec(shell.getDisplay(), async, new Runnable()
     {
+      @Override
       public void run()
       {
         try
@@ -90,6 +92,7 @@ public class UICallback extends UserCallback
   {
     UIUtil.exec(shell.getDisplay(), async, new Runnable()
     {
+      @Override
       public void run()
       {
         MessageDialog.openInformation(null, shellText, message);
@@ -103,6 +106,7 @@ public class UICallback extends UserCallback
     final AtomicBoolean result = new AtomicBoolean();
     shell.getDisplay().syncExec(new Runnable()
     {
+      @Override
       public void run()
       {
         boolean confirmation = MessageDialog.openQuestion(null, shellText, message);

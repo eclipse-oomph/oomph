@@ -140,6 +140,7 @@ public class ProjectsImportTaskImpl extends SetupTaskImpl implements ProjectsImp
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public boolean isForce()
   {
     return force;
@@ -150,6 +151,7 @@ public class ProjectsImportTaskImpl extends SetupTaskImpl implements ProjectsImp
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setForce(boolean newForce)
   {
     boolean oldForce = force;
@@ -165,11 +167,12 @@ public class ProjectsImportTaskImpl extends SetupTaskImpl implements ProjectsImp
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<SourceLocator> getSourceLocators()
   {
     if (sourceLocators == null)
     {
-      sourceLocators = new EObjectContainmentEList<SourceLocator>(SourceLocator.class, this, ProjectsPackage.PROJECTS_IMPORT_TASK__SOURCE_LOCATORS);
+      sourceLocators = new EObjectContainmentEList<>(SourceLocator.class, this, ProjectsPackage.PROJECTS_IMPORT_TASK__SOURCE_LOCATORS);
     }
     return sourceLocators;
   }
@@ -294,6 +297,7 @@ public class ProjectsImportTaskImpl extends SetupTaskImpl implements ProjectsImp
     return 50;
   }
 
+  @Override
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     if (isForce() || context.getTrigger() == Trigger.MANUAL)
@@ -321,9 +325,10 @@ public class ProjectsImportTaskImpl extends SetupTaskImpl implements ProjectsImp
     return false;
   }
 
+  @Override
   public void perform(SetupTaskContext context) throws Exception
   {
-    Map<BackendContainer, IProject> backendContainers = new HashMap<BackendContainer, IProject>();
+    Map<BackendContainer, IProject> backendContainers = new HashMap<>();
     MultiStatus status = new MultiStatus(ProjectsPlugin.INSTANCE.getSymbolicName(), 0, Messages.ProjectsImportTaskImpl_Analysis_message, null);
 
     EList<SourceLocator> sourceLocators = getSourceLocators();
@@ -388,7 +393,7 @@ public class ProjectsImportTaskImpl extends SetupTaskImpl implements ProjectsImp
     String value = HISTORY.getProperty(key, null);
     if (value != null)
     {
-      List<IProject> projects = new ArrayList<IProject>();
+      List<IProject> projects = new ArrayList<>();
       for (String element : XMLTypeFactory.eINSTANCE.createNMTOKENS(value))
       {
         projects.add(ROOT.getProject(URI.decode(element)));
@@ -451,6 +456,7 @@ public class ProjectsImportTaskImpl extends SetupTaskImpl implements ProjectsImp
     IWorkspace workspace = org.eclipse.core.resources.ResourcesPlugin.getWorkspace();
     workspace.run(new IWorkspaceRunnable()
     {
+      @Override
       public void run(IProgressMonitor monitor) throws CoreException
       {
         SubMonitor progress = SubMonitor.convert(monitor, backendContainers.size()).detectCancelation();

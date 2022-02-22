@@ -129,6 +129,7 @@ public class JREComposite extends Composite
     treeViewer.setLabelProvider(new JRELabelProvider(treeViewer.getTree().getFont()));
     treeViewer.addSelectionChangedListener(new ISelectionChangedListener()
     {
+      @Override
       public void selectionChanged(SelectionChangedEvent event)
       {
         IStructuredSelection selection = (IStructuredSelection)treeViewer.getSelection();
@@ -166,6 +167,7 @@ public class JREComposite extends Composite
 
     treeViewer.addDoubleClickListener(new IDoubleClickListener()
     {
+      @Override
       public void doubleClick(DoubleClickEvent event)
       {
         if (selectedElement instanceof JRE)
@@ -262,10 +264,12 @@ public class JREComposite extends Composite
 
     UIUtil.asyncExec(new Runnable()
     {
+      @Override
       public void run()
       {
         BusyIndicator.showWhile(getShell().getDisplay(), new Runnable()
         {
+          @Override
           public void run()
           {
             treeViewer.setInput(JREManager.INSTANCE);
@@ -296,6 +300,7 @@ public class JREComposite extends Composite
 
     UIUtil.asyncExec(new Runnable()
     {
+      @Override
       public void run()
       {
         treeViewer.refresh();
@@ -314,6 +319,7 @@ public class JREComposite extends Composite
 
     UIUtil.asyncExec(new Runnable()
     {
+      @Override
       public void run()
       {
         treeViewer.setSelection(new StructuredSelection(selectedElement));
@@ -359,10 +365,11 @@ public class JREComposite extends Composite
 
       try
       {
-        final AtomicReference<Set<JRE>> added = new AtomicReference<Set<JRE>>();
+        final AtomicReference<Set<JRE>> added = new AtomicReference<>();
 
         UIUtil.runInProgressDialog(getShell(), new IRunnableWithProgress()
         {
+          @Override
           public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
           {
             added.set(JREManager.INSTANCE.addExtraJavaHomes(dir, monitor));
@@ -375,7 +382,7 @@ public class JREComposite extends Composite
         {
           treeViewer.refresh();
           treeViewer.setExpandedState(GROUPS[1], true);
-          treeViewer.setSelection(new StructuredSelection(new ArrayList<JRE>(jres)));
+          treeViewer.setSelection(new StructuredSelection(new ArrayList<>(jres)));
         }
 
         MessageDialog.openInformation(getShell(), JREDialog.TITLE, getVMFoundMessage(size));
@@ -413,7 +420,7 @@ public class JREComposite extends Composite
 
   protected void removePressed()
   {
-    Set<String> javaHomes = new HashSet<String>();
+    Set<String> javaHomes = new HashSet<>();
 
     IStructuredSelection selection = (IStructuredSelection)treeViewer.getSelection();
     for (Object element : selection.toArray())
@@ -475,10 +482,12 @@ public class JREComposite extends Composite
    */
   private final class JREContentProvider implements ITreeContentProvider
   {
+    @Override
     public void inputChanged(Viewer viewer, Object oldInput, Object newInput)
     {
     }
 
+    @Override
     public Object[] getChildren(Object element)
     {
       if (element == JREManager.INSTANCE)
@@ -506,21 +515,25 @@ public class JREComposite extends Composite
       return EMPTY;
     }
 
+    @Override
     public boolean hasChildren(Object element)
     {
       return getChildren(element).length != 0;
     }
 
+    @Override
     public Object[] getElements(Object element)
     {
       return getChildren(element);
     }
 
+    @Override
     public Object getParent(Object element)
     {
       return null;
     }
 
+    @Override
     public void dispose()
     {
     }
@@ -538,6 +551,7 @@ public class JREComposite extends Composite
       this.font = font;
     }
 
+    @Override
     public Image getColumnImage(Object element, int columnIndex)
     {
       if (columnIndex == 0)
@@ -556,6 +570,7 @@ public class JREComposite extends Composite
       return null;
     }
 
+    @Override
     public String getColumnText(Object element, int columnIndex)
     {
       if (element instanceof String)
@@ -588,6 +603,7 @@ public class JREComposite extends Composite
       return null;
     }
 
+    @Override
     public Color getForeground(Object element)
     {
       if (filter != null && element instanceof JRE)
@@ -602,11 +618,13 @@ public class JREComposite extends Composite
       return null;
     }
 
+    @Override
     public Color getBackground(Object element)
     {
       return null;
     }
 
+    @Override
     public Font getFont(Object element, int columnIndex)
     {
       if (element instanceof JRE)

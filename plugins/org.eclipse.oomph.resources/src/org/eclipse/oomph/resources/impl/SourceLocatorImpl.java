@@ -163,6 +163,7 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getRootFolder()
   {
     return rootFolder;
@@ -173,6 +174,7 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setRootFolder(String newRootFolder)
   {
     String oldRootFolder = rootFolder;
@@ -188,11 +190,12 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<String> getExcludedPaths()
   {
     if (excludedPaths == null)
     {
-      excludedPaths = new EDataTypeUniqueEList<String>(String.class, this, ResourcesPackage.SOURCE_LOCATOR__EXCLUDED_PATHS);
+      excludedPaths = new EDataTypeUniqueEList<>(String.class, this, ResourcesPackage.SOURCE_LOCATOR__EXCLUDED_PATHS);
     }
     return excludedPaths;
   }
@@ -202,11 +205,12 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<ProjectFactory> getProjectFactories()
   {
     if (projectFactories == null)
     {
-      projectFactories = new EObjectContainmentEList<ProjectFactory>(ProjectFactory.class, this, ResourcesPackage.SOURCE_LOCATOR__PROJECT_FACTORIES);
+      projectFactories = new EObjectContainmentEList<>(ProjectFactory.class, this, ResourcesPackage.SOURCE_LOCATOR__PROJECT_FACTORIES);
     }
     return projectFactories;
   }
@@ -216,6 +220,7 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public boolean isLocateNestedProjects()
   {
     return locateNestedProjects;
@@ -226,6 +231,7 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setLocateNestedProjects(boolean newLocateNestedProjects)
   {
     boolean oldLocateNestedProjects = locateNestedProjects;
@@ -242,11 +248,12 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<Predicate> getPredicates()
   {
     if (predicates == null)
     {
-      predicates = new EObjectContainmentEList<Predicate>(Predicate.class, this, ResourcesPackage.SOURCE_LOCATOR__PREDICATES);
+      predicates = new EObjectContainmentEList<>(Predicate.class, this, ResourcesPackage.SOURCE_LOCATOR__PREDICATES);
     }
     return predicates;
   }
@@ -256,6 +263,7 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public boolean matches(IProject project)
   {
     return PredicatesUtil.matchesPredicates(project, predicates);
@@ -266,6 +274,7 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public IProject loadProject(EList<ProjectFactory> defaultProjectFactories, BackendContainer backendContainer, IProgressMonitor monitor)
   {
     BackendContainer rootContainer = SourceLocatorImpl.getRootContainer(this);
@@ -283,6 +292,7 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public void handleProjects(EList<ProjectFactory> defaultProjectFactories, ProjectHandler projectHandler, MultiStatus status, IProgressMonitor monitor)
   {
     handleProjects(this, defaultProjectFactories, projectHandler, status, monitor);
@@ -568,7 +578,7 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
       return;
     }
 
-    final Set<URI> excludedURIs = new HashSet<URI>();
+    final Set<URI> excludedURIs = new HashSet<>();
     for (String path : sourceLocator.getExcludedPaths())
     {
       while (path.startsWith("/")) //$NON-NLS-1$

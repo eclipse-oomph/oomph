@@ -74,11 +74,13 @@ public class TargletContainerUI extends BaseWithDeprecation implements IAdapterF
     labelProvider = new AdapterFactoryLabelProvider(adapterFactory);
   }
 
+  @Override
   public Class<?>[] getAdapterList()
   {
     return ADAPTERS;
   }
 
+  @Override
   @SuppressWarnings("all")
   public Object getAdapter(Object object, Class adapterType)
   {
@@ -94,12 +96,7 @@ public class TargletContainerUI extends BaseWithDeprecation implements IAdapterF
         return new ContainerLabelProvider();
       }
 
-      if (adapterType == org.eclipse.pde.ui.target.ITargetLocationEditor.class)
-      {
-        return this;
-      }
-
-      if (adapterType == org.eclipse.pde.ui.target.ITargetLocationUpdater.class)
+      if ((adapterType == org.eclipse.pde.ui.target.ITargetLocationEditor.class) || (adapterType == org.eclipse.pde.ui.target.ITargetLocationUpdater.class))
       {
         return this;
       }
@@ -122,6 +119,7 @@ public class TargletContainerUI extends BaseWithDeprecation implements IAdapterF
 
     UIUtil.asyncExec(display, new Runnable()
     {
+      @Override
       public void run()
       {
         try
@@ -149,6 +147,7 @@ public class TargletContainerUI extends BaseWithDeprecation implements IAdapterF
 
     UIUtil.asyncExec(display, new Runnable()
     {
+      @Override
       public void run()
       {
         try
@@ -197,25 +196,29 @@ public class TargletContainerUI extends BaseWithDeprecation implements IAdapterF
     {
     }
 
+    @Override
     public void inputChanged(Viewer viewer, Object oldInput, Object newInput)
     {
     }
 
+    @Override
     public void dispose()
     {
     }
 
+    @Override
     public Object[] getElements(Object element)
     {
       return getChildren(element);
     }
 
+    @Override
     public Object[] getChildren(Object element)
     {
       if (element instanceof ITargletContainer)
       {
         ITargletContainer location = (ITargletContainer)element;
-        List<Object> children = new ArrayList<Object>();
+        List<Object> children = new ArrayList<>();
 
         ITargletContainerDescriptor descriptor = location.getDescriptor();
         if (descriptor != null)
@@ -240,7 +243,7 @@ public class TargletContainerUI extends BaseWithDeprecation implements IAdapterF
                   UpdateProblem.MissingIU missingIU = (UpdateProblem.MissingIU)updateProblem;
 
                   VersionRange range = new VersionRange(missingIU.getRange());
-                  Set<P2Index.Repository> repositories = new HashSet<P2Index.Repository>();
+                  Set<P2Index.Repository> repositories = new HashSet<>();
 
                   Map<P2Index.Repository, Set<Version>> simpleResult = P2Index.INSTANCE.lookupCapabilities(missingIU.getNamespace(), missingIU.getName());
                   collectRepositories(simpleResult, range, repositories);
@@ -283,11 +286,13 @@ public class TargletContainerUI extends BaseWithDeprecation implements IAdapterF
       return NO_CHILDREN;
     }
 
+    @Override
     public boolean hasChildren(Object element)
     {
       return getChildren(element).length != 0;
     }
 
+    @Override
     public Object getParent(Object element)
     {
       return null;
@@ -364,7 +369,7 @@ public class TargletContainerUI extends BaseWithDeprecation implements IAdapterF
 
     private final String message;
 
-    private final List<StatusWrapper> children = new ArrayList<StatusWrapper>();
+    private final List<StatusWrapper> children = new ArrayList<>();
 
     public StatusWrapper(int severity, String message)
     {
@@ -392,52 +397,63 @@ public class TargletContainerUI extends BaseWithDeprecation implements IAdapterF
       children.add(child);
     }
 
+    @Override
     public void dispose()
     {
     }
 
+    @Override
     public void inputChanged(Viewer viewer, Object oldInput, Object newInput)
     {
     }
 
+    @Override
     public Object[] getElements(Object inputElement)
     {
       return getChildren(inputElement);
     }
 
+    @Override
     public Object[] getChildren(Object parentElement)
     {
       return children.toArray();
     }
 
+    @Override
     public Object getParent(Object element)
     {
       return null;
     }
 
+    @Override
     public boolean hasChildren(Object element)
     {
       return !children.isEmpty();
     }
 
+    @Override
     public void addListener(ILabelProviderListener listener)
     {
     }
 
+    @Override
     public boolean isLabelProperty(Object element, String property)
     {
       return false;
     }
 
+    @Override
     public void removeListener(ILabelProviderListener listener)
     {
     }
 
+    @Override
     public Image getImage(Object element)
     {
       return UIUtil.getStatusImage(severity);
     }
 
+    @Override
     public String getText(Object element)
     {
       return message;
@@ -462,16 +478,19 @@ public class TargletContainerUI extends BaseWithDeprecation implements IAdapterF
       this.wrappedObject = wrappedObject;
     }
 
+    @Override
     public void inputChanged(Viewer viewer, Object oldInput, Object newInput)
     {
       contentProvider.inputChanged(viewer, oldInput, newInput);
     }
 
+    @Override
     public Object[] getElements(Object object)
     {
       return getChildren(wrappedObject);
     }
 
+    @Override
     public Object[] getChildren(Object object)
     {
       Object[] children = contentProvider.getChildren(wrappedObject);
@@ -483,41 +502,49 @@ public class TargletContainerUI extends BaseWithDeprecation implements IAdapterF
       return children;
     }
 
+    @Override
     public boolean hasChildren(Object object)
     {
       return contentProvider.hasChildren(wrappedObject);
     }
 
+    @Override
     public Object getParent(Object object)
     {
       return contentProvider.getParent(wrappedObject);
     }
 
+    @Override
     public void addListener(ILabelProviderListener listener)
     {
       labelProvider.addListener(listener);
     }
 
+    @Override
     public void removeListener(ILabelProviderListener listener)
     {
       labelProvider.removeListener(listener);
     }
 
+    @Override
     public void dispose()
     {
       labelProvider.dispose();
     }
 
+    @Override
     public boolean isLabelProperty(Object object, String id)
     {
       return labelProvider.isLabelProperty(wrappedObject, id);
     }
 
+    @Override
     public Image getImage(Object object)
     {
       return labelProvider.getImage(wrappedObject);
     }
 
+    @Override
     public String getText(Object object)
     {
       return labelProvider.getText(wrappedObject);
@@ -531,21 +558,25 @@ class BaseWithDeprecation implements org.eclipse.pde.ui.target.ITargetLocationEd
   static final Class<?>[] ADAPTERS = { ITreeContentProvider.class, ILabelProvider.class, org.eclipse.pde.ui.target.ITargetLocationEditor.class,
       org.eclipse.pde.ui.target.ITargetLocationUpdater.class };
 
+  @Override
   public boolean canUpdate(ITargetDefinition target, ITargetLocation targetLocation)
   {
     return false;
   }
 
+  @Override
   public IStatus update(ITargetDefinition target, ITargetLocation targetLocation, IProgressMonitor monitor)
   {
     return null;
   }
 
+  @Override
   public boolean canEdit(ITargetDefinition target, ITargetLocation targetLocation)
   {
     return false;
   }
 
+  @Override
   public IWizard getEditWizard(ITargetDefinition target, ITargetLocation targetLocation)
   {
     return null;

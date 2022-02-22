@@ -294,6 +294,7 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getName()
   {
     return name;
@@ -304,6 +305,7 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setName(String newName)
   {
     String oldName = name;
@@ -319,6 +321,7 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getNamespace()
   {
     return namespace;
@@ -329,6 +332,7 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setNamespace(String newNamespace)
   {
     String oldNamespace = namespace;
@@ -344,6 +348,7 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public VersionRange getVersionRange()
   {
     return versionRange;
@@ -354,6 +359,7 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setVersionRange(VersionRange newVersionRange)
   {
     VersionRange oldVersionRange = versionRange;
@@ -369,11 +375,13 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public void setVersionRange(Version version, VersionSegment segment)
   {
     setVersionRange(P2Factory.eINSTANCE.createVersionRange(version, segment));
   }
 
+  @Override
   public IRequirement toIRequirement()
   {
     String namespace = getNamespace();
@@ -395,6 +403,7 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public boolean isOptional()
   {
     return min <= 0;
@@ -405,6 +414,7 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public void setOptional(boolean newOptional)
   {
     setMin(newOptional ? 0 : 1);
@@ -426,6 +436,7 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getFilter()
   {
     return filter;
@@ -436,6 +447,7 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setFilter(String newFilter)
   {
     String oldFilter = filter;
@@ -451,6 +463,7 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public RequirementType getType()
   {
     String name = getName();
@@ -476,6 +489,7 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public int getMin()
   {
     return min;
@@ -486,6 +500,7 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public void setMin(int newMin)
   {
     boolean oldOptional = isOptional();
@@ -504,6 +519,7 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public int getMax()
   {
     return max;
@@ -514,6 +530,7 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setMax(int newMax)
   {
     int oldMax = max;
@@ -529,6 +546,7 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getDescription()
   {
     return description;
@@ -539,6 +557,7 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setDescription(String newDescription)
   {
     String oldDescription = description;
@@ -554,6 +573,7 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public boolean isGreedy()
   {
     return greedy;
@@ -564,6 +584,7 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setGreedy(boolean newGreedy)
   {
     boolean oldGreedy = greedy;
@@ -574,12 +595,14 @@ public class RequirementImpl extends ModelElementImpl implements Requirement
     }
   }
 
+  @Override
   public IMatchExpression<IInstallableUnit> getMatchExpression()
   {
     String filter = getFilter();
     return parseMatchExpression(filter);
   }
 
+  @Override
   public void setMatchExpression(IMatchExpression<IInstallableUnit> matchExpression)
   {
     String filter = formatMatchExpression(matchExpression);

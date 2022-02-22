@@ -131,6 +131,7 @@ public class EnablementDialog extends AbstractSetupDialog
 
     UIUtil.asyncExec(new Runnable()
     {
+      @Override
       public void run()
       {
         treeViewer.expandAll();
@@ -147,6 +148,7 @@ public class EnablementDialog extends AbstractSetupDialog
 
               UIUtil.asyncExec(new Runnable()
               {
+                @Override
                 public void run()
                 {
                   extensionImageLabel.setImage(image);
@@ -173,8 +175,8 @@ public class EnablementDialog extends AbstractSetupDialog
 
   private ItemProvider createTreeViewerInput()
   {
-    Map<String, Set<Requirement>> requirements = new HashMap<String, Set<Requirement>>();
-    List<Requirement> extraRequirements = new ArrayList<Requirement>();
+    Map<String, Set<Requirement>> requirements = new HashMap<>();
+    List<Requirement> extraRequirements = new ArrayList<>();
 
     int size = enablementTasks.size();
     for (int i = 0; i < size; i++)
@@ -216,7 +218,7 @@ public class EnablementDialog extends AbstractSetupDialog
       }
     }
 
-    List<String> urls = new ArrayList<String>(requirements.keySet());
+    List<String> urls = new ArrayList<>(requirements.keySet());
     Collections.sort(urls);
 
     ItemProvider input = new ItemProvider(adapterFactory);

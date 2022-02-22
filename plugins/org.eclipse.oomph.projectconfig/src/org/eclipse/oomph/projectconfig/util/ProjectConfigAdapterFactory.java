@@ -85,7 +85,7 @@ public class ProjectConfigAdapterFactory extends AdapterFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  protected ProjectConfigSwitch<Adapter> modelSwitch = new ProjectConfigSwitch<Adapter>()
+  protected ProjectConfigSwitch<Adapter> modelSwitch = new ProjectConfigSwitch<>()
   {
     @Override
     public Adapter caseWorkspaceConfiguration(WorkspaceConfiguration object)

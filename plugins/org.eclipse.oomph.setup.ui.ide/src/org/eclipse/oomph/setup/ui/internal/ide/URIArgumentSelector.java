@@ -54,6 +54,7 @@ public class URIArgumentSelector
    */
   public static class ExtensionFactory implements IExecutableExtensionFactory
   {
+    @Override
     public Object create() throws CoreException
     {
       Class<?> argumentSelectorInterface = null;
@@ -78,6 +79,7 @@ public class URIArgumentSelector
       {
         private final URIArgumentSelector uriArgumentSelector = new URIArgumentSelector();
 
+        @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable
         {
           return uriArgumentSelector.selectArgument((IStringVariable)args[0], (Shell)args[1]);

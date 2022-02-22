@@ -29,6 +29,7 @@ public class LocalDataProvider implements DataProvider
     localFile = locaFile;
   }
 
+  @Override
   public final Location getLocation()
   {
     return Location.LOCAL;
@@ -39,11 +40,13 @@ public class LocalDataProvider implements DataProvider
     return localFile;
   }
 
+  @Override
   public File[] getExtraFiles()
   {
     return NO_FILES;
   }
 
+  @Override
   public boolean retrieve(File file) throws IOException, NotFoundException
   {
     String localVersion = SyncUtil.getDigest(localFile);
@@ -62,6 +65,7 @@ public class LocalDataProvider implements DataProvider
     return false;
   }
 
+  @Override
   public void update(File file, File baseFile) throws IOException, NotCurrentException
   {
     String localVersion = SyncUtil.getDigest(localFile);
@@ -80,6 +84,7 @@ public class LocalDataProvider implements DataProvider
     }
   }
 
+  @Override
   public boolean delete() throws IOException
   {
     if (!localFile.exists())

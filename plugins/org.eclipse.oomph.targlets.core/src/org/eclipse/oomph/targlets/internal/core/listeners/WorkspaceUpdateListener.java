@@ -26,12 +26,13 @@ import java.util.Map;
  */
 public abstract class WorkspaceUpdateListener implements ITargletContainerListener
 {
-  private final Map<String, ProfileUpdateSucceededEvent> profileUpdateSucceededEvents = new HashMap<String, ProfileUpdateSucceededEvent>();
+  private final Map<String, ProfileUpdateSucceededEvent> profileUpdateSucceededEvents = new HashMap<>();
 
   public WorkspaceUpdateListener()
   {
   }
 
+  @Override
   public void handleTargletContainerEvent(TargletContainerEvent event, IProgressMonitor monitor) throws Exception
   {
     if (event instanceof ProfileUpdateSucceededEvent)

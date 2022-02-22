@@ -55,6 +55,7 @@ public final class WorkspaceIUImporter
 
   private final TargetPlatformListener listener = new TargetPlatformListener()
   {
+    @Override
     public void targetDefinitionActivated(ITargetDefinition oldTargetDefinition, ITargetDefinition newTargetDefinition) throws Exception
     {
       if (newTargetDefinition != null)
@@ -73,10 +74,11 @@ public final class WorkspaceIUImporter
   {
     TargetPlatformUtil.runWithTargetPlatformService(new TargetPlatformRunnable<Object>()
     {
+      @Override
       public Object run(ITargetPlatformService service) throws CoreException
       {
-        Set<WorkspaceIUInfo> workspaceIUInfos = new HashSet<WorkspaceIUInfo>();
-        List<Pair<ITargletContainer, ITargletContainerDescriptor>> targletContainerInfos = new ArrayList<Pair<ITargletContainer, ITargletContainerDescriptor>>();
+        Set<WorkspaceIUInfo> workspaceIUInfos = new HashSet<>();
+        List<Pair<ITargletContainer, ITargletContainerDescriptor>> targletContainerInfos = new ArrayList<>();
 
         ITargetDefinition targetDefinition = TargetPlatformUtil.getActiveTargetDefinition(service);
         if (targetDefinition != null)
@@ -108,7 +110,7 @@ public final class WorkspaceIUImporter
         Map<WorkspaceIUInfo, ResourcesUtil.ImportResult> importResults;
         if (workspaceIUInfos.isEmpty())
         {
-          importResults = new HashMap<WorkspaceIUInfo, ResourcesUtil.ImportResult>();
+          importResults = new HashMap<>();
         }
         else
         {
@@ -120,7 +122,7 @@ public final class WorkspaceIUImporter
           ITargletContainer container = pair.getElement1();
           ITargletContainerDescriptor descriptor = pair.getElement2();
 
-          Map<WorkspaceIUInfo, ResourcesUtil.ImportResult> containerImportResults = new HashMap<WorkspaceIUInfo, ResourcesUtil.ImportResult>();
+          Map<WorkspaceIUInfo, ResourcesUtil.ImportResult> containerImportResults = new HashMap<>();
           Collection<WorkspaceIUInfo> workingProjects = descriptor.getWorkingProjects();
           if (workingProjects != null)
           {
@@ -140,10 +142,11 @@ public final class WorkspaceIUImporter
   private Map<WorkspaceIUInfo, ResourcesUtil.ImportResult> updateWorkspace(final Set<WorkspaceIUInfo> workspaceIUInfos, IProgressMonitor monitor)
       throws CoreException
   {
-    final Map<WorkspaceIUInfo, ResourcesUtil.ImportResult> importResults = new HashMap<WorkspaceIUInfo, ResourcesUtil.ImportResult>();
+    final Map<WorkspaceIUInfo, ResourcesUtil.ImportResult> importResults = new HashMap<>();
 
     ResourcesPlugin.getWorkspace().run(new IWorkspaceRunnable()
     {
+      @Override
       @SuppressWarnings("restriction")
       public void run(IProgressMonitor monitor) throws CoreException
       {

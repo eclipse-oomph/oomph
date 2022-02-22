@@ -120,7 +120,7 @@ public class PreferenceProfileItemProvider extends ModelElementItemProvider
           return allProjects;
         }
 
-        Collection<Project> result = new ArrayList<Project>();
+        Collection<Project> result = new ArrayList<>();
         for (Object value : allProjects)
         {
           Project project = (Project)value;
@@ -271,14 +271,14 @@ public class PreferenceProfileItemProvider extends ModelElementItemProvider
       this.preferenceProfile = preferenceProfile;
     }
 
-    Map<Project, IWrapperItemProvider> wrappers = new HashMap<Project, IWrapperItemProvider>();
+    Map<Project, IWrapperItemProvider> wrappers = new HashMap<>();
 
     public void update()
     {
       /*
        * for (Object child : getChildren()) { ((IDisposable)child).dispose(); }
        */
-      List<Object> children = new ArrayList<Object>();
+      List<Object> children = new ArrayList<>();
       EList<Project> referentProjects = preferenceProfile.getReferentProjects();
       for (int i = 0, size = referentProjects.size(); i < size; ++i)
       {
@@ -307,7 +307,7 @@ public class PreferenceProfileItemProvider extends ModelElementItemProvider
           public Object getImage(Object object)
           {
             Object image = super.getImage(object);
-            List<Object> images = new ArrayList<Object>(2);
+            List<Object> images = new ArrayList<>(2);
             images.add(image);
             images.add(EMFEditPlugin.INSTANCE.getImage("full/ovr16/ControlledObject")); //$NON-NLS-1$
             return image = new ComposedImage(images);
@@ -383,7 +383,7 @@ public class PreferenceProfileItemProvider extends ModelElementItemProvider
       }
       else if (commandClass == AddCommand.class && collection != null)
       {
-        final Collection<Object> wrappers = new ArrayList<Object>();
+        final Collection<Object> wrappers = new ArrayList<>();
         for (Object value : collection)
         {
           if (value instanceof Project)
@@ -462,7 +462,7 @@ public class PreferenceProfileItemProvider extends ModelElementItemProvider
   @Override
   public Collection<?> getChildren(Object object)
   {
-    Collection<Object> result = new ArrayList<Object>(super.getChildren(object));
+    Collection<Object> result = new ArrayList<>(super.getChildren(object));
     PreferenceProfile preferenceProfile = (PreferenceProfile)object;
     if (referents == null)
     {

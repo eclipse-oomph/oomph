@@ -21,11 +21,13 @@ import org.eclipse.swt.graphics.Image;
  */
 public class LabelDecorator extends BaseLabelProvider implements ILabelDecorator
 {
+  @Override
   public Image decorateImage(Image image, Object element)
   {
     return image;
   }
 
+  @Override
   public String decorateText(String text, Object element)
   {
     return text;

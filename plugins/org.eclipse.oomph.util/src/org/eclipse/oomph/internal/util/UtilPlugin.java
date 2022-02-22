@@ -36,11 +36,13 @@ public final class UtilPlugin extends OomphPlugin
       return "/instance/org.eclipse.ui.workbench//org.eclipse.ui.commands/state/" + id + "/org.eclipse.ui.commands.toggleState"; //$NON-NLS-1$ //$NON-NLS-2$
     }
 
+    @Override
     public void setEnabled(String id, boolean enabled)
     {
       preferences.putBoolean(getPreferenceKey(id), enabled);
     }
 
+    @Override
     public boolean isEnabled(String id)
     {
       return preferences.getBoolean(getPreferenceKey(id), false);

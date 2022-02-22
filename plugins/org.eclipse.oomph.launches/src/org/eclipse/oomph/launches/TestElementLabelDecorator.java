@@ -34,11 +34,13 @@ public class TestElementLabelDecorator extends BaseLabelProvider implements ILab
     timeFormat.setMinimumIntegerDigits(1);
   }
 
+  @Override
   public Image decorateImage(Image image, Object element)
   {
     return null;
   }
 
+  @Override
   public String decorateText(String text, Object element)
   {
     if (element instanceof ITestElementContainer)

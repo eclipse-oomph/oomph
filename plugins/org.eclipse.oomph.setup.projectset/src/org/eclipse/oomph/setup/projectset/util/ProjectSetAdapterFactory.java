@@ -80,7 +80,7 @@ public class ProjectSetAdapterFactory extends AdapterFactoryImpl
    * <!-- end-user-doc -->
    * @generated
    */
-  protected ProjectSetSwitch<Adapter> modelSwitch = new ProjectSetSwitch<Adapter>()
+  protected ProjectSetSwitch<Adapter> modelSwitch = new ProjectSetSwitch<>()
   {
     @Override
     public Adapter caseProjectSetImportTask(ProjectSetImportTask object)

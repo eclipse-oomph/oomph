@@ -55,28 +55,34 @@ public class ToolTipLabelProvider extends DecoratingColumLabelProvider
   {
     super(new AdapterFactoryLabelProvider(adapterFactory), new ILabelDecorator()
     {
+      @Override
       public void removeListener(ILabelProviderListener listener)
       {
       }
 
+      @Override
       public boolean isLabelProperty(Object element, String property)
       {
         return true;
       }
 
+      @Override
       public void dispose()
       {
       }
 
+      @Override
       public void addListener(ILabelProviderListener listener)
       {
       }
 
+      @Override
       public String decorateText(String text, Object element)
       {
         return text;
       }
 
+      @Override
       public Image decorateImage(Image image, Object element)
       {
         return image;
@@ -90,7 +96,7 @@ public class ToolTipLabelProvider extends DecoratingColumLabelProvider
   @Override
   public String getToolTipText(Object element)
   {
-    List<IItemPropertyDescriptor> propertyDescriptors = new ArrayList<IItemPropertyDescriptor>();
+    List<IItemPropertyDescriptor> propertyDescriptors = new ArrayList<>();
     List<IItemPropertyDescriptor> underlyingPropertyDescriptors = itemDelegator.getPropertyDescriptors(element);
     if (underlyingPropertyDescriptors != null)
     {

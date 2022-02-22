@@ -112,7 +112,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
 
   private final FieldHolderManager manager = new FieldHolderManager();
 
-  private final Set<String> unusedVariables = new HashSet<String>();
+  private final Set<String> unusedVariables = new HashSet<>();
 
   private boolean prompted;
 
@@ -120,9 +120,9 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
 
   private boolean updating;
 
-  private Set<SetupTaskPerformer> incompletePerformers = new LinkedHashSet<SetupTaskPerformer>();
+  private Set<SetupTaskPerformer> incompletePerformers = new LinkedHashSet<>();
 
-  private Set<SetupTaskPerformer> allPromptedPerfomers = new LinkedHashSet<SetupTaskPerformer>();
+  private Set<SetupTaskPerformer> allPromptedPerfomers = new LinkedHashSet<>();
 
   private SetupTaskPerformer performer;
 
@@ -229,7 +229,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
       fieldHolder.clear();
     }
 
-    Set<SetupTaskPerformer> performers = new LinkedHashSet<SetupTaskPerformer>();
+    Set<SetupTaskPerformer> performers = new LinkedHashSet<>();
     if (incompletePerformers.isEmpty())
     {
       if (performer != null)
@@ -245,7 +245,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
       performers.addAll(allPromptedPerfomers);
     }
 
-    Set<String> usedVariables = new HashSet<String>();
+    Set<String> usedVariables = new HashSet<>();
     for (FieldHolder fieldHolder : manager)
     {
       String value = fieldHolder.getValue();
@@ -404,7 +404,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
     }
 
     // Determine the URIs of all the variables actually being used.
-    Set<URI> uris = new HashSet<URI>();
+    Set<URI> uris = new HashSet<>();
     if (performer != null)
     {
       for (VariableTask variable : performer.getUnresolvedVariables())
@@ -424,7 +424,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
     Point origin = parent.getOrigin();
     parent.setRedraw(false);
 
-    List<SetupTaskPerformer> allPerformers = new ArrayList<SetupTaskPerformer>(allPromptedPerfomers);
+    List<SetupTaskPerformer> allPerformers = new ArrayList<>(allPromptedPerfomers);
     if (performer != null)
     {
       allPerformers.add(0, performer);
@@ -597,6 +597,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
 
       UIUtil.asyncExec(getControl(), new Runnable()
       {
+        @Override
         public void run()
         {
           performerCreationJob = null;
@@ -690,6 +691,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
       {
         UIUtil.asyncExec(getControl(), new Runnable()
         {
+          @Override
           public void run()
           {
             if (isPageComplete() && !defaultsSet)
@@ -783,6 +785,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
     }
   }
 
+  @Override
   public synchronized String getValue(VariableTask variable)
   {
     FieldHolder fieldHolder = manager.getFieldHolder(variable, false, true);
@@ -807,16 +810,19 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
     return null;
   }
 
+  @Override
   public OS getOS()
   {
     return getWizard().getOS();
   }
 
+  @Override
   public String getVMPath()
   {
     return getWizard().getVMPath();
   }
 
+  @Override
   public synchronized boolean promptVariables(List<? extends SetupTaskContext> contexts)
   {
     prompted = true;
@@ -863,6 +869,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
     return isComplete;
   }
 
+  @Override
   public UserCallback getUserCallback()
   {
     return userCallback;
@@ -873,9 +880,9 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
    */
   private final class FieldHolder implements ValueListener
   {
-    private final Set<VariableTask> variables = new LinkedHashSet<VariableTask>();
+    private final Set<VariableTask> variables = new LinkedHashSet<>();
 
-    private final List<String> choiceLabels = new ArrayList<String>();
+    private final List<String> choiceLabels = new ArrayList<>();
 
     private PropertyField field;
 
@@ -900,7 +907,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
 
     protected List<String> getChoiceLabels(VariableTask variable)
     {
-      List<String> result = new ArrayList<String>();
+      List<String> result = new ArrayList<>();
       for (VariableChoice choice : variable.getChoices())
       {
         String label = choice.getLabel();
@@ -1039,7 +1046,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
       {
         AuthenticatedField authenticatedField = (AuthenticatedField)field;
         String value = field.getValue();
-        Set<Authenticator> allAuthenticators = new LinkedHashSet<Authenticator>();
+        Set<Authenticator> allAuthenticators = new LinkedHashSet<>();
         for (VariableTask variable : variables)
         {
           if (!StringUtil.isEmpty(value))
@@ -1075,6 +1082,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
       }
     }
 
+    @Override
     public void valueChanged(String oldValue, String newValue) throws Exception
     {
       synchronized (VariablePage.this)
@@ -1138,7 +1146,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
   {
     private FieldHolder fieldHolder;
 
-    private final Set<URI> variableURIs = new HashSet<URI>();
+    private final Set<URI> variableURIs = new HashSet<>();
 
     public FieldHolderRecord()
     {
@@ -1171,23 +1179,27 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
    */
   private class FieldHolderManager implements Iterable<FieldHolder>
   {
-    private final EList<FieldHolderRecord> fields = new BasicEList<FieldHolderRecord>();
+    private final EList<FieldHolderRecord> fields = new BasicEList<>();
 
+    @Override
     public Iterator<FieldHolder> iterator()
     {
       final Iterator<FieldHolderRecord> iterator = fields.iterator();
-      return new Iterator<FieldHolder>()
+      return new Iterator<>()
       {
+        @Override
         public boolean hasNext()
         {
           return iterator.hasNext();
         }
 
+        @Override
         public FieldHolder next()
         {
           return iterator.next().getFieldHolder();
         }
 
+        @Override
         public void remove()
         {
           throw new UnsupportedOperationException();
@@ -1197,8 +1209,8 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
 
     public void reorder(List<SetupTaskPerformer> allPerformers)
     {
-      List<Control> controls = new ArrayList<Control>();
-      Map<FieldHolderRecord, Set<FieldHolderRecord>> ruleUses = new LinkedHashMap<FieldHolderRecord, Set<FieldHolderRecord>>();
+      List<Control> controls = new ArrayList<>();
+      Map<FieldHolderRecord, Set<FieldHolderRecord>> ruleUses = new LinkedHashMap<>();
       LOOP: for (FieldHolderRecord fieldHolderRecord : fields)
       {
         FieldHolder fieldHolder = fieldHolderRecord.getFieldHolder();
@@ -1468,6 +1480,7 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
 
     private boolean clearSpecialFieldHolders;
 
+    @Override
     public void run()
     {
       if (!canceled && !getShell().isDisposed())

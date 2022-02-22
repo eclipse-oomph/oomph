@@ -125,6 +125,7 @@ public class SyncDeltaImpl extends MinimalEObjectImpl.Container implements SyncD
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getID()
   {
     return iD;
@@ -150,6 +151,7 @@ public class SyncDeltaImpl extends MinimalEObjectImpl.Container implements SyncD
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public SetupTask getOldTask()
   {
     if (oldTask != null && oldTask.eIsProxy())
@@ -197,6 +199,7 @@ public class SyncDeltaImpl extends MinimalEObjectImpl.Container implements SyncD
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public SetupTask getNewTask()
   {
     if (newTask != null && newTask.eIsProxy())
@@ -244,6 +247,7 @@ public class SyncDeltaImpl extends MinimalEObjectImpl.Container implements SyncD
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public SyncDeltaType getType()
   {
     return type;

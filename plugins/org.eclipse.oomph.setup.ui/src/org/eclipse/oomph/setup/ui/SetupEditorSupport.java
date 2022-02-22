@@ -112,7 +112,7 @@ public final class SetupEditorSupport
       if (editor != null)
       {
         // Convert the handlers to a list, and if there is a fragment, add a handler for selecting the object associated with that fragment.
-        final List<LoadHandler> handlers = new ArrayList<LoadHandler>(Arrays.asList(loadHandlers));
+        final List<LoadHandler> handlers = new ArrayList<>(Arrays.asList(loadHandlers));
         if (fragment != null)
         {
           handlers.add(0, new LoadHandler()
@@ -148,6 +148,7 @@ public final class SetupEditorSupport
                 {
                   shell.getDisplay().asyncExec(new Runnable()
                   {
+                    @Override
                     public void run()
                     {
                       URI uri = EditUIUtil.getURI(editorInput);
@@ -293,62 +294,74 @@ public final class SetupEditorSupport
 
       return new IStorageEditorInput()
       {
+        @Override
         @SuppressWarnings("all")
         public Object getAdapter(Class adapter)
         {
           return null;
         }
 
+        @Override
         public String getToolTipText()
         {
           return uri.toString();
         }
 
+        @Override
         public IPersistableElement getPersistable()
         {
           return null;
         }
 
+        @Override
         public String getName()
         {
           return uri.lastSegment();
         }
 
+        @Override
         public ImageDescriptor getImageDescriptor()
         {
           return null;
         }
 
+        @Override
         public boolean exists()
         {
           return true;
         }
 
+        @Override
         public IStorage getStorage() throws CoreException
         {
           return new IStorage()
           {
+            @Override
             @SuppressWarnings("all")
             public Object getAdapter(Class adapter)
             {
               return null;
             }
 
+            @Override
             public boolean isReadOnly()
             {
               return true;
             }
 
+            @Override
             public String getName()
             {
               return uri.lastSegment();
             }
 
+            @Override
             public IPath getFullPath()
             {
               return new Path(uri.toString());
             }
 
+            @Override
             public InputStream getContents() throws CoreException
             {
               URIConverter uriConverter = SetupCoreUtil.createResourceSet().getURIConverter();

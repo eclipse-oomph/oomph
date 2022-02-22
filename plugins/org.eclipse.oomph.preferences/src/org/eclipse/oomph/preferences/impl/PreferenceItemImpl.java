@@ -109,6 +109,7 @@ public abstract class PreferenceItemImpl extends ModelElementImpl implements Pre
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public PreferenceNode getRoot()
   {
     PreferenceNode parent = getParent();
@@ -130,6 +131,7 @@ public abstract class PreferenceItemImpl extends ModelElementImpl implements Pre
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public abstract URI getAbsolutePath();
 
   /**
@@ -137,6 +139,7 @@ public abstract class PreferenceItemImpl extends ModelElementImpl implements Pre
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getName()
   {
     return name;
@@ -147,6 +150,7 @@ public abstract class PreferenceItemImpl extends ModelElementImpl implements Pre
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setName(String newName)
   {
     String oldName = name;
@@ -162,6 +166,7 @@ public abstract class PreferenceItemImpl extends ModelElementImpl implements Pre
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public abstract URI getRelativePath();
 
   /**
@@ -169,6 +174,7 @@ public abstract class PreferenceItemImpl extends ModelElementImpl implements Pre
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public abstract PreferenceItem getAncestor();
 
   /**
@@ -176,6 +182,7 @@ public abstract class PreferenceItemImpl extends ModelElementImpl implements Pre
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public abstract PreferenceNode getScope();
 
   /**
@@ -183,6 +190,7 @@ public abstract class PreferenceItemImpl extends ModelElementImpl implements Pre
    * <!-- end-user-doc -->
    * @generated NOT
    */
+  @Override
   public abstract PreferenceNode getParent();
 
   /**

@@ -313,6 +313,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getLocation()
   {
     return location;
@@ -323,6 +324,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setLocation(String newLocation)
   {
     String oldLocation = location;
@@ -338,6 +340,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getLocationQualifier()
   {
     return locationQualifier;
@@ -348,6 +351,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setLocationQualifier(String newLocationQualifier)
   {
     String oldLocationQualifier = locationQualifier;
@@ -363,6 +367,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getRemoteName()
   {
     return remoteName;
@@ -373,6 +378,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setRemoteName(String newRemoteName)
   {
     String oldRemoteName = remoteName;
@@ -388,6 +394,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getRemoteURI()
   {
     return remoteURI;
@@ -398,6 +405,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setRemoteURI(String newRemoteURI)
   {
     String oldRemoteURI = remoteURI;
@@ -413,6 +421,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getCheckoutBranch()
   {
     return checkoutBranch;
@@ -423,6 +432,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setCheckoutBranch(String newCheckoutBranch)
   {
     String oldCheckoutBranch = checkoutBranch;
@@ -438,6 +448,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public boolean isRecursive()
   {
     return recursive;
@@ -448,6 +459,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setRecursive(boolean newRecursive)
   {
     boolean oldRecursive = recursive;
@@ -463,11 +475,12 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<ConfigSection> getConfigSections()
   {
     if (configSections == null)
     {
-      configSections = new EObjectContainmentEList<ConfigSection>(ConfigSection.class, this, GitPackage.GIT_CLONE_TASK__CONFIG_SECTIONS);
+      configSections = new EObjectContainmentEList<>(ConfigSection.class, this, GitPackage.GIT_CLONE_TASK__CONFIG_SECTIONS);
     }
     return configSections;
   }
@@ -477,6 +490,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public boolean isRestrictToCheckoutBranch()
   {
     return restrictToCheckoutBranch;
@@ -487,6 +501,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setRestrictToCheckoutBranch(boolean newRestrictToCheckoutBranch)
   {
     boolean oldRestrictToCheckoutBranch = restrictToCheckoutBranch;
@@ -519,6 +534,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getPushURI()
   {
     return pushURI;
@@ -529,6 +545,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setPushURI(String newPushURI)
   {
     String oldPushURI = pushURI;
@@ -754,6 +771,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
     return 100;
   }
 
+  @Override
   public boolean isNeeded(final SetupTaskContext context) throws Exception
   {
     if (StringUtil.isEmpty(getRemoteURI()))
@@ -768,7 +786,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
     // Also use this as an opportunity to initialize the timeout based on EGit preferences
     try
     {
-      repositories = new HashSet<Path>(GitSettings.getConfiguredRepositoryDirectories());
+      repositories = new HashSet<>(GitSettings.getConfiguredRepositoryDirectories());
       timeout = GitSettings.getRemoteConnectionTimeout();
     }
     catch (Throwable ex)
@@ -844,6 +862,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
     }
   }
 
+  @Override
   public void perform(SetupTaskContext context) throws Exception
   {
     try
@@ -1023,7 +1042,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
   {
     StoredConfig config = repository.getConfig();
 
-    Map<String, Map<String, Map<String, List<String>>>> properties = new LinkedHashMap<String, Map<String, Map<String, List<String>>>>();
+    Map<String, Map<String, Map<String, List<String>>>> properties = new LinkedHashMap<>();
 
     for (ConfigSection section : configSections)
     {
@@ -1116,7 +1135,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
 
   private static Set<String> getGerritPatterns(SetupTaskContext context)
   {
-    Set<String> gerritPatterns = new HashSet<String>();
+    Set<String> gerritPatterns = new HashSet<>();
     for (Object key : context.keySet())
     {
       if (key instanceof String)
@@ -1181,21 +1200,21 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
       Map<String, Map<String, List<String>>> subsections = properties.get(sectionName);
       if (subsections == null)
       {
-        subsections = new LinkedHashMap<String, Map<String, List<String>>>();
+        subsections = new LinkedHashMap<>();
         properties.put(sectionName, subsections);
       }
 
       Map<String, List<String>> sectionProperties = subsections.get(subsectionName);
       if (sectionProperties == null)
       {
-        sectionProperties = new LinkedHashMap<String, List<String>>();
+        sectionProperties = new LinkedHashMap<>();
         subsections.put(subsectionName, sectionProperties);
       }
 
       List<String> list = sectionProperties.get(key);
       if (list == null)
       {
-        list = new ArrayList<String>();
+        list = new ArrayList<>();
         sectionProperties.put(key, list);
       }
 

@@ -76,11 +76,11 @@ public abstract class Authenticator
               {
                 if (result == null)
                 {
-                  result = new LinkedHashSet<Authenticator>();
+                  result = new LinkedHashSet<>();
                 }
 
-                Set<String> keys = new HashSet<String>();
-                final Map<String, String> map = new HashMap<String, String>();
+                Set<String> keys = new HashSet<>();
+                final Map<String, String> map = new HashMap<>();
                 String variableValue = variable.getValue();
                 map.put("value", variableValue); //$NON-NLS-1$
                 map.put("form.url", url); //$NON-NLS-1$
@@ -107,7 +107,7 @@ public abstract class Authenticator
 
                 String formSecurity = details.get("form.secure.parameters"); //$NON-NLS-1$
                 List<String> secureKeys = formSecurity == null ? null : SegmentSequence.create(" ", formSecurity).segmentsList(); //$NON-NLS-1$
-                Map<String, String> parameters = new LinkedHashMap<String, String>();
+                Map<String, String> parameters = new LinkedHashMap<>();
                 for (String key : SegmentSequence.create(" ", formFields).segments()) //$NON-NLS-1$
                 {
                   String detailKey = "form.parameter." + key; //$NON-NLS-1$
@@ -190,11 +190,11 @@ public abstract class Authenticator
             {
               if (result == null)
               {
-                result = new LinkedHashSet<Authenticator>();
+                result = new LinkedHashSet<>();
               }
 
-              Set<String> keys = new HashSet<String>();
-              final Map<String, String> map = new HashMap<String, String>();
+              Set<String> keys = new HashSet<>();
+              final Map<String, String> map = new HashMap<>();
               String variableValue = variable.getValue();
               map.put("value", variableValue); //$NON-NLS-1$
               map.put("form.url", url); //$NON-NLS-1$
@@ -349,12 +349,7 @@ public abstract class Authenticator
         return true;
       }
 
-      if (obj == null)
-      {
-        return false;
-      }
-
-      if (getClass() != obj.getClass())
+      if (obj == null || getClass() != obj.getClass())
       {
         return false;
       }
@@ -706,12 +701,7 @@ public abstract class Authenticator
         return true;
       }
 
-      if (obj == null)
-      {
-        return false;
-      }
-
-      if (getClass() != obj.getClass())
+      if (obj == null || getClass() != obj.getClass())
       {
         return false;
       }
@@ -806,11 +796,13 @@ public abstract class Authenticator
       FormHandler formHandler = new ECFURIHandlerImpl.FormHandler(org.eclipse.emf.common.util.URI.createURI(uri), uriConverter,
           new ECFURIHandlerImpl.AuthorizationHandler()
           {
+            @Override
             public Authorization authorize(org.eclipse.emf.common.util.URI uri)
             {
               return authorization;
             }
 
+            @Override
             public Authorization reauthorize(org.eclipse.emf.common.util.URI uri, Authorization authorization)
             {
               return Authorization.UNAUTHORIZEABLE;
