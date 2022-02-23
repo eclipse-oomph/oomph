@@ -29,6 +29,8 @@ import org.eclipse.equinox.p2.metadata.VersionRange;
 import org.eclipse.equinox.p2.query.QueryUtil;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IDialogSettings;
+import org.eclipse.jface.layout.TableColumnLayout;
+import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
@@ -36,16 +38,12 @@ import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.Transfer;
-import org.eclipse.swt.events.ControlAdapter;
-import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.ScrollBar;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -72,8 +70,6 @@ public final class AboutDialog extends AbstractSetupDialog
 
   private static final Transfer[] DND_TRANSFERS = new Transfer[] { DND_DELEGATES.get(0).getTransfer() };
 
-  private static final int VERSION_COLUMN_PADDING = 10;
-
   private final IDialogSettings dialogSettings = getDialogSettings();
 
   private final String version;
@@ -87,24 +83,6 @@ public final class AboutDialog extends AbstractSetupDialog
   private TableColumn idColumn;
 
   private TableColumn versionColumn;
-
-  private ControlAdapter columnResizer = new ControlAdapter()
-  {
-    @Override
-    public void controlResized(ControlEvent e)
-    {
-      Point size = table.getSize();
-      ScrollBar bar = table.getVerticalBar();
-      if (bar != null && bar.isVisible())
-      {
-        size.x -= bar.getSize().x;
-      }
-
-      versionColumn.pack();
-
-      idColumn.setWidth(size.x - versionColumn.getWidth() - VERSION_COLUMN_PADDING);
-    }
-  };
 
   private Color gray;
 
@@ -124,21 +102,26 @@ public final class AboutDialog extends AbstractSetupDialog
   @Override
   protected void createUI(Composite parent)
   {
-    table = new Table(parent, SWT.FULL_SELECTION | SWT.MULTI | SWT.NO_SCROLL | SWT.V_SCROLL);
+    Composite composite = new Composite(parent, SWT.NONE);
+    composite.setLayoutData(new GridData(GridData.FILL_BOTH));
+    TableColumnLayout tableColumnLayout = new TableColumnLayout(true);
+    composite.setLayout(tableColumnLayout);
+
+    table = new Table(composite, SWT.FULL_SELECTION | SWT.MULTI | SWT.NO_SCROLL | SWT.V_SCROLL);
     table.setHeaderVisible(true);
     table.setLinesVisible(true);
-    table.setLayoutData(new GridData(GridData.FILL_BOTH));
-    table.addControlListener(columnResizer);
 
     idColumn = new TableColumn(table, SWT.NONE);
     idColumn.setText(Messages.AboutDialog_PluginColumn_label);
     idColumn.setResizable(false);
     idColumn.setMoveable(false);
+    tableColumnLayout.setColumnData(idColumn, new ColumnWeightData(80));
 
     versionColumn = new TableColumn(table, SWT.NONE);
     versionColumn.setText(Messages.AboutDialog_VersionColumn_label);
     versionColumn.setResizable(false);
     versionColumn.setMoveable(false);
+    tableColumnLayout.setColumnData(versionColumn, new ColumnWeightData(20));
 
     Agent agent = P2Util.getAgentManager().getCurrentAgent();
     profile = agent.getCurrentProfile();
@@ -217,16 +200,6 @@ public final class AboutDialog extends AbstractSetupDialog
     }
 
     versionColumn.pack();
-    versionColumn.setWidth(versionColumn.getWidth() + VERSION_COLUMN_PADDING);
-
-    table.getDisplay().asyncExec(new Runnable()
-    {
-      @Override
-      public void run()
-      {
-        columnResizer.controlResized(null);
-      }
-    });
   }
 
   private List<IInstallableUnit> getPlugins()
