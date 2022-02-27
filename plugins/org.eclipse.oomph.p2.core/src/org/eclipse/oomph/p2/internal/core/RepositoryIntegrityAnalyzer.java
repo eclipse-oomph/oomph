@@ -1449,9 +1449,13 @@ public class RepositoryIntegrityAnalyzer implements IApplication
           {
             for (IArtifactKey artifactKey : iu.getArtifacts())
             {
-              for (File file : get(artifactCache.get(artifactKey)).values())
+              Future<Map<IArtifactDescriptor, File>> artifactCacheFuture = artifactCache.get(artifactKey);
+              if (artifactCacheFuture != null)
               {
-                CollectionUtil.add(artifacts, file, iu);
+                for (File file : get(artifactCacheFuture).values())
+                {
+                  CollectionUtil.add(artifacts, file, iu);
+                }
               }
             }
           }
@@ -2964,25 +2968,30 @@ public class RepositoryIntegrityAnalyzer implements IApplication
                 {
                   for (IArtifactKey artifactKey : brandingPlugin.getArtifacts())
                   {
-                    for (File brandingFile : artifactCache.get(artifactKey).get().values())
+                    Future<Map<IArtifactDescriptor, File>> artifactCacheFuture = artifactCache.get(artifactKey);
+                    if (artifactCacheFuture != null)
                     {
-                      URI brandingArtifactURI = URI.createFileURI(brandingFile.toString());
-                      if ("jar".equals(brandingArtifactURI.fileExtension()))
+
+                      for (File brandingFile : artifactCacheFuture.get().values())
                       {
-                        URI aboutINI = URI.createURI("archive:" + brandingArtifactURI + "!/about.ini");
-                        try
+                        URI brandingArtifactURI = URI.createFileURI(brandingFile.toString());
+                        if ("jar".equals(brandingArtifactURI.fileExtension()))
                         {
-                          Properties properties = loadProperties(aboutINI);
-                          Object featureImage = properties.get("featureImage");
-                          if (featureImage != null)
+                          URI aboutINI = URI.createURI("archive:" + brandingArtifactURI + "!/about.ini");
+                          try
                           {
-                            URI brandingImageURI = URI.createURI("archive:" + brandingArtifactURI + "!/" + featureImage.toString().replaceAll("^/*", ""));
-                            return brandingImageURI;
+                            Properties properties = loadProperties(aboutINI);
+                            Object featureImage = properties.get("featureImage");
+                            if (featureImage != null)
+                            {
+                              URI brandingImageURI = URI.createURI("archive:" + brandingArtifactURI + "!/" + featureImage.toString().replaceAll("^/*", ""));
+                              return brandingImageURI;
+                            }
                           }
-                        }
-                        catch (IOException ex)
-                        {
-                          //$FALL-THROUGH$
+                          catch (IOException ex)
+                          {
+                            //$FALL-THROUGH$
+                          }
                         }
                       }
                     }
@@ -3349,27 +3358,31 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         artifactSignedContent = new LinkedHashMap<>();
         for (IArtifactKey artifactKey : iu.getArtifacts())
         {
-          for (final File file : get(artifactCache.get(artifactKey)).values())
+          Future<Map<IArtifactDescriptor, File>> artifactCacheFuture = artifactCache.get(artifactKey);
+          if (artifactCacheFuture != null)
           {
-            Future<SignedContent> signedContent = executor.submit(new Callable<SignedContent>()
+            for (final File file : get(artifactCacheFuture).values())
             {
-              @Override
-              public SignedContent call() throws Exception
+              Future<SignedContent> signedContent = executor.submit(new Callable<SignedContent>()
               {
-                File processedFile = new File(file.toString() + PROCESSED);
-                File targetFile = processedFile.isFile() && processedFile.length() != 0 ? processedFile : file;
-                if (targetFile.toString().endsWith(".pack.gz") || targetFile.length() == 0)
+                @Override
+                public SignedContent call() throws Exception
                 {
-                  return null;
+                  File processedFile = new File(file.toString() + PROCESSED);
+                  File targetFile = processedFile.isFile() && processedFile.length() != 0 ? processedFile : file;
+                  if (targetFile.toString().endsWith(".pack.gz") || targetFile.length() == 0)
+                  {
+                    return null;
+                  }
+
+                  return verifierFactory.getSignedContent(targetFile);
                 }
+              });
 
-                return verifierFactory.getSignedContent(targetFile);
-              }
-            });
+              artifactSignedContent.put(file, signedContent);
 
-            artifactSignedContent.put(file, signedContent);
-
-            getIndex(file);
+              getIndex(file);
+            }
           }
 
           result.put(iu, artifactSignedContent);
