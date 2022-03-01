@@ -470,6 +470,12 @@ public class RepositoryIntegrityAnalyzer implements IApplication
           }
         }
 
+        if ("false".equals(get(eObject, "repositories", "enabled")))
+        {
+          System.out.println("Disabled repository");
+          continue LOOP;
+        }
+
         String location = get(eObject, "repositories", "location");
         if (location != null)
         {
