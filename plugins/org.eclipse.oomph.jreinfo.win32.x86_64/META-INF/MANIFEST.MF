@@ -5,6 +5,5 @@ Bundle-Version: 1.8.0.qualifier
 Bundle-Localization: fragment
 Bundle-Name: %pluginName
 Bundle-Vendor: %providerName
-Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-NativeCode: jreinfo.dll;osname=win32;processor=x86_64,*
-Fragment-Host: org.eclipse.oomph.jreinfo;bundle-version="[1.1.0,2.0.0)"
+Fragment-Host: org.eclipse.oomph.jreinfo;bundle-version="[1.16.0,2.0.0)"
