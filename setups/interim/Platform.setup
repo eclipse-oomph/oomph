@@ -364,13 +364,13 @@
       </setupTask>
       <setupTask
           xsi:type="git:GitCloneTask"
-          id="git.clone.ecf"
-          remoteURI="ecf/org.eclipse.ecf">
+          id="github.clone.ecf"
+          remoteURI="eclipse/ecf">
         <annotation
             source="http://www.eclipse.org/oomph/setup/InducedChoices">
           <detail
               key="inherit">
-            <value>eclipse.git.gerrit.remoteURIs</value>
+            <value>github.remoteURIs</value>
           </detail>
           <detail
               key="label">
@@ -381,18 +381,12 @@
             <value>remoteURI</value>
           </detail>
         </annotation>
-        <configSections
-            name="gerrit">
-          <properties
-              key="createchangeid"
-              value="true"/>
-        </configSections>
         <description>ECF</description>
       </setupTask>
       <setupTask
           xsi:type="setup:TextModifyTask"
           excludedTriggers="BOOTSTRAP"
-          url="${git.clone.ecf.location|uri}/framework/bundles/org.eclipse.ecf.identity/src/org/eclipse/ecf/core/util/SystemLogService.java"
+          url="${github.clone.ecf.location|uri}/framework/bundles/org.eclipse.ecf.identity/src/org/eclipse/ecf/core/util/SystemLogService.java"
           encoding="UTF-8">
         <modification
             pattern="(?im)public void log\(@SuppressWarnings\(&quot;rawtypes&quot;\) ServiceReference sr, int level, String message, Throwable exception\) \{\s+doLog\(sr, level, message, exception\);\s+\}\s+()\}(\s+)$">
@@ -405,7 +399,7 @@
         <targlet
             name="ECF Dependency">
           <sourceLocator
-              rootFolder="${git.clone.ecf.location}"
+              rootFolder="${github.clone.ecf.location}"
               locateNestedProjects="true"/>
         </targlet>
       </setupTask>
@@ -588,7 +582,7 @@
       label="Releng">
     <setupTask
         xsi:type="git:GitCloneTask"
-        id="git.clone.platform.releng"
+        id="github.clone.platform.releng"
         remoteURI="eclipse-platform/eclipse.platform.releng">
       <annotation
           source="http://www.eclipse.org/oomph/setup/InducedChoices">
@@ -619,7 +613,7 @@
         <requirement
             name="org.eclipse.egit.core"/>
         <sourceLocator
-            rootFolder="${git.clone.platform.releng.location}"/>
+            rootFolder="${github.clone.platform.releng.location}"/>
         <repositoryList
             name="EGit+JGit">
           <repository
@@ -663,7 +657,7 @@
       label="Releng Aggregator">
     <setupTask
         xsi:type="git:GitCloneTask"
-        id="git.clone.platform.releng.aggregator"
+        id="github.clone.platform.releng.aggregator"
         remoteURI="eclipse-platform/eclipse.platform.releng.aggregator">
       <annotation
           source="http://www.eclipse.org/oomph/setup/InducedChoices">
@@ -689,7 +683,7 @@
         <requirement
             name="org.eclipse.platform.releng.tychoeclipsebuilder.plain.project"/>
         <sourceLocator
-            rootFolder="${git.clone.platform.releng.aggregator.location}"
+            rootFolder="${github.clone.platform.releng.aggregator.location}"
             locateNestedProjects="true"/>
       </targlet>
     </setupTask>
