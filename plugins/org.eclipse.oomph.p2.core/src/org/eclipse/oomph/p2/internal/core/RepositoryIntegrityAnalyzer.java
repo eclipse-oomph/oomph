@@ -942,8 +942,6 @@ public class RepositoryIntegrityAnalyzer implements IApplication
           Set<IInstallableUnit> brokenBrandingIUs = report.getBrokenBrandingIUs();
           Map<List<Certificate>, Map<String, IInstallableUnit>> certificates = report.getCertificates();
           Map<String, IInstallableUnit> unsigned = certificates.get(Collections.emptyList());
-          Collection<IInstallableUnit> pluginsWithMissingPackGZ = report.getPluginsWithMissingPackGZ();
-          Set<IInstallableUnit> classContainingIUs = report.getClassContainingIUs();
           for (IInstallableUnit iu : allIUs)
           {
             if (iu.getId().endsWith(".feature.group"))
@@ -1019,32 +1017,6 @@ public class RepositoryIntegrityAnalyzer implements IApplication
                 long end = System.currentTimeMillis();
                 testCase.setTime((end - start) / 1000.0);
               }
-            }
-
-            if (classContainingIUs.contains(iu))
-            {
-              long start = System.currentTimeMillis();
-              TestCaseType testCase = createTestCase(testSuite, "validCorrespondingPackGZ_" + iu);
-
-              if (pluginsWithMissingPackGZ.contains(iu))
-              {
-                Map<String, Boolean> iuArtifacts = report.getIUArtifacts(iu);
-                StringBuilder message = new StringBuilder();
-                for (String artifact : iuArtifacts.keySet())
-                {
-                  if (message.length() != 0)
-                  {
-                    message.append('\n');
-                  }
-
-                  message.append(siteURI).append('/').append(artifact);
-                }
-
-                addFailure(testCase, "The plugin IU '" + iu + "' has no corresponding .pack.gz artifact", message.toString());
-              }
-
-              long end = System.currentTimeMillis();
-              testCase.setTime((end - start) / 1000.0);
             }
           }
         }
@@ -1636,27 +1608,6 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         public Set<IInstallableUnit> getClassContainingIUs()
         {
           return classContainingIUs;
-        }
-
-        private Set<IInstallableUnit> pluginsWithMissingPackGZ;
-
-        @Override
-        public Set<IInstallableUnit> getPluginsWithMissingPackGZ()
-        {
-          if (pluginsWithMissingPackGZ == null)
-          {
-            pluginsWithMissingPackGZ = new TreeSet<>();
-            for (IInstallableUnit iu : classContainingIUs)
-            {
-              Set<File> files = iuFiles.get(iu);
-              if (files.size() != 2)
-              {
-                pluginsWithMissingPackGZ.add(iu);
-              }
-            }
-          }
-
-          return pluginsWithMissingPackGZ;
         }
 
         private Set<IInstallableUnit> unsignedIUs;
@@ -3983,8 +3934,6 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     public abstract Set<IInstallableUnit> getBrokenBrandingIUs();
 
     public abstract Set<IInstallableUnit> getClassContainingIUs();
-
-    public abstract Set<IInstallableUnit> getPluginsWithMissingPackGZ();
 
     public abstract boolean isSimple();
 

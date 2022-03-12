@@ -581,8 +581,7 @@ span:target {
       <%}%>
     <%}%>
            <h3 style="font-weight: bold;">Artifacts</h3>
-    <%Collection<IInstallableUnit> pluginsWithMissingPackGZ = report.getPluginsWithMissingPackGZ();
-      for (Map.Entry<String, Boolean> entry : artifacts.entrySet()) {
+    <%for (Map.Entry<String, Boolean> entry : artifacts.entrySet()) {
         String artifact = entry.getKey();
         Boolean signed = entry.getValue();%>
            <p>
@@ -596,13 +595,6 @@ span:target {
              <br/>
              <span style="color: FireBrick; font-size: 90%;"><%=status%></span>
       <%}%>
-           </p>
-    <%}%>
-    <%if (pluginsWithMissingPackGZ.contains(iuReport.getIU())) {%>
-           <p>
-             <img class="fit-image" src="../<%=report.getErrorImage()%>"/>
-             <img class="fit-image" src="../<%=report.getArtifactImage("*.jar.pack.gz")%>"/>
-             Missing
            </p>
     <%}%>
   <%}%>
@@ -1039,7 +1031,6 @@ span:target {
 <%-[IUs]-%>
   <%Collection<IInstallableUnit> ius = report.getAllIUs();
     if (!ius.isEmpty()) {
-      Collection<IInstallableUnit> pluginsWithMissingPackGZ = report.getPluginsWithMissingPackGZ();
       Set<IInstallableUnit> unsignedIUs = report.getUnsignedIUs();
       Set<IInstallableUnit> badProviderIUs = report.getBadProviderIUs();
       Set<IInstallableUnit> badLicenseIUs = report.getBadLicenseIUs();
@@ -1059,16 +1050,13 @@ span:target {
            <img class="fit-image" src="<%=report.getBundleImage()%>"/>
            Installable Units
            <span style="color: DarkCyan;"><%=ius.size()%></span>
-    <%if (!pluginsWithMissingPackGZ.isEmpty()) {%>
-           <span style="color: FireBrick; font-size: 60%;">(<%=pluginsWithMissingPackGZ.size()%> Missing *.pack.gz)</span>
-    <%}%>
     <%if (duplicateCount > 0) {%>
            <span style="color: FireBrick; font-size: 60%;">(<%=duplicateCount%> with Multiple Versions)</span>
     <%}%>
            </h3>
            <div id="ius" style="display:none;">
              <span style="margin-left: 1em;" class="nowrap">Filter Pattern: <input id="subset" type="text" oninput="match('subset');"> <span style="color: firebrick;" id="subset-error"></span></input></span><br/>
-    <%if (duplicateCount > 0 || !pluginsWithMissingPackGZ.isEmpty() || !unsignedIUs.isEmpty() || !badProviderIUs.isEmpty() || !badLicenseIUs.isEmpty()
+    <%if (duplicateCount > 0 || !unsignedIUs.isEmpty() || !badProviderIUs.isEmpty() || !badLicenseIUs.isEmpty()
           || !brokenBrandingIUs.isEmpty()) {%>
              <span style="margin-left: 1em;">
                <input id="filter" type="radio" name="filter" value="all" class="filter" onclick="filterIU('iu-li');" checked="checked"> All </input>
@@ -1087,9 +1075,6 @@ span:target {
       <%if (duplicateCount > 0) {%>
                <input id="duplicates" type="radio" name="filter" value="duplicate" class="filter" onclick="filterIU('duplicate');"> Duplicates </input>
       <%}%>
-      <%if (!pluginsWithMissingPackGZ.isEmpty()) {%>
-               <input id="missing" type="radio" name="filter" value="missing" class="filter" onclick="filterIU('missing');"> Missing .pack.gz </input>
-      <%}%>
              </span>
     <%}%>
              <ul style="list-style-type: none; padding: 0; margin-left: 1em;">
@@ -1101,9 +1086,6 @@ span:target {
         StringBuilder classNames = new StringBuilder();
         if (duplicateVersions) {
           classNames.append(" duplicate");
-        }
-        if (pluginsWithMissingPackGZ.contains(iu)) {
-          classNames.append(" missing");
         }
         if (unsignedIUs.contains(iu)) {
           classNames.append(" unsigned");
@@ -1142,12 +1124,6 @@ span:target {
         <%}%>
                    <img class="fit-image" src="<%=report.getArtifactImage(artifact)%>"/>
                    <span style="color: DarkCyan;"><%=report.getArtifactSize(artifact)%></span>
-                 )
-      <%}%>
-      <%if (pluginsWithMissingPackGZ.contains(iu)) {%>
-                 (
-                   <img class="fit-image" src="<%=report.getErrorImage()%>"/>
-                   <img class="fit-image" src="<%=report.getArtifactImage("*.jar.pack.gz")%>"/>
                  )
       <%}%>
       <%String brandingImage = report.getBrandingImage(iu);
