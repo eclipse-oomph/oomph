@@ -57,6 +57,7 @@ import org.eclipse.emf.ecore.xml.type.AnyType;
 import org.eclipse.emf.ecore.xml.type.XMLTypeDocumentRoot;
 import org.eclipse.emf.ecore.xml.type.XMLTypeFactory;
 
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -64,6 +65,8 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
+import org.eclipse.equinox.internal.p2.artifact.processors.pgp.PGPPublicKeyStore;
+import org.eclipse.equinox.internal.p2.artifact.processors.pgp.PGPSignatureVerifier;
 import org.eclipse.equinox.internal.p2.artifact.repository.CompositeArtifactRepository;
 import org.eclipse.equinox.internal.p2.artifact.repository.simple.SimpleArtifactRepository;
 import org.eclipse.equinox.internal.p2.metadata.IRequiredCapability;
@@ -92,13 +95,16 @@ import org.eclipse.equinox.p2.repository.artifact.IArtifactDescriptor;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepository;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepositoryManager;
 import org.eclipse.equinox.p2.repository.artifact.IProcessingStepDescriptor;
+import org.eclipse.equinox.p2.repository.artifact.spi.ArtifactDescriptor;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
+import org.eclipse.equinox.p2.repository.spi.PGPPublicKeyService;
 import org.eclipse.equinox.spi.p2.publisher.PublisherHelper;
 import org.eclipse.osgi.signedcontent.SignedContent;
 import org.eclipse.osgi.signedcontent.SignedContentFactory;
 import org.eclipse.osgi.signedcontent.SignerInfo;
 
+import org.bouncycastle.openpgp.PGPPublicKey;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -113,6 +119,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -162,6 +169,33 @@ import java.util.regex.Pattern;
 @SuppressWarnings({ "restriction", "nls" })
 public class RepositoryIntegrityAnalyzer implements IApplication
 {
+  private static final Comparator<List<Certificate>> CERTIFICATE_COMPARATOR = new Comparator<>()
+  {
+    @Override
+    public int compare(List<Certificate> o1, List<Certificate> o2)
+    {
+      int size = o1.size();
+      int result = Integer.compare(size, o2.size());
+      if (result == 0 && size != 0)
+      {
+        X509Certificate certificate1 = (X509Certificate)o1.get(0);
+        X509Certificate certificate2 = (X509Certificate)o2.get(0);
+        result = certificate1.getSubjectX500Principal().getName().compareTo(certificate2.getSubjectX500Principal().getName());
+      }
+
+      return result;
+    }
+  };
+
+  private static final Comparator<PGPPublicKey> PGP_COMPARATOR = new Comparator<PGPPublicKey>()
+  {
+    @Override
+    public int compare(PGPPublicKey o1, PGPPublicKey o2)
+    {
+      return PGPPublicKeyService.toHexFingerprint(o1).compareTo(PGPPublicKeyService.toHexFingerprint(o2));
+    }
+  };
+
   private static final String DOWNLOAD_ECLIPSE_ORG_AUTHORITY = "download.eclipse.org";
 
   private static final File DOWNLOAD_ECLIPSE_ORG_FOLDER = new File("/home/data/httpd/" + DOWNLOAD_ECLIPSE_ORG_AUTHORITY);
@@ -1296,6 +1330,12 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         getSignedContent(iu, artifactCache, signedContentCache);
       }
 
+      Map<IInstallableUnit, Map<File, Set<PGPPublicKey>>> pgpSignedContentCache = new LinkedHashMap<>();
+      for (IInstallableUnit iu : allIUs)
+      {
+        getPGPSignedContent(iu, artifactCache, pgpSignedContentCache);
+      }
+
       final Map<List<String>, IRequirement> requiredCapabilities = new HashMap<>();
       Map<IRequirement, Future<Set<IInstallableUnit>>> futures = new HashMap<>();
       Map<IRequirement, Set<IInstallableUnit>> requiringIUs = new HashMap<>();
@@ -1384,6 +1424,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
       final Map<IInstallableUnit, Set<File>> iuFiles = new TreeMap<>();
       final Map<File, SignedContent> fileSignedContents = new TreeMap<>();
+      final Map<File, Set<PGPPublicKey>> filePGPSignedContents = new TreeMap<>();
       final Map<File, List<String>> localFileIndices = new TreeMap<>();
       final Set<IInstallableUnit> classContainingIUs = new TreeSet<>();
       final Map<String, Set<Version>> iuIDVersions = new TreeMap<>();
@@ -1396,6 +1437,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
           files.add(file);
           SignedContent signedContent = get(entry.getValue());
           fileSignedContents.put(file, signedContent);
+          filePGPSignedContents.put(file, pgpSignedContentCache.get(iu).get(file));
 
           List<String> index = get(getIndex(file));
           localFileIndices.put(file, index);
@@ -1700,7 +1742,8 @@ public class RepositoryIntegrityAnalyzer implements IApplication
             SignedContent signedContent = fileSignedContents.get(file);
             int prefixLength = artifactCacheFolder.toString().length() + 1;
             String path = file.toString().substring(prefixLength).replace('\\', '/');
-            result.put(path, signedContent == null || path.startsWith("binary/") ? null : signedContent.isSigned());
+            Set<PGPPublicKey> keys = filePGPSignedContents.get(file);
+            result.put(path, signedContent == null || path.startsWith("binary/") ? null : signedContent.isSigned() || keys != null && !keys.isEmpty());
           }
 
           return result;
@@ -1800,17 +1843,17 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         }
 
         @Override
-        public List<Certificate> getCertificates(IInstallableUnit iu)
+        public Set<List<Certificate>> getCertificates(IInstallableUnit iu)
         {
+          Set<List<Certificate>> result = new TreeSet<>(CERTIFICATE_COMPARATOR);
           for (Map.Entry<List<Certificate>, Map<String, IInstallableUnit>> entry : getCertificates().entrySet())
           {
             if (entry.getValue().values().contains(iu))
             {
-              return entry.getKey();
+              result.add(entry.getKey());
             }
           }
-
-          return null;
+          return result;
         }
 
         private Map<List<Certificate>, Map<String, IInstallableUnit>> certificates;
@@ -1820,26 +1863,8 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         {
           if (certificates == null)
           {
-            Comparator<List<Certificate>> certificateComparator = new Comparator<>()
-            {
-              @Override
-              public int compare(List<Certificate> o1, List<Certificate> o2)
-              {
-                int size = o1.size();
-                int result = Integer.compare(size, o2.size());
-                if (result == 0 && size != 0)
-                {
-                  X509Certificate certificate1 = (X509Certificate)o1.get(0);
-                  X509Certificate certificate2 = (X509Certificate)o2.get(0);
-                  result = certificate1.getSubjectX500Principal().getName().compareTo(certificate2.getSubjectX500Principal().getName());
-                }
-
-                return result;
-              }
-            };
-
             int prefixLength = artifactCacheFolder.toString().length() + 1;
-            certificates = new TreeMap<>(certificateComparator);
+            certificates = new TreeMap<>(CERTIFICATE_COMPARATOR);
             for (Map.Entry<IInstallableUnit, Set<File>> entry : iuFiles.entrySet())
             {
               IInstallableUnit iu = entry.getKey();
@@ -1867,7 +1892,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
                       artifacts.put(path, iu);
                     }
                   }
-                  else
+                  else if (getPGPKeys(file).isEmpty())
                   {
                     Map<String, IInstallableUnit> artifacts = certificates.get(Collections.emptyList());
                     if (artifacts == null)
@@ -1884,6 +1909,78 @@ public class RepositoryIntegrityAnalyzer implements IApplication
           }
 
           return certificates;
+        }
+
+        private Set<PGPPublicKey> getPGPKeys(File file)
+        {
+          File pgpKeyFile = new File(file + ".asc");
+          if (pgpKeyFile.isFile())
+          {
+            try
+            {
+              Set<PGPPublicKey> pgpPubliKeys = PGPPublicKeyStore.readPublicKeys(IOUtil.readUTF8(pgpKeyFile));
+              return pgpPubliKeys;
+            }
+            catch (Exception ex)
+            {
+              System.err.println("### bad keys found " + file);
+            }
+          }
+          return Set.of();
+        }
+
+        @Override
+        public String getKeyServerURL(PGPPublicKey key)
+        {
+          return "https://keyserver.ubuntu.com/pks/lookup?search=0x" + PGPPublicKeyService.toHexFingerprint(key) + "&fingerprint=on&op=index";
+        }
+
+        @Override
+        public Set<PGPPublicKey> getPGPKeys(IInstallableUnit iu)
+        {
+          Set<PGPPublicKey> result = new TreeSet<>(PGP_COMPARATOR);
+          for (Map.Entry<PGPPublicKey, Map<String, IInstallableUnit>> entry : getPGPKeys().entrySet())
+          {
+            if (entry.getValue().values().contains(iu))
+            {
+              result.add(entry.getKey());
+            }
+          }
+          return result;
+        }
+
+        private Map<PGPPublicKey, Map<String, IInstallableUnit>> pgpKeys;
+
+        @Override
+        public Map<PGPPublicKey, Map<String, IInstallableUnit>> getPGPKeys()
+        {
+          if (pgpKeys == null)
+          {
+            pgpKeys = new TreeMap<>(PGP_COMPARATOR);
+            int prefixLength = artifactCacheFolder.toString().length() + 1;
+            for (Map.Entry<IInstallableUnit, Set<File>> entry : iuFiles.entrySet())
+            {
+              IInstallableUnit iu = entry.getKey();
+              Set<File> files = entry.getValue();
+              for (File file : files)
+              {
+                for (PGPPublicKey pgpPublicKey : getPGPKeys(file))
+                {
+                  Map<String, IInstallableUnit> artifacts = pgpKeys.get(pgpPublicKey);
+                  if (artifacts == null)
+                  {
+                    artifacts = new TreeMap<>();
+                    pgpKeys.put(pgpPublicKey, artifacts);
+                  }
+
+                  String path = file.toString().substring(prefixLength).replace('\\', '/');
+                  artifacts.put(path, iu);
+                }
+              }
+            }
+          }
+
+          return pgpKeys;
         }
 
         @Override
@@ -3188,7 +3285,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
                 }
 
                 IProcessingStepDescriptor[] processingSteps = artifactDescriptor.getProcessingSteps();
-                if (processingSteps.length != 0)
+                if (processingSteps.length != 0 || artifactDescriptor.getProperty(PGPSignatureVerifier.PGP_SIGNATURES_PROPERTY_NAME) != null)
                 {
                   File targetProcessedLocation = new File(cache, relativeLocation.toString() + PROCESSED);
                   File processedDownloadLocation = new File(targetProcessedLocation.getPath() + "." + uuid);
@@ -3198,7 +3295,26 @@ public class RepositoryIntegrityAnalyzer implements IApplication
                     status = Status.CANCEL_STATUS;
                     try
                     {
-                      out = new FileOutputStream(processedDownloadLocation);
+                      ArtifactDescriptor descriptor = new ArtifactDescriptor(artifactKey);
+                      class DescriptorOutputStream extends FileOutputStream implements IAdaptable
+                      {
+                        public DescriptorOutputStream(File file) throws FileNotFoundException
+                        {
+                          super(file);
+                        }
+
+                        @Override
+                        public <T> T getAdapter(Class<T> adapter)
+                        {
+                          if (adapter.isInstance(descriptor))
+                          {
+                            return adapter.cast(descriptor);
+                          }
+                          return null;
+                        }
+                      }
+
+                      out = new DescriptorOutputStream(processedDownloadLocation);
                       status = artifactRepository.getArtifact(artifactDescriptor, out, new NullProgressMonitor());
                       if (!status.isOK())
                       {
@@ -3210,6 +3326,12 @@ public class RepositoryIntegrityAnalyzer implements IApplication
                       if (!processedDownloadLocation.renameTo(targetProcessedLocation))
                       {
                         throw new IOException("Could not rename '" + processedDownloadLocation + "' to '" + targetProcessedLocation + "'");
+                      }
+
+                      String pgpKeys = descriptor.getProperty(PGPSignatureVerifier.PGP_SIGNER_KEYS_PROPERTY_NAME);
+                      if (!pgpKeys.isBlank())
+                      {
+                        IOUtil.writeUTF8(new File(targetLocation + ".asc"), pgpKeys);
                       }
                     }
                     catch (Exception ex)
@@ -3354,6 +3476,34 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     }
 
     return artifactSignedContent;
+  }
+
+  private Map<File, Set<PGPPublicKey>> getPGPSignedContent(IInstallableUnit iu, final Map<IArtifactKey, Future<Map<IArtifactDescriptor, File>>> artifactCache,
+      Map<IInstallableUnit, Map<File, Set<PGPPublicKey>>> pgpSignedContentCache)
+  {
+    Map<File, Set<PGPPublicKey>> artifactPGPSignedContent = pgpSignedContentCache.get(iu);
+    if (artifactPGPSignedContent == null)
+    {
+      artifactPGPSignedContent = new LinkedHashMap<>();
+      for (IArtifactKey artifactKey : iu.getArtifacts())
+      {
+        Future<Map<IArtifactDescriptor, File>> artifactCacheFuture = artifactCache.get(artifactKey);
+        if (artifactCacheFuture != null)
+        {
+          for (Map.Entry<IArtifactDescriptor, File> entry : get(artifactCacheFuture).entrySet())
+          {
+            PGPPublicKeyStore keys = PGPSignatureVerifier.getKeys(entry.getKey());
+            Collection<PGPPublicKey> all = keys.all();
+            if (!all.isEmpty())
+            {
+              artifactPGPSignedContent.put(entry.getValue(), new LinkedHashSet<>(all));
+            }
+          }
+        }
+      }
+      pgpSignedContentCache.put(iu, artifactPGPSignedContent);
+    }
+    return artifactPGPSignedContent;
   }
 
   private static <T> T get(Future<T> future)
@@ -3911,7 +4061,13 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
     public abstract Map<List<Certificate>, Map<String, IInstallableUnit>> getCertificates();
 
-    public abstract List<Certificate> getCertificates(IInstallableUnit iu);
+    public abstract String getKeyServerURL(PGPPublicKey key);
+
+    public abstract Map<PGPPublicKey, Map<String, IInstallableUnit>> getPGPKeys();
+
+    public abstract Set<List<Certificate>> getCertificates(IInstallableUnit iu);
+
+    public abstract Set<PGPPublicKey> getPGPKeys(IInstallableUnit iu);
 
     public abstract Map<String, Boolean> getIUArtifacts(IInstallableUnit iu);
 

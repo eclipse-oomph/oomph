@@ -12,7 +12,9 @@ http://www.eclipse.org/legal/epl-v20.html
     "
       java.security.cert.Certificate
       java.util.*
+      org.bouncycastle.openpgp.PGPPublicKey
       org.eclipse.equinox.p2.metadata.*
+      org.eclipse.equinox.p2.repository.spi.PGPPublicKeyService
       org.eclipse.oomph.p2.internal.core.RepositoryIntegrityAnalyzer.IndexReport
       org.eclipse.oomph.p2.internal.core.RepositoryIntegrityAnalyzer.IUReport
       org.eclipse.oomph.p2.internal.core.RepositoryIntegrityAnalyzer.Report
@@ -537,46 +539,64 @@ span:target {
   <%}%>
   <%Map<String, Boolean> artifacts = report.getIUArtifacts(iuReport.getIU());
     if (!artifacts.isEmpty()) {
-      List<Certificate> certificates = report.getCertificates(iuReport.getIU());
-      if (certificates != null) {
+      Set<PGPPublicKey> pgpKeys = report.getPGPKeys(iuReport.getIU());
+      if (!pgpKeys.isEmpty()) {%>
+           <h3 style="font-weight: bold;">
+             PGP Keys
+           </h3>
+      <%for (PGPPublicKey pgpPublicKey : pgpKeys) {
+          String fingerPrint = PGPPublicKeyService.toHexFingerprint(pgpPublicKey);%>
+           <div class="font-smaller">
+             <img alt="Signed" class="fit-image" src="../<%=report.getSignedImage(true)%>"/>
+             <span class="text-nowrap"><a href="<%=report.getKeyServerURL(pgpPublicKey)%>" target="keyserver">0x<%=fingerPrint%></a></span>
+           </div>
+      <%}
+      }
+      Set<List<Certificate>> allCertificates = report.getCertificates(iuReport.getIU());
+      if (!allCertificates.isEmpty()) {
         Set<Certificate> expiredCertificates = new HashSet<Certificate>();
-        for (Certificate certificate : certificates) {
-          if (report.isExpired(certificate)) {
-            expiredCertificates.add(certificate);
+        for (List<Certificate> certificates : allCertificates) {
+          for (Certificate certificate : certificates) {
+            if (report.isExpired(certificate)) {
+              expiredCertificates.add(certificate);
+            }
+            break;
           }
         }%>
            <h3 style="font-weight: bold;">
-             Certificate
+             Certificates
       <%if (!expiredCertificates.isEmpty()) {%>
            <span style="color: FireBrick; font-size: 60%;">(<%=expiredCertificates.size()%> Expired Certificate<%if (expiredCertificates.size() > 1) {%>s<%}%>)</span>
       <%}%>
            </h3>
-      <%if (certificates.isEmpty()) {%>
+      <%for (List<Certificate> certificates : allCertificates) {%>
+        <%if (certificates.isEmpty()) {%>
              <div>
                <img class="fit-image" src="../<%=report.getSignedImage(false)%>"/>
                <span style="color: FireBrick;">Unsigned</span>
              </div>
-      <%} else {%>
-        <%int count = 0;
-          for (Certificate certificate : certificates) {
-            Map<String, String> components = report.getCertificateComponents(certificate);%>
+        <%} else {%>
+          <%int count = 0;
+            for (Certificate certificate : certificates) {
+              Map<String, String> components = report.getCertificateComponents(certificate);%>
              <div class="font-smaller" style="margin-left: <%=count++%>em;">
                <img alt="Signed" class="fit-image" src="../<%=report.getSignedImage(true)%>"/>
-          <%for (Map.Entry<String, String> component : components.entrySet()) {
-              String key = component.getKey();
-              String value = component.getValue();
-              String keyStyle;
-              String spanStyle;
-              if ("to".equals(key) && expiredCertificates.contains(certificate)) {
-                keyStyle = "color: Firebrick; ";
-                spanStyle = " style='font-weight: bold; color: Firebrick;'";
-              } else {
-                keyStyle = "color: SteelBlue; ";
-                spanStyle = "";
-              }%>
+            <%for (Map.Entry<String, String> component : components.entrySet()) {
+                String key = component.getKey();
+                String value = component.getValue();
+                String keyStyle;
+                String spanStyle;
+                if ("to".equals(key) && expiredCertificates.contains(certificate)) {
+                  keyStyle = "color: Firebrick; ";
+                  spanStyle = " style='font-weight: bold; color: Firebrick;'";
+                } else {
+                  keyStyle = "color: SteelBlue; ";
+                  spanStyle = "";
+                }%>
                <span class="text-nowrap"<%=spanStyle%>><span style="<%=keyStyle%>font-size: 75%;"><%=key%>=</span><%=value%></span>
-          <%}%>
+            <%}%>
              </div>
+          <%}%>
         <%}%>
       <%}%>
     <%}%>
@@ -732,6 +752,53 @@ span:target {
                </ul>
              </li>
       <%}%>
+    <%}%>
+           </ul>
+  <%}%>
+<%-[PGP Keys]-%>
+  <%Map<PGPPublicKey, Map<String, IInstallableUnit>> pgpKeys = report.getPGPKeys();
+    if (!pgpKeys.isEmpty()) {
+      int idCount = 0;
+      boolean isInitiallyExpanded = false;
+      String display = isInitiallyExpanded ? "block" : "none";
+      String displayButton = isInitiallyExpanded ? "inline" : "none";%>
+           <p></p>
+           <h3 style="font-weight: bold;">
+           <button id="pgpKeys_arrows" class="orange bb" onclick="expand_collapse('pgpKeys'); expand_collapse_inline('pgpKeys_all_arrows');">&#x25B7;</button>
+           <img class="fit-image" src="<%=report.getSignedImage(true)%>"/>
+           Signing PGP Keys
+           <span style="color: DarkCyan;"><%=pgpKeys.size()%></span>
+    <%{
+        StringBuilder onClick = new StringBuilder();
+        for (int i = 0, size = pgpKeys.size(); i < size; ++i) {
+          String id = "pgpKeys" + ++idCount;
+          onClick.append("expand2('pgpKeys_all_arrows', '").append(id).append("');");
+        }
+        idCount = 0;%>
+           <button id="pgpKeys_all_arrows" title="Expand All" class="orange bb" style="display: <%=displayButton%>;" onclick="toggle('pgpKeys_all_arrows');<%=onClick%>">&#x25B7;</button>
+    <%}%>
+           </h3>
+           <ul id="pgpKeys" style="display:<%=display%>; margin-left: -1em; list-style-type: none;">
+    <%for (Map.Entry<PGPPublicKey, Map<String, IInstallableUnit>> entry : pgpKeys.entrySet()) {
+        PGPPublicKey pgpPublicKey = entry.getKey();
+        String fingerPrint = PGPPublicKeyService.toHexFingerprint(pgpPublicKey);
+        String id = "pgpKeys" + ++idCount;%>
+           <li>
+             <div class="font-smaller" style="margin-left: <%=2%>em; text-indent: -4em;">
+               <button id="<%=id%>_arrows" class="orange bb" style="margin-left: 1em;" onclick="expand_collapse('<%=id%>');">&#x25B7;</button>
+               <img alt="Signed" class="fit-image" src="<%=report.getSignedImage(true)%>"/>
+               <span class="text-nowrap"><a href="<%=report.getKeyServerURL(pgpPublicKey)%>" target="keyserver">0x<%=fingerPrint%></a></span>
+               <span style="color: DarkCyan; font-size: 110%;">(<%=entry.getValue().size()%>)</span>
+             </div>
+             <ul class="font-smaller" style="list-style-type: none; display:none; margin-left: -3em;" id="<%=id%>">
+      <%Map<String, IInstallableUnit> artifacts = entry.getValue();
+        for (Map.Entry<String, IInstallableUnit> artifact : artifacts.entrySet()) {%>
+               <li>
+                 <a href="<%=report.getRelativeIUReportURL(artifact.getValue())%>"><img class="fit-image" src="<%=report.getIUImage(artifact.getValue())%>"/> <%=artifact.getKey()%></a>
+               </li>
+      <%}%>
+             </ul>
+           </li>
     <%}%>
            </ul>
   <%}%>
@@ -1056,8 +1123,7 @@ span:target {
            </h3>
            <div id="ius" style="display:none;">
              <span style="margin-left: 1em;" class="nowrap">Filter Pattern: <input id="subset" type="text" oninput="match('subset');"> <span style="color: firebrick;" id="subset-error"></span></input></span><br/>
-    <%if (duplicateCount > 0 || !unsignedIUs.isEmpty() || !badProviderIUs.isEmpty() || !badLicenseIUs.isEmpty()
-          || !brokenBrandingIUs.isEmpty()) {%>
+    <%if (duplicateCount > 0 || !unsignedIUs.isEmpty() || !badProviderIUs.isEmpty() || !badLicenseIUs.isEmpty() || !brokenBrandingIUs.isEmpty()) {%>
              <span style="margin-left: 1em;">
                <input id="filter" type="radio" name="filter" value="all" class="filter" onclick="filterIU('iu-li');" checked="checked"> All </input>
       <%if (!badLicenseIUs.isEmpty()) {%>
