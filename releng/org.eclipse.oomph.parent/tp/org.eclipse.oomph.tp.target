@@ -21,7 +21,7 @@
       <unit id="org.eclipse.swtbot.generator" version="0.0.0"/>
       <unit id="org.eclipse.userstorage.oauth" version="0.0.0"/>
       <unit id="org.eclipse.userstorage.tests" version="0.0.0"/>
-      <repository location="https://download.eclipse.org/eclipse/updates/4.23/R-4.23-202203080310"/>
+      <repository location="https://download.eclipse.org/eclipse/updates/4.24-I-builds"/>
       <repository location="https://download.eclipse.org/egit/updates-stable-nightly"/>
       <repository location="https://download.eclipse.org/justj/jres/17/updates/release/17.0.2"/>
       <repository location="https://download.eclipse.org/modeling/emf/emf/builds/milestone/latest"/>
