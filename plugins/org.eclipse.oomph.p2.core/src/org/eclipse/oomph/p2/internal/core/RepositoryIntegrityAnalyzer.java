@@ -3329,7 +3329,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
                       }
 
                       String pgpKeys = descriptor.getProperty(PGPSignatureVerifier.PGP_SIGNER_KEYS_PROPERTY_NAME);
-                      if (!pgpKeys.isBlank())
+                      if (pgpKeys != null && !pgpKeys.isBlank())
                       {
                         IOUtil.writeUTF8(new File(targetLocation + ".asc"), pgpKeys);
                       }
