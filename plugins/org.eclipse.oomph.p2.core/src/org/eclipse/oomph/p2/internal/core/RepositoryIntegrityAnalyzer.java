@@ -133,6 +133,8 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.Certificate;
+import java.security.cert.CertificateExpiredException;
+import java.security.cert.CertificateNotYetValidException;
 import java.security.cert.X509Certificate;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -162,6 +164,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * @author Ed Merks
@@ -976,6 +979,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
           Set<IInstallableUnit> brokenBrandingIUs = report.getBrokenBrandingIUs();
           Map<List<Certificate>, Map<String, IInstallableUnit>> certificates = report.getCertificates();
           Map<String, IInstallableUnit> unsigned = certificates.get(Collections.emptyList());
+          Map<List<Certificate>, Map<String, IInstallableUnit>> invalidSignatures = report.getInvalidSignatures();
           for (IInstallableUnit iu : allIUs)
           {
             if (iu.getId().endsWith(".feature.group"))
@@ -1046,6 +1050,27 @@ public class RepositoryIntegrityAnalyzer implements IApplication
                   }
 
                   addFailure(testCase, "The IU '" + iu + "' has unsigned artifacts", message.toString());
+                }
+                else
+                {
+                  int count = 0;
+                  StringBuilder message = new StringBuilder();
+                  for (Map.Entry<List<Certificate>, Map<String, IInstallableUnit>> entry : invalidSignatures.entrySet())
+                  {
+                    Map<String, IInstallableUnit> invalid = entry.getValue();
+                    if (invalid != null && invalid.containsValue(iu))
+                    {
+                      ++count;
+                      Certificate certificate = entry.getKey().get(0);
+                      message.append(report.getCertificateComponents(certificate).entrySet().stream().map(Map.Entry<String, String>::toString)
+                          .collect(Collectors.joining(" ")));
+                    }
+                  }
+
+                  if (count > 0)
+                  {
+                    addFailure(testCase, "The IU '" + iu + "' has " + count + " bad signatures", message.toString());
+                  }
                 }
 
                 long end = System.currentTimeMillis();
@@ -1858,10 +1883,13 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
         private Map<List<Certificate>, Map<String, IInstallableUnit>> certificates;
 
+        private Map<List<Certificate>, Map<String, IInstallableUnit>> invalidSignatures = new HashMap<>();
+
         @Override
         public Map<List<Certificate>, Map<String, IInstallableUnit>> getCertificates()
         {
           if (certificates == null)
+
           {
             int prefixLength = artifactCacheFolder.toString().length() + 1;
             certificates = new TreeMap<>(CERTIFICATE_COMPARATOR);
@@ -1889,6 +1917,37 @@ public class RepositoryIntegrityAnalyzer implements IApplication
                         certificates.put(certificateList, artifacts);
                       }
 
+                      Map<String, IInstallableUnit> invalidArtificts = invalidSignatures.get(certificateList);
+                      if (invalidArtificts == null)
+                      {
+                        invalidArtificts = new TreeMap<>();
+                        invalidSignatures.put(certificateList, invalidArtificts);
+                      }
+
+                      try
+                      {
+                        Date signingTime = signedContent.getSigningTime(signerInfo);
+                        Certificate[] certs = signerInfo.getCertificateChain();
+                        for (Certificate cert : certs)
+                        {
+                          if (cert instanceof X509Certificate)
+                          {
+                            if (signingTime == null)
+                            {
+                              ((X509Certificate)cert).checkValidity();
+                            }
+                            else
+                            {
+                              ((X509Certificate)cert).checkValidity(signingTime);
+                            }
+                          }
+                        }
+                      }
+                      catch (CertificateExpiredException | CertificateNotYetValidException ex)
+                      {
+                        invalidArtificts.put(path, iu);
+                      }
+
                       artifacts.put(path, iu);
                     }
                   }
@@ -1909,6 +1968,13 @@ public class RepositoryIntegrityAnalyzer implements IApplication
           }
 
           return certificates;
+        }
+
+        @Override
+        public Map<List<Certificate>, Map<String, IInstallableUnit>> getInvalidSignatures()
+        {
+          getCertificates();
+          return invalidSignatures;
         }
 
         private Set<PGPPublicKey> getPGPKeys(File file)
@@ -4056,6 +4122,8 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     public abstract Map<String, String> getCertificateComponents(Certificate certificate);
 
     public abstract boolean isExpired(Certificate certificate);
+
+    public abstract Map<List<Certificate>, Map<String, IInstallableUnit>> getInvalidSignatures();
 
     public abstract Map<List<Certificate>, Map<String, IInstallableUnit>> getCertificates();
 

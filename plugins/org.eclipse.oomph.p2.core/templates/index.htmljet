@@ -555,18 +555,23 @@ span:target {
       Set<List<Certificate>> allCertificates = report.getCertificates(iuReport.getIU());
       if (!allCertificates.isEmpty()) {
         Set<Certificate> expiredCertificates = new HashSet<Certificate>();
+        int invalidSignatureCount = 0;
+        Map<List<Certificate>, Map<String, IInstallableUnit>> allInvalidSignatures = report.getInvalidSignatures();
         for (List<Certificate> certificates : allCertificates) {
+          Map<String, IInstallableUnit> invalidSignatures = allInvalidSignatures.get(certificates);
+          if (invalidSignatures != null && invalidSignatures.values().contains(iuReport.getIU())) {
+            ++invalidSignatureCount;
+          }
           for (Certificate certificate : certificates) {
             if (report.isExpired(certificate)) {
               expiredCertificates.add(certificate);
             }
-            break;
           }
         }%>
            <h3 style="font-weight: bold;">
              Certificates
-      <%if (!expiredCertificates.isEmpty()) {%>
-           <span style="color: FireBrick; font-size: 60%;">(<%=expiredCertificates.size()%> Expired Certificate<%if (expiredCertificates.size() > 1) {%>s<%}%>)</span>
+      <%if (invalidSignatureCount > 0) {%>
+           <span style="color: FireBrick; font-size: 60%;">(<%=invalidSignatureCount%> Invalid Signature<%if (invalidSignatureCount > 1) {%>s<%}%>)</span>
       <%}%>
            </h3>
       <%for (List<Certificate> certificates : allCertificates) {%>
@@ -575,9 +580,11 @@ span:target {
                <img class="fit-image" src="../<%=report.getSignedImage(false)%>"/>
                <span style="color: FireBrick;">Unsigned</span>
              </div>
-        <%} else {%>
-          <%int count = 0;
+        <%} else {
+            int count = 0;
             for (Certificate certificate : certificates) {
+              Map<String, IInstallableUnit> invalidSignatures = allInvalidSignatures.get(certificates);
+              String style = invalidSignatures != null && invalidSignatures.values().contains(iuReport.getIU()) ? " text-decoration: line-through;" : "";
               Map<String, String> components = report.getCertificateComponents(certificate);%>
              <div class="font-smaller" style="margin-left: <%=count++%>em;">
                <img alt="Signed" class="fit-image" src="../<%=report.getSignedImage(true)%>"/>
@@ -588,10 +595,10 @@ span:target {
                 String spanStyle;
                 if ("to".equals(key) && expiredCertificates.contains(certificate)) {
                   keyStyle = "color: Firebrick; ";
-                  spanStyle = " style='font-weight: bold; color: Firebrick;'";
+                  spanStyle = " style='font-weight: bold; color: Firebrick;" + style + "'";
                 } else {
                   keyStyle = "color: SteelBlue; ";
-                  spanStyle = "";
+                  spanStyle = style.isBlank() ? "" : " style='" + style.trim() + "'";
                 }%>
                <span class="text-nowrap"<%=spanStyle%>><span style="<%=keyStyle%>font-size: 75%;"><%=key%>=</span><%=value%></span>
             <%}%>
@@ -653,7 +660,7 @@ span:target {
   <%List<Report> children = report.getChildren();
     if (!children.isEmpty()) {%>
            <p>
-    <%if (!report.isRoot()) {%>
+      <%if (!report.isRoot()) {%>
              This is a composite update site.
     <%}%>
              In addition to this composite report, reports are also generated for each of the composed children listed in the navigation bar to the left.
@@ -804,21 +811,20 @@ span:target {
   <%}%>
 <%-[Certificates]-%>
   <%Map<List<Certificate>, Map<String, IInstallableUnit>> allCertificates = report.getCertificates();
+    Map<List<Certificate>, Map<String, IInstallableUnit>> allInvalidSignatures = report.getInvalidSignatures();
     if (!allCertificates.isEmpty()) {
       int idCount = 0;
       Map<String, IInstallableUnit> unsigned = allCertificates.get(Collections.emptyList());
-      int expiredChainCount = 0;
+      int invalidSignatureCount = 0;
+      for (Map<String, IInstallableUnit> invalidSignatures : allInvalidSignatures.values()) {
+        invalidSignatureCount += invalidSignatures.size();
+      }
       Set<Certificate> expiredCertificates = new HashSet<Certificate>();
       for (List<Certificate> list : allCertificates.keySet()) {
-        boolean expired = false;
         for (Certificate certificate : list) {
           if (report.isExpired(certificate)) {
             expiredCertificates.add(certificate);
-            expired = true;
           }
-        }
-        if (expired) {
-          ++expiredChainCount;
         }
       }
       boolean isInitiallyExpanded = false;
@@ -833,8 +839,8 @@ span:target {
     <%if (unsigned != null) {%>
            <span style="color: FireBrick; font-size: 60%;">(<%=unsigned.size()%> Unsigned Artifacts)</span>
     <%}%>
-    <%if (expiredChainCount > 0) {%>
-           <span style="color: FireBrick; font-size: 60%;">(<%=expiredChainCount%> Expired)</span>
+    <%if (invalidSignatureCount > 0) {%>
+           <span style="color: FireBrick; font-size: 60%;">(<%=invalidSignatureCount%> Invalid Signatures)</span>
     <%}%>
     <%{
         StringBuilder onClick = new StringBuilder();
@@ -849,6 +855,7 @@ span:target {
            <ul id="certificates" style="display:<%=display%>; margin-left: -1em; list-style-type: none;">
     <%for (Map.Entry<List<Certificate>, Map<String, IInstallableUnit>> entry : allCertificates.entrySet()) {
         List<Certificate> certificates = entry.getKey();
+        Map<String, IInstallableUnit> invalidSignatures = allInvalidSignatures.get(certificates);
         String id = "certificates" + ++idCount;%>
            <li>
       <%if (certificates.isEmpty()) {%>
@@ -885,14 +892,18 @@ span:target {
               }%>
                <span class="text-nowrap"<%=spanStyle%>><span style="<%=keyStyle%>font-size: 75%;"><%=key%>=</span><%=value%></span>
           <%}%>
+          <%if (count == 1 && !invalidSignatures.isEmpty()) {%>
+               <span style='font-weight: bold; color: Firebrick;'>(<%=invalidSignatures.size()%> invalid Signatures)</span>
+          <%}%>
              </div>
         <%}%>
       <%}%>
              <ul class="font-smaller" style="list-style-type: none; display:none; margin-left: -3em;" id="<%=id%>">
       <%Map<String, IInstallableUnit> artifacts = entry.getValue();
-        for (Map.Entry<String, IInstallableUnit> artifact : artifacts.entrySet()) {%>
+        for (Map.Entry<String, IInstallableUnit> artifact : artifacts.entrySet()) {
+          String style = invalidSignatures != null && invalidSignatures.entrySet().contains(artifact) ? "style='text-decoration: line-through;'" : "";%>
                <li>
-                 <a href="<%=report.getRelativeIUReportURL(artifact.getValue())%>"><img class="fit-image" src="<%=report.getIUImage(artifact.getValue())%>"/> <%=artifact.getKey()%></a>
+                 <a href="<%=report.getRelativeIUReportURL(artifact.getValue())%>"<%=style%>><img class="fit-image" src="<%=report.getIUImage(artifact.getValue())%>"/> <%=artifact.getKey()%></a>
                </li>
       <%}%>
              </ul>
