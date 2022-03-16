@@ -11,7 +11,7 @@
       source="http://www.eclipse.org/oomph/setup/BrandingInfo">
     <detail
         key="notificationURI">
-      <value>https://www.eclipse.org/setups/donate/?scope=${scope}&amp;campaign=2021-12</value>
+      <value>https://www.eclipse.org/setups/donate/?scope=${scope}&amp;campaign=2022-03</value>
     </detail>
     <detail
         key="notificationLabel">
@@ -38,7 +38,7 @@
   <setupTask
       xsi:type="setup:VariableTask"
       name="oomph.emf.update.url"
-      value="https://download.eclipse.org/modeling/emf/emf/builds/release/2.28"
+      value="https://download.eclipse.org/modeling/emf/emf/builds/release/2.29"
       label="Oomph's EMF Repository Location">
     <description>The location of the EMF repository for satisifying Oomph's dependencies on EMF</description>
   </setupTask>
@@ -69,17 +69,17 @@
           versionRange="[4.23.0,5.0.0)"
           filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=ppc64le)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
       <repository
-          url="https://download.eclipse.org/eclipse/updates/4.23-I-builds"/>
+          url="https://download.eclipse.org/eclipse/updates/4.23/R-4.23-202203080310"/>
     </setupTask>
   </version>
   <version name="latest.released"
-      label="Latest Release (4.22 - 2021-12)"
+      label="Latest Release (4.23 - 2022-03)"
       requiredJavaVersion="11">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://archive.eclipse.org/eclipse/downloads/drops4/R-4.22-202111241800/</value>
+        <value>https://download.eclipse.org/eclipse/downloads/</value>
       </detail>
       <detail
           key="shortcut">
@@ -87,18 +87,14 @@
       </detail>
     </annotation>
     <setupTask
-        xsi:type="setup:VariableTask"
-        name="oomph.update.url"
-        value="https://download.eclipse.org/oomph/updates/release"/>
-    <setupTask
         xsi:type="setup.p2:P2Task"
-        label="Eclipse SDK (4.22 - 2021-12)">
+        label="Eclipse SDK (4.23 - 2022-03)">
       <requirement
           name="org.eclipse.sdk.ide"
-          versionRange="[4.22.0,5.0.0)"
+          versionRange="[4.23.0,5.0.0)"
           filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=ppc64le)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
       <repository
-          url="https://download.eclipse.org/eclipse/updates/4.22/R-4.22-202111241800"/>
+          url="https://download.eclipse.org/eclipse/updates/4.23/R-4.23-202203080310"/>
     </setupTask>
   </version>
   <version name="4.23"
@@ -106,6 +102,10 @@
       requiredJavaVersion="11">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="status">
+        <value>current</value>
+      </detail>
       <detail
           key="siteURI">
         <value>https://download.eclipse.org/eclipse/downloads/</value>
@@ -123,7 +123,7 @@
           versionRange="[4.23.0,5.0.0)"
           filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=ppc64le)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
       <repository
-          url="https://download.eclipse.org/eclipse/updates/4.23-I-builds"/>
+          url="https://download.eclipse.org/eclipse/updates/4.23/R-4.23-202203080310"/>
     </setupTask>
   </version>
   <version name="4.22"
@@ -133,7 +133,7 @@
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="status">
-        <value>current</value>
+        <value>outdated</value>
       </detail>
       <detail
           key="siteURI">
@@ -785,7 +785,7 @@
       <repository
           url="https://download.eclipse.org/eclipse/updates/4.3/R-4.3.2-201402211700"/>
       <repository
-          url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.28"/>
+          url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.29"/>
     </setupTask>
   </version>
   <version name="4.2"
@@ -820,7 +820,7 @@
       <repository
           url="https://download.eclipse.org/eclipse/updates/4.2/R-4.2.2-201302041200"/>
       <repository
-          url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.28"/>
+          url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.29"/>
     </setupTask>
   </version>
   <description>This package contains the IDE provided by the Eclipse project's platform build.</description>
