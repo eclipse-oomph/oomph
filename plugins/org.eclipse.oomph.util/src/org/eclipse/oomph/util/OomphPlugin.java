@@ -55,6 +55,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Optional;
 import java.util.Properties;
 
 /**
@@ -584,39 +585,42 @@ public abstract class OomphPlugin extends EMFPlugin
 
   public static List<File> getClassPath(Bundle bundle) throws Exception
   {
-    final List<File> cp = new ArrayList<>();
-
-    final File file = FileLocator.getBundleFile(bundle);
-    if (file.isFile())
+    List<File> cp = new ArrayList<>();
+    Optional<File> bundleLocation = FileLocator.getBundleFileLocation(bundle);
+    if (bundleLocation.isPresent())
     {
-      if (file.getName().endsWith(".jar")) //$NON-NLS-1$
+      File file = bundleLocation.get();
+      if (file.isFile())
       {
-        cp.add(file);
-      }
-    }
-    else if (file.isDirectory())
-    {
-      File classpathFile = new File(file, ".classpath"); //$NON-NLS-1$
-      if (classpathFile.isFile())
-      {
-        DocumentBuilder documentBuilder = XMLUtil.createDocumentBuilder();
-        Element rootElement = XMLUtil.loadRootElement(documentBuilder, classpathFile);
-        XMLUtil.handleElementsByTagName(rootElement, "classpathentry", new XMLUtil.ElementHandler() //$NON-NLS-1$
+        if (file.getName().endsWith(".jar")) //$NON-NLS-1$
         {
-          @Override
-          public void handleElement(Element element) throws Exception
-          {
-            if ("output".equals(element.getAttribute("kind"))) //$NON-NLS-1$ //$NON-NLS-2$
-            {
-              String path = element.getAttribute("path"); //$NON-NLS-1$
-              cp.add(new File(file, path));
-            }
-          }
-        });
+          cp.add(file);
+        }
       }
-      else
+      else if (file.isDirectory())
       {
-        cp.add(file);
+        File classpathFile = new File(file, ".classpath"); //$NON-NLS-1$
+        if (classpathFile.isFile())
+        {
+          DocumentBuilder documentBuilder = XMLUtil.createDocumentBuilder();
+          Element rootElement = XMLUtil.loadRootElement(documentBuilder, classpathFile);
+          XMLUtil.handleElementsByTagName(rootElement, "classpathentry", new XMLUtil.ElementHandler() //$NON-NLS-1$
+          {
+            @Override
+            public void handleElement(Element element) throws Exception
+            {
+              if ("output".equals(element.getAttribute("kind"))) //$NON-NLS-1$ //$NON-NLS-2$
+              {
+                String path = element.getAttribute("path"); //$NON-NLS-1$
+                cp.add(new File(file, path));
+              }
+            }
+          });
+        }
+        else
+        {
+          cp.add(file);
+        }
       }
     }
 

@@ -21,7 +21,7 @@ import org.eclipse.core.variables.IDynamicVariableResolver;
 import org.osgi.framework.Bundle;
 
 import java.io.File;
-import java.io.IOException;
+import java.util.Optional;
 
 /**
  * @author Eike Stepper
@@ -36,17 +36,10 @@ public class BundleLocationVariableResolver implements IDynamicVariableResolver
       Bundle bundle = Platform.getBundle(symbolicName);
       if (bundle != null)
       {
-        try
+        Optional<File> bundleFileLocation = FileLocator.getBundleFileLocation(bundle);
+        if (bundleFileLocation.isPresent())
         {
-          File bundleFile = FileLocator.getBundleFile(bundle);
-          if (bundleFile != null)
-          {
-            return bundleFile.getAbsolutePath();
-          }
-        }
-        catch (IOException ex)
-        {
-          P2CorePlugin.INSTANCE.coreException(ex);
+          return bundleFileLocation.get().getAbsolutePath();
         }
       }
     }
