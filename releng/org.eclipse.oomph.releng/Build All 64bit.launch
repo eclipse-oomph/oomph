@@ -10,6 +10,6 @@
     </listAttribute>
     <stringAttribute key="org.eclipse.ui.externaltools.ATTR_LAUNCH_CONFIGURATION_BUILD_SCOPE" value="${none}"/>
     <stringAttribute key="org.eclipse.ui.externaltools.ATTR_LOCATION" value="${maven.build.command}"/>
-    <stringAttribute key="org.eclipse.ui.externaltools.ATTR_TOOL_ARGUMENTS" value="-Dbuild.id=Local&#13;&#10;-Dgit.commit=Unknown&#13;&#10;-DskipTests=true&#13;&#10;-DDtycho.debug.resolver=true&#13;&#10;-DGENERATE_SOURCE=true&#13;&#10;-DBUILD_TYPE=milestone&#13;&#10;-DRESTRICTED_VERSION=2021-12&#13;&#10;-DX&#13;&#10;-DU&#13;&#10;clean&#13;&#10;verify"/>
+    <stringAttribute key="org.eclipse.ui.externaltools.ATTR_TOOL_ARGUMENTS" value="-Dbuild.id=Local&#13;&#10;-Dgit.commit=Unknown&#13;&#10;-DskipTests=true&#13;&#10;-DDtycho.debug.resolver=true&#13;&#10;-DGENERATE_SOURCE=true&#13;&#10;-DBUILD_TYPE=milestone&#13;&#10;-DRESTRICTED_VERSION=2022-06&#13;&#10;-Dmaven.artifact.threads=16&#13;&#10;-Duser.home=${system_property:user.home}&#13;&#10;-DX&#13;&#10;-DU&#13;&#10;clean&#13;&#10;verify"/>
     <stringAttribute key="org.eclipse.ui.externaltools.ATTR_WORKING_DIRECTORY" value="${git.clone.oomph}"/>
 </launchConfiguration>
