@@ -592,7 +592,7 @@
         </detail>
         <detail
             key="label">
-          <value>Platform Releng Git or Gerrit Repository</value>
+          <value>Platform Releng Git Repository</value>
         </detail>
         <detail
             key="target">

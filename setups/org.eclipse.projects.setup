@@ -1096,7 +1096,7 @@
   <project href="http://git.eclipse.org/c/emf-parsley/org.eclipse.emf-parsley.git/plain/devtools/org.eclipse.emf.parsley.oomph/EMFParsley.setup#/"/>
   <project href="interim/EPPPackages.setup#/"/>
   <project href="https://git.eclipse.org/c/epsilon/org.eclipse.epsilon.git/plain/releng/org.eclipse.epsilon.releng/epsilonDev.setup#/"/>
-  <project href="https://git.eclipse.org/c/equinox/rt.equinox.framework.git/plain/releng/org.eclipse.equinox.releng/Equinox.setup#/"/>
+  <project href="https://raw.githubusercontent.com/eclipse-equinox/equinox.framework/master/releng/org.eclipse.equinox.releng/Equinox.setup#/"/>
   <project href="https://git.eclipse.org/c/gmf-notation/org.eclipse.gmf.notation.git/plain/org.eclipse.gmf.runtime.notation/GMFNotation.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse/ice/master/org.eclipse.ice.aggregator/ICE.setup#/"/>
   <project href="https://git.eclipse.org/c/jdt/eclipse.jdt.git/plain/org.eclipse.jdt.releng/JDT.setup#/"/>
