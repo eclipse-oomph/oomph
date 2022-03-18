@@ -892,7 +892,11 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
             if (normalizedURI.isPlatformResource())
             {
-              files.add(EcorePlugin.getWorkspaceRoot().getFile(new Path(normalizedURI.toPlatformString(true))));
+              IFile file = EcorePlugin.getWorkspaceRoot().getFile(new Path(normalizedURI.toPlatformString(true)));
+              if (file.isSynchronized(1))
+              {
+                files.add(file);
+              }
             }
             else if (normalizedURI.isFile())
             {
@@ -923,7 +927,12 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
             {
               for (IFile file : files)
               {
-                if (!file.isSynchronized(1))
+                if (monitor.isCanceled())
+                {
+                  return;
+                }
+
+                if (file.isSynchronized(1))
                 {
                   needsRefresh.set(true);
                   file.refreshLocal(1, monitor);
@@ -934,7 +943,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
           try
           {
-            EcorePlugin.getWorkspaceRoot().getWorkspace().run(operation, null);
+            EcorePlugin.getWorkspaceRoot().getWorkspace().run(operation, new NullProgressMonitor());
           }
           catch (OperationCanceledException exception)
           {
