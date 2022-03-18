@@ -164,28 +164,22 @@
     <setupTask
         xsi:type="git:GitCloneTask"
         id="git.clone.platform"
-        remoteURI="platform/eclipse.platform">
+        remoteURI="eclipse-platform/eclipse.platform">
       <annotation
           source="http://www.eclipse.org/oomph/setup/InducedChoices">
         <detail
             key="inherit">
-          <value>eclipse.git.gerrit.remoteURIs</value>
+          <value>github.remoteURIs</value>
         </detail>
         <detail
             key="label">
-          <value>Platform Base, Update, and Ant Git or Gerrit Repository</value>
+          <value>Platform Base, Update, and Ant Git Repository</value>
         </detail>
         <detail
             key="target">
           <value>remoteURI</value>
         </detail>
       </annotation>
-      <configSections
-          name="gerrit">
-        <properties
-            key="createchangeid"
-            value="true"/>
-      </configSections>
       <description>Platform Base, Update, and Ant</description>
     </setupTask>
     <setupTask
@@ -475,29 +469,23 @@
       label="Documentation">
     <setupTask
         xsi:type="git:GitCloneTask"
-        id="git.clone.platform.common"
-        remoteURI="platform/eclipse.platform.common">
+        id="github.clone.platform.common"
+        remoteURI="eclipse-platform/eclipse.platform.common">
       <annotation
           source="http://www.eclipse.org/oomph/setup/InducedChoices">
         <detail
             key="inherit">
-          <value>eclipse.git.gerrit.remoteURIs</value>
+          <value>github.remoteURIs</value>
         </detail>
         <detail
             key="label">
-          <value>Platform Documentation Git or Gerrit Repository</value>
+          <value>Platform Documentation Git Repository</value>
         </detail>
         <detail
             key="target">
           <value>remoteURI</value>
         </detail>
       </annotation>
-      <configSections
-          name="gerrit">
-        <properties
-            key="createchangeid"
-            value="true"/>
-      </configSections>
       <description>Platform Documentation</description>
     </setupTask>
     <setupTask
@@ -508,7 +496,7 @@
         <requirement
             name="*"/>
         <sourceLocator
-            rootFolder="${git.clone.platform.common.location}"/>
+            rootFolder="${github.clone.platform.common.location}"/>
       </targlet>
     </setupTask>
     <setupTask
@@ -524,6 +512,60 @@
         name="master"
         label="Master"/>
     <description>The Platform documentation</description>
+  </project>
+  <project name="images"
+      label="Images">
+    <setupTask
+        xsi:type="git:GitCloneTask"
+        id="github.clone.platform.images"
+        remoteURI="eclipse-platform/eclipse.platform.images">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/InducedChoices">
+        <detail
+            key="inherit">
+          <value>github.remoteURIs</value>
+        </detail>
+        <detail
+            key="label">
+          <value>Platform Images Git Repository</value>
+        </detail>
+        <detail
+            key="target">
+          <value>remoteURI</value>
+        </detail>
+      </annotation>
+      <description>Platform Images</description>
+    </setupTask>
+    <setupTask
+        xsi:type="setup.targlets:TargletTask">
+      <targlet
+          name="Platform Images">
+        <requirement
+            name="*"/>
+        <sourceLocator
+            rootFolder="${github.clone.platform.images.location}"
+            locateNestedProjects="true">
+          <excludedPath>org.eclipse.images/eclipse-svg/org.eclipse.m2e.core.ui</excludedPath>
+          <excludedPath>org.eclipse.images.renderer</excludedPath>
+        </sourceLocator>
+      </targlet>
+    </setupTask>
+    <setupTask
+        xsi:type="setup.workingsets:WorkingSetTask">
+      <workingSet
+          name="Platform Images">
+        <predicate
+            xsi:type="predicates:AndPredicate">
+          <operand
+              xsi:type="predicates:RepositoryPredicate"
+              project="org.eclipse.images"/>
+        </predicate>
+      </workingSet>
+    </setupTask>
+    <stream
+        name="master"
+        label="Master"/>
+    <description>The Platform Images</description>
   </project>
   <project name="news"
       label="News">
@@ -704,6 +746,65 @@
         label="Master"/>
     <description>The Platform Releng Agrregator components, including the Platform's products</description>
   </project>
+  <project name="releng.buildtools"
+      label="Releng Build Tools">
+    <setupTask
+        xsi:type="git:GitCloneTask"
+        id="github.clone.platform.releng.buildtools"
+        remoteURI="eclipse-platform/eclipse.platform.releng.buildtools">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/InducedChoices">
+        <detail
+            key="inherit">
+          <value>github.remoteURIs</value>
+        </detail>
+        <detail
+            key="label">
+          <value>Platform Releng Build Tools Git Repository</value>
+        </detail>
+        <detail
+            key="target">
+          <value>remoteURI</value>
+        </detail>
+      </annotation>
+      <description>Platform Releng Build Tools</description>
+    </setupTask>
+    <setupTask
+        xsi:type="setup.targlets:TargletTask">
+      <targlet
+          name="Platform Build Tools"
+          activeRepositoryList="egit">
+        <requirement
+            name="*"/>
+        <requirement
+            name="org.eclipse.egit.core"/>
+        <sourceLocator
+            rootFolder="${github.clone.platform.releng.buildtools.location}"
+            locateNestedProjects="true"/>
+        <repositoryList
+            name="egit">
+          <repository
+              url="https://download.eclipse.org/egit/updates"/>
+        </repositoryList>
+      </targlet>
+    </setupTask>
+    <setupTask
+        xsi:type="setup.workingsets:WorkingSetTask">
+      <workingSet
+          name="Platform Releng Build Tools">
+        <predicate
+            xsi:type="predicates:AndPredicate">
+          <operand
+              xsi:type="predicates:RepositoryPredicate"
+              project="org.eclipse.build.tools"/>
+        </predicate>
+      </workingSet>
+    </setupTask>
+    <stream
+        name="master"
+        label="Master"/>
+    <description>The Platform Releng Build Tools</description>
+  </project>
   <project href="https://git.eclipse.org/c/platform/eclipse.platform.resources.git/plain/bundles/org.eclipse.core.resources.releng/platformResources.setup#/"/>
   <project href="https://git.eclipse.org/c/platform/eclipse.platform.runtime.git/plain/bundles/org.eclipse.core.runtime.releng/platformRuntime.setup#/"/>
   <project href="https://git.eclipse.org/c/platform/eclipse.platform.swt.git/plain/bundles/org.eclipse.swt.tools/Oomph/platformSwt.setup#/"/>
@@ -716,29 +817,23 @@
     <setupTask
         xsi:type="git:GitCloneTask"
         id="git.clone.platform.ui.tools"
-        remoteURI="platform/eclipse.platform.ui.tools"
+        remoteURI="eclipse-platform/eclipse.platform.ui.tools"
         pushURI="">
       <annotation
           source="http://www.eclipse.org/oomph/setup/InducedChoices">
         <detail
             key="inherit">
-          <value>eclipse.git.gerrit.remoteURIs</value>
+          <value>github.remoteURIs</value>
         </detail>
         <detail
             key="label">
-          <value>Platform UI Git or Gerrit Repository</value>
+          <value>Platform UI Git Repository</value>
         </detail>
         <detail
             key="target">
           <value>remoteURI</value>
         </detail>
       </annotation>
-      <configSections
-          name="gerrit">
-        <properties
-            key="createchangeid"
-            value="true"/>
-      </configSections>
       <description>Platform UI Tools</description>
     </setupTask>
     <setupTask
