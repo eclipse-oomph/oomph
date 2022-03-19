@@ -68,10 +68,8 @@
         <setEntry value="com.google.guava*21.0.0.v20170206-1425@default:default"/>
         <setEntry value="com.ibm.icu@default:default"/>
         <setEntry value="com.jcraft.jsch@default:default"/>
-        <setEntry value="com.sun.jna*4.5.1.v20190425-1842@default:default"/>
-        <setEntry value="com.sun.jna*5.8.0.v20210503-0343@default:default"/>
-        <setEntry value="com.sun.jna.platform*4.5.1.v20190425-1842@default:default"/>
-        <setEntry value="com.sun.jna.platform*5.8.0.v20210406-1004@default:default"/>
+        <setEntry value="com.sun.jna.platform@default:default"/>
+        <setEntry value="com.sun.jna@default:default"/>
         <setEntry value="com.sun.xml.bind@default:default"/>
         <setEntry value="javaewah@default:default"/>
         <setEntry value="javax.activation@default:default"/>
@@ -102,7 +100,6 @@
         <setEntry value="org.apache.lucene.core*8.4.1.v20200122-1459@default:default"/>
         <setEntry value="org.apache.sshd.osgi@default:default"/>
         <setEntry value="org.apache.sshd.sftp@default:default"/>
-        <setEntry value="org.apache.xerces*2.12.1.v20210115-0812@default:default"/>
         <setEntry value="org.apache.xerces*2.9.0.v201101211617@default:default"/>
         <setEntry value="org.apache.xml.resolver@default:default"/>
         <setEntry value="org.apache.xml.serializer@default:default"/>
@@ -251,7 +248,6 @@
         <setEntry value="org.eclipse.ltk.ui.refactoring@default:default"/>
         <setEntry value="org.eclipse.m2e.archetype.common@default:default"/>
         <setEntry value="org.eclipse.m2e.core@default:default"/>
-        <setEntry value="org.eclipse.m2e.maven.indexer@default:default"/>
         <setEntry value="org.eclipse.m2e.maven.runtime.slf4j.simple@default:default"/>
         <setEntry value="org.eclipse.m2e.maven.runtime@default:default"/>
         <setEntry value="org.eclipse.m2e.workspace.cli@default:default"/>
