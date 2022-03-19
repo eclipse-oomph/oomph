@@ -78,14 +78,20 @@ import org.eclipse.equinox.p2.repository.IRepository;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.ParserConfigurationException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -306,7 +312,7 @@ public class ProductCatalogGenerator implements IApplication
   private String[] getTrains()
   {
     return new String[] { "juno", "kepler", "luna", "mars", "neon", "oxygen", "photon", "2018-09", "2018-12", "2019-03", "2019-06", "2019-09", "2019-12",
-        "2020-03", "2020-06", "2020-09", "2020-12", "2021-03", "2021-06", "2021-09", "2021-12", "2022-03" };
+        "2020-03", "2020-06", "2020-09", "2020-12", "2021-03", "2021-06", "2021-09", "2021-12", "2022-03", "2022-06" };
   }
 
   private URI getEclipsePlatformSite(String train)
@@ -2172,7 +2178,7 @@ public class ProductCatalogGenerator implements IApplication
     return rootInstallIUs;
   }
 
-  private Macro getJREs() throws ProvisionException, URISyntaxException
+  private Macro getJREs() throws ProvisionException, URISyntaxException, SAXException, IOException, ParserConfigurationException
   {
     // The p2 task for each JRE version will be stored in a macro.
     Macro jreMacro = SetupFactory.eINSTANCE.createMacro();
@@ -2210,10 +2216,23 @@ public class ProductCatalogGenerator implements IApplication
       }
     }
 
-    for (Map.Entry<Version, IInstallableUnit> entry : jreVersions.entrySet())
+    for (IInstallableUnit iu : jreVersions.values())
     {
-      IInstallableUnit iu = entry.getValue();
       IMetadataRepository childRepository = findRepository(jreRepository, iu);
+      String model = iu.getProperty("org.eclipse.justj.model");
+      Document document = XMLUtil.createDocumentBuilder().parse(new InputSource(new StringReader(model)));
+      NodeList details = document.getElementsByTagNameNS("", "detail");
+      String javaRuntimeVersion = null;
+      for (int i = 0; i < details.getLength(); ++i)
+      {
+        Element element = (Element)details.item(i);
+        if ("java.version".equals(element.getAttribute("key")))
+        {
+          javaRuntimeVersion = element.getElementsByTagNameNS("", "value").item(0).getTextContent();
+          break;
+        }
+      }
+
       System.out.println("jre=" + iu + " -> " + childRepository.getLocation());
 
       Requirement jreRequirement = P2Factory.eINSTANCE.createRequirement(iu.getId());
@@ -2247,7 +2266,13 @@ public class ProductCatalogGenerator implements IApplication
         jreRequirement.setFilter(compositeFilter.append(')').toString());
       }
 
-      Repository jreChildRepository = P2Factory.eINSTANCE.createRepository(childRepository.getLocation().toString());
+      URI childRepositoryURI = URI.createURI(childRepository.getLocation().toString());
+      if (childRepositoryURI.lastSegment().contains(".v"))
+      {
+        childRepositoryURI = childRepositoryURI.trimSegments(1).appendSegment("latest");
+      }
+
+      Repository jreChildRepository = P2Factory.eINSTANCE.createRepository(childRepositoryURI.toString());
 
       P2Task p2Task = SetupP2Factory.eINSTANCE.createP2Task();
       p2Task.getRequirements().add(jreRequirement);
@@ -2256,7 +2281,7 @@ public class ProductCatalogGenerator implements IApplication
       // Get the version without the qualifier.
       OSGiVersion osgiVersion = (OSGiVersion)iu.getVersion();
       Version jreVersion = Version.createOSGi(osgiVersion.getMajor(), osgiVersion.getMinor(), osgiVersion.getMicro());
-      p2Task.setLabel("JRE " + jreVersion);
+      p2Task.setLabel("JRE " + (javaRuntimeVersion != null ? javaRuntimeVersion : jreVersion));
       String description = iu.getProperty(IInstallableUnit.PROP_DESCRIPTION, null);
       p2Task.setDescription(description);
 
