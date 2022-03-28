@@ -255,13 +255,13 @@
       label="Debug">
     <setupTask
         xsi:type="git:GitCloneTask"
-        id="git.clone.platform.debug"
-        remoteURI="platform/eclipse.platform.debug">
+        id="github.clone.platform.debug"
+        remoteURI="eclipse-platform/eclipse.platform.debug">
       <annotation
           source="http://www.eclipse.org/oomph/setup/InducedChoices">
         <detail
             key="inherit">
-          <value>eclipse.git.gerrit.remoteURIs</value>
+          <value>github.remoteURIs</value>
         </detail>
         <detail
             key="label">
@@ -272,12 +272,6 @@
           <value>remoteURI</value>
         </detail>
       </annotation>
-      <configSections
-          name="gerrit">
-        <properties
-            key="createchangeid"
-            value="true"/>
-      </configSections>
       <description>Platform Debug</description>
     </setupTask>
     <setupTask
@@ -288,11 +282,12 @@
         <requirement
             name="*"/>
         <sourceLocator
-            rootFolder="${git.clone.platform.debug.location}"/>
+            rootFolder="${github.clone.platform.debug.location}"/>
       </targlet>
     </setupTask>
     <setupTask
-        xsi:type="setup.workingsets:WorkingSetTask">
+        xsi:type="setup.workingsets:WorkingSetTask"
+        id="platform.debug.workingsets">
       <workingSet
           name="Platform Debug">
         <predicate
@@ -302,7 +297,7 @@
               project="org.eclipse.debug.core"/>
           <operand
               xsi:type="workingsets:ExclusionPredicate"
-              excludedWorkingSet="//@projects[name='debug']/@setupTasks.2/@workingSets[name='Platform%20Debug%20Tests'] //@projects[name='debug']/@setupTasks.2/@workingSets[name='Platform%20Debug%20Examples']"/>
+              excludedWorkingSet="//'platform.debug.workingsets'/@workingSets[name='Platform%20Debug%20Tests'] //'platform.debug.workingsets'/@workingSets[name='Platform%20Debug%20Examples']"/>
         </predicate>
       </workingSet>
       <workingSet
