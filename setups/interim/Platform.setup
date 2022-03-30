@@ -868,6 +868,57 @@
         label="Master"/>
     <description>The Platform UI Tools support</description>
   </project>
+  <project name="website"
+      label="Website">
+    <setupTask
+        xsi:type="git:GitCloneTask"
+        id="git.clone.platform.website"
+        remoteURI="www.eclipse.org/eclipse.git"
+        pushURI="">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/InducedChoices">
+        <detail
+            key="inherit">
+          <value>eclipse.git.gerrit.remoteURIs</value>
+        </detail>
+        <detail
+            key="label">
+          <value>Platform WebsiteI Git Repository</value>
+        </detail>
+        <detail
+            key="target">
+          <value>remoteURI</value>
+        </detail>
+      </annotation>
+      <description>Platform Website</description>
+    </setupTask>
+    <setupTask
+        xsi:type="setup.targlets:TargletTask">
+      <targlet
+          name="Platform Website">
+        <requirement
+            name="*"/>
+        <sourceLocator
+            rootFolder="${git.clone.platform.website.location}"/>
+      </targlet>
+    </setupTask>
+    <setupTask
+        xsi:type="setup.workingsets:WorkingSetTask">
+      <workingSet
+          name="Platform Website">
+        <predicate
+            xsi:type="predicates:AndPredicate">
+          <operand
+              xsi:type="predicates:RepositoryPredicate"
+              project="eclipse"/>
+        </predicate>
+      </workingSet>
+    </setupTask>
+    <stream
+        name="master"
+        label="Master"/>
+    <description>The Platform Website</description>
+  </project>
   <logicalProjectContainer
       xsi:type="setup:ProjectCatalog"
       href="../org.eclipse.setup#//@projectCatalogs[name='org.eclipse']"/>
