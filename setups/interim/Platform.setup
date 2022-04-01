@@ -265,7 +265,7 @@
         </detail>
         <detail
             key="label">
-          <value>Platform Debug Git or Gerrit Repository</value>
+          <value>Platform Debug Github Repository</value>
         </detail>
         <detail
             key="target">
@@ -363,7 +363,7 @@
           </detail>
           <detail
               key="label">
-            <value>ECF Git or Gerrit Repository</value>
+            <value>ECF Github Repository</value>
           </detail>
           <detail
               key="target">
@@ -566,29 +566,23 @@
       label="News">
     <setupTask
         xsi:type="git:GitCloneTask"
-        id="git.clone.platform.news"
-        remoteURI="www.eclipse.org/eclipse/news.git">
+        id="github.clone.platform.news"
+        remoteURI="eclipse-platform/www.eclipse.org-eclipse-news">
       <annotation
           source="http://www.eclipse.org/oomph/setup/InducedChoices">
         <detail
             key="inherit">
-          <value>eclipse.git.gerrit.remoteURIs</value>
+          <value>github.remoteURIs</value>
         </detail>
         <detail
             key="label">
-          <value>Platform News Git or Gerrit Repository</value>
+          <value>Platform News Github Repository</value>
         </detail>
         <detail
             key="target">
           <value>remoteURI</value>
         </detail>
       </annotation>
-      <configSections
-          name="gerrit">
-        <properties
-            key="createchangeid"
-            value="true"/>
-      </configSections>
       <description>Platform News</description>
     </setupTask>
     <setupTask
@@ -598,11 +592,12 @@
         <requirement
             name="*"/>
         <sourceLocator
-            rootFolder="${git.clone.platform.news.location}"/>
+            rootFolder="${github.clone.platform.news.location}"/>
       </targlet>
     </setupTask>
     <setupTask
-        xsi:type="setup.workingsets:WorkingSetTask">
+        xsi:type="setup.workingsets:WorkingSetTask"
+        id="platform.news.workingsets">
       <workingSet
           name="Platform News">
         <predicate
@@ -872,18 +867,18 @@
       label="Website">
     <setupTask
         xsi:type="git:GitCloneTask"
-        id="git.clone.platform.website"
-        remoteURI="www.eclipse.org/eclipse.git"
+        id="github.clone.platform.website"
+        remoteURI="eclipse-platform/www.eclipse.org-eclipse"
         pushURI="">
       <annotation
           source="http://www.eclipse.org/oomph/setup/InducedChoices">
         <detail
             key="inherit">
-          <value>eclipse.git.gerrit.remoteURIs</value>
+          <value>github.remoteURIs</value>
         </detail>
         <detail
             key="label">
-          <value>Platform WebsiteI Git Repository</value>
+          <value>Platform Website Github Repository</value>
         </detail>
         <detail
             key="target">
@@ -899,11 +894,12 @@
         <requirement
             name="*"/>
         <sourceLocator
-            rootFolder="${git.clone.platform.website.location}"/>
+            rootFolder="${github.clone.platform.website.location}"/>
       </targlet>
     </setupTask>
     <setupTask
-        xsi:type="setup.workingsets:WorkingSetTask">
+        xsi:type="setup.workingsets:WorkingSetTask"
+        id="platform.website.workingsets">
       <workingSet
           name="Platform Website">
         <predicate
