@@ -11551,7 +11551,7 @@
       </setupTask>
     </version>
     <description>
-      The essential tools for any PHP developer, including PHP language support, Git client, Mylyn and editors for JavaScript, TypeScript, HTML, CSS and XML.&lt;br />
+      The essential tools for any PHP developer, including PHP language support, Git client and editors for JavaScript, TypeScript, HTML, CSS and XML.&lt;br />
       Click &lt;a href=&quot;https://github.com/eclipse/pdt/issues/new/choose&quot;>here&lt;/a> to report an issue against Eclipse PHP Development Tools.&lt;br />
       Click &lt;a href=&quot;https://bugs.eclipse.org/bugs/enter_bug.cgi?classification=WebTools&quot;>here&lt;/a> to file a bug against Eclipse Web Tools Platform.&lt;br />
       Click &lt;a href=&quot;https://bugs.eclipse.org/bugs/enter_bug.cgi?product=Platform&quot;>here&lt;/a> to file a bug against Eclipse Platform.&lt;br />
@@ -15651,8 +15651,7 @@
         <requirement
             name="org.eclipse.m2e.pde.feature.feature.group"/>
         <requirement
-            name="org.eclipse.passage.ldc.feature.feature.group"
-            versionRange="2.2.1"/>
+            name="org.eclipse.passage.ldc.feature.feature.group"/>
         <requirement
             name="org.eclipse.rap.tools.feature.feature.group"/>
         <requirement
@@ -15665,8 +15664,6 @@
             name="org.eclipse.tm.terminal.feature.feature.group"/>
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
-        <repository
-            url="https://download.eclipse.org/passage/updates/release/2.2.1"/>
         <repository
             url="https://download.eclipse.org/technology/epp/packages/2022-03/202203101200"/>
         <repository
@@ -15812,8 +15809,7 @@
         <requirement
             name="org.eclipse.m2e.pde.feature.feature.group"/>
         <requirement
-            name="org.eclipse.passage.ldc.feature.feature.group"
-            versionRange="2.2.1"/>
+            name="org.eclipse.passage.ldc.feature.feature.group"/>
         <requirement
             name="org.eclipse.rap.tools.feature.feature.group"/>
         <requirement
@@ -15826,8 +15822,6 @@
             name="org.eclipse.tm.terminal.feature.feature.group"/>
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
-        <repository
-            url="https://download.eclipse.org/passage/updates/release/2.2.1"/>
         <repository
             url="https://download.eclipse.org/technology/epp/packages/2022-03/202203101200"/>
         <repository

@@ -1356,7 +1356,7 @@ public class ProductCatalogGenerator implements IApplication
       {
         if ("org.eclipse.passage.ldc.feature.feature.group".equals(additionalRequirement.getName()))
         {
-          if (compareTrains(train, "2022-03") <= 0)
+          if (compareTrains(train, "2022-03") < 0)
           {
             additionalRequirement.setVersionRange(new VersionRange(Version.create("2.2.1"), true, Version.MAX_VERSION, true));
             p2Task.getRepositories().add(P2Factory.eINSTANCE.createRepository("https://download.eclipse.org/passage/updates/release/2.2.1"));
