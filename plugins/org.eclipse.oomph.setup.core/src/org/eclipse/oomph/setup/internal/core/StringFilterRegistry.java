@@ -48,6 +48,8 @@ public class StringFilterRegistry
 
   private static final Pattern CAMEL_PATTERN = Pattern.compile("(?:[^\\p{Alnum}]+|^)(\\p{Lower})?"); //$NON-NLS-1$
 
+  private static final Pattern DRIVE_PATTERN = Pattern.compile("^([A-Z]):(.*)"); //$NON-NLS-1$
+
   private final Map<String, StringFilter> filters = new HashMap<>();
 
   private StringFilterRegistry()
@@ -518,6 +520,39 @@ public class StringFilterRegistry
       public String filter(String value)
       {
         return value.replaceAll("\\\\", "/"); //$NON-NLS-1$ //$NON-NLS-2$
+      }
+    });
+
+    registerFilter(new DocumentedStringFilter()
+    {
+      @Override
+      public String getName()
+      {
+        return "cygpath"; //$NON-NLS-1$
+      }
+
+      @Override
+      public String getDescription()
+      {
+        return Messages.StringFilterRegistry_Cygpath_description;
+      }
+
+      @Override
+      public String filter(String value)
+      {
+        if (File.separatorChar == '/')
+        {
+          return value;
+        }
+
+        String result = value.replaceAll("\\\\", "/"); //$NON-NLS-1$ //$NON-NLS-2$
+        Matcher matcher = DRIVE_PATTERN.matcher(result);
+        if (!matcher.find())
+        {
+          return result;
+        }
+
+        return "/" + matcher.group(1).toLowerCase() + matcher.group(2); //$NON-NLS-1$
       }
     });
 

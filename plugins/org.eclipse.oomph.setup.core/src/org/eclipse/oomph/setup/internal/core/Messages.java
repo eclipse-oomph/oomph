@@ -89,6 +89,8 @@ public class Messages extends NLS
 
   public static String StringFilterRegistry_CapAll_description;
 
+  public static String StringFilterRegistry_Cygpath_description;
+
   public static String StringFilterRegistry_File_description;
 
   public static String StringFilterRegistry_FileExtension_description;
