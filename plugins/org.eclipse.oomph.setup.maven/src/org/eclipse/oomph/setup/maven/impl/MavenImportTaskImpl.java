@@ -20,6 +20,7 @@ import org.eclipse.oomph.setup.impl.SetupTaskImpl;
 import org.eclipse.oomph.setup.maven.MavenImportTask;
 import org.eclipse.oomph.setup.maven.MavenPackage;
 import org.eclipse.oomph.util.MonitorUtil;
+import org.eclipse.oomph.util.ReflectUtil;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -45,6 +46,8 @@ import org.eclipse.m2e.core.project.LocalProjectScanner;
 import org.eclipse.m2e.core.project.MavenProjectInfo;
 import org.eclipse.m2e.core.project.ProjectImportConfiguration;
 
+import java.io.File;
+import java.lang.reflect.Constructor;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
@@ -367,7 +370,7 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
       Set<MavenProjectInfo> projectInfos = new LinkedHashSet<>();
       for (SourceLocator sourceLocator : sourceLocators)
       {
-        LocalProjectScanner projectScanner = new LocalProjectScanner(null, Collections.singletonList(sourceLocator.getRootFolder()), false, modelManager);
+        LocalProjectScanner projectScanner = createLocalProjectScanner(Collections.singletonList(sourceLocator.getRootFolder()), modelManager);
         processMavenProject(sourceLocator, projectInfos, projectScanner, MonitorUtil.create(monitor, 1));
       }
 
@@ -401,6 +404,20 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
     finally
     {
       monitor.done();
+    }
+  }
+
+  private LocalProjectScanner createLocalProjectScanner(List<String> folders, MavenModelManager modelManager)
+  {
+    try
+    {
+      Constructor<LocalProjectScanner> constructor = ReflectUtil.getConstructor(LocalProjectScanner.class, File.class, List.class, boolean.class,
+          MavenModelManager.class);
+      return constructor.newInstance(null, folders, false, modelManager);
+    }
+    catch (Exception ex)
+    {
+      return new LocalProjectScanner(folders, false, modelManager);
     }
   }
 
