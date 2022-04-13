@@ -57,7 +57,9 @@ public class LazyProfileRegistry extends SimpleProfileRegistry
 
   private final Class<?> parserClass;
 
-  private final Constructor<?> parserConstructor;
+  private Constructor<?> parserConstructor;
+
+  private Constructor<?> parserConstructor2;
 
   private final Method parseMethod;
 
@@ -101,7 +103,15 @@ public class LazyProfileRegistry extends SimpleProfileRegistry
     try
     {
       parserClass = CommonPlugin.loadClass(EngineActivator.ID, "org.eclipse.equinox.internal.p2.engine.SimpleProfileRegistry$Parser"); //$NON-NLS-1$
-      parserConstructor = ReflectUtil.getConstructor(parserClass, SimpleProfileRegistry.class, BundleContext.class, String.class);
+      try
+      {
+        parserConstructor = ReflectUtil.getConstructor(parserClass, SimpleProfileRegistry.class, BundleContext.class, String.class);
+      }
+      catch (Throwable ex)
+      {
+        parserConstructor2 = ReflectUtil.getConstructor(parserClass, SimpleProfileRegistry.class, String.class);
+      }
+
       parseMethod = ReflectUtil.getMethod(parserClass, "parse", File.class); //$NON-NLS-1$
       addProfilePlaceHolderMethod = ReflectUtil.getMethod(parserClass, "addProfilePlaceHolder", String.class); //$NON-NLS-1$
       getProfileMapMethod = ReflectUtil.getMethod(parserClass, "getProfileMap"); //$NON-NLS-1$
@@ -304,7 +314,8 @@ public class LazyProfileRegistry extends SimpleProfileRegistry
 
     try
     {
-      Object parser = ReflectUtil.newInstance(parserConstructor, this, EngineActivator.getContext(), EngineActivator.ID);
+      Object parser = parserConstructor == null ? ReflectUtil.newInstance(parserConstructor2, this, EngineActivator.ID)
+          : ReflectUtil.newInstance(parserConstructor, this, EngineActivator.getContext(), EngineActivator.ID);
 
       ProfileLock lock = profileLocks.get(profileId);
       if (lock == null && canWrite)
