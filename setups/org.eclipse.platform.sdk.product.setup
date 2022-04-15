@@ -53,6 +53,10 @@
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
+          key="siteURI">
+        <value>https://download.eclipse.org/eclipse/downloads/</value>
+      </detail>
+      <detail
           key="shortcut">
         <value>Eclipse SDK - Latest</value>
       </detail>
@@ -98,6 +102,10 @@
       requiredJavaVersion="11">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="siteURI">
+        <value>https://download.eclipse.org/eclipse/downloads/</value>
+      </detail>
       <detail
           key="shortcut">
         <value>Eclipse SDK - 4.24 - 2022-06</value>
