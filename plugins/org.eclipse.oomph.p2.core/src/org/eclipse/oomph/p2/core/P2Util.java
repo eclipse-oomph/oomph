@@ -146,18 +146,21 @@ public final class P2Util
 
   public static void copyTrustPreferences(Profile sourceProfile, Profile targetProfile)
   {
-    IEclipsePreferences source = getTrustPreferences(sourceProfile);
-    IEclipsePreferences target = getTrustPreferences(targetProfile);
-    try
+    if (sourceProfile != null && targetProfile != null)
     {
-      for (String key : source.keys())
+      IEclipsePreferences source = getTrustPreferences(sourceProfile);
+      IEclipsePreferences target = getTrustPreferences(targetProfile);
+      try
       {
-        target.put(key, source.get(key, null));
+        for (String key : source.keys())
+        {
+          target.put(key, source.get(key, null));
+        }
       }
-    }
-    catch (BackingStoreException ex)
-    {
-      P2CorePlugin.INSTANCE.log(ex);
+      catch (BackingStoreException ex)
+      {
+        P2CorePlugin.INSTANCE.log(ex);
+      }
     }
   }
 

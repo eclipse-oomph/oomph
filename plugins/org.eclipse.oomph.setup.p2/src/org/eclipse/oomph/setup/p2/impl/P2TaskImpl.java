@@ -939,13 +939,17 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
 
       // Copy the trust preferences of the profile to the self profile if the agents are different, i.e., in the installer.
       Profile selfProfile = P2Util.getAgentManager().getCurrentAgent().getCurrentProfile();
-      if (selfProfile.getAgent() != profile.getAgent())
+      if (selfProfile != null)
       {
-        P2Util.copyTrustPreferences(profile, selfProfile);
-      }
 
-      // Save them globally as well, but don't remove anything from the global preferences.
-      P2Util.saveGlobalTrustPreferences(profile, false);
+        if (selfProfile.getAgent() != profile.getAgent())
+        {
+          P2Util.copyTrustPreferences(profile, selfProfile);
+        }
+
+        // Save them globally as well, but don't remove anything from the global preferences.
+        P2Util.saveGlobalTrustPreferences(profile, false);
+      }
     }
   }
 
