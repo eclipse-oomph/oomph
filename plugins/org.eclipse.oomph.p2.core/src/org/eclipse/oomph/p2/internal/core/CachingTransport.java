@@ -106,7 +106,7 @@ public class CachingTransport extends Transport
   }
 
   @Override
-  public IStatus download(URI uri, OutputStream target, long startPos, IProgressMonitor monitor)
+  public IStatus download(URI uri, OutputStream target, IProgressMonitor monitor)
   {
     if (DEBUG)
     {
@@ -133,7 +133,7 @@ public class CachingTransport extends Transport
           eventBus.publishEvent(new DownloadArtifactEvent(uri));
         }
 
-        status = delegate.download(uri, target, startPos, monitor);
+        status = delegate.download(uri, target, monitor);
         return status;
       }
       finally
@@ -190,7 +190,7 @@ public class CachingTransport extends Transport
           // Can't open an output stream on the cache location.
         }
 
-        IStatus status = delegate.download(uri, statefulTarget != null ? statefulTarget : target, startPos, monitor);
+        IStatus status = delegate.download(uri, statefulTarget != null ? statefulTarget : target, monitor);
 
         // If we have a cached stateful target, we need to transfer the bytes into the original target.
         if (statefulTarget != null)
@@ -251,9 +251,16 @@ public class CachingTransport extends Transport
   }
 
   @Override
-  public IStatus download(URI uri, OutputStream target, IProgressMonitor monitor)
+  @Deprecated
+  public IStatus download(URI uri, OutputStream target, long startPos, IProgressMonitor monitor)
   {
-    return download(uri, target, -1, monitor);
+    if (startPos <= -1)
+    {
+      return download(uri, target, monitor);
+    }
+
+    throw new UnsupportedOperationException(
+        "Positional downloads are actually never called from p2 code and thus disabled by default, please use the method without a position instead."); //$NON-NLS-1$
   }
 
   @Override
