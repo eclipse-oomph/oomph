@@ -1456,7 +1456,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
         if (expectedETag != null || cacheHandling == CacheHandling.CACHE_ONLY || cacheHandling == CacheHandling.CACHE_WITHOUT_ETAG_CHECKING)
         {
           if (cacheHandling == CacheHandling.CACHE_ONLY || //
-              cacheHandling == CacheHandling.CACHE_WITHOUT_ETAG_CHECKING ? eTag != null : expectedETag.equals(eTag))
+              (cacheHandling == CacheHandling.CACHE_WITHOUT_ETAG_CHECKING ? eTag != null : expectedETag.equals(eTag)))
           {
             try
             {

@@ -1127,6 +1127,9 @@ public class MarketplaceCatalogGenerator implements IApplication
 
             BaseUtil.setAnnotation(stream, PROCESSING_ANNOTATION_SOURCE, "state", "done");
           }
+
+          System.gc();
+          System.out.println("available=" + Runtime.getRuntime().freeMemory() / 1000 / 1000);
         }
       });
     }
