@@ -1688,7 +1688,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
             for (IInstallableUnit iu : allIUs)
             {
               Map<String, Boolean> iuArtifacts = getIUArtifacts(iu);
-              if (iuArtifacts.containsValue(Boolean.FALSE))
+              if (!iuArtifacts.isEmpty() && !iuArtifacts.containsValue(Boolean.TRUE) && !iuArtifacts.containsValue(null))
               {
                 unsignedIUs.add(iu);
               }
@@ -1889,7 +1889,6 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         public Map<List<Certificate>, Map<String, IInstallableUnit>> getCertificates()
         {
           if (certificates == null)
-
           {
             int prefixLength = artifactCacheFolder.toString().length() + 1;
             certificates = new TreeMap<>(CERTIFICATE_COMPARATOR);
@@ -1900,7 +1899,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
               for (File file : files)
               {
                 String path = file.toString().substring(prefixLength).replace('\\', '/');
-                if (!path.startsWith("binary/"))
+                if (!path.startsWith("binary/") && !path.endsWith(".pack.gz"))
                 {
                   SignedContent signedContent = fileSignedContents.get(file);
                   if (signedContent != null && signedContent.isSigned())
