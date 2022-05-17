@@ -179,6 +179,8 @@ public class ProductCatalogGenerator implements IApplication
 
   private static final String JUSTJ_JRES = "https://download.eclipse.org/justj/jres";
 
+  private static final Set<Integer> EXCLUDED_NON_LTS_JUSTJ_VERSIONS = Set.of(12, 13, 14, 15, 16);
+
   private URI outputLocation;
 
   private String stagingTrain;
@@ -2208,10 +2210,14 @@ public class ProductCatalogGenerator implements IApplication
       if (version instanceof OSGiVersion)
       {
         OSGiVersion osgiVersion = (OSGiVersion)version;
-        Version jreVersion = Version.createOSGi(osgiVersion.getMajor(), osgiVersion.getMinor(), 0);
-        if (!jreVersions.containsKey(jreVersion))
+        int major = osgiVersion.getMajor();
+        if (!EXCLUDED_NON_LTS_JUSTJ_VERSIONS.contains(major))
         {
-          jreVersions.put(jreVersion, iu);
+          Version jreVersion = Version.createOSGi(major, osgiVersion.getMinor(), 0);
+          if (!jreVersions.containsKey(jreVersion))
+          {
+            jreVersions.put(jreVersion, iu);
+          }
         }
       }
     }
@@ -2285,24 +2291,40 @@ public class ProductCatalogGenerator implements IApplication
       String description = iu.getProperty(IInstallableUnit.PROP_DESCRIPTION, null);
       p2Task.setDescription(description);
 
-      if (osgiVersion.getMajor() >= 17)
+      if (osgiVersion.getMajor() >= 18)
       {
-        Annotation jreSpecifTasks = BaseFactory.eINSTANCE.createAnnotation(AnnotationConstants.ANNOTATION_JRE_SPECIFIC_TASKS);
+        Annotation jreSpecificTasks = BaseFactory.eINSTANCE.createAnnotation(AnnotationConstants.ANNOTATION_JRE_SPECIFIC_TASKS);
         EclipseIniTask addOpensJavaLangTask = SetupFactory.eINSTANCE.createEclipseIniTask();
         addOpensJavaLangTask.setOption("--add-opens=java.base/java.lang=ALL-UNNAMED");
         addOpensJavaLangTask.setVm(true);
-        jreSpecifTasks.getContents().add(addOpensJavaLangTask);
-        p2Task.getAnnotations().add(jreSpecifTasks);
+        jreSpecificTasks.getContents().add(addOpensJavaLangTask);
+
+        EclipseIniTask allowSecurityManagerTask = SetupFactory.eINSTANCE.createEclipseIniTask();
+        allowSecurityManagerTask.setOption("-Djava.security.manager");
+        allowSecurityManagerTask.setValue("=allow");
+        allowSecurityManagerTask.setVm(true);
+        jreSpecificTasks.getContents().add(allowSecurityManagerTask);
+
+        p2Task.getAnnotations().add(jreSpecificTasks);
+      }
+      else if (osgiVersion.getMajor() >= 17)
+      {
+        Annotation jreSpecificTasks = BaseFactory.eINSTANCE.createAnnotation(AnnotationConstants.ANNOTATION_JRE_SPECIFIC_TASKS);
+        EclipseIniTask addOpensJavaLangTask = SetupFactory.eINSTANCE.createEclipseIniTask();
+        addOpensJavaLangTask.setOption("--add-opens=java.base/java.lang=ALL-UNNAMED");
+        addOpensJavaLangTask.setVm(true);
+        jreSpecificTasks.getContents().add(addOpensJavaLangTask);
+        p2Task.getAnnotations().add(jreSpecificTasks);
       }
       else if (osgiVersion.getMajor() >= 16)
       {
-        Annotation jreSpecifTasks = BaseFactory.eINSTANCE.createAnnotation(AnnotationConstants.ANNOTATION_JRE_SPECIFIC_TASKS);
+        Annotation jreSpecificTasks = BaseFactory.eINSTANCE.createAnnotation(AnnotationConstants.ANNOTATION_JRE_SPECIFIC_TASKS);
         EclipseIniTask illegalAccessTask = SetupFactory.eINSTANCE.createEclipseIniTask();
         illegalAccessTask.setOption("--illegal-access");
         illegalAccessTask.setValue("=permit");
         illegalAccessTask.setVm(true);
-        jreSpecifTasks.getContents().add(illegalAccessTask);
-        p2Task.getAnnotations().add(jreSpecifTasks);
+        jreSpecificTasks.getContents().add(illegalAccessTask);
+        p2Task.getAnnotations().add(jreSpecificTasks);
       }
 
       jreMacro.getSetupTasks().add(p2Task);
