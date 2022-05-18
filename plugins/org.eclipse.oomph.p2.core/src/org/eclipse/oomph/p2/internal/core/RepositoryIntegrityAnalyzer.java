@@ -184,6 +184,18 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         X509Certificate certificate1 = (X509Certificate)o1.get(0);
         X509Certificate certificate2 = (X509Certificate)o2.get(0);
         result = certificate1.getSubjectX500Principal().getName().compareTo(certificate2.getSubjectX500Principal().getName());
+        if (result == 0)
+        {
+          result = certificate1.getNotBefore().compareTo(certificate2.getNotBefore());
+          if (result == 0)
+          {
+            result = certificate1.getNotAfter().compareTo(certificate2.getNotAfter());
+            if (result == 0 && !certificate1.equals(certificate2))
+            {
+              result = Integer.compare(certificate1.hashCode(), certificate2.hashCode());
+            }
+          }
+        }
       }
 
       return result;
@@ -1909,6 +1921,64 @@ public class RepositoryIntegrityAnalyzer implements IApplication
                     {
                       Certificate[] certificateChain = signerInfo.getCertificateChain();
                       List<Certificate> certificateList = Arrays.asList(certificateChain);
+
+                      if (file.toString().contains("org.eclipse.emf.databinding_1.6.0.v20220516-1117.jar"))
+                      {
+                        for (Certificate certificate : certificateChain)
+                        {
+                          SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy'-'MM'-'dd");
+                          X509Certificate x509Certificate = (X509Certificate)certificate;
+                          String notBefore = dateFormat.format(x509Certificate.getNotBefore());
+                          String notAfter = dateFormat.format(x509Certificate.getNotAfter());
+                          X500Principal subjectX500Principal = x509Certificate.getSubjectX500Principal();
+                          String name = subjectX500Principal.getName();
+                          Pattern namePattern = Pattern.compile("([A-Za-z]+)=(([^,\\\\]|\\\\,)+),");
+                          Matcher matcher = namePattern.matcher(name);
+                          Map<String, String> components = new LinkedHashMap<>();
+                          while (matcher.find())
+                          {
+                            components.put(matcher.group(1), matcher.group(2).replaceAll("\\\\", ""));
+                          }
+
+                          components.put("from", notBefore);
+                          components.put("to", notAfter);
+
+                          System.err.println("###1" + components);
+                          break;
+                        }
+
+                        for (List<Certificate> list : certificates.keySet())
+                        {
+                          if (list.equals(certificateList))
+                          {
+                            System.err.println("###");
+                          }
+
+                          for (Certificate certificate : list)
+                          {
+                            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy'-'MM'-'dd");
+                            X509Certificate x509Certificate = (X509Certificate)certificate;
+                            String notBefore = dateFormat.format(x509Certificate.getNotBefore());
+                            String notAfter = dateFormat.format(x509Certificate.getNotAfter());
+                            X500Principal subjectX500Principal = x509Certificate.getSubjectX500Principal();
+                            String name = subjectX500Principal.getName();
+                            Pattern namePattern = Pattern.compile("([A-Za-z]+)=(([^,\\\\]|\\\\,)+),");
+                            Matcher matcher = namePattern.matcher(name);
+                            Map<String, String> components = new LinkedHashMap<>();
+                            while (matcher.find())
+                            {
+                              components.put(matcher.group(1), matcher.group(2).replaceAll("\\\\", ""));
+                            }
+
+                            components.put("from", notBefore);
+                            components.put("to", notAfter);
+
+                            System.err.println("###Other" + components);
+                            break;
+                          }
+                        }
+                      }
+
                       Map<String, IInstallableUnit> artifacts = certificates.get(certificateList);
                       if (artifacts == null)
                       {
@@ -3519,7 +3589,96 @@ public class RepositoryIntegrityAnalyzer implements IApplication
                     return null;
                   }
 
-                  return verifierFactory.getSignedContent(targetFile);
+                  SignedContent signedContent2 = verifierFactory.getSignedContent(targetFile);
+                  if (file.toString().contains("org.eclipse.emf.databinding_1.6.0.v20220516-1117.jar"))
+                  {
+                    if (signedContent2 != null && signedContent2.isSigned())
+                    {
+                      Certificate c1 = null;
+                      Certificate c2 = null;
+
+                      SignedContent signedContent3 = verifierFactory.getSignedContent(new File(
+                          "D:\\Users\\merks\\oomph-1.25\\git\\org.eclipse.oomph\\plugins\\org.eclipse.oomph.p2.core\\report\\platform\\artifacts\\plugins\\org.eclipse.swt.examples_3.107.300.v20220418-1921.jar"));
+
+                      {
+                        SignerInfo[] signerInfos = signedContent2.getSignerInfos();
+                        for (SignerInfo signerInfo : signerInfos)
+                        {
+                          Certificate[] certificateChain = signerInfo.getCertificateChain();
+                          for (Certificate certificate : certificateChain)
+                          {
+                            if (c1 == null)
+                            {
+                              c1 = certificate;
+                            }
+
+                            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy'-'MM'-'dd");
+                            X509Certificate x509Certificate = (X509Certificate)certificate;
+                            String notBefore = dateFormat.format(x509Certificate.getNotBefore());
+                            String notAfter = dateFormat.format(x509Certificate.getNotAfter());
+                            X500Principal subjectX500Principal = x509Certificate.getSubjectX500Principal();
+                            String name = subjectX500Principal.getName();
+                            Pattern namePattern = Pattern.compile("([A-Za-z]+)=(([^,\\\\]|\\\\,)+),");
+                            Matcher matcher = namePattern.matcher(name);
+                            Map<String, String> components = new LinkedHashMap<>();
+                            while (matcher.find())
+                            {
+                              components.put(matcher.group(1), matcher.group(2).replaceAll("\\\\", ""));
+                            }
+
+                            components.put("from", notBefore);
+                            components.put("to", notAfter);
+
+                            System.err.println("###1" + components);
+                            break;
+                          }
+                        }
+                      }
+                      {
+                        SignerInfo[] signerInfos = signedContent3.getSignerInfos();
+                        for (SignerInfo signerInfo : signerInfos)
+                        {
+                          Certificate[] certificateChain = signerInfo.getCertificateChain();
+                          for (Certificate certificate : certificateChain)
+                          {
+                            if (c2 == null)
+                            {
+                              c2 = certificate;
+                            }
+
+                            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy'-'MM'-'dd");
+                            X509Certificate x509Certificate = (X509Certificate)certificate;
+                            String notBefore = dateFormat.format(x509Certificate.getNotBefore());
+                            String notAfter = dateFormat.format(x509Certificate.getNotAfter());
+                            X500Principal subjectX500Principal = x509Certificate.getSubjectX500Principal();
+                            String name = subjectX500Principal.getName();
+                            Pattern namePattern = Pattern.compile("([A-Za-z]+)=(([^,\\\\]|\\\\,)+),");
+                            Matcher matcher = namePattern.matcher(name);
+                            Map<String, String> components = new LinkedHashMap<>();
+                            while (matcher.find())
+                            {
+                              components.put(matcher.group(1), matcher.group(2).replaceAll("\\\\", ""));
+                            }
+
+                            components.put("from", notBefore);
+                            components.put("to", notAfter);
+
+                            System.err.println("###2" + components);
+                            break;
+                          }
+                        }
+                      }
+
+                      System.err.println("###");
+                      if (c1.equals(c2))
+                      {
+                        System.err.println("###!!");
+
+                      }
+                    }
+                  }
+
+                  return signedContent2;
                 }
               });
 
