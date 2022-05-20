@@ -821,7 +821,10 @@ public class CachingRepositoryManager<T>
 
             // We don't expect to have repeated requests for the same artifact.
             // But this does happen if it's a .pack.gz produced by a version of Java newer than the version of Java being used by this process.
-            monitor.subTask(NLS.bind(Messages.CachingRepositoryManager_RepeatedDownload_task, artifactURI));
+            if (artifactURI.toString().endsWith(".jar.pack.gz")) //$NON-NLS-1$
+            {
+              monitor.subTask(NLS.bind(Messages.CachingRepositoryManager_RepeatedDownload_task, artifactURI));
+            }
           }
 
           // Use this location in the mirror instead of the original URI.

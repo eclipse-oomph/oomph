@@ -61,6 +61,8 @@ public final class JREManager
 
   public static final JREManager INSTANCE = new JREManager();
 
+  public static final int CURRENT_LTS_VERSION = Integer.valueOf(17).intValue();
+
   private static final String PROP_DEFAULT_JRE = "oomph.default.jres"; //$NON-NLS-1$
 
   private final List<String> javaHomes = new ArrayList<>();

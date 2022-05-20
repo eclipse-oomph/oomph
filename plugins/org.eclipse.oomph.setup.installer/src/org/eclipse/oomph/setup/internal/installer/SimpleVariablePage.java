@@ -2261,6 +2261,13 @@ public class SimpleVariablePage extends SimpleInstallerPage
           {
             return true;
           }
+
+          // If it's a shell for a dialog implemented provided by p2 then treat it as modal.
+          Object data = shell.getData();
+          if (data != null && data.getClass().getName().matches("org\\.eclipse\\.equinox\\..*\\.p2\\..*")) //$NON-NLS-1$
+          {
+            return true;
+          }
         }
       }
 

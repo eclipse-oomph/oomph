@@ -1279,7 +1279,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
   {
     if (defaultSize == null)
     {
-      defaultSize = computeSize(drawable, getDefaultFont(), 37, 38);
+      defaultSize = computeSize(drawable, getDefaultFont(), 45, 38);
     }
 
     return defaultSize;
