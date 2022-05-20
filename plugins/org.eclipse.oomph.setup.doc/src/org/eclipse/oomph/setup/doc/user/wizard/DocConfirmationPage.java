@@ -39,7 +39,7 @@ import java.util.Map;
 public class DocConfirmationPage
 {
   /**
-   * @snippet image ConfirmationPage.images
+   * @snip image ConfirmationPage.images
    * @style box
    * @description
    * The page has the following controls:

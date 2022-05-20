@@ -145,32 +145,32 @@ public abstract class DocConceptOverview
   protected abstract void setupOverviewDiagram();
 
   /*
-   * @snippet tree org.eclipse.setup.tree /setups/org.eclipse.setup?prune:/org.eclipse.oomph.setup.Project
+   * @snip tree org.eclipse.setup.tree /setups/org.eclipse.setup?prune:/org.eclipse.oomph.setup.Project
    * @title org.eclipse.setup
    */
   protected abstract void index();
 
   /*
-   * @snippet tree Oomph.setup.tree /setups/Oomph.setup?editor://org.eclipse.oomph.setup.presentation.SetupEditorID/Outline?/org.eclipse.oomph.setup.Project
+   * @snip tree Oomph.setup.tree /setups/Oomph.setup?editor://org.eclipse.oomph.setup.presentation.SetupEditorID/Outline?/org.eclipse.oomph.setup.Project
    * @title Oomph.setup
    */
   protected abstract void oomphSetup();
 
   /*
-   * @snippet tree Setup.genmodel.tree /org.eclipse.oomph.setup/model/Setup.genmodel#//setup/SetupTask
+   * @snip tree Setup.genmodel.tree /org.eclipse.oomph.setup/model/Setup.genmodel#//setup/SetupTask
    * /org.eclipse.oomph.setup/model/Setup.genmodel?editor://org.eclipse.emf.codegen.ecore.genmodel.presentation.GenModelEditorID
    * @title Setup.genmodel
    */
   protected abstract void setupGenModel();
 
   /*
-   * @snippet tree Setup.ecore.tree /org.eclipse.oomph.setup/model/Setup.ecore?editor://org.eclipse.emf.ecore.presentation.EcoreEditorID
+   * @snip tree Setup.ecore.tree /org.eclipse.oomph.setup/model/Setup.ecore?editor://org.eclipse.emf.ecore.presentation.EcoreEditorID
    * @title Setup.genmodel
    */
   protected abstract void setupEcoreModel();
 
   /*
-   * @snippet tree PackageExplorer.tree
+   * @snip tree PackageExplorer.tree
    * viewer://org.eclipse.jdt.ui.PackageExplorer?/org.eclipse.jdt.core:org.eclipse.jdt.internal.core.JarPackageFragmentRoot/org
    * .eclipse.jdt.core:org.eclipse.jdt.internal.core.ExternalPackageFragmentRoot
    * @title Package Explorer

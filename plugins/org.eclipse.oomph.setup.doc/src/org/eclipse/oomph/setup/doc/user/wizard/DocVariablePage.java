@@ -38,7 +38,7 @@ import org.eclipse.swt.widgets.Shell;
 public class DocVariablePage
 {
   /**
-   * @snippet image PromptPage.images
+   * @snip image PromptPage.images
    * @style box
    * @description
    * The page has the following controls:
@@ -107,7 +107,7 @@ public class DocVariablePage
   }
 
   /**
-   * @snippet image VariablePageExtras.images
+   * @snip image VariablePageExtras.images
    */
   public static Image[] promptPageExtras()
   {

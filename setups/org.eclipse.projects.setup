@@ -1112,6 +1112,7 @@
   <project href="https://raw.githubusercontent.com/eclipse/n4js/master/releng/org.eclipse.n4js.targetplatform/N4JS.setup#/"/>
   <project href="http://git.eclipse.org/c/ocl/org.eclipse.ocl.git/plain/releng/org.eclipse.ocl.oomph/setups/ocl.setup#/"/>
   <project href="Oomph.setup#/"/>
+  <project href="interim/Orbit.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse/packagedrone/master/setups/org.eclipse.packagedrone.oomph/PackageDrone.setup#/"/>
   <project href="http://git.eclipse.org/c/papyrus/org.eclipse.papyrus.git/plain/releng/org.eclipse.papyrus.oomph/setups/papyrus.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-passage/passage/master/releng/org.eclipse.passage.releng/passage.setup#/"/>

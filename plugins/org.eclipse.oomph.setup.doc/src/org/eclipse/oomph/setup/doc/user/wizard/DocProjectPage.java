@@ -46,7 +46,7 @@ import java.util.Map;
 public abstract class DocProjectPage
 {
   /**
-   * @snippet image ProjectPage.images
+   * @snip image ProjectPage.images
    * @style box
    * @description
    * The page contains the following controls:

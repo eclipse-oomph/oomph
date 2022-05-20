@@ -39,7 +39,7 @@ import org.eclipse.swt.widgets.Shell;
 public abstract class DocImportWizard extends DocInstallWizard
 {
   /**
-   * @snippet image ProjectImportWizard.images
+   * @snip image ProjectImportWizard.images
    */
   public static Image projectImporter()
   {

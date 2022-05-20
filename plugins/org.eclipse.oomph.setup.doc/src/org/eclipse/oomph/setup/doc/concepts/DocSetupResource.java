@@ -39,7 +39,7 @@ import org.eclipse.oomph.setup.doc.user.wizard.DocProjectPage;
 public abstract class DocSetupResource
 {
   /**
-   * @snippet xml org.eclipse.setup /setups/org.eclipse.setup
+   * @snip xml org.eclipse.setup /setups/org.eclipse.setup
    */
   public abstract void indexXMI();
 
@@ -55,7 +55,7 @@ public abstract class DocSetupResource
   public abstract static class DocIndexResource
   {
     /**
-     * @snippet tree org.eclipse.setup.tree /setups/org.eclipse.setup?prune:/org.eclipse.oomph.setup.Project#/
+     * @snip tree org.eclipse.setup.tree /setups/org.eclipse.setup?prune:/org.eclipse.oomph.setup.Project#/
      * @title org.eclipse.setup
      * @expandTo 1
      */

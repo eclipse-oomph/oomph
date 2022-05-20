@@ -1148,8 +1148,8 @@ public final class UIUtil
    * the runnable will timer executed again,
    * without calling {@link #perform() perform}.
    * Otherwise, run will call perform to finally perform the delayed behavior.
-   * The {@link #prepareForDispatch() prepareForDispatch} method will be called immediate before any timer execute.
-   * In this default implementation is does nothing.
+   * The {@link #prepareForDispatch() prepareForDispatch} method will be called immediately before any timer execute.
+   * In this default implementation it does nothing.
    * If the control specified in the constructor is disposed when run is called, run will do nothing.
    *
    * @author Ed Merks

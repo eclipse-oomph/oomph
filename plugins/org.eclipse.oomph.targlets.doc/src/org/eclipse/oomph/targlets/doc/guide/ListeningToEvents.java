@@ -55,7 +55,7 @@ public class ListeningToEvents
 }
 
 /**
- * @snippet
+ * @snip
  */
 class TargletContainerEventLogger implements ITargletContainerListener
 {

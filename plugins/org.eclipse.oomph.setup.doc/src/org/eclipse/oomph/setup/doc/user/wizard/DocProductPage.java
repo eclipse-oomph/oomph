@@ -37,7 +37,7 @@ import org.eclipse.swt.graphics.Image;
 public class DocProductPage
 {
   /**
-   * @snippet image ProductPage.images
+   * @snip image ProductPage.images
    * @style box
    * @description The page contains the following controls:
    * @callout

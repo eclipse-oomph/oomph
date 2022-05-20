@@ -51,7 +51,7 @@ import java.util.Iterator;
 public abstract class DocUpdateWizard extends DocInstallWizard
 {
   /**
-   * @snippet image UpdateWizard.images
+   * @snip image UpdateWizard.images
    */
   public static Image updater()
   {

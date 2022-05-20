@@ -58,7 +58,7 @@ import java.util.Collections;
 public abstract class DocInstallWizard
 {
   /**
-   * @snippet image InstallerFooter.images
+   * @snip image InstallerFooter.images
    * @description The wizards's footer contains the following:
    * @callout
    * {@link #helpDescription()}
@@ -218,7 +218,7 @@ public abstract class DocInstallWizard
   }
 
   /**
-   * @snippet image InstallerWizard.images
+   * @snip image InstallerWizard.images
    */
   public static Image installer()
   {
@@ -226,7 +226,7 @@ public abstract class DocInstallWizard
   }
 
   /**
-   * @snippet image WizardFooter.images
+   * @snip image WizardFooter.images
    * @description The wizard's footer contain the following controls:
    * @callout
    * {@link #helpDescription()}
@@ -246,35 +246,35 @@ public abstract class DocInstallWizard
   }
 
   /**
-   * @snippet html
+   * @snip html
    * @description
    * Brings up this help.
    */
   public abstract void helpDescription();
 
   /**
-   * @snippet html
+   * @snip html
    * @description
    * Navigates to the previous page.
    */
   public abstract void backDescription();
 
   /**
-   * @snippet html
+   * @snip html
    * @description
    * Navigates to the next page.
    */
   public abstract void nextDescription();
 
   /**
-   * @snippet html
+   * @snip html
    * @description
    * Completes the wizard, performing any final actions.
    */
   public abstract void finishDescription();
 
   /**
-   * @snippet html
+   * @snip html
    * @description
    * Closes the wizard, taking no further action.
    */

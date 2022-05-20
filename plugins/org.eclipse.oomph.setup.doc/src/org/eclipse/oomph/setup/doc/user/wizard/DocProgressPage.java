@@ -49,7 +49,7 @@ import java.util.Map;
 public class DocProgressPage
 {
   /**
-   * @snippet image ProgressPage.images
+   * @snip image ProgressPage.images
    * @style box
    * @description
    * The page contains the following controls:
