@@ -485,7 +485,6 @@ public class IndexManager
                 if (key != null && value != null)
                 {
                   safeProperties.put(key.toString(), value.toString());
-                  System.out.println(entry);
                 }
               }
             }
