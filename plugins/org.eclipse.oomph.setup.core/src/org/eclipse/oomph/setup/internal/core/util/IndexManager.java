@@ -17,8 +17,12 @@ import org.eclipse.oomph.base.util.ArchiveResourceImpl;
 import org.eclipse.oomph.base.util.BaseResourceFactoryImpl;
 import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.internal.setup.SetupProperties;
+import org.eclipse.oomph.p2.core.P2Util;
+import org.eclipse.oomph.p2.internal.core.PGPKeyResourceImpl;
+import org.eclipse.oomph.setup.AnnotationConstants;
 import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
+import org.eclipse.oomph.setup.internal.core.SetupCorePlugin;
 import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.StringUtil;
@@ -33,10 +37,20 @@ import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
+import org.eclipse.equinox.internal.p2.metadata.InstallableUnit;
+import org.eclipse.equinox.p2.metadata.IInstallableUnit;
+import org.eclipse.equinox.p2.metadata.expression.IMatchExpression;
+import org.eclipse.equinox.p2.repository.spi.PGPPublicKeyService;
+
+import org.bouncycastle.openpgp.PGPPublicKey;
+
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Properties;
 import java.util.Set;
 
 /**
@@ -80,6 +94,8 @@ public class IndexManager
     URI uri = resource.getURI();
     URIConverter uriConverter = resource.getResourceSet().getURIConverter();
     URI indexLocation = uriConverter.normalize(uri);
+
+    handleTrust(index);
 
     return addIndex(indexLocation, index.getName(), false);
   }
@@ -443,6 +459,93 @@ public class IndexManager
         BaseUtil.saveEObject(annotation);
       }
     }, resourceSet.getURIConverter(), indicesLocation);
+  }
+
+  private static void handleTrust(Index index)
+  {
+    try
+    {
+      IInstallableUnit contextIU = null;
+      PGPPublicKeyService keyService = null;
+      for (Annotation annotation : index.getAnnotations())
+      {
+        IMatchExpression<IInstallableUnit> filter = getFilter(annotation);
+        if (filter != null)
+        {
+          if (contextIU == null)
+          {
+            Map<String, String> safeProperties = new LinkedHashMap<>();
+            Properties properties = System.getProperties();
+            synchronized (properties)
+            {
+              for (Entry<Object, Object> entry : properties.entrySet())
+              {
+                Object key = entry.getKey();
+                Object value = entry.getValue();
+                if (key != null && value != null)
+                {
+                  safeProperties.put(key.toString(), value.toString());
+                  System.out.println(entry);
+                }
+              }
+            }
+
+            contextIU = InstallableUnit.contextIU(safeProperties);
+          }
+
+          if (!filter.isMatch(contextIU))
+          {
+            continue;
+          }
+        }
+
+        if (keyService == null)
+        {
+          keyService = P2Util.getCurrentProvisioningAgent().getService(PGPPublicKeyService.class);
+        }
+
+        Set<PGPPublicKey> keys = new LinkedHashSet<>();
+        for (EObject eObject : annotation.getReferences())
+        {
+          Resource resource = eObject.eResource();
+          if (resource instanceof PGPKeyResourceImpl)
+          {
+            for (PGPPublicKey key : ((PGPKeyResourceImpl)resource).getPublicKeys())
+            {
+              keys.add(keyService.addKey(key));
+            }
+          }
+        }
+
+        if (!keys.isEmpty())
+        {
+          P2Util.addedTrustedKeys(P2Util.getAgentManager().getCurrentAgent().getCurrentProfile(), keys);
+        }
+      }
+    }
+    catch (Exception ex)
+    {
+      SetupCorePlugin.INSTANCE.log(ex);
+    }
+  }
+
+  private static IMatchExpression<IInstallableUnit> getFilter(Annotation annotation)
+  {
+    String filter = annotation.getDetails().get(AnnotationConstants.KEY_FILTER);
+    if (!StringUtil.isEmpty(filter))
+    {
+      try
+      {
+        IMatchExpression<IInstallableUnit> matchExpression = InstallableUnit.parseFilter(filter);
+        return matchExpression;
+      }
+      catch (Exception ex)
+      {
+        SetupCorePlugin.INSTANCE.log(ex);
+      }
+    }
+
+    return null;
   }
 
   public static URI getUnderlyingLocation(URI indexLocation)

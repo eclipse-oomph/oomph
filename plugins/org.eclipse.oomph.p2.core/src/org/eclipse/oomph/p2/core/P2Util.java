@@ -156,6 +156,8 @@ public final class P2Util
         {
           target.put(key, source.get(key, null));
         }
+
+        target.flush();
       }
       catch (BackingStoreException ex)
       {
@@ -174,125 +176,145 @@ public final class P2Util
   @SuppressWarnings("restriction")
   public static void mergeGlobalTrustPreferences(Profile profile)
   {
-    // Copy the global preference settings into the current agent's profile preferences.
-    org.eclipse.equinox.internal.p2.engine.phases.CertificateChecker currentCertificateChecker = createCertificateCheker(profile);
-
-    File globalTrustFolder = getGlobalTrustFolder();
-
-    boolean trustAlways = "true".equals(PropertiesUtil.getProperties(new File(globalTrustFolder, PREFERENCES_FILE_NAME)) //$NON-NLS-1$
-        .getOrDefault(org.eclipse.equinox.internal.p2.engine.phases.CertificateChecker.TRUST_ALWAYS_PROPERTY, "false")); //$NON-NLS-1$
-    CertificateFactory certificateFactory = null;
-    try
+    synchronized (profile)
     {
-      certificateFactory = CertificateFactory.getInstance("X.509"); //$NON-NLS-1$
-    }
-    catch (CertificateException ex)
-    {
-      P2CorePlugin.INSTANCE.log(ex);
-    }
+      // Copy the global preference settings into the current agent's profile preferences.
+      org.eclipse.equinox.internal.p2.engine.phases.CertificateChecker currentCertificateChecker = createCertificateCheker(profile);
 
-    org.eclipse.equinox.internal.p2.artifact.processors.pgp.PGPPublicKeyStore trustedKeys = new org.eclipse.equinox.internal.p2.artifact.processors.pgp.PGPPublicKeyStore();
-    Set<Certificate> trustedCertificates = new LinkedHashSet<>();
-    for (File file : globalTrustFolder.listFiles())
-    {
-      String name = file.getName();
-      if (name.endsWith(PGP_KEY_FILE_EXTENSION))
+      File globalTrustFolder = getGlobalTrustFolder();
+
+      boolean trustAlways = "true".equals(PropertiesUtil.getProperties(new File(globalTrustFolder, PREFERENCES_FILE_NAME)) //$NON-NLS-1$
+          .getOrDefault(org.eclipse.equinox.internal.p2.engine.phases.CertificateChecker.TRUST_ALWAYS_PROPERTY, "false")); //$NON-NLS-1$
+      CertificateFactory certificateFactory = null;
+      try
       {
-        trustedKeys.add(file);
+        certificateFactory = CertificateFactory.getInstance("X.509"); //$NON-NLS-1$
       }
-      else if (certificateFactory != null && name.endsWith(X509_CERTIFICATE_FILE_EXTENSION))
+      catch (CertificateException ex)
       {
-        try (InputStream input = new BufferedInputStream(Files.newInputStream(file.toPath())))
+        P2CorePlugin.INSTANCE.log(ex);
+      }
+
+      org.eclipse.equinox.internal.p2.artifact.processors.pgp.PGPPublicKeyStore trustedKeys = new org.eclipse.equinox.internal.p2.artifact.processors.pgp.PGPPublicKeyStore();
+      Set<Certificate> trustedCertificates = new LinkedHashSet<>();
+      for (File file : globalTrustFolder.listFiles())
+      {
+        String name = file.getName();
+        if (name.endsWith(PGP_KEY_FILE_EXTENSION))
         {
-          Collection<? extends Certificate> certificates = certificateFactory.generateCertificates(input);
-          trustedCertificates.addAll(certificates);
+          trustedKeys.add(file);
         }
-        catch (Exception ex)
+        else if (certificateFactory != null && name.endsWith(X509_CERTIFICATE_FILE_EXTENSION))
         {
-          P2CorePlugin.INSTANCE.log(ex);
+          try (InputStream input = new BufferedInputStream(Files.newInputStream(file.toPath())))
+          {
+            Collection<? extends Certificate> certificates = certificateFactory.generateCertificates(input);
+            trustedCertificates.addAll(certificates);
+          }
+          catch (Exception ex)
+          {
+            P2CorePlugin.INSTANCE.log(ex);
+          }
         }
       }
-    }
 
-    trustedCertificates.addAll(currentCertificateChecker.getPreferenceTrustedCertificates());
-    for (PGPPublicKey key : currentCertificateChecker.getPreferenceTrustedKeys().all())
+      trustedCertificates.addAll(currentCertificateChecker.getPreferenceTrustedCertificates());
+      for (PGPPublicKey key : currentCertificateChecker.getPreferenceTrustedKeys().all())
+      {
+        trustedKeys.addKey(key);
+      }
+
+      currentCertificateChecker.setTrustAlways(trustAlways);
+      currentCertificateChecker.persistTrustedCertificates(trustedCertificates);
+      currentCertificateChecker.persistTrustedKeys(trustedKeys);
+    }
+  }
+
+  @SuppressWarnings("restriction")
+  public static void addedTrustedKeys(Profile profile, Collection<? extends PGPPublicKey> keys)
+  {
+    synchronized (profile)
     {
-      trustedKeys.addKey(key);
-    }
+      // Copy the global preference settings into the current agent's profile preferences.
+      org.eclipse.equinox.internal.p2.engine.phases.CertificateChecker currentCertificateChecker = createCertificateCheker(profile);
 
-    currentCertificateChecker.setTrustAlways(trustAlways);
-    currentCertificateChecker.persistTrustedCertificates(trustedCertificates);
-    currentCertificateChecker.persistTrustedKeys(trustedKeys);
+      org.eclipse.equinox.internal.p2.artifact.processors.pgp.PGPPublicKeyStore preferenceTrustedKeys = currentCertificateChecker.getPreferenceTrustedKeys();
+      keys.forEach(preferenceTrustedKeys::addKey);
+      currentCertificateChecker.persistTrustedKeys(preferenceTrustedKeys);
+    }
   }
 
   @SuppressWarnings("restriction")
   public static void saveGlobalTrustPreferences(Profile profile, boolean strict)
   {
-    org.eclipse.equinox.internal.p2.engine.phases.CertificateChecker certificateChecker = createCertificateCheker(profile);
-
-    boolean trustAlways = certificateChecker.isTrustAlways();
-    Set<? extends Certificate> trustedCertificates = certificateChecker.getPreferenceTrustedCertificates();
-    org.eclipse.equinox.internal.p2.artifact.processors.pgp.PGPPublicKeyStore trustedKeys = certificateChecker.getPreferenceTrustedKeys();
-
-    File trustFolder = getGlobalTrustFolder();
-
-    File propertiesFile = new File(trustFolder, PREFERENCES_FILE_NAME);
-    Map<String, String> properties = PropertiesUtil.getProperties(propertiesFile);
-    properties.put(org.eclipse.equinox.internal.p2.engine.phases.CertificateChecker.TRUST_ALWAYS_PROPERTY, Boolean.toString(trustAlways));
-    PropertiesUtil.saveProperties(propertiesFile, properties, false);
-
-    Set<File> retainedFiles = new LinkedHashSet<>();
-
-    for (Certificate certificate : trustedCertificates)
+    synchronized (profile)
     {
-      try
+      org.eclipse.equinox.internal.p2.engine.phases.CertificateChecker certificateChecker = createCertificateCheker(profile);
+
+      boolean trustAlways = certificateChecker.isTrustAlways();
+      Set<? extends Certificate> trustedCertificates = certificateChecker.getPreferenceTrustedCertificates();
+      org.eclipse.equinox.internal.p2.artifact.processors.pgp.PGPPublicKeyStore trustedKeys = certificateChecker.getPreferenceTrustedKeys();
+
+      File trustFolder = getGlobalTrustFolder();
+
+      File propertiesFile = new File(trustFolder, PREFERENCES_FILE_NAME);
+      Map<String, String> properties = PropertiesUtil.getProperties(propertiesFile);
+      properties.put(org.eclipse.equinox.internal.p2.engine.phases.CertificateChecker.TRUST_ALWAYS_PROPERTY, Boolean.toString(trustAlways));
+      PropertiesUtil.saveProperties(propertiesFile, properties, false);
+
+      Set<File> retainedFiles = new LinkedHashSet<>();
+
+      for (Certificate certificate : trustedCertificates)
       {
-        byte[] encoded = certificate.getEncoded();
-        File certificateFile = new File(trustFolder,
-            PGPPublicKeyService.toHex(IOUtil.getSHA1(new ByteArrayInputStream(encoded))) + X509_CERTIFICATE_FILE_EXTENSION);
-        retainedFiles.add(certificateFile);
-        if (!certificateFile.isFile())
+        try
         {
-          try (OutputStream output = Files.newOutputStream(certificateFile.toPath()))
+          byte[] encoded = certificate.getEncoded();
+          File certificateFile = new File(trustFolder,
+              PGPPublicKeyService.toHex(IOUtil.getSHA1(new ByteArrayInputStream(encoded))) + X509_CERTIFICATE_FILE_EXTENSION);
+          retainedFiles.add(certificateFile);
+          if (!certificateFile.isFile())
           {
-            output.write(encoded);
+            try (OutputStream output = Files.newOutputStream(certificateFile.toPath()))
+            {
+              output.write(encoded);
+            }
           }
-        }
-      }
-      catch (Exception ex)
-      {
-        P2CorePlugin.INSTANCE.log(ex);
-      }
-    }
-
-    for (PGPPublicKey key : trustedKeys.all())
-    {
-      File keyFile = new File(trustFolder, PGPPublicKeyService.toHexFingerprint(key) + PGP_KEY_FILE_EXTENSION);
-      retainedFiles.add(keyFile);
-      if (!keyFile.isFile())
-      {
-        try (OutputStream output = new ArmoredOutputStream(new FileOutputStream(keyFile)))
-        {
-          key.encode(output);
         }
         catch (Exception ex)
         {
           P2CorePlugin.INSTANCE.log(ex);
         }
       }
-    }
 
-    if (strict)
-    {
-      for (File file : trustFolder.listFiles())
+      for (PGPPublicKey key : trustedKeys.all())
       {
-        if (!retainedFiles.contains(file))
+        File keyFile = new File(trustFolder, PGPPublicKeyService.toHexFingerprint(key) + PGP_KEY_FILE_EXTENSION);
+        retainedFiles.add(keyFile);
+        if (!keyFile.isFile())
         {
-
-          String name = file.getName();
-          if (name.endsWith(PGP_KEY_FILE_EXTENSION) || name.endsWith(X509_CERTIFICATE_FILE_EXTENSION))
+          try (OutputStream output = new ArmoredOutputStream(new FileOutputStream(keyFile)))
           {
-            IOUtil.deleteBestEffort(file, false);
+            key.encode(output);
+          }
+          catch (Exception ex)
+          {
+            P2CorePlugin.INSTANCE.log(ex);
+          }
+        }
+      }
+
+      if (strict)
+      {
+        for (File file : trustFolder.listFiles())
+        {
+          if (!retainedFiles.contains(file))
+          {
+
+            String name = file.getName();
+            if (name.endsWith(PGP_KEY_FILE_EXTENSION) || name.endsWith(X509_CERTIFICATE_FILE_EXTENSION))
+            {
+              IOUtil.deleteBestEffort(file, false);
+            }
           }
         }
       }

@@ -91,6 +91,10 @@ public final class AnnotationConstants
 
   public static final String ANNOTATION_CONFIGURATION_REFERENCE = "http://www.eclipse.org/oomph/setup/ConfigurationReference"; //$NON-NLS-1$
 
+  public static final String ANNOTATION_TRUSTED_KEYS = "http://www.eclipse.org/oomph/setup/TrustedKeys"; //$NON-NLS-1$
+
+  public static final String KEY_FILTER = "filter"; //$NON-NLS-1$
+
   private AnnotationConstants()
   {
   }

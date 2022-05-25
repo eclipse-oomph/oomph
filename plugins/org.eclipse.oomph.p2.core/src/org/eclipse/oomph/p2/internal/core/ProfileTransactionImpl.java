@@ -57,6 +57,7 @@ import org.eclipse.equinox.internal.p2.engine.InstallableUnitPropertyOperand;
 import org.eclipse.equinox.internal.p2.engine.Operand;
 import org.eclipse.equinox.internal.p2.engine.PropertyOperand;
 import org.eclipse.equinox.internal.p2.engine.ProvisioningPlan;
+import org.eclipse.equinox.internal.p2.engine.phases.CertificateChecker;
 import org.eclipse.equinox.internal.p2.metadata.IRequiredCapability;
 import org.eclipse.equinox.internal.p2.touchpoint.natives.IBackupStore;
 import org.eclipse.equinox.internal.p2.touchpoint.natives.NativeTouchpoint;
@@ -127,6 +128,8 @@ public class ProfileTransactionImpl implements ProfileTransaction
   public static final String PROP_ADDITIONAL_POOLS = "oomph.p2.additional.pools"; //$NON-NLS-1$
 
   public static final String ARTIFICIAL_ROOT_ID = "artificial_root"; //$NON-NLS-1$
+
+  public static final String EXCLUDE_IU_PROPERTY = "oomph.exclude"; //$NON-NLS-1$
 
   public static final String SOURCE_IU_ID = "org.eclipse.oomph.p2.source.container"; //$NON-NLS-1$
 
@@ -607,7 +610,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
         IInstallableUnit second = iuOperand.second();
         if (first == null)
         {
-          if (second.getId().equals(ARTIFICIAL_ROOT_ID))
+          if (second.getId().equals(ARTIFICIAL_ROOT_ID) || "true".equals(second.getProperty(EXCLUDE_IU_PROPERTY))) //$NON-NLS-1$
           {
             it.remove();
           }
@@ -745,6 +748,11 @@ public class ProfileTransactionImpl implements ProfileTransaction
       if (provisioningAgentKeyService != null)
       {
         selfAgent.registerService(PGPPublicKeyService.SERVICE_NAME, provisioningAgentKeyService);
+
+        // Because we might have added some keys in the installer initialization, ensure that those are loaded into the key service.
+        CertificateChecker certificateChecker = new CertificateChecker(provisioningAgent);
+        certificateChecker.setProfile(profile);
+        certificateChecker.getPreferenceTrustedKeys();
 
         cleanup.add(() -> {
           // Restore the key service to how it was.

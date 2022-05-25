@@ -16,6 +16,15 @@
     <reference
         href="org.eclipse.jres.setup#/"/>
   </annotation>
+  <annotation
+      source="http://www.eclipse.org/oomph/setup/TrustedKeys">
+    <detail
+        key="filter">
+      <value>(&amp;(|(eclipse.product=org.eclipse.oomph.setup.installer.product)(eclipse.product=org.eclipse.epp.package.*)(eclipse.product=org.eclipse.sdk.ide)(eclipse.product=org.eclipse.platform.ide)(org.eclipse.oomph.setup.trust.keys=true))(!(org.eclipse.oomph.setup.trust.keys=false)))</value>
+    </detail>
+    <reference
+        href="keys/trusted-keys.asc#/"/>
+  </annotation>
   <discoverablePackage
       href="models/Git.ecore#/"/>
   <discoverablePackage

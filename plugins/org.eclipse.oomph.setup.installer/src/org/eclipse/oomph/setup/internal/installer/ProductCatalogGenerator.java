@@ -58,9 +58,13 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
+import org.eclipse.equinox.internal.p2.artifact.processors.pgp.PGPPublicKeyStore;
+import org.eclipse.equinox.internal.p2.artifact.processors.pgp.PGPSignatureVerifier;
 import org.eclipse.equinox.internal.p2.metadata.IRequiredCapability;
 import org.eclipse.equinox.internal.p2.metadata.OSGiVersion;
+import org.eclipse.equinox.internal.provisional.p2.repository.DefaultPGPPublicKeyService;
 import org.eclipse.equinox.p2.core.ProvisionException;
+import org.eclipse.equinox.p2.metadata.IArtifactKey;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.IRequirement;
 import org.eclipse.equinox.p2.metadata.ITouchpointData;
@@ -75,9 +79,16 @@ import org.eclipse.equinox.p2.query.IQueryable;
 import org.eclipse.equinox.p2.query.QueryUtil;
 import org.eclipse.equinox.p2.repository.ICompositeRepository;
 import org.eclipse.equinox.p2.repository.IRepository;
+import org.eclipse.equinox.p2.repository.artifact.ArtifactKeyQuery;
+import org.eclipse.equinox.p2.repository.artifact.IArtifactDescriptor;
+import org.eclipse.equinox.p2.repository.artifact.IArtifactRepository;
+import org.eclipse.equinox.p2.repository.artifact.IArtifactRepositoryManager;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
+import org.eclipse.equinox.p2.repository.spi.PGPPublicKeyService;
 
+import org.bouncycastle.bcpg.ArmoredOutputStream;
+import org.bouncycastle.openpgp.PGPPublicKey;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -91,6 +102,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.StringReader;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -110,8 +122,10 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * @author Eike Stepper
@@ -181,6 +195,8 @@ public class ProductCatalogGenerator implements IApplication
 
   private static final Set<Integer> EXCLUDED_NON_LTS_JUSTJ_VERSIONS = Set.of(12, 13, 14, 15, 16);
 
+  private static final Pattern PUB = Pattern.compile("pub:([^:]+):.*");
+
   private URI outputLocation;
 
   private String stagingTrain;
@@ -205,7 +221,13 @@ public class ProductCatalogGenerator implements IApplication
 
   private final Map<String, Map<URI, Map<String, URI>>> sites = new LinkedHashMap<>();
 
+  private final PGPPublicKeyService keyService = getKeyService();
+
+  private final Map<String, PGPPublicKey> pgpKeys = new TreeMap<>();
+
   private final IMetadataRepositoryManager manager = getMetadataRepositoryManager();
+
+  private final IArtifactRepositoryManager artifactManager = getArtifactRepositoryManager();
 
   private final Map<String, IMetadataRepository> eppMetaDataRepositories = new HashMap<>();
 
@@ -222,6 +244,8 @@ public class ProductCatalogGenerator implements IApplication
   private final String[] TRAINS = getTrains();
 
   private URIConverter uriConverter;
+
+  private Agent agent;
 
   @Override
   public Object start(IApplicationContext context) throws Exception
@@ -546,11 +570,91 @@ public class ProductCatalogGenerator implements IApplication
         }
 
         resource.save(Collections.singletonMap(Resource.OPTION_SAVE_ONLY_IF_CHANGED, Resource.OPTION_SAVE_ONLY_IF_CHANGED_MEMORY_BUFFER));
+
+        savePGPKeys();
       }
     }
     catch (Exception ex)
     {
       ex.printStackTrace();
+    }
+  }
+
+  private void savePGPKeys() throws IOException
+  {
+    try
+    {
+      getPGPKeys(new java.net.URI("https://download.eclipse.org/staging/" + getMostRecentTrain()));
+    }
+    catch (Exception ex)
+    {
+      ex.printStackTrace();
+    }
+
+    for (PGPPublicKey key : new ArrayList<>(pgpKeys.values()))
+    {
+      pgpKeys.putAll(keyService.getVerifiedCertifications(key).stream().collect(Collectors.toMap(PGPPublicKeyService::toHexFingerprint, Function.identity())));
+    }
+
+    for (Entry<String, PGPPublicKey> entry : new LinkedHashSet<>(pgpKeys.entrySet()))
+    {
+      String fingerprint = entry.getKey();
+
+      List<String> ids = new ArrayList<>();
+      for (Iterator<String> userIDs = entry.getValue().getUserIDs(); userIDs.hasNext();)
+      {
+        String userID = userIDs.next();
+        ids.add(userID);
+      }
+
+      System.out.println(fingerprint + " -> " + String.join(",", ids));
+
+      String url = "https://keyserver.ubuntu.com/pks/lookup?search=0x" + fingerprint + "&fingerprint=on&options=mr&op=index";
+      String pub = null;
+      for (String line : IOUtil.readLines(uriConverter.createInputStream(URI.createURI(url)), "UTF-8"))
+      {
+        System.out.print("  ");
+        System.out.println(line);
+        Matcher matcher = PUB.matcher(line);
+        if (matcher.matches())
+        {
+          pub = matcher.group(1).toLowerCase();
+        }
+      }
+
+      if (!pub.equals(fingerprint))
+      {
+        // pgpKeys.remove(fingerprint);
+        System.out.println("  **removing this subkey**");
+      }
+
+      System.out.println();
+    }
+
+    URI trustedKeys = outputLocation.trimSegments(1).appendSegment("keys").appendSegment("trusted-keys.asc");
+    try (OutputStream out = new ArmoredOutputStream(uriConverter.createOutputStream(trustedKeys)))
+    {
+      for (PGPPublicKey key : pgpKeys.values())
+      {
+        key.encode(out);
+      }
+    }
+  }
+
+  private void getPGPKeys(java.net.URI uri) throws ProvisionException
+  {
+    IArtifactRepository repository = artifactManager.loadRepository(uri, null);
+    for (IArtifactKey key : repository.query(ArtifactKeyQuery.ALL_KEYS, null))
+    {
+      for (IArtifactDescriptor descriptor : repository.getArtifactDescriptors(key))
+      {
+        PGPPublicKeyStore keys = PGPSignatureVerifier.getKeys(descriptor);
+        for (PGPPublicKey pgpKey : keys.all())
+        {
+          String fingerPrint = PGPPublicKeyService.toHexFingerprint(pgpKey);
+          pgpKeys.computeIfAbsent(fingerPrint, it -> keyService.addKey(pgpKey));
+        }
+      }
     }
   }
 
@@ -684,6 +788,7 @@ public class ProductCatalogGenerator implements IApplication
 
       URI effectiveEPPURI = isStaging ? stagingEPPLocation : eppURI;
       IMetadataRepository eppMetaDataRepository = manager.loadRepository(new java.net.URI(effectiveEPPURI.toString()), null);
+      getPGPKeys(eppMetaDataRepository.getLocation());
       IMetadataRepository latestEPPMetaDataRepository = isStaging && stagingUseComposite || compositeTrains.contains(train) ? eppMetaDataRepository
           : getLatestRepository(manager, eppMetaDataRepository);
       if (latestEPPMetaDataRepository != eppMetaDataRepository)
@@ -1009,22 +1114,41 @@ public class ProductCatalogGenerator implements IApplication
     return uri;
   }
 
+  private Agent getAgent()
+  {
+    if (agent == null)
+    {
+      try
+      {
+        File agentLocation = File.createTempFile("test-", "-agent");
+        agentLocation.delete();
+        agentLocation.mkdirs();
+
+        agent = new AgentImpl(null, agentLocation);
+      }
+      catch (IOException ex)
+      {
+        throw new IORuntimeException(ex);
+      }
+    }
+    return agent;
+  }
+
+  private PGPPublicKeyService getKeyService()
+  {
+    DefaultPGPPublicKeyService service = (DefaultPGPPublicKeyService)getAgent().getProvisioningAgent().getService(PGPPublicKeyService.class);
+    service.setKeyServers(Set.of("keyserver.ubuntu.com"));
+    return service;
+  }
+
   private IMetadataRepositoryManager getMetadataRepositoryManager()
   {
-    try
-    {
-      File agentLocation = File.createTempFile("test-", "-agent");
-      agentLocation.delete();
-      agentLocation.mkdirs();
+    return getAgent().getMetadataRepositoryManager();
+  }
 
-      Agent agent = new AgentImpl(null, agentLocation);
-      IMetadataRepositoryManager manager = agent.getMetadataRepositoryManager();
-      return manager;
-    }
-    catch (IOException ex)
-    {
-      throw new IORuntimeException(ex);
-    }
+  private IArtifactRepositoryManager getArtifactRepositoryManager()
+  {
+    return getAgent().getArtifactRepositoryManager();
   }
 
   private IMetadataRepository getLatestRepository(IMetadataRepositoryManager manager, IMetadataRepository repository)
@@ -1056,6 +1180,7 @@ public class ProductCatalogGenerator implements IApplication
       throws URISyntaxException, ProvisionException
   {
     IMetadataRepository releaseMetaDataRepository = manager.loadRepository(new java.net.URI(uriConverter.normalize(releaseURI).toString()), null);
+    getPGPKeys(releaseMetaDataRepository.getLocation());
     IMetadataRepository result = releaseMetaDataRepository;
     if (loadLatestChild && releaseMetaDataRepository instanceof ICompositeRepository<?>)
     {
@@ -1317,6 +1442,7 @@ public class ProductCatalogGenerator implements IApplication
         try
         {
           IMetadataRepository eppMetadataRepository = manager.loadRepository(new java.net.URI(eppURI.toString()), null);
+          getPGPKeys(eppMetadataRepository.getLocation());
           if (!eppMetadataRepository.query(QueryUtil.createIUQuery(productName), null).iterator().hasNext())
           {
             eppURI = eppURI.trimSegments(1);
