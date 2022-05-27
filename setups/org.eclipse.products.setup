@@ -68,7 +68,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2022-06/m2/eclipse-ide-java-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2022-06/m3/eclipse-ide-java-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -115,9 +115,9 @@
         <requirement
             name="org.eclipse.wildwebdeveloper.xml.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2022-06/202205051200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2022-06/202205261200"/>
         <repository
-            url="https://download.eclipse.org/releases/2022-06/202205061000">
+            url="https://download.eclipse.org/releases/2022-06/202205271000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -194,7 +194,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2022-06/m2/eclipse-ide-java-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2022-06/m3/eclipse-ide-java-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -241,9 +241,9 @@
         <requirement
             name="org.eclipse.wildwebdeveloper.xml.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2022-06/202205051200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2022-06/202205261200"/>
         <repository
-            url="https://download.eclipse.org/releases/2022-06/202205061000">
+            url="https://download.eclipse.org/releases/2022-06/202205271000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -1792,7 +1792,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2022-06/m2/eclipse-ide-enterprise-java-and-web-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2022-06/m3/eclipse-ide-enterprise-java-and-web-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -1967,9 +1967,9 @@
         <requirement
             name="org.eclipse.wst.xsl.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2022-06/202205051200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2022-06/202205261200"/>
         <repository
-            url="https://download.eclipse.org/releases/2022-06/202205061000">
+            url="https://download.eclipse.org/releases/2022-06/202205271000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -2188,7 +2188,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2022-06/m2/eclipse-ide-enterprise-java-and-web-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2022-06/m3/eclipse-ide-enterprise-java-and-web-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -2363,9 +2363,9 @@
         <requirement
             name="org.eclipse.wst.xsl.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2022-06/202205051200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2022-06/202205261200"/>
         <repository
-            url="https://download.eclipse.org/releases/2022-06/202205061000">
+            url="https://download.eclipse.org/releases/2022-06/202205271000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -6258,7 +6258,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2022-06/m2/eclipse-ide-cc-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2022-06/m3/eclipse-ide-cc-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -6341,9 +6341,9 @@
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2022-06/202205051200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2022-06/202205261200"/>
         <repository
-            url="https://download.eclipse.org/releases/2022-06/202205061000">
+            url="https://download.eclipse.org/releases/2022-06/202205271000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -6456,7 +6456,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2022-06/m2/eclipse-ide-cc-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2022-06/m3/eclipse-ide-cc-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -6539,9 +6539,9 @@
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2022-06/202205051200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2022-06/202205261200"/>
         <repository
-            url="https://download.eclipse.org/releases/2022-06/202205061000">
+            url="https://download.eclipse.org/releases/2022-06/202205271000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -8662,7 +8662,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2022-06/m2/eclipse-ide-embedded-cc-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2022-06/m3/eclipse-ide-embedded-cc-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -8775,9 +8775,9 @@
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2022-06/202205051200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2022-06/202205261200"/>
         <repository
-            url="https://download.eclipse.org/releases/2022-06/202205061000">
+            url="https://download.eclipse.org/releases/2022-06/202205271000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -8920,7 +8920,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2022-06/m2/eclipse-ide-embedded-cc-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2022-06/m3/eclipse-ide-embedded-cc-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -9033,9 +9033,9 @@
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2022-06/202205051200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2022-06/202205261200"/>
         <repository
-            url="https://download.eclipse.org/releases/2022-06/202205061000">
+            url="https://download.eclipse.org/releases/2022-06/202205271000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -9857,7 +9857,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2022-06/m2/eclipse-ide-php-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2022-06/m3/eclipse-ide-php-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -9904,9 +9904,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2022-06/202205051200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2022-06/202205261200"/>
         <repository
-            url="https://download.eclipse.org/releases/2022-06/202205061000">
+            url="https://download.eclipse.org/releases/2022-06/202205271000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -9997,7 +9997,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2022-06/m2/eclipse-ide-php-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2022-06/m3/eclipse-ide-php-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -10044,9 +10044,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2022-06/202205051200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2022-06/202205261200"/>
         <repository
-            url="https://download.eclipse.org/releases/2022-06/202205061000">
+            url="https://download.eclipse.org/releases/2022-06/202205271000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -11559,7 +11559,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2022-06/m2/eclipse-ide-eclipse-committers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2022-06/m3/eclipse-ide-eclipse-committers</value>
         </detail>
         <detail
             key="shortcut">
@@ -11622,9 +11622,9 @@
         <requirement
             name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2022-06/202205051200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2022-06/202205261200"/>
         <repository
-            url="https://download.eclipse.org/releases/2022-06/202205061000">
+            url="https://download.eclipse.org/releases/2022-06/202205271000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -11755,7 +11755,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2022-06/m2/eclipse-ide-eclipse-committers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2022-06/m3/eclipse-ide-eclipse-committers</value>
         </detail>
         <detail
             key="shortcut">
@@ -11818,9 +11818,9 @@
         <requirement
             name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2022-06/202205051200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2022-06/202205261200"/>
         <repository
-            url="https://download.eclipse.org/releases/2022-06/202205061000">
+            url="https://download.eclipse.org/releases/2022-06/202205271000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -13977,7 +13977,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2022-06/m2/eclipse-ide-java-and-dsl-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2022-06/m3/eclipse-ide-java-and-dsl-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -14028,9 +14028,9 @@
         <requirement
             name="org.eclipse.xtext.sdk.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2022-06/202205051200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2022-06/202205261200"/>
         <repository
-            url="https://download.eclipse.org/releases/2022-06/202205061000">
+            url="https://download.eclipse.org/releases/2022-06/202205271000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -14111,7 +14111,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2022-06/m2/eclipse-ide-java-and-dsl-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2022-06/m3/eclipse-ide-java-and-dsl-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -14162,9 +14162,9 @@
         <requirement
             name="org.eclipse.xtext.sdk.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2022-06/202205051200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2022-06/202205261200"/>
         <repository
-            url="https://download.eclipse.org/releases/2022-06/202205061000">
+            url="https://download.eclipse.org/releases/2022-06/202205271000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -15451,7 +15451,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2022-06/m2/eclipse-ide-rcp-and-rap-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2022-06/m3/eclipse-ide-rcp-and-rap-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -15514,9 +15514,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2022-06/202205051200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2022-06/202205261200"/>
         <repository
-            url="https://download.eclipse.org/releases/2022-06/202205061000">
+            url="https://download.eclipse.org/releases/2022-06/202205271000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -15609,7 +15609,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2022-06/m2/eclipse-ide-rcp-and-rap-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2022-06/m3/eclipse-ide-rcp-and-rap-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -15672,9 +15672,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2022-06/202205051200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2022-06/202205261200"/>
         <repository
-            url="https://download.eclipse.org/releases/2022-06/202205061000">
+            url="https://download.eclipse.org/releases/2022-06/202205271000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -17495,7 +17495,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2022-06/m2/eclipse-modeling-tools</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2022-06/m3/eclipse-modeling-tools</value>
         </detail>
         <detail
             key="shortcut">
@@ -17572,9 +17572,9 @@
         <requirement
             name="org.eclipse.xsd.sdk.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2022-06/202205051200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2022-06/202205261200"/>
         <repository
-            url="https://download.eclipse.org/releases/2022-06/202205061000">
+            url="https://download.eclipse.org/releases/2022-06/202205271000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -17681,7 +17681,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2022-06/m2/eclipse-modeling-tools</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2022-06/m3/eclipse-modeling-tools</value>
         </detail>
         <detail
             key="shortcut">
@@ -17758,9 +17758,9 @@
         <requirement
             name="org.eclipse.xsd.sdk.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2022-06/202205051200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2022-06/202205261200"/>
         <repository
-            url="https://download.eclipse.org/releases/2022-06/202205061000">
+            url="https://download.eclipse.org/releases/2022-06/202205271000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -19799,7 +19799,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2022-06/m2/eclipse-ide-scientific-computing</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2022-06/m3/eclipse-ide-scientific-computing</value>
         </detail>
         <detail
             key="shortcut">
@@ -19864,9 +19864,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2022-06/202205051200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2022-06/202205261200"/>
         <repository
-            url="https://download.eclipse.org/releases/2022-06/202205061000">
+            url="https://download.eclipse.org/releases/2022-06/202205271000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -19961,7 +19961,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2022-06/m2/eclipse-ide-scientific-computing</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2022-06/m3/eclipse-ide-scientific-computing</value>
         </detail>
         <detail
             key="shortcut">
@@ -20026,9 +20026,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2022-06/202205051200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2022-06/202205261200"/>
         <repository
-            url="https://download.eclipse.org/releases/2022-06/202205061000">
+            url="https://download.eclipse.org/releases/2022-06/202205271000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -21867,7 +21867,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2022-06/m2/eclipse-ide-scout-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2022-06/m3/eclipse-ide-scout-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -21916,9 +21916,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2022-06/202205051200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2022-06/202205261200"/>
         <repository
-            url="https://download.eclipse.org/releases/2022-06/202205061000">
+            url="https://download.eclipse.org/releases/2022-06/202205271000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -21997,7 +21997,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2022-06/m2/eclipse-ide-scout-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2022-06/m3/eclipse-ide-scout-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -22046,9 +22046,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2022-06/202205051200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2022-06/202205261200"/>
         <repository
-            url="https://download.eclipse.org/releases/2022-06/202205061000">
+            url="https://download.eclipse.org/releases/2022-06/202205271000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -26388,7 +26388,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.24.0,5.0.0)"/>
         <repository
-            url="https://download.eclipse.org/releases/2022-06/202205061000">
+            url="https://download.eclipse.org/releases/2022-06/202205271000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -26458,7 +26458,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.24.0,5.0.0)"/>
         <repository
-            url="https://download.eclipse.org/releases/2022-06/202205061000">
+            url="https://download.eclipse.org/releases/2022-06/202205271000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
