@@ -376,6 +376,12 @@ public class ModelElementItemProvider extends ItemProviderAdapter
       }
 
       @Override
+      public IItemLabelProvider getLabelProvider(Object object)
+      {
+        return ModelElementItemProvider.this.getLabelProvider(super.getLabelProvider(object), feature, object);
+      }
+
+      @Override
       public String[] getFilterFlags(Object object)
       {
         String[] filterFlags = super.getFilterFlags(object);
@@ -414,6 +420,11 @@ public class ModelElementItemProvider extends ItemProviderAdapter
     return false;
   }
 
+  protected IItemLabelProvider getLabelProvider(IItemLabelProvider itemLabelProvider, EStructuralFeature feature, Object object)
+  {
+    return itemLabelProvider;
+  }
+
   /**
    * Return the resource locator for this item provider's resources.
    * <!-- begin-user-doc -->
@@ -424,6 +435,25 @@ public class ModelElementItemProvider extends ItemProviderAdapter
   public ResourceLocator getResourceLocator()
   {
     return ((IChildCreationExtender)adapterFactory).getResourceLocator();
+  }
+
+  /**
+   * @author Ed Merks
+   */
+  public static class GroupingChildCommandParameter extends CommandParameter
+  {
+    private final String group;
+
+    public GroupingChildCommandParameter(String group, Object feature, Object child)
+    {
+      super(null, feature, child);
+      this.group = group;
+    }
+
+    public String getGroup()
+    {
+      return group;
+    }
   }
 
   /**
@@ -470,7 +500,8 @@ public class ModelElementItemProvider extends ItemProviderAdapter
       if (command instanceof AddCommand)
       {
         AddCommand addCommand = (AddCommand)command;
-        if (isNonContainment(addCommand.getFeature()))
+        EStructuralFeature feature = addCommand.getFeature();
+        if (isNonContainment(feature))
         {
           return true;
         }
@@ -479,7 +510,7 @@ public class ModelElementItemProvider extends ItemProviderAdapter
         EList<?> ownerList = addCommand.getOwnerList();
         if (ownerList != null)
         {
-          if (((EReference)addCommand.getFeature()).isResolveProxies())
+          if (feature instanceof EReference && ((EReference)feature).isResolveProxies())
           {
             for (Object value : addCommand.getCollection())
             {

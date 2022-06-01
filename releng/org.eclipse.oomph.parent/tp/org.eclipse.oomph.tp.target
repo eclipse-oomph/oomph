@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.8"?>
-<target name="Generated from Oomph" sequenceNumber="88">
+<target name="Generated from Oomph" sequenceNumber="89">
   <locations>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
       <unit id="javaewah" version="0.0.0"/>
@@ -13,6 +13,7 @@
       <unit id="org.eclipse.equinox.executable.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.justj.openjdk.hotspot.jre.minimal.stripped.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.m2e.feature.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.m2e.pde.feature.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.mylyn.builds.sdk.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.mylyn.sdk_feature.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.nebula.widgets.tablecombo" version="0.0.0"/>

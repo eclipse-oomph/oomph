@@ -23,6 +23,17 @@
     <eAnnotations source="http://www.eclipse.org/oomph/base/LabelProvider">
       <details key="text" value="Targlets"/>
     </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="composedTargets" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+        <details key="name" value="composedTarget"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The names of other target definitions to be composed with the target container's targlets"/>
+        <details key="propertyDescription" value="The names of other target definitions to be composed with the target container's targlets"/>
+      </eAnnotations>
+    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="targlets" upperBound="-1"
         eType="ecore:EClass ../../org.eclipse.oomph.targlets/model/Targlets.ecore#//Targlet"
         containment="true">

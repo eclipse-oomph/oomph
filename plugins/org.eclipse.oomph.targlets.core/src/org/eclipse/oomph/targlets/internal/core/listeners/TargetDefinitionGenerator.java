@@ -29,7 +29,10 @@ import org.eclipse.oomph.util.CollectionUtil;
 import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.StringUtil;
+import org.eclipse.oomph.util.pde.TargetPlatformUtil;
 
+import org.eclipse.emf.common.CommonPlugin;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
@@ -68,6 +71,8 @@ import org.eclipse.equinox.p2.query.IQueryable;
 import org.eclipse.equinox.p2.query.QueryUtil;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 import org.eclipse.osgi.util.NLS;
+import org.eclipse.pde.core.target.ITargetDefinition;
+import org.eclipse.pde.core.target.ITargetHandle;
 
 import java.io.File;
 import java.io.IOException;
@@ -148,14 +153,14 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
         List<IMetadataRepository> metadataRepositories = profileUpdateSucceededEvent.getMetadataRepositories();
         Map<IInstallableUnit, WorkspaceIUInfo> workspaceIUInfos = profileUpdateSucceededEvent.getWorkspaceIUInfos();
 
-        generateTargetDefinition(targlet, annotation, profile, artificialRoot, metadataRepositories, workspaceIUInfos, monitor);
+        generateTargetDefinition(targletContainer, targlet, annotation, profile, artificialRoot, metadataRepositories, workspaceIUInfos, monitor);
       }
     }
   }
 
-  private static void generateTargetDefinition(final Targlet targlet, Annotation annotation, Profile profile, IInstallableUnit artificialRoot,
-      final List<IMetadataRepository> metadataRepositories, Map<IInstallableUnit, WorkspaceIUInfo> workspaceIUInfos, final IProgressMonitor monitor)
-      throws Exception
+  private static void generateTargetDefinition(ITargletContainer targletContainer, final Targlet targlet, Annotation annotation, Profile profile,
+      IInstallableUnit artificialRoot, final List<IMetadataRepository> metadataRepositories, Map<IInstallableUnit, WorkspaceIUInfo> workspaceIUInfos,
+      final IProgressMonitor monitor) throws Exception
   {
     monitor.setTaskName(Messages.TargetDefinitionGenerator_CheckingUpdates_task);
     EMap<String, String> details = annotation.getDetails();
@@ -169,6 +174,16 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
       location = File.createTempFile("tmp-", ".target").getAbsolutePath(); //$NON-NLS-1$ //$NON-NLS-2$
       TargletsCorePlugin.INSTANCE.log(NLS.bind(Messages.TargetDefinitionGenerator_Generating_message, targlet.getName(), location));
     }
+    else if (location.startsWith("platform:/resource/")) //$NON-NLS-1$
+    {
+      URI resolvedURI = CommonPlugin.resolve(URI.createURI(location));
+      if (resolvedURI.isFile())
+      {
+        location = resolvedURI.toFileString();
+      }
+    }
+
+    EList<String> composedTargets = targletContainer.getComposedTargets();
 
     File targetDefinition = new File(location);
 
@@ -181,7 +196,8 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
     final boolean versions = isAnnotationDetail(annotation, ANNOTATION_GENERATE_VERSIONS, false);
     final boolean includeAllPlatforms = isAnnotationDetail(annotation, ANNOTATION_INCLUDE_ALL_PLATFORMS, targlet.isIncludeAllPlatforms());
     final boolean includeConfigurePhase = isAnnotationDetail(annotation, ANNOTATION_INCLUDE_CONFIGURE_PHASE, true);
-    final String includeMode = getAnnotationDetail(annotation, ANNOTATION_INCLUDE_MODE, targlet.isIncludeAllRequirements() ? "planner" : "slicer"); //$NON-NLS-1$ //$NON-NLS-2$
+    final String includeMode = getAnnotationDetail(annotation, ANNOTATION_INCLUDE_MODE,
+        targlet.isIncludeAllRequirements() && composedTargets.isEmpty() ? "planner" : "slicer"); //$NON-NLS-1$ //$NON-NLS-2$
     final boolean includeSource = isAnnotationDetail(annotation, ANNOTATION_INCLUDE_SOURCE, targlet.isIncludeSources());
     final boolean generateServerXML = isAnnotationDetail(annotation, ANNOTATION_GENERATE_SERVER_XML, false);
 
@@ -197,6 +213,31 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
 
     final Map<IMetadataRepository, Set<IInstallableUnit>> repositoryIUs = analyzeRepositories(targlet, profile, artificialRoot, metadataRepositories,
         workspaceIUInfos, extraUnits, preferredURLs, generateImplicitUnits, minimizeImplicitUnits, singleLocation, sortLocations, monitor);
+
+    List<String> targetReferences = new ArrayList<>();
+    for (String composedTarget : composedTargets)
+    {
+      ITargetDefinition composedTargetDefinition = TargetPlatformUtil.getTargetDefinition(composedTarget);
+      if (composedTargetDefinition != null)
+      {
+        ITargetHandle handle = composedTargetDefinition.getHandle();
+        String memento = handle.getMemento();
+        URI uri = URI.createURI(memento);
+        if (!"resource".equals(uri.scheme())) //$NON-NLS-1$
+        {
+          throw new UnsupportedOperationException(NLS.bind(Messages.TargetDefinitionGenerator_CannotGenerateNonWorkspaceTarget, memento));
+        }
+
+        StringBuilder targetReference = new StringBuilder("file:${project_loc:/"); //$NON-NLS-1$
+        targetReference.append(uri.segment(0)).append('}');
+        for (int i = 1, count = uri.segmentCount(); i < count; ++i)
+        {
+          targetReference.append('/');
+          targetReference.append(uri.segment(i));
+        }
+        targetReferences.add(targetReference.toString());
+      }
+    }
 
     new FileUpdater()
     {
@@ -225,6 +266,11 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
         builder.append(nl);
         builder.append("  <locations>"); //$NON-NLS-1$
         builder.append(nl);
+
+        for (String targetReference : targetReferences)
+        {
+          builder.append("    <location type=\"Target\" uri=\"").append(targetReference).append("\"/>").append(nl); //$NON-NLS-1$ //$NON-NLS-2$
+        }
 
         if (singleLocation)
         {
@@ -728,16 +774,14 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
       boolean generateImplicitUnits, boolean minimizeImplicitUnits, boolean singleLocation, boolean sortLocations, Set<IInstallableUnit> resolvedIUs,
       IProgressMonitor monitor)
   {
-    Map<IMetadataRepository, Set<IInstallableUnit>> result = sortLocations
-        ? new TreeMap<>(new Comparator<IMetadataRepository>()
-        {
-          @Override
-          public int compare(IMetadataRepository o1, IMetadataRepository o2)
-          {
-            return o1.getLocation().compareTo(o2.getLocation());
-          }
-        })
-        : new LinkedHashMap<>();
+    Map<IMetadataRepository, Set<IInstallableUnit>> result = sortLocations ? new TreeMap<>(new Comparator<IMetadataRepository>()
+    {
+      @Override
+      public int compare(IMetadataRepository o1, IMetadataRepository o2)
+      {
+        return o1.getLocation().compareTo(o2.getLocation());
+      }
+    }) : new LinkedHashMap<>();
 
     if (singleLocation)
     {

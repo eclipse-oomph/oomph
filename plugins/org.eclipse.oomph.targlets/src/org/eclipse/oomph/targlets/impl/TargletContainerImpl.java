@@ -21,6 +21,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -35,6 +36,7 @@ import java.util.Collection;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.oomph.targlets.impl.TargletContainerImpl#getID <em>ID</em>}</li>
+ *   <li>{@link org.eclipse.oomph.targlets.impl.TargletContainerImpl#getComposedTargets <em>Composed Targets</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.impl.TargletContainerImpl#getTarglets <em>Targlets</em>}</li>
  * </ul>
  *
@@ -61,6 +63,16 @@ public class TargletContainerImpl extends ModelElementImpl implements TargletCon
    * @ordered
    */
   protected String iD = ID_EDEFAULT;
+
+  /**
+   * The cached value of the '{@link #getComposedTargets() <em>Composed Targets</em>}' attribute list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getComposedTargets()
+   * @generated
+   * @ordered
+   */
+  protected EList<String> composedTargets;
 
   /**
    * The cached value of the '{@link #getTarglets() <em>Targlets</em>}' containment reference list.
@@ -126,6 +138,21 @@ public class TargletContainerImpl extends ModelElementImpl implements TargletCon
    * @generated
    */
   @Override
+  public EList<String> getComposedTargets()
+  {
+    if (composedTargets == null)
+    {
+      composedTargets = new EDataTypeUniqueEList<>(String.class, this, TargletPackage.TARGLET_CONTAINER__COMPOSED_TARGETS);
+    }
+    return composedTargets;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public EList<Targlet> getTarglets()
   {
     if (targlets == null)
@@ -163,6 +190,8 @@ public class TargletContainerImpl extends ModelElementImpl implements TargletCon
     {
       case TargletPackage.TARGLET_CONTAINER__ID:
         return getID();
+      case TargletPackage.TARGLET_CONTAINER__COMPOSED_TARGETS:
+        return getComposedTargets();
       case TargletPackage.TARGLET_CONTAINER__TARGLETS:
         return getTarglets();
     }
@@ -182,6 +211,10 @@ public class TargletContainerImpl extends ModelElementImpl implements TargletCon
     {
       case TargletPackage.TARGLET_CONTAINER__ID:
         setID((String)newValue);
+        return;
+      case TargletPackage.TARGLET_CONTAINER__COMPOSED_TARGETS:
+        getComposedTargets().clear();
+        getComposedTargets().addAll((Collection<? extends String>)newValue);
         return;
       case TargletPackage.TARGLET_CONTAINER__TARGLETS:
         getTarglets().clear();
@@ -204,6 +237,9 @@ public class TargletContainerImpl extends ModelElementImpl implements TargletCon
       case TargletPackage.TARGLET_CONTAINER__ID:
         setID(ID_EDEFAULT);
         return;
+      case TargletPackage.TARGLET_CONTAINER__COMPOSED_TARGETS:
+        getComposedTargets().clear();
+        return;
       case TargletPackage.TARGLET_CONTAINER__TARGLETS:
         getTarglets().clear();
         return;
@@ -223,6 +259,8 @@ public class TargletContainerImpl extends ModelElementImpl implements TargletCon
     {
       case TargletPackage.TARGLET_CONTAINER__ID:
         return ID_EDEFAULT == null ? iD != null : !ID_EDEFAULT.equals(iD);
+      case TargletPackage.TARGLET_CONTAINER__COMPOSED_TARGETS:
+        return composedTargets != null && !composedTargets.isEmpty();
       case TargletPackage.TARGLET_CONTAINER__TARGLETS:
         return targlets != null && !targlets.isEmpty();
     }
@@ -245,6 +283,8 @@ public class TargletContainerImpl extends ModelElementImpl implements TargletCon
     StringBuilder result = new StringBuilder(super.toString());
     result.append(" (iD: "); //$NON-NLS-1$
     result.append(iD);
+    result.append(", composedTargets: "); //$NON-NLS-1$
+    result.append(composedTargets);
     result.append(')');
     return result.toString();
   }

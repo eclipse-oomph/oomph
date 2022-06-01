@@ -22,6 +22,7 @@ import org.eclipse.oomph.p2.core.ProfileTransaction;
 import org.eclipse.oomph.p2.core.ProfileTransaction.CommitContext;
 import org.eclipse.oomph.p2.internal.core.CacheUsageConfirmer;
 import org.eclipse.oomph.p2.internal.core.CachingRepositoryManager;
+import org.eclipse.oomph.p2.internal.core.ProfileTransactionImpl;
 import org.eclipse.oomph.resources.SourceLocator;
 import org.eclipse.oomph.targlets.DropinLocation;
 import org.eclipse.oomph.targlets.FeatureGenerator;
@@ -62,12 +63,14 @@ import org.eclipse.emf.ecore.xml.type.XMLTypeFactory;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.preferences.ConfigurationScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.equinox.frameworkadmin.BundleInfo;
 import org.eclipse.equinox.internal.p2.engine.DownloadManager;
 import org.eclipse.equinox.internal.p2.engine.InstallableUnitOperand;
 import org.eclipse.equinox.internal.p2.engine.InstallableUnitPhase;
@@ -97,7 +100,10 @@ import org.eclipse.equinox.p2.metadata.Version;
 import org.eclipse.equinox.p2.metadata.VersionRange;
 import org.eclipse.equinox.p2.metadata.expression.IMatchExpression;
 import org.eclipse.equinox.p2.planner.IProfileChangeRequest;
+import org.eclipse.equinox.p2.publisher.PublisherInfo;
+import org.eclipse.equinox.p2.publisher.PublisherResult;
 import org.eclipse.equinox.p2.publisher.eclipse.BundlesAction;
+import org.eclipse.equinox.p2.publisher.eclipse.FeaturesAction;
 import org.eclipse.equinox.p2.query.CollectionResult;
 import org.eclipse.equinox.p2.query.IQueryResult;
 import org.eclipse.equinox.p2.query.IQueryable;
@@ -107,6 +113,7 @@ import org.eclipse.equinox.p2.repository.artifact.IArtifactRequest;
 import org.eclipse.equinox.p2.repository.artifact.IFileArtifactRepository;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 import org.eclipse.equinox.spi.p2.publisher.PublisherHelper;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.pde.core.target.ITargetDefinition;
 import org.eclipse.pde.core.target.ITargetLocation;
 import org.eclipse.pde.core.target.ITargetLocationFactory;
@@ -116,7 +123,13 @@ import org.eclipse.pde.core.target.TargetBundle;
 import org.eclipse.pde.core.target.TargetFeature;
 import org.eclipse.pde.internal.core.target.AbstractBundleContainer;
 
+import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
+
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -129,11 +142,13 @@ import java.io.Writer;
 import java.lang.reflect.Method;
 import java.security.MessageDigest;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -179,6 +194,10 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
 
   private final EList<Targlet> targlets = new BasicEList<>();
 
+  private final EList<String> composedTargets = new BasicEList<>();
+
+  private ComposedTargetContent composedTargetContent;
+
   public TargletContainer(String id)
   {
     this.id = id;
@@ -198,10 +217,11 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
    * Copies the passed targlets into this targlet container. Modifications of the passed targlets after the call
    * to this constructor won't have an impact on this targlet container.
    */
-  private TargletContainer(String id, Collection<? extends Targlet> targlets)
+  private TargletContainer(String id, Collection<? extends Targlet> targlets, Collection<? extends String> composedTargets)
   {
     this(id);
     basicSetTarglets(targlets);
+    basicSetComposedTargets(composedTargets);
   }
 
   @Override
@@ -307,10 +327,6 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     return targetDefinition;
   }
 
-  /**
-   * Returns a copy of the targlet with the given name in this targlet container. This copy can be freely modified but the modifications won't have an impact
-   * on a targlet container unless the copy is set back into a container via {@link #setTarglets(Collection)}.
-   */
   @Override
   public Targlet getTarglet(String name)
   {
@@ -344,24 +360,23 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     return getTargletIndex(name) != -1;
   }
 
-  /**
-   * Returns a copy of the targlets in this targlet container. This copy can be freely modified but the modifications won't have an impact
-   * on a targlet container unless the copy is set back into a container via {@link #setTarglets(Collection)}.
-   */
   @Override
   public EList<Targlet> getTarglets()
   {
     return TargletFactory.eINSTANCE.copyTarglets(targlets);
   }
 
-  /**
-   * Copies the passed targlets into this targlet container. Modifications of the passed targlets after the call
-   * to this method won't have an impact on this targlet container.
-   */
   @Override
-  public void setTarglets(Collection<? extends Targlet> targlets) throws CoreException
+  public EList<String> getComposedTargets()
+  {
+    return new BasicEList<>(composedTargets);
+  }
+
+  @Override
+  public void setTarglets(Collection<? extends Targlet> targlets, Collection<? extends String> composedTargets) throws CoreException
   {
     basicSetTarglets(targlets);
+    basicSetComposedTargets(composedTargets);
 
     TargletContainerDescriptor descriptor = updateTargetDefinition();
     TargletContainerEvent event = new TargletContainerEvent.TargletsChangedEvent(this, descriptor);
@@ -374,12 +389,20 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     this.targlets.addAll(TargletFactory.eINSTANCE.copyTarglets(targlets));
   }
 
+  private void basicSetComposedTargets(Collection<? extends String> composedTargets)
+  {
+    this.composedTargets.clear();
+    this.composedTargets.addAll(composedTargets);
+  }
+
   @Override
   public String serialize()
   {
     try
     {
-      return Persistence.toXML(id, targlets).toString();
+      // Remove all leading indentation and line endings because the latest PDE target location support produces nicely indented content without these
+      // and yet add bogus blank lines with these things.
+      return Persistence.toXML(id, targlets, composedTargets).toString().replaceAll("(?m)^ +|\r?\n", ""); //$NON-NLS-1$ //$NON-NLS-2$
     }
     catch (Exception ex)
     {
@@ -535,7 +558,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
   {
     String environmentProperties = getEnvironmentProperties();
     String nlProperty = getNLProperty();
-    return createDigest(id, environmentProperties, nlProperty, targlets);
+    return createDigest(id, environmentProperties, nlProperty, targlets, composedTargets);
   }
 
   @Override
@@ -548,8 +571,43 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
   @Override
   protected TargetBundle[] resolveBundles(ITargetDefinition target, IProgressMonitor monitor) throws CoreException
   {
-    resolveUnits(monitor);
-    return fBundles;
+    Boolean oldForce = FORCE_UPDATE.get();
+    boolean force = Boolean.TRUE.equals(oldForce);
+    if (!force)
+    {
+      for (StackTraceElement stackTraceElement : Thread.currentThread().getStackTrace())
+      {
+        String className = stackTraceElement.getClassName();
+        // System.err.println(className + '.' + stackTraceElement.getMethodName());
+
+        // This is kind of a hack because some of the actions like Update and Reload from the preference dialog and the editor are supposed to clean up the
+        // profiles but for targlets they don't do that so the expected updates don't really happen.
+        if (className.equals("org.eclipse.pde.internal.ui.preferences.TargetPlatformPreferencePage") || //$NON-NLS-1$
+            className.startsWith("org.eclipse.pde.internal.ui.editor.targetdefinition.TargetEditor$TargetChangedListener")) //$NON-NLS-1$
+        {
+          force = true;
+          break;
+        }
+      }
+    }
+
+    try
+    {
+      FORCE_UPDATE.set(force);
+      resolveUnits(monitor);
+      return fBundles;
+    }
+    finally
+    {
+      if (oldForce == null)
+      {
+        FORCE_UPDATE.remove();
+      }
+      else
+      {
+        FORCE_UPDATE.set(oldForce);
+      }
+    }
   }
 
   @Override
@@ -568,7 +626,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
 
       String environmentProperties = getEnvironmentProperties();
       String nlProperty = getNLProperty();
-      String digest = createDigest(id, environmentProperties, nlProperty, targlets);
+      String digest = createDigest(id, environmentProperties, nlProperty, targlets, composedTargets);
 
       TargletContainerDescriptor descriptor = manager.getDescriptor(id, progress.newChild(4));
       progress.childDone();
@@ -646,8 +704,31 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
       }
     }
 
-    fBundles = bundles.toArray(new TargetBundle[bundles.size()]);
-    fFeatures = features.toArray(new TargetFeature[features.size()]);
+    if (composedTargetContent == null)
+    {
+      composedTargetContent = new ComposedTargetContent(targetDefinition, composedTargets);
+      IStatus status = composedTargetContent.resolve(progress.newChild(), false);
+      TargletsCorePlugin.INSTANCE.coreException(status);
+    }
+
+    bundles.addAll(composedTargetContent.getBundles());
+    features.addAll(composedTargetContent.getFeatures());
+
+    Map<String, TargetBundle> bundleMap = new LinkedHashMap<>();
+    for (TargetBundle bundle : bundles)
+    {
+      BundleInfo bundleInfo = bundle.getBundleInfo();
+      bundleMap.putIfAbsent(bundleInfo.getSymbolicName() + '_' + bundleInfo.getVersion(), bundle);
+    }
+
+    Map<String, TargetFeature> featureMap = new LinkedHashMap<>();
+    for (TargetFeature feature : features)
+    {
+      featureMap.putIfAbsent(feature.getId() + '_' + feature.getVersion(), feature);
+    }
+
+    fBundles = bundleMap.values().toArray(new TargetBundle[bundleMap.size()]);
+    fFeatures = featureMap.values().toArray(new TargetFeature[featureMap.size()]);
     progress.done();
   }
 
@@ -852,7 +933,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     {
       String environmentProperties = getEnvironmentProperties();
       String nlProperty = getNLProperty();
-      String digest = createDigest(id, environmentProperties, nlProperty, targlets);
+      String digest = createDigest(id, environmentProperties, nlProperty, targlets, composedTargets);
 
       updateProfile(environmentProperties, nlProperty, digest, monitor);
       return Status.OK_STATUS;
@@ -869,6 +950,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
 
     TargletContainerDescriptorManager manager = TargletContainerDescriptorManager.getInstance();
     TargletContainerDescriptor descriptor = manager.getDescriptor(id, progress.newChild());
+    descriptor.resetUpdateProblem();
 
     final Profile profile = descriptor.startUpdateTransaction(environmentProperties, nlProperty, digest, progress.newChild());
 
@@ -885,8 +967,12 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
 
     boolean originalBetterMirrorSelection = CachingRepositoryManager.enableBetterMirrorSelection();
 
+    MultiStatus composedTargetContentStatus = null;
     try
     {
+      composedTargetContent = new ComposedTargetContent(targetDefinition, composedTargets);
+      composedTargetContentStatus = composedTargetContent.resolve(progress.newChild(composedTargets.size(), SubMonitor.SUPPRESS_BEGINTASK), true);
+
       if (cacheUsageConfirmer != null)
       {
         provisioningAgent.registerService(CacheUsageConfirmer.SERVICE_NAME, cacheUsageConfirmer);
@@ -913,8 +999,10 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
       }
 
       TargletCommitContext commitContext = new TargletCommitContext(profile, workspaceIUAnalyzer, isIncludeAllPlatforms(), isIncludeAllRequirements(),
-          isIncludeBinaryEquivalents());
+          isIncludeBinaryEquivalents(), composedTargetContent.getAdditionalIUs());
       transaction.commit(commitContext, progress.newChild());
+
+      TargletsCorePlugin.INSTANCE.coreException(composedTargetContentStatus);
 
       Map<IInstallableUnit, WorkspaceIUInfo> requiredProjects = getRequiredProjects(profile, workspaceIUAnalyzer.getWorkspaceIUInfos(), progress.newChild());
       descriptor.commitUpdateTransaction(digest, requiredProjects.values(), progress.newChild());
@@ -927,6 +1015,13 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     }
     catch (Throwable t)
     {
+      if (composedTargetContentStatus != null && !composedTargetContentStatus.isOK() && t instanceof CoreException
+          && ((CoreException)t).getStatus() != composedTargetContentStatus)
+      {
+        composedTargetContentStatus.add(((CoreException)t).getStatus());
+        t = new CoreException(composedTargetContentStatus);
+      }
+
       descriptor.rollbackUpdateTransaction(t, new NullProgressMonitor());
 
       UpdateProblem updateProblem = descriptor.getUpdateProblem();
@@ -1059,19 +1154,39 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     return effectiveInstallableUnitGenerators;
   }
 
-  private static String createDigest(String id, String environmentProperties, String nlProperty, EList<Targlet> targlets)
+  private static String createDigest(String id, String environmentProperties, String nlProperty, EList<Targlet> targlets, EList<String> composedTargets)
   {
     InputStream stream = null;
 
     try
     {
-      Writer writer = Persistence.toXML(id, targlets);
+      Writer writer = Persistence.toXML(id, targlets, composedTargets);
       writer.write("\n<!-- Environment Properties: "); //$NON-NLS-1$
       writer.write(environmentProperties);
       writer.write(" -->"); //$NON-NLS-1$
       writer.write("\n<!-- NL Property: "); //$NON-NLS-1$
       writer.write(nlProperty);
       writer.write(" -->\n"); //$NON-NLS-1$
+      if (!composedTargets.isEmpty())
+      {
+        try
+        {
+          TransformerFactory transformerFactory = TransformerFactory.newInstance();
+          Transformer transformer = transformerFactory.newTransformer();
+          for (ITargetDefinition targetDefinition : TargetPlatformUtil.getTargetDefinitions(new NullProgressMonitor()))
+          {
+            if (composedTargets.contains(targetDefinition.getName()))
+            {
+              Document document = targetDefinition.getDocument();
+              transformer.transform(new DOMSource(document), new StreamResult(writer));
+            }
+          }
+        }
+        catch (Exception ex)
+        {
+          TargletsCorePlugin.INSTANCE.log(ex);
+        }
+      }
 
       final MessageDigest digest = MessageDigest.getInstance("SHA-1"); //$NON-NLS-1$
       stream = new FilterInputStream(new ByteArrayInputStream(writer.toString().getBytes("UTF-8"))) //$NON-NLS-1$
@@ -1251,6 +1366,153 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     return result;
   }
 
+  private static final class ComposedTargetContent
+  {
+    private final List<String> composedTargets;
+
+    private final ITargetDefinition targetDefinition;
+
+    private final Set<IInstallableUnit> additionalIUs = new LinkedHashSet<>();
+
+    private final List<TargetBundle> bundles = new ArrayList<>();
+
+    private final List<TargetFeature> features = new ArrayList<>();
+
+    public ComposedTargetContent(ITargetDefinition targetDefinition, List<String> composedTargets)
+    {
+      this.targetDefinition = targetDefinition;
+      this.composedTargets = composedTargets;
+    }
+
+    public MultiStatus resolve(SubMonitor progress, boolean publishIUs)
+    {
+      Set<File> bundleFiles = new LinkedHashSet<>();
+      Set<File> featureFiles = new LinkedHashSet<>();
+
+      MultiStatus rootStatus = new MultiStatus(TargletsCorePlugin.INSTANCE.getSymbolicName(), 0, Messages.TargletContainer_ResolutionProblems, null);
+
+      for (String composedTarget : composedTargets)
+      {
+        MultiStatus childStatus = new MultiStatus(TargletsCorePlugin.INSTANCE.getSymbolicName(), 0,
+            NLS.bind(Messages.TargletContainer_ComposedTargetResolutionProblem, composedTarget), null);
+
+        ITargetDefinition targetDefinition = TargetPlatformUtil.getTargetDefinition(composedTarget); // $NON-NLS-1$
+        if (targetDefinition == null)
+        {
+          childStatus.add(
+              new Status(IStatus.ERROR, TargletsCorePlugin.INSTANCE.getSymbolicName(), NLS.bind(Messages.TargletContainer_NoTargetDefinition, composedTarget)));
+          rootStatus.add(childStatus);
+          continue;
+        }
+
+        if (targetDefinition.getHandle().equals(this.targetDefinition.getHandle()))
+        {
+          childStatus.add(new Status(IStatus.ERROR, TargletsCorePlugin.INSTANCE.getSymbolicName(),
+              NLS.bind(Messages.TargletContainer_InvalidSelfReference, composedTarget)));
+          rootStatus.add(childStatus);
+          continue;
+        }
+
+        IStatus resolve = targetDefinition.resolve(progress.newChild());
+        if (!resolve.isOK())
+        {
+          childStatus.add(resolve);
+          rootStatus.add(childStatus);
+          continue;
+        }
+
+        TargetBundle[] allBundles = targetDefinition.getAllBundles();
+        bundles.addAll(Arrays.asList(allBundles));
+
+        TargetFeature[] allFeatures = targetDefinition.getAllFeatures();
+        features.addAll(Arrays.asList(allFeatures));
+
+        if (publishIUs)
+        {
+          for (TargetBundle targetBundle : allBundles)
+          {
+            try
+            {
+              bundleFiles.add(new File(targetBundle.getBundleInfo().getLocation()));
+            }
+            catch (Exception ex)
+            {
+              childStatus.add(TargletsCorePlugin.INSTANCE.getStatus(ex, IStatus.ERROR));
+            }
+          }
+
+          for (TargetFeature targetFeature : allFeatures)
+          {
+            try
+            {
+              featureFiles.add(new File(targetFeature.getLocation()));
+            }
+            catch (Exception ex)
+            {
+              childStatus.add(TargletsCorePlugin.INSTANCE.getStatus(ex, IStatus.ERROR));
+            }
+          }
+        }
+
+        if (!childStatus.isOK())
+        {
+          rootStatus.add(childStatus);
+        }
+      }
+
+      if (publishIUs)
+      {
+        PublisherInfo publisherInfo = new PublisherInfo();
+        PublisherResult publisherResult = new PublisherResult();
+        if (!bundleFiles.isEmpty())
+        {
+          BundlesAction bundlesAction = new BundlesAction(bundleFiles.toArray(File[]::new));
+          IStatus status = bundlesAction.perform(publisherInfo, publisherResult, progress.newChild());
+          if (!status.isOK())
+          {
+            rootStatus.add(status);
+          }
+        }
+
+        if (!featureFiles.isEmpty())
+        {
+          FeaturesAction featuresAction = new FeaturesAction(featureFiles.toArray(File[]::new));
+          IStatus status = featuresAction.perform(publisherInfo, publisherResult, progress.newChild());
+          if (!status.isOK())
+          {
+            rootStatus.add(status);
+          }
+        }
+
+        IArtifactKey[] NONE = new IArtifactKey[0];
+        for (Iterator<IInstallableUnit> everything = publisherResult.everything(); everything.hasNext();)
+        {
+          InstallableUnit iu = (InstallableUnit)everything.next();
+          iu.setArtifacts(NONE);
+          iu.setProperty(ProfileTransactionImpl.EXCLUDE_IU_PROPERTY, "true"); //$NON-NLS-1$
+          additionalIUs.add(iu);
+        }
+      }
+
+      return rootStatus;
+    }
+
+    public Set<IInstallableUnit> getAdditionalIUs()
+    {
+      return additionalIUs;
+    }
+
+    public List<TargetBundle> getBundles()
+    {
+      return bundles;
+    }
+
+    public List<TargetFeature> getFeatures()
+    {
+      return features;
+    }
+  }
+
   /**
    * @author Eike Stepper
    */
@@ -1274,14 +1536,17 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
 
     private boolean isIncludeBinaryEquivalents;
 
+    private Set<IInstallableUnit> additionalIUs;
+
     public TargletCommitContext(Profile profile, WorkspaceIUAnalyzer workspaceIUAnalyzer, boolean isIncludeAllPlatforms, boolean isIncludeAllRequirements,
-        boolean isIncludeBinaryEquivalents)
+        boolean isIncludeBinaryEquivalents, Set<IInstallableUnit> additionalIUs)
     {
       this.profile = profile;
       this.workspaceIUAnalyzer = workspaceIUAnalyzer;
       this.isIncludeAllPlatforms = isIncludeAllPlatforms;
       this.isIncludeAllRequirements = isIncludeAllRequirements;
       this.isIncludeBinaryEquivalents = isIncludeBinaryEquivalents;
+      this.additionalIUs = additionalIUs;
     }
 
     public IProvisioningPlan getProvisioningPlan()
@@ -1324,7 +1589,15 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
             ius.add(createPDETargetPlatformIU());
 
             IQueryResult<IInstallableUnit> metadataResult = super.getMetadata(monitor).query(QueryUtil.createIUAnyQuery(), monitor);
+            Set<IInstallableUnit> metadataIUs = new LinkedHashSet<>();
             for (IInstallableUnit iu : P2Util.asIterable(metadataResult))
+            {
+              metadataIUs.add(iu);
+            }
+
+            metadataIUs.addAll(additionalIUs);
+
+            for (IInstallableUnit iu : metadataIUs)
             {
               TargletsCorePlugin.checkCancelation(monitor);
 
@@ -1807,6 +2080,8 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
 
     private static final EStructuralFeature TARGLET_FEATURE = EXTENDED_META_DATA.demandFeature(null, "targlet", true); //$NON-NLS-1$
 
+    private static final EStructuralFeature COMPOSED_TARGET_FEATURE = EXTENDED_META_DATA.demandFeature(null, "composedTarget", true, false); //$NON-NLS-1$
+
     private static final EClass DOCUMENT_ROOT_CLASS = LOCATION_FEATURE.getEContainingClass();
 
     static
@@ -1846,13 +2121,16 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
         AnyType location = (AnyType)documentRoot.eContents().get(0);
         String id = (String)location.eGet(LOCATION_ID_FEATURE);
 
+        @SuppressWarnings("unchecked")
+        EList<String> composedTargets = (EList<String>)location.eGet(COMPOSED_TARGET_FEATURE);
+
         EList<Targlet> targlets = new BasicEList<>();
         for (EObject eObject : location.eContents())
         {
           targlets.add((Targlet)eObject);
         }
 
-        return new TargletContainer(id, targlets);
+        return new TargletContainer(id, targlets, composedTargets);
       }
       catch (Exception ex)
       {
@@ -1862,7 +2140,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
       return null;
     }
 
-    public static Writer toXML(String id, List<Targlet> targlets) throws Exception
+    public static Writer toXML(String id, List<Targlet> targlets, List<String> composedTargets) throws Exception
     {
       AnyType location = XMLTypeFactory.eINSTANCE.createAnyType();
       location.eSet(LOCATION_ID_FEATURE, id);
@@ -1872,13 +2150,21 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
       documentRoot.eSet(LOCATION_FEATURE, location);
 
       FeatureMap targletFeatureMap = location.getAny();
-      FeatureMapUtil.addText(targletFeatureMap, "\n  "); //$NON-NLS-1$
+
+      for (String composedTarget : composedTargets)
+      {
+        FeatureMapUtil.addText(targletFeatureMap, "\n  "); //$NON-NLS-1$
+        targletFeatureMap.add(COMPOSED_TARGET_FEATURE, composedTarget);
+      }
 
       EList<Targlet> copy = TargletFactory.eINSTANCE.copyTarglets(targlets);
       for (Targlet targlet : copy)
       {
+        FeatureMapUtil.addText(targletFeatureMap, "\n  "); //$NON-NLS-1$
         targletFeatureMap.add(TARGLET_FEATURE, targlet);
       }
+
+      FeatureMapUtil.addText(targletFeatureMap, "\n"); //$NON-NLS-1$
 
       StringWriter writer = new StringWriter();
 

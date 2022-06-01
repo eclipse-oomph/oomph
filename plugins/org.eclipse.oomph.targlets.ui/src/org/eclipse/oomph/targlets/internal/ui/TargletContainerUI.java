@@ -11,14 +11,18 @@
 package org.eclipse.oomph.targlets.internal.ui;
 
 import org.eclipse.oomph.p2.internal.core.P2Index;
+import org.eclipse.oomph.targlets.TargletContainer;
+import org.eclipse.oomph.targlets.TargletFactory;
 import org.eclipse.oomph.targlets.core.ITargletContainer;
 import org.eclipse.oomph.targlets.core.ITargletContainerDescriptor;
 import org.eclipse.oomph.targlets.core.ITargletContainerDescriptor.UpdateProblem;
+import org.eclipse.oomph.targlets.internal.core.TargletContainerDescriptorManager;
 import org.eclipse.oomph.targlets.presentation.TargletEditor;
 import org.eclipse.oomph.targlets.provider.TargletItemProviderAdapterFactory;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.ReflectUtil;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
@@ -26,25 +30,36 @@ import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.core.runtime.IAdapterFactory;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.equinox.p2.metadata.Version;
 import org.eclipse.equinox.p2.metadata.VersionRange;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.pde.core.target.ITargetDefinition;
 import org.eclipse.pde.core.target.ITargetLocation;
-import org.eclipse.pde.internal.ui.shared.target.StyledBundleLabelProvider;
+import org.eclipse.pde.internal.ui.editor.targetdefinition.LocationsSection;
+import org.eclipse.pde.internal.ui.editor.targetdefinition.TargetEditor;
+import org.eclipse.pde.internal.ui.shared.target.TargetLocationsGroup;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.forms.IFormPart;
+import org.eclipse.ui.forms.IManagedForm;
+import org.eclipse.ui.forms.editor.IFormPage;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -64,6 +79,10 @@ public class TargletContainerUI extends BaseWithDeprecation implements IAdapterF
   private final AdapterFactoryContentProvider contentProvider;
 
   private final AdapterFactoryLabelProvider labelProvider;
+
+  private ContainerContentProvider containerContentProvider;
+
+  private ContainerLabelProvider containerLabelProvider;
 
   public TargletContainerUI()
   {
@@ -88,15 +107,27 @@ public class TargletContainerUI extends BaseWithDeprecation implements IAdapterF
     {
       if (adapterType == ITreeContentProvider.class)
       {
-        return new ContainerContentProvider();
+        if (containerContentProvider == null)
+        {
+          containerContentProvider = new ContainerContentProvider();
+        }
+
+        return containerContentProvider;
       }
 
       if (adapterType == ILabelProvider.class)
       {
-        return new ContainerLabelProvider();
+        if (containerLabelProvider == null)
+        {
+          containerLabelProvider = new ContainerLabelProvider();
+        }
+
+        fixComparator();
+
+        return containerLabelProvider;
       }
 
-      if ((adapterType == org.eclipse.pde.ui.target.ITargetLocationEditor.class) || (adapterType == org.eclipse.pde.ui.target.ITargetLocationUpdater.class))
+      if (adapterType == org.eclipse.pde.ui.target.ITargetLocationEditor.class || adapterType == org.eclipse.pde.ui.target.ITargetLocationUpdater.class)
       {
         return this;
       }
@@ -168,7 +199,27 @@ public class TargletContainerUI extends BaseWithDeprecation implements IAdapterF
     });
 
     IWorkbenchPage page = window.getActivePage();
-    TargletEditor.open(page, ((ITargletContainer)targetLocation).getID());
+    String id = ((ITargletContainer)targetLocation).getID();
+    if (TargletContainerDescriptorManager.getContainer(id) == null)
+    {
+      IEditorPart activeEditor = page.getActiveEditor();
+      String editorID = activeEditor.getSite().getId();
+      if ("org.eclipse.pde.ui.targetEditor".equals(editorID)) //$NON-NLS-1$
+      {
+        UIUtil.asyncExec(display, () -> {
+          try
+          {
+            activeEditor.doSave(new NullProgressMonitor());
+          }
+          catch (Throwable ex)
+          {
+            TargletsUIPlugin.INSTANCE.log(ex);
+          }
+        });
+      }
+    }
+
+    TargletEditor.open(page, id);
 
     return null;
   }
@@ -183,6 +234,65 @@ public class TargletContainerUI extends BaseWithDeprecation implements IAdapterF
   public IStatus update(ITargetDefinition target, ITargetLocation targetLocation, IProgressMonitor monitor)
   {
     return ((ITargletContainer)targetLocation).updateProfile(monitor);
+  }
+
+  private void fixComparator()
+  {
+    try
+    {
+      IEditorPart activeEditor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
+      if (activeEditor instanceof TargetEditor)
+      {
+        IFormPage activePageInstance = ((TargetEditor)activeEditor).getActivePageInstance();
+        IManagedForm managedForm = activePageInstance.getManagedForm();
+        for (IFormPart formPart : managedForm.getParts())
+        {
+          if (formPart instanceof LocationsSection)
+          {
+            TargetLocationsGroup group = ReflectUtil.getValue("fContainerGroup", formPart); //$NON-NLS-1$
+            TreeViewer treeViewer = ReflectUtil.getValue("fTreeViewer", group); //$NON-NLS-1$
+            ViewerComparator comparator = treeViewer.getComparator();
+            if (comparator != null)
+            {
+              Control control = treeViewer.getControl();
+              if (control.getData("oomph.fixed.comparator") == null) //$NON-NLS-1$
+              {
+                control.setData("oomph.fixed.comparator", Boolean.TRUE); //$NON-NLS-1$
+                UIUtil.asyncExec(control, () -> {
+                  treeViewer.setComparator(new FixedViewerComparator(comparator));
+                });
+              }
+            }
+          }
+        }
+      }
+    }
+    catch (Exception ex)
+    {
+      //$FALL-THROUGH$
+    }
+  }
+
+  private static class FixedViewerComparator extends ViewerComparator
+  {
+    private final ViewerComparator delegate;
+
+    public FixedViewerComparator(ViewerComparator delegate)
+    {
+      this.delegate = delegate;
+    }
+
+    @Override
+    public int compare(Viewer viewer, Object e1, Object e2)
+    {
+      if ((e1 instanceof EObject || e1 instanceof Wrapper || e1 instanceof StatusWrapper || e1 instanceof UpdateProblem)
+          && (e2 instanceof EObject || e2 instanceof Wrapper || e2 instanceof StatusWrapper || e1 instanceof UpdateProblem))
+      {
+        return 0;
+      }
+
+      return delegate.compare(viewer, e1, e2);
+    }
   }
 
   /**
@@ -219,6 +329,21 @@ public class TargletContainerUI extends BaseWithDeprecation implements IAdapterF
       {
         ITargletContainer location = (ITargletContainer)element;
         List<Object> children = new ArrayList<>();
+
+        TargletContainer targletContainer = TargletFactory.eINSTANCE.createTargletContainer();
+        targletContainer.getComposedTargets().addAll(location.getComposedTargets());
+        Object[] composedTargets = contentProvider.getChildren(targletContainer);
+        for (Object object : composedTargets)
+        {
+          children.add(new Wrapper(object));
+
+        }
+        // children.addAll(Arrays.asList(composedTargets));
+
+        for (Object targlet : location.getTarglets())
+        {
+          children.add(new Wrapper(targlet));
+        }
 
         ITargletContainerDescriptor descriptor = location.getDescriptor();
         if (descriptor != null)
@@ -271,13 +396,6 @@ public class TargletContainerUI extends BaseWithDeprecation implements IAdapterF
               TargletsUIPlugin.INSTANCE.log(ex);
             }
           }
-          else
-          {
-            for (Object targlet : location.getTarglets())
-            {
-              children.add(new Wrapper(targlet));
-            }
-          }
         }
 
         return children.toArray(new Object[children.size()]);
@@ -317,11 +435,10 @@ public class TargletContainerUI extends BaseWithDeprecation implements IAdapterF
   /**
    * @author Eike Stepper
    */
-  private static class ContainerLabelProvider extends StyledBundleLabelProvider
+  private static class ContainerLabelProvider extends LabelProvider
   {
     public ContainerLabelProvider()
     {
-      super(true, false);
     }
 
     @Override

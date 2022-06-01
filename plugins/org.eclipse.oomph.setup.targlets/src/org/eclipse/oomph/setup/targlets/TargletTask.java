@@ -24,6 +24,7 @@ import org.eclipse.emf.common.util.EList;
  * The following features are supported:
  * </p>
  * <ul>
+ *   <li>{@link org.eclipse.oomph.setup.targlets.TargletTask#getComposedTargets <em>Composed Targets</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.targlets.TargletTask#getTarglets <em>Targlets</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.targlets.TargletTask#getTargletURIs <em>Targlet UR Is</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.targlets.TargletTask#getOperatingSystem <em>Operating System</em>}</li>
@@ -44,6 +45,21 @@ import org.eclipse.emf.common.util.EList;
  */
 public interface TargletTask extends SetupTask
 {
+
+  /**
+   * Returns the value of the '<em><b>Composed Targets</b></em>' attribute list.
+   * The list contents are of type {@link java.lang.String}.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * <!-- begin-model-doc -->
+   * The names of other target definitions to be composed with the target container's targlets
+   * <!-- end-model-doc -->
+   * @return the value of the '<em>Composed Targets</em>' attribute list.
+   * @see org.eclipse.oomph.setup.targlets.SetupTargletsPackage#getTargletTask_ComposedTargets()
+   * @model extendedMetaData="kind='element' name='composedTarget'"
+   * @generated
+   */
+  EList<String> getComposedTargets();
 
   /**
    * Returns the value of the '<em><b>Targlets</b></em>' containment reference list.

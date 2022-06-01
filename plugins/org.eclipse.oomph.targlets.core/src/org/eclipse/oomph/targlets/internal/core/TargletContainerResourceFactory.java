@@ -63,7 +63,7 @@ public class TargletContainerResourceFactory implements Factory
 
           try
           {
-            targletContainer.setTarglets(wrapper.getTarglets());
+            targletContainer.setTarglets(wrapper.getTarglets(), wrapper.getComposedTargets());
             if (updateJob != null)
             {
               // Cancel the job and wait for it to stop running.
@@ -110,6 +110,7 @@ public class TargletContainerResourceFactory implements Factory
     if (targletContainer != null)
     {
       wrapper.getTarglets().addAll(targletContainer.getTarglets());
+      wrapper.getComposedTargets().addAll(targletContainer.getComposedTargets());
     }
 
     resource.getContents().add(wrapper);

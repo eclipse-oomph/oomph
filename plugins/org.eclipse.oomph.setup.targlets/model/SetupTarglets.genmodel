@@ -11,6 +11,8 @@
   <genPackages prefix="SetupTarglets" basePackage="org.eclipse.oomph.setup" disposableProviderFactory="true"
       childCreationExtenders="true" ecorePackage="SetupTarglets.ecore#/" publicationLocation="/setups/models/SetupTarglets.ecore">
     <genClasses ecoreClass="SetupTarglets.ecore#//TargletTask">
+      <genFeatures children="true" createChild="true" propertyDescription="The names of other target definitions to be composed with the target container's targlets"
+          propertySortChoices="true" ecoreFeature="ecore:EAttribute SetupTarglets.ecore#//TargletTask/composedTargets"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference SetupTarglets.ecore#//TargletTask/targlets"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute SetupTarglets.ecore#//TargletTask/targletURIs"/>
       <genFeatures createChild="false" propertySortChoices="true" ecoreFeature="ecore:EAttribute SetupTarglets.ecore#//TargletTask/operatingSystem"/>

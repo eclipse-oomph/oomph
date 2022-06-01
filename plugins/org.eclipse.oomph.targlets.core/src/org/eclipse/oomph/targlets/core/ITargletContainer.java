@@ -41,7 +41,7 @@ public interface ITargletContainer extends ITargetLocation
 
   /**
    * Returns a copy of the targlet with the given name in this targlet container. This copy can be freely modified but the modifications won't have an impact
-   * on a targlet container unless the copy is set back into a container via {@link #setTarglets(Collection)}.
+   * on a targlet container unless the copy is set back into a container via {@link #setTarglets(Collection, Collection)}.
    */
   public Targlet getTarglet(String name);
 
@@ -50,16 +50,27 @@ public interface ITargletContainer extends ITargetLocation
   public boolean hasTarglet(String name);
 
   /**
+   * Returns a copy of the composed target names in this targlet container. This copy can be freely modified but the modifications won't have an impact
+   * on a targlet container unless the copy is set back into a container via {@link #setTarglets(Collection, Collection)}.
+   */
+  public EList<String> getComposedTargets();
+
+  /**
    * Returns a copy of the targlets in this targlet container. This copy can be freely modified but the modifications won't have an impact
-   * on a targlet container unless the copy is set back into a container via {@link #setTarglets(Collection)}.
+   * on a targlet container unless the copy is set back into a container via {@link #setTarglets(Collection, Collection)}.
    */
   public EList<Targlet> getTarglets();
 
   /**
-   * Copies the passed targlets into this targlet container. Modifications of the passed targlets after the call
+   * Copies the passed targlets and composed target names into this targlet container. Modifications of the passed targlets or composed target names after the call
    * to this method won't have an impact on this targlet container.
    */
-  public void setTarglets(Collection<? extends Targlet> targlets) throws CoreException;
+  public void setTarglets(Collection<? extends Targlet> targlets, Collection<? extends String> composedTargets) throws CoreException;
+
+  default void setTarglets(Collection<? extends Targlet> targlets) throws CoreException
+  {
+    setTarglets(targlets, getComposedTargets());
+  }
 
   public boolean isIncludeSources();
 

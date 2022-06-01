@@ -21,6 +21,8 @@ public class Messages extends NLS
 
   public static String PomModulesUpdater_NotFile_message;
 
+  public static String TargetDefinitionGenerator_CannotGenerateNonWorkspaceTarget;
+
   public static String TargetDefinitionGenerator_CheckingUpdates_task;
 
   public static String TargetDefinitionGenerator_GeneratedFrom_message;

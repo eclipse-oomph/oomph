@@ -15,6 +15,14 @@ public class Messages extends NLS
 
   public static String TargletContainer_CannotInstall_message;
 
+  public static String TargletContainer_ComposedTargetResolutionProblem;
+
+  public static String TargletContainer_InvalidSelfReference;
+
+  public static String TargletContainer_NoTargetDefinition;
+
+  public static String TargletContainer_ResolutionProblems;
+
   public static String TargletContainer_UpdateComplete_task;
 
   public static String TargletContainerDescriptor_ConflictingTransaction_exception;

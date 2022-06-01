@@ -15,6 +15,7 @@ import org.eclipse.oomph.base.BaseFactory;
 import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.base.ModelElement;
 import org.eclipse.oomph.base.provider.BaseEditUtil.IconReflectiveItemProvider;
+import org.eclipse.oomph.base.provider.ModelElementItemProvider;
 import org.eclipse.oomph.base.util.EAnnotations;
 import org.eclipse.oomph.internal.ui.OomphEditingDomainActionBarContributor;
 import org.eclipse.oomph.setup.AnnotationConstants;
@@ -956,6 +957,9 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
   {
     manager.add(new Separator("elements")); //$NON-NLS-1$
     manager.add(new Separator("elements-end")); //$NON-NLS-1$
+    manager.add(new Separator("groups")); //$NON-NLS-1$
+    manager.add(new Separator("groups-end")); //$NON-NLS-1$
+    manager.add(new Separator("scopes")); //$NON-NLS-1$
     manager.add(new Separator("scopes")); //$NON-NLS-1$
     manager.add(new Separator("scopes-end")); //$NON-NLS-1$
     manager.add(new Separator("defaults")); //$NON-NLS-1$
@@ -978,6 +982,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
     List<IAction> additions = new ArrayList<>();
     List<EnablementAction> additionalTasks = new ArrayList<>();
     List<EnablementAction> additionalElements = new ArrayList<>();
+    Map<String, MenuManager> submenuManagers = new LinkedHashMap<>();
 
     Set<String> installedClasses = new HashSet<>();
 
@@ -1014,7 +1019,14 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
         continue;
       }
 
-      if (descriptor instanceof CommandParameter)
+      if (descriptor instanceof ModelElementItemProvider.GroupingChildCommandParameter)
+      {
+        String group = ((ModelElementItemProvider.GroupingChildCommandParameter)descriptor).getGroup();
+        MenuManager submenuManager = submenuManagers.computeIfAbsent(contributionID, it -> new MenuManager(group, action.getImageDescriptor(), null));
+
+        submenuManager.add(action);
+      }
+      else if (descriptor instanceof CommandParameter)
       {
         CommandParameter parameter = (CommandParameter)descriptor;
         Object value = parameter.getValue();
@@ -1063,6 +1075,11 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
     Collections.sort(tasks, ACTION_COMPARATOR);
 
     populateManagerGen(manager, elements, "elements-end"); //$NON-NLS-1$
+
+    for (MenuManager submenuManager : submenuManagers.values())
+    {
+      manager.insertBefore("groups-end", submenuManager); //$NON-NLS-1$
+    }
 
     if (!additionalElements.isEmpty())
     {
@@ -1196,10 +1213,17 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
       for (int i = 0; i < items.length; i++)
       {
         IContributionItem item = items[i];
-        String id = item.getId();
-        if (id != null && id.startsWith(ENABLEMENT_ITEM_PREFIX))
+        if (item instanceof MenuManager)
         {
           manager.remove(item);
+        }
+        else
+        {
+          String id = item.getId();
+          if (id != null && id.startsWith(ENABLEMENT_ITEM_PREFIX))
+          {
+            manager.remove(item);
+          }
         }
       }
     }

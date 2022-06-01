@@ -100,13 +100,22 @@ public interface TargletPackage extends EPackage
   int TARGLET_CONTAINER__ID = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
 
   /**
+   * The feature id for the '<em><b>Composed Targets</b></em>' attribute list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TARGLET_CONTAINER__COMPOSED_TARGETS = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
+
+  /**
    * The feature id for the '<em><b>Targlets</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int TARGLET_CONTAINER__TARGLETS = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
+  int TARGLET_CONTAINER__TARGLETS = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 2;
 
   /**
    * The number of structural features of the '<em>Container</em>' class.
@@ -115,7 +124,7 @@ public interface TargletPackage extends EPackage
    * @generated
    * @ordered
    */
-  int TARGLET_CONTAINER_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 2;
+  int TARGLET_CONTAINER_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 3;
 
   /**
    * The operation id for the '<em>Get Annotation</em>' operation.
@@ -1128,6 +1137,17 @@ public interface TargletPackage extends EPackage
   EAttribute getTargletContainer_ID();
 
   /**
+   * Returns the meta object for the attribute list '{@link org.eclipse.oomph.targlets.TargletContainer#getComposedTargets <em>Composed Targets</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute list '<em>Composed Targets</em>'.
+   * @see org.eclipse.oomph.targlets.TargletContainer#getComposedTargets()
+   * @see #getTargletContainer()
+   * @generated
+   */
+  EAttribute getTargletContainer_ComposedTargets();
+
+  /**
    * Returns the meta object for the containment reference list '{@link org.eclipse.oomph.targlets.TargletContainer#getTarglets <em>Targlets</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1570,6 +1590,14 @@ public interface TargletPackage extends EPackage
      * @generated
      */
     EAttribute TARGLET_CONTAINER__ID = eINSTANCE.getTargletContainer_ID();
+
+    /**
+     * The meta object literal for the '<em><b>Composed Targets</b></em>' attribute list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute TARGLET_CONTAINER__COMPOSED_TARGETS = eINSTANCE.getTargletContainer_ComposedTargets();
 
     /**
      * The meta object literal for the '<em><b>Targlets</b></em>' containment reference list feature.

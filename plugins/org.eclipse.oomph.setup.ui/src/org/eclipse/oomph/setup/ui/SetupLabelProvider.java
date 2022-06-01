@@ -25,6 +25,7 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.provider.ComposedImage;
+import org.eclipse.emf.edit.provider.IWrapperItemProvider;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.emf.edit.ui.provider.ExtendedImageRegistry;
@@ -108,6 +109,10 @@ public class SetupLabelProvider extends AdapterFactoryLabelProvider.FontAndColor
       {
         return isDisabled(eContainer);
       }
+    }
+    else if (object instanceof IWrapperItemProvider)
+    {
+      return isDisabled(((IWrapperItemProvider)object).getOwner());
     }
 
     return false;

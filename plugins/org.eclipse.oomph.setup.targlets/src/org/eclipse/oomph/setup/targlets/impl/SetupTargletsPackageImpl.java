@@ -142,9 +142,9 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
    * @generated
    */
   @Override
-  public EAttribute getTargletTask_TargetName()
+  public EAttribute getTargletTask_ComposedTargets()
   {
-    return (EAttribute)targletTaskEClass.getEStructuralFeatures().get(9);
+    return (EAttribute)targletTaskEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -153,7 +153,7 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
    * @generated
    */
   @Override
-  public EAttribute getTargletTask_ActivateTarget()
+  public EAttribute getTargletTask_TargetName()
   {
     return (EAttribute)targletTaskEClass.getEStructuralFeatures().get(10);
   }
@@ -164,9 +164,20 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
    * @generated
    */
   @Override
+  public EAttribute getTargletTask_ActivateTarget()
+  {
+    return (EAttribute)targletTaskEClass.getEStructuralFeatures().get(11);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public EReference getTargletTask_Targlets()
   {
-    return (EReference)targletTaskEClass.getEStructuralFeatures().get(0);
+    return (EReference)targletTaskEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -177,7 +188,7 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
   @Override
   public EAttribute getTargletTask_TargletURIs()
   {
-    return (EAttribute)targletTaskEClass.getEStructuralFeatures().get(1);
+    return (EAttribute)targletTaskEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -188,7 +199,7 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
   @Override
   public EAttribute getTargletTask_OperatingSystem()
   {
-    return (EAttribute)targletTaskEClass.getEStructuralFeatures().get(2);
+    return (EAttribute)targletTaskEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -199,7 +210,7 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
   @Override
   public EAttribute getTargletTask_WindowingSystem()
   {
-    return (EAttribute)targletTaskEClass.getEStructuralFeatures().get(3);
+    return (EAttribute)targletTaskEClass.getEStructuralFeatures().get(4);
   }
 
   /**
@@ -210,7 +221,7 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
   @Override
   public EAttribute getTargletTask_Architecture()
   {
-    return (EAttribute)targletTaskEClass.getEStructuralFeatures().get(4);
+    return (EAttribute)targletTaskEClass.getEStructuralFeatures().get(5);
   }
 
   /**
@@ -221,7 +232,7 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
   @Override
   public EAttribute getTargletTask_Locale()
   {
-    return (EAttribute)targletTaskEClass.getEStructuralFeatures().get(5);
+    return (EAttribute)targletTaskEClass.getEStructuralFeatures().get(6);
   }
 
   /**
@@ -232,7 +243,7 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
   @Override
   public EAttribute getTargletTask_ProgramArguments()
   {
-    return (EAttribute)targletTaskEClass.getEStructuralFeatures().get(6);
+    return (EAttribute)targletTaskEClass.getEStructuralFeatures().get(7);
   }
 
   /**
@@ -243,7 +254,7 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
   @Override
   public EAttribute getTargletTask_VMArguments()
   {
-    return (EAttribute)targletTaskEClass.getEStructuralFeatures().get(7);
+    return (EAttribute)targletTaskEClass.getEStructuralFeatures().get(8);
   }
 
   /**
@@ -254,7 +265,7 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
   @Override
   public EReference getTargletTask_ImplicitDependencies()
   {
-    return (EReference)targletTaskEClass.getEStructuralFeatures().get(8);
+    return (EReference)targletTaskEClass.getEStructuralFeatures().get(9);
   }
 
   /**
@@ -325,6 +336,7 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
 
     // Create classes and their features
     targletTaskEClass = createEClass(TARGLET_TASK);
+    createEAttribute(targletTaskEClass, TARGLET_TASK__COMPOSED_TARGETS);
     createEReference(targletTaskEClass, TARGLET_TASK__TARGLETS);
     createEAttribute(targletTaskEClass, TARGLET_TASK__TARGLET_UR_IS);
     createEAttribute(targletTaskEClass, TARGLET_TASK__OPERATING_SYSTEM);
@@ -384,6 +396,8 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
 
     // Initialize classes and features; add operations and parameters
     initEClass(targletTaskEClass, TargletTask.class, "TargletTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getTargletTask_ComposedTargets(), ecorePackage.getEString(), "composedTargets", null, 0, -1, TargletTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getTargletTask_Targlets(), theTargletPackage.getTarglet(), null, "targlets", null, 0, -1, TargletTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getTargletTask_TargletURIs(), ecorePackage.getEString(), "targletURIs", null, 0, -1, TargletTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
@@ -497,6 +511,9 @@ public class SetupTargletsPackageImpl extends EPackageImpl implements SetupTargl
   protected void createExtendedMetaDataAnnotations()
   {
     String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData"; //$NON-NLS-1$
+    addAnnotation(getTargletTask_ComposedTargets(), source, new String[] { "kind", "element", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "composedTarget" //$NON-NLS-1$ //$NON-NLS-2$
+    });
     addAnnotation(getTargletTask_Targlets(), source, new String[] { "name", "targlet" //$NON-NLS-1$ //$NON-NLS-2$
     });
     addAnnotation(getTargletTask_TargletURIs(), source, new String[] { "name", "targletURI" //$NON-NLS-1$ //$NON-NLS-2$

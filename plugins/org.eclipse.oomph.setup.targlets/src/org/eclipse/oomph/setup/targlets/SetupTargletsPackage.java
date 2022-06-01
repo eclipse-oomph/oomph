@@ -170,13 +170,22 @@ public interface SetupTargletsPackage extends EPackage
   int TARGLET_TASK__FILTER = SetupPackage.SETUP_TASK__FILTER;
 
   /**
+   * The feature id for the '<em><b>Composed Targets</b></em>' attribute list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TARGLET_TASK__COMPOSED_TARGETS = SetupPackage.SETUP_TASK_FEATURE_COUNT + 0;
+
+  /**
    * The feature id for the '<em><b>Targlets</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int TARGLET_TASK__TARGLETS = SetupPackage.SETUP_TASK_FEATURE_COUNT + 0;
+  int TARGLET_TASK__TARGLETS = SetupPackage.SETUP_TASK_FEATURE_COUNT + 1;
 
   /**
    * The feature id for the '<em><b>Targlet UR Is</b></em>' attribute list.
@@ -185,7 +194,7 @@ public interface SetupTargletsPackage extends EPackage
    * @generated
    * @ordered
    */
-  int TARGLET_TASK__TARGLET_UR_IS = SetupPackage.SETUP_TASK_FEATURE_COUNT + 1;
+  int TARGLET_TASK__TARGLET_UR_IS = SetupPackage.SETUP_TASK_FEATURE_COUNT + 2;
 
   /**
    * The feature id for the '<em><b>Operating System</b></em>' attribute.
@@ -194,7 +203,7 @@ public interface SetupTargletsPackage extends EPackage
    * @generated
    * @ordered
    */
-  int TARGLET_TASK__OPERATING_SYSTEM = SetupPackage.SETUP_TASK_FEATURE_COUNT + 2;
+  int TARGLET_TASK__OPERATING_SYSTEM = SetupPackage.SETUP_TASK_FEATURE_COUNT + 3;
 
   /**
    * The feature id for the '<em><b>Windowing System</b></em>' attribute.
@@ -203,7 +212,7 @@ public interface SetupTargletsPackage extends EPackage
    * @generated
    * @ordered
    */
-  int TARGLET_TASK__WINDOWING_SYSTEM = SetupPackage.SETUP_TASK_FEATURE_COUNT + 3;
+  int TARGLET_TASK__WINDOWING_SYSTEM = SetupPackage.SETUP_TASK_FEATURE_COUNT + 4;
 
   /**
    * The feature id for the '<em><b>Architecture</b></em>' attribute.
@@ -212,7 +221,7 @@ public interface SetupTargletsPackage extends EPackage
    * @generated
    * @ordered
    */
-  int TARGLET_TASK__ARCHITECTURE = SetupPackage.SETUP_TASK_FEATURE_COUNT + 4;
+  int TARGLET_TASK__ARCHITECTURE = SetupPackage.SETUP_TASK_FEATURE_COUNT + 5;
 
   /**
    * The feature id for the '<em><b>Locale</b></em>' attribute.
@@ -221,7 +230,7 @@ public interface SetupTargletsPackage extends EPackage
    * @generated
    * @ordered
    */
-  int TARGLET_TASK__LOCALE = SetupPackage.SETUP_TASK_FEATURE_COUNT + 5;
+  int TARGLET_TASK__LOCALE = SetupPackage.SETUP_TASK_FEATURE_COUNT + 6;
 
   /**
    * The feature id for the '<em><b>Program Arguments</b></em>' attribute.
@@ -230,7 +239,7 @@ public interface SetupTargletsPackage extends EPackage
    * @generated
    * @ordered
    */
-  int TARGLET_TASK__PROGRAM_ARGUMENTS = SetupPackage.SETUP_TASK_FEATURE_COUNT + 6;
+  int TARGLET_TASK__PROGRAM_ARGUMENTS = SetupPackage.SETUP_TASK_FEATURE_COUNT + 7;
 
   /**
    * The feature id for the '<em><b>VM Arguments</b></em>' attribute.
@@ -239,7 +248,7 @@ public interface SetupTargletsPackage extends EPackage
    * @generated
    * @ordered
    */
-  int TARGLET_TASK__VM_ARGUMENTS = SetupPackage.SETUP_TASK_FEATURE_COUNT + 7;
+  int TARGLET_TASK__VM_ARGUMENTS = SetupPackage.SETUP_TASK_FEATURE_COUNT + 8;
 
   /**
    * The feature id for the '<em><b>Implicit Dependencies</b></em>' containment reference list.
@@ -248,7 +257,7 @@ public interface SetupTargletsPackage extends EPackage
    * @generated
    * @ordered
    */
-  int TARGLET_TASK__IMPLICIT_DEPENDENCIES = SetupPackage.SETUP_TASK_FEATURE_COUNT + 8;
+  int TARGLET_TASK__IMPLICIT_DEPENDENCIES = SetupPackage.SETUP_TASK_FEATURE_COUNT + 9;
 
   /**
    * The feature id for the '<em><b>Target Name</b></em>' attribute.
@@ -257,7 +266,7 @@ public interface SetupTargletsPackage extends EPackage
    * @generated
    * @ordered
    */
-  int TARGLET_TASK__TARGET_NAME = SetupPackage.SETUP_TASK_FEATURE_COUNT + 9;
+  int TARGLET_TASK__TARGET_NAME = SetupPackage.SETUP_TASK_FEATURE_COUNT + 10;
 
   /**
    * The feature id for the '<em><b>Activate Target</b></em>' attribute.
@@ -266,7 +275,7 @@ public interface SetupTargletsPackage extends EPackage
    * @generated
    * @ordered
    */
-  int TARGLET_TASK__ACTIVATE_TARGET = SetupPackage.SETUP_TASK_FEATURE_COUNT + 10;
+  int TARGLET_TASK__ACTIVATE_TARGET = SetupPackage.SETUP_TASK_FEATURE_COUNT + 11;
 
   /**
    * The number of structural features of the '<em>Targlet Task</em>' class.
@@ -275,7 +284,7 @@ public interface SetupTargletsPackage extends EPackage
    * @generated
    * @ordered
    */
-  int TARGLET_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 11;
+  int TARGLET_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 12;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.targlets.impl.ImplicitDependencyImpl <em>Implicit Dependency</em>}' class.
@@ -323,6 +332,17 @@ public interface SetupTargletsPackage extends EPackage
    * @generated
    */
   EClass getTargletTask();
+
+  /**
+   * Returns the meta object for the attribute list '{@link org.eclipse.oomph.setup.targlets.TargletTask#getComposedTargets <em>Composed Targets</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute list '<em>Composed Targets</em>'.
+   * @see org.eclipse.oomph.setup.targlets.TargletTask#getComposedTargets()
+   * @see #getTargletTask()
+   * @generated
+   */
+  EAttribute getTargletTask_ComposedTargets();
 
   /**
    * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.targlets.TargletTask#getTargetName <em>Target Name</em>}'.
@@ -509,6 +529,14 @@ public interface SetupTargletsPackage extends EPackage
      * @generated
      */
     EClass TARGLET_TASK = eINSTANCE.getTargletTask();
+
+    /**
+     * The meta object literal for the '<em><b>Composed Targets</b></em>' attribute list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute TARGLET_TASK__COMPOSED_TARGETS = eINSTANCE.getTargletTask_ComposedTargets();
 
     /**
      * The meta object literal for the '<em><b>Target Name</b></em>' attribute feature.

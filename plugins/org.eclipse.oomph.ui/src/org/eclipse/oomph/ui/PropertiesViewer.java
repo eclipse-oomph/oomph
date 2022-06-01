@@ -345,7 +345,7 @@ public class PropertiesViewer extends TableViewer
                 EDataType eDataType = eAttribute.getEAttributeType();
                 if (eDataType.isSerializable())
                 {
-                  if (eAttribute.isMany())
+                  if (eAttribute.isMany() && propertyValue instanceof List<?>)
                   {
                     List<?> values = (List<?>)propertyValue;
                     StringBuilder result = new StringBuilder();

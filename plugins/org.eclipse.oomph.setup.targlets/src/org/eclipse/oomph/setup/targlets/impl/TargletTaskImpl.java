@@ -78,6 +78,7 @@ import java.util.Set;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link org.eclipse.oomph.setup.targlets.impl.TargletTaskImpl#getComposedTargets <em>Composed Targets</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.targlets.impl.TargletTaskImpl#getTarglets <em>Targlets</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.targlets.impl.TargletTaskImpl#getTargletURIs <em>Targlet UR Is</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.targlets.impl.TargletTaskImpl#getOperatingSystem <em>Operating System</em>}</li>
@@ -95,6 +96,16 @@ import java.util.Set;
  */
 public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
 {
+  /**
+   * The cached value of the '{@link #getComposedTargets() <em>Composed Targets</em>}' attribute list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getComposedTargets()
+   * @generated
+   * @ordered
+   */
+  protected EList<String> composedTargets;
+
   /**
    * The cached value of the '{@link #getTarglets() <em>Targlets</em>}' containment reference list.
    * <!-- begin-user-doc -->
@@ -310,6 +321,21 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
   protected EClass eStaticClass()
   {
     return SetupTargletsPackage.Literals.TARGLET_TASK;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EList<String> getComposedTargets()
+  {
+    if (composedTargets == null)
+    {
+      composedTargets = new EDataTypeUniqueEList<>(String.class, this, SetupTargletsPackage.TARGLET_TASK__COMPOSED_TARGETS);
+    }
+    return composedTargets;
   }
 
   /**
@@ -602,6 +628,8 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
   {
     switch (featureID)
     {
+      case SetupTargletsPackage.TARGLET_TASK__COMPOSED_TARGETS:
+        return getComposedTargets();
       case SetupTargletsPackage.TARGLET_TASK__TARGLETS:
         return getTarglets();
       case SetupTargletsPackage.TARGLET_TASK__TARGLET_UR_IS:
@@ -639,6 +667,10 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
   {
     switch (featureID)
     {
+      case SetupTargletsPackage.TARGLET_TASK__COMPOSED_TARGETS:
+        getComposedTargets().clear();
+        getComposedTargets().addAll((Collection<? extends String>)newValue);
+        return;
       case SetupTargletsPackage.TARGLET_TASK__TARGLETS:
         getTarglets().clear();
         getTarglets().addAll((Collection<? extends Targlet>)newValue);
@@ -689,6 +721,9 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
   {
     switch (featureID)
     {
+      case SetupTargletsPackage.TARGLET_TASK__COMPOSED_TARGETS:
+        getComposedTargets().clear();
+        return;
       case SetupTargletsPackage.TARGLET_TASK__TARGLETS:
         getTarglets().clear();
         return;
@@ -737,6 +772,8 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
   {
     switch (featureID)
     {
+      case SetupTargletsPackage.TARGLET_TASK__COMPOSED_TARGETS:
+        return composedTargets != null && !composedTargets.isEmpty();
       case SetupTargletsPackage.TARGLET_TASK__TARGLETS:
         return targlets != null && !targlets.isEmpty();
       case SetupTargletsPackage.TARGLET_TASK__TARGLET_UR_IS:
@@ -777,7 +814,9 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (targletURIs: "); //$NON-NLS-1$
+    result.append(" (composedTargets: "); //$NON-NLS-1$
+    result.append(composedTargets);
+    result.append(", targletURIs: "); //$NON-NLS-1$
     result.append(targletURIs);
     result.append(", operatingSystem: "); //$NON-NLS-1$
     result.append(operatingSystem);
@@ -812,6 +851,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
 
     TargletTask targletTask = (TargletTask)overriddenSetupTask;
     getTarglets().addAll(targletTask.getTarglets());
+    getComposedTargets().addAll(targletTask.getComposedTargets());
 
     mergeSetting(targletTask, SetupTargletsPackage.Literals.TARGLET_TASK__OPERATING_SYSTEM, "operating systems"); //$NON-NLS-1$
     mergeSetting(targletTask, SetupTargletsPackage.Literals.TARGLET_TASK__WINDOWING_SYSTEM, "windowing systems"); //$NON-NLS-1$
@@ -974,6 +1014,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
   public boolean isNeeded(final SetupTaskContext context) throws Exception
   {
     copyTarglets = TargletFactory.eINSTANCE.copyTarglets(getTarglets());
+    EList<String> composedTargets = getComposedTargets();
 
     boolean isNeeded = TargetPlatformUtil.runWithTargetPlatformService(new TargetPlatformRunnable<Boolean>()
     {
@@ -991,16 +1032,17 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
         targletContainer = getTargletContainer();
         if (targletContainer == null)
         {
-          return hasRequirements(copyTarglets);
+          return !composedTargets.isEmpty() || hasRequirements(copyTarglets);
         }
 
-        if (!hasRequirements(copyTarglets) && !hasRequirements(targletContainer.getTarglets()))
+        if (!hasRequirements(copyTarglets) && !hasRequirements(targletContainer.getTarglets()) && composedTargets.isEmpty()
+            && targletContainer.getComposedTargets().isEmpty())
         {
           return false;
         }
 
-        if (!EcoreUtil.equals(targletContainer.getTarglets(), copyTarglets) || context.getTrigger() == Trigger.MANUAL
-            || isActivateTarget() && !targetDefinition.getHandle().equals(activeTargetHandle))
+        if (!EcoreUtil.equals(targletContainer.getTarglets(), copyTarglets) || !composedTargets.equals(targletContainer.getComposedTargets())
+            || context.getTrigger() == Trigger.MANUAL || isActivateTarget() && !targetDefinition.getHandle().equals(activeTargetHandle))
         {
           return true;
         }
@@ -1137,7 +1179,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
           {
             TargletsCorePlugin.INSTANCE.setCacheUsageConfirmer(cacheUsageConfirmer);
 
-            targletContainer.setTarglets(targlets);
+            targletContainer.setTarglets(targlets, getComposedTargets());
 
             boolean includeAllPlatforms = targletContainer.isIncludeAllPlatforms();
             context.log(NLS.bind(Messages.TargletTaskImpl_AllPlatforms_message, includeAllPlatforms));

@@ -10,14 +10,21 @@
  */
 package org.eclipse.oomph.targlets.presentation;
 
+import org.eclipse.oomph.base.provider.ModelElementItemProvider;
+import org.eclipse.oomph.util.ReflectUtil;
+
 import org.eclipse.emf.common.ui.viewer.IViewerProvider;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.domain.IEditingDomainProvider;
+import org.eclipse.emf.edit.ui.action.CollapseAllAction;
 import org.eclipse.emf.edit.ui.action.ControlAction;
 import org.eclipse.emf.edit.ui.action.CreateChildAction;
 import org.eclipse.emf.edit.ui.action.CreateSiblingAction;
 import org.eclipse.emf.edit.ui.action.EditingDomainActionBarContributor;
+import org.eclipse.emf.edit.ui.action.ExpandAllAction;
+import org.eclipse.emf.edit.ui.action.FindAction;
 import org.eclipse.emf.edit.ui.action.LoadResourceAction;
+import org.eclipse.emf.edit.ui.action.RevertAction;
 import org.eclipse.emf.edit.ui.action.ValidateAction;
 import org.eclipse.emf.edit.ui.provider.DiagnosticDecorator;
 
@@ -43,6 +50,9 @@ import org.eclipse.ui.PartInitException;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This is the action bar contributor for the Targlet model editor.
@@ -166,6 +176,10 @@ public class TargletActionBarContributor extends EditingDomainActionBarContribut
     validateAction = new ValidateAction();
     liveValidationAction = new DiagnosticDecorator.LiveValidator.LiveValidationAction(TargletEditorPlugin.getPlugin().getDialogSettings());
     controlAction = new ControlAction();
+    findAction = FindAction.create();
+    revertAction = new RevertAction();
+    expandAllAction = new ExpandAllAction();
+    collapseAllAction = new CollapseAllAction();
   }
 
   /**
@@ -365,7 +379,7 @@ public class TargletActionBarContributor extends EditingDomainActionBarContribut
    * <!-- end-user-doc -->
    * @generated
    */
-  protected void populateManager(IContributionManager manager, Collection<? extends IAction> actions, String contributionID)
+  protected void populateManagerGen(IContributionManager manager, Collection<? extends IAction> actions, String contributionID)
   {
     if (actions != null)
     {
@@ -383,6 +397,42 @@ public class TargletActionBarContributor extends EditingDomainActionBarContribut
     }
   }
 
+  protected void populateManager(IContributionManager manager, Collection<? extends IAction> actions, String contributionID)
+  {
+    List<? extends IAction> filteredActions = new ArrayList<>(actions);
+    Map<String, MenuManager> submenuManagers = new LinkedHashMap<>();
+    for (IAction action : filteredActions.toArray(IAction[]::new))
+    {
+      if (action instanceof CreateChildAction || action instanceof CreateSiblingAction)
+      {
+        Object value = ReflectUtil.getValue("descriptor", action); //$NON-NLS-1$
+        if (value instanceof ModelElementItemProvider.GroupingChildCommandParameter)
+        {
+          String group = ((ModelElementItemProvider.GroupingChildCommandParameter)value).getGroup();
+          MenuManager submenuManager = submenuManagers.computeIfAbsent(contributionID, it -> new MenuManager(group, action.getImageDescriptor(), null));
+
+          filteredActions.remove(action);
+          submenuManager.add(action);
+          submenuManager.setImageDescriptor(action.getImageDescriptor());
+        }
+      }
+    }
+
+    populateManagerGen(manager, filteredActions, contributionID);
+
+    for (MenuManager submenuManager : submenuManagers.values())
+    {
+      if (contributionID != null)
+      {
+        manager.insertBefore(contributionID, submenuManager);
+      }
+      else
+      {
+        manager.add(submenuManager);
+      }
+    }
+  }
+
   /**
    * This removes from the specified <code>manager</code> all {@link org.eclipse.jface.action.ActionContributionItem}s
    * based on the {@link org.eclipse.jface.action.IAction}s contained in the <code>actions</code> collection.
@@ -390,7 +440,7 @@ public class TargletActionBarContributor extends EditingDomainActionBarContribut
    * <!-- end-user-doc -->
    * @generated
    */
-  protected void depopulateManager(IContributionManager manager, Collection<? extends IAction> actions)
+  protected void depopulateManagerGen(IContributionManager manager, Collection<? extends IAction> actions)
   {
     if (actions != null)
     {
@@ -417,6 +467,24 @@ public class TargletActionBarContributor extends EditingDomainActionBarContribut
         }
       }
     }
+  }
+
+  protected void depopulateManager(IContributionManager manager, Collection<? extends IAction> actions)
+  {
+    IContributionItem[] items = manager.getItems();
+    if (items != null)
+    {
+      for (int i = 0; i < items.length; i++)
+      {
+        IContributionItem contributionItem = items[i];
+        if (contributionItem instanceof MenuManager)
+        {
+          manager.remove(contributionItem);
+        }
+      }
+    }
+
+    depopulateManagerGen(manager, actions);
   }
 
   /**

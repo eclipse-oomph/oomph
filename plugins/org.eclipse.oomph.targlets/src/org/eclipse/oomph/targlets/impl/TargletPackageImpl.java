@@ -280,9 +280,20 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
    * @generated
    */
   @Override
+  public EAttribute getTargletContainer_ComposedTargets()
+  {
+    return (EAttribute)targletContainerEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public EReference getTargletContainer_Targlets()
   {
-    return (EReference)targletContainerEClass.getEStructuralFeatures().get(1);
+    return (EReference)targletContainerEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -728,6 +739,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
     // Create classes and their features
     targletContainerEClass = createEClass(TARGLET_CONTAINER);
     createEAttribute(targletContainerEClass, TARGLET_CONTAINER__ID);
+    createEAttribute(targletContainerEClass, TARGLET_CONTAINER__COMPOSED_TARGETS);
     createEReference(targletContainerEClass, TARGLET_CONTAINER__TARGLETS);
 
     targletEClass = createEClass(TARGLET);
@@ -844,6 +856,8 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
     initEClass(targletContainerEClass, TargletContainer.class, "TargletContainer", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
     initEAttribute(getTargletContainer_ID(), ecorePackage.getEString(), "iD", null, 0, 1, TargletContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getTargletContainer_ComposedTargets(), ecorePackage.getEString(), "composedTargets", null, 0, -1, TargletContainer.class, !IS_TRANSIENT, //$NON-NLS-1$
+        !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getTargletContainer_Targlets(), getTarglet(), null, "targlets", null, 0, -1, TargletContainer.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
@@ -979,6 +993,9 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
     String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData"; //$NON-NLS-1$
     addAnnotation(getTargletContainer_ID(), source, new String[] { "kind", "attribute", //$NON-NLS-1$ //$NON-NLS-2$
         "name", "id" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getTargletContainer_ComposedTargets(), source, new String[] { "kind", "element", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "composedTarget" //$NON-NLS-1$ //$NON-NLS-2$
     });
     addAnnotation(getTargletContainer_Targlets(), source, new String[] { "name", "targlet" //$NON-NLS-1$ //$NON-NLS-2$
     });

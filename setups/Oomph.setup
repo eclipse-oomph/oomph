@@ -478,6 +478,8 @@
         <requirement
             name="*"/>
         <requirement
+            name="org.eclipse.m2e.pde.feature.feature.group"/>
+        <requirement
             name="org.eclipse.justj.openjdk.hotspot.jre.minimal.stripped.feature.group"/>
         <sourceLocator
             rootFolder="${git.clone.oomph.location}">

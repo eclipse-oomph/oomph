@@ -10,8 +10,6 @@
  */
 package org.eclipse.oomph.setup.targlets.provider;
 
-import org.eclipse.oomph.base.BaseFactory;
-import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.p2.Configuration;
 import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.Repository;
@@ -35,6 +33,8 @@ import org.eclipse.oomph.targlets.Targlet;
 import org.eclipse.oomph.targlets.TargletFactory;
 import org.eclipse.oomph.targlets.core.WorkspaceIUInfo;
 import org.eclipse.oomph.targlets.internal.core.WorkspaceIUAnalyzer;
+import org.eclipse.oomph.targlets.provider.TargletContainerItemProvider;
+import org.eclipse.oomph.targlets.provider.TargletContainerItemProvider.ComposedTargetItemLabelProvider;
 import org.eclipse.oomph.util.ReflectUtil;
 import org.eclipse.oomph.util.StringUtil;
 import org.eclipse.oomph.util.pde.TargetPlatformRunnable;
@@ -109,6 +109,8 @@ import java.util.regex.Pattern;
  */
 public class TargletTaskItemProvider extends SetupTaskItemProvider
 {
+  private static final Pattern TARGET_NAME_LABEL_PATTERN = Pattern.compile("(.*)[\\s-_](Modular)?[\\s-_]*(Target)?"); //$NON-NLS-1$
+
   private static final Pattern VERSION_PATTERN = Pattern.compile("([1-9]+\\.[0-9]+)"); //$NON-NLS-1$
 
   /**
@@ -135,6 +137,7 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
     {
       super.getPropertyDescriptors(object);
 
+      addComposedTargetsPropertyDescriptor(object);
       addTargletURIsPropertyDescriptor(object);
       addOperatingSystemPropertyDescriptor(object);
       addWindowingSystemPropertyDescriptor(object);
@@ -146,6 +149,20 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
       addActivateTargetPropertyDescriptor(object);
     }
     return itemPropertyDescriptors;
+  }
+
+  /**
+   * This adds a property descriptor for the Composed Targets feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addComposedTargetsPropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_TargletTask_composedTargets_feature"), //$NON-NLS-1$
+        getString("_UI_TargletTask_composedTargets_description"), //$NON-NLS-1$
+        SetupTargletsPackage.Literals.TARGLET_TASK__COMPOSED_TARGETS, true, false, true, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
   /**
@@ -339,6 +356,38 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
     return result;
   }
 
+  @Override
+  protected Collection<?> filterChoices(Collection<?> choices, EStructuralFeature feature, Object object)
+  {
+    if (feature == SetupTargletsPackage.Literals.TARGLET_TASK__COMPOSED_TARGETS)
+    {
+      Set<String> targetDefinitionNames = TargletContainerItemProvider.getTargetDefinitionNames();
+      if (targetDefinitionNames != null)
+      {
+        return targetDefinitionNames;
+      }
+    }
+
+    return super.filterChoices(choices, feature, object);
+  }
+
+  @Override
+  protected boolean isChoiceArbitrary(EStructuralFeature feature, Object object)
+  {
+    return feature == SetupTargletsPackage.Literals.TARGLET_TASK__COMPOSED_TARGETS || super.isChoiceArbitrary(feature, object);
+  }
+
+  @Override
+  protected IItemLabelProvider getLabelProvider(IItemLabelProvider itemLabelProvider, EStructuralFeature feature, Object object)
+  {
+    if (feature == SetupTargletsPackage.Literals.TARGLET_TASK__COMPOSED_TARGETS)
+    {
+      return new ComposedTargetItemLabelProvider();
+    }
+
+    return super.getLabelProvider(itemLabelProvider, feature, object);
+  }
+
   /**
    * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
    * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
@@ -353,10 +402,35 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
     if (childrenFeatures == null)
     {
       super.getChildrenFeatures(object);
+      childrenFeatures.add(SetupTargletsPackage.Literals.TARGLET_TASK__COMPOSED_TARGETS);
       childrenFeatures.add(SetupTargletsPackage.Literals.TARGLET_TASK__TARGLETS);
       childrenFeatures.add(SetupTargletsPackage.Literals.TARGLET_TASK__IMPLICIT_DEPENDENCIES);
     }
     return childrenFeatures;
+  }
+
+  @Override
+  protected Object createWrapper(EObject object, EStructuralFeature feature, Object value, int index)
+  {
+    if (feature == SetupTargletsPackage.Literals.TARGLET_TASK__COMPOSED_TARGETS)
+    {
+      return TargletContainerItemProvider.createComposedTargetWrapper(object, SetupTargletsPackage.Literals.TARGLET_TASK__COMPOSED_TARGETS, (String)value,
+          index, adapterFactory, getResourceLocator());
+    }
+
+    return super.createWrapper(object, feature, value, index);
+  }
+
+  @Override
+  protected Command createCreateChildCommand(EditingDomain domain, EObject owner, EStructuralFeature feature, Object value, int index, Collection<?> collection)
+  {
+    if (feature == SetupTargletsPackage.Literals.TARGLET_TASK__COMPOSED_TARGETS)
+    {
+      return TargletContainerItemProvider.createCreateChildComposedTargetCommand(domain, owner, SetupTargletsPackage.Literals.TARGLET_TASK__COMPOSED_TARGETS,
+          value, index, collection, this);
+    }
+
+    return super.createCreateChildCommand(domain, owner, feature, value, index, collection);
   }
 
   /**
@@ -414,7 +488,6 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
     String targetName = targletTask.getTargetName();
     if (targetName != null)
     {
-      Pattern TARGET_NAME_LABEL_PATTERN = Pattern.compile("(.*)[\\s-_](Modular)?[\\s-_]*(Target)?"); //$NON-NLS-1$
       Matcher matcher = TARGET_NAME_LABEL_PATTERN.matcher(targetName);
       if (matcher.matches())
       {
@@ -426,10 +499,23 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
       }
     }
 
+    for (String name : targletTask.getComposedTargets())
+    {
+      if (added.add(name) && name != null)
+      {
+        if (builder.length() != 0)
+        {
+          builder.append(" + "); //$NON-NLS-1$
+        }
+
+        builder.append(name);
+      }
+    }
+
     for (Targlet targlet : targletTask.getTarglets())
     {
       String name = targlet.getName();
-      if (added.add(name))
+      if (added.add(name) && name != null)
       {
         if (builder.length() != 0)
         {
@@ -471,8 +557,7 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
-  public void notifyChanged(Notification notification)
+  public void notifyChangedGen(Notification notification)
   {
     updateChildren(notification);
 
@@ -489,6 +574,7 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
       case SetupTargletsPackage.TARGLET_TASK__ACTIVATE_TARGET:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
         return;
+      case SetupTargletsPackage.TARGLET_TASK__COMPOSED_TARGETS:
       case SetupTargletsPackage.TARGLET_TASK__TARGLETS:
       case SetupTargletsPackage.TARGLET_TASK__IMPLICIT_DEPENDENCIES:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
@@ -497,24 +583,45 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
     super.notifyChanged(notification);
   }
 
+  @Override
+  public void notifyChanged(Notification notification)
+  {
+    switch (notification.getFeatureID(TargletTask.class))
+    {
+      case SetupTargletsPackage.TARGLET_TASK__COMPOSED_TARGETS:
+      case SetupTargletsPackage.TARGLET_TASK__TARGLETS:
+      {
+        updateChildren(notification);
+        fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, true));
+        break;
+      }
+      default:
+      {
+        notifyChangedGen(notification);
+
+      }
+    }
+  }
+
   /**
    * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children
    * that can be created under this object.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   @Override
   protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object)
   {
     super.collectNewChildDescriptors(newChildDescriptors, object);
 
-    newChildDescriptors.add(createChildParameter(BasePackage.Literals.MODEL_ELEMENT__ANNOTATIONS, BaseFactory.eINSTANCE.createAnnotation()));
-
     newChildDescriptors.add(createChildParameter(SetupTargletsPackage.Literals.TARGLET_TASK__TARGLETS, TargletFactory.eINSTANCE.createTarglet()));
 
     newChildDescriptors.add(
         createChildParameter(SetupTargletsPackage.Literals.TARGLET_TASK__IMPLICIT_DEPENDENCIES, SetupTargletsFactory.eINSTANCE.createImplicitDependency()));
+
+    TargletContainerItemProvider.collectNewChildComposedTargetDescriptors(newChildDescriptors, object,
+        SetupTargletsPackage.Literals.TARGLET_TASK__COMPOSED_TARGETS);
   }
 
   @Override
