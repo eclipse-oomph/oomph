@@ -17,10 +17,12 @@ import org.eclipse.oomph.targlets.core.ITargletContainer;
 import org.eclipse.oomph.targlets.core.ITargletContainerDescriptor;
 import org.eclipse.oomph.targlets.core.ITargletContainerDescriptor.UpdateProblem;
 import org.eclipse.oomph.targlets.internal.core.TargletContainerDescriptorManager;
+import org.eclipse.oomph.targlets.internal.core.TargletsCorePlugin;
 import org.eclipse.oomph.targlets.presentation.TargletEditor;
 import org.eclipse.oomph.targlets.provider.TargletItemProviderAdapterFactory;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.ReflectUtil;
+import org.eclipse.oomph.util.SubMonitor;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
@@ -30,6 +32,7 @@ import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.core.runtime.IAdapterFactory;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.equinox.p2.metadata.Version;
 import org.eclipse.equinox.p2.metadata.VersionRange;
@@ -38,6 +41,7 @@ import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
@@ -49,6 +53,7 @@ import org.eclipse.pde.core.target.ITargetLocation;
 import org.eclipse.pde.internal.ui.editor.targetdefinition.LocationsSection;
 import org.eclipse.pde.internal.ui.editor.targetdefinition.TargetEditor;
 import org.eclipse.pde.internal.ui.shared.target.TargetLocationsGroup;
+import org.eclipse.pde.ui.target.ITargetLocationHandler;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -70,9 +75,11 @@ import java.util.Set;
 /**
  * @author Eike Stepper
  */
-public class TargletContainerUI extends BaseWithDeprecation implements IAdapterFactory
+public class TargletContainerUI implements ITargetLocationHandler, IAdapterFactory
 {
   private static final Object[] NO_CHILDREN = new Object[0];
+
+  static final Class<?>[] ADAPTERS = { ITreeContentProvider.class, ILabelProvider.class, ITargetLocationHandler.class };
 
   private final ComposedAdapterFactory adapterFactory;
 
@@ -127,7 +134,7 @@ public class TargletContainerUI extends BaseWithDeprecation implements IAdapterF
         return containerLabelProvider;
       }
 
-      if (adapterType == org.eclipse.pde.ui.target.ITargetLocationEditor.class || adapterType == org.eclipse.pde.ui.target.ITargetLocationUpdater.class)
+      if (adapterType == ITargetLocationHandler.class)
       {
         return this;
       }
@@ -137,13 +144,13 @@ public class TargletContainerUI extends BaseWithDeprecation implements IAdapterF
   }
 
   @Override
-  public boolean canEdit(ITargetDefinition target, ITargetLocation targetLocation)
+  public boolean canEdit(ITargetDefinition target, TreePath treePath)
   {
-    return targetLocation instanceof ITargletContainer;
+    return treePath.getFirstSegment() instanceof ITargletContainer;
   }
 
   @Override
-  public IWizard getEditWizard(ITargetDefinition target, ITargetLocation targetLocation)
+  public IWizard getEditWizard(ITargetDefinition target, TreePath treePath)
   {
     final IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
     final Display display = window.getShell().getDisplay();
@@ -199,7 +206,7 @@ public class TargletContainerUI extends BaseWithDeprecation implements IAdapterF
     });
 
     IWorkbenchPage page = window.getActivePage();
-    String id = ((ITargletContainer)targetLocation).getID();
+    String id = ((ITargletContainer)treePath.getFirstSegment()).getID();
     if (TargletContainerDescriptorManager.getContainer(id) == null)
     {
       IEditorPart activeEditor = page.getActiveEditor();
@@ -225,15 +232,45 @@ public class TargletContainerUI extends BaseWithDeprecation implements IAdapterF
   }
 
   @Override
-  public boolean canUpdate(ITargetDefinition target, ITargetLocation targetLocation)
+  public boolean canUpdate(ITargetDefinition target, TreePath treePath)
   {
-    return targetLocation instanceof ITargletContainer;
+    return treePath.getFirstSegment() instanceof ITargletContainer;
   }
 
   @Override
-  public IStatus update(ITargetDefinition target, ITargetLocation targetLocation, IProgressMonitor monitor)
+  public IStatus update(ITargetDefinition target, TreePath[] treePaths, IProgressMonitor monitor)
   {
-    return ((ITargletContainer)targetLocation).updateProfile(monitor);
+    SubMonitor progress = SubMonitor.convert(monitor, treePaths.length).detectCancelation();
+    MultiStatus rootStatus = new MultiStatus(TargletsCorePlugin.INSTANCE.getSymbolicName(), 0,
+        org.eclipse.oomph.targlets.internal.core.Messages.TargletContainer_ResolutionProblems, null);
+    for (TreePath treePath : treePaths)
+    {
+      IStatus status = ((ITargletContainer)treePath.getFirstSegment()).resolve(target, progress.newChild());
+      if (!status.isOK())
+      {
+        rootStatus.add(status);
+      }
+    }
+
+    return rootStatus;
+  }
+
+  @Override
+  public IStatus reload(ITargetDefinition target, ITargetLocation[] targetLocations, IProgressMonitor monitor)
+  {
+    SubMonitor progress = SubMonitor.convert(monitor, targetLocations.length).detectCancelation();
+    MultiStatus rootStatus = new MultiStatus(TargletsCorePlugin.INSTANCE.getSymbolicName(), 0,
+        org.eclipse.oomph.targlets.internal.core.Messages.TargletContainer_ResolutionProblems, null);
+    for (ITargetLocation location : targetLocations)
+    {
+      IStatus status = ((ITargletContainer)location).resolve(target, progress.newChild());
+      if (!status.isOK())
+      {
+        rootStatus.add(status);
+      }
+    }
+
+    return rootStatus;
   }
 
   private void fixComparator()
@@ -666,36 +703,5 @@ public class TargletContainerUI extends BaseWithDeprecation implements IAdapterF
     {
       return labelProvider.getText(wrappedObject);
     }
-  }
-}
-
-@SuppressWarnings("deprecation")
-class BaseWithDeprecation implements org.eclipse.pde.ui.target.ITargetLocationEditor, org.eclipse.pde.ui.target.ITargetLocationUpdater
-{
-  static final Class<?>[] ADAPTERS = { ITreeContentProvider.class, ILabelProvider.class, org.eclipse.pde.ui.target.ITargetLocationEditor.class,
-      org.eclipse.pde.ui.target.ITargetLocationUpdater.class };
-
-  @Override
-  public boolean canUpdate(ITargetDefinition target, ITargetLocation targetLocation)
-  {
-    return false;
-  }
-
-  @Override
-  public IStatus update(ITargetDefinition target, ITargetLocation targetLocation, IProgressMonitor monitor)
-  {
-    return null;
-  }
-
-  @Override
-  public boolean canEdit(ITargetDefinition target, ITargetLocation targetLocation)
-  {
-    return false;
-  }
-
-  @Override
-  public IWizard getEditWizard(ITargetDefinition target, ITargetLocation targetLocation)
-  {
-    return null;
   }
 }
