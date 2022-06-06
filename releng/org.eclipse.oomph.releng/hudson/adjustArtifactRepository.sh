@@ -26,5 +26,5 @@ java -cp "$GIT/releng/org.eclipse.oomph.releng/target/classes/" ArtifactReposito
 cd "$REPO"
 mv artifacts.out artifacts.xml
 zip -r -9 -qq artifacts.jar artifacts.xml
-rm artifacts.xml
+xz artifacts.xml
 cd "$CURDIR"

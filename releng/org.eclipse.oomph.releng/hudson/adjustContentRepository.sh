@@ -18,5 +18,5 @@ sed -e "s/<repository name='[^']*'/<repository name='$REPO_NAME'/" content.xml >
 mv content.out content.xml
 
 zip -r -9 -qq content.jar content.xml
-rm content.xml
+xz content.xml
 cd "$CURDIR"
