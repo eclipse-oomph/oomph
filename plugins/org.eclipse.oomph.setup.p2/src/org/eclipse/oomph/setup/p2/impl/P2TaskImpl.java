@@ -770,7 +770,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
 
     context.log((requirements.size() == 1 ? Messages.P2TaskImpl_resolvingRequirement : NLS.bind(Messages.P2TaskImpl_resolvingRequirements, requirements.size()))
         + " " + (repositories.size() == 1 ? Messages.P2TaskImpl_fromRepository : NLS.bind(Messages.P2TaskImpl_fromRepositories, repositories.size())) //$NON-NLS-1$
-        + NLS.bind(Messages.P2TaskImpl_resolvingRequirements_to, context.getProductLocation()));
+        + " " + NLS.bind(Messages.P2TaskImpl_resolvingRequirements_to, context.getProductLocation())); //$NON-NLS-1$
 
     for (Requirement requirement : requirements)
     {
