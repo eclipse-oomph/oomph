@@ -72,9 +72,6 @@
         name="org.eclipse.swtbot.ide.feature.group"/>
     <requirement
         name="org.eclipse.swtbot.eclipse.test.junit.feature.group"/>
-    <requirement
-        name="org.eclipse.pde.api.tools.ee.feature.feature.group"
-        optional="true"/>
     <repository
         url="https://download.eclipse.org/modeling/emf/emf/builds/nightly/latest"/>
     <repository
