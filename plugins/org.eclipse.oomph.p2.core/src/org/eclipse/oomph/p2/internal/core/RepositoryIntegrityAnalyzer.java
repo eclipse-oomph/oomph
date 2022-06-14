@@ -4067,12 +4067,14 @@ public class RepositoryIntegrityAnalyzer implements IApplication
       }
     }
 
-    public static final ILicense SUA_10 = loadLicence(URI.createURI("https://www.eclipse.org/legal/epl-v10.html"), "license-1.0.0.v20131003-1638");
+    public static final ILicense SUA_10 = loadLicence(URI.createURI("https://www.eclipse.org/legal/epl-v10.html"), URI.createURI(
+        "archive:https://download.eclipse.org/cbi/updates/license/1.0.0.v20131003-1638/features/org.eclipse.license_1.0.0.v20131003-1638.jar!/feature.properties"));
 
-    public static final ILicense SUA_11 = loadLicence(URI.createURI("https://www.eclipse.org/legal/epl-v10.html"), "license-1.0.1.v20140414-1359");
+    public static final ILicense SUA_11 = loadLicence(URI.createURI("https://www.eclipse.org/legal/epl-v10.html"), URI.createURI(
+        "archive:https://download.eclipse.org/cbi/updates/license/1.0.1.v20140414-1359/features/org.eclipse.license_1.0.1.v20140414-1359.jar!/feature.properties"));
 
-    public static final ILicense SUA_20 = loadLicence(URI.createURI("https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.html"),
-        "license-2.0.1.v20180423-1114");
+    public static final ILicense SUA_20 = loadLicence(URI.createURI("https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.html"), URI.createURI(
+        "archive:https://download.eclipse.org/cbi/updates/license/2.0.2.v20181016-2210/features/org.eclipse.license_2.0.2.v20181016-2210.jar!/feature.properties"));
 
     public static final List<ILicense> SUAS = Collections.unmodifiableList(Arrays.asList(new ILicense[] { SUA_10, SUA_11, SUA_20 }));
 
@@ -4304,26 +4306,17 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     @Override
     public abstract String getTitle();
 
-    private static ILicense loadLicence(URI licenseURI, String tag)
+    private static ILicense loadLicence(URI licenseURI, URI featurePropertiesURI)
     {
       InputStream in = null;
       try
       {
-        in = URIConverter.INSTANCE.createInputStream(
-            URI.createURI("https://api.github.com/repos/eclipse-cbi/epl-license-feature/contents/org.eclipse.license/feature.properties?ref=" + tag));
-        String json = IOUtil.readUTF8(in);
-        Matcher matcher = Pattern.compile("\"content\"\\s*:\\s*\"([^\"]+)\"").matcher(json);
-        if (matcher.find())
-        {
-          String content = matcher.group(1);
-          byte[] bytes = XMLTypeFactory.eINSTANCE.createBase64Binary(content.replace("\\n", ""));
-          Properties properties = new Properties();
-          Reader reader = new InputStreamReader(new ByteArrayInputStream(bytes), "UTF-8");
-          properties.load(reader);
-          Object license = properties.get("license");
-          return MetadataFactory.createLicense(new java.net.URI(licenseURI.toString()), license.toString());
-        }
-        throw new IORuntimeException("No content: " + json);
+        in = URIConverter.INSTANCE.createInputStream(featurePropertiesURI);
+        Properties properties = new Properties();
+        Reader reader = new InputStreamReader(in, "UTF-8");
+        properties.load(reader);
+        Object license = properties.get("license");
+        return MetadataFactory.createLicense(new java.net.URI(licenseURI.toString()), license.toString());
       }
       catch (Exception ex)
       {
