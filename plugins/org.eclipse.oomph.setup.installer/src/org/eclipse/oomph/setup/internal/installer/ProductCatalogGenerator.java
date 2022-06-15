@@ -30,6 +30,7 @@ import org.eclipse.oomph.setup.Macro;
 import org.eclipse.oomph.setup.Product;
 import org.eclipse.oomph.setup.ProductCatalog;
 import org.eclipse.oomph.setup.ProductVersion;
+import org.eclipse.oomph.setup.RedirectionTask;
 import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.SetupTask;
@@ -145,7 +146,7 @@ public class ProductCatalogGenerator implements IApplication
 
   private static final URI ECLIPSE_PROJECT_URI = URI.createURI("https://download.eclipse.org/eclipse/updates");
 
-  private static final URI ECLIPSE_BRANDING_NOTIFICATION_URI = URI.createURI("https://www.eclipse.org/setups/donate/?scope=${scope}&campaign=2022-03");
+  private static final URI ECLIPSE_BRANDING_NOTIFICATION_URI = URI.createURI("https://www.eclipse.org/setups/donate/?scope=${scope}&campaign=2022-06");
 
   private static final String ICON_DEFAULT = ICON_URL_PREFIX + "committers.png";
 
@@ -218,6 +219,8 @@ public class ProductCatalogGenerator implements IApplication
   private URI stagingEclipePlatformLocation;
 
   private URI eppSiteURI;
+
+  private boolean fakeNextRelease;
 
   private final Map<String, Map<URI, Map<String, URI>>> sites = new LinkedHashMap<>();
 
@@ -304,6 +307,11 @@ public class ProductCatalogGenerator implements IApplication
         {
           eppSiteURI = URI.createURI(arguments[++i]);
         }
+        else if ("-fakeNextRelease".equals(option))
+        {
+          compositeTrains.add(getMostRecentTrain());
+          fakeNextRelease = true;
+        }
       }
     }
 
@@ -338,7 +346,7 @@ public class ProductCatalogGenerator implements IApplication
   private String[] getTrains()
   {
     return new String[] { "juno", "kepler", "luna", "mars", "neon", "oxygen", "photon", "2018-09", "2018-12", "2019-03", "2019-06", "2019-09", "2019-12",
-        "2020-03", "2020-06", "2020-09", "2020-12", "2021-03", "2021-06", "2021-09", "2021-12", "2022-03", "2022-06" };
+        "2020-03", "2020-06", "2020-09", "2020-12", "2021-03", "2021-06", "2021-09", "2021-12", "2022-03", "2022-06", "2022-09" };
   }
 
   private URI getEclipsePlatformSite(String train)
@@ -397,6 +405,12 @@ public class ProductCatalogGenerator implements IApplication
   {
     String[] trains = getTrains();
     return trains[trains.length - (isLatestReleased() ? 1 : 2)];
+  }
+
+  private String getMostRecentRealTrain()
+  {
+    String[] trains = getTrains();
+    return trains[fakeNextRelease ? trains.length - 2 : trains.length - 1];
   }
 
   private String[] getRootIUs()
@@ -582,13 +596,16 @@ public class ProductCatalogGenerator implements IApplication
 
   private void savePGPKeys() throws IOException
   {
-    try
+    if (!fakeNextRelease)
     {
-      getPGPKeys(new java.net.URI("https://download.eclipse.org/staging/" + getMostRecentTrain()));
-    }
-    catch (Exception ex)
-    {
-      ex.printStackTrace();
+      try
+      {
+        getPGPKeys(new java.net.URI("https://download.eclipse.org/staging/" + getMostRecentTrain()));
+      }
+      catch (Exception ex)
+      {
+        ex.printStackTrace();
+      }
     }
 
     for (PGPPublicKey key : new ArrayList<>(pgpKeys.values()))
@@ -774,63 +791,73 @@ public class ProductCatalogGenerator implements IApplication
 
   private void generate(final String train) throws ProvisionException, URISyntaxException
   {
+    StringBuilder log = new StringBuilder();
+
+    URI originalEPPURI = URI.createURI(HTTPS_PACKAGES + "/" + train);
+    URI eppURI = uriConverter.normalize(originalEPPURI);
+    log.append(eppURI);
+    boolean isStaging = train.equals(stagingTrain);
+    boolean isFake = fakeNextRelease && train.equals(getMostRecentTrain());
+    URI eppReplacementURI = null;
+    if (isStaging)
     {
-      StringBuilder log = new StringBuilder();
+      log.append(" -> ").append(stagingEPPLocation);
+    }
+    else if (isFake)
+    {
+      eppReplacementURI = URI.createURI(HTTPS_PACKAGES + "/" + getMostRecentRealTrain());
+      log.append(" -> ").append(eppReplacementURI);
+    }
 
-      URI originalEPPURI = URI.createURI(HTTPS_PACKAGES + "/" + train);
-      URI eppURI = uriConverter.normalize(originalEPPURI);
-      log.append(eppURI);
-      boolean isStaging = train.equals(stagingTrain);
-      if (isStaging)
+    URI effectiveEPPURI = isStaging ? stagingEPPLocation : isFake ? eppReplacementURI : eppURI;
+    IMetadataRepository eppMetaDataRepository = manager.loadRepository(new java.net.URI(effectiveEPPURI.toString()), null);
+    getPGPKeys(eppMetaDataRepository.getLocation());
+    IMetadataRepository latestEPPMetaDataRepository = isStaging && stagingUseComposite || compositeTrains.contains(train) || isFake ? eppMetaDataRepository
+        : getLatestRepository(manager, eppMetaDataRepository);
+    if (latestEPPMetaDataRepository != eppMetaDataRepository)
+    {
+      URI latestLocation = URI.createURI(latestEPPMetaDataRepository.getLocation().toString());
+      log.append(" -> ").append(latestLocation);
+      URI relativeLocation = URI.createURI(latestLocation.toString()).deresolve(URI.createURI(effectiveEPPURI.toString()).appendSegment(""));
+      if (relativeLocation.isRelative())
       {
-        log.append(" -> ").append(stagingEPPLocation);
-      }
-
-      URI effectiveEPPURI = isStaging ? stagingEPPLocation : eppURI;
-      IMetadataRepository eppMetaDataRepository = manager.loadRepository(new java.net.URI(effectiveEPPURI.toString()), null);
-      getPGPKeys(eppMetaDataRepository.getLocation());
-      IMetadataRepository latestEPPMetaDataRepository = isStaging && stagingUseComposite || compositeTrains.contains(train) ? eppMetaDataRepository
-          : getLatestRepository(manager, eppMetaDataRepository);
-      if (latestEPPMetaDataRepository != eppMetaDataRepository)
-      {
-        URI latestLocation = URI.createURI(latestEPPMetaDataRepository.getLocation().toString());
-        log.append(" -> ").append(latestLocation);
-        URI relativeLocation = URI.createURI(latestLocation.toString()).deresolve(URI.createURI(effectiveEPPURI.toString()).appendSegment(""));
-        if (relativeLocation.isRelative())
+        URI actualLatestEPPURI = URI.createURI(URI.createURI(eppURI.toString()).appendSegments(relativeLocation.segments()).toString());
+        try
         {
-          URI actualLatestEPPURI = URI.createURI(URI.createURI(eppURI.toString()).appendSegments(relativeLocation.segments()).toString());
-          try
-          {
-            manager.loadRepository(new java.net.URI(actualLatestEPPURI.toString()), null);
-            log.append(" -> ").append(actualLatestEPPURI);
-            eppURI = trimEmptyTrailingSegment(actualLatestEPPURI);
-          }
-          catch (Throwable throwable)
-          {
-            // Ignore;
-          }
+          manager.loadRepository(new java.net.URI(actualLatestEPPURI.toString()), null);
+          log.append(" -> ").append(actualLatestEPPURI);
+          eppURI = trimEmptyTrailingSegment(actualLatestEPPURI);
+        }
+        catch (Throwable throwable)
+        {
+          // Ignore;
         }
       }
-      else if (isStaging && stagingEPPLocationIsActual)
-      {
-        eppURI = stagingEPPLocation;
-        log.append(" -> ").append(stagingEPPLocation);
-      }
+    }
+    else if (isStaging && stagingEPPLocationIsActual)
+    {
+      eppURI = stagingEPPLocation;
+      log.append(" -> ").append(stagingEPPLocation);
+    }
 
-      log.append('\n');
+    log.append('\n');
 
-      synchronized (eppMetaDataRepositories)
-      {
-        eppMetaDataRepositories.put(train, eppMetaDataRepository);
-      }
+    synchronized (eppMetaDataRepositories)
+    {
+      eppMetaDataRepositories.put(train, eppMetaDataRepository);
+    }
 
-      Map<String, IInstallableUnit> ius = new HashMap<>();
+    Map<String, IInstallableUnit> ius = new HashMap<>();
 
-      URI releaseURI = URI.createURI(RELEASES + "/" + train);
-      log.append(releaseURI);
+    URI releaseURI = URI.createURI(RELEASES + "/" + train);
+    log.append(releaseURI);
 
-      IMetadataRepository releaseMetaDataRepository = loadLatestRepository(manager, originalEPPURI, isStaging ? stagingTrainLocation : releaseURI,
-          !(compositeTrains.contains(train) || isStaging && stagingUseComposite));
+    URI effectiveReleaseURI = isFake ? URI.createURI(RELEASES + "/" + getMostRecentRealTrain()) : releaseURI;
+
+    IMetadataRepository releaseMetaDataRepository = loadLatestRepository(manager, originalEPPURI, isStaging ? stagingTrainLocation : effectiveReleaseURI,
+        !(compositeTrains.contains(train) || isStaging && stagingUseComposite));
+    if (!isFake)
+    {
       if (compositeTrains.contains(train) || isStaging && stagingUseComposite)
       {
         URI latestURI = trimEmptyTrailingSegment(URI.createURI(releaseMetaDataRepository.getLocation().toString()));
@@ -843,132 +870,132 @@ public class ProductCatalogGenerator implements IApplication
       {
         releaseURI = trimEmptyTrailingSegment(URI.createURI(releaseMetaDataRepository.getLocation().toString()));
       }
+    }
 
-      log.append(" -> ").append(releaseURI).append('\n');
+    log.append(" -> ").append(releaseURI).append('\n');
 
-      log.append(generateEclipsePlatformProduct(train));
+    log.append(generateEclipsePlatformProduct(train));
 
-      generateFullTrainProduct(train, releaseMetaDataRepository, releaseURI);
+    generateFullTrainProduct(train, releaseMetaDataRepository, releaseURI);
 
-      String mostRecentTrain = getMostRecentTrain();
-      Set<String> requirements = new HashSet<>();
+    String mostRecentTrain = getMostRecentTrain();
+    Set<String> requirements = new HashSet<>();
 
-      for (IInstallableUnit iu : P2Util.asIterable(eppMetaDataRepository.query(QueryUtil.createLatestIUQuery(), null)))
+    for (IInstallableUnit iu : P2Util.asIterable(eppMetaDataRepository.query(QueryUtil.createLatestIUQuery(), null)))
+    {
+      String fragment = iu.getProperty("org.eclipse.equinox.p2.type.fragment");
+      if ("true".equals(fragment))
       {
-        String fragment = iu.getProperty("org.eclipse.equinox.p2.type.fragment");
-        if ("true".equals(fragment))
-        {
-          continue;
-        }
-
-        String label = iu.getProperty("org.eclipse.equinox.p2.name");
-        if (label == null || label.startsWith("%") || label.equals("Uncategorized"))
-        {
-          // Ensure that this is removed later,
-          // but that the requirements are still processed for filtering roots.
-          requirements.add(iu.getId());
-        }
-        String id = iu.getId();
-        if ("epp.package.standard".equals(id))
-        {
-          label = "Eclipse Standard";
-        }
-
-        IInstallableUnit existingIU = ius.get(id);
-        if (existingIU == null)
-        {
-          ius.put(id, iu);
-          synchronized (labels)
-          {
-            String existingLabel = labels.get(id);
-            if (existingLabel == null || train.equals(mostRecentTrain))
-            {
-              labels.put(id, label);
-            }
-          }
-        }
+        continue;
       }
 
-      for (IInstallableUnit iu : ius.values())
+      String label = iu.getProperty("org.eclipse.equinox.p2.name");
+      if (label == null || label.startsWith("%") || label.equals("Uncategorized"))
       {
-        for (IRequirement requirement : iu.getRequirements())
-        {
-          if (requirement instanceof IRequiredCapability)
-          {
-            IRequiredCapability capability = (IRequiredCapability)requirement;
-            IMatchExpression<IInstallableUnit> filter = capability.getFilter();
-            if (filter != null)
-            {
-              String value = RequirementImpl.formatMatchExpression(filter);
-              if (EPP_INSTALL_ROOTS_FILTER.equals(value))
-              {
-                continue;
-              }
-            }
-
-            if ("org.eclipse.equinox.p2.iu".equals(capability.getNamespace()))
-            {
-              requirements.add(capability.getName());
-            }
-          }
-        }
+        // Ensure that this is removed later,
+        // but that the requirements are still processed for filtering roots.
+        requirements.add(iu.getId());
+      }
+      String id = iu.getId();
+      if ("epp.package.standard".equals(id))
+      {
+        label = "Eclipse Standard";
       }
 
-      ius.keySet().removeAll(requirements);
-      ius.keySet().remove("org.eclipse.epp.package.common.feature.feature.group");
-
-      for (String specialProductID : SPECIAL_PRODUCT_IDS)
+      IInstallableUnit existingIU = ius.get(id);
+      if (existingIU == null)
       {
-        for (IInstallableUnit iu : P2Util
-            .asIterable(releaseMetaDataRepository.query(QueryUtil.createLatestQuery(QueryUtil.createIUQuery(specialProductID)), null)))
+        ius.put(id, iu);
+        synchronized (labels)
         {
-          String id = iu.getId();
-          String label = iu.getProperty("org.eclipse.equinox.p2.name");
-          ius.put(id, iu);
-          synchronized (labels)
+          String existingLabel = labels.get(id);
+          if (existingLabel == null || train.equals(mostRecentTrain))
           {
             labels.put(id, label);
           }
         }
       }
+    }
 
-      LOOP: for (Map.Entry<String, IInstallableUnit> entry : ius.entrySet())
+    for (IInstallableUnit iu : ius.values())
+    {
+      for (IRequirement requirement : iu.getRequirements())
       {
-        String id = entry.getKey();
-        String label = labels.get(id);
-        IInstallableUnit iu = entry.getValue();
-        final Version version = iu.getVersion();
-        log.append("  ").append(label).append("  --  ").append(id).append(" ").append(version).append('\n');
-
-        Map<String, Set<IInstallableUnit>> versionIUs = new HashMap<>();
-        gatherReleaseIUs(versionIUs, iu, releaseMetaDataRepository, eppMetaDataRepository);
-        filterRoots(versionIUs);
-
-        synchronized (trainsAndVersions)
+        if (requirement instanceof IRequiredCapability)
         {
-          List<TrainAndVersion> list = trainsAndVersions.get(id);
-          if (list == null)
+          IRequiredCapability capability = (IRequiredCapability)requirement;
+          IMatchExpression<IInstallableUnit> filter = capability.getFilter();
+          if (filter != null)
           {
-            list = new ArrayList<>();
-            trainsAndVersions.put(id, list);
-          }
-
-          for (int i = 0, size = list.size(); i < size; ++i)
-          {
-            TrainAndVersion trainAndVersion = list.get(i);
-            if (compareTrains(trainAndVersion.train, train) > 0)
+            String value = RequirementImpl.formatMatchExpression(filter);
+            if (EPP_INSTALL_ROOTS_FILTER.equals(value))
             {
-              list.add(i, new TrainAndVersion(train, version, releaseURI, eppURI, versionIUs));
-              continue LOOP;
+              continue;
             }
           }
 
-          list.add(new TrainAndVersion(train, version, releaseURI, eppURI, versionIUs));
+          if ("org.eclipse.equinox.p2.iu".equals(capability.getNamespace()))
+          {
+            requirements.add(capability.getName());
+          }
         }
       }
-
-      System.out.println(log.toString());
     }
+
+    ius.keySet().removeAll(requirements);
+    ius.keySet().remove("org.eclipse.epp.package.common.feature.feature.group");
+
+    for (String specialProductID : SPECIAL_PRODUCT_IDS)
+    {
+      for (IInstallableUnit iu : P2Util
+          .asIterable(releaseMetaDataRepository.query(QueryUtil.createLatestQuery(QueryUtil.createIUQuery(specialProductID)), null)))
+      {
+        String id = iu.getId();
+        String label = iu.getProperty("org.eclipse.equinox.p2.name");
+        ius.put(id, iu);
+        synchronized (labels)
+        {
+          labels.put(id, label);
+        }
+      }
+    }
+
+    LOOP: for (Map.Entry<String, IInstallableUnit> entry : ius.entrySet())
+    {
+      String id = entry.getKey();
+      String label = labels.get(id);
+      IInstallableUnit iu = entry.getValue();
+      final Version version = iu.getVersion();
+      log.append("  ").append(label).append("  --  ").append(id).append(" ").append(version).append('\n');
+
+      Map<String, Set<IInstallableUnit>> versionIUs = new HashMap<>();
+      gatherReleaseIUs(versionIUs, iu, releaseMetaDataRepository, eppMetaDataRepository);
+      filterRoots(versionIUs);
+
+      synchronized (trainsAndVersions)
+      {
+        List<TrainAndVersion> list = trainsAndVersions.get(id);
+        if (list == null)
+        {
+          list = new ArrayList<>();
+          trainsAndVersions.put(id, list);
+        }
+
+        for (int i = 0, size = list.size(); i < size; ++i)
+        {
+          TrainAndVersion trainAndVersion = list.get(i);
+          if (compareTrains(trainAndVersion.train, train) > 0)
+          {
+            list.add(i, new TrainAndVersion(train, version, releaseURI, eppURI, versionIUs));
+            continue LOOP;
+          }
+        }
+
+        list.add(new TrainAndVersion(train, version, releaseURI, eppURI, versionIUs));
+      }
+    }
+
+    System.out.println(log.toString());
   }
 
   private String generateEclipsePlatformProduct(String train) throws ProvisionException, URISyntaxException
@@ -1429,8 +1456,9 @@ public class ProductCatalogGenerator implements IApplication
       productVersion.getSetupTasks().add(oomphUpdateURLVariable);
     }
 
+    boolean isFake = fakeNextRelease && getMostRecentTrain().equals(trainURI.lastSegment());
     Repository packageRepository = null;
-    if (eppURI != null)
+    if (eppURI != null && !isFake)
     {
       packageRepository = P2Factory.eINSTANCE.createRepository();
 
@@ -1467,6 +1495,14 @@ public class ProductCatalogGenerator implements IApplication
     if (!ECLIPSE_PLATFORM_SDK_PRODUCT_ID.equals(productName))
     {
       releaseRepository.getAnnotations().add(BaseFactory.eINSTANCE.createAnnotation(AnnotationConstants.ANNOTATION_RELEASE_TRAIN));
+    }
+
+    if (isFake)
+    {
+      RedirectionTask redirectionTask = SetupFactory.eINSTANCE.createRedirectionTask();
+      redirectionTask.setSourceURL(trainURI.toString());
+      redirectionTask.setTargetURL(RELEASES + "/" + getMostRecentRealTrain());
+      productVersion.getSetupTasks().add(redirectionTask);
     }
 
     P2Task p2Task = SetupP2Factory.eINSTANCE.createP2Task();
@@ -1965,11 +2001,13 @@ public class ProductCatalogGenerator implements IApplication
     }
 
     final String[] trains = getTrains();
-    for (int i = trains.length; i >= 0; --i)
+    for (int i = trains.length - 1; i >= 0; --i)
     {
       InputStream in = null;
 
-      final String branch = i == trains.length ? "master" : trains[i].startsWith("20") ? trains[i] + "_R" : trains[i].toUpperCase();
+      int trainIndex = i;
+      final String branch = stagingTrain != null && i == trains.length - 1 || fakeNextRelease && i == trains.length - 2 ? "master"
+          : trains[i].startsWith("20") ? trains[i] + "_R" : trains[i].toUpperCase();
 
       String url = "https://git.eclipse.org/c/epp/org.eclipse.epp.packages.git/plain/packages/org.eclipse.epp.package." + name + ".feature/epp.website.xml"
           + "?h=" + branch;
@@ -2004,36 +2042,39 @@ public class ProductCatalogGenerator implements IApplication
               String packageName = element.getAttribute("packageName");
               if (packageName != null)
               {
-                // If we are generating for a site that does not yet exist and are on the master branch.
+                // If we are generating for a site that does not yet exist and we are on the master branch.
                 if (eppSiteURI != null && "master".equals(branch))
                 {
                   // Compute the site URL from the package name.
                   URI siteURI = URI
                       .createURI(eppSiteURI + "/" + packageName.replaceAll("[\\W&&[^ ]]", "").replace(" for ", " ").replaceAll(" +", "-").toLowerCase());
                   String key = getKey(packageName);
-                  String train = trains[trains.length - 1];
                   synchronized (sites)
                   {
-                    Map<URI, Map<String, URI>> releaseLocations = sites.get(train);
-                    if (releaseLocations == null)
+                    for (int j = fakeNextRelease && trainIndex == trains.length - 1 ? trainIndex - 1 : trainIndex; j < trains.length; ++j)
                     {
-                      // Nothing yet for this train, so create it.
-                      releaseLocations = new LinkedHashMap<>();
-                      sites.put(train, releaseLocations);
-                    }
+                      String train = trains[j];
+                      Map<URI, Map<String, URI>> releaseLocations = sites.get(train);
+                      if (releaseLocations == null)
+                      {
+                        // Nothing yet for this train, so create it.
+                        releaseLocations = new LinkedHashMap<>();
+                        sites.put(train, releaseLocations);
+                      }
 
-                    Map<String, URI> map = releaseLocations.get(eppSiteURI);
-                    if (map == null)
-                    {
-                      // Clear any existing map and create a new one for this EPP site.
-                      releaseLocations.clear();
-                      map = new LinkedHashMap<>();
-                      releaseLocations.put(eppSiteURI, map);
+                      Map<String, URI> map = releaseLocations.get(eppSiteURI);
+                      if (map == null)
+                      {
+                        // Clear any existing map and create a new one for this EPP site.
+                        releaseLocations.clear();
+                        map = new LinkedHashMap<>();
+                        releaseLocations.put(eppSiteURI, map);
+                        map.put(key, siteURI);
+                      }
+
+                      // Replace the site for this key.
                       map.put(key, siteURI);
                     }
-
-                    // Replace the site for this key.
-                    map.put(key, siteURI);
                   }
                 }
 
