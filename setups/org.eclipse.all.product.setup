@@ -53,10 +53,6 @@
       </detail>
     </annotation>
     <setupTask
-        xsi:type="setup:RedirectionTask"
-        sourceURL="https://download.eclipse.org/releases/2022-09"
-        targetURL="https://download.eclipse.org/releases/2022-06"/>
-    <setupTask
         xsi:type="setup.p2:P2Task"
         label="Eclipse Eierlegende Wollmilchsau (2022-09)">
       <requirement
@@ -166,10 +162,6 @@
         <value>Eclipse Eierlegende Wollmilchsau - 2022-09</value>
       </detail>
     </annotation>
-    <setupTask
-        xsi:type="setup:RedirectionTask"
-        sourceURL="https://download.eclipse.org/releases/2022-09"
-        targetURL="https://download.eclipse.org/releases/2022-06"/>
     <setupTask
         xsi:type="setup.p2:P2Task"
         label="Eclipse Eierlegende Wollmilchsau (2022-09)">
