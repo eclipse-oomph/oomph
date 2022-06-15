@@ -20,11 +20,13 @@ import java.io.FileFilter;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.io.Writer;
-import java.net.URL;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.http.HttpResponse.BodyHandlers;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
@@ -43,6 +45,7 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -569,67 +572,52 @@ public final class OwnershipMapper
    */
   private static final class PMI
   {
-    private static final String URL = "https://projects.eclipse.org/list-of-projects";
+    private static final Pattern PROJECT_DETAILS_PATTERN = Pattern.compile("\"project_id\":\"([^\"]+)\"[^}]*\"name\":\"([^\"]+)\".*?\"state\":\"([^\"]+)\"");
 
-    private static final Pattern ID_PATTERN = Pattern.compile("<div[^>]+about=\"/projects/([^\"]+)\"[^>]+>");
-
-    private static final String NEXT = "<li class=\"next\">";
+    private static final Pattern NEXT_PAGE_PATTERN = Pattern.compile("<([^>]+)>; *rel=\"next\"");
 
     public static Map<String, String> getProjects() throws Exception
     {
       Map<String, String> projects = new HashMap<String, String>();
-      for (int page = 0;; ++page)
+      if (Boolean.TRUE)
       {
-        String url = URL + "?page=" + page;
-        System.out.println("Processing " + url);
-
-        InputStream stream = new URL(url).openStream();
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-        try
+        HttpClient client = HttpClient.newHttpClient();
+        String pageURL = "https://projects.eclipse.org/api/projects/?pagesize=50&page=0";
+        for (;;)
         {
-          IOUtil.copy(stream, baos);
-        }
-        finally
-        {
-          IOUtil.close(stream);
-        }
+          System.out.println("Processing " + pageURL);
+          HttpRequest request = HttpRequest.newBuilder().uri(java.net.URI.create(pageURL)).build();
+          HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
+          String body = response.body();
 
-        String content = new String(baos.toByteArray(), "UTF-8");
-        if (processPage(content, projects))
-        {
-          break;
+          Optional<String> link = response.headers().firstValue("link");
+          for (Matcher matcher = PROJECT_DETAILS_PATTERN.matcher(body); matcher.find();)
+          {
+            String state = matcher.group(3);
+            if (!state.equals("Archived"))
+            {
+              String id = matcher.group(1);
+              String name = matcher.group(2).trim().replace("\\u2122", "").replace("\\u00ae", "");
+              projects.put(id, name);
+            }
+          }
+
+          if (!link.isPresent())
+          {
+            break;
+          }
+
+          Matcher matcher = NEXT_PAGE_PATTERN.matcher(link.get());
+          if (!matcher.find())
+          {
+            break;
+          }
+
+          pageURL = matcher.group(1);
         }
       }
 
       return projects;
-    }
-
-    /**
-     * @return <code>true</code> if this is the last page.
-     */
-    private static boolean processPage(String content, Map<String, String> projects)
-    {
-      Matcher matcher = ID_PATTERN.matcher(content);
-      int start = 0;
-
-      while (matcher.find(start))
-      {
-        String project = matcher.group(1).trim();
-        String name = "";
-
-        Pattern namePattern = Pattern.compile("<a href=\"/projects/" + project.replace(".", "\\.") + "\">([^<]+)</a>");
-        Matcher nameMatcher = namePattern.matcher(content);
-        if (nameMatcher.find())
-        {
-          name = nameMatcher.group(1).trim().replace("\u2122", "").replace("\u00ae", "");
-        }
-
-        projects.put(project, name);
-        start = matcher.end();
-      }
-
-      return !content.contains(NEXT);
     }
   }
 
