@@ -561,4 +561,10 @@ public final class ExternalProject extends ExternalContainer implements IProject
       }
     }
   }
+
+  @Override
+  public String getDefaultLineSeparator() throws CoreException
+  {
+    return System.lineSeparator();
+  }
 }
