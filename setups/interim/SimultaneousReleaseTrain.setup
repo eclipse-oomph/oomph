@@ -4,13 +4,12 @@
     xmlns:xmi="http://www.omg.org/XMI"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:git="http://www.eclipse.org/oomph/setup/git/1.0"
-    xmlns:mylyn="http://www.eclipse.org/oomph/setup/mylyn/1.0"
     xmlns:predicates="http://www.eclipse.org/oomph/predicates/1.0"
     xmlns:projects="http://www.eclipse.org/oomph/setup/projects/1.0"
     xmlns:setup="http://www.eclipse.org/oomph/setup/1.0"
     xmlns:setup.p2="http://www.eclipse.org/oomph/setup/p2/1.0"
     xmlns:setup.workingsets="http://www.eclipse.org/oomph/setup/workingsets/1.0"
-    xsi:schemaLocation="http://www.eclipse.org/oomph/setup/git/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Git.ecore http://www.eclipse.org/oomph/setup/mylyn/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Mylyn.ecore http://www.eclipse.org/oomph/predicates/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Predicates.ecore http://www.eclipse.org/oomph/setup/projects/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Projects.ecore http://www.eclipse.org/oomph/setup/workingsets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupWorkingSets.ecore"
+    xsi:schemaLocation="http://www.eclipse.org/oomph/setup/git/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Git.ecore http://www.eclipse.org/oomph/predicates/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Predicates.ecore http://www.eclipse.org/oomph/setup/projects/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Projects.ecore http://www.eclipse.org/oomph/setup/workingsets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupWorkingSets.ecore"
     name="simrel"
     label="Simultaneous Release Train">
   <annotation
@@ -44,31 +43,13 @@
       xsi:type="setup.p2:P2Task"
       label="${scope.project.label}">
     <requirement
-        name="org.eclipse.cbi.p2repo.aggregator.editor.feature.feature.group"/>
-    <requirement
-        name="org.eclipse.mylyn.ide_feature.feature.group"/>
-    <requirement
-        name="org.eclipse.mylyn.pde_feature.feature.group"/>
-    <requirement
-        name="org.eclipse.mylyn.team_feature.feature.group"/>
-    <requirement
-        name="org.eclipse.mylyn.gerrit.feature.feature.group"/>
-    <requirement
-        name="org.eclipse.mylyn_feature.feature.group"/>
-    <requirement
-        name="org.eclipse.mylyn.bugzilla_feature.feature.group"/>
-    <requirement
-        name="org.eclipse.mylyn.git.feature.group"/>
-    <requirement
-        name="org.eclipse.mylyn.builds.feature.group"/>
-    <requirement
-        name="org.eclipse.mylyn.hudson.feature.group"/>
-    <requirement
         name="org.eclipse.egit.feature.group"/>
     <requirement
-        name="org.eclipse.egit.mylyn.feature.group"/>
+        name="org.eclipse.cbi.p2repo.aggregator.editor.feature.feature.group"/>
+    <requirement
+        name="org.eclipse.cbi.p2repo.aggregator.analyzer.editor.feature.feature.group"/>
     <repository
-        url="https://download.eclipse.org/cbi/updates/aggregator/ide/4.13"/>
+        url="https://download.eclipse.org/cbi/updates/p2-aggregator/tools/nightly/latest"/>
     <repository
         url="https://download.eclipse.org/egit/updates-stable-nightly"/>
     <repository
@@ -122,32 +103,6 @@
       </predicate>
     </workingSet>
     <description>The dynamic working sets for ${scope.project.label}</description>
-  </setupTask>
-  <setupTask
-      xsi:type="mylyn:MylynQueriesTask"
-      repositoryURL="https://bugs.eclipse.org/bugs"
-      userID="${bugzilla.id}"
-      password="${eclipse.user.password}">
-    <query summary="${scope.project.label} Bugs in ${git.clone.checkoutBranch}"
-        url="https://bugs.eclipse.org/bugs/buglist.cgi?product=Simultaneous%20Release&amp;bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED"/>
-  </setupTask>
-  <setupTask
-      xsi:type="mylyn:MylynQueriesTask"
-      connectorKind="org.eclipse.mylyn.gerrit"
-      repositoryURL="https://git.eclipse.org/r"
-      userID="${bugzilla.id}"
-      password="${eclipse.user.password}">
-    <query summary="${scope.project.label} Reviews in ${git.clone.checkoutBranch}">
-      <attribute
-          key="gerrit query type"
-          value="custom"/>
-      <attribute
-          key="gerrit query project"
-          value="simrel/org.eclipse.simrel.build"/>
-      <attribute
-          key="gerrit query string"
-          value="project:simrel/org.eclipse.simrel.build status:open branch:${git.clone.checkoutBranch}"/>
-    </query>
   </setupTask>
   <setupTask
       xsi:type="setup:VariableTask"

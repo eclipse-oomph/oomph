@@ -1118,7 +1118,9 @@
   <project href="interim/EPPPackages.setup#/"/>
   <project href="https://git.eclipse.org/c/epsilon/org.eclipse.epsilon.git/plain/releng/org.eclipse.epsilon.releng/epsilonDev.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-equinox/equinox/master/releng/org.eclipse.equinox.releng/Equinox.setup#/"/>
-  <project href="https://git.eclipse.org/c/gmf-notation/org.eclipse.gmf.notation.git/plain/org.eclipse.gmf.runtime.notation/GMFNotation.setup#/"/>
+  <project href="interim/GEF.setup#/"/>
+  <project href="interim/GMFNotation.setup#/"/>
+  <project href="interim/GMFRuntime.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse/ice/master/org.eclipse.ice.aggregator/ICE.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-jdt/eclipse.jdt/master/org.eclipse.jdt.releng/JDT.setup#/"/>
   <project href="https://git.eclipse.org/c/jubula/org.eclipse.jubula.core.git/plain/org.eclipse.jubula.project.configuration/oomph/jubula.setup#/"/>

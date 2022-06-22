@@ -7,6 +7,17 @@
     label="Simultaneous Release Train">
   <annotation
       source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="imageURI">
+        <value>https://raw.githubusercontent.com/eclipse-cbi/p2repo-aggregator/main/org.eclipse.cbi.p2repo.aggregator.editor/icons/full/wizban/NewAggregator.png</value>
+      </detail>
+      <detail
+          key="siteURI">
+        <value>https://wiki.eclipse.org/Simrel/Contributing_to_Simrel_Aggregation_Build</value>
+      </detail>
+    </annotation>
     <detail
         key="imageURI">
       <value>https://raw.githubusercontent.com/eclipse-cbi/p2repo-aggregator/main/org.eclipse.cbi.p2repo.aggregator.editor/icons/full/wizban/NewAggregator.png</value>
@@ -63,8 +74,7 @@
     &lt;/p>
     &lt;p>
     The default Git repository URI uses ssh so you must &lt;a href=&quot;https://wiki.eclipse.org/Gerrit#SSH_Keys&quot; target=&quot;simrel_wiki&quot;>specify your user ID for which you've registered your SSH keys&lt;/a> to use this choice.
-    To exploit the Mylyn Bugzilla integration, you should enter the email address of your Eclipse account and enter your password for that account. 
-    You can use the Authenticate... button to ensure you've entered it correctly.
+    You may choose the Git repository URI for anonymous access if you only wish to explore the content but will not be committing any changes.
     &lt;/p>
   </description>
 </setup:Configuration>
