@@ -14,6 +14,7 @@ package org.eclipse.oomph.setup.internal.installer;
 import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.jreinfo.JREManager;
 import org.eclipse.oomph.p2.core.P2Util;
+import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.p2.core.ProfileTransaction.Resolution;
 import org.eclipse.oomph.p2.internal.ui.P2UIPlugin;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
@@ -134,7 +135,11 @@ public class InstallerApplication implements IApplication
       @Override
       public void run()
       {
-        P2Util.mergeGlobalTrustPreferences(P2Util.getAgentManager().getCurrentAgent().getCurrentProfile());
+        Profile profile = P2Util.getAgentManager().getCurrentAgent().getCurrentProfile();
+        if (profile != null)
+        {
+          P2Util.mergeGlobalTrustPreferences(profile);
+        }
       }
     };
 
