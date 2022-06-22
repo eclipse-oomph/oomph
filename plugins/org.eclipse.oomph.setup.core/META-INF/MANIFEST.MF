@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.oomph.setup.core;singleton:=true
-Bundle-Version: 1.24.0.qualifier
+Bundle-Version: 1.25.0.qualifier
 Bundle-ClassPath: .
 Bundle-Name: %pluginName
 Bundle-Vendor: %providerName
@@ -41,7 +41,7 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.24.0,4.0.0)",
  org.bouncycastle.bcpg;bundle-version="[1.65.0,2.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-ActivationPolicy: lazy
-Export-Package: org.eclipse.oomph.setup.internal.core;version="1.24.0";x-internal:=true,
- org.eclipse.oomph.setup.internal.core.util;version="1.24.0";x-internal:=true
+Export-Package: org.eclipse.oomph.setup.internal.core;version="1.25.0";x-internal:=true,
+ org.eclipse.oomph.setup.internal.core.util;version="1.25.0";x-internal:=true
 Bundle-Activator: org.eclipse.oomph.setup.internal.core.SetupCorePlugin$Implementation
 Automatic-Module-Name: org.eclipse.oomph.setup.core

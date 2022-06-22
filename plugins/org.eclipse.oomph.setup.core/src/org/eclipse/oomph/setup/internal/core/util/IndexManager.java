@@ -18,6 +18,7 @@ import org.eclipse.oomph.base.util.BaseResourceFactoryImpl;
 import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.p2.core.P2Util;
+import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.p2.internal.core.PGPKeyResourceImpl;
 import org.eclipse.oomph.setup.AnnotationConstants;
 import org.eclipse.oomph.setup.Index;
@@ -518,7 +519,11 @@ public class IndexManager
 
         if (!keys.isEmpty())
         {
-          P2Util.addedTrustedKeys(P2Util.getAgentManager().getCurrentAgent().getCurrentProfile(), keys);
+          Profile profile = P2Util.getAgentManager().getCurrentAgent().getCurrentProfile();
+          if (profile != null)
+          {
+            P2Util.addedTrustedKeys(profile, keys);
+          }
         }
       }
     }
