@@ -167,5 +167,5 @@
   <logicalProjectContainer
       xsi:type="setup:ProjectCatalog"
       href="../org.eclipse.setup#//@projectCatalogs[name='org.eclipse']"/>
-  <description>The Eclipse Graphical Modeling Project (GMP) provides a set of generative components and runtime infrastructures for developing graphical editors based on EMF and GEF. The GMF Runtime Project provides a standard EMF runtimeal meta model.</description>
+  <description>The Eclipse Graphical Modeling Project (GMP) provides a set of generative components and runtime infrastructures for developing graphical editors based on EMF and GEF. The GMF Runtime Project provides a standard EMF runtime meta model.</description>
 </setup:Project>
