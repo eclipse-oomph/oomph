@@ -81,21 +81,6 @@
       </detail>
     </annotation>
     <description>${scope.project.label}</description>
-    <anruntime
-        source="http://www.eclipse.org/oomph/setup/InducedChoices">
-      <detail
-          key="inherit">
-        <value>eclipse.git.gerrit.remoteURIs</value>
-      </detail>
-      <detail
-          key="label">
-        <value>${scope.project.label} Git or Gerrit repository</value>
-      </detail>
-      <detail
-          key="target">
-        <value>remoteURI</value>
-      </detail>
-    </anruntime>
   </setupTask>
   <setupTask
       xsi:type="setup.targlets:TargletTask">
