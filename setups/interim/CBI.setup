@@ -6,7 +6,7 @@
     xmlns:setup="http://www.eclipse.org/oomph/setup/1.0"
     name="cbi"
     label="CBI">
-  <project href="https://raw.githubusercontent.com/eclipse-cbi/p2repo-aggregator/main/org.eclipse.cbi.p2repo.releng.parent/setup/P2RepoAggregator.setup#/"/>
+  <project href="https://github.com/eclipse-cbi/p2repo-aggregator/blob/main/releng/org.eclipse.cbi.p2repo.releng.parent/setup/P2RepoAggregator.setup#/"/>
   <logicalProjectContainer
       xsi:type="setup:ProjectCatalog"
       href="../org.eclipse.setup#//@projectCatalogs[name='org.eclipse']"/>
