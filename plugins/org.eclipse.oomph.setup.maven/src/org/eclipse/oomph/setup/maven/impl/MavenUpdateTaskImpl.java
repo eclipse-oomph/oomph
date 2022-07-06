@@ -344,7 +344,7 @@ public class MavenUpdateTaskImpl extends SetupTaskImpl implements MavenUpdateTas
   public void perform(SetupTaskContext context) throws Exception
   {
     List<IProject> projects = getFilteredProjects();
-    MavenUpdateRequest updateRequest = new MavenUpdateRequest(projects.toArray(new IProject[0]), isOffline(), isUpdateSnapshots());
+    MavenUpdateRequest updateRequest = new MavenUpdateRequest(projects, isOffline(), isUpdateSnapshots());
     MavenPlugin.getMavenProjectRegistry().refresh(updateRequest);
   }
 
