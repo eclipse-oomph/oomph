@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.8"?>
-<target name="Generated from Oomph" sequenceNumber="92">
+<target name="Generated from Oomph" sequenceNumber="93">
   <locations>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+      <unit id="com.ibm.icu.base" version="0.0.0"/>
       <unit id="javaewah" version="0.0.0"/>
+      <unit id="javax.servlet.jsp" version="0.0.0"/>
       <unit id="net.i2p.crypto.eddsa" version="0.0.0"/>
       <unit id="org.apache.commons.compress" version="0.0.0"/>
+      <unit id="org.apache.commons.io" version="0.0.0"/>
       <unit id="org.apache.sshd.osgi" version="0.0.0"/>
       <unit id="org.apache.sshd.sftp" version="0.0.0"/>
+      <unit id="org.eclipse.e4.ui.progress" version="0.0.0"/>
       <unit id="org.eclipse.egit.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.emf.sdk.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.equinox.executable.feature.group" version="0.0.0"/>
