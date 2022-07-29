@@ -12,7 +12,7 @@
 <feature
       id="org.eclipse.oomph.tests"
       label="%featureName"
-      version="2.0.0.qualifier"
+      version="1.21.0.qualifier"
       provider-name="%providerName"
       license-feature="org.eclipse.oomph.license"
       license-feature-version="0.0.0">
@@ -156,14 +156,14 @@
          unpack="false"/>
 
    <plugin
-         id="bcpg"
+         id="org.bouncycastle.bcpg"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="bcprov"
+         id="org.bouncycastle.bcprov"
          download-size="0"
          install-size="0"
          version="0.0.0"
