@@ -1103,7 +1103,7 @@
   <project href="https://git.eclipse.org/c/capra/org.eclipse.capra.git/plain/releng/org.eclipse.capra.oomph/EclipseCapra.setup#/"/>
   <project href="interim/CBI.setup#/"/>
   <project href="https://git.eclipse.org/c/cdo/cdo.git/plain/releng/org.eclipse.emf.cdo.releng/CDO.setup#/"/>
-  <project href="http://git.eclipse.org/c/cdt/org.eclipse.cdt.git/plain/releng/CDT.setup#/"/>
+  <project href="https://git.eclipse.org/c/cdt/org.eclipse.cdt.git/plain/releng/CDT.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse/corrosion/master/target-platform/Corrosion.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse/dartboard/master/org.eclipse.dartboard.releng/Dartboard.setup#/"/>
   <project href="interim/E4Tools.setup#/"/>
