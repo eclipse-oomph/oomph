@@ -963,6 +963,12 @@ public class ProductCatalogGenerator implements IApplication
     LOOP: for (Map.Entry<String, IInstallableUnit> entry : ius.entrySet())
     {
       String id = entry.getKey();
+      if (!PRODUCT_IDS.contains(id) && !ALL_PRODUCT_ID.equals(id) && !ECLIPSE_PLATFORM_SDK_PRODUCT_ID.equals(id)
+          && !ECLIPSE_PLATFORM_SDK_PRODUCT_IDE_ID.equals(id) && !SPECIAL_PRODUCT_IDS.contains(id) && !"epp.package.standard".equals(id))
+      {
+        continue;
+      }
+
       String label = labels.get(id);
       IInstallableUnit iu = entry.getValue();
       final Version version = iu.getVersion();

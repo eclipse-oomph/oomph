@@ -40,12 +40,12 @@
       vm="true"/>
   <version name="latest"
       label="Latest (2022-09)"
-      requiredJavaVersion="11">
+      requiredJavaVersion="17">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/2022-09/m1</value>
+        <value>https://www.eclipse.org/downloads/packages/release/2022-09/m2</value>
       </detail>
       <detail
           key="shortcut">
@@ -87,7 +87,7 @@
       <requirement
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
       <repository
-          url="https://download.eclipse.org/releases/2022-09/202207151001">
+          url="https://download.eclipse.org/releases/2022-09/202208051000">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
@@ -150,12 +150,12 @@
   </version>
   <version name="2022-09"
       label="2022-09"
-      requiredJavaVersion="11">
+      requiredJavaVersion="17">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/2022-09/m1</value>
+        <value>https://www.eclipse.org/downloads/packages/release/2022-09/m2</value>
       </detail>
       <detail
           key="shortcut">
@@ -197,7 +197,7 @@
       <requirement
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
       <repository
-          url="https://download.eclipse.org/releases/2022-09/202207151001">
+          url="https://download.eclipse.org/releases/2022-09/202208051000">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
