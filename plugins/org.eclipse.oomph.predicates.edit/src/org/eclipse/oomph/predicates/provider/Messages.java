@@ -37,6 +37,8 @@ public class Messages extends NLS
 
   public static String OrPredicateItemProvider_Or_label;
 
+  public static String RepositoryPredicateItemProvider_relativePathLike;
+
   public static String RepositoryPredicateItemProvider_SameRepository_label;
 
   static

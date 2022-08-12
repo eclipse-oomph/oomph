@@ -145,9 +145,12 @@ public class RepositoryPredicateItemProvider extends PredicateItemProvider
   @Override
   public String getText(Object object)
   {
-    IProject project = ((RepositoryPredicate)object).getProject();
-    return project == null ? getString("_UI_RepositoryPredicate_type") //$NON-NLS-1$
-        : NLS.bind(Messages.RepositoryPredicateItemProvider_SameRepository_label, project.getName());
+    RepositoryPredicate repositoryPredicate = (RepositoryPredicate)object;
+    IProject project = repositoryPredicate.getProject();
+    String relativePathPattern = repositoryPredicate.getRelativePathPattern();
+    return (project == null ? getString("_UI_RepositoryPredicate_type") //$NON-NLS-1$
+        : NLS.bind(Messages.RepositoryPredicateItemProvider_SameRepository_label, project.getName()))
+        + (relativePathPattern == null ? "" : NLS.bind(Messages.RepositoryPredicateItemProvider_relativePathLike, relativePathPattern)); //$NON-NLS-1$
   }
 
   /**
