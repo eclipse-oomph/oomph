@@ -62,6 +62,7 @@ public class ProgressLogFilter
       "Receiving task ", //$NON-NLS-1$
       "Updating repository state", //$NON-NLS-1$
       "Processing Local", //$NON-NLS-1$
+      "Clear content flags for project", //$NON-NLS-1$
       "Resources to refresh:" //$NON-NLS-1$
   };
 
