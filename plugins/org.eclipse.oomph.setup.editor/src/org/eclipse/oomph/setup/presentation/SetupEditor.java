@@ -893,7 +893,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
             if (normalizedURI.isPlatformResource())
             {
               IFile file = EcorePlugin.getWorkspaceRoot().getFile(new Path(normalizedURI.toPlatformString(true)));
-              if (file.isSynchronized(1))
+              if (!file.isSynchronized(1))
               {
                 files.add(file);
               }
