@@ -193,6 +193,12 @@ public class BaseValidator extends EObjectValidator
    */
   public boolean validateAnnotation_WellFormedSourceURI(Annotation annotation, DiagnosticChain diagnostics, Map<Object, Object> context)
   {
+    // Ignore for an annotation that is the root of a document so that they can easily use any string value.
+    if (annotation.eContainer() == null && annotation.eResource() != null)
+    {
+      return true;
+    }
+
     String source = annotation.getSource();
     boolean result = source == null || isWellFormedURI(source);
     if (!result && diagnostics != null)
