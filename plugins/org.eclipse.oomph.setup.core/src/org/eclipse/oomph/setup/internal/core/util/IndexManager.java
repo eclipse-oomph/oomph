@@ -20,6 +20,7 @@ import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.p2.internal.core.PGPKeyResourceImpl;
+import org.eclipse.oomph.p2.internal.core.X509CertificateResourceImpl;
 import org.eclipse.oomph.setup.AnnotationConstants;
 import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
@@ -46,6 +47,7 @@ import org.eclipse.equinox.p2.repository.spi.PGPPublicKeyService;
 import org.bouncycastle.openpgp.PGPPublicKey;
 
 import java.io.IOException;
+import java.security.cert.Certificate;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -470,59 +472,89 @@ public class IndexManager
       PGPPublicKeyService keyService = null;
       for (Annotation annotation : index.getAnnotations())
       {
-        IMatchExpression<IInstallableUnit> filter = getFilter(annotation);
-        if (filter != null)
+        String source = annotation.getSource();
+        boolean trustedKeysAnnotation = AnnotationConstants.ANNOTATION_TRUSTED_KEYS.equals(source);
+        boolean trustedCertificatesAnnotation = AnnotationConstants.ANNOTATION_TRUSTED_CERTIFICATES.equals(source);
+        if (trustedKeysAnnotation || trustedCertificatesAnnotation)
         {
-          if (contextIU == null)
+          IMatchExpression<IInstallableUnit> filter = getFilter(annotation);
+          if (filter != null)
           {
-            Map<String, String> safeProperties = new LinkedHashMap<>();
-            Properties properties = System.getProperties();
-            synchronized (properties)
+            if (contextIU == null)
             {
-              for (Entry<Object, Object> entry : properties.entrySet())
+              Map<String, String> safeProperties = new LinkedHashMap<>();
+              Properties properties = System.getProperties();
+              synchronized (properties)
               {
-                Object key = entry.getKey();
-                Object value = entry.getValue();
-                if (key != null && value != null)
+                for (Entry<Object, Object> entry : properties.entrySet())
                 {
-                  safeProperties.put(key.toString(), value.toString());
+                  Object key = entry.getKey();
+                  Object value = entry.getValue();
+                  if (key != null && value != null)
+                  {
+                    safeProperties.put(key.toString(), value.toString());
+                  }
+                }
+              }
+
+              contextIU = InstallableUnit.contextIU(safeProperties);
+            }
+
+            if (!filter.isMatch(contextIU))
+            {
+              continue;
+            }
+          }
+
+          if (trustedKeysAnnotation)
+          {
+            if (keyService == null)
+            {
+              keyService = P2Util.getCurrentProvisioningAgent().getService(PGPPublicKeyService.class);
+            }
+
+            Set<PGPPublicKey> keys = new LinkedHashSet<>();
+            for (EObject eObject : annotation.getReferences())
+            {
+              Resource resource = eObject.eResource();
+              if (resource instanceof PGPKeyResourceImpl)
+              {
+                for (PGPPublicKey key : ((PGPKeyResourceImpl)resource).getPublicKeys())
+                {
+                  keys.add(keyService.addKey(key));
                 }
               }
             }
 
-            contextIU = InstallableUnit.contextIU(safeProperties);
-          }
-
-          if (!filter.isMatch(contextIU))
-          {
-            continue;
-          }
-        }
-
-        if (keyService == null)
-        {
-          keyService = P2Util.getCurrentProvisioningAgent().getService(PGPPublicKeyService.class);
-        }
-
-        Set<PGPPublicKey> keys = new LinkedHashSet<>();
-        for (EObject eObject : annotation.getReferences())
-        {
-          Resource resource = eObject.eResource();
-          if (resource instanceof PGPKeyResourceImpl)
-          {
-            for (PGPPublicKey key : ((PGPKeyResourceImpl)resource).getPublicKeys())
+            if (!keys.isEmpty())
             {
-              keys.add(keyService.addKey(key));
+              Profile profile = P2Util.getAgentManager().getCurrentAgent().getCurrentProfile();
+              if (profile != null)
+              {
+                P2Util.addedTrustedKeys(profile, keys);
+              }
             }
           }
-        }
-
-        if (!keys.isEmpty())
-        {
-          Profile profile = P2Util.getAgentManager().getCurrentAgent().getCurrentProfile();
-          if (profile != null)
+          else if (trustedCertificatesAnnotation)
           {
-            P2Util.addedTrustedKeys(profile, keys);
+            Set<Certificate> certificates = new LinkedHashSet<>();
+            for (EObject eObject : annotation.getReferences())
+            {
+              Resource resource = eObject.eResource();
+              if (resource instanceof X509CertificateResourceImpl)
+              {
+                certificates.add(((X509CertificateResourceImpl)resource).getCertificate());
+              }
+            }
+
+            if (!certificates.isEmpty())
+            {
+              Profile profile = P2Util.getAgentManager().getCurrentAgent().getCurrentProfile();
+              if (profile != null)
+              {
+                P2Util.addedTrustedCertificates(profile, certificates);
+              }
+            }
           }
         }
       }

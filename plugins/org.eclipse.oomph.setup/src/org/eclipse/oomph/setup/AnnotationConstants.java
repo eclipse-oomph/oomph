@@ -93,6 +93,8 @@ public final class AnnotationConstants
 
   public static final String ANNOTATION_TRUSTED_KEYS = "http://www.eclipse.org/oomph/setup/TrustedKeys"; //$NON-NLS-1$
 
+  public static final String ANNOTATION_TRUSTED_CERTIFICATES = "http://www.eclipse.org/oomph/setup/TrustedCertificates"; //$NON-NLS-1$
+
   public static final String KEY_FILTER = "filter"; //$NON-NLS-1$
 
   private AnnotationConstants()

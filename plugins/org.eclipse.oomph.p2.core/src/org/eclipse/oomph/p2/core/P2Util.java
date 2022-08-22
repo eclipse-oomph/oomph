@@ -77,8 +77,9 @@ import java.util.regex.Pattern;
  */
 public final class P2Util
 {
-
   public static final String X509_CERTIFICATE_FILE_EXTENSION = ".der"; //$NON-NLS-1$
+
+  public static final String X509_CERTIFICATE_PEM_FILE_EXTENSION = ".pem"; //$NON-NLS-1$
 
   public static final String PGP_KEY_FILE_EXTENSION = ".asc"; //$NON-NLS-1$
 
@@ -241,6 +242,20 @@ public final class P2Util
       org.eclipse.equinox.internal.p2.artifact.processors.pgp.PGPPublicKeyStore preferenceTrustedKeys = currentCertificateChecker.getPreferenceTrustedKeys();
       keys.forEach(preferenceTrustedKeys::addKey);
       currentCertificateChecker.persistTrustedKeys(preferenceTrustedKeys);
+    }
+  }
+
+  @SuppressWarnings("restriction")
+  public static void addedTrustedCertificates(Profile profile, Collection<? extends Certificate> certificates)
+  {
+    synchronized (profile)
+    {
+      // Copy the global preference settings into the current agent's profile preferences.
+      org.eclipse.equinox.internal.p2.engine.phases.CertificateChecker currentCertificateChecker = createCertificateCheker(profile);
+
+      Set<Certificate> preferenceTrustedCertificates = new LinkedHashSet<Certificate>(currentCertificateChecker.getPreferenceTrustedCertificates());
+      preferenceTrustedCertificates.addAll(certificates);
+      currentCertificateChecker.persistTrustedCertificates(preferenceTrustedCertificates);
     }
   }
 

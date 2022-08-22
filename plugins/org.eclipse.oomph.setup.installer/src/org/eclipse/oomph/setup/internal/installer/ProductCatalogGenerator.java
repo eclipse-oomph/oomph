@@ -35,6 +35,7 @@ import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.VariableTask;
+import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.p2.P2Task;
 import org.eclipse.oomph.setup.p2.SetupP2Factory;
@@ -87,9 +88,14 @@ import org.eclipse.equinox.p2.repository.artifact.IArtifactRepositoryManager;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
 import org.eclipse.equinox.p2.repository.spi.PGPPublicKeyService;
+import org.eclipse.osgi.signedcontent.SignedContent;
+import org.eclipse.osgi.signedcontent.SignedContentFactory;
+import org.eclipse.osgi.signedcontent.SignerInfo;
 
 import org.bouncycastle.bcpg.ArmoredOutputStream;
 import org.bouncycastle.openpgp.PGPPublicKey;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -99,6 +105,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.ParserConfigurationException;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -107,8 +114,15 @@ import java.io.OutputStream;
 import java.io.StringReader;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.security.cert.Certificate;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
+import java.util.Base64.Encoder;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -198,6 +212,11 @@ public class ProductCatalogGenerator implements IApplication
 
   private static final Pattern PUB = Pattern.compile("pub:([^:]+):.*");
 
+  private static final List<String> OLD_SIGNED_ARTIFACTS = Arrays.asList(new String[] { //
+      "https://download.eclipse.org/releases/2022-09/202208051000/plugins/javax.servlet.jsp_2.2.0.v201112011158.jar", //
+      "https://download.eclipse.org/releases/2022-06/202206151000/plugins/com.google.inject.assistedinject_3.0.0.v201402270930.jar", //
+  });
+
   private URI outputLocation;
 
   private String stagingTrain;
@@ -221,6 +240,8 @@ public class ProductCatalogGenerator implements IApplication
   private URI eppSiteURI;
 
   private boolean fakeNextRelease;
+
+  private boolean updateCertificates;
 
   private final Map<String, Map<URI, Map<String, URI>>> sites = new LinkedHashMap<>();
 
@@ -312,6 +333,10 @@ public class ProductCatalogGenerator implements IApplication
           compositeTrains.add(getMostRecentTrain());
           fakeNextRelease = true;
         }
+        else if ("-updateCertificates".equals(option))
+        {
+          updateCertificates = true;
+        }
       }
     }
 
@@ -336,6 +361,61 @@ public class ProductCatalogGenerator implements IApplication
 
     generate();
     return null;
+  }
+
+  private void updateCertificates()
+  {
+    BundleContext context = SetupInstallerPlugin.INSTANCE.getBundle().getBundleContext();
+    ServiceReference<SignedContentFactory> contentFactoryRef = context.getServiceReference(SignedContentFactory.class);
+    SignedContentFactory verifierFactory = context.getService(contentFactoryRef);
+    try
+    {
+      Path certificatesDirectory = Path.of(outputLocation.trimSegments(1).appendSegment("certificates").toFileString());
+      Files.createDirectories(certificatesDirectory);
+
+      LOOP: for (String artifact : OLD_SIGNED_ARTIFACTS)
+      {
+        URI uri = URI.createURI(artifact);
+        uriConverter.createInputStream(uri, null).close();
+        File file = new File(ECFURIHandlerImpl.getCacheFile(uri).toFileString());
+        SignedContent signedContent = verifierFactory.getSignedContent(file);
+        SignerInfo[] signerInfos = signedContent.getSignerInfos();
+        for (SignerInfo signerInfo : signerInfos)
+        {
+          Certificate[] certificateChain = signerInfo.getCertificateChain();
+          for (Certificate certificate : certificateChain)
+          {
+            if (certificate instanceof X509Certificate)
+            {
+              byte[] encoded = certificate.getEncoded();
+              String sha1 = PGPPublicKeyService.toHex(IOUtil.getSHA1(new ByteArrayInputStream(encoded)));
+
+              // Path derOut = certificatesDirectory.resolve(sha1 + ".der");
+              // Files.write(derOut, encoded);
+
+              List<String> pemContent = new ArrayList<String>();
+              pemContent.add("-----BEGIN CERTIFICATE-----");
+              Encoder mimeEncoder = Base64.getMimeEncoder(64, "\n".getBytes(StandardCharsets.US_ASCII));
+              pemContent.addAll(Arrays.asList(new String(mimeEncoder.encode(encoded), StandardCharsets.US_ASCII).split("\n")));
+              pemContent.add("-----END CERTIFICATE-----");
+
+              Path pemOut = certificatesDirectory.resolve(sha1 + ".pem");
+              Files.write(pemOut, pemContent);
+
+              continue LOOP;
+            }
+          }
+        }
+      }
+    }
+    catch (Exception ex)
+    {
+      ex.printStackTrace();
+    }
+    finally
+    {
+      context.ungetService(contentFactoryRef);
+    }
   }
 
   @Override
@@ -426,6 +506,11 @@ public class ProductCatalogGenerator implements IApplication
 
   public void generate()
   {
+    if (updateCertificates)
+    {
+      updateCertificates();
+    }
+
     getPackageBrandingSites();
 
     try

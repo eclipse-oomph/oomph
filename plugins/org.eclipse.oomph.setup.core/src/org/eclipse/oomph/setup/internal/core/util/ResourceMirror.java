@@ -13,6 +13,7 @@ package org.eclipse.oomph.setup.internal.core.util;
 import org.eclipse.oomph.base.util.BytesResourceFactoryImpl;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.internal.core.PGPKeyResourceImpl;
+import org.eclipse.oomph.p2.internal.core.X509CertificateResourceImpl;
 import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.util.IOExceptionWithCause;
 import org.eclipse.oomph.util.WorkerPool;
@@ -65,8 +66,13 @@ public class ResourceMirror extends WorkerPool<ResourceMirror, URI, ResourceMirr
   {
     super(maxWorker);
     this.resourceSet = resourceSet;
-    resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put(P2Util.PGP_KEY_FILE_EXTENSION.substring(1),
-        (Resource.Factory)uri -> new PGPKeyResourceImpl(uri));
+
+    Map<String, Object> extensionToFactoryMap = resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap();
+    extensionToFactoryMap.put(P2Util.PGP_KEY_FILE_EXTENSION.substring(1), (Resource.Factory)uri -> new PGPKeyResourceImpl(uri));
+    Resource.Factory x509ResourceFactory = (Resource.Factory)uri -> new X509CertificateResourceImpl(uri);
+    extensionToFactoryMap.put(P2Util.X509_CERTIFICATE_FILE_EXTENSION.substring(1), x509ResourceFactory);
+    extensionToFactoryMap.put(P2Util.X509_CERTIFICATE_PEM_FILE_EXTENSION.substring(1), x509ResourceFactory);
+
     resourceLocator = new DelegatingResourceLocator((ResourceSetImpl)resourceSet);
   }
 
