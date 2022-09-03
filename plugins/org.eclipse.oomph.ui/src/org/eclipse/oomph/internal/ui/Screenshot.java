@@ -56,23 +56,6 @@ import java.util.Map;
  */
 class Screenshot
 {
-  private static final Display DISPLAY;
-
-  static
-  {
-    Display display = null;
-    try
-    {
-      display = Display.getDefault();
-    }
-    catch (Throwable throwable)
-    {
-      //$FALL-THROUGH$
-    }
-
-    DISPLAY = display;
-  }
-
   private static final File LOCATION;
 
   private static int SCALE;
@@ -99,6 +82,26 @@ class Screenshot
 
     LOCATION = folderLocation;
     SCALE = scale;
+  }
+
+  private static final Display DISPLAY;
+
+  static
+  {
+    Display display = null;
+    if (LOCATION != null)
+    {
+      try
+      {
+        display = Display.getDefault();
+      }
+      catch (Throwable throwable)
+      {
+        //$FALL-THROUGH$
+      }
+    }
+
+    DISPLAY = display;
   }
 
   Screenshot()
