@@ -36,10 +36,22 @@ public interface DesktopSupport
   void pinToTaskBar(String location, String launcherName) throws IOException;
 
   /**
-   * Creates a shortcut in the system menu for the given folder, group target, and shortcut name.
+   * Creates a shortcut in the type for the given group, executable, shortcut, description, and id.
    *
    * @return <code>true</code> if creation was performed, <code>false</code> otherwise.
    * @throws IOException if an unrecoverable error occurred that prevents the creation of the shortcut.
    */
   boolean createShortCut(ShortcutType type, String groupName, File executable, String shortcutName, String description, String id) throws IOException;
+
+  /**
+   * Creates a shortcut in the type for the given group, executable, shortcut, description, id, and application name.
+   *
+   * @return <code>true</code> if creation was performed, <code>false</code> otherwise.
+   * @throws IOException if an unrecoverable error occurred that prevents the creation of the shortcut.
+   */
+  default boolean createShortCut(ShortcutType type, String groupName, File executable, String shortcutName, String description, String id, String appName)
+      throws IOException
+  {
+    return createShortCut(type, groupName, executable, shortcutName, description, id);
+  }
 }

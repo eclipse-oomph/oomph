@@ -1465,6 +1465,23 @@ public class SimpleVariablePage extends SimpleInstallerPage
           scope = scope.getParentScope();
         }
 
+        String appName = null;
+        scope = selectedProductVersion;
+        while (scope != null)
+        {
+          Annotation annotation = scope.getAnnotation(AnnotationConstants.ANNOTATION_BRANDING_INFO);
+          if (annotation != null)
+          {
+            appName = annotation.getDetails().get(AnnotationConstants.KEY_APP_NAME);
+            if (appName != null)
+            {
+              break;
+            }
+          }
+
+          scope = scope.getParentScope();
+        }
+
         if (shortCutName == null)
         {
           ProductCatalog productCatalog = product.getProductCatalog();
@@ -1487,14 +1504,20 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
           shortCutName = StringUtil.capAll(StringUtil.isEmpty(catalogName) ? qualifiedProductName : catalogName + " " + qualifiedProductName); //$NON-NLS-1$
         }
+
+        if (appName == null)
+        {
+          appName = "Eclipse"; //$NON-NLS-1$
+        }
+
         if (createMenuShortcut)
         {
-          KeepInstallerUtil.createShortCut(ShortcutType.START_MENU, "Eclipse", executable, shortCutName, product.getDescription(), product.getName()); //$NON-NLS-1$
+          KeepInstallerUtil.createShortCut(ShortcutType.START_MENU, "Eclipse", executable, shortCutName, product.getDescription(), product.getName(), appName); //$NON-NLS-1$
         }
 
         if (createDesktopShortcut)
         {
-          KeepInstallerUtil.createShortCut(ShortcutType.DESKTOP, null, executable, shortCutName, product.getDescription(), product.getName());
+          KeepInstallerUtil.createShortCut(ShortcutType.DESKTOP, null, executable, shortCutName, product.getDescription(), product.getName(), appName);
         }
       }
 

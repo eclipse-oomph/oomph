@@ -23,6 +23,8 @@ public final class AnnotationConstants
 
   public static final String KEY_FOLDER_NAME = "folderName"; //$NON-NLS-1$
 
+  public static final String KEY_APP_NAME = "appName"; //$NON-NLS-1$
+
   public static final String KEY_SITE_URI = "siteURI"; //$NON-NLS-1$
 
   public static final String KEY_BADGE_LABEL = "badgeLabel"; //$NON-NLS-1$

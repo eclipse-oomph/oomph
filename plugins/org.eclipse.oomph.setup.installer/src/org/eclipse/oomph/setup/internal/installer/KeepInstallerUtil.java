@@ -19,6 +19,7 @@ import org.eclipse.oomph.util.OomphPlugin.Preference;
 import org.eclipse.oomph.util.PropertiesUtil;
 
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.swt.widgets.Display;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,17 +44,27 @@ public final class KeepInstallerUtil
 
   private static void createShortCut(ShortcutType type, File target)
   {
-    createShortCut(type, null, target, PropertiesUtil.getProductName(), null, PropertiesUtil.getProductID());
+    // This is for the installer.
+    createShortCut(type, null, target, PropertiesUtil.getProductName(), null, PropertiesUtil.getProductID(), Display.getAppName());
   }
 
+  /**
+   * @deprecated Use {@link #createShortCut(ShortcutType, String, File, String, String, String, String)} instead.
+   */
+  @Deprecated
   public static void createShortCut(ShortcutType type, String groupName, File target, String shortcutName, String description, String id)
+  {
+    createShortCut(type, groupName, target, shortcutName, description, id, "Eclipse"); //$NON-NLS-1$
+  }
+
+  public static void createShortCut(ShortcutType type, String groupName, File target, String shortcutName, String description, String id, String appName)
   {
     try
     {
       DesktopSupport desktopSupport = KeepInstallerUtil.getDesktopSupport();
       if (desktopSupport != null)
       {
-        desktopSupport.createShortCut(type, groupName, target, shortcutName, description, id);
+        desktopSupport.createShortCut(type, groupName, target, shortcutName, description, id, appName);
       }
     }
     catch (IOException ex)

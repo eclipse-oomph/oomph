@@ -14,6 +14,10 @@
       <value>readme/readme_eclipse.html</value>
     </detail>
     <detail
+        key="appName">
+      <value>Eclipse</value>
+    </detail>
+    <detail
         key="notificationURI">
       <value>https://www.eclipse.org/setups/donate/?scope=${scope}&amp;campaign=2022-06</value>
     </detail>

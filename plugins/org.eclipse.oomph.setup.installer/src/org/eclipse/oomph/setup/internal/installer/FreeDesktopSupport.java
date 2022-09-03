@@ -51,6 +51,14 @@ public class FreeDesktopSupport implements DesktopSupport
   @SuppressWarnings("nls")
   public boolean createShortCut(ShortcutType type, String groupName, File executable, String shortcutName, String description, String id) throws IOException
   {
+    return DesktopSupport.super.createShortCut(type, groupName, executable, shortcutName, description, id, "Eclipse");
+  }
+
+  @Override
+  @SuppressWarnings("nls")
+  public boolean createShortCut(ShortcutType type, String groupName, File executable, String shortcutName, String description, String id, String appName)
+      throws IOException
+  {
     StringBuilder desktopFile = new StringBuilder();
     desktopFile.append("[Desktop Entry]\n");
     desktopFile.append("Type=Application\n");
@@ -58,6 +66,7 @@ public class FreeDesktopSupport implements DesktopSupport
     desktopFile.append("Encoding=UTF-8\n");
     desktopFile.append("Version=1.1\n");
     desktopFile.append("Name=").append(shortcutName).append("\n");
+    desktopFile.append("StartupWMClass=").append(appName == null ? "Eclipse" : appName).append("\n");
     desktopFile.append("Exec=");
 
     String module = System.getenv("GTK_IM_MODULE");

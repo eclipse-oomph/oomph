@@ -522,6 +522,7 @@ public class ProductCatalogGenerator implements IApplication
 
       EMap<String, String> brandingInfos = getBrandingInfos(productCatalog);
       brandingInfos.put(AnnotationConstants.KEY_README_PATH, "readme/readme_eclipse.html");
+      brandingInfos.put(AnnotationConstants.KEY_APP_NAME, "Eclipse");
 
       Annotation statsSending = BaseFactory.eINSTANCE.createAnnotation(AnnotationConstants.ANNOTATION_STATS_SENDING);
       statsSending.getDetails().put(AnnotationConstants.KEY_URI, SetupCoreUtil.STATS_URI);
@@ -1446,6 +1447,7 @@ public class ProductCatalogGenerator implements IApplication
         productBrandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_URI, ECLIPSE_BRANDING_NOTIFICATION_URI.toString());
         productBrandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_LABEL, "DONATE");
         productBrandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_ANIMATION_STYLE, "REPEAT");
+        productBrandingInfos.put(AnnotationConstants.KEY_APP_NAME, "Eclipse");
         // productBrandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_COLOR, "color://rgb/12/184/198");
         // brandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_SCOPE, product.getLabel());
       }

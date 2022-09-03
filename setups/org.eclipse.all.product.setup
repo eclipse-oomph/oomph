@@ -22,6 +22,10 @@
       <value>REPEAT</value>
     </detail>
     <detail
+        key="appName">
+      <value>Eclipse</value>
+    </detail>
+    <detail
         key="notificationTooltip">
       <value>Donate to the Eclipse Community for the Eclipse Eierlegende Wollmilchsau</value>
     </detail>
