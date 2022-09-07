@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.8"?>
-<target name="Generated from Oomph" sequenceNumber="98">
+<target name="Generated from Oomph" sequenceNumber="99">
   <locations>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-      <unit id="com.ibm.icu.base" version="0.0.0"/>
       <unit id="javaewah" version="0.0.0"/>
       <unit id="net.i2p.crypto.eddsa" version="0.0.0"/>
       <unit id="org.apache.commons.compress" version="0.0.0"/>
@@ -38,7 +37,7 @@
       <repository location="https://download.eclipse.org/tools/orbit/downloads/drops2/R20190602212107/repository"/>
       <repository location="https://download.eclipse.org/tools/orbit/downloads/latest-R"/>
       <repository location="https://download.eclipse.org/usssdk/updates/latest"/>
-      <repository location="https://download.eclipse.org/webtools/repository/latest"/>
+      <repository location="https://download.eclipse.org/webtools/downloads/drops/R3.27.0/S-3.27RC1-20220829002010/repository"/>
     </location>
   </locations>
 </target>
