@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.internal.ui;
 
+import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences.PreferenceChangeEvent;
 import org.eclipse.core.runtime.preferences.InstanceScope;
@@ -35,6 +36,10 @@ public class TaskItemDecorator
 
   public static final String WORKSPACE_NAME = "WORKSPACE_NAME"; //$NON-NLS-1$
 
+  private static final String SHOW_LOCATION_NAME = "SHOW_LOCATION_NAME"; //$NON-NLS-1$
+
+  private static final IEclipsePreferences DEFAULT_IDE_PREFERENCES = DefaultScope.INSTANCE.getNode(IDE_NODE);
+
   private static final IEclipsePreferences IDE_PREFERENCES = InstanceScope.INSTANCE.getNode(IDE_NODE);
 
   public TaskItemDecorator()
@@ -46,10 +51,10 @@ public class TaskItemDecorator
         @Override
         public void preferenceChange(PreferenceChangeEvent event)
         {
-          if (WORKSPACE_NAME.equals(event.getKey()))
+          String key = event.getKey();
+          if (WORKSPACE_NAME.equals(key) || SHOW_LOCATION_NAME.equals(key))
           {
-            Object value = event.getNewValue();
-            update(value == null ? "" : value.toString()); //$NON-NLS-1$
+            update(getWorkspaceName());
           }
         }
       });
@@ -88,7 +93,12 @@ public class TaskItemDecorator
 
   private String getWorkspaceName()
   {
-    return IDE_PREFERENCES.get(WORKSPACE_NAME, ""); //$NON-NLS-1$
+    if (IDE_PREFERENCES.getBoolean(SHOW_LOCATION_NAME, DEFAULT_IDE_PREFERENCES.getBoolean(SHOW_LOCATION_NAME, true)))
+    {
+      return IDE_PREFERENCES.get(WORKSPACE_NAME, DEFAULT_IDE_PREFERENCES.get(WORKSPACE_NAME, "")); //$NON-NLS-1$
+    }
+
+    return ""; //$NON-NLS-1$
   }
 
   private void update(String label)
