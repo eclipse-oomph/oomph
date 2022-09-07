@@ -160,8 +160,6 @@ public class ProductCatalogGenerator implements IApplication
 
   private static final URI ECLIPSE_PROJECT_URI = URI.createURI("https://download.eclipse.org/eclipse/updates");
 
-  private static final URI ECLIPSE_BRANDING_NOTIFICATION_URI = URI.createURI("https://www.eclipse.org/setups/donate/?scope=${scope}&campaign=2022-06");
-
   private static final String ICON_DEFAULT = ICON_URL_PREFIX + "committers.png";
 
   private static final Map<String, String> ICONS = new HashMap<>();
@@ -267,6 +265,8 @@ public class ProductCatalogGenerator implements IApplication
 
   private final String[] TRAINS = getTrains();
 
+  private URI eclipseBrandingNotificationURI;
+
   private URIConverter uriConverter;
 
   private Agent agent;
@@ -339,6 +339,8 @@ public class ProductCatalogGenerator implements IApplication
         }
       }
     }
+
+    eclipseBrandingNotificationURI = URI.createURI("https://www.eclipse.org/setups/donate/?scope=${scope}&campaign=" + getMostRecentReleasedTrain());
 
     ICONS.put("reporting", ICON_URL_PREFIX + "birt-icon_48x48.png");
     ICONS.put("cpp", ICON_URL_PREFIX + "cdt.png");
@@ -426,7 +428,7 @@ public class ProductCatalogGenerator implements IApplication
   private String[] getTrains()
   {
     return new String[] { "juno", "kepler", "luna", "mars", "neon", "oxygen", "photon", "2018-09", "2018-12", "2019-03", "2019-06", "2019-09", "2019-12",
-        "2020-03", "2020-06", "2020-09", "2020-12", "2021-03", "2021-06", "2021-09", "2021-12", "2022-03", "2022-06", "2022-09" };
+        "2020-03", "2020-06", "2020-09", "2020-12", "2021-03", "2021-06", "2021-09", "2021-12", "2022-03", "2022-06", "2022-09", "2022-12" };
   }
 
   private URI getEclipsePlatformSite(String train)
@@ -1429,7 +1431,7 @@ public class ProductCatalogGenerator implements IApplication
   private void addBrandingNotificationAnnotations(ProductCatalog productCatalog)
   {
     EMap<String, String> productCatalogBrandingInfos = getBrandingInfos(productCatalog);
-    productCatalogBrandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_URI, ECLIPSE_BRANDING_NOTIFICATION_URI.toString());
+    productCatalogBrandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_URI, eclipseBrandingNotificationURI.toString());
     productCatalogBrandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_LABEL, "DONATE");
     productCatalogBrandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_TOOLTIP, "Donate to the Eclipse Community");
     productCatalogBrandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_ANIMATION_STYLE, "REPEAT");
@@ -1444,7 +1446,7 @@ public class ProductCatalogGenerator implements IApplication
       if (foreignCatalog)
       {
         // A copy of the annotations on the catalog because these end up in another catalog.
-        productBrandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_URI, ECLIPSE_BRANDING_NOTIFICATION_URI.toString());
+        productBrandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_URI, eclipseBrandingNotificationURI.toString());
         productBrandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_LABEL, "DONATE");
         productBrandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_ANIMATION_STYLE, "REPEAT");
         productBrandingInfos.put(AnnotationConstants.KEY_APP_NAME, "Eclipse");

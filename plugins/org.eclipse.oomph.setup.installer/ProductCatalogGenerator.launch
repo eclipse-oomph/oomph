@@ -19,6 +19,7 @@
     <stringAttribute key="featurePluginResolution" value="workspace"/>
     <booleanAttribute key="includeOptional" value="false"/>
     <stringAttribute key="location" value="${workspace_loc}/../ws-product-catalog-generator"/>
+    <booleanAttribute key="org.eclipse.debug.core.ATTR_FORCE_SYSTEM_CONSOLE_ENCODING" value="false"/>
     <stringAttribute key="org.eclipse.debug.ui.ATTR_CONSOLE_ENCODING" value="UTF-8"/>
     <listAttribute key="org.eclipse.debug.ui.favoriteGroups">
         <listEntry value="org.eclipse.debug.ui.launchGroup.debug"/>
@@ -27,7 +28,7 @@
     <booleanAttribute key="org.eclipse.jdt.launching.ATTR_ATTR_USE_ARGFILE" value="false"/>
     <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_START_ON_FIRST_THREAD" value="true"/>
     <stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-11"/>
-    <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-os ${target.os} -ws ${target.ws} -arch ${target.arch} -nl ${target.nl} -consoleLog &#13;&#10;-outputLocation ${file_uri:${resource_loc:/setups/org.eclipse.products.setup}}&#13;&#10;-staging 2022-09&#13;&#10;https://download.eclipse.org/technology/epp/packages/2022-09/202208041200&#13;&#10;https://download.eclipse.org/releases/2022-09/202208051000&#13;&#10;-xuseComposite 2022-09&#13;&#10;-xlatestReleased&#13;&#10;-xfakeNextRelease&#13;&#10;-brandingNotification&#13;&#10;-siteURI https://www.eclipse.org/downloads/packages/release/2022-09/m2&#13;&#10;-actual"/>
+    <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-os ${target.os} -ws ${target.ws} -arch ${target.arch} -nl ${target.nl} -consoleLog &#13;&#10;-outputLocation ${file_uri:${resource_loc:/setups/org.eclipse.products.setup}}&#13;&#10;-staging 2022-09&#13;&#10;https://download.eclipse.org/technology/epp/packages/2022-09/202209011200&#13;&#10;https://download.eclipse.org/releases/2022-09/202209021000&#13;&#10;https://download.eclipse.org/eclipse/updates/4.25-I-builds/I20220824-1800&#13;&#10;-xuseComposite 2022-09&#13;&#10;-xlatestReleased&#13;&#10;-fakeNextRelease&#13;&#10;-brandingNotification&#13;&#10;-siteURI https://www.eclipse.org/downloads/packages/release/2022-09/r&#13;&#10;-xupdateCertificates&#13;&#10;-actual"/>
     <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.pde.ui.workbenchClasspathProvider"/>
     <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Declipse.p2.mirrors=false&#13;&#10;-Dxorg.eclipse.ecf.provider.filetransfer.excludeContributors=org.eclipse.ecf.provider.filetransfer.httpclient45&#13;&#10;-Doomph.p2.repository.retry=2&#13;&#10;-Dxorg.eclipse.ecf.core.util.traceAll=true&#13;&#10;-Dxorg.apache.commons.logging.Log=org.apache.commons.logging.impl.SimpleLog&#13;&#10;-Dxorg.apache.commons.logging.simplelog.showdatetime=true&#13;&#10;-Dxorg.apache.commons.logging.simplelog.log.org.apache.http=DEBUG&#13;&#10;-Dxorg.apache.commons.logging.simplelog.log.org.apache.http.wire=ERROR&#13;&#10;-Duser.home=${system_property:user.home}"/>
     <stringAttribute key="pde.version" value="3.3"/>
