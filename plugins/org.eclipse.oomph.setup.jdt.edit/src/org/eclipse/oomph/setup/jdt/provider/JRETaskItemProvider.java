@@ -10,8 +10,6 @@
  */
 package org.eclipse.oomph.setup.jdt.provider;
 
-import org.eclipse.oomph.base.BaseFactory;
-import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.setup.EAnnotationConstants;
 import org.eclipse.oomph.setup.jdt.JDTFactory;
 import org.eclipse.oomph.setup.jdt.JDTPackage;
@@ -367,8 +365,6 @@ public class JRETaskItemProvider extends SetupTaskItemProvider
   protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object)
   {
     super.collectNewChildDescriptors(newChildDescriptors, object);
-
-    newChildDescriptors.add(createChildParameter(BasePackage.Literals.MODEL_ELEMENT__ANNOTATIONS, BaseFactory.eINSTANCE.createAnnotation()));
 
     newChildDescriptors.add(createChildParameter(JDTPackage.Literals.JRE_TASK__JRE_LIBRARIES, JDTFactory.eINSTANCE.createJRELibrary()));
   }
