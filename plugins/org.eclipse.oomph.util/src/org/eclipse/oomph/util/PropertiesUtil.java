@@ -28,7 +28,6 @@ import java.util.Enumeration;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 import java.util.Vector;
@@ -210,7 +209,7 @@ public final class PropertiesUtil
         private static final long serialVersionUID = 1L;
 
         @Override
-        public Set<Entry<Object, Object>> entrySet()
+        public Set<Map.Entry<Object, Object>> entrySet()
         {
           Collection<String> keys = properties.keySet();
           if (sort)
