@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.ui.externaltools.ProgramLaunchConfigurationType">
+    <booleanAttribute key="org.eclipse.debug.core.ATTR_FORCE_SYSTEM_CONSOLE_ENCODING" value="false"/>
+    <stringAttribute key="org.eclipse.ui.externaltools.ATTR_LOCATION" value="${git.clone.oomph}/products/org.eclipse.oomph.setup.installer.product/target/repackaged-products/eclipse-inst-jre-win64.exe"/>
+    <stringAttribute key="org.eclipse.ui.externaltools.ATTR_TOOL_ARGUMENTS" value="-vmargs&#13;&#10;-Doomph.update.url=${file_uri:${resource_loc:/org.eclipse.oomph.site}}/target/repository/&#13;&#10;-Doomph.redirection.setups=http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/-&gt;${file_uri:${resource_loc:/setups}}/&#13;&#10;-Doomph.setup.remote.debug=maybe&#13;&#10;-Doomph.setup.stats.skip=true&#13;&#10;-Dorg.eclipse.swtbot.generator.enable=false&#13;&#10;-Duser.home=${system_property:user.home}&#13;&#10;-Doomph.setup.user.home.redirect=true"/>
+    <stringAttribute key="org.eclipse.ui.externaltools.ATTR_WORKING_DIRECTORY" value="${git.clone.oomph}"/>
+</launchConfiguration>
