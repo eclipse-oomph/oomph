@@ -233,7 +233,18 @@ public abstract class RecorderTransaction
       return policy;
     }
 
-    return cleanPolicies.get(key);
+    policy = cleanPolicies.get(key);
+    if (policy == null)
+    {
+      // Support policies that end in '/' to ignore an entire subtree of properties.
+      int slash = key.lastIndexOf('/', key.length() - 2);
+      if (slash != -1)
+      {
+        return getPolicy(key.substring(0, slash + 1));
+      }
+    }
+
+    return policy;
   }
 
   public void setPolicy(String key, boolean policy)

@@ -10,6 +10,8 @@
  */
 package org.eclipse.oomph.setup.ui;
 
+import org.eclipse.oomph.setup.internal.core.SetupCorePlugin;
+
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
@@ -21,15 +23,27 @@ import org.eclipse.jface.window.IShellProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.dialogs.EditorSelectionDialog;
+
+import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Properties;
+import java.util.function.Consumer;
 
 /**
  * @author Eike Stepper
@@ -45,6 +59,10 @@ public class SetupPreferencePage extends FieldEditorPreferencePage implements IW
   private BooleanFieldEditor skipStartupTasks;
 
   private Composite parent;
+
+  private Text workspaceVariables;
+
+  private Text installationVariables;
 
   public SetupPreferencePage()
   {
@@ -119,6 +137,10 @@ public class SetupPreferencePage extends FieldEditorPreferencePage implements IW
     preferredTextEditor.fillIntoGrid(parent, 3);
     preferredTextEditor.getLabelControl(parent).setToolTipText(Messages.SetupPreferencePage_preferredTextEditor_labelTooltip);
 
+    workspaceVariables = createVariablesField(Messages.SetupPreferencePage_WorkspaceVariablesLabel, SetupCorePlugin.INSTANCE.getImplicitWorkspaceVariables());
+    installationVariables = createVariablesField(Messages.SetupPreferencePage_InstallationVariablesLabel,
+        SetupCorePlugin.INSTANCE.getImplicitInstallationVariables());
+
     if (Questionnaire.exists())
     {
       Button questionnaireButton = new Button(parent, SWT.PUSH);
@@ -144,6 +166,40 @@ public class SetupPreferencePage extends FieldEditorPreferencePage implements IW
     }
   }
 
+  private Text createVariablesField(String label, Map<String, String> implicitVariables)
+  {
+    Group group = new Group(parent, SWT.NONE);
+    group.setText(label);
+    GridData variableGridData = new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1);
+
+    Properties properties = new Properties();
+    properties.putAll(implicitVariables);
+    StringWriter out = new StringWriter();
+    try
+    {
+      properties.store(out, null);
+    }
+    catch (IOException ex)
+    {
+      SetupUIPlugin.INSTANCE.log(ex);
+    }
+
+    String value = out.toString().replaceAll("^#.*\r?\n", ""); //$NON-NLS-1$ //$NON-NLS-2$
+
+    group.setLayoutData(variableGridData);
+    FillLayout fillLayout = new FillLayout();
+    fillLayout.marginHeight = 5;
+    fillLayout.marginWidth = 5;
+    group.setLayout(fillLayout);
+
+    Text variables = new Text(group, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
+    GC gc = new GC(variables);
+    variableGridData.heightHint = Math.min(15, Math.max(6, value.split("\r\n").length + 1)) * gc.getFontMetrics().getHeight(); //$NON-NLS-1$
+    gc.dispose();
+    variables.setText(value);
+    return variables;
+  }
+
   @Override
   public void propertyChange(PropertyChangeEvent event)
   {
@@ -152,6 +208,43 @@ public class SetupPreferencePage extends FieldEditorPreferencePage implements IW
     {
       p2StartupTasks.setEnabled(!Boolean.TRUE.equals(event.getNewValue()), parent);
     }
+  }
+
+  private boolean setImplicitVariables(Text variables, Consumer<Map<String, String>> preferences)
+  {
+    try
+    {
+      Properties properties = new Properties();
+      properties.load(new StringReader(variables.getText()));
+      Map<String, String> map = new LinkedHashMap<>();
+      for (Map.Entry<Object, Object> entry : properties.entrySet())
+      {
+        map.put(entry.getKey().toString(), entry.getValue().toString());
+      }
+
+      preferences.accept(map);
+      return true;
+    }
+    catch (IOException ex)
+    {
+      setErrorMessage(ex.getLocalizedMessage());
+      return false;
+    }
+  }
+
+  @Override
+  protected void performApply()
+  {
+    super.performApply();
+    setImplicitVariables(workspaceVariables, SetupCorePlugin.INSTANCE::setImplicitWorkspaceVariables);
+    setImplicitVariables(installationVariables, SetupCorePlugin.INSTANCE::setImplicitInstallationVariables);
+  }
+
+  @Override
+  public boolean performOk()
+  {
+    return super.performOk() && setImplicitVariables(workspaceVariables, SetupCorePlugin.INSTANCE::setImplicitWorkspaceVariables)
+        && setImplicitVariables(installationVariables, SetupCorePlugin.INSTANCE::setImplicitInstallationVariables);
   }
 
   private BooleanFieldEditor addBooleanField(final Composite parent, String preferenceName, String label, String toolTip)

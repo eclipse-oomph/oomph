@@ -18,6 +18,11 @@ import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.emf.common.util.ResourceLocator;
 
 import org.osgi.framework.BundleContext;
+import org.osgi.service.prefs.BackingStoreException;
+import org.osgi.service.prefs.Preferences;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * @author Eike Stepper
@@ -41,6 +46,69 @@ public final class SetupCorePlugin extends OomphPlugin
   public ResourceLocator getPluginResourceLocator()
   {
     return plugin;
+  }
+
+  public Map<String, String> getImplicitWorkspaceVariables()
+  {
+    return getImplicitVariables(getInstancePreferences().node("variables")); //$NON-NLS-1$
+  }
+
+  public void setImplicitWorkspaceVariables(Map<String, String> implicitVariables)
+  {
+    setImplicitVariables(getInstancePreferences().node("variables"), implicitVariables); //$NON-NLS-1$
+  }
+
+  public Map<String, String> getImplicitInstallationVariables()
+  {
+    return getImplicitVariables(getConfigurationPreferences().node("variables")); //$NON-NLS-1$
+  }
+
+  public void setImplicitInstallationVariables(Map<String, String> implicitVariables)
+  {
+    setImplicitVariables(getConfigurationPreferences().node("variables"), implicitVariables); //$NON-NLS-1$
+  }
+
+  private static Map<String, String> getImplicitVariables(Preferences variables)
+  {
+    LinkedHashMap<String, String> result = new LinkedHashMap<>();
+
+    try
+    {
+      for (String key : variables.keys())
+      {
+        String value = variables.get(key, null);
+        if (value != null)
+        {
+          result.put(key, value);
+        }
+      }
+    }
+    catch (BackingStoreException ex)
+    {
+      SetupCorePlugin.INSTANCE.log(ex);
+    }
+    return result;
+  }
+
+  private static void setImplicitVariables(Preferences variables, Map<String, String> implicitVariables)
+  {
+    try
+    {
+      for (String key : variables.keys())
+      {
+        variables.remove(key);
+      }
+
+      for (Map.Entry<String, String> entry : implicitVariables.entrySet())
+      {
+        variables.put(entry.getKey(), entry.getValue());
+      }
+      variables.flush();
+    }
+    catch (BackingStoreException ex)
+    {
+      SetupCorePlugin.INSTANCE.log(ex);
+    }
   }
 
   /**

@@ -131,6 +131,8 @@ public class Messages extends NLS
 
   public static String SetupLabelProvider_catalogIndex;
 
+  public static String SetupPreferencePage_InstallationVariablesLabel;
+
   public static String SetupPreferencePage_skipStartupTasks_label;
 
   public static String SetupPreferencePage_skipStartupTasks_tooltip;
@@ -160,6 +162,8 @@ public class Messages extends NLS
   public static String SetupPreferencePage_preferredTextEditor_labelTooltip;
 
   public static String SetupPreferencePage_questionnaireButton_text;
+
+  public static String SetupPreferencePage_WorkspaceVariablesLabel;
 
   public static String SetupUIPlugin_remoteDebugPauseDialog_title;
 

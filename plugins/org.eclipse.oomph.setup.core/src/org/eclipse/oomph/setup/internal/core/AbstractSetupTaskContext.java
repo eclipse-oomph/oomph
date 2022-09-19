@@ -45,6 +45,7 @@ import org.eclipse.equinox.p2.metadata.ITouchpointData;
 import org.eclipse.equinox.p2.metadata.ITouchpointInstruction;
 import org.eclipse.equinox.p2.metadata.expression.IMatchExpression;
 import org.eclipse.equinox.p2.query.QueryUtil;
+import org.eclipse.osgi.service.datalocation.Location;
 import org.eclipse.osgi.util.NLS;
 
 import java.io.File;
@@ -134,6 +135,23 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
       }
     }
 
+    String instanceArea = filterContext.get(Location.INSTANCE_AREA_TYPE);
+    if (instanceArea != null && !instanceArea.equals(filterContext.get(Location.CONFIGURATION_AREA_TYPE)))
+    {
+      URI uri = URI.createURI(instanceArea);
+      if (uri.isFile() && uri.scheme() != null)
+      {
+        if (uri.hasTrailingPathSeparator())
+        {
+          uri = uri.trimSegments(1);
+        }
+
+        String workspaceLocation = uri.toFileString();
+        put("workspace.location", workspaceLocation); //$NON-NLS-1$
+        filterContext.put("workspace.location", workspaceLocation); //$NON-NLS-1$
+      }
+    }
+
     OS os = getOS();
     put("osgi.ws", os.getOsgiWS()); //$NON-NLS-1$
     put("osgi.os", os.getOsgiOS()); //$NON-NLS-1$
@@ -141,6 +159,22 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
     filterContext.put("osgi.ws", os.getOsgiWS()); //$NON-NLS-1$
     filterContext.put("osgi.os", os.getOsgiOS()); //$NON-NLS-1$
     filterContext.put("osgi.arch", os.getOsgiArch()); //$NON-NLS-1$
+
+    for (Map.Entry<String, String> entry : SetupCorePlugin.INSTANCE.getImplicitInstallationVariables().entrySet())
+    {
+      String key = entry.getKey();
+      String value = entry.getValue();
+      filterContext.put(key, value);
+      put(key, value);
+    }
+
+    for (Map.Entry<String, String> entry : SetupCorePlugin.INSTANCE.getImplicitWorkspaceVariables().entrySet())
+    {
+      String key = entry.getKey();
+      String value = entry.getValue();
+      filterContext.put(key, value);
+      put(key, value);
+    }
 
     filterContextIU = (InstallableUnit)InstallableUnit.contextIU(filterContext);
 
