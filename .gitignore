@@ -10,3 +10,4 @@ Copy of *.launch
 com.chronon.sb.browser.launcher.prefs
 Corel Auto-Preserve/
 .DS_Store
+.tycho-consumer-pom.xml
