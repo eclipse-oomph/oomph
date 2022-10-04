@@ -197,7 +197,6 @@
                 </goals>
                 <phase>post-integration-test</phase>
                 <configuration>
-                  <signerUrl>https://cbi-staging.eclipse.org/authenticode/sign</signerUrl>
                   <baseSearchDir>${project.build.directory}/repackaged-products/</baseSearchDir>
                   <fileNames>
                     <fileName>eclipse-inst-win64.exe</fileName>
