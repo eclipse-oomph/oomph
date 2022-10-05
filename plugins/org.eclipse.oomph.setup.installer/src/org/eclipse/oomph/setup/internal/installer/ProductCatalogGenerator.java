@@ -757,7 +757,10 @@ public class ProductCatalogGenerator implements IApplication
         for (PGPPublicKey pgpKey : keys.all())
         {
           String fingerPrint = PGPPublicKeyService.toHexFingerprint(pgpKey);
-          pgpKeys.computeIfAbsent(fingerPrint, it -> keyService.addKey(pgpKey));
+          synchronized (pgpKeys)
+          {
+            pgpKeys.computeIfAbsent(fingerPrint, it -> keyService.addKey(pgpKey));
+          }
         }
       }
     }
@@ -997,7 +1000,7 @@ public class ProductCatalogGenerator implements IApplication
         synchronized (labels)
         {
           String existingLabel = labels.get(id);
-          if (existingLabel == null || train.equals(mostRecentTrain))
+          if (existingLabel == null || train.equals(mostRecentTrain) || existingLabel.contains("PHP") && id.contains(".rust"))
           {
             labels.put(id, label);
           }
@@ -2276,11 +2279,18 @@ public class ProductCatalogGenerator implements IApplication
             break;
           }
         }
-
       }
       catch (Exception ex)
       {
-        ex.printStackTrace();
+        if (train.equals(getMostRecentTrain()))
+        {
+          System.out.println(train + " => " + getMostRecentReleasedTrain());
+          sites.put(train, sites.get(getMostRecentReleasedTrain()));
+        }
+        else
+        {
+          ex.printStackTrace();
+        }
       }
       finally
       {
@@ -2549,7 +2559,7 @@ public class ProductCatalogGenerator implements IApplication
       // Get the version without the qualifier.
       OSGiVersion osgiVersion = (OSGiVersion)iu.getVersion();
       Version jreVersion = Version.createOSGi(osgiVersion.getMajor(), osgiVersion.getMinor(), osgiVersion.getMicro());
-      p2Task.setLabel("JRE " + (javaRuntimeVersion != null ? javaRuntimeVersion : jreVersion));
+      p2Task.setLabel("JRE " + (javaRuntimeVersion != null ? Version.create(javaRuntimeVersion) : jreVersion));
       String description = iu.getProperty(IInstallableUnit.PROP_DESCRIPTION, null);
       p2Task.setDescription(description);
 
