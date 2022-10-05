@@ -1769,7 +1769,7 @@ public class ProductCatalogGenerator implements IApplication
     }
 
     BaseUtil.setAnnotation(productVersion, AnnotationConstants.ANNOTATION_BRANDING_INFO, AnnotationConstants.SHORTCUT,
-        product.getLabel().replaceAll(" \\(.+\\)", "") + " - " + label.replaceAll(" \\(.+\\)", ""));
+        product.getLabel().replaceAll(" \\(.+\\)", "").replace("/", " and ") + " - " + label.replaceAll(" \\(.+\\)", ""));
 
     log.append('\n');
   }
