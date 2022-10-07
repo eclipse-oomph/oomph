@@ -64,6 +64,7 @@ pipeline {
               if ! diff -arq setups-old setups-new; then
                 diff -ar setups-old setups-new >> changes || true
                 echo "The contents have changed"
+                cat changes
               else
                 echo "The contents are unchanged"
                 exit
