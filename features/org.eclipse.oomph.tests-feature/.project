@@ -18,6 +18,10 @@
 					<value>true</value>
 				</dictionary>
 				<dictionary>
+					<key>ignore.feature.content.changes</key>
+					<value>true</value>
+				</dictionary>
+				<dictionary>
 					<key>release.path</key>
 					<value>/org.eclipse.oomph.util/release.xml</value>
 				</dictionary>

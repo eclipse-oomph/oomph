@@ -85,6 +85,7 @@ Eike Stepper - initial API and implementation
                 <plugin id="bcpg"/>
                 <plugin id="bcprov"/>
                 <plugin id="org.slf4j.api"/>
+                <plugin id="slf4j.api"/>
                 <plugin id="org.eclipse.nebula.widgets.tablecombo"/>
                 <plugin id="org.eclipse.oomph.releng.helpcenter"/>
               </excludes>
