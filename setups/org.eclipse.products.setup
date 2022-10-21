@@ -1577,7 +1577,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/oxygen/3a/eclipse-ide-java-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/oxygen/r/eclipse-ide-java-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -1660,7 +1660,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/neon/3/eclipse-ide-java-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/neon/r/eclipse-ide-java-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -1739,7 +1739,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/mars/2/eclipse-ide-java-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/mars/r/eclipse-ide-java-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -1783,7 +1783,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/luna/sr2/eclipse-ide-java-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/luna/r/eclipse-ide-java-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -1827,7 +1827,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/kepler/sr2/eclipse-ide-java-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/kepler/r/eclipse-ide-java-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -1873,7 +1873,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/juno/sr2/eclipse-ide-java-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/juno/r/eclipse-ide-java-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -6247,7 +6247,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/oxygen/3a/eclipse-ide-java-ee-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/oxygen/r/eclipse-ide-java-ee-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -6410,7 +6410,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/neon/3/eclipse-ide-java-ee-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/neon/r/eclipse-ide-java-ee-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -6569,7 +6569,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/mars/2/eclipse-ide-java-ee-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/mars/r/eclipse-ide-java-ee-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -6616,7 +6616,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/luna/sr2/eclipse-ide-java-ee-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/luna/r/eclipse-ide-java-ee-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -6663,7 +6663,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/kepler/sr2/eclipse-ide-java-ee-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/kepler/r/eclipse-ide-java-ee-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -6712,7 +6712,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/juno/sr2/eclipse-ide-java-ee-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/juno/r/eclipse-ide-java-ee-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -9021,7 +9021,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/oxygen/3a/eclipse-ide-cc-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/oxygen/r/eclipse-ide-cc-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -9118,7 +9118,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/neon/3/eclipse-ide-cc-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/neon/r/eclipse-ide-cc-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -9211,7 +9211,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/mars/2/eclipse-ide-cc-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/mars/r/eclipse-ide-cc-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -9252,7 +9252,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/luna/sr2/eclipse-ide-cc-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/luna/r/eclipse-ide-cc-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -9293,7 +9293,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/kepler/sr2/eclipse-ide-cc-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/kepler/r/eclipse-ide-cc-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -9336,7 +9336,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/juno/sr2/eclipse-ide-cc-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/juno/r/eclipse-ide-cc-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -12444,7 +12444,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/oxygen/3a/eclipse-php-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/oxygen/r/eclipse-php-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -12521,7 +12521,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/neon/3/eclipse-php-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/neon/r/eclipse-php-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -12594,7 +12594,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/mars/2/eclipse-php-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/mars/r/eclipse-php-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -12635,7 +12635,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/luna/sr2/eclipse-php-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/luna/r/eclipse-php-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -14942,7 +14942,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/oxygen/3a/eclipse-ide-eclipse-committers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/oxygen/r/eclipse-ide-eclipse-committers</value>
         </detail>
         <detail
             key="shortcut">
@@ -15061,7 +15061,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/neon/3/eclipse-ide-eclipse-committers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/neon/r/eclipse-ide-eclipse-committers</value>
         </detail>
         <detail
             key="shortcut">
@@ -15180,7 +15180,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/mars/2/eclipse-ide-eclipse-committers-452</value>
+          <value>https://www.eclipse.org/downloads/packages/release/mars/r/eclipse-ide-eclipse-committers-450</value>
         </detail>
         <detail
             key="shortcut">
@@ -16552,7 +16552,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/oxygen/3a/eclipse-ide-java-and-dsl-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/oxygen/r/eclipse-ide-java-and-dsl-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -16609,7 +16609,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/neon/3/eclipse-ide-java-and-dsl-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/neon/r/eclipse-ide-java-and-dsl-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -16664,7 +16664,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/mars/2/eclipse-ide-java-and-dsl-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/mars/r/eclipse-ide-java-and-dsl-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -16711,7 +16711,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/luna/sr2/eclipse-ide-java-and-dsl-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/luna/r/eclipse-ide-java-and-dsl-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -16758,7 +16758,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/kepler/sr2/eclipse-ide-java-and-dsl-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/kepler/r/eclipse-ide-java-and-dsl-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -16807,7 +16807,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/juno/sr2/eclipse-ide-java-and-dsl-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/juno/r</value>
         </detail>
         <detail
             key="shortcut">
@@ -18694,7 +18694,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/oxygen/3a/eclipse-rcp-and-rap-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/oxygen/r/eclipse-rcp-and-rap-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -18789,7 +18789,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/neon/3/eclipse-rcp-and-rap-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/neon/r/eclipse-rcp-and-rap-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -18882,7 +18882,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/mars/2/eclipse-rcp-and-rap-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/mars/r/eclipse-rcp-and-rap-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -18929,7 +18929,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/luna/sr2/eclipse-rcp-and-rap-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/luna/r/eclipse-rcp-and-rap-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -18976,7 +18976,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/kepler/sr2/eclipse-rcp-and-rap-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/kepler/r/eclipse-rcp-and-rap-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -19025,7 +19025,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/juno/sr2/eclipse-rcp-and-rap-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/juno/r/eclipse-rcp-and-rap-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -21162,7 +21162,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/oxygen/3a/eclipse-modeling-tools</value>
+          <value>https://www.eclipse.org/downloads/packages/release/oxygen/r/eclipse-modeling-tools</value>
         </detail>
         <detail
             key="shortcut">
@@ -21269,7 +21269,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/neon/3/eclipse-modeling-tools</value>
+          <value>https://www.eclipse.org/downloads/packages/release/neon/r/eclipse-modeling-tools</value>
         </detail>
         <detail
             key="shortcut">
@@ -21376,7 +21376,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/mars/2/eclipse-modeling-tools</value>
+          <value>https://www.eclipse.org/downloads/packages/release/mars/r/eclipse-modeling-tools</value>
         </detail>
         <detail
             key="shortcut">
@@ -21423,7 +21423,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/luna/sr2/eclipse-modeling-tools</value>
+          <value>https://www.eclipse.org/downloads/packages/release/luna/r/eclipse-modeling-tools</value>
         </detail>
         <detail
             key="shortcut">
@@ -21470,7 +21470,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/kepler/sr2/eclipse-modeling-tools</value>
+          <value>https://www.eclipse.org/downloads/packages/release/kepler/r/eclipse-modeling-tools</value>
         </detail>
         <detail
             key="shortcut">
@@ -21519,7 +21519,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/juno/sr2/eclipse-modeling-tools</value>
+          <value>https://www.eclipse.org/downloads/packages/release/juno/r/eclipse-modeling-tools</value>
         </detail>
         <detail
             key="shortcut">
@@ -23456,7 +23456,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/oxygen/3a</value>
+          <value>https://www.eclipse.org/downloads/packages/release/oxygen/r</value>
         </detail>
         <detail
             key="shortcut">
@@ -23549,7 +23549,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/neon/3</value>
+          <value>https://www.eclipse.org/downloads/packages/release/neon/r</value>
         </detail>
         <detail
             key="shortcut">
@@ -23642,7 +23642,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/mars/2</value>
+          <value>https://www.eclipse.org/downloads/packages/release/mars/r</value>
         </detail>
         <detail
             key="shortcut">
@@ -23683,7 +23683,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/luna/sr2</value>
+          <value>https://www.eclipse.org/downloads/packages/release/luna/r</value>
         </detail>
         <detail
             key="shortcut">
@@ -23724,7 +23724,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/kepler/sr2</value>
+          <value>https://www.eclipse.org/downloads/packages/release/kepler/r</value>
         </detail>
         <detail
             key="shortcut">
@@ -23767,7 +23767,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/juno/sr2</value>
+          <value>https://www.eclipse.org/downloads/packages/release/juno/r</value>
         </detail>
         <detail
             key="shortcut">
@@ -25314,7 +25314,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/oxygen/3a/eclipse-scout-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/oxygen/r/eclipse-scout-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -25389,7 +25389,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/neon/3/eclipse-scout-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/neon/r/eclipse-scout-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -25464,7 +25464,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/mars/2/eclipse-scout-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/mars/r/eclipse-scout-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -25511,7 +25511,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/luna/sr2/eclipse-scout-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/luna/r/eclipse-scout-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -25558,7 +25558,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/kepler/sr2/eclipse-scout-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/kepler/r/eclipse-scout-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -25607,7 +25607,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/juno/sr2/eclipse-scout-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/juno/r/eclipse-scout-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -26620,7 +26620,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/oxygen/3a/eclipse-ide-javascript-and-web-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/oxygen/r/eclipse-ide-javascript-and-web-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -26699,7 +26699,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/neon/3/eclipse-ide-javascript-and-web-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/neon/r/eclipse-ide-javascript-and-web-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -27420,7 +27420,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/oxygen/3a</value>
+          <value>https://www.eclipse.org/downloads/packages/release/oxygen/r/eclipse-testers</value>
         </detail>
         <detail
             key="shortcut">
@@ -27469,7 +27469,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/neon/3/eclipse-testers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/neon/r/eclipse-testers</value>
         </detail>
         <detail
             key="shortcut">
@@ -27518,7 +27518,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/mars/2/eclipse-testers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/mars/r/eclipse-testers</value>
         </detail>
         <detail
             key="shortcut">
@@ -27555,7 +27555,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/luna/sr2/eclipse-testers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/luna/r/eclipse-testers</value>
         </detail>
         <detail
             key="shortcut">
@@ -27592,7 +27592,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/kepler/sr2/eclipse-testers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/kepler/r/eclipse-testers</value>
         </detail>
         <detail
             key="shortcut">
@@ -27631,7 +27631,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/juno/sr2/eclipse-testers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/juno/r/eclipse-testers</value>
         </detail>
         <detail
             key="shortcut">
@@ -28458,6 +28458,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
+            key="siteURI">
+          <value>https://download.eclipse.org/eclipse/downloads/</value>
+        </detail>
+        <detail
             key="shortcut">
           <value>Eclipse Platform - Latest</value>
         </detail>
@@ -28523,6 +28527,10 @@
         requiredJavaVersion="17">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://download.eclipse.org/eclipse/downloads/</value>
+        </detail>
         <detail
             key="shortcut">
           <value>Eclipse Platform - 2022-12</value>
@@ -30965,7 +30973,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/oxygen/3a</value>
+          <value>https://www.eclipse.org/downloads/packages/release/oxygen/r</value>
         </detail>
         <detail
             key="shortcut">
@@ -31096,7 +31104,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/neon/3/eclipse-ide-java-and-report-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/neon/r/eclipse-ide-java-and-report-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -31227,7 +31235,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/mars/2/eclipse-ide-java-and-report-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/mars/r/eclipse-ide-java-and-report-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -31270,7 +31278,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/luna/sr2/eclipse-ide-java-and-report-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/luna/r/eclipse-ide-java-and-report-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -31313,7 +31321,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/kepler/sr2/eclipse-ide-java-and-report-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/kepler/r/eclipse-ide-java-and-report-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -31358,7 +31366,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/juno/sr2/eclipse-ide-java-and-report-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/juno/r/eclipse-ide-java-and-report-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -31418,7 +31426,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/neon/3/eclipse-android-developers-includes-incubating-components</value>
+          <value>https://www.eclipse.org/downloads/packages/release/neon/r/eclipse-android-developers-includes-incubating-components</value>
         </detail>
         <detail
             key="incubating">
@@ -31505,7 +31513,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/neon/3/eclipse-android-developers-includes-incubating-components</value>
+          <value>https://www.eclipse.org/downloads/packages/release/neon/r/eclipse-android-developers-includes-incubating-components</value>
         </detail>
         <detail
             key="incubating">
@@ -31592,7 +31600,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/neon/3/eclipse-android-developers-includes-incubating-components</value>
+          <value>https://www.eclipse.org/downloads/packages/release/neon/r/eclipse-android-developers-includes-incubating-components</value>
         </detail>
         <detail
             key="incubating">
@@ -31698,7 +31706,11 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/mars/2</value>
+          <value>https://www.eclipse.org/downloads/packages/release/mars/r/eclipse-ide-automotive-software-developers-includes-incubating-components</value>
+        </detail>
+        <detail
+            key="incubating">
+          <value>true</value>
         </detail>
         <detail
             key="shortcut">
@@ -31741,7 +31753,11 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/mars/2</value>
+          <value>https://www.eclipse.org/downloads/packages/release/mars/r/eclipse-ide-automotive-software-developers-includes-incubating-components</value>
+        </detail>
+        <detail
+            key="incubating">
+          <value>true</value>
         </detail>
         <detail
             key="shortcut">
@@ -31784,7 +31800,11 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/mars/2</value>
+          <value>https://www.eclipse.org/downloads/packages/release/mars/r/eclipse-ide-automotive-software-developers-includes-incubating-components</value>
+        </detail>
+        <detail
+            key="incubating">
+          <value>true</value>
         </detail>
         <detail
             key="shortcut">
@@ -31827,7 +31847,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/luna/sr2/eclipse-ide-automotive-software-developers-includes-incubating-components</value>
+          <value>https://www.eclipse.org/downloads/packages/release/luna/r/eclipse-ide-automotive-software-developers-includes-incubating-components</value>
         </detail>
         <detail
             key="incubating">
@@ -31874,7 +31894,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/kepler/sr2/eclipse-ide-automotive-software-developers-includes-incubating-components</value>
+          <value>https://www.eclipse.org/downloads/packages/release/kepler/r/eclipse-ide-automotive-software-developers-includes-incubating-components</value>
         </detail>
         <detail
             key="incubating">
@@ -31923,7 +31943,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/juno/sr2/eclipse-ide-automotive-software-developers-includes-incubating-components</value>
+          <value>https://www.eclipse.org/downloads/packages/release/juno/r/eclipse-ide-automotive-software-developers-includes-incubating-components</value>
         </detail>
         <detail
             key="incubating">
@@ -31987,7 +32007,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/luna/sr2/eclipse-ide-eclipse-committers-442</value>
+          <value>https://www.eclipse.org/downloads/packages/release/luna/r/eclipse-standard-44</value>
         </detail>
         <detail
             key="shortcut">
@@ -32030,7 +32050,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/luna/sr2/eclipse-ide-eclipse-committers-442</value>
+          <value>https://www.eclipse.org/downloads/packages/release/luna/r/eclipse-standard-44</value>
         </detail>
         <detail
             key="shortcut">
@@ -32073,7 +32093,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/luna/sr2/eclipse-ide-eclipse-committers-442</value>
+          <value>https://www.eclipse.org/downloads/packages/release/luna/r/eclipse-standard-44</value>
         </detail>
         <detail
             key="shortcut">
@@ -32116,7 +32136,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/kepler/sr2/eclipse-standard-432</value>
+          <value>https://www.eclipse.org/downloads/packages/release/kepler/r/eclipse-standard-43</value>
         </detail>
         <detail
             key="shortcut">

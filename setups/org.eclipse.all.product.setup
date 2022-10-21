@@ -1304,7 +1304,7 @@
       </detail>
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/oxygen/3a</value>
+        <value>https://www.eclipse.org/downloads/packages/release/oxygen/r</value>
       </detail>
       <detail
           key="shortcut">
@@ -1365,7 +1365,7 @@
       </detail>
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/neon/3</value>
+        <value>https://www.eclipse.org/downloads/packages/release/neon/r</value>
       </detail>
       <detail
           key="shortcut">
@@ -1426,7 +1426,7 @@
       </detail>
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/mars/2</value>
+        <value>https://www.eclipse.org/downloads/packages/release/mars/r</value>
       </detail>
       <detail
           key="shortcut">
@@ -1485,7 +1485,7 @@
       </detail>
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/luna/sr2</value>
+        <value>https://www.eclipse.org/downloads/packages/release/luna/r</value>
       </detail>
       <detail
           key="shortcut">
@@ -1542,7 +1542,7 @@
       </detail>
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/kepler/sr2</value>
+        <value>https://www.eclipse.org/downloads/packages/release/kepler/r</value>
       </detail>
       <detail
           key="shortcut">
@@ -1601,7 +1601,7 @@
       </detail>
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/juno/sr2</value>
+        <value>https://www.eclipse.org/downloads/packages/release/juno/r</value>
       </detail>
       <detail
           key="shortcut">
