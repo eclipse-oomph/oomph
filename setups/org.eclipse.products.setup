@@ -6961,6 +6961,9 @@
             name="org.eclipse.tracecompass.lttng2.kernel.feature.group"/>
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
+        <requirement
+            name="org.eclipse.jdt.core"
+            optional="true"/>
         <repository
             url="https://download.eclipse.org/technology/epp/packages/2022-09/202209081200"/>
         <repository
@@ -7163,6 +7166,9 @@
             name="org.eclipse.tracecompass.lttng2.kernel.feature.group"/>
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
+        <requirement
+            name="org.eclipse.jdt.core"
+            optional="true"/>
         <repository
             url="https://download.eclipse.org/technology/epp/packages/2022-09/202209081200"/>
         <repository
@@ -9635,6 +9641,9 @@
             name="org.eclipse.tracecompass.lttng2.kernel.feature.group"/>
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
+        <requirement
+            name="org.eclipse.jdt.core"
+            optional="true"/>
         <repository
             url="https://download.eclipse.org/technology/epp/packages/2022-09/202209081200"/>
         <repository
@@ -9901,6 +9910,9 @@
             name="org.eclipse.tracecompass.lttng2.kernel.feature.group"/>
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
+        <requirement
+            name="org.eclipse.jdt.core"
+            optional="true"/>
         <repository
             url="https://download.eclipse.org/technology/epp/packages/2022-09/202209081200"/>
         <repository
@@ -10972,6 +10984,9 @@
             name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jdt.core"
+            optional="true"/>
         <repository
             url="https://download.eclipse.org/technology/epp/packages/2022-09/202209081200"/>
         <repository
@@ -11106,6 +11121,9 @@
             name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jdt.core"
+            optional="true"/>
         <repository
             url="https://download.eclipse.org/technology/epp/packages/2022-09/202209081200"/>
         <repository
@@ -21728,6 +21746,9 @@
             name="org.eclipse.tm.terminal.feature.feature.group"/>
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jdt.core"
+            optional="true"/>
         <repository
             url="https://download.eclipse.org/technology/epp/packages/2022-09/202209081200"/>
         <repository
@@ -21894,6 +21915,9 @@
             name="org.eclipse.tm.terminal.feature.feature.group"/>
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.jdt.core"
+            optional="true"/>
         <repository
             url="https://download.eclipse.org/technology/epp/packages/2022-09/202209081200"/>
         <repository

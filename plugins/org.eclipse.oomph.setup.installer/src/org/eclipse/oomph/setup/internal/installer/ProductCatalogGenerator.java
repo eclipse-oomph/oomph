@@ -2036,6 +2036,17 @@ public class ProductCatalogGenerator implements IApplication
           requirements.add(requirement);
         }
       }
+
+      if (productName.startsWith("epp.package") && "2022-09".equals(train) && !requirements.stream().anyMatch(r -> {
+        String name = r.getName();
+        return "org.eclipse.jdt.feature.group".equals(name) || "org.eclipse.sdk.feature.group".equals(name);
+      }))
+      {
+        Requirement requirement = P2Factory.eINSTANCE.createRequirement();
+        requirement.setName("org.eclipse.jdt.core");
+        requirements.add(requirement);
+        requirement.setOptional(true);
+      }
     }
   }
 
@@ -2252,18 +2263,41 @@ public class ProductCatalogGenerator implements IApplication
 
   private void getPackageBrandingSites()
   {
+    Pattern pattern = Pattern.compile("<li class=\"[0-9][^>]+><a href=\"([^\"]+)\"[^>]*>([\\w]+) Packages</a></li>");
     PackageLocationLoader packageLocationLoader = new PackageLocationLoader(this);
     Set<URI> locations = new LinkedHashSet<>();
     for (String train : getTrains())
     {
       InputStream packages = null;
+      InputStream alternativePackages = null;
       try
       {
+        if (!train.equals(getMostRecentTrain()))
+        {
+          try
+          {
+            URI siteURI = PACKAGES_URI.trimSegments(1).appendSegment(train).appendSegment("r");
+            URL packagesURL = new URL(siteURI.toString());
+            alternativePackages = packagesURL.openStream();
+
+            System.out.println(train + " -> " + siteURI);
+            Map<URI, Map<String, URI>> releaseLocations = new LinkedHashMap<>();
+            Map<String, URI> packageLocations = new LinkedHashMap<>();
+            releaseLocations.put(siteURI, packageLocations);
+            sites.put(train, releaseLocations);
+            locations.add(siteURI);
+            continue;
+          }
+          catch (Exception ex)
+          {
+            //$FALL-THROUGH$
+          }
+        }
+
         URI packagesURI = PACKAGES_URI.trimSegments(1).appendSegment(train).appendSegment("");
         URL packagesURL = new URL(packagesURI.toString());
         packages = packagesURL.openStream();
         List<String> lines = IOUtil.readLines(packages, "UTF-8");
-        Pattern pattern = Pattern.compile("<li class=\"[0-9][^>]+><a href=\"([^\"]+)\"[^>]*>([\\w]+) Packages</a></li>");
         for (String line : lines)
         {
           Matcher matcher = pattern.matcher(line);
@@ -2284,8 +2318,9 @@ public class ProductCatalogGenerator implements IApplication
       {
         if (train.equals(getMostRecentTrain()))
         {
-          System.out.println(train + " => " + getMostRecentReleasedTrain());
-          sites.put(train, sites.get(getMostRecentReleasedTrain()));
+          // System.out.println(train + " => " + getMostRecentReleasedTrain());
+          // sites.put(train, sites.get(getMostRecentReleasedTrain()));
+          ex.printStackTrace();
         }
         else
         {
@@ -2295,6 +2330,7 @@ public class ProductCatalogGenerator implements IApplication
       finally
       {
         IOUtil.closeSilent(packages);
+        IOUtil.closeSilent(alternativePackages);
       }
     }
 
