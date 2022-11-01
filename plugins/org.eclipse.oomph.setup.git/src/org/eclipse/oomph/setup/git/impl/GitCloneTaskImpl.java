@@ -1313,11 +1313,14 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
   {
     context.log(NLS.bind(Messages.GitCloneTaskImpl_CreatingLocalBranch_message, checkoutBranch));
 
-    CreateBranchCommand command = git.branchCreate();
-    command.setUpstreamMode(SetupUpstreamMode.SET_UPSTREAM);
-    command.setName(checkoutBranch);
-    command.setStartPoint(Constants.R_REMOTES + remoteName + "/" + checkoutBranch); //$NON-NLS-1$
-    command.call();
+    if (findRef(git.getRepository(), Constants.R_HEADS + checkoutBranch) == null)
+    {
+      CreateBranchCommand command = git.branchCreate();
+      command.setUpstreamMode(SetupUpstreamMode.SET_UPSTREAM);
+      command.setName(checkoutBranch);
+      command.setStartPoint(Constants.R_REMOTES + remoteName + "/" + checkoutBranch); //$NON-NLS-1$
+      command.call();
+    }
 
     StoredConfig config = git.getRepository().getConfig();
     config.setBoolean(ConfigConstants.CONFIG_BRANCH_SECTION, checkoutBranch, ConfigConstants.CONFIG_KEY_REBASE, true);
@@ -1327,11 +1330,14 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
   private static void createTag(SetupTaskContext context, Git git, String checkoutTag) throws Exception
   {
     context.log(NLS.bind(Messages.GitCloneTaskImpl_CreatingLocalTab_message, checkoutTag));
-    CreateBranchCommand command = git.branchCreate();
-    command.setUpstreamMode(SetupUpstreamMode.SET_UPSTREAM);
-    command.setName(checkoutTag);
-    command.setStartPoint(Constants.R_TAGS + checkoutTag);
-    command.call();
+    if (findRef(git.getRepository(), Constants.R_HEADS + checkoutTag) == null)
+    {
+      CreateBranchCommand command = git.branchCreate();
+      command.setUpstreamMode(SetupUpstreamMode.SET_UPSTREAM);
+      command.setName(checkoutTag);
+      command.setStartPoint(Constants.R_TAGS + checkoutTag);
+      command.call();
+    }
 
     StoredConfig config = git.getRepository().getConfig();
     config.setBoolean(ConfigConstants.CONFIG_BRANCH_SECTION, checkoutTag, ConfigConstants.CONFIG_KEY_REBASE, true);
