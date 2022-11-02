@@ -9,12 +9,12 @@
     label="JRE">
   <setupTask
       xsi:type="setup.p2:P2Task"
-      label="JRE 11.0.16.1">
+      label="JRE 11.0.17">
     <requirement
         name="org.eclipse.justj.openjdk.hotspot.jre.full.feature.group"
         filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux))(&amp;(osgi.arch=aarch64)(osgi.os=macosx))(&amp;(osgi.arch=x86_64)(osgi.os=linux))(&amp;(osgi.arch=x86_64)(osgi.os=macosx))(&amp;(osgi.arch=x86_64)(osgi.os=win32)))"/>
     <repository
-        url="https://download.eclipse.org/justj/jres/11/updates/release/latest"/>
+        url="https://download.eclipse.org/justj/jres/11/updates/release/11.0.17"/>
     <description>
       Contains the plug-ins and fragments for the Adoptium OpenJDK Hotspot JRE Complete.
       Provides the complete set of modules of the JDK, excluding incubators.
@@ -22,7 +22,7 @@
   </setupTask>
   <setupTask
       xsi:type="setup.p2:P2Task"
-      label="JRE 17.0.4.1">
+      label="JRE 17.0.5">
     <annotation
         source="http://www.eclipse.org/oomph/setup/JRESpecificTasks">
       <content
@@ -34,7 +34,7 @@
         name="org.eclipse.justj.openjdk.hotspot.jre.full.feature.group"
         filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux))(&amp;(osgi.arch=aarch64)(osgi.os=macosx))(&amp;(osgi.arch=x86_64)(osgi.os=linux))(&amp;(osgi.arch=x86_64)(osgi.os=macosx))(&amp;(osgi.arch=x86_64)(osgi.os=win32)))"/>
     <repository
-        url="https://download.eclipse.org/justj/jres/17/updates/release/latest"/>
+        url="https://download.eclipse.org/justj/jres/17/updates/release/17.0.5"/>
     <description>
       Contains the plug-ins and fragments for the Adoptium OpenJDK Hotspot JRE Complete.
       Provides the complete set of modules of the JDK, excluding incubators.
@@ -67,7 +67,7 @@
   </setupTask>
   <setupTask
       xsi:type="setup.p2:P2Task"
-      label="JRE 19.0.0">
+      label="JRE 19.0.1">
     <annotation
         source="http://www.eclipse.org/oomph/setup/JRESpecificTasks">
       <content
@@ -84,7 +84,7 @@
         name="org.eclipse.justj.openjdk.hotspot.jre.full.feature.group"
         filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux))(&amp;(osgi.arch=aarch64)(osgi.os=macosx))(&amp;(osgi.arch=x86_64)(osgi.os=linux))(&amp;(osgi.arch=x86_64)(osgi.os=macosx))(&amp;(osgi.arch=x86_64)(osgi.os=win32)))"/>
     <repository
-        url="https://download.eclipse.org/justj/jres/19/updates/release/latest"/>
+        url="https://download.eclipse.org/justj/jres/19/updates/release/19.0.1"/>
     <description>
       Contains the plug-ins and fragments for the Adoptium OpenJDK Hotspot JRE Complete.
       Provides the complete set of modules of the JDK, excluding incubators.
