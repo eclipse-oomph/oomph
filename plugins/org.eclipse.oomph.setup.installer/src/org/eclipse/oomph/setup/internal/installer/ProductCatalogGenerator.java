@@ -110,7 +110,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.StringReader;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -737,8 +736,9 @@ public class ProductCatalogGenerator implements IApplication
     }
 
     URI trustedKeys = outputLocation.trimSegments(1).appendSegment("keys").appendSegment("trusted-keys.asc");
-    try (OutputStream out = new ArmoredOutputStream(uriConverter.createOutputStream(trustedKeys)))
+    try (ArmoredOutputStream out = new ArmoredOutputStream(uriConverter.createOutputStream(trustedKeys)))
     {
+      out.setHeader("Version", null);
       for (PGPPublicKey key : pgpKeys.values())
       {
         key.encode(out);
@@ -2581,10 +2581,7 @@ public class ProductCatalogGenerator implements IApplication
       }
 
       URI childRepositoryURI = URI.createURI(childRepository.getLocation().toString());
-      if (childRepositoryURI.lastSegment().contains(".v"))
-      {
-        childRepositoryURI = childRepositoryURI.trimSegments(1).appendSegment("latest");
-      }
+      childRepositoryURI = childRepositoryURI.trimSegments(1).appendSegment("latest");
 
       Repository jreChildRepository = P2Factory.eINSTANCE.createRepository(childRepositoryURI.toString());
 
