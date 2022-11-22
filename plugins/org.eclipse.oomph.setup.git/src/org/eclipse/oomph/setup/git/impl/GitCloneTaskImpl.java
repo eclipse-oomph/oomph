@@ -1023,6 +1023,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
     command.setNoCheckout(true);
     command.setURI(remoteURI);
     command.setRemote(remoteName);
+    command.setBranch(checkoutBranch);
     command.setCloneAllBranches(!restrictToCheckoutBranch);
     command.setCloneSubmodules(recursive);
     if (restrictToCheckoutBranch)
