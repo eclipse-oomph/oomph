@@ -71,6 +71,7 @@ import org.eclipse.equinox.internal.p2.artifact.repository.CompositeArtifactRepo
 import org.eclipse.equinox.internal.p2.artifact.repository.simple.SimpleArtifactRepository;
 import org.eclipse.equinox.internal.p2.metadata.IRequiredCapability;
 import org.eclipse.equinox.internal.p2.metadata.RequiredCapability;
+import org.eclipse.equinox.internal.p2.metadata.RequiredPropertiesMatch;
 import org.eclipse.equinox.internal.p2.metadata.repository.CompositeMetadataRepository;
 import org.eclipse.equinox.internal.p2.metadata.repository.io.MetadataWriter;
 import org.eclipse.equinox.internal.p2.metadata.repository.io.XMLConstants;
@@ -108,6 +109,7 @@ import org.bouncycastle.openpgp.PGPPublicKey;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.namespace.ExecutionEnvironmentNamespace;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
@@ -2649,7 +2651,9 @@ public class RepositoryIntegrityAnalyzer implements IApplication
           {
             IMatchExpression<IInstallableUnit> match = requirement.getMatches();
             if (RequiredCapability.isVersionRangeRequirement(match)
-                && PublisherHelper.CAPABILITY_NS_JAVA_PACKAGE.equals(RequiredCapability.extractNamespace(match)))
+                && PublisherHelper.CAPABILITY_NS_JAVA_PACKAGE.equals(RequiredCapability.extractNamespace(match))
+                || RequiredPropertiesMatch.isPropertiesMatchRequirement(match)
+                    && ExecutionEnvironmentNamespace.EXECUTION_ENVIRONMENT_NAMESPACE.equals(RequiredPropertiesMatch.extractNamespace(match)))
             {
               return getPluginImage();
             }
