@@ -31,6 +31,7 @@ import org.eclipse.oomph.util.ZIPUtil;
 import org.eclipse.emf.common.CommonPlugin;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.common.util.UniqueEList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -1294,13 +1295,14 @@ public class RepositoryIntegrityAnalyzer implements IApplication
           CollectionUtil.addAll(licenseIUs, getLicenses(iu), iu);
 
           Set<String> ids = new HashSet<>();
-          for (final IRequirement requirement : iu.getRequirements())
+          for (final IRequirement requirement : new LinkedHashSet<IRequirement>(iu.getRequirements()))
           {
             if (requirement instanceof IRequiredCapability)
             {
               IRequiredCapability requiredCapability = (IRequiredCapability)requirement;
               String namespace = requiredCapability.getNamespace();
-              if (IInstallableUnit.NAMESPACE_IU_ID.equals(namespace))
+              VersionRange range = requiredCapability.getRange();
+              if (IInstallableUnit.NAMESPACE_IU_ID.equals(namespace) && range.getMaximum().equals(range.getMinimum()))
               {
                 String name = requiredCapability.getName();
                 if (!ids.add(name))
@@ -1899,6 +1901,10 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
         private Map<List<Certificate>, Map<String, IInstallableUnit>> invalidSignatures = new HashMap<>();
 
+        private Map<String, Set<IInstallableUnit>> packageProviders = new TreeMap<String, Set<IInstallableUnit>>();
+
+        private Map<String, Set<List<List<Certificate>>>> packageCertificates = new TreeMap<>();
+
         @Override
         public Map<List<Certificate>, Map<String, IInstallableUnit>> getCertificates()
         {
@@ -1916,6 +1922,11 @@ public class RepositoryIntegrityAnalyzer implements IApplication
                 if (!path.startsWith("binary/") && !path.endsWith(".pack.gz"))
                 {
                   SignedContent signedContent = fileSignedContents.get(file);
+
+                  List<String> packages = iu.getProvidedCapabilities().stream().filter(it -> "java.package".equals(it.getNamespace())).map(it -> it.getName())
+                      .collect(Collectors.toList());
+                  List<List<Certificate>> allCertificates = new UniqueEList<>();
+
                   if (signedContent != null && signedContent.isSigned())
                   {
                     SignerInfo[] signerInfos = signedContent.getSignerInfos();
@@ -1923,6 +1934,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
                     {
                       Certificate[] certificateChain = signerInfo.getCertificateChain();
                       List<Certificate> certificateList = Arrays.asList(certificateChain);
+                      allCertificates.add(certificateList);
                       Map<String, IInstallableUnit> artifacts = certificates.get(certificateList);
                       if (artifacts == null)
                       {
@@ -1966,6 +1978,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
                   }
                   else if (getPGPKeys(file).isEmpty())
                   {
+                    allCertificates.add(Collections.emptyList());
                     Map<String, IInstallableUnit> artifacts = certificates.get(Collections.emptyList());
                     if (artifacts == null)
                     {
@@ -1974,6 +1987,50 @@ public class RepositoryIntegrityAnalyzer implements IApplication
                     }
 
                     artifacts.put(path, iu);
+                  }
+
+                  for (String javaPackage : packages)
+                  {
+                    packageCertificates.computeIfAbsent(javaPackage, it -> new LinkedHashSet<>()).add(allCertificates);
+                    packageProviders.computeIfAbsent(javaPackage, it -> new TreeSet<>()).add(iu);
+                  }
+                }
+              }
+            }
+
+            if (Boolean.FALSE)
+            {
+              int count = 0;
+              for (Map.Entry<String, Set<List<List<Certificate>>>> entry : packageCertificates.entrySet())
+              {
+                Set<List<List<Certificate>>> value = entry.getValue();
+                if (value.size() > 1)
+                {
+                  Set<IInstallableUnit> set = packageProviders.get(entry.getKey());
+                  String prefix = ++count + ". ";
+                  System.err.println(prefix + "**" + entry.getKey() + "**");
+                  prefix = prefix.replaceAll(".", " ");
+                  System.err.println(prefix + "- _" + set + "_");
+                  for (List<List<Certificate>> certficateChains : value)
+                  {
+                    if (certficateChains.isEmpty())
+                    {
+                      System.err.println(prefix + "- unsigned");
+                    }
+                    else
+                    {
+                      for (List<Certificate> certficateChain : certficateChains)
+                      {
+                        if (certficateChain.isEmpty())
+                        {
+                          System.err.println(prefix + "- unsigned");
+                        }
+                        else
+                        {
+                          System.err.println(prefix + "- " + getCertificateComponents(certficateChain.get(0)));
+                        }
+                      }
+                    }
                   }
                 }
               }
