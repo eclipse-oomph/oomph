@@ -11,7 +11,7 @@
       source="http://www.eclipse.org/oomph/setup/BrandingInfo">
     <detail
         key="notificationURI">
-      <value>https://www.eclipse.org/setups/donate/?scope=${scope}&amp;campaign=2022-09</value>
+      <value>https://www.eclipse.org/setups/donate/?scope=${scope}&amp;campaign=2022-12</value>
     </detail>
     <detail
         key="notificationLabel">
@@ -43,17 +43,76 @@
       value="5g"
       vm="true"/>
   <version name="latest"
-      label="Latest (2022-12)"
+      label="Latest (2023-03)"
       requiredJavaVersion="17">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/2022-12/rc1</value>
+        <value>https://www.eclipse.org/downloads/packages/release/2022-12/r</value>
       </detail>
       <detail
           key="shortcut">
         <value>Eclipse Eierlegende Wollmilchsau - Latest</value>
+      </detail>
+    </annotation>
+    <setupTask
+        xsi:type="setup:RedirectionTask"
+        sourceURL="https://download.eclipse.org/releases/2023-03"
+        targetURL="https://download.eclipse.org/releases/2022-12"/>
+    <setupTask
+        xsi:type="setup.p2:P2Task"
+        label="Eclipse Eierlegende Wollmilchsau (2023-03)">
+      <requirement
+          name="org.eclipse.platform.ide"
+          versionRange="[4.26.0,5.0.0)"
+          filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
+      <requirement
+          name="Application Development Frameworks"/>
+      <requirement
+          name="Collaboration"/>
+      <requirement
+          name="Database Development"/>
+      <requirement
+          name="General Purpose Tools"/>
+      <requirement
+          name="License Management"/>
+      <requirement
+          name="Linux Tools"
+          filter="(osgi.os=linux)"/>
+      <requirement
+          name="Mobile and Device Development"/>
+      <requirement
+          name="Modeling"/>
+      <requirement
+          name="Performance, Profiling and Tracing Tools"/>
+      <requirement
+          name="Programming Languages"/>
+      <requirement
+          name="SOA Development"/>
+      <requirement
+          name="Testing"/>
+      <requirement
+          name="Web, XML, Java EE and OSGi Enterprise Development"/>
+      <repository
+          url="https://download.eclipse.org/releases/2023-03">
+        <annotation
+            source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
+      </repository>
+    </setupTask>
+  </version>
+  <version name="latest.released"
+      label="Latest Release (2022-12)"
+      requiredJavaVersion="17">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="siteURI">
+        <value>https://www.eclipse.org/downloads/packages/release/2022-12/r</value>
+      </detail>
+      <detail
+          key="shortcut">
+        <value>Eclipse Eierlegende Wollmilchsau - Latest Release</value>
       </detail>
     </annotation>
     <setupTask
@@ -91,32 +150,36 @@
       <requirement
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
       <repository
-          url="https://download.eclipse.org/releases/2022-12/202211251000">
+          url="https://download.eclipse.org/releases/2022-12/202212071000">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
     </setupTask>
   </version>
-  <version name="latest.released"
-      label="Latest Release (2022-09)"
+  <version name="2023-03"
+      label="2023-03"
       requiredJavaVersion="17">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/2022-09/r</value>
+        <value>https://www.eclipse.org/downloads/packages/release/2022-12/r</value>
       </detail>
       <detail
           key="shortcut">
-        <value>Eclipse Eierlegende Wollmilchsau - Latest Release</value>
+        <value>Eclipse Eierlegende Wollmilchsau - 2023-03</value>
       </detail>
     </annotation>
     <setupTask
+        xsi:type="setup:RedirectionTask"
+        sourceURL="https://download.eclipse.org/releases/2023-03"
+        targetURL="https://download.eclipse.org/releases/2022-12"/>
+    <setupTask
         xsi:type="setup.p2:P2Task"
-        label="Eclipse Eierlegende Wollmilchsau (2022-09)">
+        label="Eclipse Eierlegende Wollmilchsau (2023-03)">
       <requirement
           name="org.eclipse.platform.ide"
-          versionRange="[4.25.0,5.0.0)"
+          versionRange="[4.26.0,5.0.0)"
           filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
       <requirement
           name="Application Development Frameworks"/>
@@ -146,7 +209,7 @@
       <requirement
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
       <repository
-          url="https://download.eclipse.org/releases/2022-09/202209141001">
+          url="https://download.eclipse.org/releases/2023-03">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
@@ -158,8 +221,12 @@
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
+          key="status">
+        <value>current</value>
+      </detail>
+      <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/2022-12/rc1</value>
+        <value>https://www.eclipse.org/downloads/packages/release/2022-12/r</value>
       </detail>
       <detail
           key="shortcut">
@@ -201,7 +268,7 @@
       <requirement
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
       <repository
-          url="https://download.eclipse.org/releases/2022-12/202211251000">
+          url="https://download.eclipse.org/releases/2022-12/202212071000">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
@@ -214,7 +281,7 @@
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="status">
-        <value>current</value>
+        <value>outdated</value>
       </detail>
       <detail
           key="siteURI">
