@@ -427,7 +427,7 @@ public class ProductCatalogGenerator implements IApplication
   private String[] getTrains()
   {
     return new String[] { "juno", "kepler", "luna", "mars", "neon", "oxygen", "photon", "2018-09", "2018-12", "2019-03", "2019-06", "2019-09", "2019-12",
-        "2020-03", "2020-06", "2020-09", "2020-12", "2021-03", "2021-06", "2021-09", "2021-12", "2022-03", "2022-06", "2022-09", "2022-12" };
+        "2020-03", "2020-06", "2020-09", "2020-12", "2021-03", "2021-06", "2021-09", "2021-12", "2022-03", "2022-06", "2022-09", "2022-12", "2023-03" };
   }
 
   private URI getEclipsePlatformSite(String train)
@@ -2032,6 +2032,11 @@ public class ProductCatalogGenerator implements IApplication
         for (String id : rootInstallIUs)
         {
           Requirement requirement = P2Factory.eINSTANCE.createRequirement();
+          if ("2022-12".equals(train) && "org.eclipse.emf.cdo.epp.feature.group".equals(id))
+          {
+            id = "org.eclipse.emf.cdo.sdk.feature.group";
+          }
+
           requirement.setName(id);
           requirements.add(requirement);
         }

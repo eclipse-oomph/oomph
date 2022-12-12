@@ -20026,7 +20026,7 @@
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
-            name="org.eclipse.emf.cdo.epp.feature.group"/>
+            name="org.eclipse.emf.cdo.sdk.feature.group"/>
         <requirement
             name="org.eclipse.emf.compare.diagram.sirius.source.feature.group"/>
         <requirement
@@ -20216,7 +20216,7 @@
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
-            name="org.eclipse.emf.cdo.epp.feature.group"/>
+            name="org.eclipse.emf.cdo.sdk.feature.group"/>
         <requirement
             name="org.eclipse.emf.compare.diagram.sirius.source.feature.group"/>
         <requirement
