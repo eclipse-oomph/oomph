@@ -5,7 +5,7 @@ instructions.configure=\
   setProgramProperty(propName:eclipse.p2.max.threads,propValue:10);\
   setProgramProperty(propName:oomph.p2.repository.retry,propValue:2);\
   setProgramProperty(propName:org.eclipse.update.reconcile,propValue:false);\
-  setProgramProperty(propName:osgi.requiredJavaVersion,propValue:17.0);\
+  setProgramProperty(propName:osgi.requiredJavaVersion,propValue:11.0);\
   setProgramProperty(propName:p2.userAgent,propValue:eclipse/oomph/installer);\
   setProgramProperty(propName:oomph.setup.product.catalog.filter,propValue:);\
   setProgramProperty(propName:oomph.setup.product.filter,propValue:);\
