@@ -202,7 +202,6 @@ public class AgentAnalyzerComposite extends Composite
     TableColumn bundlePoolColumn = new TableViewerColumn(bundlePoolViewer, SWT.NONE).getColumn();
     bundlePoolColumn.setText(Messages.AgentAnalyzerComposite_bundlePool_bundlePool);
     bundlePoolColumn.setWidth(305);
-    bundlePoolColumn.setResizable(false);
 
     TableColumn profilesColumn = new TableViewerColumn(bundlePoolViewer, SWT.NONE).getColumn();
     profilesColumn.setText(Messages.AgentAnalyzerComposite_bundlePool_profiles);
@@ -322,7 +321,6 @@ public class AgentAnalyzerComposite extends Composite
     TableColumn profileColumn = new TableViewerColumn(profileViewer, SWT.NONE).getColumn();
     profileColumn.setText(Messages.AgentAnalyzerComposite_profile_profile);
     profileColumn.setWidth(447);
-    profileColumn.setResizable(false);
 
     TableColumn artifactsColumn = new TableViewerColumn(profileViewer, SWT.NONE).getColumn();
     artifactsColumn.setText(Messages.AgentAnalyzerComposite_profile_artifacts);
@@ -463,7 +461,6 @@ public class AgentAnalyzerComposite extends Composite
     TableColumn artifactColumn = new TableViewerColumn(artifactViewer, SWT.NONE).getColumn();
     artifactColumn.setText(Messages.AgentAnalyzerComposite_artifact_artifact);
     artifactColumn.setWidth(365);
-    artifactColumn.setResizable(false);
 
     TableColumn versionVersion = new TableViewerColumn(artifactViewer, SWT.NONE).getColumn();
     versionVersion.setText(Messages.AgentAnalyzerComposite_artifact_version);
