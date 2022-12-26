@@ -1168,7 +1168,7 @@
   <project href="https://raw.githubusercontent.com/eclipse/kura/develop/kura/setups/kura.setup#/"/>
   <project href="interim/MPC.setup#/"/>
   <project href="https://git.eclipse.org/c/modisco/org.eclipse.modisco.git/plain/releng/org.eclipse.modisco.oomph/setups/modisco.setup#/"/>
-  <project href="https://raw.githubusercontent.com/eclipse-mylyn/org.eclipse.mylyn/master/org.eclipse.mylyn.releng/oomph/Mylyn.setup#/"/>
+  <project href="https://raw.githubusercontent.com/eclipse-mylyn/org.eclipse.mylyn/main/org.eclipse.mylyn.releng/oomph/Mylyn.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse/mwe/master/releng/MWE.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-m2e/m2e-core/master/setup/m2e.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse/nebula/master/oomph.setup#/"/>
