@@ -193,7 +193,7 @@ public class RepositoryPredicateImpl extends PredicateImpl implements Repository
         if (locationURI != null && "file".equals(locationURI.getScheme())) //$NON-NLS-1$
         {
           org.eclipse.emf.common.util.URI emfURI = org.eclipse.emf.common.util.URI.createURI(locationURI.toString());
-          for (File parent = new File(emfURI.toFileString()).getParentFile(); parent != null && parent.isDirectory(); parent = parent.getParentFile())
+          for (File parent = new File(emfURI.toFileString()); parent != null && parent.isDirectory(); parent = parent.getParentFile())
           {
             File gitFolder = new File(parent, ".git"); //$NON-NLS-1$
             if (new File(gitFolder, "index").exists()) //$NON-NLS-1$
