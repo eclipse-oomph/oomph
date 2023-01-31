@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.8"?>
-<target name="Generated from Oomph" sequenceNumber="108">
+<target name="Generated from Oomph" sequenceNumber="111">
   <locations>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
       <unit id="javaewah" version="0.0.0"/>
       <unit id="net.i2p.crypto.eddsa" version="0.0.0"/>
-      <unit id="org.apache.commons.commons-io" version="0.0.0"/>
+      <unit id="org.apache.commons.beanutils" version="0.0.0"/>
+      <unit id="org.apache.commons.collections" version="0.0.0"/>
       <unit id="org.apache.commons.compress" version="0.0.0"/>
+      <unit id="org.apache.commons.io" version="0.0.0"/>
       <unit id="org.apache.sshd.osgi" version="0.0.0"/>
       <unit id="org.apache.sshd.sftp" version="0.0.0"/>
       <unit id="org.eclipse.egit.feature.group" version="0.0.0"/>
@@ -23,8 +25,7 @@
       <unit id="org.eclipse.swtbot.generator" version="0.0.0"/>
       <unit id="org.eclipse.userstorage.oauth" version="0.0.0"/>
       <unit id="org.eclipse.userstorage.tests" version="0.0.0"/>
-      <unit id="org.objectweb.asm" version="0.0.0"/>
-      <unit id="org.objectweb.asm.tree" version="0.0.0"/>
+      <unit id="org.jdom" version="0.0.0"/>
       <unit id="slf4j.api" version="0.0.0"/>
       <unit id="slf4j.nop" version="0.0.0"/>
       <repository location="https://download.eclipse.org/eclipse/updates/4.27-I-builds"/>
@@ -38,7 +39,7 @@
       <repository location="https://download.eclipse.org/tools/orbit/downloads/drops2/R20190602212107/repository"/>
       <repository location="https://download.eclipse.org/tools/orbit/downloads/latest-R"/>
       <repository location="https://download.eclipse.org/usssdk/updates/latest"/>
-      <repository location="https://download.eclipse.org/webtools/downloads/drops/R3.27.0/S-3.27RC1-20220829002010/repository"/>
+      <repository location="https://download.eclipse.org/webtools/downloads/drops/R3.28.0/R-3.28.0-20221120050827/repository"/>
     </location>
   </locations>
 </target>
