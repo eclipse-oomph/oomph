@@ -484,7 +484,7 @@
           <repository
               url="https://download.eclipse.org/technology/swtbot/snapshots"/>
           <repository
-              url="https://download.eclipse.org/webtools/downloads/drops/R3.27.0/S-3.27RC1-20220829002010/repository"/>
+              url="https://download.eclipse.org/webtools/downloads/drops/R3.28.0/R-3.28.0-20221120050827/repository"/>
           <repository
               url="https://download.eclipse.org/justj/jres/17/updates/release/latest"/>
         </repositoryList>
@@ -516,7 +516,7 @@
           <repository
               url="https://download.eclipse.org/technology/swtbot/snapshots"/>
           <repository
-              url="https://download.eclipse.org/webtools/downloads/drops/R3.27.0/S-3.27RC1-20220829002010/repository"/>
+              url="https://download.eclipse.org/webtools/downloads/drops/R3.27.0/R-3.27.0-20220829002010/repository"/>
           <repository
               url="https://download.eclipse.org/justj/jres/17/updates/release/17.0.4.v20221004-1257"/>
         </repositoryList>
@@ -548,7 +548,7 @@
           <repository
               url="https://download.eclipse.org/technology/swtbot/snapshots"/>
           <repository
-              url="https://download.eclipse.org/webtools/downloads/drops/R3.27.0/S-3.27RC1-20220829002010/repository"/>
+              url="https://download.eclipse.org/webtools/downloads/drops/R3.27.0/R-3.27.0-20220829002010/repository"/>
           <repository
               url="https://download.eclipse.org/justj/jres/17/updates/release/17.0.4.v20220903-1038"/>
         </repositoryList>
