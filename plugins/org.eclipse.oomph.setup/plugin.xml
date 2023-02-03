@@ -13,6 +13,8 @@
 
 <plugin>
 
+   <extension-point id="preferenceHandlerFactories" name="Preference Handler Factories" schema="schema/preferenceHandlerFactories.exsd"/>
+
    <extension point="org.eclipse.emf.ecore.generated_package">
       <!-- @generated setup -->
       <package

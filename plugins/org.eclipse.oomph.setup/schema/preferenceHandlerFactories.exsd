@@ -1,12 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="org.eclipse.oomph.targlets.core" xmlns="http://www.w3.org/2001/XMLSchema">
+<schema targetNamespace="org.eclipse.oomph.setup" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appInfo>
-         <meta.schema plugin="org.eclipse.oomph.targlets.core" id="targletContainerListeners" name="Targlet Container Listeners"/>
+         <meta.schema plugin="org.eclipse.oomph.setup" id="preferenceHandlerFactories" name="Preference Handler Factories"/>
       </appInfo>
       <documentation>
-         This extension point allows clients to contribute targlet container listeners, which handle targlet container events such as profile updates.
+         This extension point allows clients to contribute preference handler factories, which create preference handlers, which, in turn, are consulted by PreferenceTasks to handle preference values that are more complex than simple strings. An example of such preference values are XML blobs, which can be merged by custom preference handlers on a per-element basis.
       </documentation>
    </annotation>
 
@@ -18,7 +18,7 @@
       </annotation>
       <complexType>
          <sequence>
-            <element ref="targletListener" minOccurs="1" maxOccurs="unbounded"/>
+            <element ref="preferenceHandlerFactory" minOccurs="1" maxOccurs="unbounded"/>
          </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -47,15 +47,26 @@
       </complexType>
    </element>
 
-   <element name="targletListener">
+   <element name="preferenceHandlerFactory">
       <complexType>
+         <attribute name="preferenceKey" type="string" use="required">
+            <annotation>
+               <documentation>
+                  A URI that represents the preference key. Th URI must be hierarchical, must contain an authority, and must not contain a scheme.
+
+The authority of the URI represents the preference scope, e.g., &quot;instance&quot;, &quot;configuration&quot;, or a project name. The path of the the URI represents the remainder of the preference key.
+
+Example: //instance/org.eclipse.ui.workbench/ENABLED_DECORATORS
+               </documentation>
+            </annotation>
+         </attribute>
          <attribute name="class" type="string" use="required">
             <annotation>
                <documentation>
                   
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn=":org.eclipse.oomph.targlets.core.ITargletContainerListener"/>
+                  <meta.attribute kind="java" basedOn=":org.eclipse.oomph.setup.impl.PreferenceTaskImpl$PreferenceHandler$Factory"/>
                </appInfo>
             </annotation>
          </attribute>
@@ -67,7 +78,7 @@
          <meta.section type="since"/>
       </appInfo>
       <documentation>
-         1.0
+         1.28
       </documentation>
    </annotation>
 
@@ -76,15 +87,17 @@
          <meta.section type="examples"/>
       </appInfo>
       <documentation>
-         The following example of a &lt;code&gt;targletContainerListeners&lt;/code&gt; extension contributes one targlet container listener:
+         The following example of a &lt;code&gt;preferenceHandlerFactories&lt;/code&gt; extension contributes one preference handler factory:
 
 &lt;pre&gt;
-   &lt;extension point=&quot;org.eclipse.oomph.targlets.core.targletContainerListeners&quot;&gt;
-      &lt;targletListener class=&quot;com.foo.bar.TargletContainerEventLogger&quot;/&gt;
+   &lt;extension point=&quot;org.eclipse.oomph.setup.preferenceHandlerFactories&quot;&gt;
+      &lt;preferenceHandlerFactory
+            class=&quot;com.foo.bar.ColorShadesPreferenceHandlerFactory&quot;
+            preferenceKey=&quot;//instance/com.foo.bar/ColorShades&quot;&gt;
+      &lt;/preferenceHandlerFactory&gt;
    &lt;/extension&gt;
 &lt;/pre&gt;
 
-Refer to &lt;a href=&quot;../html/guide/ListeningToEvents.html&quot;&gt;Listening To Targlet Container Events&lt;/a&gt; for a code example of a listener implementation.
       </documentation>
    </annotation>
 
@@ -93,7 +106,7 @@ Refer to &lt;a href=&quot;../html/guide/ListeningToEvents.html&quot;&gt;Listenin
          <meta.section type="apiinfo"/>
       </appInfo>
       <documentation>
-         A contribution must provide a class implementing &lt;a href=&quot;../javadoc/org/eclipse/oomph/targlets/core/TargletContainerListener.html&quot;&gt;org.eclipse.oomph.targlets.core.TargletContainerListener&lt;/a&gt;.
+         A contribution must provide a class implementing org.eclipse.oomph.setup.impl.PreferenceTaskImpl.PreferenceHandler.Factory.
       </documentation>
    </annotation>
 
@@ -102,29 +115,13 @@ Refer to &lt;a href=&quot;../html/guide/ListeningToEvents.html&quot;&gt;Listenin
          <meta.section type="implementation"/>
       </appInfo>
       <documentation>
-         The following listener implementations are contributed by Oomph internally:
-
-&lt;pre&gt;
-   &lt;extension point=&quot;org.eclipse.oomph.targlets.core.targletContainerListeners&quot;&gt;
-      &lt;targletListener class=&quot;org.eclipse.oomph.targlets.internal.core.listeners.PomArtifactUpdater&quot;/&gt;
-      &lt;targletListener class=&quot;org.eclipse.oomph.targlets.internal.core.listeners.PomModulesUpdater&quot;/&gt;
-      &lt;targletListener class=&quot;org.eclipse.oomph.targlets.internal.core.listeners.TargetDefinitionGenerator&quot;/&gt;
-   &lt;/extension&gt;
-&lt;/pre&gt;
-      </documentation>
-   </annotation>
-
-   <annotation>
-      <appInfo>
-         <meta.section type="copyright"/>
-      </appInfo>
-      <documentation>
-         Copyright (c) 2014 Eike Stepper (Loehne, Germany) and others.&lt;br&gt;
+         Copyright (c) 2023 Eike Stepper (Loehne, Germany) and others.&lt;br&gt;
 All rights reserved. This program and the accompanying materials
 are made available under the terms of the Eclipse Public License v2.0
 which accompanies this distribution, and is available at
 http://www.eclipse.org/legal/epl-v20.html
       </documentation>
    </annotation>
+
 
 </schema>

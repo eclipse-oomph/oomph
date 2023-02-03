@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.setup.impl;
 
+import org.eclipse.oomph.internal.setup.SetupPlugin;
 import org.eclipse.oomph.internal.setup.SetupPrompter;
 import org.eclipse.oomph.preferences.PreferencesFactory;
 import org.eclipse.oomph.preferences.util.PreferencesUtil;
@@ -43,6 +44,8 @@ import org.eclipse.emf.ecore.resource.URIConverter;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -682,6 +685,8 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
    */
   public static class PreferenceHandler
   {
+    private static final String EXTENSION_POINT = "org.eclipse.oomph.setup.preferenceHandlerFactories"; //$NON-NLS-1$
+
     protected URI key;
 
     protected String oldValue;
@@ -848,17 +853,13 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
 
     protected static void registerListHandlerFactory(String key, char itemSeparator, char keySeparator)
     {
-      final String itemSeparatorStr = new String(new char[] { itemSeparator });
-      final String itemPattern = "([^" + itemSeparatorStr + "]+)"; //$NON-NLS-1$ //$NON-NLS-2$
-      final String keyPattern = keySeparator == (char)0 ? "(.*)" : "([^" + new String(new char[] { keySeparator }) + "]+)"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-
       PreferenceHandlerFactoryRegistry registry = (PreferenceHandlerFactoryRegistry)Factory.Registry.INSTANCE;
       registry.put(URI.createURI(key), new Factory()
       {
         @Override
         public PreferenceHandler create(URI key)
         {
-          return new ListPreferenceHandler(key, itemPattern, keyPattern, itemSeparatorStr);
+          return new ListPreferenceHandler(key, itemSeparator, keySeparator);
         }
       });
     }
@@ -866,6 +867,32 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
     protected static void registerListHandlerFactory(String key, char itemSeparator)
     {
       registerListHandlerFactory(key, itemSeparator, (char)0);
+    }
+
+    private static void contributeExtensions(PreferenceHandlerFactoryRegistry registry)
+    {
+      IExtensionRegistry extensionRegistry = Platform.getExtensionRegistry();
+      for (IConfigurationElement configurationElement : extensionRegistry.getConfigurationElementsFor(EXTENSION_POINT))
+      {
+        try
+        {
+          String key = configurationElement.getAttribute("preferenceKey"); //$NON-NLS-1$
+
+          URI uri = URI.createURI(key);
+          if (registry.containsKey(uri))
+          {
+            SetupPlugin.INSTANCE.log("A PreferenceHandler.Factory for key '" + key + "' is already registered.", IStatus.WARNING); //$NON-NLS-1$//$NON-NLS-2$
+            continue;
+          }
+
+          Factory factory = (Factory)configurationElement.createExecutableExtension("class"); //$NON-NLS-1$
+          registry.put(uri, factory);
+        }
+        catch (Exception ex)
+        {
+          SetupPlugin.INSTANCE.log(ex);
+        }
+      }
     }
 
     static
@@ -1111,6 +1138,8 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
           return new PreferenceHandler(key);
         }
       });
+
+      contributeExtensions(registry);
     }
 
     /**
@@ -1176,6 +1205,14 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
       this.itemPattern = Pattern.compile(itemPattern);
       this.keyPattern = Pattern.compile(keyPattern);
       this.separator = separator;
+    }
+
+    public ListPreferenceHandler(URI key, char itemSeparator, char keySeparator)
+    {
+      super(key);
+      separator = new String(new char[] { itemSeparator });
+      itemPattern = Pattern.compile("([^" + separator + "]+)"); //$NON-NLS-1$//$NON-NLS-2$
+      keyPattern = Pattern.compile(keySeparator == (char)0 ? "(.*)" : "([^" + new String(new char[] { keySeparator }) + "]+)"); //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
     }
 
     @Override
