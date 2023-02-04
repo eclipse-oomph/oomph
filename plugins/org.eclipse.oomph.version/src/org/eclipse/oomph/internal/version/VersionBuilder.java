@@ -1622,18 +1622,37 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
     Markers.deleteAllMarkers(file, Markers.EXPORT_VERSION_PROBLEM);
 
     BundleDescription description = pluginModel.getBundleDescription();
-    String bundleName = description.getSymbolicName();
     Version bundleVersion = VersionUtil.normalize(description.getVersion());
+
+    Set<IPath> paths = new HashSet<>();
+    Set<String> prefixes = new HashSet<>();
+    getProject().accept(it -> {
+      if (it instanceof IFile)
+      {
+        IPath path = it.getProjectRelativePath();
+        if ("java".equals(path.getFileExtension())) //$NON-NLS-1$
+        {
+          IPath javaPackageFolder = path.removeLastSegments(1);
+          if (paths.add(javaPackageFolder))
+          {
+            prefixes.add(javaPackageFolder.toString().replace('/', '.'));
+          }
+        }
+      }
+      return true;
+    });
 
     for (ExportPackageDescription packageExport : description.getExportPackages())
     {
       String packageName = packageExport.getName();
-      if (isBundlePackage(packageName, bundleName))
+      String suffix = '.' + packageName;
+      boolean isBundlePackage = prefixes.stream().anyMatch(it -> it.endsWith(suffix));
+      if (isBundlePackage)
       {
         Version packageVersion = packageExport.getVersion();
-        if (packageVersion != null && !packageVersion.equals(Version.emptyVersion) && !packageVersion.equals(bundleVersion))
+        if (!packageVersion.equals(bundleVersion))
         {
-          addExportMarker(file, packageName, bundleVersion);
+          addExportMarker(file, packageName, packageVersion, bundleVersion);
         }
       }
     }
@@ -1802,32 +1821,6 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
     }
   }
 
-  private boolean isBundlePackage(String packageName, String bundleName)
-  {
-    if (packageName.startsWith(bundleName))
-    {
-      return true;
-    }
-
-    int lastDot = bundleName.lastIndexOf('.');
-    if (lastDot != -1)
-    {
-      String bundleStart = bundleName.substring(0, lastDot);
-      String bundleEnd = bundleName.substring(lastDot + 1);
-      if (packageName.startsWith(bundleStart + ".internal." + bundleEnd)) //$NON-NLS-1$
-      {
-        return true;
-      }
-
-      if (packageName.startsWith(bundleStart + ".spi." + bundleEnd)) //$NON-NLS-1$
-      {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
   private void addRequireMarker(IFile file, String name, String message, boolean missing, VersionRange versionRange)
   {
     try
@@ -1909,19 +1902,23 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
     }
   }
 
-  private void addExportMarker(IFile file, String name, Version bundleVersion)
+  private void addExportMarker(IFile file, String name, Version packageVersion, Version bundleVersion)
   {
     String versionString = bundleVersion.toString();
 
     try
     {
       String message = NLS.bind(Messages.VersionBuilder_PackageRequiresVersion_message, name, versionString);
-      String regex = name.replace(".", "\\.") + ";version=\"([0123456789\\.]*)\""; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+      boolean exists = !packageVersion.equals(Version.emptyVersion);
+      @SuppressWarnings("nls")
+      String regex = !exists ? //
+          "(?:\nExport-Package: |\n )" + name.replace(".", "\\.") + "()[;,\r\n]" : //
+          name.replace(".", "\\.") + ";version=\"([0123456789\\.]*)\"";
 
       IMarker marker = Markers.addMarker(file, message, IMarker.SEVERITY_ERROR, regex);
       marker.setAttribute(Markers.PROBLEM_TYPE, Markers.EXPORT_VERSION_PROBLEM);
       marker.setAttribute(Markers.QUICK_FIX_PATTERN, regex);
-      marker.setAttribute(Markers.QUICK_FIX_REPLACEMENT, versionString);
+      marker.setAttribute(Markers.QUICK_FIX_REPLACEMENT, exists ? versionString : ";version=\"" + bundleVersion + "\""); //$NON-NLS-1$ //$NON-NLS-2$
       marker.setAttribute(Markers.QUICK_FIX_CONFIGURE_OPTION, IVersionBuilderArguments.IGNORE_EXPORT_VERSIONS_ARGUMENT);
     }
     catch (Exception ex)
