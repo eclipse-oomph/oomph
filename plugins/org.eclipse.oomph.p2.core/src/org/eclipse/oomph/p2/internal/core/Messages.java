@@ -61,9 +61,13 @@ public class Messages extends NLS
 
   public static String CachingRepositoryManager_AddingRepository_task;
 
+  public static String CachingRepositoryManager_artifact;
+
   public static String CachingRepositoryManager_Failure_message;
 
   public static String CachingRepositoryManager_LoadingFailed_message;
+
+  public static String CachingRepositoryManager_metadata;
 
   public static String CachingRepositoryManager_NonRelative_message;
 
@@ -108,6 +112,8 @@ public class Messages extends NLS
   public static String ProfileReferencerImpl_NotDirectory_exception;
 
   public static String ProfileReferencerImpl_NotFile_exception;
+
+  public static String ProfileTransactionImpl_AddPGPSignature;
 
   public static String ProfileTransactionImpl_CollectingArtifacts_task;
 

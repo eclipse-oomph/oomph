@@ -204,7 +204,9 @@ public class CachingRepositoryManager<T>
         String[] allSuffixes = getAllSuffixes();
         String[] suffixes = sortSuffixes(allSuffixes, preferredOrder);
 
-        sub = SubMonitor.convert(sub, NLS.bind(Messages.CachingRepositoryManager_AddingRepository_task, location), suffixes.length * 100);
+        sub = SubMonitor.convert(sub, NLS.bind(Messages.CachingRepositoryManager_AddingRepository_task,
+            repositoryType == IRepository.TYPE_METADATA ? Messages.CachingRepositoryManager_metadata : Messages.CachingRepositoryManager_artifact, location),
+            suffixes.length * 100);
         ProvisionException failure = null;
 
         try

@@ -39,6 +39,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil.EqualityHelper;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
@@ -47,6 +48,7 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.ProgressMonitorWrapper;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.equinox.internal.p2.artifact.processors.pgp.PGPSignatureVerifier;
 import org.eclipse.equinox.internal.p2.artifact.repository.CompositeArtifactRepository;
 import org.eclipse.equinox.internal.p2.artifact.repository.simple.SimpleArtifactRepository;
 import org.eclipse.equinox.internal.p2.director.ProfileChangeRequest;
@@ -70,6 +72,7 @@ import org.eclipse.equinox.p2.engine.IEngine;
 import org.eclipse.equinox.p2.engine.IPhaseSet;
 import org.eclipse.equinox.p2.engine.IProfile;
 import org.eclipse.equinox.p2.engine.IProvisioningPlan;
+import org.eclipse.equinox.p2.engine.PhaseSetFactory;
 import org.eclipse.equinox.p2.engine.ProvisioningContext;
 import org.eclipse.equinox.p2.engine.query.UserVisibleRootQuery;
 import org.eclipse.equinox.p2.metadata.IArtifactKey;
@@ -88,9 +91,15 @@ import org.eclipse.equinox.p2.query.IQuery;
 import org.eclipse.equinox.p2.query.IQueryResult;
 import org.eclipse.equinox.p2.query.IQueryable;
 import org.eclipse.equinox.p2.query.QueryUtil;
+import org.eclipse.equinox.p2.repository.IRepository;
+import org.eclipse.equinox.p2.repository.IRepositoryManager;
+import org.eclipse.equinox.p2.repository.artifact.ArtifactDescriptorQuery;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactDescriptor;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepository;
+import org.eclipse.equinox.p2.repository.artifact.IArtifactRepositoryManager;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRequest;
+import org.eclipse.equinox.p2.repository.artifact.IFileArtifactRepository;
+import org.eclipse.equinox.p2.repository.artifact.spi.ArtifactDescriptor;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
 import org.eclipse.equinox.p2.repository.spi.PGPPublicKeyService;
@@ -99,9 +108,11 @@ import org.eclipse.osgi.util.NLS;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.net.URI;
+import java.nio.file.Files;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -113,6 +124,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -554,6 +566,11 @@ public class ProfileTransactionImpl implements ProfileTransaction
             IEngine engine = agent.getEngine();
             ensureSameBackupDevice(provisioningPlan);
 
+            if (Arrays.asList(phaseSet.getPhaseIds()).contains(PhaseSetFactory.PHASE_CHECK_TRUST))
+            {
+              checkMissingPGPSignatures(agent, artifactURIs, MonitorUtil.create(monitor, 1));
+            }
+
             IStatus status = PlanExecutionHelper.executePlan(provisioningPlan, engine, phaseSet, provisioningContext,
                 new ExecutePlanMonitor(monitor, provisioningPlan));
 
@@ -590,6 +607,124 @@ public class ProfileTransactionImpl implements ProfileTransaction
     finally
     {
       monitor.done();
+    }
+  }
+
+  private void checkMissingPGPSignatures(Agent agent, Set<URI> artifactURIs, IProgressMonitor monitor)
+  {
+    IProvisioningAgent provisioningAgent = agent.getProvisioningAgent();
+    IArtifactRepositoryManager artifactRepositoryManager = agent.getArtifactRepositoryManager();
+
+    BundlePool bundlePool = profile.getBundlePool();
+    URI bundlePoolLocation = bundlePool.getLocation().toURI();
+
+    // Load the artifact repositories in parallel.
+    Set<URI> uris = new LinkedHashSet<>();
+    uris.add(bundlePoolLocation);
+    uris.addAll(artifactURIs);
+    RepositoryLoader<IArtifactKey> repositoryLoader = new RepositoryLoader<>(artifactRepositoryManager, uris.toArray(new URI[uris.size()]));
+    repositoryLoader.begin(monitor);
+    ProvisionException exception = repositoryLoader.getException();
+    if (exception != null)
+    {
+      // Ignore.
+      return;
+    }
+
+    if (repositoryLoader.isCanceled())
+    {
+      throw new OperationCanceledException();
+    }
+
+    try
+    {
+      List<IQueryable<IArtifactDescriptor>> repositories = new ArrayList<>();
+      for (URI uri : uris)
+      {
+        repositories.add(artifactRepositoryManager.loadRepository(uri, monitor).descriptorQueryable());
+      }
+
+      Map<IArtifactKey, IArtifactDescriptor> pgpArtifacts = new LinkedHashMap<>();
+      for (IArtifactDescriptor descriptor : QueryUtil.compoundQueryable(repositories).query(ArtifactDescriptorQuery.ALL_DESCRIPTORS, monitor))
+      {
+        if (descriptor.getProperty(PGPSignatureVerifier.PGP_SIGNATURES_PROPERTY_NAME) != null)
+        {
+          pgpArtifacts.put(descriptor.getArtifactKey(), descriptor);
+        }
+      }
+
+      IFileArtifactRepository artifactRepository = (IFileArtifactRepository)artifactRepositoryManager.loadRepository(bundlePoolLocation, monitor);
+      List<Runnable> runnables = new ArrayList<>();
+      for (IArtifactDescriptor descriptor : artifactRepository.descriptorQueryable().query(ArtifactDescriptorQuery.ALL_DESCRIPTORS, monitor))
+      {
+        // Look for all descriptors in the bundle pool with without PGP signature...
+        if (descriptor.getProperty(PGPSignatureVerifier.PGP_SIGNATURES_PROPERTY_NAME) == null)
+        {
+          // If one of the other repositories has a PGP signature...
+          IArtifactDescriptor other = pgpArtifacts.get(descriptor.getArtifactKey());
+          if (other != null)
+          {
+            File artifactFile = artifactRepository.getArtifactFile(descriptor);
+            if (artifactFile != null && artifactFile.isFile())
+            {
+              // Defer checking the artifact against the signature to run while the repository is locked.
+              runnables.add(() -> {
+                try (PGPSignatureVerifier pgpSignatureVerifier = new PGPSignatureVerifier())
+                {
+                  // A stream that ignores the writes but provides access to the target descriptor so that it can be updated if the PGP signing is successful.
+                  class NullOutputStream extends OutputStream implements IAdaptable
+                  {
+                    @Override
+                    public <T> T getAdapter(Class<T> adapter)
+                    {
+                      if (adapter == ArtifactDescriptor.class)
+                      {
+                        return adapter.cast(descriptor);
+                      }
+                      return null;
+                    }
+
+                    @Override
+                    public void write(int b) throws IOException
+                    {
+                    }
+
+                    @Override
+                    public void write(byte[] b, int off, int len) throws IOException
+                    {
+                    }
+                  }
+
+                  pgpSignatureVerifier.link(new NullOutputStream(), monitor);
+                  pgpSignatureVerifier.initialize(provisioningAgent, null, other);
+                  Files.copy(artifactFile.toPath(), pgpSignatureVerifier);
+                }
+                catch (IOException ex)
+                {
+                  P2CorePlugin.INSTANCE.log(ex);
+                }
+
+                String property = descriptor.getProperty(PGPSignatureVerifier.PGP_SIGNATURES_PROPERTY_NAME);
+                if (property != null)
+                {
+                  monitor.subTask(NLS.bind(Messages.ProfileTransactionImpl_AddPGPSignature, artifactFile));
+                }
+              });
+            }
+          }
+        }
+      }
+
+      if (!runnables.isEmpty())
+      {
+        artifactRepository.executeBatch(m -> {
+          runnables.parallelStream().forEach(Runnable::run);
+        }, monitor);
+      }
+    }
+    catch (ProvisionException ex)
+    {
+      P2CorePlugin.INSTANCE.log(ex);
     }
   }
 
@@ -820,7 +955,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
       }
     }
 
-    RepositoryLoader repositoryLoader = new RepositoryLoader(metadataRepositoryManager, metadataURIs);
+    RepositoryLoader<IInstallableUnit> repositoryLoader = new RepositoryLoader<>(metadataRepositoryManager, metadataURIs);
     repositoryLoader.begin(monitor);
     ProvisionException exception = repositoryLoader.getException();
     if (exception != null)
@@ -1544,17 +1679,17 @@ public class ProfileTransactionImpl implements ProfileTransaction
   /**
    * @author Ed Merks
    */
-  private static final class RepositoryLoader extends WorkerPool<RepositoryLoader, URI, RepositoryLoader.Worker>
+  private static final class RepositoryLoader<T> extends WorkerPool<RepositoryLoader<T>, URI, RepositoryLoader.Worker<T>>
   {
-    private final IMetadataRepositoryManager manager;
+    private final IRepositoryManager<T> manager;
 
     private final URI[] uris;
 
-    private final List<IMetadataRepository> metadataRepositories = Collections.synchronizedList(new ArrayList<IMetadataRepository>());
+    private final List<IRepository<T>> repositories = Collections.synchronizedList(new ArrayList<>());
 
     private ProvisionException exception;
 
-    public RepositoryLoader(IMetadataRepositoryManager manager, URI... uris)
+    public RepositoryLoader(IRepositoryManager<T> manager, URI... uris)
     {
       this.manager = manager;
       this.uris = uris;
@@ -1586,17 +1721,17 @@ public class ProfileTransactionImpl implements ProfileTransaction
     }
 
     @Override
-    protected Worker createWorker(URI key, int workerID, boolean secondary)
+    protected Worker<T> createWorker(URI key, int workerID, boolean secondary)
     {
-      return new Worker(NLS.bind(Messages.ProfileTransactionImpl_RepositoryLoader_thread, key), this, key, workerID, secondary);
+      return new Worker<T>(NLS.bind(Messages.ProfileTransactionImpl_RepositoryLoader_thread, key), this, key, workerID, secondary);
     }
 
     /**
      * @author Ed Merks
      */
-    private static class Worker extends WorkerPool.Worker<URI, RepositoryLoader>
+    private static class Worker<T> extends WorkerPool.Worker<URI, RepositoryLoader<T>>
     {
-      public Worker(String name, RepositoryLoader workPool, URI key, int id, boolean secondary)
+      public Worker(String name, RepositoryLoader<T> workPool, URI key, int id, boolean secondary)
       {
         super(name, workPool, key, id, secondary);
       }
@@ -1604,7 +1739,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
       @Override
       protected IStatus perform(IProgressMonitor monitor)
       {
-        RepositoryLoader workPool = getWorkPool();
+        RepositoryLoader<T> workPool = getWorkPool();
         if (workPool.isCanceled())
         {
           return Status.CANCEL_STATUS;
@@ -1612,8 +1747,13 @@ public class ProfileTransactionImpl implements ProfileTransaction
 
         try
         {
-          IMetadataRepository metadataRepository = workPool.manager.loadRepository(getKey(), MonitorUtil.create(monitor, 1));
-          workPool.metadataRepositories.add(metadataRepository);
+          IRepositoryManager<T> manager = workPool.manager;
+          URI key = getKey();
+          @SuppressWarnings("unchecked")
+          IRepository<T> repository = (IRepository<T>)(manager instanceof IMetadataRepositoryManager
+              ? ((IMetadataRepositoryManager)manager).loadRepository(key, MonitorUtil.create(monitor, 1))
+              : ((IArtifactRepositoryManager)manager).loadRepository(key, MonitorUtil.create(monitor, 1)));
+          workPool.repositories.add(repository);
           return Status.OK_STATUS;
         }
         catch (ProvisionException ex)
