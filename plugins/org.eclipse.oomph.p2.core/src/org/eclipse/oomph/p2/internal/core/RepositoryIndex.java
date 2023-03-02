@@ -84,11 +84,11 @@ public class RepositoryIndex
   protected static final String _51 = "<!----------->";
   protected static final String _52 = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">";
   protected static final String _53 = "</a>";
-  protected static final String _54 = "</a> report.";
-  protected static final String _55 = "</a>.";
-  protected static final String _56 = "</a>.</p>";
-  protected static final String _57 = "</a></li>";
-  protected static final String _58 = "</a></span>";
+  protected static final String _54 = "</a> ";
+  protected static final String _55 = "</a> report.";
+  protected static final String _56 = "</a>.";
+  protected static final String _57 = "</a>.</p>";
+  protected static final String _58 = "</a></li>";
   protected static final String _59 = "</aside>";
   protected static final String _60 = "</b>";
   protected static final String _61 = "</body>";
@@ -475,20 +475,20 @@ public class RepositoryIndex
   protected final String _423 = _259 + NL_9 + _150;
   protected final String _424 = _249 + NL_7 + _53;
   protected final String _425 = NL_8 + _178 + NL_10 + _245 + NL_10 + _87 + NL_12 + _147;
-  protected final String _426 = _54 + NL_8 + _72 + NL_8 + _181;
+  protected final String _426 = _55 + NL_8 + _72 + NL_8 + _181;
   protected final String _427 = NL_8 + _180 + NL_8 + _224;
   protected final String _428 = NL_10 + _165;
   protected final String _429 = NL_8 + _80;
   protected final String _430 = NL_8 + _178 + NL_10 + _243 + NL_10 + _86;
   protected final String _431 = _260 + NL_12 + _147;
   protected final String _432 = _53 + NL_10 + _358;
-  protected final String _433 = _55 + NL_8 + _72;
+  protected final String _433 = _56 + NL_8 + _72;
   protected final String _434 = NL_8 + _139 + NL_8 + _178;
   protected final String _435 = NL_8 + _137 + NL_8 + _178;
   protected final String _436 = NL_8 + _135 + NL_10 + _238 + NL_8 + _65;
   protected final String _437 = NL_8 + _119 + NL_10 + _145;
   protected final String _438 = _262 + NL_10 + _189;
-  protected final String _439 = _58 + NL_8 + _63;
+  protected final String _439 = _76 + NL_8 + _63;
   protected final String _440 = NL_8 + _135 + NL_10 + _230;
   protected final String _441 = NL_8 + _197;
   protected final String _442 = NL_8 + _65;
@@ -544,7 +544,7 @@ public class RepositoryIndex
   protected final String _492 = _305 + NL_12 + _95;
   protected final String _493 = _16 + NL_12 + _144;
   protected final String _494 = _262 + NL_12 + _189;
-  protected final String _495 = _58 + NL_12 + _193;
+  protected final String _495 = _76 + NL_12 + _193;
   protected final String _496 = _21 + NL_10 + _63 + NL_10 + _211;
   protected final String _497 = NL_12 + _164 + NL_14 + _86;
   protected final String _498 = _53 + NL_12 + _69;
@@ -675,7 +675,7 @@ public class RepositoryIndex
     stringBuffer.append(entry.getValue());
     stringBuffer.append(_265);
     stringBuffer.append(entry.getKey());
-    stringBuffer.append(_57);
+    stringBuffer.append(_58);
     }
     }
     stringBuffer.append(_402);
@@ -766,7 +766,7 @@ public class RepositoryIndex
     stringBuffer.append(reporter.getReportSource());
     stringBuffer.append(_261);
     stringBuffer.append(reporter.getReportSource());
-    stringBuffer.append(_56);
+    stringBuffer.append(_57);
     Map<String, String> allReports = indexReport.getAllReports();
     if (allReports != null && !allReports.isEmpty()) {
     stringBuffer.append(_427);
@@ -775,7 +775,7 @@ public class RepositoryIndex
     stringBuffer.append(entry.getValue());
     stringBuffer.append(_265);
     stringBuffer.append(entry.getKey());
-    stringBuffer.append(_57);
+    stringBuffer.append(_58);
     }
     stringBuffer.append(_429);
     }
@@ -811,12 +811,15 @@ public class RepositoryIndex
     stringBuffer.append(_436);
     for (PGPPublicKey pgpPublicKey : pgpKeys) {
           String fingerPrint = PGPPublicKeyService.toHexFingerprint(pgpPublicKey);
+          String uid = report.getUID(pgpPublicKey);
     stringBuffer.append(_437);
     stringBuffer.append(report.getSignedImage(true));
     stringBuffer.append(_438);
     stringBuffer.append(report.getKeyServerURL(pgpPublicKey));
     stringBuffer.append(_258);
     stringBuffer.append(fingerPrint);
+    stringBuffer.append(_54);
+    stringBuffer.append(uid);
     stringBuffer.append(_439);
     }
       }
@@ -1143,6 +1146,7 @@ public class RepositoryIndex
     for (Map.Entry<PGPPublicKey, Map<String, IInstallableUnit>> entry : pgpKeys.entrySet()) {
         PGPPublicKey pgpPublicKey = entry.getKey();
         String fingerPrint = PGPPublicKeyService.toHexFingerprint(pgpPublicKey);
+        String uid = report.getUID(pgpPublicKey);
         String id = "pgpKeys" + ++idCount;
     stringBuffer.append(_491);
     stringBuffer.append(2);
@@ -1156,6 +1160,8 @@ public class RepositoryIndex
     stringBuffer.append(report.getKeyServerURL(pgpPublicKey));
     stringBuffer.append(_258);
     stringBuffer.append(fingerPrint);
+    stringBuffer.append(_54);
+    stringBuffer.append(uid);
     stringBuffer.append(_495);
     stringBuffer.append(entry.getValue().size());
     stringBuffer.append(_496);

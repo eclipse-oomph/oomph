@@ -545,10 +545,11 @@ span:target {
              PGP Keys
            </h3>
       <%for (PGPPublicKey pgpPublicKey : pgpKeys) {
-          String fingerPrint = PGPPublicKeyService.toHexFingerprint(pgpPublicKey);%>
+          String fingerPrint = PGPPublicKeyService.toHexFingerprint(pgpPublicKey);
+          String uid = report.getUID(pgpPublicKey);%>
            <div class="font-smaller">
              <img alt="Signed" class="fit-image" src="../<%=report.getSignedImage(true)%>"/>
-             <span class="text-nowrap"><a href="<%=report.getKeyServerURL(pgpPublicKey)%>" target="keyserver">0x<%=fingerPrint%></a></span>
+             <span class="text-nowrap"><a href="<%=report.getKeyServerURL(pgpPublicKey)%>" target="keyserver">0x<%=fingerPrint%></a> <%=uid%></span>
            </div>
       <%}
       }
@@ -789,12 +790,13 @@ span:target {
     <%for (Map.Entry<PGPPublicKey, Map<String, IInstallableUnit>> entry : pgpKeys.entrySet()) {
         PGPPublicKey pgpPublicKey = entry.getKey();
         String fingerPrint = PGPPublicKeyService.toHexFingerprint(pgpPublicKey);
+        String uid = report.getUID(pgpPublicKey);
         String id = "pgpKeys" + ++idCount;%>
            <li>
              <div class="font-smaller" style="margin-left: <%=2%>em; text-indent: -4em;">
                <button id="<%=id%>_arrows" class="orange bb" style="margin-left: 1em;" onclick="expand_collapse('<%=id%>');">&#x25B7;</button>
                <img alt="Signed" class="fit-image" src="<%=report.getSignedImage(true)%>"/>
-               <span class="text-nowrap"><a href="<%=report.getKeyServerURL(pgpPublicKey)%>" target="keyserver">0x<%=fingerPrint%></a></span>
+               <span class="text-nowrap"><a href="<%=report.getKeyServerURL(pgpPublicKey)%>" target="keyserver">0x<%=fingerPrint%></a> <%=uid%></span>
                <span style="color: DarkCyan; font-size: 110%;">(<%=entry.getValue().size()%>)</span>
              </div>
              <ul class="font-smaller" style="list-style-type: none; display:none; margin-left: -3em;" id="<%=id%>">

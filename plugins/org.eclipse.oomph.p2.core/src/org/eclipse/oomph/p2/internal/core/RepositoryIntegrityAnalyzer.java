@@ -78,6 +78,7 @@ import org.eclipse.equinox.internal.p2.metadata.repository.io.MetadataWriter;
 import org.eclipse.equinox.internal.p2.metadata.repository.io.XMLConstants;
 import org.eclipse.equinox.internal.p2.persistence.CompositeRepositoryIO;
 import org.eclipse.equinox.internal.p2.persistence.CompositeRepositoryState;
+import org.eclipse.equinox.internal.provisional.p2.repository.DefaultPGPPublicKeyService;
 import org.eclipse.equinox.p2.core.ProvisionException;
 import org.eclipse.equinox.p2.metadata.IArtifactKey;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
@@ -160,6 +161,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -2054,8 +2056,14 @@ public class RepositoryIntegrityAnalyzer implements IApplication
           {
             try
             {
-              Set<PGPPublicKey> pgpPubliKeys = PGPPublicKeyStore.readPublicKeys(IOUtil.readUTF8(pgpKeyFile));
-              return pgpPubliKeys;
+              Set<PGPPublicKey> pgpPublicKeys = PGPPublicKeyStore.readPublicKeys(IOUtil.readUTF8(pgpKeyFile));
+              PGPPublicKeyService keyService = getKeyService();
+              Set<PGPPublicKey> result = new LinkedHashSet<>();
+              for (PGPPublicKey pgpPublicKey : pgpPublicKeys)
+              {
+                result.add(keyService.getKey(pgpPublicKey.getFingerprint()));
+              }
+              return result;
             }
             catch (Exception ex)
             {
@@ -2063,6 +2071,53 @@ public class RepositoryIntegrityAnalyzer implements IApplication
             }
           }
           return Set.of();
+        }
+
+        private Map<PGPPublicKey, String> uids = new ConcurrentHashMap<>();
+
+        @Override
+        public String getUID(PGPPublicKey key)
+        {
+          return uids.computeIfAbsent(key, k -> computeUID(k, true));
+        }
+
+        public String computeUID(PGPPublicKey key, boolean recursive)
+        {
+          for (Iterator<String> it = key.getUserIDs(); it.hasNext();)
+          {
+            String userID = it.next();
+            Matcher matcher = UID_PATTERN.matcher(userID);
+            if (matcher.matches())
+            {
+              return matcher.group(1);
+            }
+          }
+
+          if (recursive)
+          {
+            try
+            {
+              Set<PGPPublicKey> verifiedCertifications = getKeyService().getVerifiedCertifications(key);
+              for (PGPPublicKey certifyingKey : verifiedCertifications)
+              {
+                if (certifyingKey != key)
+                {
+                  String uid = computeUID(certifyingKey, false);
+                  if (!StringUtil.isEmpty(uid))
+                  {
+                    return uid;
+                  }
+                }
+              }
+            }
+            catch (RuntimeException ex)
+            {
+              ex.printStackTrace();
+              //$FALL-THROUGH$
+            }
+          }
+
+          return "";
         }
 
         @Override
@@ -3792,6 +3847,13 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     return getAgent().getArtifactRepositoryManager();
   }
 
+  private PGPPublicKeyService getKeyService()
+  {
+    DefaultPGPPublicKeyService service = (DefaultPGPPublicKeyService)getAgent().getProvisioningAgent().getService(PGPPublicKeyService.class);
+    service.setKeyServers(Set.of("keyserver.ubuntu.com"));
+    return service;
+  }
+
   private static String format(float size)
   {
     NumberFormat instance = NumberFormat.getInstance(Locale.US);
@@ -3865,6 +3927,8 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
   public static abstract class Report implements Reporter
   {
+    static Pattern UID_PATTERN = Pattern.compile(".*<([^>]+)>.*");
+
     private static final URI NO_LICENSE_URI = URI.createURI("");
 
     public static class LicenseDetail
@@ -4200,6 +4264,8 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     public abstract Map<List<Certificate>, Map<String, IInstallableUnit>> getInvalidSignatures();
 
     public abstract Map<List<Certificate>, Map<String, IInstallableUnit>> getCertificates();
+
+    public abstract String getUID(PGPPublicKey key);
 
     public abstract String getKeyServerURL(PGPPublicKey key);
 
