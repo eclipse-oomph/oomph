@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.8"?>
-<target name="Generated from Oomph" sequenceNumber="112">
+<target name="Generated from Oomph" sequenceNumber="113">
   <locations>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
       <unit id="org.eclipse.egit.feature.group" version="0.0.0"/>
@@ -29,7 +29,7 @@
       <repository location="https://download.eclipse.org/technology/m2e/snapshots/latest"/>
       <repository location="https://download.eclipse.org/technology/swtbot/snapshots"/>
       <repository location="https://download.eclipse.org/tools/orbit/downloads/drops2/R20190602212107/repository"/>
-      <repository location="https://download.eclipse.org/tools/orbit/downloads/latest-R"/>
+      <repository location="https://download.eclipse.org/tools/orbit/downloads/drops/R20221123021534/repository"/>
       <repository location="https://download.eclipse.org/usssdk/updates/latest"/>
       <repository location="https://download.eclipse.org/webtools/downloads/drops/R3.28.0/R-3.28.0-20221120050827/repository"/>
     </location>

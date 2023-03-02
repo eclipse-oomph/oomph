@@ -89,6 +89,12 @@ public class FixCRLFAction extends AbstractAction<Repository>
       {
         processDisplay();
       }
+
+      @Override
+      public void showDuration(boolean enabled)
+      {
+        processDisplay();
+      }
     };
 
     Repository targetRepository = null;
