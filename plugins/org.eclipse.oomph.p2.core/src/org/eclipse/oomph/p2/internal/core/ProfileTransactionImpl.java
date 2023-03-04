@@ -616,6 +616,11 @@ public class ProfileTransactionImpl implements ProfileTransaction
     IArtifactRepositoryManager artifactRepositoryManager = agent.getArtifactRepositoryManager();
 
     BundlePool bundlePool = profile.getBundlePool();
+    if (bundlePool == null)
+    {
+      return;
+    }
+
     URI bundlePoolLocation = bundlePool.getLocation().toURI();
 
     // Load the artifact repositories in parallel.
