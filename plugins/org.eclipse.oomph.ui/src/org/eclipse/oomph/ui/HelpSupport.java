@@ -97,6 +97,11 @@ public class HelpSupport
       @Override
       public void helpRequested(HelpEvent e)
       {
+        if (shell.isDisposed())
+        {
+          return;
+        }
+
         if (UIUtil.isBrowserAvailable())
         {
           if (dialog.getTray() != null)
