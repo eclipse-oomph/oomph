@@ -181,6 +181,9 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/GlobalVariable"/>
       <choice
+          value="2023-06"
+          label="Eclipse 2023-06 - 4.28"/>
+      <choice
           value="2023-03"
           label="Eclipse 2023-03 - 4.27"/>
       <choice
