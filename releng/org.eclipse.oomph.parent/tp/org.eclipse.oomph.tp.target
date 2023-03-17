@@ -3,6 +3,15 @@
 <target name="Generated from Oomph" sequenceNumber="114">
   <locations>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+      <unit id="javaewah" version="0.0.0"/>
+      <unit id="net.i2p.crypto.eddsa" version="0.0.0"/>
+      <unit id="org.apache.commons.cli" version="0.0.0"/>
+      <unit id="org.apache.commons.collections" version="0.0.0"/>
+      <unit id="org.apache.commons.commons-beanutils" version="0.0.0"/>
+      <unit id="org.apache.commons.compress" version="0.0.0"/>
+      <unit id="org.apache.commons.io" version="0.0.0"/>
+      <unit id="org.apache.sshd.osgi" version="0.0.0"/>
+      <unit id="org.apache.sshd.sftp" version="0.0.0"/>
       <unit id="org.eclipse.egit.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.emf.sdk.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.equinox.executable.feature.group" version="0.0.0"/>
@@ -20,7 +29,7 @@
       <unit id="org.jdom" version="0.0.0"/>
       <unit id="slf4j.api" version="0.0.0"/>
       <unit id="slf4j.nop" version="0.0.0"/>
-      <repository location="https://download.eclipse.org/eclipse/updates/4.27-I-builds/I20230302-0300"/>
+      <repository location="https://download.eclipse.org/eclipse/updates/4.28-I-builds"/>
       <repository location="https://download.eclipse.org/egit/updates-stable-nightly"/>
       <repository location="https://download.eclipse.org/justj/jres/17/updates/release/latest"/>
       <repository location="https://download.eclipse.org/modeling/emf/emf/builds/milestone/latest"/>
@@ -28,10 +37,11 @@
       <repository location="https://download.eclipse.org/nebula/snapshot"/>
       <repository location="https://download.eclipse.org/technology/m2e/snapshots/latest"/>
       <repository location="https://download.eclipse.org/technology/swtbot/snapshots"/>
-      <repository location="https://download.eclipse.org/tools/orbit/downloads/drops2/R20190602212107/repository"/>
       <repository location="https://download.eclipse.org/tools/orbit/downloads/drops/R20221123021534/repository"/>
+      <repository location="https://download.eclipse.org/tools/orbit/downloads/drops2/R20190602212107/repository"/>
+      <repository location="https://download.eclipse.org/tools/orbit/downloads/latest-R"/>
       <repository location="https://download.eclipse.org/usssdk/updates/latest"/>
-      <repository location="https://download.eclipse.org/webtools/downloads/drops/R3.28.0/R-3.28.0-20221120050827/repository"/>
+      <repository location="https://download.eclipse.org/webtools/downloads/drops/R3.29.0/R-3.29.0-20230303230236/repository"/>
     </location>
   </locations>
 </target>

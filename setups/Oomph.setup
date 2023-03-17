@@ -447,6 +447,9 @@
             name="org.eclipse.m2e.pde.feature.feature.group"/>
         <requirement
             name="org.eclipse.justj.openjdk.hotspot.jre.minimal.stripped.feature.group"/>
+        <requirement
+            name="org.apache.httpcomponents.httpclient"
+            versionRange="[4.5.0,4.6.0)"/>
         <sourceLocator
             rootFolder="${git.clone.oomph.location}">
           <predicate
@@ -464,6 +467,15 @@
               url="https://download.eclipse.org/egit/updates-stable-nightly"/>
           <repository
               url="https://download.eclipse.org/tools/orbit/downloads/latest-R"/>
+          <repository
+              url="https://download.eclipse.org/tools/orbit/downloads/drops/R20221123021534/repository">
+            <annotation>
+              <detail
+                  key="justification">
+                <value>Tycho builds fail without this present.</value>
+              </detail>
+            </annotation>
+          </repository>
           <repository
               url="https://download.eclipse.org/modeling/emf/emf/builds/milestone/latest"/>
           <repository
@@ -484,7 +496,7 @@
           <repository
               url="https://download.eclipse.org/technology/swtbot/snapshots"/>
           <repository
-              url="https://download.eclipse.org/webtools/downloads/drops/R3.28.0/R-3.28.0-20221120050827/repository"/>
+              url="https://download.eclipse.org/webtools/downloads/drops/R3.29.0/R-3.29.0-20230303230236/repository"/>
           <repository
               url="https://download.eclipse.org/justj/jres/17/updates/release/latest"/>
         </repositoryList>
