@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.oomph.setup.installer;singleton:=true
-Bundle-Version: 1.27.0.qualifier
+Bundle-Version: 1.29.0.qualifier
 Bundle-ClassPath: .
 Bundle-Name: %pluginName
 Bundle-Vendor: %providerName
@@ -38,5 +38,5 @@ Import-Package: org.bouncycastle.bcpg;version="[1.65.0,2.0.0)",
  org.bouncycastle.openpgp;version="[1.65.0,2.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-ActivationPolicy: lazy
-Export-Package: org.eclipse.oomph.setup.internal.installer;version="1.27.0";x-internal:=true
+Export-Package: org.eclipse.oomph.setup.internal.installer;version="1.29.0";x-internal:=true
 Automatic-Module-Name: org.eclipse.oomph.setup.installer

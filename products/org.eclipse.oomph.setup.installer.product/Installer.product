@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="Eclipse Installer" uid="org.eclipse.oomph.setup.installer.product" id="org.eclipse.oomph.setup.installer.product" application="org.eclipse.oomph.setup.installer.application" version="1.27.0.qualifier" useFeatures="true" includeLaunchers="true">
+<product name="Eclipse Installer" uid="org.eclipse.oomph.setup.installer.product" id="org.eclipse.oomph.setup.installer.product" application="org.eclipse.oomph.setup.installer.application" version="1.29.0.qualifier" useFeatures="true" includeLaunchers="true" autoIncludeRequirements="true">
 
    <configIni use="">
    </configIni>
@@ -192,9 +192,6 @@ United States, other countries, or both.
 
    <features>
       <feature id="org.eclipse.oomph.setup.installer"/>
-<!-- 
-      <feature id="org.eclipse.justj.openjdk.hotspot.jre.minimal.stripped"/>
--->
    </features>
 
    <configurations>
