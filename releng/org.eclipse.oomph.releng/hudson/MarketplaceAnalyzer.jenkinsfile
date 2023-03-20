@@ -2,7 +2,7 @@ pipeline {
   agent { label 'basic-8gb' }
 
   tools {
-      jdk 'adoptopenjdk-openj9-jdk17-latest'
+      jdk 'temurin-jdk17-latest'
   }
 
   options {
