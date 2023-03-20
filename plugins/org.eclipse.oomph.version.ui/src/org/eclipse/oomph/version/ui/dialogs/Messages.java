@@ -49,6 +49,8 @@ public class Messages extends NLS
 
   public static String ConfigurationDialog_error_cantDoRedundancyAndCompletenessChecksAtSameTime;
 
+  public static String ConfigurationDialog_IgnoreMissingNature;
+
   public static String ExtendedConfigurationDialog_title;
 
   public static String ExtendedConfigurationDialog_message;
@@ -78,6 +80,8 @@ public class Messages extends NLS
   public static String ExtendedConfigurationDialog_column_checkMavenPom;
 
   public static String ExtendedConfigurationDialog_column_project;
+
+  public static String ExtendedConfigurationDialog_IgnoreMissingVersionNature;
 
   static
   {

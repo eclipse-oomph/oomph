@@ -21,6 +21,10 @@ public class Messages extends NLS
 
   public static String ConfigureResolution_label;
 
+  public static String IgnoreMissingVersionNatureResolution_IgnoreMissingVersionNature_description;
+
+  public static String IgnoreMissingVersionNatureResolution_IgnoreMissingVersionNature_label;
+
   public static String IgnoreRootProjectsResolution_label;
 
   public static String IgnoreRootProjectsResolution_description;

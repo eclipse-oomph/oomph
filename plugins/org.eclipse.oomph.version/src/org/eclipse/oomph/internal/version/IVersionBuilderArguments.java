@@ -46,6 +46,8 @@ public interface IVersionBuilderArguments extends Map<String, String>
 
   public static final String IGNORE_CONTENT_REDUNDANCY_ARGUMENT = "ignore.feature.content.redundancy"; //$NON-NLS-1$
 
+  public static final String IGNORE_MISSING_NATURE_ARGUMENT = "ignore.missing.nature"; //$NON-NLS-1$
+
   public static final String CHECK_CLOSURE_COMPLETENESS_ARGUMENT = "check.feature.closure.completeness"; //$NON-NLS-1$
 
   public static final String CHECK_CLOSURE_CONTENT_ARGUMENT = "check.feature.closure.content"; //$NON-NLS-1$
@@ -75,6 +77,8 @@ public interface IVersionBuilderArguments extends Map<String, String>
   public boolean isIgnoreFeatureContentChanges();
 
   public boolean isIgnoreFeatureContentRedundancy();
+
+  public boolean isIgnoreMissingVersionNature();
 
   public boolean isCheckFeatureClosureCompleteness();
 

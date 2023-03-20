@@ -183,6 +183,17 @@ public class VersionBuilderArguments extends HashMap<String, String> implements 
     return "true".equals(get(IVersionBuilderArguments.IGNORE_CONTENT_REDUNDANCY_ARGUMENT)); //$NON-NLS-1$
   }
 
+  public void setIgnoreMissingVersionNature(boolean value)
+  {
+    setBoolean(IVersionBuilderArguments.IGNORE_MISSING_NATURE_ARGUMENT, value);
+  }
+
+  @Override
+  public boolean isIgnoreMissingVersionNature()
+  {
+    return "true".equals(get(IVersionBuilderArguments.IGNORE_MISSING_NATURE_ARGUMENT)); //$NON-NLS-1$
+  }
+
   public void setIgnoreFeatureContentRedundancy(boolean value)
   {
     setBoolean(IVersionBuilderArguments.IGNORE_CONTENT_REDUNDANCY_ARGUMENT, value);

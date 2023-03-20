@@ -64,6 +64,8 @@ public class ConfigurationDialog extends TitleAreaDialog implements IVersionBuil
 
   private Button ignoreFeatureContentRedundancyButton;
 
+  private Button ignoreMissingNatureButton;
+
   private Button checkFeatureClosureCompletenessButton;
 
   private Button checkFeatureClosureContentButton;
@@ -174,6 +176,11 @@ public class ConfigurationDialog extends TitleAreaDialog implements IVersionBuil
     ignoreFeatureContentRedundancyButton.setSelection(values.isIgnoreFeatureContentRedundancy());
     ignoreFeatureContentRedundancyButton.addSelectionListener(buttonListener);
 
+    ignoreMissingNatureButton = new Button(composite, SWT.CHECK);
+    ignoreMissingNatureButton.setText(Messages.ConfigurationDialog_IgnoreMissingNature);
+    ignoreMissingNatureButton.setSelection(values.isIgnoreMissingVersionNature());
+    ignoreMissingNatureButton.addSelectionListener(buttonListener);
+
     checkFeatureClosureCompletenessButton = new Button(composite, SWT.CHECK);
     checkFeatureClosureCompletenessButton.setText(Messages.ConfigurationDialog_checkFeatureClosureCompletenessButton_text);
     checkFeatureClosureCompletenessButton.setSelection(values.isCheckFeatureClosureCompleteness());
@@ -226,6 +233,7 @@ public class ConfigurationDialog extends TitleAreaDialog implements IVersionBuil
     values.setIgnoreMissingExportVersions(ignoreMissingExportVersionsButton.getSelection());
     values.setIgnoreFeatureContentChanges(ignoreFeatureContentChangesButton.getSelection());
     values.setIgnoreFeatureContentRedundancy(ignoreFeatureContentRedundancyButton.getSelection());
+    values.setIgnoreMissingVersionNature(ignoreMissingNatureButton.getSelection());
     values.setCheckFeatureClosureCompleteness(checkFeatureClosureCompletenessButton.getSelection());
     values.setCheckFeatureClosureContent(checkFeatureClosureContentButton.getSelection());
     values.setCheckMavenPom(checkMavenPomButton.getSelection());
@@ -302,6 +310,12 @@ public class ConfigurationDialog extends TitleAreaDialog implements IVersionBuil
   public boolean isIgnoreFeatureContentRedundancy()
   {
     return values.isIgnoreFeatureContentRedundancy();
+  }
+
+  @Override
+  public boolean isIgnoreMissingVersionNature()
+  {
+    return values.isIgnoreMissingVersionNature();
   }
 
   @Override

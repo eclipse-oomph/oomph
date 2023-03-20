@@ -59,6 +59,7 @@ public class ExtendedConfigurationDialog extends TitleAreaDialog
           Messages.ExtendedConfigurationDialog_column_ignoreMissingPackageExportVersions),
       new ColumnHandler(IVersionBuilderArguments.IGNORE_CONTENT_CHANGES_ARGUMENT, Messages.ExtendedConfigurationDialog_column_ignoreFeatureChanges),
       new ColumnHandler(IVersionBuilderArguments.IGNORE_CONTENT_REDUNDANCY_ARGUMENT, Messages.ExtendedConfigurationDialog_column_ignoreFeatureRedundancy),
+      new ColumnHandler(IVersionBuilderArguments.IGNORE_MISSING_NATURE_ARGUMENT, Messages.ExtendedConfigurationDialog_IgnoreMissingVersionNature),
       new ColumnHandler(IVersionBuilderArguments.CHECK_CLOSURE_COMPLETENESS_ARGUMENT,
           Messages.ExtendedConfigurationDialog_column_checkFeatureClosureCompleteness),
       new ColumnHandler(IVersionBuilderArguments.CHECK_CLOSURE_CONTENT_ARGUMENT, Messages.ExtendedConfigurationDialog_column_checkFeatureClosureContent),

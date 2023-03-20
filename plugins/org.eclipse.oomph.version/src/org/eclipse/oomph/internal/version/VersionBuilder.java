@@ -544,26 +544,29 @@ public class VersionBuilder extends IncrementalProjectBuilder implements IElemen
         }
 
         Markers.deleteAllMarkers(componentModelFile, Markers.VERSION_NATURE_PROBLEM);
-        for (IElement child : element.getChildren())
+        if (!arguments.isIgnoreMissingVersionNature())
         {
-          IModel childComponentModel = ReleaseManager.INSTANCE.getComponentModel(child);
-          if (childComponentModel != null)
+          for (IElement child : element.getChildren())
           {
-            IResource childComponentModelFile = childComponentModel.getUnderlyingResource();
-            if (childComponentModelFile != null)
+            IModel childComponentModel = ReleaseManager.INSTANCE.getComponentModel(child);
+            if (childComponentModel != null)
             {
-              IProject childProject = childComponentModelFile.getProject();
-              if (!childProject.hasNature(VersionNature.NATURE_ID))
+              IResource childComponentModelFile = childComponentModel.getUnderlyingResource();
+              if (childComponentModelFile != null)
               {
-                Type childType = child.getType();
-                String name = child.getName();
-                String label = childType.toString();
-                String tag = childType.getTag();
-                String msg = NLS.bind(Messages.VersionBuilder_MissingVersionBuilder_message, label, name);
-                IMarker marker = addFeatureChildMarker(componentModelFile, Markers.VERSION_NATURE_PROBLEM, tag, name, msg, child.isLicenseFeature(), false,
-                    null, IMarker.SEVERITY_ERROR);
-                marker.setAttribute(Markers.QUICK_FIX_NATURE, VersionNature.NATURE_ID);
-                marker.setAttribute(Markers.QUICK_FIX_PROJECT, childProject.getName());
+                IProject childProject = childComponentModelFile.getProject();
+                if (!childProject.hasNature(VersionNature.NATURE_ID))
+                {
+                  Type childType = child.getType();
+                  String name = child.getName();
+                  String label = childType.toString();
+                  String tag = childType.getTag();
+                  String msg = NLS.bind(Messages.VersionBuilder_MissingVersionBuilder_message, label, name);
+                  IMarker marker = addFeatureChildMarker(componentModelFile, Markers.VERSION_NATURE_PROBLEM, tag, name, msg, child.isLicenseFeature(), false,
+                      null, IMarker.SEVERITY_ERROR);
+                  marker.setAttribute(Markers.QUICK_FIX_NATURE, VersionNature.NATURE_ID);
+                  marker.setAttribute(Markers.QUICK_FIX_PROJECT, childProject.getName());
+                }
               }
             }
           }

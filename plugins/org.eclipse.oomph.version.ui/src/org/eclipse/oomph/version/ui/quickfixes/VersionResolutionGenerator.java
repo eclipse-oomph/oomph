@@ -92,6 +92,7 @@ public class VersionResolutionGenerator implements IMarkerResolutionGenerator2
     if (nature != null)
     {
       resolutions.add(new AddNatureResolution(marker, nature));
+      resolutions.add(new IgnoreMissingVersionNatureResolution(marker));
     }
 
     return resolutions.toArray(new IMarkerResolution[resolutions.size()]);
