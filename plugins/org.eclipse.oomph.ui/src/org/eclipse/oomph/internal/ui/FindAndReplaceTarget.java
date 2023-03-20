@@ -1684,7 +1684,7 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
         {
           // Always create a list.
           List<String> result = new ArrayList<>();
-          if (eAttribute.isMany())
+          if (eAttribute.isMany() && value instanceof List<?>)
           {
             // Add the textual representation of each value.
             for (Object item : (List<?>)value)
@@ -1694,7 +1694,7 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
           }
           else
           {
-            // Ad the textual representation of the one value.
+            // Add the textual representation of the one value.
             result.add(EcoreUtil.convertToString(eDataType, value));
           }
 
