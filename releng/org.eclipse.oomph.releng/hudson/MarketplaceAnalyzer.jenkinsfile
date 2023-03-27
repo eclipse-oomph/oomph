@@ -2,7 +2,7 @@ pipeline {
   agent { label 'basic-8gb' }
 
   tools {
-      jdk 'temurin-jdk17-latest'
+      jdk 'semeru-jdk17-latest'
   }
 
   options {
