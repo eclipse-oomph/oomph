@@ -98,7 +98,8 @@ public class ProductGeneratorImpl extends ModelElementImpl implements ProductGen
 
         if (productDescriptor.useFeatures())
         {
-          addRequirements(componentDefinition, productDescriptor.getFeatures(), Requirement.FEATURE_SUFFIX);
+          addRequirements(componentDefinition, productDescriptor.getFeatures(IProductDescriptor.INCLUDED_FEATURES | IProductDescriptor.ROOT_FEATURES),
+              Requirement.FEATURE_SUFFIX);
         }
         else
         {
