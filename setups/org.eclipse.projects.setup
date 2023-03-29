@@ -1224,7 +1224,7 @@
   <project href="https://raw.githubusercontent.com/eclipse/windowbuilder/master/setups/WindowBuilder.setup#/"/>
   <project href="http://git.eclipse.org/c/webtools/webtools.releng.git/plain/installer/WTP.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse/xsemantics/master/devtools/org.eclipse.xsemantics.workspace/Xsemantics.setup#/"/>
-  <project href="https://raw.githubusercontent.com/eclipse/xtext-eclipse/master/releng/org.eclipse.xtext.contributor/Xtext.setup#/"/>
+  <project href="https://raw.githubusercontent.com/eclipse/xtext/main/releng/org.eclipse.xtext.contributor/Xtext.setup#/"/>
   <project href="http://git.eclipse.org/c/m2t/org.eclipse.xpand.git/plain/releng/org.eclipse.xpand.releng/Xpand.setup#/"/>
   <description>All the projects at Eclipse.org that provide automated setup support along with additional user-added projects</description>
 </setup:ProjectCatalog>
