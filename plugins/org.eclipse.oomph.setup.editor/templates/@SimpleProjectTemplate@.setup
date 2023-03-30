@@ -44,6 +44,13 @@
     </setupTask>
     <setupTask
         xsi:type="setup:VariableTask"
+        name="project.git.branch"
+        value="master"
+        label="Git Default Branch">
+      <description>The default branch branch name.</description>
+    </setupTask>
+    <setupTask
+        xsi:type="setup:VariableTask"
         type="CONTAINER"
         name="setup.location"
         label="Folder">
@@ -57,8 +64,8 @@
       <description>The camel case filename of the new project setup model.</description>
     </setupTask>
   </setupTask>
-  <stream name="master"
-      label="Master"/>
+  <stream name="${project.git.branch}"
+      label="${project.git.branch|camel}"/>
   <logicalProjectContainer
       xsi:type="setup:ProjectCatalog"
       href="index:/org.eclipse.setup#//@projectCatalogs[name='org.eclipse']"/>

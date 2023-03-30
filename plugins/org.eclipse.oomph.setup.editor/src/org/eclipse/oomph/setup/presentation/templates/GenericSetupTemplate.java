@@ -468,7 +468,7 @@ public class GenericSetupTemplate extends SetupTemplate
     {
       // The list of choices in the eclipse target platform variable, provide the key information to dynamic update the templates.
       VariableTask eclipseTargetPlatformVariable = getVariable(eclipseProjectCatalog, "eclipse.target.platform"); //$NON-NLS-1$
-      if (eclipseTargetPlatformVariable != null)
+      if (eclipseTargetPlatformVariable != null && eclipseTargetPlatformVariable.getValue() == null)
       {
         // Update the product template's product release train choices.
         VariableTask productReleaseTrainVariable = getVariable(modelElement, "product.release.train"); //$NON-NLS-1$
@@ -537,41 +537,43 @@ public class GenericSetupTemplate extends SetupTemplate
       else
       {
         // Update the modular targlet task with the latest set of available releases.
-        EObject projectTargletTask = getTargletTask(modelElement, "Modular Target"); //$NON-NLS-1$
-        if (projectTargletTask != null)
+        VariableTask targetPlatformVariable = getVariable(modelElement, "eclipse.target.platform"); //$NON-NLS-1$
+        if (targetPlatformVariable != null && !"${eclipse.target.platform.latest}".equals(targetPlatformVariable.getDefaultValue())) //$NON-NLS-1$
         {
-          EObject projectTarglet = (EObject)((List<?>)projectTargletTask.eGet(projectTargletTask.eClass().getEStructuralFeature("targlets"))).get(0); //$NON-NLS-1$
-          @SuppressWarnings("unchecked")
-          List<RepositoryList> repositoryLists = (List<RepositoryList>)projectTarglet.eGet(projectTarglet.eClass().getEStructuralFeature("repositoryLists")); //$NON-NLS-1$
-          RepositoryList repositoryList = repositoryLists.get(0);
-          repositoryLists.clear();
-
-          VariableTask targetPlatformVariable = getVariable(modelElement, "eclipse.target.platform"); //$NON-NLS-1$
-
-          for (VariableChoice variableChoice : eclipseTargetPlatformVariable.getChoices())
+          EObject projectTargletTask = getTargletTask(modelElement, "Modular Target"); //$NON-NLS-1$
+          if (projectTargletTask != null)
           {
-            String trainName = variableChoice.getValue();
-            if (!"None".equals(trainName)) //$NON-NLS-1$
+            EObject projectTarglet = (EObject)((List<?>)projectTargletTask.eGet(projectTargletTask.eClass().getEStructuralFeature("targlets"))).get(0); //$NON-NLS-1$
+            @SuppressWarnings("unchecked")
+            List<RepositoryList> repositoryLists = (List<RepositoryList>)projectTarglet.eGet(projectTarglet.eClass().getEStructuralFeature("repositoryLists")); //$NON-NLS-1$
+            RepositoryList repositoryList = repositoryLists.get(0);
+            repositoryLists.clear();
+
+            for (VariableChoice variableChoice : eclipseTargetPlatformVariable.getChoices())
             {
-              if (targetPlatformVariable != null)
+              String trainName = variableChoice.getValue();
+              if (!"None".equals(trainName)) //$NON-NLS-1$
               {
-                // Ensure that the default choice is the latest one, and of course do that only once for the first/latest train name.
-                targetPlatformVariable.setDefaultValue(trainName);
-                targetPlatformVariable = null;
-              }
-
-              RepositoryList newRepositoryList = EcoreUtil.copy(repositoryList);
-              newRepositoryList.setName(trainName);
-
-              for (Repository repository : newRepositoryList.getRepositories())
-              {
-                if (repository.getURL().contains("download.eclipse.org/releases")) //$NON-NLS-1$
+                if (targetPlatformVariable != null)
                 {
-                  repository.setURL("https://download.eclipse.org/releases/" + trainName.toLowerCase()); //$NON-NLS-1$
+                  // Ensure that the default choice is the latest one, and of course do that only once for the first/latest train name.
+                  targetPlatformVariable.setDefaultValue(trainName);
+                  targetPlatformVariable = null;
                 }
-              }
 
-              repositoryLists.add(newRepositoryList);
+                RepositoryList newRepositoryList = EcoreUtil.copy(repositoryList);
+                newRepositoryList.setName(trainName);
+
+                for (Repository repository : newRepositoryList.getRepositories())
+                {
+                  if (repository.getURL().contains("download.eclipse.org/releases")) //$NON-NLS-1$
+                  {
+                    repository.setURL("https://download.eclipse.org/releases/" + trainName.toLowerCase()); //$NON-NLS-1$
+                  }
+                }
+
+                repositoryLists.add(newRepositoryList);
+              }
             }
           }
         }
@@ -861,6 +863,11 @@ public class GenericSetupTemplate extends SetupTemplate
           }
           else
           {
+            if ("project.git.setup.url".equals(variable.getName())) //$NON-NLS-1$
+            {
+              value = expandString(value, usedVariables);
+            }
+
             String filters = matcher.group(4);
             if (filters != null)
             {
@@ -942,8 +949,9 @@ public class GenericSetupTemplate extends SetupTemplate
     {
       try
       {
-        IProject project = EcorePlugin.getWorkspaceRoot().getProject(new Path(value).segment(0));
-        IPath location = project.getLocation();
+        Path fullPath = new Path(value);
+        IContainer container = EcorePlugin.getWorkspaceRoot().getFolder(fullPath);
+        IPath location = container.getLocation();
         StringBuilder path = new StringBuilder();
         if (location != null)
         {
@@ -1022,8 +1030,8 @@ public class GenericSetupTemplate extends SetupTemplate
                     {
                       URI repositoryURI = URI.createURI(matcher.group(1));
                       String host = repositoryURI.host();
-                      List<String> segments = repositoryURI.isHierarchical() ? repositoryURI.segmentsList()
-                          : URI.createURI(repositoryURI.opaquePart()).segmentsList();
+                      List<String> segments = new ArrayList<>(
+                          repositoryURI.isHierarchical() ? repositoryURI.segmentsList() : URI.createURI(repositoryURI.opaquePart()).segmentsList());
                       String firstSegment = segments.get(0);
                       String lastSegment = segments.get(segments.size() - 1);
                       List<String> qualifiedName = StringUtil.explode(lastSegment, ".-"); //$NON-NLS-1$
@@ -1052,9 +1060,16 @@ public class GenericSetupTemplate extends SetupTemplate
                       }
                       else if ("github.com".equals(host)) //$NON-NLS-1$
                       {
-                        if ("eclipse".equals(firstSegment)) //$NON-NLS-1$
+                        projectRemoteURIs = "github.remoteURIs"; //$NON-NLS-1$
+                        String lastNameSegment = qualifiedName.get(qualifiedName.size() - 1);
+                        if ("git".equals(lastNameSegment)) //$NON-NLS-1$
                         {
-                          projectRemoteURIs = "github.remoteURIs"; //$NON-NLS-1$
+                          qualifiedName.remove(qualifiedName.size() - 1);
+                        }
+
+                        if (lastSegment.endsWith(".git")) //$NON-NLS-1$
+                        {
+                          segments.set(segments.size() - 1, lastSegment.substring(0, lastSegment.length() - 4));
                         }
                       }
 
