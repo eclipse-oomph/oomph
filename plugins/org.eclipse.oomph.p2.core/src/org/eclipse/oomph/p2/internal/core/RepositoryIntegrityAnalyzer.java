@@ -3412,154 +3412,157 @@ public class RepositoryIntegrityAnalyzer implements IApplication
             {
               SimpleArtifactRepository simpleArtifactRepository = (SimpleArtifactRepository)repository;
               java.net.URI artifactLocation = simpleArtifactRepository.getLocation(artifactDescriptor);
-              java.net.URI location = repository.getLocation();
-              java.net.URI relativeLocation = location.relativize(artifactLocation);
-              File targetLocation = new File(cache, relativeLocation.toString());
-              if (!targetLocation.isFile())
+              if (artifactLocation != null)
               {
-                targetLocation.getParentFile().mkdirs();
-
-                String uuid = EcoreUtil.generateUUID();
-                File downloadLocation = new File(targetLocation.getPath() + "." + uuid);
-                IStatus status = Status.CANCEL_STATUS;
-                for (int i = 1; i <= DOWNLOAD_RETRY_COUNT; ++i)
+                java.net.URI location = repository.getLocation();
+                java.net.URI relativeLocation = location.relativize(artifactLocation);
+                File targetLocation = new File(cache, relativeLocation.toString());
+                if (!targetLocation.isFile())
                 {
-                  FileOutputStream out = null;
-                  try
-                  {
-                    out = new FileOutputStream(downloadLocation);
-                    status = artifactRepository.getRawArtifact(artifactDescriptor, out, new NullProgressMonitor());
-                    if (!status.isOK())
-                    {
-                      throw new IOException("Failed to download: '" + downloadLocation + "' because " + status.getMessage());
-                    }
+                  targetLocation.getParentFile().mkdirs();
 
-                    IOUtil.closeSilent(out);
-
-                    if (!downloadLocation.renameTo(targetLocation))
-                    {
-                      throw new IOException("Could not rename '" + downloadLocation + "' to '" + targetLocation + "'");
-                    }
-
-                    if (relativeLocation.toString().startsWith("binary/"))
-                    {
-                      ZIPUtil.unzip(targetLocation, new File(cache, "binary/unpacked/" + relativeLocation.toString().substring("binary/".length())));
-                    }
-                  }
-                  catch (Exception ex)
-                  {
-                    IOUtil.close(out);
-                    targetLocation.delete();
-                    downloadLocation.delete();
-                    if (i == DOWNLOAD_RETRY_COUNT)
-                    {
-                      new FileOutputStream(targetLocation).close();
-                      OutputStream failure = new FileOutputStream(new File(targetLocation + ".fail"));
-                      PrintStream printStream = new PrintStream(failure);
-                      printStream.print(status);
-                      printStream.close();
-                      System.err.println("Failed: " + targetLocation);
-                      break;
-                    }
-
-                    System.err.println("Retrying: " + targetLocation);
-                    continue;
-                  }
-                  finally
-                  {
-                    downloadLocation.delete();
-                    IOUtil.close(out);
-                  }
-
-                  if (validZip(targetLocation))
-                  {
-                    break;
-                  }
-                }
-
-                IProcessingStepDescriptor[] processingSteps = artifactDescriptor.getProcessingSteps();
-                if (processingSteps.length != 0 || artifactDescriptor.getProperty(PGPSignatureVerifier.PGP_SIGNATURES_PROPERTY_NAME) != null)
-                {
-                  File targetProcessedLocation = new File(cache, relativeLocation.toString() + PROCESSED);
-                  File processedDownloadLocation = new File(targetProcessedLocation.getPath() + "." + uuid);
+                  String uuid = EcoreUtil.generateUUID();
+                  File downloadLocation = new File(targetLocation.getPath() + "." + uuid);
+                  IStatus status = Status.CANCEL_STATUS;
                   for (int i = 1; i <= DOWNLOAD_RETRY_COUNT; ++i)
                   {
                     FileOutputStream out = null;
-                    status = Status.CANCEL_STATUS;
                     try
                     {
-                      ArtifactDescriptor descriptor = new ArtifactDescriptor(artifactKey);
-                      class DescriptorOutputStream extends FileOutputStream implements IAdaptable
-                      {
-                        public DescriptorOutputStream(File file) throws FileNotFoundException
-                        {
-                          super(file);
-                        }
-
-                        @Override
-                        public <T> T getAdapter(Class<T> adapter)
-                        {
-                          if (adapter.isInstance(descriptor))
-                          {
-                            return adapter.cast(descriptor);
-                          }
-                          return null;
-                        }
-                      }
-
-                      out = new DescriptorOutputStream(processedDownloadLocation);
-                      status = artifactRepository.getArtifact(artifactDescriptor, out, new NullProgressMonitor());
+                      out = new FileOutputStream(downloadLocation);
+                      status = artifactRepository.getRawArtifact(artifactDescriptor, out, new NullProgressMonitor());
                       if (!status.isOK())
                       {
-                        throw new IOException("Failed to download: '" + processedDownloadLocation + "' because " + status.getMessage());
+                        throw new IOException("Failed to download: '" + downloadLocation + "' because " + status.getMessage());
                       }
 
                       IOUtil.closeSilent(out);
 
-                      if (!processedDownloadLocation.renameTo(targetProcessedLocation))
+                      if (!downloadLocation.renameTo(targetLocation))
                       {
-                        throw new IOException("Could not rename '" + processedDownloadLocation + "' to '" + targetProcessedLocation + "'");
+                        throw new IOException("Could not rename '" + downloadLocation + "' to '" + targetLocation + "'");
                       }
 
-                      String pgpKeys = descriptor.getProperty(PGPSignatureVerifier.PGP_SIGNER_KEYS_PROPERTY_NAME);
-                      if (pgpKeys != null && !pgpKeys.isBlank())
+                      if (relativeLocation.toString().startsWith("binary/"))
                       {
-                        IOUtil.writeUTF8(new File(targetLocation + ".asc"), pgpKeys);
+                        ZIPUtil.unzip(targetLocation, new File(cache, "binary/unpacked/" + relativeLocation.toString().substring("binary/".length())));
                       }
                     }
                     catch (Exception ex)
                     {
                       IOUtil.close(out);
-                      targetProcessedLocation.delete();
-                      processedDownloadLocation.delete();
+                      targetLocation.delete();
+                      downloadLocation.delete();
                       if (i == DOWNLOAD_RETRY_COUNT)
                       {
-                        new FileOutputStream(targetProcessedLocation).close();
-                        OutputStream failure = new FileOutputStream(new File(targetProcessedLocation + ".fail"));
+                        new FileOutputStream(targetLocation).close();
+                        OutputStream failure = new FileOutputStream(new File(targetLocation + ".fail"));
                         PrintStream printStream = new PrintStream(failure);
                         printStream.print(status);
                         printStream.close();
-                        System.err.println("Failed: " + targetProcessedLocation);
+                        System.err.println("Failed: " + targetLocation);
                         break;
                       }
 
-                      System.err.println("Retrying: " + targetProcessedLocation);
+                      System.err.println("Retrying: " + targetLocation);
                       continue;
                     }
                     finally
                     {
+                      downloadLocation.delete();
                       IOUtil.close(out);
                     }
 
-                    if (validZip(targetProcessedLocation))
+                    if (validZip(targetLocation))
                     {
                       break;
                     }
                   }
-                }
-              }
 
-              artifacts.put(artifactDescriptor, targetLocation);
+                  IProcessingStepDescriptor[] processingSteps = artifactDescriptor.getProcessingSteps();
+                  if (processingSteps.length != 0 || artifactDescriptor.getProperty(PGPSignatureVerifier.PGP_SIGNATURES_PROPERTY_NAME) != null)
+                  {
+                    File targetProcessedLocation = new File(cache, relativeLocation.toString() + PROCESSED);
+                    File processedDownloadLocation = new File(targetProcessedLocation.getPath() + "." + uuid);
+                    for (int i = 1; i <= DOWNLOAD_RETRY_COUNT; ++i)
+                    {
+                      FileOutputStream out = null;
+                      status = Status.CANCEL_STATUS;
+                      try
+                      {
+                        ArtifactDescriptor descriptor = new ArtifactDescriptor(artifactKey);
+                        class DescriptorOutputStream extends FileOutputStream implements IAdaptable
+                        {
+                          public DescriptorOutputStream(File file) throws FileNotFoundException
+                          {
+                            super(file);
+                          }
+
+                          @Override
+                          public <T> T getAdapter(Class<T> adapter)
+                          {
+                            if (adapter.isInstance(descriptor))
+                            {
+                              return adapter.cast(descriptor);
+                            }
+                            return null;
+                          }
+                        }
+
+                        out = new DescriptorOutputStream(processedDownloadLocation);
+                        status = artifactRepository.getArtifact(artifactDescriptor, out, new NullProgressMonitor());
+                        if (!status.isOK())
+                        {
+                          throw new IOException("Failed to download: '" + processedDownloadLocation + "' because " + status.getMessage());
+                        }
+
+                        IOUtil.closeSilent(out);
+
+                        if (!processedDownloadLocation.renameTo(targetProcessedLocation))
+                        {
+                          throw new IOException("Could not rename '" + processedDownloadLocation + "' to '" + targetProcessedLocation + "'");
+                        }
+
+                        String pgpKeys = descriptor.getProperty(PGPSignatureVerifier.PGP_SIGNER_KEYS_PROPERTY_NAME);
+                        if (pgpKeys != null && !pgpKeys.isBlank())
+                        {
+                          IOUtil.writeUTF8(new File(targetLocation + ".asc"), pgpKeys);
+                        }
+                      }
+                      catch (Exception ex)
+                      {
+                        IOUtil.close(out);
+                        targetProcessedLocation.delete();
+                        processedDownloadLocation.delete();
+                        if (i == DOWNLOAD_RETRY_COUNT)
+                        {
+                          new FileOutputStream(targetProcessedLocation).close();
+                          OutputStream failure = new FileOutputStream(new File(targetProcessedLocation + ".fail"));
+                          PrintStream printStream = new PrintStream(failure);
+                          printStream.print(status);
+                          printStream.close();
+                          System.err.println("Failed: " + targetProcessedLocation);
+                          break;
+                        }
+
+                        System.err.println("Retrying: " + targetProcessedLocation);
+                        continue;
+                      }
+                      finally
+                      {
+                        IOUtil.close(out);
+                      }
+
+                      if (validZip(targetProcessedLocation))
+                      {
+                        break;
+                      }
+                    }
+                  }
+                }
+
+                artifacts.put(artifactDescriptor, targetLocation);
+              }
             }
             else
             {
