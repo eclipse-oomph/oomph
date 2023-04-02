@@ -119,6 +119,8 @@ public class Messages extends NLS
 
   public static String StringFilterRegistry_QualifiedName_description;
 
+  public static String StringFilterRegistry_RSEFreeze_description;
+
   public static String StringFilterRegistry_SlashDecode_description;
 
   public static String StringFilterRegistry_SlashEncode_description;

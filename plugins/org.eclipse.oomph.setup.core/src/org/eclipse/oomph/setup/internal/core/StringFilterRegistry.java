@@ -890,6 +890,60 @@ public class StringFilterRegistry
         return Pattern.quote(value);
       }
     });
+
+    registerFilter(new DocumentedStringFilter()
+    {
+      @Override
+      public String getName()
+      {
+        return "rseFreeze"; //$NON-NLS-1$
+      }
+
+      @Override
+      public String getDescription()
+      {
+        return Messages.StringFilterRegistry_RSEFreeze_description;
+      }
+
+      @Override
+      public String filter(String name)
+      {
+        int p = name.indexOf(':');
+        if (p >= 0)
+        {
+          name = name.substring(p + 1);
+        }
+        StringBuffer buf = new StringBuffer(name.length());
+        char[] chars = name.toCharArray();
+        long suffix = 0;
+        for (int i = 0; i < chars.length; i++)
+        {
+          char c = chars[i];
+          suffix *= 2;
+          if ("abcdefghijklmnopqrstuvwxyz0123456789-._".indexOf(c) >= 0) //$NON-NLS-1$
+          {
+            buf.append(c);
+          }
+          else if ("ABCDEFGHIJKLMNOPQRTSUVWXYZ".indexOf(c) >= 0) //$NON-NLS-1$
+          {
+            buf.append(Character.toLowerCase(c));
+            suffix += 1;
+          }
+          else if (c == ' ')
+          {
+            buf.append('_');
+            suffix += 1;
+          }
+          else
+          {
+            buf.append('#');
+            buf.append(Integer.toHexString(c));
+            buf.append('#');
+          }
+        }
+        return buf.toString() + "_" + Long.toString(suffix); //$NON-NLS-1$
+      }
+    });
   }
 
   public static void main(String[] args) throws UnsupportedEncodingException
