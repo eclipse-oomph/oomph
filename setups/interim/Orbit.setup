@@ -35,15 +35,14 @@
   </setupTask>
   <setupTask
       xsi:type="jdt:JRETask"
-      version="JavaSE-11"
-      location="${jre.location-11}"
-      name="JRE for JavaSE-11">
+      version="JavaSE-17"
+      location="${jre.location-17}">
     <description>Define the JRE needed to compile and run the Java projects of ${scope.project.label}</description>
   </setupTask>
   <setupTask
       xsi:type="setup:EclipseIniTask"
       option="-Xmx"
-      value="1024m"
+      value="2048m"
       vm="true">
     <description>Set the heap space needed to work with the projects of ${scope.project.label}</description>
   </setupTask>
@@ -78,17 +77,17 @@
   </setupTask>
   <setupTask
       xsi:type="git:GitCloneTask"
-      id="git.clone.orbit"
-      remoteURI="orbit/orbit-recipes">
+      id="github.clone.orbit"
+      remoteURI="eclipse/orbit">
     <annotation
         source="http://www.eclipse.org/oomph/setup/InducedChoices">
       <detail
           key="inherit">
-        <value>eclipse.git.gerrit.remoteURIs</value>
+        <value>github.remoteURIs</value>
       </detail>
       <detail
           key="label">
-        <value>${scope.project.label} Git or Gerrit repository</value>
+        <value>${scope.project.label} Github repository</value>
       </detail>
       <detail
           key="target">
@@ -105,7 +104,7 @@
       <requirement
           name="*"/>
       <sourceLocator
-          rootFolder="${git.clone.orbit.location}"
+          rootFolder="${github.clone.orbit.location}"
           locateNestedProjects="true"/>
     </targlet>
   </setupTask>
@@ -161,7 +160,7 @@
         xsi:type="setup:EclipseIniTask"
         disabled="true"
         option="-Doomph.redirection.orbit"
-        value="=https://git.eclipse.org/c/orbit/orbit-recipes.git/plain/setups/Orbit.setup->${git.clone.orbit.location|uri}/setups/Orbit.setup"
+        value="=https://git.eclipse.org/c/orbit/orbit-recipes.git/plain/setups/Orbit.setup->${github.clone.orbit.location|uri}/setups/Orbit.setup"
         vm="true">
       <description>Set an Oomph redirection system property to redirect the logical location of this setup to its physical location in the Git clone.</description>
     </setupTask>
