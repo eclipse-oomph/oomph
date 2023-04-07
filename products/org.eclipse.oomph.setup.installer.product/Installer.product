@@ -23,6 +23,9 @@ Eclipse Installer
       <vmArgsMac>-XstartOnFirstThread
 -Dorg.eclipse.swt.internal.carbon.smallFonts
       </vmArgsMac>
+      <vmArgsWin>-Djavax.net.ssl.trustStoreType=Windows-ROOT
+-Djavax.net.ssl.trustStore=NUL
+      </vmArgsWin>
    </launcherArgs>
 
    <windowImages/>
