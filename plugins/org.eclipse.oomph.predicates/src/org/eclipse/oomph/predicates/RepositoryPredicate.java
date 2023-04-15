@@ -23,6 +23,7 @@ import org.eclipse.core.resources.IProject;
  * <ul>
  *   <li>{@link org.eclipse.oomph.predicates.RepositoryPredicate#getProject <em>Project</em>}</li>
  *   <li>{@link org.eclipse.oomph.predicates.RepositoryPredicate#getRelativePathPattern <em>Relative Path Pattern</em>}</li>
+ *   <li>{@link org.eclipse.oomph.predicates.RepositoryPredicate#isIncludeNestedRepositories <em>Include Nested Repositories</em>}</li>
  * </ul>
  *
  * @see org.eclipse.oomph.predicates.PredicatesPackage#getRepositoryPredicate()
@@ -78,5 +79,27 @@ public interface RepositoryPredicate extends Predicate
    * @generated
    */
   void setRelativePathPattern(String value);
+
+  /**
+   * Returns the value of the '<em><b>Include Nested Repositories</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Include Nested Repositories</em>' attribute.
+   * @see #setIncludeNestedRepositories(boolean)
+   * @see org.eclipse.oomph.predicates.PredicatesPackage#getRepositoryPredicate_IncludeNestedRepositories()
+   * @model
+   * @generated
+   */
+  boolean isIncludeNestedRepositories();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.predicates.RepositoryPredicate#isIncludeNestedRepositories <em>Include Nested Repositories</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Include Nested Repositories</em>' attribute.
+   * @see #isIncludeNestedRepositories()
+   * @generated
+   */
+  void setIncludeNestedRepositories(boolean value);
 
 } // RepositoryPredicate

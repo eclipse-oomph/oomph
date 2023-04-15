@@ -70,6 +70,7 @@ public class RepositoryPredicateItemProvider extends PredicateItemProvider
 
       addProjectPropertyDescriptor(object);
       addRelativePathPatternPropertyDescriptor(object);
+      addIncludeNestedRepositoriesPropertyDescriptor(object);
     }
     return itemPropertyDescriptors;
   }
@@ -111,6 +112,21 @@ public class RepositoryPredicateItemProvider extends PredicateItemProvider
         getString("_UI_RepositoryPredicate_relativePathPattern_feature"), //$NON-NLS-1$
         getString("_UI_RepositoryPredicate_relativePathPattern_description"), //$NON-NLS-1$
         PredicatesPackage.Literals.REPOSITORY_PREDICATE__RELATIVE_PATH_PATTERN, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+  }
+
+  /**
+   * This adds a property descriptor for the Include Nested Repositories feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addIncludeNestedRepositoriesPropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_RepositoryPredicate_includeNestedRepositories_feature"), //$NON-NLS-1$
+        getString("_UI_RepositoryPredicate_includeNestedRepositories_description"), //$NON-NLS-1$
+        PredicatesPackage.Literals.REPOSITORY_PREDICATE__INCLUDE_NESTED_REPOSITORIES, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null,
+        null));
   }
 
   /**
@@ -169,6 +185,7 @@ public class RepositoryPredicateItemProvider extends PredicateItemProvider
     {
       case PredicatesPackage.REPOSITORY_PREDICATE__PROJECT:
       case PredicatesPackage.REPOSITORY_PREDICATE__RELATIVE_PATH_PATTERN:
+      case PredicatesPackage.REPOSITORY_PREDICATE__INCLUDE_NESTED_REPOSITORIES:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
         return;
     }

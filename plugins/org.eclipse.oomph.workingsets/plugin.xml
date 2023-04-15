@@ -24,7 +24,7 @@
    <extension
          point="org.eclipse.emf.ecore.extension_parser">
       <parser
-            class="org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl"
+            class="org.eclipse.oomph.base.util.BaseResourceFactoryImpl"
             type="workingsets">
       </parser>
       

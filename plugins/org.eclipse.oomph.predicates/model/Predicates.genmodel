@@ -34,6 +34,8 @@
           ecoreFeature="ecore:EAttribute Predicates.ecore#//RepositoryPredicate/project"/>
       <genFeatures createChild="false" propertyDescription="A regular expression used to match the repository-relative path (in portable notation with forward slashes) of the resource"
           ecoreFeature="ecore:EAttribute Predicates.ecore#//RepositoryPredicate/relativePathPattern"/>
+      <genFeatures createChild="false" propertyDescription="Whether to include nested repositories as being in the same repository as the given project's repository"
+          ecoreFeature="ecore:EAttribute Predicates.ecore#//RepositoryPredicate/includeNestedRepositories"/>
     </genClasses>
     <genClasses ecoreClass="Predicates.ecore#//AndPredicate">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Predicates.ecore#//AndPredicate/operands"/>

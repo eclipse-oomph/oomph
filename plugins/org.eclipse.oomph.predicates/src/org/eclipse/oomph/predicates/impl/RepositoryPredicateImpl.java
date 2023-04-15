@@ -29,7 +29,7 @@ import org.eclipse.team.core.RepositoryProvider;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.net.URI;
-import java.util.Objects;
+import java.nio.file.Path;
 import java.util.regex.Pattern;
 
 /**
@@ -42,6 +42,7 @@ import java.util.regex.Pattern;
  * <ul>
  *   <li>{@link org.eclipse.oomph.predicates.impl.RepositoryPredicateImpl#getProject <em>Project</em>}</li>
  *   <li>{@link org.eclipse.oomph.predicates.impl.RepositoryPredicateImpl#getRelativePathPattern <em>Relative Path Pattern</em>}</li>
+ *   <li>{@link org.eclipse.oomph.predicates.impl.RepositoryPredicateImpl#isIncludeNestedRepositories <em>Include Nested Repositories</em>}</li>
  * </ul>
  *
  * @generated
@@ -88,7 +89,29 @@ public class RepositoryPredicateImpl extends PredicateImpl implements Repository
    */
   protected String relativePathPattern = RELATIVE_PATH_PATTERN_EDEFAULT;
 
+  /**
+   * The default value of the '{@link #isIncludeNestedRepositories() <em>Include Nested Repositories</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isIncludeNestedRepositories()
+   * @generated
+   * @ordered
+   */
+  protected static final boolean INCLUDE_NESTED_REPOSITORIES_EDEFAULT = false;
+
+  /**
+   * The cached value of the '{@link #isIncludeNestedRepositories() <em>Include Nested Repositories</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isIncludeNestedRepositories()
+   * @generated
+   * @ordered
+   */
+  protected boolean includeNestedRepositories = INCLUDE_NESTED_REPOSITORIES_EDEFAULT;
+
   private Pattern compiledPattern;
+
+  private Path referenceMainRepoAbsolutPath;
 
   /**
    * <!-- begin-user-doc -->
@@ -127,8 +150,7 @@ public class RepositoryPredicateImpl extends PredicateImpl implements Repository
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
-  public void setProject(IProject newProject)
+  public void setProjectGen(IProject newProject)
   {
     IProject oldProject = project;
     project = newProject;
@@ -136,6 +158,13 @@ public class RepositoryPredicateImpl extends PredicateImpl implements Repository
     {
       eNotify(new ENotificationImpl(this, Notification.SET, PredicatesPackage.REPOSITORY_PREDICATE__PROJECT, oldProject, project));
     }
+  }
+
+  @Override
+  public void setProject(IProject newProject)
+  {
+    setProjectGen(newProject);
+    referenceMainRepoAbsolutPath = null;
   }
 
   /**
@@ -172,6 +201,34 @@ public class RepositoryPredicateImpl extends PredicateImpl implements Repository
     compiledPattern = null;
   }
 
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public boolean isIncludeNestedRepositories()
+  {
+    return includeNestedRepositories;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void setIncludeNestedRepositories(boolean newIncludeNestedRepositories)
+  {
+    boolean oldIncludeNestedRepositories = includeNestedRepositories;
+    includeNestedRepositories = newIncludeNestedRepositories;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, PredicatesPackage.REPOSITORY_PREDICATE__INCLUDE_NESTED_REPOSITORIES, oldIncludeNestedRepositories,
+          includeNestedRepositories));
+    }
+  }
+
   private Pattern getCompiledPattern()
   {
     if (compiledPattern == null)
@@ -182,7 +239,16 @@ public class RepositoryPredicateImpl extends PredicateImpl implements Repository
     return compiledPattern;
   }
 
-  private String getRepoDirAbsolutePath(IProject project)
+  private Path getReferenceMainRepoAbsolutPath()
+  {
+    if (referenceMainRepoAbsolutPath == null)
+    {
+      referenceMainRepoAbsolutPath = getRepoDirAbsolutePath(getProject());
+    }
+    return referenceMainRepoAbsolutPath;
+  }
+
+  private Path getRepoDirAbsolutePath(IProject project)
   {
     if (project != null)
     {
@@ -198,7 +264,7 @@ public class RepositoryPredicateImpl extends PredicateImpl implements Repository
             File gitFolder = new File(parent, ".git"); //$NON-NLS-1$
             if (new File(gitFolder, "index").exists()) //$NON-NLS-1$
             {
-              return parent.toString();
+              return parent.toPath();
             }
           }
         }
@@ -213,7 +279,7 @@ public class RepositoryPredicateImpl extends PredicateImpl implements Repository
             GitProjectData data = gitProvider.getData();
             RepositoryMapping repositoryMapping = data.getRepositoryMapping(project);
             File workTree = repositoryMapping.getWorkTree();
-            return workTree == null ? null : workTree.toString();
+            return workTree == null ? null : workTree.toPath();
           }
         }
         catch (NoClassDefFoundError ex)
@@ -233,7 +299,7 @@ public class RepositoryPredicateImpl extends PredicateImpl implements Repository
           Class<? extends Object> repositoryLocationClass = repositoryLocation.getClass();
           Method getLocationMethod = repositoryLocationClass.getMethod("getLocation"); //$NON-NLS-1$
           Object location = getLocationMethod.invoke(repositoryLocation);
-          return location == null ? null : location.toString();
+          return location == null ? null : Path.of(location.toString());
         }
         catch (Throwable throwable)
         {
@@ -249,14 +315,14 @@ public class RepositoryPredicateImpl extends PredicateImpl implements Repository
           Class<? extends Object> repositoryLocationClass = repositoryLocation.getClass();
           Method getRepositoryRootUrlMethod = repositoryLocationClass.getMethod("getRepositoryRootUrl"); //$NON-NLS-1$
           Object respositoryRootURL = getRepositoryRootUrlMethod.invoke(repositoryLocation);
-          return respositoryRootURL == null ? null : respositoryRootURL.toString();
+          return respositoryRootURL == null ? null : Path.of(respositoryRootURL.toString());
         }
         catch (Throwable throwable)
         {
           // Ignore
         }
 
-        return "Unknown repo"; //$NON-NLS-1$
+        return null;
       }
     }
 
@@ -276,21 +342,22 @@ public class RepositoryPredicateImpl extends PredicateImpl implements Repository
       return false;
     }
 
-    String prototypeRepoDirAbsolutePath = getRepoDirAbsolutePath(getProject());
-    String repoDirAbsolutePath = getRepoDirAbsolutePath(resource.getProject());
+    Path prototypeRepoDir = getReferenceMainRepoAbsolutPath();
+    Path repoDir = getRepoDirAbsolutePath(resource.getProject());
 
-    if (!Objects.equals(prototypeRepoDirAbsolutePath, repoDirAbsolutePath))
+    if (prototypeRepoDir == null || repoDir == null
+        || !repoDir.equals(prototypeRepoDir) && (!isIncludeNestedRepositories() || !repoDir.startsWith(prototypeRepoDir)))
     {
       return false;
     }
 
-    if (repoDirAbsolutePath != null && getRelativePathPattern() != null)
+    if (getRelativePathPattern() != null)
     {
       IPath location = resource.getLocation();
       if (location != null)
       {
         String projectLocation = location.toPortableString();
-        repoDirAbsolutePath = repoDirAbsolutePath.replace(File.separatorChar, '/');
+        String repoDirAbsolutePath = prototypeRepoDir.toString().replace(File.separatorChar, '/');
 
         String relativePath = StringUtil.removePrefix(projectLocation, repoDirAbsolutePath);
         relativePath = StringUtil.removePrefix(relativePath, "/"); //$NON-NLS-1$
@@ -321,6 +388,8 @@ public class RepositoryPredicateImpl extends PredicateImpl implements Repository
         return getProject();
       case PredicatesPackage.REPOSITORY_PREDICATE__RELATIVE_PATH_PATTERN:
         return getRelativePathPattern();
+      case PredicatesPackage.REPOSITORY_PREDICATE__INCLUDE_NESTED_REPOSITORIES:
+        return isIncludeNestedRepositories();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -340,6 +409,9 @@ public class RepositoryPredicateImpl extends PredicateImpl implements Repository
         return;
       case PredicatesPackage.REPOSITORY_PREDICATE__RELATIVE_PATH_PATTERN:
         setRelativePathPattern((String)newValue);
+        return;
+      case PredicatesPackage.REPOSITORY_PREDICATE__INCLUDE_NESTED_REPOSITORIES:
+        setIncludeNestedRepositories((Boolean)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -361,6 +433,9 @@ public class RepositoryPredicateImpl extends PredicateImpl implements Repository
       case PredicatesPackage.REPOSITORY_PREDICATE__RELATIVE_PATH_PATTERN:
         setRelativePathPattern(RELATIVE_PATH_PATTERN_EDEFAULT);
         return;
+      case PredicatesPackage.REPOSITORY_PREDICATE__INCLUDE_NESTED_REPOSITORIES:
+        setIncludeNestedRepositories(INCLUDE_NESTED_REPOSITORIES_EDEFAULT);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -379,6 +454,8 @@ public class RepositoryPredicateImpl extends PredicateImpl implements Repository
         return PROJECT_EDEFAULT == null ? project != null : !PROJECT_EDEFAULT.equals(project);
       case PredicatesPackage.REPOSITORY_PREDICATE__RELATIVE_PATH_PATTERN:
         return RELATIVE_PATH_PATTERN_EDEFAULT == null ? relativePathPattern != null : !RELATIVE_PATH_PATTERN_EDEFAULT.equals(relativePathPattern);
+      case PredicatesPackage.REPOSITORY_PREDICATE__INCLUDE_NESTED_REPOSITORIES:
+        return includeNestedRepositories != INCLUDE_NESTED_REPOSITORIES_EDEFAULT;
     }
     return super.eIsSet(featureID);
   }
@@ -401,6 +478,8 @@ public class RepositoryPredicateImpl extends PredicateImpl implements Repository
     result.append(project);
     result.append(", relativePathPattern: "); //$NON-NLS-1$
     result.append(relativePathPattern);
+    result.append(", includeNestedRepositories: "); //$NON-NLS-1$
+    result.append(includeNestedRepositories);
     result.append(')');
     return result.toString();
   }
