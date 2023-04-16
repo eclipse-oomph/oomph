@@ -10,24 +10,31 @@
  */
 package org.eclipse.oomph.setup.workbench.provider;
 
-import org.eclipse.oomph.base.BaseFactory;
-import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.setup.provider.SetupTaskItemProvider;
+import org.eclipse.oomph.setup.workbench.CommandParameter;
 import org.eclipse.oomph.setup.workbench.KeyBindingTask;
 import org.eclipse.oomph.setup.workbench.WorkbenchFactory;
 import org.eclipse.oomph.setup.workbench.WorkbenchPackage;
 
+import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.ResourceLocator;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.command.SetCommand;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * This is the item provider adapter for a {@link org.eclipse.oomph.setup.workbench.KeyBindingTask} object.
@@ -140,6 +147,84 @@ public class KeyBindingTaskItemProvider extends SetupTaskItemProvider
         WorkbenchPackage.Literals.KEY_BINDING_TASK__COMMAND, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
+  @Override
+  protected Collection<?> filterChoices(Collection<?> choices, EStructuralFeature feature, Object object)
+  {
+    if (feature == WorkbenchPackage.Literals.KEY_BINDING_TASK__COMMAND)
+    {
+      Set<String> result = new LinkedHashSet<>();
+      KeyBindingTask keyBindingTask = (KeyBindingTask)object;
+      String command = keyBindingTask.getCommand();
+      if (command != null)
+      {
+        result.add(command);
+      }
+
+      result.addAll(WorkbenchEditPlugin.getCommands().keySet());
+      return result;
+    }
+    else if (feature == WorkbenchPackage.Literals.KEY_BINDING_TASK__SCHEME)
+    {
+      Set<String> result = new LinkedHashSet<>();
+      KeyBindingTask keyBindingTask = (KeyBindingTask)object;
+      String scheme = keyBindingTask.getScheme();
+      if (scheme != null)
+      {
+        result.add(scheme);
+      }
+
+      result.addAll(WorkbenchEditPlugin.getSchemes());
+      return result;
+    }
+
+    return super.filterChoices(choices, feature, object);
+  }
+
+  @Override
+  protected boolean isChoiceArbitrary(EStructuralFeature feature, Object object)
+  {
+    if (feature == WorkbenchPackage.Literals.KEY_BINDING_TASK__COMMAND || feature == WorkbenchPackage.Literals.KEY_BINDING_TASK__SCHEME)
+    {
+      return true;
+    }
+
+    return super.isChoiceArbitrary(feature, object);
+  }
+
+  @Override
+  protected Command createSetCommand(EditingDomain domain, EObject owner, EStructuralFeature feature, Object value)
+  {
+    if (feature == WorkbenchPackage.Literals.KEY_BINDING_TASK__COMMAND)
+    {
+      Command command = super.createSetCommand(domain, owner, feature, value);
+
+      Set<String> availableCommandParameters = WorkbenchEditPlugin.getCommandParameters((String)value).keySet();
+      List<CommandParameter> commandParameters = new ArrayList<>();
+      KeyBindingTask keyBindingTask = (KeyBindingTask)owner;
+      LOOP: for (String id : availableCommandParameters)
+      {
+        for (CommandParameter commandParameter : keyBindingTask.getCommandParameters())
+        {
+          if (id.equals(commandParameter.getID()))
+          {
+            commandParameters.add(commandParameter);
+            continue LOOP;
+          }
+        }
+        CommandParameter commandParameter = WorkbenchFactory.eINSTANCE.createCommandParameter();
+        commandParameter.setID(id);
+        commandParameters.add(commandParameter);
+      }
+
+      CompoundCommand result = new CompoundCommand();
+      result.append(command);
+      result.append(SetCommand.create(domain, owner, WorkbenchPackage.Literals.KEY_BINDING_TASK__COMMAND_PARAMETERS, commandParameters));
+      return result.unwrap();
+    }
+
+    return super.createSetCommand(domain, owner, feature, value);
+  }
+
   /**
    * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
    * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
@@ -207,7 +292,9 @@ public class KeyBindingTaskItemProvider extends SetupTaskItemProvider
   public String getText(Object object)
   {
     KeyBindingTask keyBindingTask = (KeyBindingTask)object;
-    return "" + keyBindingTask.getKeys() + " = " + keyBindingTask.getCommand(); //$NON-NLS-1$ //$NON-NLS-2$
+    String command = keyBindingTask.getCommand();
+    String name = command == null ? null : WorkbenchEditPlugin.getCommands().get(command);
+    return "" + keyBindingTask.getKeys() + " = " + command + (name == null ? "" : " \u279d " + name); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
   }
 
   /**
@@ -250,8 +337,6 @@ public class KeyBindingTaskItemProvider extends SetupTaskItemProvider
   protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object)
   {
     super.collectNewChildDescriptors(newChildDescriptors, object);
-
-    newChildDescriptors.add(createChildParameter(BasePackage.Literals.MODEL_ELEMENT__ANNOTATIONS, BaseFactory.eINSTANCE.createAnnotation()));
 
     newChildDescriptors.add(createChildParameter(WorkbenchPackage.Literals.KEY_BINDING_TASK__CONTEXTS, WorkbenchFactory.eINSTANCE.createKeyBindingContext()));
 
