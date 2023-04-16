@@ -941,7 +941,6 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
       Profile selfProfile = P2Util.getAgentManager().getCurrentAgent().getCurrentProfile();
       if (selfProfile != null)
       {
-
         if (selfProfile.getAgent() != profile.getAgent())
         {
           P2Util.copyTrustPreferences(profile, selfProfile);

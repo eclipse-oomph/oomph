@@ -56,10 +56,12 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -228,6 +230,11 @@ public final class P2Util
       currentCertificateChecker.setTrustAlways(trustAlways);
       currentCertificateChecker.persistTrustedCertificates(trustedCertificates);
       currentCertificateChecker.persistTrustedKeys(trustedKeys);
+
+      if (TrustAuthoritySupport.ENABLED)
+      {
+        TrustAuthoritySupport.mergeGlobalTrustPreferences(profile, globalTrustFolder);
+      }
     }
   }
 
@@ -332,6 +339,11 @@ public final class P2Util
             }
           }
         }
+      }
+
+      if (TrustAuthoritySupport.ENABLED)
+      {
+        TrustAuthoritySupport.saveGlobalTrustPreferences(profile, trustFolder, strict);
       }
     }
   }
@@ -697,5 +709,91 @@ public final class P2Util
   public interface VersionedIdFilter
   {
     public boolean matches(IVersionedId versionedId);
+  }
+
+  @SuppressWarnings({ "restriction", "nls" })
+  private static class TrustAuthoritySupport
+  {
+    public static final boolean ENABLED;
+
+    static
+    {
+      boolean enabled = false;
+      try
+      {
+        org.eclipse.equinox.internal.p2.engine.phases.AuthorityChecker.class.getName();
+        enabled = true;
+      }
+      catch (Exception ex)
+      {
+        //$FALL-THROUGH$
+      }
+      ENABLED = enabled;
+    }
+
+    public static org.eclipse.equinox.internal.p2.engine.phases.AuthorityChecker createAuthorityChecker(Profile profile)
+    {
+      org.eclipse.equinox.internal.p2.engine.phases.AuthorityChecker authorityChecker = new org.eclipse.equinox.internal.p2.engine.phases.AuthorityChecker(
+          profile.getProvisioningAgent(), profile);
+      return authorityChecker;
+    }
+
+    public static void mergeGlobalTrustPreferences(Profile profile, File globalTrustFolder)
+    {
+      // Copy the global preference settings into the current agent's profile preferences.
+      org.eclipse.equinox.internal.p2.engine.phases.AuthorityChecker authorityChecker = createAuthorityChecker(profile);
+
+      Map<String, String> properties = PropertiesUtil.getProperties(new File(globalTrustFolder, PREFERENCES_FILE_NAME));
+      boolean trustAllAuthorities = "true"
+          .equals(properties.getOrDefault(org.eclipse.equinox.internal.p2.engine.phases.AuthorityChecker.TRUST_ALL_AUTHORITIES, "false"));
+      List<String> trustedAuthoritiesProperty = Arrays
+          .asList(properties.getOrDefault(org.eclipse.equinox.internal.p2.engine.phases.AuthorityChecker.TRUSTED_AUTHORITIES_PROPERTY, "").split("\\s+"));
+      Set<URI> trustedAuthorities = new LinkedHashSet<>(authorityChecker.getPreferenceTrustedAuthorities());
+      for (String authority : trustedAuthoritiesProperty)
+      {
+        try
+        {
+          if (!authority.isBlank())
+          {
+            trustedAuthorities.add(new URI(authority));
+          }
+        }
+        catch (URISyntaxException ex)
+        {
+          //$FALL-THROUGH$
+        }
+      }
+
+      authorityChecker.setTrustAlways(trustAllAuthorities);
+      authorityChecker.persistTrustedAuthorities(trustedAuthorities);
+    }
+
+    public static void saveGlobalTrustPreferences(Profile profile, File trustFolder, boolean strict)
+    {
+      org.eclipse.equinox.internal.p2.engine.phases.AuthorityChecker authorityChecker = createAuthorityChecker(profile);
+
+      boolean trustAlways = authorityChecker.isTrustAlways();
+      Set<URI> trustedAuthorities = authorityChecker.getPreferenceTrustedAuthorities();
+
+      File propertiesFile = new File(trustFolder, PREFERENCES_FILE_NAME);
+      Map<String, String> properties = PropertiesUtil.getProperties(propertiesFile);
+      Set<String> trustedAuthoritiesProperty = new LinkedHashSet<>();
+      if (!strict)
+      {
+        trustedAuthoritiesProperty.addAll(Arrays
+            .asList(properties.getOrDefault(org.eclipse.equinox.internal.p2.engine.phases.AuthorityChecker.TRUSTED_AUTHORITIES_PROPERTY, "").split("\\s+")));
+        trustedAuthoritiesProperty.remove("");
+      }
+
+      for (URI uri : trustedAuthorities)
+      {
+        trustedAuthoritiesProperty.add(uri.toString());
+      }
+
+      properties.put(org.eclipse.equinox.internal.p2.engine.phases.AuthorityChecker.TRUST_ALL_AUTHORITIES, Boolean.toString(trustAlways));
+      properties.put(org.eclipse.equinox.internal.p2.engine.phases.AuthorityChecker.TRUSTED_AUTHORITIES_PROPERTY, String.join(" ", trustedAuthoritiesProperty));
+
+      PropertiesUtil.saveProperties(propertiesFile, properties, false);
+    }
   }
 }
