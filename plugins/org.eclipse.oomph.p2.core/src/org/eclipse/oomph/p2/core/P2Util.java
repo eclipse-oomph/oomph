@@ -724,7 +724,7 @@ public final class P2Util
         org.eclipse.equinox.internal.p2.engine.phases.AuthorityChecker.class.getName();
         enabled = true;
       }
-      catch (Exception ex)
+      catch (Throwable ex)
       {
         //$FALL-THROUGH$
       }
