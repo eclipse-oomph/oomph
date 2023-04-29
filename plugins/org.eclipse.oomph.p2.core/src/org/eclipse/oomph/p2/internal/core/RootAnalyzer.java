@@ -66,16 +66,29 @@ public final class RootAnalyzer
 
   public static void removeImplicitUnits(Map<IMetadataRepository, Set<IInstallableUnit>> result, IProgressMonitor monitor, boolean onlyIfRedundant)
   {
+    removeImplicitUnits(result, monitor, onlyIfRedundant, true);
+
+  }
+
+  public static void removeImplicitUnits(Map<IMetadataRepository, Set<IInstallableUnit>> result, IProgressMonitor monitor, boolean onlyIfRedundant,
+      boolean ignoreJavaRequirements)
+  {
     for (Map.Entry<IMetadataRepository, Set<IInstallableUnit>> entry : result.entrySet())
     {
       IMetadataRepository metadataRepository = entry.getKey();
       Set<IInstallableUnit> ius = entry.getValue();
 
-      removeImplicitUnits(ius, metadataRepository, monitor, onlyIfRedundant);
+      removeImplicitUnits(ius, metadataRepository, monitor, onlyIfRedundant, ignoreJavaRequirements);
     }
   }
 
   public static void removeImplicitUnits(Set<IInstallableUnit> ius, IQueryable<IInstallableUnit> queryable, IProgressMonitor monitor, boolean onlyIfRedundant)
+  {
+    removeImplicitUnits(ius, queryable, monitor, onlyIfRedundant, true);
+  }
+
+  public static void removeImplicitUnits(Set<IInstallableUnit> ius, IQueryable<IInstallableUnit> queryable, IProgressMonitor monitor, boolean onlyIfRedundant,
+      boolean ignoreJavaRequirements)
   {
     Set<IInstallableUnit> rootIUs = new HashSet<>(ius);
     Set<IInstallableUnit> currentlyVisitingIUs = new HashSet<>();
@@ -83,7 +96,7 @@ public final class RootAnalyzer
 
     for (IInstallableUnit iu : ius)
     {
-      removeImplicitUnits(iu, rootIUs, currentlyVisitingIUs, visitedIUs, queryable, monitor, onlyIfRedundant);
+      removeImplicitUnits(iu, rootIUs, currentlyVisitingIUs, visitedIUs, queryable, monitor, onlyIfRedundant, ignoreJavaRequirements);
     }
 
     if (rootIUs.size() < ius.size())
@@ -93,14 +106,15 @@ public final class RootAnalyzer
   }
 
   private static void removeImplicitUnits(IInstallableUnit iu, Set<IInstallableUnit> rootIUs, Set<IInstallableUnit> currentlyVisitingIUs,
-      Set<IInstallableUnit> visitedIUs, IQueryable<IInstallableUnit> queryable, IProgressMonitor monitor, boolean onlyIfRedundant)
+      Set<IInstallableUnit> visitedIUs, IQueryable<IInstallableUnit> queryable, IProgressMonitor monitor, boolean onlyIfRedundant,
+      boolean ignoreJavaRequirements)
   {
     if (visitedIUs.add(iu))
     {
       currentlyVisitingIUs.add(iu);
       for (IRequirement requirement : iu.getRequirements())
       {
-        if (!isTypeRequirement(requirement) && !isJavaPackageRequirment(requirement))
+        if (!isTypeRequirement(requirement) && !ignoreJavaRequirements || !isJavaPackageRequirment(requirement))
         {
           for (IInstallableUnit requiredIU : P2Util.asIterable(queryable.query(QueryUtil.createMatchQuery(requirement.getMatches()), null)))
           {
@@ -113,7 +127,7 @@ public final class RootAnalyzer
                 rootIUs.remove(requiredIU);
               }
 
-              removeImplicitUnits(requiredIU, rootIUs, currentlyVisitingIUs, visitedIUs, queryable, monitor, onlyIfRedundant);
+              removeImplicitUnits(requiredIU, rootIUs, currentlyVisitingIUs, visitedIUs, queryable, monitor, onlyIfRedundant, ignoreJavaRequirements);
             }
           }
         }

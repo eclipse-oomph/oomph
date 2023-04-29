@@ -440,6 +440,10 @@
               key="includeSource">
             <value>true</value>
           </detail>
+          <detail
+              key="ignoreJavaRequirements">
+            <value>false</value>
+          </detail>
         </annotation>
         <requirement
             name="*"/>

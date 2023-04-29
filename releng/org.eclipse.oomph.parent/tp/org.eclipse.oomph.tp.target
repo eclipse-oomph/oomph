@@ -1,17 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.8"?>
-<target name="Generated from Oomph" sequenceNumber="115">
+<target name="Generated from Oomph" sequenceNumber="116">
   <locations>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-      <unit id="javaewah" version="0.0.0"/>
-      <unit id="net.i2p.crypto.eddsa" version="0.0.0"/>
-      <unit id="org.apache.commons.cli" version="0.0.0"/>
-      <unit id="org.apache.commons.collections" version="0.0.0"/>
-      <unit id="org.apache.commons.commons-beanutils" version="0.0.0"/>
-      <unit id="org.apache.commons.compress" version="0.0.0"/>
-      <unit id="org.apache.commons.io" version="0.0.0"/>
-      <unit id="org.apache.sshd.osgi" version="0.0.0"/>
-      <unit id="org.apache.sshd.sftp" version="0.0.0"/>
       <unit id="org.eclipse.egit.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.emf.sdk.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.equinox.executable.feature.group" version="0.0.0"/>
@@ -26,9 +17,6 @@
       <unit id="org.eclipse.swtbot.generator" version="0.0.0"/>
       <unit id="org.eclipse.userstorage.oauth" version="0.0.0"/>
       <unit id="org.eclipse.userstorage.tests" version="0.0.0"/>
-      <unit id="org.jdom" version="0.0.0"/>
-      <unit id="slf4j.api" version="0.0.0"/>
-      <unit id="slf4j.nop" version="0.0.0"/>
       <repository location="https://download.eclipse.org/eclipse/updates/4.28-I-builds"/>
       <repository location="https://download.eclipse.org/egit/updates-stable-nightly"/>
       <repository location="https://download.eclipse.org/justj/jres/17/updates/milestone/latest"/>

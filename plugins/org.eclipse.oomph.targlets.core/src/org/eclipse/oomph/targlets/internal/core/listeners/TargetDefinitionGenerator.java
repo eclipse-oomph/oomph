@@ -125,6 +125,8 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
 
   public static final String ANNOTATION_SORT_LOCATIONS = "sortLocations"; //$NON-NLS-1$
 
+  public static final String ANNOTATION_IGNORE_JAVA_REQUIREMENTS = "ignoreJavaRequirements"; //$NON-NLS-1$
+
   public static final String ANNOTATION_GENERATE_SERVER_XML = "generateServerXML"; //$NON-NLS-1$
 
   public static final String NESTED_ANNOTATION_REPOSITORY_IDS = "RepositoryIDs"; //$NON-NLS-1$
@@ -193,6 +195,7 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
     final boolean sortLocations = isAnnotationDetail(annotation, ANNOTATION_SORT_LOCATIONS, false);
     final boolean generateImplicitUnits = isAnnotationDetail(annotation, ANNOTATION_GENERATE_IMPLICIT_UNITS, false);
     final boolean minimizeImplicitUnits = isAnnotationDetail(annotation, ANNOTATION_MINIMIZE_IMPLICIT_UNITS, false);
+    final boolean ignoreJavaRequirements = isAnnotationDetail(annotation, ANNOTATION_IGNORE_JAVA_REQUIREMENTS, true);
     final boolean versions = isAnnotationDetail(annotation, ANNOTATION_GENERATE_VERSIONS, false);
     final boolean includeAllPlatforms = isAnnotationDetail(annotation, ANNOTATION_INCLUDE_ALL_PLATFORMS, targlet.isIncludeAllPlatforms());
     final boolean includeConfigurePhase = isAnnotationDetail(annotation, ANNOTATION_INCLUDE_CONFIGURE_PHASE, true);
@@ -212,7 +215,8 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
     }
 
     final Map<IMetadataRepository, Set<IInstallableUnit>> repositoryIUs = analyzeRepositories(targlet, profile, artificialRoot, metadataRepositories,
-        workspaceIUInfos, extraUnits, preferredURLs, generateImplicitUnits, minimizeImplicitUnits, singleLocation, sortLocations, monitor);
+        workspaceIUInfos, extraUnits, preferredURLs, generateImplicitUnits, minimizeImplicitUnits, singleLocation, sortLocations, ignoreJavaRequirements,
+        monitor);
 
     List<String> targetReferences = new ArrayList<>();
     for (String composedTarget : composedTargets)
@@ -669,9 +673,8 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
   private static Map<IMetadataRepository, Set<IInstallableUnit>> analyzeRepositories(Targlet targlet, Profile profile, IInstallableUnit artificialRoot,
       List<IMetadataRepository> metadataRepositories, Map<IInstallableUnit, WorkspaceIUInfo> workspaceIUInfos, Set<IVersionedId> extraUnits,
       List<String> preferredURLs, boolean generateImplicitUnits, boolean minimizeImplicitUnits, boolean singleLocation, boolean sortLocations,
-      IProgressMonitor monitor)
+      boolean ignoreJavaRequirements, IProgressMonitor monitor)
   {
-
     Set<String> workspaceIDs = new HashSet<>();
     for (IInstallableUnit iu : workspaceIUInfos.keySet())
     {
@@ -708,7 +711,8 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
 
     Map<String, IMetadataRepository> queryables = sortMetadataRepositories(targlet, metadataRepositories, preferredURLs, monitor);
 
-    return assignUnits(queryables, extraUnits, generateImplicitUnits, minimizeImplicitUnits, singleLocation, sortLocations, profileIUs, monitor);
+    return assignUnits(queryables, extraUnits, generateImplicitUnits, minimizeImplicitUnits, singleLocation, sortLocations, ignoreJavaRequirements, profileIUs,
+        monitor);
   }
 
   private static Map<String, IMetadataRepository> sortMetadataRepositories(Targlet targlet, List<IMetadataRepository> metadataRepositories,
@@ -771,8 +775,8 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
   }
 
   private static Map<IMetadataRepository, Set<IInstallableUnit>> assignUnits(Map<String, IMetadataRepository> queryables, Set<IVersionedId> extraUnits,
-      boolean generateImplicitUnits, boolean minimizeImplicitUnits, boolean singleLocation, boolean sortLocations, Set<IInstallableUnit> resolvedIUs,
-      IProgressMonitor monitor)
+      boolean generateImplicitUnits, boolean minimizeImplicitUnits, boolean singleLocation, boolean sortLocations, boolean igoreJavaRquirements,
+      Set<IInstallableUnit> resolvedIUs, IProgressMonitor monitor)
   {
     Map<IMetadataRepository, Set<IInstallableUnit>> result = sortLocations ? new TreeMap<>(new Comparator<IMetadataRepository>()
     {
@@ -800,7 +804,7 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
 
           if (!generateImplicitUnits)
           {
-            RootAnalyzer.removeImplicitUnits(ius, queryable, monitor, false);
+            RootAnalyzer.removeImplicitUnits(ius, queryable, monitor, false, igoreJavaRquirements);
           }
           else if (minimizeImplicitUnits)
           {
@@ -837,7 +841,7 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
 
       if (!generateImplicitUnits)
       {
-        RootAnalyzer.removeImplicitUnits(result, monitor, false);
+        RootAnalyzer.removeImplicitUnits(result, monitor, false, igoreJavaRquirements);
       }
       else if (minimizeImplicitUnits)
       {
