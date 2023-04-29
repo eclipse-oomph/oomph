@@ -25,8 +25,10 @@ import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.OomphPlugin.Preference;
 import org.eclipse.oomph.util.PropertiesUtil;
+import org.eclipse.oomph.util.ReflectUtil;
 import org.eclipse.oomph.util.StringUtil;
 
+import org.eclipse.emf.common.CommonPlugin;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.edit.ui.provider.ExtendedImageRegistry;
@@ -40,6 +42,7 @@ import org.eclipse.equinox.app.IApplicationContext;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.core.UIServices;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.IDialogSettingsProvider;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -505,6 +508,19 @@ public class InstallerApplication implements IApplication
       dialog.open();
 
       return exitCode.get();
+    }
+    finally
+    {
+      try
+      {
+        Map<Bundle, IDialogSettingsProvider> settings = ReflectUtil.getValue("fTrackedBundles", //$NON-NLS-1$
+            CommonPlugin.loadClass("org.eclipse.e4.ui.workbench.swt", "org.eclipse.e4.ui.internal.workbench.swt.DialogSettingsProviderService")); //$NON-NLS-1$ //$NON-NLS-2$
+        settings.values().forEach(IDialogSettingsProvider::saveDialogSettings);
+      }
+      catch (ClassNotFoundException ex)
+      {
+        SetupInstallerPlugin.INSTANCE.log(ex);
+      }
     }
   }
 
