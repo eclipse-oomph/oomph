@@ -148,7 +148,6 @@ Eike Stepper - initial API and implementation
               <!--  This is needed for Tycho 2.0.0, but breaks 1.7.0 because the compiler source/target levels are not set properly.
               <executionEnvironmentDefault>org.eclipse.justj.openjdk.hotspot.jre.minimal-17</executionEnvironmentDefault>
               -->
-              <includePackedArtifacts>true</includePackedArtifacts>
               <environments>
                 <environment>
                   <os>win32</os>
