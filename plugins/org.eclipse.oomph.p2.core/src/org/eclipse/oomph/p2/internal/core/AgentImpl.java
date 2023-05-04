@@ -88,6 +88,13 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
   private static final Pattern ECLIPSE_INI_SECTION_PATTERN = Pattern.compile("^(-vmargs)([\n\r]+.*)\\z|^(-[^\\n\\r]*[\\n\\r]*)((?:^[^-][^\\n\\r]*)*[\\n\\r]*)", //$NON-NLS-1$
       Pattern.MULTILINE | Pattern.DOTALL);
 
+  private static final String[] SPLASH_IMAGES = { "splash.bmp", //$NON-NLS-1$
+      "splash.png", //$NON-NLS-1$
+      "splash.jpg", //$NON-NLS-1$
+      "splash.jpeg", //$NON-NLS-1$
+      "splash.gif", //$NON-NLS-1$
+  };
+
   private final AgentManagerImpl agentManager;
 
   private final File location;
@@ -814,10 +821,9 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
       // Look at all that IU's artifacts.
       for (IArtifactKey artifactKey : installableUnit.getArtifacts())
       {
-        // If the file slash.bmp exists in that artifact jar or folder...
+        // If the file slash.(bmp|png|jpg|jpeg|gif) exists in that artifact jar or folder...
         File artifactFile = bundlePool.getFileArtifactRepository().getArtifactFile(artifactKey);
-        if (artifactFile.isDirectory() ? new File(artifactFile, "splash.bmp").exists() //$NON-NLS-1$
-            : URIConverter.INSTANCE.exists(URI.createURI("archive:" + URI.createFileURI(artifactFile.getAbsolutePath() + "!/splash.bmp")), null)) //$NON-NLS-1$ //$NON-NLS-2$
+        if (containsSplashImage(artifactFile))
         {
           return artifactFile;
         }
@@ -825,6 +831,19 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
     }
 
     return null;
+  }
+
+  private boolean containsSplashImage(File artifactFile)
+  {
+    for (String splashImage : SPLASH_IMAGES)
+    {
+      if (artifactFile.isDirectory() ? new File(artifactFile, splashImage).exists()
+          : URIConverter.INSTANCE.exists(URI.createURI("archive:" + URI.createFileURI(artifactFile.getAbsolutePath() + "!/" + splashImage)), null)) //$NON-NLS-1$ //$NON-NLS-2$
+      {
+        return true;
+      }
+    }
+    return false;
   }
 
   private void adjustInstallation(IProfile profile)
