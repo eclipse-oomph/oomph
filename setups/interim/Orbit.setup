@@ -154,8 +154,8 @@
     </workingSet>
     <description>The dynamic working sets for ${scope.project.label}</description>
   </setupTask>
-  <stream name="master"
-      label="Master">
+  <stream name="main"
+      label="Main">
     <setupTask
         xsi:type="setup:EclipseIniTask"
         disabled="true"
