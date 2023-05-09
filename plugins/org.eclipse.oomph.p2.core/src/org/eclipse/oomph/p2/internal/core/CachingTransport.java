@@ -108,6 +108,15 @@ public class CachingTransport extends Transport
   @Override
   public IStatus download(URI uri, OutputStream target, IProgressMonitor monitor)
   {
+    try
+    {
+      uri = getSecureLocation(uri);
+    }
+    catch (CoreException e)
+    {
+      return e.getStatus();
+    }
+
     if (DEBUG)
     {
       log("  ! " + uri); //$NON-NLS-1$
@@ -272,6 +281,8 @@ public class CachingTransport extends Transport
   @Override
   public long getLastModified(URI uri, IProgressMonitor monitor) throws CoreException, FileNotFoundException, AuthenticationFailedException
   {
+    uri = getSecureLocation(uri);
+
     if (DEBUG)
     {
       log("  ? " + uri); //$NON-NLS-1$
@@ -451,6 +462,19 @@ public class CachingTransport extends Transport
     }
 
     return result;
+  }
+
+  @Override
+  public URI getSecureLocation(URI location) throws CoreException
+  {
+    try
+    {
+      return super.getSecureLocation(location);
+    }
+    catch (NoSuchMethodError ex)
+    {
+      return location;
+    }
   }
 
   private synchronized void removeLock(URI uri)
