@@ -483,7 +483,16 @@
           <repository
               url="https://download.eclipse.org/modeling/emf/emf/builds/milestone/latest"/>
           <repository
-              url="https://download.eclipse.org/mylyn/snapshots/weekly"/>
+              url="https://download.eclipse.org/rt/ecf/3.14.38/site.p2/3.14.38.v20230507-1923">
+            <annotation>
+              <detail
+                  key="justification">
+                <value>Needed for Mylyn</value>
+              </detail>
+            </annotation>
+          </repository>
+          <repository
+              url="https://download.eclipse.org/mylyn/updates/nightly/latest"/>
           <repository
               url="https://download.eclipse.org/tools/orbit/downloads/drops2/R20190602212107/repository">
             <annotation>
