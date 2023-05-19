@@ -81,7 +81,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -631,7 +630,7 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
 
   private static Set<IVersionedId> getExtraUnits(Annotation annotation)
   {
-    Set<IVersionedId> extraUnits = new HashSet<>();
+    Set<IVersionedId> extraUnits = new LinkedHashSet<>();
 
     String values = annotation.getDetails().get(ANNOTATION_EXTRA_UNITS);
     if (!StringUtil.isEmpty(values))
@@ -675,13 +674,13 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
       List<String> preferredURLs, boolean generateImplicitUnits, boolean minimizeImplicitUnits, boolean singleLocation, boolean sortLocations,
       boolean ignoreJavaRequirements, IProgressMonitor monitor)
   {
-    Set<String> workspaceIDs = new HashSet<>();
+    Set<String> workspaceIDs = new LinkedHashSet<>();
     for (IInstallableUnit iu : workspaceIUInfos.keySet())
     {
       workspaceIDs.add(iu.getId());
     }
 
-    Set<IInstallableUnit> profileIUs = new HashSet<>();
+    Set<IInstallableUnit> profileIUs = new LinkedHashSet<>();
     for (IInstallableUnit iu : P2Util.asIterable(profile.query(QueryUtil.createIUAnyQuery(), monitor)))
     {
       String id = iu.getId();
@@ -775,7 +774,7 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
   }
 
   private static Map<IMetadataRepository, Set<IInstallableUnit>> assignUnits(Map<String, IMetadataRepository> queryables, Set<IVersionedId> extraUnits,
-      boolean generateImplicitUnits, boolean minimizeImplicitUnits, boolean singleLocation, boolean sortLocations, boolean igoreJavaRquirements,
+      boolean generateImplicitUnits, boolean minimizeImplicitUnits, boolean singleLocation, boolean sortLocations, boolean ignoreJavaRequirements,
       Set<IInstallableUnit> resolvedIUs, IProgressMonitor monitor)
   {
     Map<IMetadataRepository, Set<IInstallableUnit>> result = sortLocations ? new TreeMap<>(new Comparator<IMetadataRepository>()
@@ -786,6 +785,14 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
         return o1.getLocation().compareTo(o2.getLocation());
       }
     }) : new LinkedHashMap<>();
+
+    if (!sortLocations)
+    {
+      for (IMetadataRepository metadataRepository : queryables.values())
+      {
+        CollectionUtil.getSet(result, metadataRepository);
+      }
+    }
 
     if (singleLocation)
     {
@@ -804,7 +811,7 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
 
           if (!generateImplicitUnits)
           {
-            RootAnalyzer.removeImplicitUnits(ius, queryable, monitor, false, igoreJavaRquirements);
+            RootAnalyzer.removeImplicitUnits(ius, queryable, monitor, false, ignoreJavaRequirements);
           }
           else if (minimizeImplicitUnits)
           {
@@ -841,7 +848,7 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
 
       if (!generateImplicitUnits)
       {
-        RootAnalyzer.removeImplicitUnits(result, monitor, false, igoreJavaRquirements);
+        RootAnalyzer.removeImplicitUnits(result, monitor, false, ignoreJavaRequirements);
       }
       else if (minimizeImplicitUnits)
       {
