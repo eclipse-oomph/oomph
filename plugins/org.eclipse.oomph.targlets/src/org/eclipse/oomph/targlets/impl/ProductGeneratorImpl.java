@@ -99,20 +99,20 @@ public class ProductGeneratorImpl extends ModelElementImpl implements ProductGen
         if (productDescriptor.useFeatures())
         {
           addRequirements(componentDefinition, productDescriptor.getFeatures(IProductDescriptor.INCLUDED_FEATURES | IProductDescriptor.ROOT_FEATURES),
-              Requirement.FEATURE_SUFFIX);
+              Requirement.FEATURE_SUFFIX, false);
         }
         else
         {
-          addRequirements(componentDefinition, productDescriptor.getBundles(false), ""); //$NON-NLS-1$
+          addRequirements(componentDefinition, productDescriptor.getBundles(false), "", false); //$NON-NLS-1$
         }
 
-        addRequirements(componentDefinition, productDescriptor.getFragments(), ""); //$NON-NLS-1$
+        addRequirements(componentDefinition, productDescriptor.getFragments(), "", true); //$NON-NLS-1$
 
         IInstallableUnit iu = ComponentDefGeneratorImpl.generateIU(componentDefinition, qualifierReplacement);
         result.add(iu);
       }
 
-      private void addRequirements(ComponentDefinition componentDefinition, List<IVersionedId> versionedIds, String idSuffix)
+      private void addRequirements(ComponentDefinition componentDefinition, List<IVersionedId> versionedIds, String idSuffix, boolean optional)
       {
         EList<Requirement> requirements = componentDefinition.getRequirements();
 
@@ -122,6 +122,7 @@ public class ProductGeneratorImpl extends ModelElementImpl implements ProductGen
           Version version = versionedId.getVersion();
 
           Requirement requirement = P2Factory.eINSTANCE.createRequirement(id, version, true);
+          requirement.setOptional(optional);
           requirements.add(requirement);
         }
       }

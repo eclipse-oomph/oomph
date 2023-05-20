@@ -155,7 +155,7 @@ public class ComponentExtGeneratorImpl extends ModelElementImpl implements Compo
           namespace = "osgi.bundle"; //$NON-NLS-1$
         }
 
-        requirements.add(MetadataFactory.createRequirement(namespace, id, versionRange, requirement.getFilter(), requirement.isOptional(), true,
+        requirements.add(MetadataFactory.createRequirement(namespace, id, versionRange, requirement.getFilter(), requirement.isOptional(), false,
             !requirement.isOptional() || requirement.isGreedy()));
       }
 
