@@ -1386,7 +1386,7 @@ public abstract class SearchEclipseDialog extends OomphDialog
         result.append(item.getNamespace());
         result.append('/');
         result.append(URI.decode(item.getName()));
-        return result.toString();
+        return DiagnosticDecorator.strip(result.toString());
       }
 
       return null;

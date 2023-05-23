@@ -1902,7 +1902,7 @@ public class OpenDiscoveredType extends OomphDialog
       Point size = UIUtil.caclcuateSize(toolTip);
       hoverInformationControlManager.setSizeConstraints(size.x + 4, size.y + 1, true, false);
 
-      return result.toString();
+      return DiagnosticDecorator.strip(result.toString());
     }
   }
 
