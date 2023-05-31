@@ -1167,6 +1167,7 @@
   <project href="https://raw.githubusercontent.com/eclipse-cdt/cdt/main/releng/CDT.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse/corrosion/master/target-platform/Corrosion.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse/dartboard/master/org.eclipse.dartboard.releng/Dartboard.setup#/"/>
+  <project href="https://raw.githubusercontent.com/eclipse-datatools/datatools/master/releng/DataTools.setup#/"/>
   <project href="interim/E4Tools.setup#/"/>
   <project href="https://gitlab.eclipse.org/eclipse/ease/ease/-/raw/main/releng/org.eclipse.ease.releng/oomph/ease.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse/eclemma/master/EclEmma.setup#/"/>
