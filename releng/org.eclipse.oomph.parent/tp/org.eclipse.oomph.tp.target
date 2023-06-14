@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.8"?>
-<target name="Generated from Oomph" sequenceNumber="118">
+<target name="Generated from Oomph" sequenceNumber="119">
   <locations>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
       <unit id="org.eclipse.egit.feature.group" version="0.0.0"/>
@@ -17,7 +17,7 @@
       <unit id="org.eclipse.swtbot.generator" version="0.0.0"/>
       <unit id="org.eclipse.userstorage.oauth" version="0.0.0"/>
       <unit id="org.eclipse.userstorage.tests" version="0.0.0"/>
-      <repository location="https://download.eclipse.org/eclipse/updates/4.28-I-builds"/>
+      <repository location="https://download.eclipse.org/eclipse/updates/4.29-I-builds"/>
       <repository location="https://download.eclipse.org/egit/updates-stable-nightly"/>
       <repository location="https://download.eclipse.org/justj/jres/17/updates/milestone/latest"/>
       <repository location="https://download.eclipse.org/modeling/emf/emf/builds/milestone/latest"/>
@@ -26,8 +26,7 @@
       <repository location="https://download.eclipse.org/rt/ecf/3.14.38/site.p2/3.14.38.v20230507-1923"/>
       <repository location="https://download.eclipse.org/technology/m2e/snapshots/latest"/>
       <repository location="https://download.eclipse.org/technology/swtbot/snapshots"/>
-      <repository location="https://download.eclipse.org/tools/orbit/downloads/drops/R20221123021534/repository"/>
-      <repository location="https://download.eclipse.org/tools/orbit/downloads/drops2/R20190602212107/repository"/>
+      <repository location="https://download.eclipse.org/tools/orbit/downloads/drops/R20230531010532/repository"/>
       <repository location="https://download.eclipse.org/tools/orbit/downloads/latest-R"/>
       <repository location="https://download.eclipse.org/usssdk/updates/latest"/>
       <repository location="https://download.eclipse.org/webtools/downloads/drops/R3.29.0/R-3.29.0-20230303230236/repository"/>
