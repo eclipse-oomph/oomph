@@ -8,7 +8,7 @@
       source="http://www.eclipse.org/oomph/setup/BrandingInfo">
     <detail
         key="notificationURI">
-      <value>https://www.eclipse.org/setups/donate/?scope=${scope}&amp;version=${scope.version}&amp;campaign=2023-03</value>
+      <value>https://www.eclipse.org/setups/donate/?scope=${scope}&amp;version=${scope.version}&amp;campaign=2023-06</value>
     </detail>
   </annotation>
   <annotation
