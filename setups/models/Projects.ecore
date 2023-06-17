@@ -3,7 +3,7 @@
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="projects" nsURI="http://www.eclipse.org/oomph/setup/projects/1.0"
     nsPrefix="projects">
   <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
-    <details key="schemaLocation" value="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Projects.ecore"/>
+    <details key="schemaLocation" value="https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/models/Projects.ecore"/>
   </eAnnotations>
   <eAnnotations source="http://www.eclipse.org/oomph/setup/Enablement">
     <details key="variableName" value="setup.projects.p2"/>
@@ -11,7 +11,7 @@
     <details key="installableUnits" value="org.eclipse.oomph.setup.projects.feature.group"/>
   </eAnnotations>
   <eAnnotations source="http://www.eclipse.org/oomph/base/LabelProvider">
-    <details key="imageBaseURI" value="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.projects.edit/icons/full/obj16"/>
+    <details key="imageBaseURI" value="https://raw.githubusercontent.com/eclipse-oomph/oomph/master/plugins/org.eclipse.oomph.setup.projects.edit/icons/full/obj16"/>
   </eAnnotations>
   <eClassifiers xsi:type="ecore:EClass" name="PathVariableTask" eSuperTypes="http://www.eclipse.org/oomph/setup/1.0#//SetupTask">
     <eAnnotations source="http://www.eclipse.org/oomph/setup/ValidTriggers">
@@ -32,7 +32,7 @@
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="force" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="sourceLocators" lowerBound="1"
-        upperBound="-1" eType="ecore:EClass http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Resources.ecore#//SourceLocator"
+        upperBound="-1" eType="ecore:EClass https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/models/Resources.ecore#//SourceLocator"
         containment="true">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="name" value="sourceLocator"/>
@@ -44,7 +44,7 @@
       <details key="triggers" value="STARTUP MANUAL"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="predicates" upperBound="-1"
-        eType="ecore:EClass http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Predicates.ecore#//Predicate"
+        eType="ecore:EClass https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/models/Predicates.ecore#//Predicate"
         containment="true">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="name" value="predicate"/>

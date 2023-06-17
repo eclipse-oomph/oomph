@@ -942,7 +942,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
         "java.util.Map<java.lang.String, org.eclipse.equinox.p2.metadata.Version>"); //$NON-NLS-1$
 
     // Create resource
-    createResource("http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Targlets.ecore");
+    createResource("https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/models/Targlets.ecore");
 
     // Create annotations
     // http://www.eclipse.org/emf/2002/Ecore
@@ -964,7 +964,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
   protected void createEcoreAnnotations()
   {
     String source = "http://www.eclipse.org/emf/2002/Ecore"; //$NON-NLS-1$
-    addAnnotation(this, source, new String[] { "schemaLocation", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Targlets.ecore" //$NON-NLS-1$ //$NON-NLS-2$
+    addAnnotation(this, source, new String[] { "schemaLocation", "https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/models/Targlets.ecore" //$NON-NLS-1$ //$NON-NLS-2$
     });
   }
 
@@ -978,7 +978,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
   {
     String source = "http://www.eclipse.org/oomph/base/LabelProvider"; //$NON-NLS-1$
     addAnnotation(this, source,
-        new String[] { "imageBaseURI", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.targlets.edit/icons/full/obj16" //$NON-NLS-1$ //$NON-NLS-2$
+        new String[] { "imageBaseURI", "https://raw.githubusercontent.com/eclipse-oomph/oomph/master/plugins/org.eclipse.oomph.targlets.edit/icons/full/obj16" //$NON-NLS-1$ //$NON-NLS-2$
         });
   }
 

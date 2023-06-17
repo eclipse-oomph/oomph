@@ -38,7 +38,7 @@
   <discoverablePackage
       href="models/PDE.ecore#/"/>
   <discoverablePackage
-      href="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Predicates.ecore#/"/>
+      href="models/Predicates.ecore#/"/>
   <discoverablePackage
       href="models/Projects.ecore#/"/>
   <discoverablePackage

@@ -187,8 +187,9 @@ public class PreferencesValidator extends EObjectValidator
    * @generated
    * @see #validatePreferenceNodeName_Pattern
    */
+  @SuppressWarnings("nls")
   public static final PatternMatcher[][] PREFERENCE_NODE_NAME__PATTERN__VALUES = new PatternMatcher[][] {
-      new PatternMatcher[] { XMLTypeUtil.createPatternMatcher("[^/]+") } }; //$NON-NLS-1$
+      new PatternMatcher[] { XMLTypeUtil.createPatternMatcher("[^/]+") } };
 
   /**
    * Validates the Pattern constraint of '<em>Preference Node Name</em>'.

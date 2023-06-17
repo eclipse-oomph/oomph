@@ -529,7 +529,7 @@ public class WorkbenchPackageImpl extends EPackageImpl implements WorkbenchPacka
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Create resource
-    createResource("http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Workbench.ecore");
+    createResource("https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/models/Workbench.ecore");
 
     // Create annotations
     // http://www.eclipse.org/emf/2002/Ecore
@@ -553,7 +553,7 @@ public class WorkbenchPackageImpl extends EPackageImpl implements WorkbenchPacka
   protected void createEcoreAnnotations()
   {
     String source = "http://www.eclipse.org/emf/2002/Ecore"; //$NON-NLS-1$
-    addAnnotation(this, source, new String[] { "schemaLocation", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Workbench.ecore" //$NON-NLS-1$ //$NON-NLS-2$
+    addAnnotation(this, source, new String[] { "schemaLocation", "https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/models/Workbench.ecore" //$NON-NLS-1$ //$NON-NLS-2$
     });
   }
 
@@ -582,7 +582,7 @@ public class WorkbenchPackageImpl extends EPackageImpl implements WorkbenchPacka
   {
     String source = "http://www.eclipse.org/oomph/base/LabelProvider"; //$NON-NLS-1$
     addAnnotation(this, source, new String[] { "imageBaseURI", //$NON-NLS-1$
-        "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.workbench.edit/icons/full/obj16" //$NON-NLS-1$
+        "https://raw.githubusercontent.com/eclipse-oomph/oomph/master/plugins/org.eclipse.oomph.setup.workbench.edit/icons/full/obj16" //$NON-NLS-1$
     });
   }
 

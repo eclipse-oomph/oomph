@@ -1240,7 +1240,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
     // Create the editing domain with a special command stack.
     //
-    editingDomain = new AdapterFactoryEditingDomain(adapterFactory, commandStack, new HashMap<Resource, Boolean>());
+    editingDomain = new AdapterFactoryEditingDomain(adapterFactory, commandStack, new HashMap<>());
   }
 
   protected void initializeEditingDomain()

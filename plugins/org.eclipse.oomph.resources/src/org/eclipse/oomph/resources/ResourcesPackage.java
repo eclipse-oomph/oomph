@@ -33,8 +33,8 @@ import org.eclipse.emf.ecore.EReference;
  * <!-- end-user-doc -->
  * @see org.eclipse.oomph.resources.ResourcesFactory
  * @model kind="package"
- *        annotation="http://www.eclipse.org/emf/2002/Ecore schemaLocation='http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Resources.ecore'"
- *        annotation="http://www.eclipse.org/oomph/base/LabelProvider imageBaseURI='http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.resources.edit/icons/full/obj16'"
+ *        annotation="http://www.eclipse.org/emf/2002/Ecore schemaLocation='https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/models/Resources.ecore'"
+ *        annotation="http://www.eclipse.org/oomph/base/LabelProvider imageBaseURI='https://raw.githubusercontent.com/eclipse-oomph/oomph/master/plugins/org.eclipse.oomph.resources.edit/icons/full/obj16'"
  * @generated
  */
 public interface ResourcesPackage extends EPackage

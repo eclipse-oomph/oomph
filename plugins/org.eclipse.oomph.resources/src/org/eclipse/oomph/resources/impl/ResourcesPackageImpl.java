@@ -557,7 +557,7 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
     initEDataType(progressMonitorEDataType, IProgressMonitor.class, "ProgressMonitor", !IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
     // Create resource
-    createResource("http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Resources.ecore");
+    createResource("https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/models/Resources.ecore");
 
     // Create annotations
     // http://www.eclipse.org/emf/2002/Ecore
@@ -577,7 +577,7 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
   protected void createEcoreAnnotations()
   {
     String source = "http://www.eclipse.org/emf/2002/Ecore"; //$NON-NLS-1$
-    addAnnotation(this, source, new String[] { "schemaLocation", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Resources.ecore" //$NON-NLS-1$ //$NON-NLS-2$
+    addAnnotation(this, source, new String[] { "schemaLocation", "https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/models/Resources.ecore" //$NON-NLS-1$ //$NON-NLS-2$
     });
   }
 
@@ -591,7 +591,7 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
   {
     String source = "http://www.eclipse.org/oomph/base/LabelProvider"; //$NON-NLS-1$
     addAnnotation(this, source,
-        new String[] { "imageBaseURI", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.resources.edit/icons/full/obj16" //$NON-NLS-1$ //$NON-NLS-2$
+        new String[] { "imageBaseURI", "https://raw.githubusercontent.com/eclipse-oomph/oomph/master/plugins/org.eclipse.oomph.resources.edit/icons/full/obj16" //$NON-NLS-1$ //$NON-NLS-2$
         });
   }
 

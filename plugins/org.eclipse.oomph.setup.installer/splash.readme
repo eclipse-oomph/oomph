@@ -14,4 +14,4 @@ else, the splash screen will not be displayed on Windows .... apparently a silen
 Also, The bitmap should be saved in 24 bit format (8R, 8G, 8B) for else "funny colors" (such as red instead of blue, or green instead of blue)
 will sometimes appear if the 32 bit format is used, with 8 bits of "transparency".
 
-[1] http://git.eclipse.org/c/platform/eclipse.platform.git/tree/platform/org.eclipse.platform
+[1] https://github.com/eclipse-platform/eclipse.platform/tree/master/platform/org.eclipse.platform

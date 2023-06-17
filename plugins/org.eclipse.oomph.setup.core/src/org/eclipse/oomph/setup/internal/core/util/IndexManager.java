@@ -62,7 +62,7 @@ import java.util.Set;
 public class IndexManager
 {
   private static URI DEFAULT_INDEX_LOCATION = URI
-      .createURI("archive:http://www.eclipse.org/setups/setups.zip!/http/git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/org.eclipse.setup"); //$NON-NLS-1$
+      .createURI("archive:https://www.eclipse.org/setups/setups.zip!/https/raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/org.eclipse.setup"); //$NON-NLS-1$
 
   private final ResourceSet resourceSet = new ResourceSetImpl();
 
@@ -248,7 +248,26 @@ public class IndexManager
       // Redirect the default archive location to this archive's location.
       uriMap.put(SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI, setupArchiveURI);
 
-      for (Map.Entry<String, String> entry : annotation.getDetails())
+      boolean indexProcessed = false;
+      EMap<String, String> details = annotation.getDetails();
+      String indexTargetURI = details.get(SetupContext.INDEX_SETUP_LOCATION_URI.toString());
+      if (indexTargetURI != null && SetupContext.INDEX_SETUP_LOCATION_URI.equals(uriConverter.normalize(SetupContext.INDEX_SETUP_LOCATION_URI)))
+      {
+        URI targtURI = URI.createURI(indexTargetURI);
+        uriMap.put(SetupContext.INDEX_SETUP_LOCATION_URI, targtURI);
+
+        // Map the index location to this location,
+        // map the folder of the index location to this location's folder,
+        // and map the whole index folder to this locations's folder.
+        // This brute force approach is most likely to fully override any mappings that might already be in place in the resource set.
+        uriMap.put(SetupContext.INDEX_SETUP_LOCATION_URI, targtURI);
+        uriMap.put(SetupContext.INDEX_ROOT_LOCATION_URI, targtURI.trimSegments(1).appendSegment("")); //$NON-NLS-1$
+        uriMap.put(SetupContext.INDEX_ROOT_URI, targtURI.trimSegments(1).appendSegment("")); //$NON-NLS-1$
+
+        indexProcessed = true;
+      }
+
+      for (Map.Entry<String, String> entry : details)
       {
         // Add mappings for each entry.
         URI sourceURI = URI.createURI(entry.getKey());
@@ -258,7 +277,7 @@ public class IndexManager
           uriMap.put(sourceURI, targtURI);
 
           // If this is the index resource itself...
-          if (SetupContext.INDEX_SETUP_NAME.equals(sourceURI.lastSegment()))
+          if (!indexProcessed && SetupContext.INDEX_SETUP_NAME.equals(sourceURI.lastSegment()))
           {
             // Map the index location to this location,
             // map the folder of the index location to this location's folder,

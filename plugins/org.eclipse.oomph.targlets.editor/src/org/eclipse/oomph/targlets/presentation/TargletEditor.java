@@ -824,7 +824,7 @@ public class TargletEditor extends MultiPageEditorPart
 
     // Create the editing domain with a special command stack.
     //
-    editingDomain = new OomphEditingDomain(adapterFactory, commandStack, new HashMap<Resource, Boolean>(), OomphTransferDelegate.DELEGATES);
+    editingDomain = new OomphEditingDomain(adapterFactory, commandStack, new HashMap<>(), OomphTransferDelegate.DELEGATES);
   }
 
   /**

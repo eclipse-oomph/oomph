@@ -640,9 +640,9 @@ public class PreferencesPackageImpl extends EPackageImpl implements PreferencesP
   protected void createLabelProviderAnnotations()
   {
     String source = "http://www.eclipse.org/oomph/base/LabelProvider"; //$NON-NLS-1$
-    addAnnotation(this, source,
-        new String[] { "imageBaseURI", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.preferences.edit/icons/full/obj16" //$NON-NLS-1$ //$NON-NLS-2$
-        });
+    addAnnotation(this, source, new String[] { "imageBaseURI", //$NON-NLS-1$
+        "https://raw.githubusercontent.com/eclipse-oomph/oomph/master/plugins/org.eclipse.oomph.preferences.edit/icons/full/obj16" //$NON-NLS-1$
+    });
   }
 
   /**

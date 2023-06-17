@@ -3,7 +3,7 @@
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="targlets" nsURI="http://www.eclipse.org/oomph/setup/targlets/1.0"
     nsPrefix="setup.targlets">
   <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
-    <details key="schemaLocation" value="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupTarglets.ecore"/>
+    <details key="schemaLocation" value="https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/models/SetupTarglets.ecore"/>
   </eAnnotations>
   <eAnnotations source="http://www.eclipse.org/oomph/setup/Enablement">
     <details key="variableName" value="setup.targlets.p2"/>
@@ -11,12 +11,12 @@
     <details key="installableUnits" value="org.eclipse.oomph.targlets.feature.group org.eclipse.oomph.setup.targlets.feature.group"/>
   </eAnnotations>
   <eAnnotations source="http://www.eclipse.org/oomph/base/LabelProvider">
-    <details key="imageBaseURI" value="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.targlets.edit/icons/full/obj16"/>
+    <details key="imageBaseURI" value="https://raw.githubusercontent.com/eclipse-oomph/oomph/master/plugins/org.eclipse.oomph.setup.targlets.edit/icons/full/obj16"/>
   </eAnnotations>
   <eClassifiers xsi:type="ecore:EClass" name="TargletTask" eSuperTypes="http://www.eclipse.org/oomph/setup/1.0#//SetupTask">
     <eAnnotations source="http://www.eclipse.org/oomph/setup/ValidTriggers">
       <details key="triggers" value="STARTUP MANUAL"/>
-      <contents xsi:type="ecore:EReference" name="targlets" upperBound="-1" eType="ecore:EClass http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Targlets.ecore#//Targlet"
+      <contents xsi:type="ecore:EReference" name="targlets" upperBound="-1" eType="ecore:EClass https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/models/Targlets.ecore#//Targlet"
           containment="true"/>
       <contents xsi:type="ecore:EAttribute" name="targletURIs" upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eAnnotations>
@@ -35,7 +35,7 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="targlets" upperBound="-1"
-        eType="ecore:EClass http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Targlets.ecore#//Targlet"
+        eType="ecore:EClass https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/models/Targlets.ecore#//Targlet"
         containment="true">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="name" value="targlet"/>

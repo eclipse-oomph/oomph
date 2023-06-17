@@ -10,8 +10,6 @@
  */
 package org.eclipse.oomph.setup.projectset.provider;
 
-import org.eclipse.oomph.base.BaseFactory;
-import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.setup.projectset.ProjectSetImportTask;
 import org.eclipse.oomph.setup.projectset.ProjectSetPackage;
 import org.eclipse.oomph.setup.provider.SetupTaskItemProvider;
@@ -153,8 +151,6 @@ public class ProjectSetImportTaskItemProvider extends SetupTaskItemProvider
   protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object)
   {
     super.collectNewChildDescriptors(newChildDescriptors, object);
-
-    newChildDescriptors.add(createChildParameter(BasePackage.Literals.MODEL_ELEMENT__ANNOTATIONS, BaseFactory.eINSTANCE.createAnnotation()));
   }
 
   /**

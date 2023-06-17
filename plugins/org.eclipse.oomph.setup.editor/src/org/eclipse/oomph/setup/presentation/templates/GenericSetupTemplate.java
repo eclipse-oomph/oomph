@@ -447,7 +447,7 @@ public class GenericSetupTemplate extends SetupTemplate
       try
       {
         // If that fails, i.e., the index has been replaced by a custom index, try to load directly from Git.
-        URI eclipseProjectCatalogPhysicalURI = URI.createURI("http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/org.eclipse.projects.setup"); //$NON-NLS-1$
+        URI eclipseProjectCatalogPhysicalURI = URI.createURI("https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/org.eclipse.projects.setup"); //$NON-NLS-1$
         input = URIConverter.INSTANCE.createInputStream(eclipseProjectCatalogPhysicalURI);
         Resource eclipseProjectCatalogResource = resourceSet.createResource(eclipseProjectCatalogPhysicalURI);
         eclipseProjectCatalogResource.unload();

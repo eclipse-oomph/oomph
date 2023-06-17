@@ -61,6 +61,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.ListIterator;
@@ -77,6 +78,12 @@ import java.util.zip.ZipFile;
  */
 public class SetupArchiver implements IApplication
 {
+  private static final URI GITHUB_MODELS = URI.createURI("https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/models/"); //$NON-NLS-1$
+
+  private static final URI HTTPS_LEGACY_MODELS = URI.createURI("https://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/"); //$NON-NLS-1$
+
+  private static final URI HTTP_LEGACY_MODELS = URI.createURI("http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/"); //$NON-NLS-1$
+
   @Override
   public Object start(IApplicationContext context)
   {
@@ -229,7 +236,7 @@ public class SetupArchiver implements IApplication
     String url = file.getAbsolutePath();
     if (url.startsWith("/home/data/httpd/")) //$NON-NLS-1$
     {
-      url = "http://" + url.substring("/home/data/httpd/".length()); //$NON-NLS-1$ //$NON-NLS-2$
+      url = "https://" + url.substring("/home/data/httpd/".length()); //$NON-NLS-1$ //$NON-NLS-2$
       System.out.println();
       System.out.println("--> " + url); //$NON-NLS-1$
       System.out.println();
@@ -304,7 +311,8 @@ public class SetupArchiver implements IApplication
       }
     }
 
-    resourceSet.getLoadOptions().put(ECFURIHandlerImpl.OPTION_CACHE_HANDLING, CacheHandling.CACHE_IGNORE);
+    CacheHandling cacheHandling = CacheHandling.valueOf(System.getProperty(ECFURIHandlerImpl.OPTION_CACHE_HANDLING, CacheHandling.CACHE_IGNORE.toString()));
+    resourceSet.getLoadOptions().put(ECFURIHandlerImpl.OPTION_CACHE_HANDLING, cacheHandling);
     resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("svg", new BytesResourceFactoryImpl()); //$NON-NLS-1$
 
     ResourceMirror resourceMirror = new ResourceMirror.WithProductImages(resourceSet)
@@ -436,8 +444,9 @@ public class SetupArchiver implements IApplication
     // We don't want that, so terminate early in that case.
     boolean hasEcoreFailures = false;
     // It appears that someone has manually changed their schemaLocations to use https leading to non-deterministic changes to the setups.zip.
-    uriMap.put(URI.createURI("https://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/"), //$NON-NLS-1$
-        URI.createURI("http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/")); //$NON-NLS-1$
+    uriMap.put(HTTPS_LEGACY_MODELS, GITHUB_MODELS);
+    uriMap.put(HTTP_LEGACY_MODELS, GITHUB_MODELS);
+
     for (Resource resource : resourceSet.getResources())
     {
       URI uri = resource.getURI();
@@ -464,6 +473,12 @@ public class SetupArchiver implements IApplication
             URI schemLocationURI = URI.createURI(schemaLocation);
             if (uriConverter.normalize(schemLocationURI).equals(normalizedURI))
             {
+              URI newSchemaLocation = schemLocationURI.replacePrefix(HTTP_LEGACY_MODELS, GITHUB_MODELS);
+              if (newSchemaLocation != null)
+              {
+                schemLocationURI = newSchemaLocation;
+              }
+
               resource.setURI(schemLocationURI);
               continue;
             }
@@ -490,6 +505,9 @@ public class SetupArchiver implements IApplication
     if (!hasEcoreFailures)
     {
       boolean hasFailures = false;
+
+      Map<Resource, URI> legacyResources = new LinkedHashMap<Resource, URI>();
+
       for (Resource resource : resourceSet.getResources())
       {
         URI uri = resource.getURI();
@@ -524,6 +542,13 @@ public class SetupArchiver implements IApplication
           {
             try
             {
+              URI legacyURI = normalizedURI.replacePrefix(SetupContext.INDEX_ROOT_LOCATION_URI, SetupContext.LEGACY_INDEX_ROOT_LOCATION_URI);
+              if (legacyURI != null)
+              {
+                // Prepare to serialize all the resources hosted by Oomph's setups to the legacy URI as well.
+                legacyResources.put(resource, legacyURI);
+              }
+
               long before = resource.getTimeStamp();
               resource.save(options);
               long after = resource.getTimeStamp();
@@ -543,6 +568,46 @@ public class SetupArchiver implements IApplication
         else
         {
           System.out.println(NLS.bind(Messages.SetupArchiver_Ignoring_message, normalizedURI));
+        }
+      }
+
+      for (Map.Entry<Resource, URI> entry : legacyResources.entrySet())
+      {
+        URI legacyURI = entry.getValue();
+        URI indexURI = legacyURI.replacePrefix(SetupContext.LEGACY_INDEX_ROOT_LOCATION_URI, SetupContext.INDEX_ROOT_URI);
+        uriMap.put(indexURI, legacyURI);
+        entry.getKey().setURI(indexURI);
+      }
+
+      for (Map.Entry<Resource, URI> entry : legacyResources.entrySet())
+      {
+        Resource resource = entry.getKey();
+        URI uri = entry.getValue();
+        String scheme = uri.scheme();
+        URI path = URI.createURI(scheme);
+        path = path.appendSegment(uri.authority());
+        path = path.appendSegments(uri.segments());
+        System.out.println(NLS.bind(Messages.SetupArchiver_MirroringLegacy_message, uri));
+
+        URI output = path.resolve(outputLocation);
+        entryNames.remove(path.toString());
+        uriMap.put(uri, output);
+
+        try
+        {
+          long before = resource.getTimeStamp();
+          resource.save(options);
+          long after = resource.getTimeStamp();
+
+          if (after - before > 0)
+          {
+            System.err.println(NLS.bind(Messages.SetupArchiver_Changed_message, uri));
+          }
+        }
+        catch (IOException ex)
+        {
+          System.err.println(NLS.bind(Messages.SetupArchiver_FailedToSave_message, uri));
+          ex.printStackTrace();
         }
       }
 

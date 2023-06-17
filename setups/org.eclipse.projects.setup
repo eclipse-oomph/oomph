@@ -6,7 +6,7 @@
     xmlns:pde="http://www.eclipse.org/oomph/setup/pde/1.0"
     xmlns:setup="http://www.eclipse.org/oomph/setup/1.0"
     xmlns:setup.targlets="http://www.eclipse.org/oomph/setup/targlets/1.0"
-    xsi:schemaLocation="http://www.eclipse.org/oomph/setup/pde/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/PDE.ecore http://www.eclipse.org/oomph/setup/targlets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupTarglets.ecore"
+    xsi:schemaLocation="http://www.eclipse.org/oomph/setup/pde/1.0 https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/models/PDE.ecore http://www.eclipse.org/oomph/setup/targlets/1.0 https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/models/SetupTarglets.ecore"
     name="org.eclipse"
     label="Eclipse Projects">
   <annotation
@@ -318,8 +318,8 @@
           name="eclipse.git.remoteURIs"
           label="Eclipse Git Repository">
         <choice
-            value="http://git.eclipse.org/gitroot/@{remoteURI}.git"
-            label="HTTP (read-only, anonymous, direct)"/>
+            value="https://git.eclipse.org/gitroot/@{remoteURI}.git"
+            label="HTTPS (read-only, anonymous, direct)"/>
         <choice
             value="ssh://${git.user.id|username}@git.eclipse.org/gitroot/@{remoteURI}.git"
             label="SSH (read-write, direct)">
@@ -365,8 +365,8 @@
               source="http://www.eclipse.org/oomph/setup/MatchChoice"/>
         </choice>
         <choice
-            value="http://git.eclipse.org/gitroot/@{remoteURI}.git"
-            label="HTTP (read-only, anonymous, direct)"/>
+            value="https://git.eclipse.org/gitroot/@{remoteURI}.git"
+            label="HTTPS (read-only, anonymous, direct)"/>
         <description>Choose from the available Git URIs</description>
       </setupTask>
     </setupTask>
@@ -400,8 +400,8 @@
           name="eclipse.git.remoteURIs"
           label="Eclipse Git Repository">
         <choice
-            value="http://git.eclipse.org/gitroot/@{remoteURI}.git"
-            label="HTTP (read-only, anonymous, direct)"/>
+            value="https://git.eclipse.org/gitroot/@{remoteURI}.git"
+            label="HTTPS (read-only, anonymous, direct)"/>
         <choice
             value="ssh://${git.user.id|username}@git.eclipse.org/gitroot/@{remoteURI}.git"
             label="SSH (read-write, direct)">

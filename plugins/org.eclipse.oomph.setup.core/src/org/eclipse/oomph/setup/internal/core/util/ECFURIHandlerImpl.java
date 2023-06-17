@@ -157,9 +157,6 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
 
   private static final int READ_TIMEOUT = PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_ECF_READ_TIMEOUT, 10000);
 
-  private static final URI ACTUAL_INDEX_SETUP_ARCHIVE_LOCATION_URI = URI
-      .createURI(SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI.toString().replace("http:", "https:")); //$NON-NLS-1$ //$NON-NLS-2$
-
   private static boolean loggedBlockedURI;
 
   private static final String USER_AGENT;
@@ -402,8 +399,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
 
   public static URI getCacheFile(URI uri)
   {
-    return CACHE_FOLDER.appendSegment(
-        IOUtil.encodeFileName((SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI.equals(uri) ? ACTUAL_INDEX_SETUP_ARCHIVE_LOCATION_URI : uri).toString()));
+    return CACHE_FOLDER.appendSegment(IOUtil.encodeFileName(uri.toString()));
   }
 
   public static String getETag(URIConverter uriConverter, URI file)
@@ -501,7 +497,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
     synchronized (EXPECTED_ETAGS)
     {
       String result = EXPECTED_ETAGS.get(uri);
-      return result == null && SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI.equals(uri) ? EXPECTED_ETAGS.get(ACTUAL_INDEX_SETUP_ARCHIVE_LOCATION_URI) : result;
+      return result;
     }
   }
 
@@ -1388,7 +1384,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
     public ConnectionHandler(URI uri, Map<?, ?> options) throws IOException
     {
       this.uri = uri;
-      this.originalURI = uri;
+      originalURI = uri;
       this.options = options;
     }
 
@@ -1399,7 +1395,8 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
     {
       // First transform the URI, if necessary, extracting a login URI or form URI if one is needed.
       Map<Object, Object> transformedOptions = new HashMap<>(options);
-      uri = SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI.equals(uri) ? ACTUAL_INDEX_SETUP_ARCHIVE_LOCATION_URI : transform(originalURI, transformedOptions);
+      uri = SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI.equals(uri) ? SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI
+          : transform(originalURI, transformedOptions);
 
       // This is used to prefix all tracing statements.
       tracePrefix = NLS.bind(Messages.ECFURIHandlerImpl_ECFPrefix_message, uri);
@@ -1763,7 +1760,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
 
             if (!CacheHandling.CACHE_IGNORE.equals(cacheHandling) && uriConverter.exists(cacheURI, options)
                 && (!transferListener.hasTransferException() || transferListener.getErrorCode() != HttpURLConnection.HTTP_NOT_FOUND)
-                || uri.equals(ACTUAL_INDEX_SETUP_ARCHIVE_LOCATION_URI) || loginURI != null)
+                || uri.equals(SetupContext.INDEX_SETUP_ARCHIVE_LOCATION_URI) || loginURI != null)
             {
               return handleCache(uriConverter, cacheURI, eTag);
             }

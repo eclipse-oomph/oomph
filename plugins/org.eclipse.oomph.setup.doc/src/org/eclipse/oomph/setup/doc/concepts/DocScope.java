@@ -209,7 +209,7 @@ public class DocScope
        * and the tasks to install the tools needed to work with that particular stream.
        * For example,
        * there is a stream in the Oomph project in the Eclipse project catalog
-       * for provisioning the source code of the Git <a href="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/">master</a> branch of the Oomph project.
+       * for provisioning the source code of the Git <a href="https://github.com/eclipse-oomph/oomph.git/">master</a> branch of the Oomph project.
        */
       public static class DocStream
       {

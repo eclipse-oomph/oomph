@@ -12,14 +12,14 @@
     xmlns:setup.workingsets="http://www.eclipse.org/oomph/setup/workingsets/1.0"
     xmlns:workbench="http://www.eclipse.org/oomph/setup/workbench/1.0"
     xmlns:workingsets="http://www.eclipse.org/oomph/workingsets/1.0"
-    xsi:schemaLocation="http://www.eclipse.org/oomph/setup/git/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Git.ecore http://www.eclipse.org/oomph/setup/jdt/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/JDT.ecore http://www.eclipse.org/oomph/predicates/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Predicates.ecore http://www.eclipse.org/oomph/setup/targlets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupTarglets.ecore http://www.eclipse.org/oomph/setup/workingsets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupWorkingSets.ecore http://www.eclipse.org/oomph/setup/workbench/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Workbench.ecore http://www.eclipse.org/oomph/workingsets/1.0 http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/WorkingSets.ecore"
+    xsi:schemaLocation="http://www.eclipse.org/oomph/setup/git/1.0 https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/models/Git.ecore http://www.eclipse.org/oomph/setup/jdt/1.0 https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/models/JDT.ecore http://www.eclipse.org/oomph/predicates/1.0 https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/models/Predicates.ecore http://www.eclipse.org/oomph/setup/targlets/1.0 https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/models/SetupTarglets.ecore http://www.eclipse.org/oomph/setup/workingsets/1.0 https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/models/SetupWorkingSets.ecore http://www.eclipse.org/oomph/setup/workbench/1.0 https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/models/Workbench.ecore http://www.eclipse.org/oomph/workingsets/1.0 https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/models/WorkingSets.ecore"
     name="oomph"
     label="Oomph">
   <annotation
       source="http://www.eclipse.org/oomph/setup/BrandingInfo">
     <detail
         key="imageURI">
-      <value>http://www.eclipse.org/downloads/images/oomph-42x42.png</value>
+      <value>https://www.eclipse.org/downloads/images/oomph-42x42.png</value>
     </detail>
     <detail
         key="siteURI">
@@ -144,7 +144,7 @@
   <setupTask
       xsi:type="setup:EclipseIniTask"
       option="-Doomph.redirection.setups"
-      value="=http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/->${git.clone.oomph.location|uri}/setups/"
+      value="=https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/->${github.clone.oomph.location|uri}/setups/"
       vm="true">
     <description>Redirect to the development version of the releng setup model.</description>
   </setupTask>
@@ -260,7 +260,7 @@
   <setupTask
       xsi:type="setup:StringSubstitutionTask"
       name="git.clone.oomph"
-      value="${git.clone.oomph.location}">
+      value="${github.clone.oomph.location}">
     <description>The location of Oomph's Git clone.</description>
   </setupTask>
   <setupTask
@@ -296,7 +296,7 @@
   <setupTask
       xsi:type="setup:StringSubstitutionTask"
       name="maven.build.java.home"
-      value="${jre.location-11}">
+      value="${jre.location-17}">
     <description>The location used to specify JAVA_HOME in the External Tools Configurations.</description>
   </setupTask>
   <setupTask
@@ -355,18 +355,18 @@
         location="${jre.location-17}"/>
     <setupTask
         xsi:type="git:GitCloneTask"
-        id="git.clone.oomph"
-        remoteURI="oomph/org.eclipse.oomph"
+        id="github.clone.oomph"
+        remoteURI="eclipse-oomph/oomph"
         checkoutBranch="master">
       <annotation
           source="http://www.eclipse.org/oomph/setup/InducedChoices">
         <detail
             key="inherit">
-          <value>eclipse.git.gerrit.remoteURIs</value>
+          <value>github.remoteURIs</value>
         </detail>
         <detail
             key="label">
-          <value>Oomph Git or Gerrit Repository</value>
+          <value>Oomph GitHub Repository</value>
         </detail>
         <detail
             key="target">
@@ -396,29 +396,29 @@
             source="http:/www.eclipse.org/oomph/targlets/PomModulesUpdater">
           <detail
               key="location">
-            <value>${git.clone.oomph.location/releng/org.eclipse.oomph.parent/plugins/pom.xml}</value>
+            <value>${github.clone.oomph.location/releng/org.eclipse.oomph.parent/plugins/pom.xml}</value>
           </detail>
           <detail
               key="moduleRoots">
-            <value>${git.clone.oomph.location/plugins}</value>
+            <value>${github.clone.oomph.location/plugins}</value>
           </detail>
         </annotation>
         <annotation
             source="http:/www.eclipse.org/oomph/targlets/PomModulesUpdater">
           <detail
               key="location">
-            <value>${git.clone.oomph.location/releng/org.eclipse.oomph.parent/features/pom.xml}</value>
+            <value>${github.clone.oomph.location/releng/org.eclipse.oomph.parent/features/pom.xml}</value>
           </detail>
           <detail
               key="moduleRoots">
-            <value>${git.clone.oomph.location/features}</value>
+            <value>${github.clone.oomph.location/features}</value>
           </detail>
         </annotation>
         <annotation
             source="http:/www.eclipse.org/oomph/targlets/TargetDefinitionGenerator">
           <detail
               key="location">
-            <value>${git.clone.oomph.location/releng/org.eclipse.oomph.parent/tp/org.eclipse.oomph.tp.target}</value>
+            <value>${github.clone.oomph.location/releng/org.eclipse.oomph.parent/tp/org.eclipse.oomph.tp.target}</value>
           </detail>
           <detail
               key="extraUnits">
@@ -455,7 +455,7 @@
             name="org.apache.httpcomponents.httpclient"
             versionRange="[4.5.0,4.6.0)"/>
         <sourceLocator
-            rootFolder="${git.clone.oomph.location}">
+            rootFolder="${github.clone.oomph.location}">
           <predicate
               xsi:type="predicates:NotPredicate">
             <operand

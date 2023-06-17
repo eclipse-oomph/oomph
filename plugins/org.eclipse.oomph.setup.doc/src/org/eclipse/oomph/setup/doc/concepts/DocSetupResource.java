@@ -46,8 +46,8 @@ public abstract class DocSetupResource
   /**
    * Index
    * <p>
-   * The <code><a href="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/org.eclipse.setup">index:/org.eclipse.setup</a></code> resource maintains the {@linkplain DocIndex index},
-   * where <code>index:/</code> is redirected to <code>http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/</code>.
+   * The <code><a href="https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/org.eclipse.setup">index:/org.eclipse.setup</a></code> resource maintains the {@linkplain DocIndex index},
+   * where <code>index:/</code> is redirected to <code>https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/</code>.
    * It generally consists of references to {@link ProductCatalogResource product catalog} resources and {@link ProjectCatalogResource project catalog} resources.
    * {@link #index()}
    * </p>
@@ -66,7 +66,7 @@ public abstract class DocSetupResource
      * <p>
      * A product catalog resource maintains a {@linkplain DocProductCatalog product catalog}.
      * For example,
-     * the <a href="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/org.eclipse.products.setup">Eclipse Products Catalog</a> resource
+     * the <a href="https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/org.eclipse.products.setup">Eclipse Products Catalog</a> resource
      * contains all the products available at Eclipse,
      * i.e., the equivalents of downloading and installing Eclipse packages.
      * Each product catalog resource is generally assumed to contain a {@link org.eclipse.oomph.setup.doc.concepts.DocScope.DocProductCatalog#self self} product catalog
@@ -88,9 +88,9 @@ public abstract class DocSetupResource
      * A project catalog resource maintains a {@linkplain DocProjectCatalog project catalog}.
      * It generally contains references to various separately-maintained {@link ProjectResource project resources}.
      * For example,
-     * the <a href="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/org.eclipse.projects.setup">Eclipse Projects Catalog</a> resource
+     * the <a href="https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/org.eclipse.projects.setup">Eclipse Projects Catalog</a> resource
      * references all the Oomph-enabled Eclipse projects
-     * and the <a href="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/com.github.projects.setup">Github Projects Catalog</a> resource
+     * and the <a href="https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/com.github.projects.setup">Github Projects Catalog</a> resource
      * references all the Oomph-enabled Github projects.
      * Each project catalog resource is generally assumed to maintain a so called &lt;User> project resource.
      * For example,
@@ -108,7 +108,7 @@ public abstract class DocSetupResource
        * A project resource maintains a {@linkplain DocProject project}.
        * Project resources are generally hosted on the Internet or on the local file system.
        * For example
-       * the <a href="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/Oomph.setup">Oomph.setup</a> resource
+       * the <a href="https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/Oomph.setup">Oomph.setup</a> resource
        * contains the {@linkplain DocStream streams} and {@link DocTask tasks} for the Oomph project itself.
        * </p>
        */

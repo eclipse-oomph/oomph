@@ -447,12 +447,12 @@ public abstract class SetupTaskImpl extends ModelElementImpl implements SetupTas
   @Override
   public boolean requires(SetupTask setupTask)
   {
-    return visitPredecessors(setupTask, new HashSet<SetupTask>()) || ((SetupTaskImpl)setupTask).visitSuccessors(this, new HashSet<SetupTask>());
+    return visitPredecessors(setupTask, new HashSet<>()) || ((SetupTaskImpl)setupTask).visitSuccessors(this, new HashSet<>());
   }
 
   public boolean requiresFast(SetupTask setupTask)
   {
-    return visitPredecessorsFast(setupTask, new HashSet<SetupTask>()) || ((SetupTaskImpl)setupTask).visitSuccessorsFast(this, new HashSet<SetupTask>());
+    return visitPredecessorsFast(setupTask, new HashSet<>()) || ((SetupTaskImpl)setupTask).visitSuccessorsFast(this, new HashSet<>());
   }
 
   /**

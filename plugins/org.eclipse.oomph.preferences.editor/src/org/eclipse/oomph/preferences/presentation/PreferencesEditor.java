@@ -782,7 +782,7 @@ public class PreferencesEditor extends MultiPageEditorPart
 
     // Create the editing domain with a special command stack.
     //
-    editingDomain = new AdapterFactoryEditingDomain(adapterFactory, commandStack, new HashMap<Resource, Boolean>());
+    editingDomain = new AdapterFactoryEditingDomain(adapterFactory, commandStack, new HashMap<>());
   }
 
   /**

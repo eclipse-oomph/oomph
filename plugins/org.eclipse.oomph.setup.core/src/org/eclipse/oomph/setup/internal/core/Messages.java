@@ -49,6 +49,8 @@ public class Messages extends NLS
 
   public static String SetupArchiver_Mirroring_message;
 
+  public static String SetupArchiver_MirroringLegacy_message;
+
   public static String SetupArchiver_NoUpdates_message;
 
   public static String SetupArchiver_PreviouslyMirrored_message;

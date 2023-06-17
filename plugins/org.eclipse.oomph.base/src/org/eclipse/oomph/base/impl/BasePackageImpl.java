@@ -482,7 +482,7 @@ public class BasePackageImpl extends EPackageImpl implements BasePackage
   {
     String source = "http://www.eclipse.org/oomph/base/LabelProvider"; //$NON-NLS-1$
     addAnnotation(this, source,
-        new String[] { "imageBaseURI", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.base.edit/icons/full/obj16" //$NON-NLS-1$ //$NON-NLS-2$
+        new String[] { "imageBaseURI", "https://raw.githubusercontent.com/eclipse-oomph/oomph/master/plugins/org.eclipse.oomph.base.edit/icons/full/obj16" //$NON-NLS-1$ //$NON-NLS-2$
         });
   }
 

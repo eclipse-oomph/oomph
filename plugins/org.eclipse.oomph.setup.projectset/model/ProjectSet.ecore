@@ -3,7 +3,7 @@
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="projectset" nsURI="http://www.eclipse.org/oomph/setup/projectset/1.0"
     nsPrefix="projectset">
   <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
-    <details key="schemaLocation" value="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/ProjectSet.ecore"/>
+    <details key="schemaLocation" value="https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/models/ProjectSet.ecore"/>
   </eAnnotations>
   <eAnnotations source="http://www.eclipse.org/oomph/setup/Enablement">
     <details key="variableName" value="setup.projectset.p2"/>
@@ -11,7 +11,7 @@
     <details key="installableUnits" value="org.eclipse.oomph.setup.projectset.feature.group"/>
   </eAnnotations>
   <eAnnotations source="http://www.eclipse.org/oomph/base/LabelProvider">
-    <details key="imageBaseURI" value="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.projectset.edit/icons/full/obj16"/>
+    <details key="imageBaseURI" value="https://raw.githubusercontent.com/eclipse-oomph/oomph/master/plugins/org.eclipse.oomph.setup.projectset.edit/icons/full/obj16"/>
   </eAnnotations>
   <eClassifiers xsi:type="ecore:EClass" name="ProjectSetImportTask" eSuperTypes="../../org.eclipse.oomph.setup/model/Setup.ecore#//SetupTask">
     <eAnnotations source="http://www.eclipse.org/oomph/setup/ValidTriggers">

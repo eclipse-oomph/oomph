@@ -10,8 +10,6 @@
  */
 package org.eclipse.oomph.setup.mylyn.provider;
 
-import org.eclipse.oomph.base.BaseFactory;
-import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.setup.mylyn.MylynFactory;
 import org.eclipse.oomph.setup.mylyn.MylynPackage;
 import org.eclipse.oomph.setup.mylyn.MylynQueriesTask;
@@ -233,8 +231,6 @@ public class MylynQueriesTaskItemProvider extends SetupTaskItemProvider
   protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object)
   {
     super.collectNewChildDescriptors(newChildDescriptors, object);
-
-    newChildDescriptors.add(createChildParameter(BasePackage.Literals.MODEL_ELEMENT__ANNOTATIONS, BaseFactory.eINSTANCE.createAnnotation()));
 
     newChildDescriptors.add(createChildParameter(MylynPackage.Literals.MYLYN_QUERIES_TASK__QUERIES, MylynFactory.eINSTANCE.createQuery()));
   }

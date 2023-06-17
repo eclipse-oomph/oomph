@@ -463,7 +463,7 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Create resource
-    createResource("http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Git.ecore");
+    createResource("https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/models/Git.ecore");
 
     // Create annotations
     // http://www.eclipse.org/emf/2002/Ecore
@@ -516,7 +516,7 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
   {
     String source = "http://www.eclipse.org/oomph/base/LabelProvider"; //$NON-NLS-1$
     addAnnotation(this, source,
-        new String[] { "imageBaseURI", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.git.edit/icons/full/obj16" //$NON-NLS-1$ //$NON-NLS-2$
+        new String[] { "imageBaseURI", "https://raw.githubusercontent.com/eclipse-oomph/oomph/master/plugins/org.eclipse.oomph.setup.git.edit/icons/full/obj16" //$NON-NLS-1$ //$NON-NLS-2$
         });
   }
 
@@ -555,7 +555,7 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
   protected void createEcoreAnnotations()
   {
     String source = "http://www.eclipse.org/emf/2002/Ecore"; //$NON-NLS-1$
-    addAnnotation(this, source, new String[] { "schemaLocation", "http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Git.ecore" //$NON-NLS-1$ //$NON-NLS-2$
+    addAnnotation(this, source, new String[] { "schemaLocation", "https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/models/Git.ecore" //$NON-NLS-1$ //$NON-NLS-2$
     });
   }
 

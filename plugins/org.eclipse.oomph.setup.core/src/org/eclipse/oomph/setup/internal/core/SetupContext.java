@@ -138,11 +138,13 @@ public class SetupContext
 
   public static final URI INDEX_SETUP_URI = INDEX_ROOT_URI.appendSegment(INDEX_SETUP_NAME);
 
-  public static final URI INDEX_ROOT_LOCATION_URI = URI.createURI("http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/"); //$NON-NLS-1$
+  public static final URI INDEX_ROOT_LOCATION_URI = URI.createURI("https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/"); //$NON-NLS-1$
+
+  public static final URI LEGACY_INDEX_ROOT_LOCATION_URI = URI.createURI("http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/"); //$NON-NLS-1$
 
   public static final URI INDEX_SETUP_LOCATION_URI = INDEX_ROOT_LOCATION_URI.trimSegments(1).appendSegment(INDEX_SETUP_NAME);
 
-  public static final URI INDEX_SETUP_ARCHIVE_LOCATION_URI = URI.createURI("http://www.eclipse.org/setups/setups.zip"); //$NON-NLS-1$
+  public static final URI INDEX_SETUP_ARCHIVE_LOCATION_URI = URI.createURI("https://www.eclipse.org/setups/setups.zip"); //$NON-NLS-1$
 
   public static final URI INSTALLATION_SETUP_FILE_NAME_URI = URI.createURI("installation.setup"); //$NON-NLS-1$
 

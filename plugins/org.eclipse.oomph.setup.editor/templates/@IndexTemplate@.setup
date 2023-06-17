@@ -39,35 +39,35 @@
     </content>
   </annotation>
   <discoverablePackage
-      href="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Git.ecore#/"/>
+      href="https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/models/Git.ecore#/"/>
   <discoverablePackage
-      href="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/JDT.ecore#/"/>
+      href="https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/models/JDT.ecore#/"/>
   <discoverablePackage
-      href="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Launching.ecore#/"/>
+      href="https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/models/Launching.ecore#/"/>
   <discoverablePackage
-      href="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Maven.ecore#/"/>
+      href="https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/models/Maven.ecore#/"/>
   <discoverablePackage
-      href="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Mylyn.ecore#/"/>
+      href="https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/models/Mylyn.ecore#/"/>
   <discoverablePackage
-      href="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/PDE.ecore#/"/>
+      href="https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/models/PDE.ecore#/"/>
   <discoverablePackage
-      href="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Predicates.ecore#/"/>
+      href="https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/models/Predicates.ecore#/"/>
   <discoverablePackage
-      href="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Projects.ecore#/"/>
+      href="https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/models/Projects.ecore#/"/>
   <discoverablePackage
-      href="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/ProjectSet.ecore#/"/>
+      href="https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/models/ProjectSet.ecore#/"/>
   <discoverablePackage
-      href="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Resources.ecore#/"/>
+      href="https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/models/Resources.ecore#/"/>
   <discoverablePackage
-      href="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupTarglets.ecore#/"/>
+      href="https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/models/SetupTarglets.ecore#/"/>
   <discoverablePackage
-      href="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/SetupWorkingSets.ecore#/"/>
+      href="https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/models/SetupWorkingSets.ecore#/"/>
   <discoverablePackage
-      href="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Targlets.ecore#/"/>
+      href="https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/models/Targlets.ecore#/"/>
   <discoverablePackage
-      href="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Workbench.ecore#/"/>
+      href="https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/models/Workbench.ecore#/"/>
   <discoverablePackage
-      href="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/WorkingSets.ecore#/"/>
+      href="https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/models/WorkingSets.ecore#/"/>
   <productCatalog
       href="catalog:/self-product-catalog.setup#/"/>
   <productCatalog

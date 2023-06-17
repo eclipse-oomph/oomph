@@ -1801,7 +1801,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
 
         for (int i = prefixMaps.size() - 1; i <= length; ++i)
         {
-          prefixMaps.add(new BasicEList<Map.Entry<URI, PreferenceHandler.Factory>>());
+          prefixMaps.add(new BasicEList<>());
         }
 
         prefixMaps.get(length).add(entry);

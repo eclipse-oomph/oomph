@@ -2,7 +2,7 @@
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="git" nsURI="http://www.eclipse.org/oomph/setup/git/1.0" nsPrefix="git">
   <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
-    <details key="schemaLocation" value="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Git.ecore"/>
+    <details key="schemaLocation" value="https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/models/Git.ecore"/>
   </eAnnotations>
   <eAnnotations source="http://www.eclipse.org/oomph/setup/Enablement">
     <details key="variableName" value="setup.git.p2"/>
@@ -16,7 +16,7 @@
     <details key="releaseTrainAlternate" value="true"/>
   </eAnnotations>
   <eAnnotations source="http://www.eclipse.org/oomph/base/LabelProvider">
-    <details key="imageBaseURI" value="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.git.edit/icons/full/obj16"/>
+    <details key="imageBaseURI" value="https://raw.githubusercontent.com/eclipse-oomph/oomph/master/plugins/org.eclipse.oomph.setup.git.edit/icons/full/obj16"/>
   </eAnnotations>
   <eClassifiers xsi:type="ecore:EClass" name="GitCloneTask" eSuperTypes="../../org.eclipse.oomph.setup/model/Setup.ecore#//SetupTask">
     <eAnnotations source="http://www.eclipse.org/emf/2002/EcoreXXX">

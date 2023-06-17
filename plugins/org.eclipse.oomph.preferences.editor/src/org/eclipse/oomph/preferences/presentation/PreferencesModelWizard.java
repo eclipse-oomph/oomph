@@ -91,8 +91,9 @@ public class PreferencesModelWizard extends Wizard implements INewWizard
    * <!-- end-user-doc -->
    * @generated
    */
-  public static final String FORMATTED_FILE_EXTENSIONS = PreferencesEditorPlugin.INSTANCE.getString("_UI_PreferencesEditorFilenameExtensions") //$NON-NLS-1$
-      .replaceAll("\\s*,\\s*", ", "); //$NON-NLS-1$ //$NON-NLS-2$
+  @SuppressWarnings("nls")
+  public static final String FORMATTED_FILE_EXTENSIONS = PreferencesEditorPlugin.INSTANCE.getString("_UI_PreferencesEditorFilenameExtensions")
+      .replaceAll("\\s*,\\s*", ", ");
 
   /**
    * This caches an instance of the model package.

@@ -3,7 +3,7 @@
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="mylyn" nsURI="http://www.eclipse.org/oomph/setup/mylyn/1.0"
     nsPrefix="mylyn">
   <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
-    <details key="schemaLocation" value="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/models/Mylyn.ecore"/>
+    <details key="schemaLocation" value="https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/models/Mylyn.ecore"/>
   </eAnnotations>
   <eAnnotations source="http://www.eclipse.org/oomph/setup/Enablement">
     <details key="variableName" value="setup.mylyn.p2"/>
@@ -15,7 +15,7 @@
     <details key="repository" value="https://download.eclipse.org/mylyn/releases/latest"/>
   </eAnnotations>
   <eAnnotations source="http://www.eclipse.org/oomph/base/LabelProvider">
-    <details key="imageBaseURI" value="http://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.setup.mylyn.edit/icons/full/obj16"/>
+    <details key="imageBaseURI" value="https://raw.githubusercontent.com/eclipse-oomph/oomph/master/plugins/org.eclipse.oomph.setup.mylyn.edit/icons/full/obj16"/>
   </eAnnotations>
   <eClassifiers xsi:type="ecore:EClass" name="MylynQueriesTask" eSuperTypes="http://www.eclipse.org/oomph/setup/1.0#//SetupTask">
     <eAnnotations source="http://www.eclipse.org/oomph/setup/Enablement">

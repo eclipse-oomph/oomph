@@ -36,7 +36,7 @@ import java.util.WeakHashMap;
  */
 public class PreferencesFactoryImpl extends EFactoryImpl implements PreferencesFactory
 {
-  private Map<String, URI> PREFERENCE_URIS = Collections.synchronizedMap(new WeakHashMap<String, URI>());
+  private Map<String, URI> PREFERENCE_URIS = Collections.synchronizedMap(new WeakHashMap<>());
 
   /**
    * Creates the default factory implementation.

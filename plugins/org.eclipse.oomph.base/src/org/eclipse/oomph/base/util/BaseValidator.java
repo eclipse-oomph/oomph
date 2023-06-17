@@ -288,8 +288,9 @@ public class BaseValidator extends EObjectValidator
    * @generated
    * @see #validateID_Pattern
    */
+  @SuppressWarnings("nls")
   public static final PatternMatcher[][] ID__PATTERN__VALUES = new PatternMatcher[][] {
-      new PatternMatcher[] { XMLTypeUtil.createPatternMatcher("[\\i-[:]][\\c-[:]]*") } }; //$NON-NLS-1$
+      new PatternMatcher[] { XMLTypeUtil.createPatternMatcher("[\\i-[:]][\\c-[:]]*") } };
 
   /**
    * Validates the Pattern constraint of '<em>ID</em>'.

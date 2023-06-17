@@ -370,6 +370,46 @@ public class BaseResourceImpl extends XMIResourceImpl implements org.eclipse.oom
     }
 
     @Override
+    public String getHREF(EObject obj)
+    {
+      InternalEObject o = (InternalEObject)obj;
+
+      URI objectURI = o.eProxyURI();
+      if (objectURI == null)
+      {
+        Resource otherResource = obj.eResource();
+        if (otherResource == null)
+        {
+          if (resource != null && resource.getID(obj) != null)
+          {
+            objectURI = getHREF(resource, obj);
+          }
+          else
+          {
+            objectURI = handleDanglingHREF(obj);
+            if (objectURI == null)
+            {
+              return null;
+            }
+          }
+        }
+        else
+        {
+          objectURI = getHREF(otherResource, obj);
+        }
+      }
+
+      // Don't use relative references to schema locations of packages.
+      String deresovledURI = deresolve(objectURI).toString();
+      if (deresovledURI.startsWith("..") && obj instanceof EPackage) //$NON-NLS-1$
+      {
+        return objectURI.toString();
+      }
+
+      return deresovledURI.toString();
+    }
+
+    @Override
     public String getIDREF(EObject obj)
     {
       if (resource != null)
@@ -417,12 +457,6 @@ public class BaseResourceImpl extends XMIResourceImpl implements org.eclipse.oom
       }
 
       return super.getIDREF(obj);
-    }
-
-    @Override
-    public URI deresolve(URI uri)
-    {
-      return super.deresolve(BaseUtil.resolveBogusURI(uri));
     }
   }
 
