@@ -18,8 +18,11 @@ import org.eclipse.core.internal.registry.osgi.OSGIUtils;
 import org.eclipse.core.runtime.URIUtil;
 import org.eclipse.equinox.internal.p2.core.DefaultAgentProvider;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
+import org.eclipse.equinox.p2.core.IProvisioningAgentProvider;
 
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
 
 import java.io.File;
 import java.net.URI;
@@ -32,10 +35,14 @@ import java.util.Map;
 @SuppressWarnings("restriction")
 public class ProvisioningAgentProvider extends DefaultAgentProvider
 {
+  private BundleContext context;
+
   @Override
   public void activate(BundleContext context)
   {
-    super.activate(org.eclipse.equinox.internal.p2.core.Activator.getContext());
+    this.context = context;
+    Bundle p2core = FrameworkUtil.getBundle(IProvisioningAgentProvider.class);
+    super.activate(p2core.getBundleContext());
   }
 
   @Override
@@ -63,8 +70,7 @@ public class ProvisioningAgentProvider extends DefaultAgentProvider
               {
                 // We'll compute the path relative to the configuration area.
                 // For a read-only installation, this will be a surrogate installation in ~/.eclipse.
-                URI defaultLocation = URIUtil.append(
-                    URIUtil.fromString(org.eclipse.equinox.internal.p2.core.Activator.getContext().getProperty(OSGIUtils.PROP_CONFIG_AREA) + "../p2"), ""); //$NON-NLS-1$ //$NON-NLS-2$
+                URI defaultLocation = URIUtil.append(URIUtil.fromString(context.getProperty(OSGIUtils.PROP_CONFIG_AREA) + "../p2"), ""); //$NON-NLS-1$ //$NON-NLS-2$
 
                 // Replace the bad agent location with this good one.
                 ReflectUtil.setValue("location", org.eclipse.equinox.internal.p2.core.Activator.agentDataLocation, defaultLocation); //$NON-NLS-1$
