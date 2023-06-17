@@ -43,7 +43,7 @@ pipeline {
               ${WORKSPACE}/${ARCHIVE_NAME} \
               -vmargs \
                 -Dfile.encoding=UTF-8 \
-                -Doomph.redirection.oomph.clone=https://raw.githubusercontent.com/eclipse-oomph/oomph/master/->"file:$(pwd)/" \
+                -Doomph.redirection.oomph.clone="https://raw.githubusercontent.com/eclipse-oomph/oomph/master/->file:$PWD/" \
                 -Dorg.eclipse.oomph.setup.internal.core.SetupArchiver.traceEcore=true \
                 -Doomph.setup.ecf.trace=false 2>&1 | tee log
 
