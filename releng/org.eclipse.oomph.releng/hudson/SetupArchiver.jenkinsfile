@@ -101,7 +101,7 @@ pipeline {
             currentBuild.setKeepLog(false);
           }
           env.BUILD_DESCRIPTION = sh(returnStdout: true, script: '''
-            sed "s#\\(https?:[^\\"' ]*\\)#<a href='\\1'>\\1</a>#g; s/&/\\&amp;/g; s/\\$/\\&#x24;/g; s/</\\&lt;/g; s/>/\\&gt;/g;" < changes | sed -z "s/\\n/<br>\\n/g"
+            sed "s#\\(https?:[^\\"' ]*\\)#<a href='\\1'>\\1</a>#g; s/&/\\&amp;/g; s/\\\\$/\\&#x24;/g; s/</\\&lt;/g; s/>/\\&gt;/g;" < changes | sed -z "s/\\n/<br>\\n/g"
             ''').trim()
         }
         buildDescription "${BUILD_DESCRIPTION}"
