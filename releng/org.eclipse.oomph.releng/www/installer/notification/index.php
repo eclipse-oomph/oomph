@@ -184,13 +184,13 @@ $html = <<<EOHTML
           Some projects make it even easier to get started by providing a setup configuration:
           <ul>
             <li>
-            <a href="https://www.eclipse.org/setups/installer/?url=https://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/configurations/OomphConfiguration.setup&show=true" target="_blank">Contribute to Oomph</a>.
+            <a href="https://www.eclipse.org/setups/installer/?url=https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/configurations/OomphConfiguration.setup&show=true" target="_blank">Contribute to Oomph</a>.
             </li>
             <li>
-            <a href="https://www.eclipse.org/setups/installer/?url=https://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/interim/PlatformSDKConfiguration.setup&show=true" target="_blank">Contribute to the Eclipse Platform</a>.
+            <a href="https://www.eclipse.org/setups/installer/?url=https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.releng.aggregator/master/oomph/PlatformSDKConfiguration.setup&show=true" target="_blank">Contribute to the Eclipse Platform</a>.
             </li>
             <li>
-            <a href="https://www.eclipse.org/setups/installer/?url=https://git.eclipse.org/c/emf/org.eclipse.emf.git/plain/releng/org.eclipse.emf.releng/EMFDevelopmentEnvironmentConfiguration.setup&show=true&show=true" target="_blank">Contribute to the Eclipse Modeling Framework</a>.
+            <a href="https://www.eclipse.org/setups/installer/?url=https://raw.githubusercontent.com/eclipse-emf/org.eclipse.emf/master/releng/org.eclipse.emf.releng/EMFDevelopmentEnvironmentConfiguration.setup&show=true&show=true" target="_blank">Contribute to the Eclipse Modeling Framework</a>.
             </li>
           </ul>
           </li>

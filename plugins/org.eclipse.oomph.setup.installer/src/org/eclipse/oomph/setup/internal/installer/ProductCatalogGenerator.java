@@ -2124,11 +2124,11 @@ public class ProductCatalogGenerator implements IApplication
       final String branch = stagingTrain != null && i == trains.length - 1 || fakeNextRelease && i == trains.length - 2 ? "master"
           : trains[i].startsWith("20") ? trains[i] + "_R" : trains[i].toUpperCase();
 
-      String url = "https://git.eclipse.org/c/epp/org.eclipse.epp.packages.git/plain/packages/org.eclipse.epp.package." + name + ".feature/epp.website.xml"
-          + "?h=" + branch;
+      String url = "https://raw.githubusercontent.com/eclipse-packaging/packages/" + branch + "/packages/org.eclipse.epp.package." + name
+          + ".feature/epp.website.xml";
       try
       {
-        in = new URL(url).openStream();
+        in = uriConverter.createInputStream(URI.createURI(url));
         log.append(url).append('\n');
 
         DocumentBuilder documentBuilder = XMLUtil.createDocumentBuilder();
@@ -2224,8 +2224,15 @@ public class ProductCatalogGenerator implements IApplication
       }
       catch (Exception ex)
       {
-        ex.printStackTrace();
-        System.err.println("url=" + url);
+        if (ex.getMessage().contains("File not found"))
+        {
+          log.append(ex.getMessage()).append(" (FAILED)\n");
+        }
+        else
+        {
+          ex.printStackTrace();
+          System.err.println("url=" + url);
+        }
       }
       finally
       {
@@ -2246,12 +2253,10 @@ public class ProductCatalogGenerator implements IApplication
       return;
     }
 
-    // imageURI = IOUtil.encodeImageData(imageURI);
-
     EMap<String, String> brandingInfos = getBrandingInfos(product);
     if (!brandingInfos.containsKey(AnnotationConstants.KEY_IMAGE_URI))
     {
-      brandingInfos.put(AnnotationConstants.KEY_IMAGE_URI, imageURI);
+      brandingInfos.put(AnnotationConstants.KEY_IMAGE_URI, imageURI.replaceAll("^http:", "https:"));
     }
   }
 

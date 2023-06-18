@@ -145,7 +145,7 @@ $Nav->addCustomNav("Get an Account", "https://accounts.eclipse.org/user/register
 $Nav->addCustomNav("Sign the Contributor Agreement", "https://accounts.eclipse.org/user/eca", "_blank", 1);
 $Nav->addCustomNav("Configure Your Gerrit Account", "https://wiki.eclipse.org/Gerrit#User_Account", "_blank", 1);
 $Nav->addCustomNav("Learn Bugzilla", "https://wiki.eclipse.org/Bug_Reporting_FAQ", "_blank", 1);
-$Nav->addCustomNav("Contribute to the Platform", "https://www.eclipse.org/setups/installer/?url=https://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/interim/PlatformSDKConfiguration.setup&show=true", "_blank", 1);
+$Nav->addCustomNav("Contribute to the Platform", "https://www.eclipse.org/setups/installer/?url=https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.releng.aggregator/master/oomph/PlatformSDKConfiguration.setup&show=true", "_blank", 1);
 
 $branding_image = "https://www.eclipse.org/downloads/images/committers.png";
 if ($scope == "Eclipse IDE for C/C++ Developers")
@@ -308,13 +308,13 @@ $html = <<<EOHTML
           Some projects make it even easier to get started by providing a setup configuration:
           <ul>
             <li>
-            <a href="https://www.eclipse.org/setups/installer/?url=https://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/interim/PlatformSDKConfiguration.setup&show=true" target="_blank">Contribute to the Eclipse Platform</a>.
+            <a href="https://www.eclipse.org/setups/installer/?url=https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.releng.aggregator/master/oomph/PlatformSDKConfiguration.setup&show=true" target="_blank">Contribute to the Eclipse Platform</a>.
             </li>
             <li>
-            <a href="https://www.eclipse.org/setups/installer/?url=https://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/setups/configurations/OomphConfiguration.setup&show=true" target="_blank">Contribute to Oomph</a>.
+            <a href="https://www.eclipse.org/setups/installer/?url=https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/configurations/OomphConfiguration.setup&show=true" target="_blank">Contribute to Oomph</a>.
             </li>
             <li>
-            <a href="https://www.eclipse.org/setups/installer/?url=https://git.eclipse.org/c/emf/org.eclipse.emf.git/plain/releng/org.eclipse.emf.releng/EMFDevelopmentEnvironmentConfiguration.setup&show=true&show=true" target="_blank">Contribute to the Eclipse Modeling Framework</a>.
+            <a href="https://www.eclipse.org/setups/installer/?url=https://raw.githubusercontent.com/eclipse-emf/org.eclipse.emf/master/releng/org.eclipse.emf.releng/EMFDevelopmentEnvironmentConfiguration.setup&show=true&show=true" target="_blank">Contribute to the Eclipse Modeling Framework</a>.
             </li>
           </ul>
           </li>

@@ -54,7 +54,7 @@ if [[ $file == *.tar.gz ]]; then
     chmod -R a-st "Eclipse Installer.app"
     zip -r -q unsigned.zip "Eclipse Installer.app"
     rm -rf "Eclipse Installer.app"
-    curl -O https://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/releng/org.eclipse.oomph.releng/hudson/installer.entitlements
+    curl -O https://raw.githubusercontent.com/eclipse-oomph/oomph/master/releng/org.eclipse.oomph.releng/hudson/installer.entitlements
     curl -o signed.zip -F file=@unsigned.zip -F entitlements=@installer.entitlements http://172.30.206.146:8282/macosx-signing-service/1.0.1-SNAPSHOT
     unzip -qq signed.zip
     rm -f unsigned.zip signed.zip
@@ -88,7 +88,7 @@ elif [[ $file == *.exe ]]; then
 
   # Don't use the already signed extractor.exe but rather the one directly from git.
   # Otherwise signing will fail.
-  curl -O https://git.eclipse.org/c/oomph/org.eclipse.oomph.git/plain/plugins/org.eclipse.oomph.extractor/extractor-64.exe
+  curl -O https://github.com/eclipse-oomph/oomph/raw/master/plugins/org.eclipse.oomph.extractor/extractor-64.exe
 
   cat extractor-64.exe \
     $concatdir/marker.txt \
