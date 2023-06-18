@@ -315,6 +315,10 @@ public class SetupArchiver implements IApplication
     resourceSet.getLoadOptions().put(ECFURIHandlerImpl.OPTION_CACHE_HANDLING, cacheHandling);
     resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("svg", new BytesResourceFactoryImpl()); //$NON-NLS-1$
 
+    Map<URI, URI> uriMap = uriConverter.getURIMap();
+    uriMap.put(HTTPS_LEGACY_MODELS, GITHUB_MODELS);
+    uriMap.put(HTTP_LEGACY_MODELS, GITHUB_MODELS);
+
     ResourceMirror resourceMirror = new ResourceMirror.WithProductImages(resourceSet)
     {
       @Override
@@ -418,7 +422,6 @@ public class SetupArchiver implements IApplication
 
     ECFURIHandlerImpl.clearExpectedETags();
 
-    Map<URI, URI> uriMap = uriConverter.getURIMap();
     Map<Object, Object> options = new HashMap<>();
     if (lastModified != 0)
     {
@@ -443,9 +446,6 @@ public class SetupArchiver implements IApplication
     // If Ecore models fail to load correctly, the org.eclipse.setup will resolve the package proxies incorrectly and will look changed.
     // We don't want that, so terminate early in that case.
     boolean hasEcoreFailures = false;
-    // It appears that someone has manually changed their schemaLocations to use https leading to non-deterministic changes to the setups.zip.
-    uriMap.put(HTTPS_LEGACY_MODELS, GITHUB_MODELS);
-    uriMap.put(HTTP_LEGACY_MODELS, GITHUB_MODELS);
 
     for (Resource resource : resourceSet.getResources())
     {
@@ -526,7 +526,7 @@ public class SetupArchiver implements IApplication
 
           URI output = path.resolve(outputLocation);
           entryNames.remove(path.toString());
-          uriMap.put(uri, output);
+          URI old = uriMap.put(uri, output);
 
           if (resource.getContents().isEmpty() || !resource.getErrors().isEmpty())
           {
@@ -564,6 +564,8 @@ public class SetupArchiver implements IApplication
               ex.printStackTrace();
             }
           }
+
+          uriMap.put(uri, old);
         }
         else
         {
@@ -574,9 +576,12 @@ public class SetupArchiver implements IApplication
       for (Map.Entry<Resource, URI> entry : legacyResources.entrySet())
       {
         URI legacyURI = entry.getValue();
-        URI indexURI = legacyURI.replacePrefix(SetupContext.LEGACY_INDEX_ROOT_LOCATION_URI, SetupContext.INDEX_ROOT_URI);
-        uriMap.put(indexURI, legacyURI);
-        entry.getKey().setURI(indexURI);
+        if (!"ecore".equals(legacyURI.fileExtension())) //$NON-NLS-1$
+        {
+          URI indexURI = legacyURI.replacePrefix(SetupContext.LEGACY_INDEX_ROOT_LOCATION_URI, SetupContext.INDEX_ROOT_URI);
+          uriMap.put(indexURI, legacyURI);
+          entry.getKey().setURI(indexURI);
+        }
       }
 
       for (Map.Entry<Resource, URI> entry : legacyResources.entrySet())
@@ -591,6 +596,7 @@ public class SetupArchiver implements IApplication
 
         URI output = path.resolve(outputLocation);
         entryNames.remove(path.toString());
+        uriMap.put(resource.getURI(), output);
         uriMap.put(uri, output);
 
         try

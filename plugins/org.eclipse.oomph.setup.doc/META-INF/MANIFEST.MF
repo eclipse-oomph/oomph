@@ -34,7 +34,7 @@ Require-Bundle: org.eclipse.help;bundle-version="[3.3.0,4.0.0)";resolution:=opti
  org.eclipse.oomph.setup.projectset.edit;bundle-version="[1.14.0,2.0.0)";resolution:=optional;visibility:=reexport,
  org.eclipse.oomph.setup.targlets;bundle-version="[1.16.0,2.0.0)";resolution:=optional;visibility:=reexport,
  org.eclipse.oomph.setup.targlets.edit;bundle-version="[1.14.0,2.0.0)";resolution:=optional;visibility:=reexport,
- org.eclipse.oomph.setup.ui;bundle-version="[1.26.0,2.0.0)";resolution:=optional;visibility:=reexport,
+ org.eclipse.oomph.setup.ui;bundle-version="[1.27.0,2.0.0)";resolution:=optional;visibility:=reexport,
  org.eclipse.oomph.setup.ui.ide;bundle-version="[1.12.0,2.0.0)";resolution:=optional;visibility:=reexport,
  org.eclipse.oomph.setup.workbench;bundle-version="[1.15.0,2.0.0)";resolution:=optional;visibility:=reexport,
  org.eclipse.oomph.setup.workbench.edit;bundle-version="[1.14.0,2.0.0)";resolution:=optional;visibility:=reexport,
