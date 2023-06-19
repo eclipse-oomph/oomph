@@ -161,18 +161,6 @@ $html = <<<EOHTML
         If you haven't already signed your Eclipse Contributor Agreement, <a href="https://accounts.eclipse.org/user/eca" target="_blank">sign</a> now.
         </li>
         <li>
-        If you haven't already set up your Eclipse Gerrit Account, <a href="https://wiki.eclipse.org/Gerrit#User_Account" target="_blank">set it up</a> now.
-        </li>
-        <li>
-        If you're not familiar with Bugzilla, 
-        learn <a href="http://wiki.eclipse.org/Bug_Reporting_FAQ" target="_blank">how to use Bugzilla</a> 
-        and learn how Buzilla fits into the <a href="http://wiki.eclipse.org/Development_Resources/HOWTO/Bugzilla_Use" target="_blank">development process</a>.
-        </li>
-        <li>
-        If you don't have a particular problem or enhancment in mind, 
-        look at the <a href="https://bugs.eclipse.org/bugs/buglist.cgi?bug_status=NEW&bug_status=REOPENED&keywords=helpwanted" target="_blank">Bugzilla reports for which help is wanted</a>.
-        </li>
-        <li>
         You'll need to set up a development environment with the workspace provisioned to include the Git repositories of the projects to which you wish to contribute.
         <ul>
           <li>

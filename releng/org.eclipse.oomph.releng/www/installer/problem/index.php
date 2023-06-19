@@ -29,8 +29,8 @@ $eclipse_installer = '<span style="color: #2c2255; font-family: Arial, Helvetica
 $version = $_GET["version"];
 $version_label = "";
 $version_parameter = "";
-$bugzilla_version = "";
-$bugzilla_short_desc = "&short_desc=Installer";
+$installer_version = "";
+$installer_short_desc = "Problem with Installer+";
 if (!$version)
 {
   $version = "Self Hosting";
@@ -41,16 +41,19 @@ else
   $version_parameter = "?version=" . $version;
   if (preg_match('/([0-9.]+)( Build ([0-9]+))?/', $version, $match))
   {
-    $bugzilla_version = "&version=" . $match[1];
+    $installer_version = " Version+" . $match[1];
     if (count($match) == 4)
     {
-      $bugzilla_short_desc .= " Build " . $match[3];
+      $installer_short_desc .= "Build " . $match[3];
     }
   }
 }
 
-$bugzilla = htmlEntities("https://bugs.eclipse.org/bugs/enter_bug.cgi?product=Oomph&component=Setup" . $bugzilla_version . $bugzilla_short_desc);
 $question = htmlEntities("../question/$version_parameter");
+$body= "&body=" . htmlEntities(urlencode("I have first considered [asking a question](https://www.eclipse.org/setups/installer/question?version=" . urlencode($version). ").\n\n". 
+  " I understand that without details about the problem and how to reproduce then problem, no one can fix a problem for me.  Therefore I have attached log details and screen captures below:\n```\nLog Details...\n```\n"));
+
+$issue = htmlEntities("https://github.com/eclipse-oomph/oomph/issues/new?title=" . $installer_short_desc . $installer_version . $body);
 
 # Add page-specific Nav bars here
 # Format is Link text, link URL (can be http://www.someothersite.com/), target (_self, _blank), level (1, 2 or 3)
@@ -64,7 +67,7 @@ $question = htmlEntities("../question/$version_parameter");
  $Nav->addNavSeparator("Community", "");
  $Nav->addCustomNav("Get an Eclipse Account", "https://accounts.eclipse.org/user/register", "_blank", 1);
  $Nav->addCustomNav("Ask a Question", $question, "_self", 1);
- $Nav->addCustomNav("Report a Problem", $bugzilla, "_blank", 1);
+ $Nav->addCustomNav("Report a Problem", $issue, "_blank", 1);
  $Nav->addCustomNav("<span class='fa fa-star'></span> Like", "../notification/$version_parameter", "_self", 1);
  $Nav->addNavSeparator("Download", "");
  $Nav->addCustomNav("Eclipse Installers", "https://wiki.eclipse.org/Eclipse_Installer", "_blank", 1);
@@ -82,7 +85,7 @@ $html = <<<EOHTML
 
     <br/>
     <p>
-    Before <a href="$bugzilla">reporting a problem</a>,
+    Before <a href="$issue">reporting a problem</a>,
     please consider <a href="$question">asking a question</a> instead.
     Of course it's a good idea to read the <a href="https://www.eclipse.org/downloads/packages/installer" target="oomph_instructions">general instructions</a> for how to use the $eclipse_installer before doing either.
     </p>
@@ -90,10 +93,6 @@ $html = <<<EOHTML
     Keep in mind that we cannot fix the network. 
     Networks and servers can and do fail and this is beyound our control.
     </p>
-    <p>
-    You will need an <b><a href="https://accounts.eclipse.org/user/register" target="_blank">Eclipse Account</a></b> to report problems via <a href="$bugzilla" target="_blank">Bugzilla</a>.
-    </p>
-    
     <p>
     Please provide as much detail as possible.
     I.e., include screen captures and/or attach log details, as well as information about your operating system version.

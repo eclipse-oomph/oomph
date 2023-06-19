@@ -49,7 +49,7 @@ else
  $Nav->addCustomNav("Eclipse Installer", "https://wiki.eclipse.org/Eclipse_Installer", "_blank", 1);
  $Nav->addNavSeparator("Community", "");
  $Nav->addCustomNav("Get an Eclipse Account", "https://accounts.eclipse.org/user/register", "_blank", 1);
- $Nav->addCustomNav("Ask a Question", "https://www.eclipse.org/forums/index.php/f/287/", "_self", 1);
+ $Nav->addCustomNav("Ask a Question", "https://github.com/eclipse-oomph/oomph/discussions", "_self", 1);
  $Nav->addCustomNav("Report a Problem", "../problem/$version_parameter", "_self", 1);
  $Nav->addCustomNav("<span class='fa fa-star'></span> Like", "../notification/$version_parameter", "_self", 1);
  $Nav->addNavSeparator("Download", "");
@@ -68,7 +68,7 @@ $html = <<<EOHTML
 
     <br/>
     <p>
-    Before asking a question on the <a href="https://www.eclipse.org/forums/index.php/f/287/">Oomph forum</a>,
+    Before asking a question on the <a href="https://github.com/eclipse-oomph/oomph/discussions/">Oomph Discussions</a>,
     please read the <a href="https://www.eclipse.org/downloads/packages/installer">general instructions</a> for how to use the $eclipse_installer.
     While it's true that there's <a href="https://en.wikipedia.org/wiki/No_such_thing_as_a_stupid_question">no such thing as a stupid question</a>,
     good answers nevertheless depend on the <a href="https://stackoverflow.com/help/how-to-ask">quality of the question</a>.

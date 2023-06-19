@@ -143,8 +143,6 @@ $Nav->addCustomNav("Start a Project", "https://www.eclipse.org/projects/handbook
 $Nav->addNavSeparator("Invest Your Time", "");
 $Nav->addCustomNav("Get an Account", "https://accounts.eclipse.org/user/register", "_blank", 1);
 $Nav->addCustomNav("Sign the Contributor Agreement", "https://accounts.eclipse.org/user/eca", "_blank", 1);
-$Nav->addCustomNav("Configure Your Gerrit Account", "https://wiki.eclipse.org/Gerrit#User_Account", "_blank", 1);
-$Nav->addCustomNav("Learn Bugzilla", "https://wiki.eclipse.org/Bug_Reporting_FAQ", "_blank", 1);
 $Nav->addCustomNav("Contribute to the Platform", "https://www.eclipse.org/setups/installer/?url=https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.releng.aggregator/master/oomph/PlatformSDKConfiguration.setup&show=true", "_blank", 1);
 
 $branding_image = "https://www.eclipse.org/downloads/images/committers.png";
@@ -283,18 +281,6 @@ $html = <<<EOHTML
         </li>
         <li>
         If you haven't already signed your Eclipse Contributor Agreement, <a href="https://accounts.eclipse.org/user/eca" target="_blank">sign</a> now.
-        </li>
-        <li>
-        If you haven't already set up your Eclipse Gerrit Account, <a href="https://wiki.eclipse.org/Gerrit#User_Account" target="_blank">set it up</a> now.
-        </li>
-        <li>
-        If you're not familiar with Bugzilla,
-        learn <a href="https://wiki.eclipse.org/Bug_Reporting_FAQ" target="_blank">how to use Bugzilla</a>
-        and learn how Buzilla fits into the <a href="https://wiki.eclipse.org/Development_Resources/HOWTO/Bugzilla_Use" target="_blank">development process</a>.
-        </li>
-        <li>
-        If you don't have a particular problem or enhancment in mind,
-        look at the <a href="https://bugs.eclipse.org/bugs/buglist.cgi?bug_status=NEW&bug_status=REOPENED&keywords=helpwanted" target="_blank">Bugzilla reports for which help is wanted</a>.
         </li>
         <li>
         You'll need to set up a development environment with the workspace provisioned to include the Git repositories of the projects to which you wish to contribute.
