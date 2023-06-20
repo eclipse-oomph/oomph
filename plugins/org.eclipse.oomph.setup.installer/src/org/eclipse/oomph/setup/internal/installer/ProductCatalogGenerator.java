@@ -1653,6 +1653,19 @@ public class ProductCatalogGenerator implements IApplication
       p2Task.getRepositories().add(emfRepository);
     }
 
+    if (ECLIPSE_PLATFORM_SDK_PRODUCT_ID.equals(productName))
+    {
+      for (Repository repository : p2Task.getRepositories())
+      {
+        if (repository.getURL().contains("I-builds"))
+        {
+          Repository oomphNightlyBuildRepository = P2Factory.eINSTANCE.createRepository("https://download.eclipse.org/oomph/updates/latest");
+          p2Task.getRepositories().add(oomphNightlyBuildRepository);
+          break;
+        }
+      }
+    }
+
     productVersion.getSetupTasks().add(p2Task);
 
     String idPrefix = "tooling" + (SPECIAL_PRODUCT_IDS.contains(productName) || ALL_PRODUCT_ID.equals(productName) ? "epp.package.java"
