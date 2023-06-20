@@ -20,8 +20,8 @@
   </parent>
   <groupId>org.eclipse.oomph</groupId>
   <artifactId>org.eclipse.oomph.p2.tests</artifactId>
-  <version>1.14.0-SNAPSHOT</version>
-  <packaging>eclipse-plugin</packaging>
+  <version>1.15.0-SNAPSHOT</version>
+  <packaging>eclipse-test-plugin</packaging>
 
   <build>
     <resources>
@@ -33,6 +33,15 @@
         </includes>
       </resource>
     </resources>
+    <plugins>
+      <plugin>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>tycho-surefire-plugin</artifactId>
+        <version>${tycho-version}</version>
+        <configuration>
+          <argLine>-Dp2.httpRule=allow -Declipse.p2.mirrors=false</argLine>
+        </configuration>
+      </plugin>
+    </plugins>
   </build>
-
 </project>

@@ -137,8 +137,8 @@ public abstract class AbstractP2Test extends AbstractTest
   {
     mirror("https://download.eclipse.org/modeling/emf/cdo/drops/R20130918-0029", CDO_OLD, CDO_FILTER);
     mirror("https://download.eclipse.org/modeling/emf/cdo/drops/R20140218-1655", CDO_NEW, CDO_FILTER);
-    mirror("https://download.eclipse.org/eclipse/updates/4.3/R-4.3.1-201309111000", PLATFORM_OLD, PLATFORM_FILTER);
-    mirror("https://download.eclipse.org/eclipse/updates/4.3/R-4.3.2-201402211700", PLATFORM_NEW, PLATFORM_FILTER);
+    mirror("https://download.eclipse.org/eclipse/updates/4.28/R-4.28-202306050440", PLATFORM_OLD, PLATFORM_FILTER);
+    mirror("https://download.eclipse.org/eclipse/updates/4.27/R-4.27-202303020300", PLATFORM_NEW, PLATFORM_FILTER);
   }
 
   private static void mirror(String repo, File local, VersionedIdFilter filter) throws Exception

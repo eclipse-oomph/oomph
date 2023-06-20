@@ -62,6 +62,7 @@ public class TransportTests extends AbstractP2Test
   public static void setUpBeforeClass() throws Exception
   {
     httpServer = new HTTPServer(2345, 5000);
+    AbstractP2Test.setUpBeforeClass();
   }
 
   @AfterClass

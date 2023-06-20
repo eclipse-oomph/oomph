@@ -10,7 +10,12 @@
  */
 package org.eclipse.oomph.setup.installer.tests;
 
+import static org.junit.Assert.assertTrue;
+
 import org.eclipse.oomph.ui.tests.AbstractUITest;
+
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotButton;
 
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -27,6 +32,7 @@ public class InstallerTests extends AbstractUITest
   @Override
   public void setUp() throws Exception
   {
+
     super.setUp();
 
     File userHome = getUserHome();
@@ -36,29 +42,18 @@ public class InstallerTests extends AbstractUITest
   @Test
   public void test1()
   {
-    // SWTBotShell shell = bot.activeShell();
-    //
-    // // Create a project
-    // bot.menu("File").menu("New").menu("Project...").click();
-    // bot.shell("New Project").activate();
-    // bot.tree().expandNode("General").select("Project");
-    // bot.button("Next >").click();
-    // bot.textWithLabel("Project name:").setText("test project");
-    // bot.button("Finish").click();
-    // shell.activate();
+    bot.treeWithId("productTree").getTreeItem("Eclipse.org").getNode("Eclipse Platform").select();
+    bot.comboBox().setSelection("2023-09");
 
-    // Widget widget = bot.widget(withId("productTree"));
+    bot.button("Next >").click();
+    bot.button("Next >").click();
+    bot.button("Next >").click();
 
-    bot.treeWithId("productTree").getTreeItem("Eclipse.org").getNode("Eclipse IDE for Java Developers").select();
-    bot.comboBox().setSelection("Latest (Mars)");
-    // bot.toolbarButtonWithTooltip("Manage Virtual Machines...").click();
-    // bot.tree().getTreeItem("System").getNode("C:\\Program Files\\Java\\jdk1.7.0_75\\jre (Current)").select();
-    // bot.button("OK").click();
-    bot.button("Next >").click();
-    bot.button("Next >").click();
-    // bot.textWithLabel("Installation folder name:").setText("java-latest2");
-    bot.button("Next >").click();
-    bot.button("Finish").click();
-    bot.checkBox("Launch automatically").click();
+    assertTrue("The finish button should be enabled", bot.button("Finish").isEnabled());
+
+    SWTBotButton cancelButton = bot.button("Cancel");
+    Display.getDefault().asyncExec(() -> {
+      cancelButton.click();
+    });
   }
 }

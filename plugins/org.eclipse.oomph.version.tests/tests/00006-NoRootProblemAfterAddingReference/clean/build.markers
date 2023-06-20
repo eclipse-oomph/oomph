@@ -6,3 +6,4 @@ Marker
   <message>   = Plug-in 'com.foo.project1' is not referenced by any other feature
   problemType = unreferenced.element
   FIX = Mark as root project (Add 'com.foo.project1' to the root.projects property of /com.foo.releng/release.properties)
+  FIX = Ignore root components for release (Configure '/com.foo.releng/release.xml' to stop checking that non-root elements are referenced by a root element. To re-enable this checking, use the Preferences dialog to manage the release check mode.)

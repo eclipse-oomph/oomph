@@ -24,6 +24,7 @@ import org.eclipse.oomph.targlets.Targlet;
 import org.eclipse.oomph.targlets.TargletFactory;
 import org.eclipse.oomph.targlets.core.ITargletContainer;
 import org.eclipse.oomph.targlets.internal.core.TargletContainer;
+import org.eclipse.oomph.targlets.internal.core.WorkspaceIUImporter;
 import org.eclipse.oomph.util.pde.TargetPlatformRunnable;
 import org.eclipse.oomph.util.pde.TargetPlatformUtil;
 
@@ -33,6 +34,8 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.equinox.frameworkadmin.BundleInfo;
 import org.eclipse.pde.core.target.ITargetDefinition;
 import org.eclipse.pde.core.target.ITargetHandle;
@@ -50,6 +53,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * @author Eike Stepper
@@ -104,8 +108,8 @@ public class TargletTests extends AbstractP2Test
 
   private static void assertImportedProjects(String... names)
   {
-    Set<String> expected = new HashSet<>(Arrays.asList(names));
-    Set<String> actual = new HashSet<>();
+    Set<String> expected = new TreeSet<>(Arrays.asList(names));
+    Set<String> actual = new TreeSet<>();
 
     IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
     for (IProject project : projects)
@@ -207,11 +211,13 @@ public class TargletTests extends AbstractP2Test
 
     Targlet targlet = setTarglet(null, requirements);
     assertTargetPlatform();
+    Job.getJobManager().join(WorkspaceIUImporter.WORKSPACE_IU_IMPORT_FAMILY, new NullProgressMonitor());
     assertImportedProjects("com.foo.project1-feature", "com.foo.project1", "com.foo.license-feature");
 
     targlet.getRequirements().add(P2Factory.eINSTANCE.createRequirement("com.foo.releng"));
     setTarglet(targlet);
     assertTargetPlatform();
+    Job.getJobManager().join(WorkspaceIUImporter.WORKSPACE_IU_IMPORT_FAMILY, new NullProgressMonitor());
     assertImportedProjects("com.foo.project1-feature", "com.foo.project1", "com.foo.license-feature", "com.foo.releng");
   }
 }

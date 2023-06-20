@@ -23,13 +23,17 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.IWorkspaceDescription;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.pde.core.plugin.IPluginModelBase;
 import org.eclipse.ui.IMarkerResolution;
 import org.eclipse.ui.IMarkerResolution2;
 
@@ -142,7 +146,12 @@ public class VersionBuilderExecutor extends TestCase
 
   private void clearWorkspace() throws Throwable
   {
-    WORKSPACE.getDescription().setAutoBuilding(false);
+    IWorkspaceDescription description = WORKSPACE.getDescription();
+    description.setAutoBuilding(false);
+    WORKSPACE.setDescription(description);
+
+    Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_BUILD, new NullProgressMonitor());
+
     ResourcesUtil.clearWorkspace();
   }
 
@@ -204,6 +213,30 @@ public class VersionBuilderExecutor extends TestCase
         }
       }
     }, null);
+
+    stablizePDE();
+  }
+
+  @SuppressWarnings("restriction")
+  private void stablizePDE() throws Throwable
+  {
+    Job.getJobManager().join(org.eclipse.core.internal.resources.ValidateProjectEncoding.class, new NullProgressMonitor());
+    Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_REFRESH, new NullProgressMonitor());
+    org.eclipse.pde.internal.core.PluginModelManager modelManager = org.eclipse.pde.internal.core.PDECore.getDefault().getModelManager();
+    modelManager.targetReloaded(new NullProgressMonitor());
+    IPluginModelBase[] pluginModels = modelManager.getWorkspaceModels();
+    for (IPluginModelBase pluginModel : pluginModels)
+    {
+      log("-> " + pluginModel.getBundleDescription().getSymbolicName());
+    }
+
+    org.eclipse.pde.internal.core.FeatureModelManager featureModelManager = org.eclipse.pde.internal.core.PDECore.getDefault().getFeatureModelManager();
+    featureModelManager.targetReloaded();
+    org.eclipse.pde.internal.core.ifeature.IFeatureModel[] featureModels = featureModelManager.getWorkspaceModels();
+    for (org.eclipse.pde.internal.core.ifeature.IFeatureModel featureModel : featureModels)
+    {
+      log("=> " + featureModel.getFeature().getId());
+    }
   }
 
   private void updateWorkspace(BundleFile source, File target, int level) throws Throwable

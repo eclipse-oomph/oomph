@@ -17,3 +17,12 @@ Marker
   quickFixReplacement = 2.0.0
   FIX = Change the version (Change the version to 2.0.0)
   FIX = Configure the project to ignore the problem (Set ignore.feature.content.changes = true in '/com.foo.project1-feature/.project')
+Marker
+  <resource>  = com.foo.project1/META-INF/MANIFEST.MF
+  <charStart> = (3,23)
+  <charEnd>   = (4,1)
+  <severity>  = ERROR
+  <message>   = Plug-in 'com.foo.project1' is not referenced by any other feature
+  problemType = unreferenced.element
+  FIX = Mark as root project (Add 'com.foo.project1' to the root.projects property of /com.foo.releng/release.properties)
+  FIX = Ignore root components for release (Configure '/com.foo.releng/release.xml' to stop checking that non-root elements are referenced by a root element. To re-enable this checking, use the Preferences dialog to manage the release check mode.)

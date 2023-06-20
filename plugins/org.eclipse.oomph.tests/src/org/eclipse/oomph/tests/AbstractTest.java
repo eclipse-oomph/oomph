@@ -29,6 +29,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -50,6 +51,8 @@ public abstract class AbstractTest extends CoreMatchers
       "junit.framework.TestResult$1", //
       "junit.framework.TestSuite", //
   };
+
+  private static final List<File> TEMP_FOLDERS = new ArrayList<File>();
 
   private static final PrintStream LOG = System.out;
 
@@ -137,6 +140,13 @@ public abstract class AbstractTest extends CoreMatchers
   public void tearDown() throws Exception
   {
     log();
+
+    for (File file : TEMP_FOLDERS)
+    {
+      IOUtil.deleteBestEffort(file);
+    }
+
+    TEMP_FOLDERS.clear();
     LOGGER.setTaskName(null);
   }
 
@@ -164,7 +174,7 @@ public abstract class AbstractTest extends CoreMatchers
 
         BundleFile child = testRoot.getChild(name);
         child.export(folder);
-        log("Copied plugin://" + plugin.getSymbolicName() + "/" + child + " to " + folder);
+        log("Copied plugin:/" + plugin.getSymbolicName() + "/" + child + " to " + folder);
       }
       else
       {
@@ -183,7 +193,9 @@ public abstract class AbstractTest extends CoreMatchers
 
   public static File createTempFolder()
   {
-    return IOUtil.createTempFolder("test-", false);
+    File result = IOUtil.createTempFolder("test-", false);
+    TEMP_FOLDERS.add(result);
+    return result;
   }
 
   public static void log()

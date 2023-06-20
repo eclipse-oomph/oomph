@@ -9,4 +9,6 @@
       name="org.eclipse.swtbot.eclipse.feature.group"/>
   <requirement
       name="org.eclipse.swtbot.feature.group"/>
+  <requirement
+      name="org.eclipse.core.runtime.feature.feature.group"/>
 </targlets:ComponentExtension>

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="org.eclipse.pde.ui.JunitLaunchConfig">
+    <setAttribute key="additional_plugins"/>
     <booleanAttribute key="append.args" value="true"/>
     <stringAttribute key="application" value="org.eclipse.pde.junit.runtime.coretestapplication"/>
     <booleanAttribute key="askclear" value="false"/>
-    <booleanAttribute key="automaticAdd" value="false"/>
-    <booleanAttribute key="automaticValidate" value="true"/>
+    <booleanAttribute key="automaticAdd" value="true"/>
+    <booleanAttribute key="automaticValidate" value="false"/>
     <stringAttribute key="bootstrap" value=""/>
     <stringAttribute key="checked" value="[NONE]"/>
     <booleanAttribute key="clearConfig" value="true"/>
@@ -12,46 +13,154 @@
     <booleanAttribute key="clearwslog" value="false"/>
     <stringAttribute key="configLocation" value="${workspace_loc}/.metadata/.plugins/org.eclipse.pde.core/pde-junit"/>
     <booleanAttribute key="default" value="false"/>
-    <setAttribute key="deselected_workspace_bundles"/>
-    <booleanAttribute key="includeOptional" value="false"/>
+    <setAttribute key="deselected_workspace_bundles">
+        <setEntry value="org.eclipse.oomph.base.edit"/>
+        <setEntry value="org.eclipse.oomph.extractor.lib"/>
+        <setEntry value="org.eclipse.oomph.extractor.lib.tests"/>
+        <setEntry value="org.eclipse.oomph.gitbash"/>
+        <setEntry value="org.eclipse.oomph.jreinfo"/>
+        <setEntry value="org.eclipse.oomph.jreinfo.ui"/>
+        <setEntry value="org.eclipse.oomph.jreinfo.win32.x86_64"/>
+        <setEntry value="org.eclipse.oomph.launches"/>
+        <setEntry value="org.eclipse.oomph.manifests"/>
+        <setEntry value="org.eclipse.oomph.ostools"/>
+        <setEntry value="org.eclipse.oomph.p2.doc"/>
+        <setEntry value="org.eclipse.oomph.p2.edit"/>
+        <setEntry value="org.eclipse.oomph.p2.ui"/>
+        <setEntry value="org.eclipse.oomph.predicates"/>
+        <setEntry value="org.eclipse.oomph.predicates.edit"/>
+        <setEntry value="org.eclipse.oomph.preferences"/>
+        <setEntry value="org.eclipse.oomph.preferences.edit"/>
+        <setEntry value="org.eclipse.oomph.preferences.editor"/>
+        <setEntry value="org.eclipse.oomph.projectconfig"/>
+        <setEntry value="org.eclipse.oomph.projectconfig.edit"/>
+        <setEntry value="org.eclipse.oomph.projectconfig.editor"/>
+        <setEntry value="org.eclipse.oomph.projectcopy"/>
+        <setEntry value="org.eclipse.oomph.releng"/>
+        <setEntry value="org.eclipse.oomph.releng.helpcenter"/>
+        <setEntry value="org.eclipse.oomph.resources"/>
+        <setEntry value="org.eclipse.oomph.resources.edit"/>
+        <setEntry value="org.eclipse.oomph.setup"/>
+        <setEntry value="org.eclipse.oomph.setup.core"/>
+        <setEntry value="org.eclipse.oomph.setup.doc"/>
+        <setEntry value="org.eclipse.oomph.setup.edit"/>
+        <setEntry value="org.eclipse.oomph.setup.editor"/>
+        <setEntry value="org.eclipse.oomph.setup.git"/>
+        <setEntry value="org.eclipse.oomph.setup.git.edit"/>
+        <setEntry value="org.eclipse.oomph.setup.installer"/>
+        <setEntry value="org.eclipse.oomph.setup.installer.tests"/>
+        <setEntry value="org.eclipse.oomph.setup.jdt"/>
+        <setEntry value="org.eclipse.oomph.setup.jdt.edit"/>
+        <setEntry value="org.eclipse.oomph.setup.launching"/>
+        <setEntry value="org.eclipse.oomph.setup.launching.edit"/>
+        <setEntry value="org.eclipse.oomph.setup.maven"/>
+        <setEntry value="org.eclipse.oomph.setup.maven.edit"/>
+        <setEntry value="org.eclipse.oomph.setup.mylyn"/>
+        <setEntry value="org.eclipse.oomph.setup.mylyn.edit"/>
+        <setEntry value="org.eclipse.oomph.setup.p2"/>
+        <setEntry value="org.eclipse.oomph.setup.p2.edit"/>
+        <setEntry value="org.eclipse.oomph.setup.pde"/>
+        <setEntry value="org.eclipse.oomph.setup.pde.edit"/>
+        <setEntry value="org.eclipse.oomph.setup.projects"/>
+        <setEntry value="org.eclipse.oomph.setup.projects.edit"/>
+        <setEntry value="org.eclipse.oomph.setup.projectset"/>
+        <setEntry value="org.eclipse.oomph.setup.projectset.edit"/>
+        <setEntry value="org.eclipse.oomph.setup.sdk"/>
+        <setEntry value="org.eclipse.oomph.setup.sync"/>
+        <setEntry value="org.eclipse.oomph.setup.sync.tests"/>
+        <setEntry value="org.eclipse.oomph.setup.targlets"/>
+        <setEntry value="org.eclipse.oomph.setup.targlets.edit"/>
+        <setEntry value="org.eclipse.oomph.setup.tests"/>
+        <setEntry value="org.eclipse.oomph.setup.ui"/>
+        <setEntry value="org.eclipse.oomph.setup.ui.ide"/>
+        <setEntry value="org.eclipse.oomph.setup.ui.questionnaire"/>
+        <setEntry value="org.eclipse.oomph.setup.workbench"/>
+        <setEntry value="org.eclipse.oomph.setup.workbench.edit"/>
+        <setEntry value="org.eclipse.oomph.setup.workingsets"/>
+        <setEntry value="org.eclipse.oomph.setup.workingsets.edit"/>
+        <setEntry value="org.eclipse.oomph.targlets"/>
+        <setEntry value="org.eclipse.oomph.targlets.core"/>
+        <setEntry value="org.eclipse.oomph.targlets.doc"/>
+        <setEntry value="org.eclipse.oomph.targlets.edit"/>
+        <setEntry value="org.eclipse.oomph.targlets.editor"/>
+        <setEntry value="org.eclipse.oomph.targlets.tests"/>
+        <setEntry value="org.eclipse.oomph.targlets.ui"/>
+        <setEntry value="org.eclipse.oomph.ui"/>
+        <setEntry value="org.eclipse.oomph.ui.tests"/>
+        <setEntry value="org.eclipse.oomph.util.doc"/>
+        <setEntry value="org.eclipse.oomph.util.pde"/>
+        <setEntry value="org.eclipse.oomph.version"/>
+        <setEntry value="org.eclipse.oomph.version.digest"/>
+        <setEntry value="org.eclipse.oomph.version.tests"/>
+        <setEntry value="org.eclipse.oomph.version.ui"/>
+        <setEntry value="org.eclipse.oomph.workingsets"/>
+        <setEntry value="org.eclipse.oomph.workingsets.edit"/>
+        <setEntry value="org.eclipse.oomph.workingsets.editor"/>
+    </setAttribute>
+    <stringAttribute key="featureDefaultLocation" value="workspace"/>
+    <stringAttribute key="featurePluginResolution" value="workspace"/>
+    <booleanAttribute key="includeOptional" value="true"/>
     <stringAttribute key="location" value="${workspace_loc}/../junit-workspace"/>
     <booleanAttribute key="org.eclipse.debug.core.ATTR_FORCE_SYSTEM_CONSOLE_ENCODING" value="false"/>
     <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
-        <listEntry value="/org.eclipse.oomph.p2.tests/src/org/eclipse/oomph/p2/tests/AgentTests.java"/>
+        <listEntry value="/org.eclipse.oomph.p2.tests"/>
     </listAttribute>
     <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
-        <listEntry value="1"/>
+        <listEntry value="4"/>
     </listAttribute>
-    <stringAttribute key="org.eclipse.debug.ui.ATTR_CONSOLE_ENCODING" value="UTF-8"/>
-    <stringAttribute key="org.eclipse.jdt.junit.CONTAINER" value=""/>
+    <listAttribute key="org.eclipse.debug.ui.favoriteGroups">
+        <listEntry value="org.eclipse.debug.ui.launchGroup.debug"/>
+    </listAttribute>
+    <stringAttribute key="org.eclipse.jdt.junit.CONTAINER" value="=org.eclipse.oomph.p2.tests"/>
     <booleanAttribute key="org.eclipse.jdt.junit.KEEPRUNNING_ATTR" value="false"/>
     <stringAttribute key="org.eclipse.jdt.junit.TESTNAME" value=""/>
     <stringAttribute key="org.eclipse.jdt.junit.TEST_KIND" value="org.eclipse.jdt.junit.loader.junit4"/>
     <booleanAttribute key="org.eclipse.jdt.launching.ATTR_ATTR_USE_ARGFILE" value="false"/>
     <booleanAttribute key="org.eclipse.jdt.launching.ATTR_SHOW_CODEDETAILS_IN_EXCEPTION_MESSAGES" value="true"/>
-    <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_START_ON_FIRST_THREAD" value="true"/>
-    <stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-    <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.eclipse.oomph.p2.tests.AgentTests"/>
+    <stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-17"/>
+    <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value=""/>
     <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-os ${target.os} -ws ${target.ws} -arch ${target.arch} -nl ${target.nl} -consoleLog"/>
     <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="org.eclipse.oomph.p2.tests"/>
     <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.pde.ui.workbenchClasspathProvider"/>
+    <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dorg.eclipse.swt.graphics.Resource.reportNonDisposed=true&#13;&#10;-Dp2.httpRule=allow&#13;&#10;-Declipse.p2.mirrors=false"/>
     <stringAttribute key="pde.version" value="3.3"/>
-    <stringAttribute key="product" value="org.eclipse.equinox.p2.director.app.product"/>
+    <stringAttribute key="product" value="org.eclipse.equinox.p2.director.product"/>
     <booleanAttribute key="run_in_ui_thread" value="true"/>
+    <setAttribute key="selected_features">
+        <setEntry value="org.eclipse.core.runtime.feature:default"/>
+        <setEntry value="org.eclipse.oomph.tests:default"/>
+    </setAttribute>
     <setAttribute key="selected_target_bundles">
+        <setEntry value="bcpg@default:default"/>
+        <setEntry value="bcprov@default:default"/>
         <setEntry value="com.ibm.icu@default:default"/>
-        <setEntry value="javax.annotation@default:default"/>
-        <setEntry value="javax.inject@default:default"/>
+        <setEntry value="com.sun.jna.platform@default:default"/>
+        <setEntry value="com.sun.jna@default:default"/>
+        <setEntry value="jakarta.servlet-api@default:default"/>
+        <setEntry value="javax.el-api@default:default"/>
+        <setEntry value="javax.servlet.jsp-api@default:default"/>
         <setEntry value="javax.xml@default:default"/>
+        <setEntry value="org.apache.batik.constants@default:default"/>
         <setEntry value="org.apache.batik.css@default:default"/>
+        <setEntry value="org.apache.batik.i18n@default:default"/>
         <setEntry value="org.apache.batik.util@default:default"/>
         <setEntry value="org.apache.commons.codec@default:default"/>
+        <setEntry value="org.apache.commons.collections@default:default"/>
+        <setEntry value="org.apache.commons.commons-beanutils@default:default"/>
+        <setEntry value="org.apache.commons.io@default:default"/>
         <setEntry value="org.apache.commons.jxpath@default:default"/>
         <setEntry value="org.apache.commons.logging@default:default"/>
-        <setEntry value="org.apache.httpcomponents.httpclient@default:default"/>
-        <setEntry value="org.apache.httpcomponents.httpcore@default:default"/>
+        <setEntry value="org.apache.felix.gogo.command@default:default"/>
+        <setEntry value="org.apache.felix.gogo.runtime@default:default"/>
+        <setEntry value="org.apache.felix.gogo.shell@default:default"/>
+        <setEntry value="org.apache.felix.scr@1:true"/>
+        <setEntry value="org.apache.httpcomponents.client5.httpclient5@default:default"/>
+        <setEntry value="org.apache.httpcomponents.core5.httpcore5-h2@default:default"/>
+        <setEntry value="org.apache.httpcomponents.core5.httpcore5@default:default"/>
+        <setEntry value="org.apache.xerces@default:default"/>
+        <setEntry value="org.apache.xml.resolver@default:default"/>
+        <setEntry value="org.apache.xmlgraphics@default:default"/>
         <setEntry value="org.eclipse.ant.core@default:default"/>
-        <setEntry value="org.eclipse.compare.core@default:default"/>
         <setEntry value="org.eclipse.core.commands@default:default"/>
         <setEntry value="org.eclipse.core.contenttype@default:default"/>
         <setEntry value="org.eclipse.core.databinding.observable@default:default"/>
@@ -62,6 +171,7 @@
         <setEntry value="org.eclipse.core.filesystem@default:default"/>
         <setEntry value="org.eclipse.core.jobs@default:default"/>
         <setEntry value="org.eclipse.core.net.win32.x86_64@default:false"/>
+        <setEntry value="org.eclipse.core.net.win32@default:false"/>
         <setEntry value="org.eclipse.core.net@default:default"/>
         <setEntry value="org.eclipse.core.resources.win32.x86_64@default:false"/>
         <setEntry value="org.eclipse.core.resources@default:default"/>
@@ -70,6 +180,7 @@
         <setEntry value="org.eclipse.e4.core.commands@default:default"/>
         <setEntry value="org.eclipse.e4.core.contexts@default:default"/>
         <setEntry value="org.eclipse.e4.core.di.annotations@default:default"/>
+        <setEntry value="org.eclipse.e4.core.di.extensions.supplier@default:default"/>
         <setEntry value="org.eclipse.e4.core.di.extensions@default:default"/>
         <setEntry value="org.eclipse.e4.core.di@default:default"/>
         <setEntry value="org.eclipse.e4.core.services@default:default"/>
@@ -79,8 +190,10 @@
         <setEntry value="org.eclipse.e4.ui.css.swt.theme@default:default"/>
         <setEntry value="org.eclipse.e4.ui.css.swt@default:default"/>
         <setEntry value="org.eclipse.e4.ui.di@default:default"/>
+        <setEntry value="org.eclipse.e4.ui.dialogs@default:default"/>
         <setEntry value="org.eclipse.e4.ui.model.workbench@default:default"/>
         <setEntry value="org.eclipse.e4.ui.services@default:default"/>
+        <setEntry value="org.eclipse.e4.ui.swt.win32@default:false"/>
         <setEntry value="org.eclipse.e4.ui.widgets@default:default"/>
         <setEntry value="org.eclipse.e4.ui.workbench.addons.swt@default:default"/>
         <setEntry value="org.eclipse.e4.ui.workbench.renderers.swt@default:default"/>
@@ -98,7 +211,10 @@
         <setEntry value="org.eclipse.emf.ecore.xmi@default:default"/>
         <setEntry value="org.eclipse.emf.ecore@default:default"/>
         <setEntry value="org.eclipse.equinox.app@default:default"/>
+        <setEntry value="org.eclipse.equinox.bidi@default:default"/>
         <setEntry value="org.eclipse.equinox.common@2:true"/>
+        <setEntry value="org.eclipse.equinox.concurrent@default:default"/>
+        <setEntry value="org.eclipse.equinox.event@default:default"/>
         <setEntry value="org.eclipse.equinox.frameworkadmin.equinox@default:default"/>
         <setEntry value="org.eclipse.equinox.frameworkadmin@default:default"/>
         <setEntry value="org.eclipse.equinox.p2.artifact.repository@default:default"/>
@@ -124,19 +240,28 @@
         <setEntry value="org.eclipse.equinox.simpleconfigurator.manipulator@default:default"/>
         <setEntry value="org.eclipse.equinox.simpleconfigurator@1:true"/>
         <setEntry value="org.eclipse.help@default:default"/>
+        <setEntry value="org.eclipse.jdt.junit.runtime@default:default"/>
+        <setEntry value="org.eclipse.jdt.junit4.runtime@default:default"/>
         <setEntry value="org.eclipse.jface.databinding@default:default"/>
         <setEntry value="org.eclipse.jface@default:default"/>
         <setEntry value="org.eclipse.osgi.compatibility.state@default:false"/>
-        <setEntry value="org.eclipse.osgi.services@default:default"/>
-        <setEntry value="org.eclipse.osgi@-1:true"/>
+        <setEntry value="org.eclipse.osgi@1:true"/>
+        <setEntry value="org.eclipse.pde.junit.runtime@default:default"/>
         <setEntry value="org.eclipse.swt.win32.win32.x86_64@default:false"/>
         <setEntry value="org.eclipse.swt@default:default"/>
-        <setEntry value="org.eclipse.team.core@default:default"/>
-        <setEntry value="org.eclipse.ui.trace@default:default"/>
         <setEntry value="org.eclipse.ui.workbench@default:default"/>
         <setEntry value="org.eclipse.ui@default:default"/>
+        <setEntry value="org.eclipse.urischeme@default:default"/>
         <setEntry value="org.hamcrest.core@default:default"/>
+        <setEntry value="org.jdom@default:default"/>
         <setEntry value="org.junit@default:default"/>
+        <setEntry value="org.osgi.service.cm@default:default"/>
+        <setEntry value="org.osgi.service.component@default:default"/>
+        <setEntry value="org.osgi.service.event@default:default"/>
+        <setEntry value="org.osgi.service.metatype@default:default"/>
+        <setEntry value="org.osgi.service.prefs@default:default"/>
+        <setEntry value="org.osgi.util.function@default:default"/>
+        <setEntry value="org.osgi.util.promise@default:default"/>
         <setEntry value="org.sat4j.core@default:default"/>
         <setEntry value="org.sat4j.pb@default:default"/>
         <setEntry value="org.tukaani.xz@default:default"/>
@@ -144,19 +269,20 @@
         <setEntry value="org.w3c.dom.events@default:default"/>
         <setEntry value="org.w3c.dom.smil@default:default"/>
         <setEntry value="org.w3c.dom.svg@default:default"/>
+        <setEntry value="slf4j.api@default:default"/>
     </setAttribute>
     <setAttribute key="selected_workspace_bundles">
         <setEntry value="org.eclipse.oomph.base@default:default"/>
+        <setEntry value="org.eclipse.oomph.junit@default:default"/>
         <setEntry value="org.eclipse.oomph.p2.core@default:default"/>
         <setEntry value="org.eclipse.oomph.p2.tests@default:default"/>
         <setEntry value="org.eclipse.oomph.p2@default:default"/>
         <setEntry value="org.eclipse.oomph.tests@default:default"/>
         <setEntry value="org.eclipse.oomph.util@default:default"/>
     </setAttribute>
-    <booleanAttribute key="show_selected_only" value="false"/>
-    <stringAttribute key="templateConfig" value="${target_home}\configuration\config.ini"/>
+    <booleanAttribute key="show_selected_only" value="true"/>
     <booleanAttribute key="tracing" value="false"/>
-    <booleanAttribute key="useCustomFeatures" value="false"/>
+    <booleanAttribute key="useCustomFeatures" value="true"/>
     <booleanAttribute key="useDefaultConfig" value="true"/>
     <booleanAttribute key="useDefaultConfigArea" value="false"/>
     <booleanAttribute key="useProduct" value="false"/>

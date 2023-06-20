@@ -20,8 +20,8 @@
   </parent>
   <groupId>org.eclipse.oomph</groupId>
   <artifactId>org.eclipse.oomph.setup.installer.tests</artifactId>
-  <version>1.12.0-SNAPSHOT</version>
-  <packaging>eclipse-plugin</packaging>
+  <version>1.13.0-SNAPSHOT</version>
+  <packaging>eclipse-test-plugin</packaging>
 
   <build>
     <resources>
@@ -33,6 +33,39 @@
         </includes>
       </resource>
     </resources>
+
+    <plugins>
+      <plugin>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>tycho-surefire-plugin</artifactId>
+        <version>${tycho-version}</version>
+        <configuration>
+          <argLine>-Doomph.setup.installer.mode=ADVANCED</argLine>
+          <useUIHarness>true</useUIHarness>
+          <useUIThread>false</useUIThread>
+          <product>org.eclipse.oomph.setup.installer.product</product>
+          <application>org.eclipse.oomph.setup.installer.application</application>
+          <testClass>org.eclipse.oomph.setup.installer.tests.InstallerTests</testClass>
+          <forkedProcessTimeoutInSeconds>60</forkedProcessTimeoutInSeconds>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>target-platform-configuration</artifactId>
+        <configuration>
+          <dependency-resolution>
+            <extraRequirements>
+              <requirement>
+                <type>eclipse-feature</type>
+                <id>org.eclipse.oomph.setup.installer</id>
+                <versionRange>0.0.0</versionRange>
+              </requirement>
+            </extraRequirements>
+          </dependency-resolution>
+        </configuration>
+      </plugin>
+    </plugins>
   </build>
 
 </project>
