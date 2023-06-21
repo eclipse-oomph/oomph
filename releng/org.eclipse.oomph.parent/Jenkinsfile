@@ -6,9 +6,9 @@ pipeline {
     label "centos-latest"
   }
 
-  triggers {
-    // cron('H 23 * * *')
-  }
+//  triggers {
+//     cron('H 23 * * *')
+//  }
 
   options {
     timeout(time: 120, unit: 'MINUTES')
