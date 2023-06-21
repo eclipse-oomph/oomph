@@ -33,7 +33,7 @@ echo "Copying repackaged-products"
 cd $GIT/products/org.eclipse.oomph.setup.installer.product/target/repackaged-products/
 for f in eclipse-inst*; do
   echo "Copying $f"
-  if [[ $f == *.dmg && $NOTARIZE == true ]]; then
+  if [[ $f == *.dmg && "$NOTARIZE" == "true" ]]; then
     echo "Notarizing $f"
     UNNOTARIZED_DMG=${f/.dmg/}.$TIMESTAMP.dmg
     mkdir -p $TMP
