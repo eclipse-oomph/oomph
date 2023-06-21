@@ -229,6 +229,9 @@ pipeline {
         environment name: 'PROMOTE', value: 'true'
         beforeAgent true
       }
+      tools {
+        jdk 'openjdk-jdk17-latest'
+      }
       steps {
         echoVariables()
         unstash 'promote-stash'
