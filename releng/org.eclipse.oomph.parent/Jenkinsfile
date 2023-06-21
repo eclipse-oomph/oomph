@@ -79,9 +79,9 @@ pipeline {
       name: 'PROMOTE',
       defaultValue: true,
       description: '''
-        Whether to invoke the 
+        Whether to invoke the
         <a href="https://github.com/eclipse-oomph/oomph/blob/master/releng/org.eclipse.oomph.releng/hudson/repackage.sh">repackage.sh</a>
-        and <a href="https://github.com/eclipse-oomph/oomph/blob/master/releng/org.eclipse.oomph.releng/hudson/promote.sh">promote.sh</a> 
+        and <a href="https://github.com/eclipse-oomph/oomph/blob/master/releng/org.eclipse.oomph.releng/hudson/promote.sh">promote.sh</a>
         scripts.
       '''
     )
@@ -232,13 +232,17 @@ pipeline {
       steps {
         echoVariables()
         unstash 'promote-stash'
+        env.GIT=env.WORKSPACE
 
         sh '''
+          pwd
+
           BASH=/bin/bash
           if [[ "$SCRIPT_DEBUG" == true ]]; then
             BASH="$BASH -x"
           fi
 
+          pwd
           echo "BUILD_TIMESTAMP=$BUILD_TIMESTAMP"
           echo "GIT_BRANCH=$GIT_BRANCH"
           echo "GIT=$GIT"
