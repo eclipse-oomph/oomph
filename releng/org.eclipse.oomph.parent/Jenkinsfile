@@ -232,7 +232,10 @@ pipeline {
       steps {
         echoVariables()
         unstash 'promote-stash'
-        env.GIT=env.WORKSPACE
+        
+        script {
+          env.GIT=env.WORKSPACE
+        }
 
         sh '''
           pwd
