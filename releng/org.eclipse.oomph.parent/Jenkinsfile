@@ -1,0 +1,288 @@
+def boolean useCredentials = false
+
+pipeline {
+
+  agent {
+    label "centos-latest"
+  }
+
+  triggers {
+    // cron('H 23 * * *')
+  }
+
+  options {
+    timeout(time: 120, unit: 'MINUTES')
+    buildDiscarder(logRotator(numToKeepStr:'10'))
+    disableConcurrentBuilds(abortPrevious: true)
+  }
+
+  tools {
+    maven 'apache-maven-latest'
+    jdk 'temurin-jdk17-latest'
+  }
+
+  environment {
+    CHECKOUT = 'false'
+    CLONE_URL = 'https://github.com/eclipse-oomph/oomph'
+    CLONE_BRANCH = 'master'
+    BUILD_TIMESTAMP = sh(returnStdout: true, script: 'date +%Y%m%d-%H%M%S').trim()
+  }
+
+  parameters {
+    choice(
+      name: 'BUILD_TYPE',
+      choices: ['nightly', 'milestone', 'release'],
+      description: '''
+        Choose the type of build.
+      '''
+    )
+
+    choice(
+      name: 'RESTRICTED_VERSION',
+      choices: ['2023-09'],
+      description: '''
+        The product version for the restricted variants of the installer.
+      '''
+    )
+
+    string(
+      name: 'BUILD_KEY',
+      defaultValue: '',
+      description: '''
+        The build key used by
+        <a href="https://github.com/eclipse-oomph/oomph/blob/master/releng/org.eclipse.oomph.releng/hudson/composeRepositories.sh">composeRepositories.sh</a> and
+        <a href="https://github.com/eclipse-oomph/oomph/blob/master/releng/org.eclipse.oomph.releng/hudson/promote.sh">promote.sh</a>.
+        <br/>
+        It is generally left blank and will be determined by the BUILD_TYPE/BUILD_TIMESTAMP, e.g., N20230621-000000.
+        <br/>
+        For <b>BUILD_TYPE == release</b>, this should be the version of the release, e.g., <b>1.30.0</b>.
+        <br/>
+        Consult <a href="https://download.eclipse.org/justj/?file=oomph/drops/release">https://download.eclipse.org/oomph/drops/release</a> for the next available release version.
+      '''
+    )
+
+    string(
+      name: 'BUILD_LABEL',
+      defaultValue: '',
+      description: '''
+        The build label used by
+        <a href="https://github.com/eclipse-oomph/oomph/blob/master/releng/org.eclipse.oomph.releng/hudson/composeRepositories.sh">composeRepositories.sh</a> and
+        <a href="https://github.com/eclipse-oomph/oomph/blob/master/releng/org.eclipse.oomph.releng/hudson/promote.sh">promote.sh</a>.
+        <br/>
+        It is generally left blank except for <b>BUILD_TYPE == release</b>, this could be qualifier appended to the BUILD_KEY, e.g., "<b>a</b>" to produce a <b>1.30.0-a</b> release.
+        <br/>
+        Consult <a href="https://download.eclipse.org/justj/?file=oomph/drops/release">https://download.eclipse.org/oomph/drops/release</a> for the next available release version.
+      '''
+    )
+
+    booleanParam(
+      name: 'PROMOTE',
+      defaultValue: true,
+      description: '''
+        Whether to invoke the 
+        <a href="https://github.com/eclipse-oomph/oomph/blob/master/releng/org.eclipse.oomph.releng/hudson/repackage.sh">repackage.sh</a>
+        and <a href="https://github.com/eclipse-oomph/oomph/blob/master/releng/org.eclipse.oomph.releng/hudson/promote.sh">promote.sh</a> 
+        scripts.
+      '''
+    )
+
+    booleanParam(
+      name: 'SIGN',
+      defaultValue: true,
+      description: '''
+        Whether to sign the artifacts during the Maven/Tycho build.
+      '''
+    )
+
+    booleanParam(
+      name: 'NOTARIZE',
+      defaultValue: true,
+      description: '''
+        Whether to notarize each *.dmg during the build promotion.
+      '''
+    )
+
+    booleanParam(
+      name: 'SKIP_TESTS',
+      defaultValue: true,
+      description: '''
+        Whether to use -DskipTests=${SKIP_TESTS} during the Maven/Tycho build.
+      '''
+    )
+
+    booleanParam(
+      name: 'SCRIPT_DEBUG',
+      defaultValue: false,
+      description: '''
+        Whether to enable "-x" for the bash scripts used for repository composition and promotion.
+      '''
+    )
+  }
+
+  stages {
+    stage('Display Parameters') {
+      steps {
+        script {
+          buildDescription "${params.BUILD_TYPE} - ${params.RESTRICTED_VERSION}"	
+
+          env.BUILD_TYPE = params.BUILD_TYPE
+          env.RESTRICTED_VERSION = params.RESTRICTED_VERSION
+          env.BUILD_KEY = params.BUILD_KEY
+          env.BUILD_LABEL = params.BUILD_LABEL
+          env.PROMOTE = params.PROMOTE
+          env.SIGN = params.SIGN
+          env.PACK_AND_SIGN = params.SIGN
+          env.NOTARIZE = params.NOTARIZE
+          env.SKIP_TESTS = params.SKIP_TESTS
+          env.SCRIPT_DEBUG = params.SCRIPT_DEBUG
+
+          env.GIT=env.WORKSPACE
+
+          if (env.BRANCH_NAME == 'master' || env.BRANCH_NAME == null) {
+            useCredentials = true
+            if (params.PROMOTE) {
+              env.SIGN = true
+            } else {
+              env.SIGN = false
+            }
+          } else {
+            useCredentials = false
+            env.SIGN = false
+          }
+
+          echoVariables()
+        }
+      }
+    }
+
+    stage('Git Checkout') {
+      when {
+        environment name: 'CHECKOUT', value: 'true'
+      }
+      steps {
+        script {
+          def gitVariables = checkout(
+            poll: false,
+            scm: [
+              $class: 'GitSCM',
+              branches: [[name: '*' + "${env.CLONE_BRANCH}"]],
+              doGenerateSubmoduleConfigurations: false,
+              submoduleCfg: [],
+              userRemoteConfigs: [[url: "${env.CLONE_URL}.git" ]]
+            ]
+          )
+
+          echo "$gitVariables"
+          env.GIT_COMMIT = gitVariables.GIT_COMMIT
+          env.GIT_BRANCH = gitVariables.GIT_BRANCH
+
+          if (params.PROMOTE) {
+            useCredentials = true
+            env.SIGN = true
+          } else {
+            useCredentials = false
+            env.SIGN = false
+          }
+
+          echoVariables()
+        }
+      }
+    }
+
+    stage('Build') {
+      steps {
+        script {
+          if (useCredentials) {
+            sshagent (['projects-storage.eclipse.org-bot-ssh']) {
+              mvn()
+            }
+            if (params.PROMOTE) {
+              sh '''
+                BASH=/bin/bash
+                if [[ "$SCRIPT_DEBUG" == true ]]; then
+                  BASH="$BASH -x"
+                fi
+                echo "GIT=$GIT"
+                $BASH releng/org.eclipse.oomph.releng/hudson/repackage.sh
+              '''
+              stash includes: 'help/**,installer-products/**,updates/**,releng/org.eclipse.oomph.releng/**', name: 'promote-stash'
+            }
+          } else {
+            mvn()
+          }
+        }
+      }
+
+      post {
+        always {
+          junit testResults: '**/target/surefire-reports/TEST-*.xml', allowEmptyResults: true
+          // archiveArtifacts artifacts: 'products/org.eclipse.oomph.setup.installer.product/target/products/*,products/org.eclipse.oomph.setup.installer.product/target/repository/**,sites/org.eclipse.oomph.site/target/repository/**', allowEmptyArchive: true
+        }
+      }
+    }
+
+    stage('Promote') {
+      agent {
+        label "promotion-vm"
+      }
+      when {
+        environment name: 'PROMOTE', value: 'true'
+        beforeAgent true
+      }
+      steps {
+        echoVariables()
+        unstash 'promote-stash'
+
+        sh '''
+          BASH=/bin/bash
+          if [[ "$SCRIPT_DEBUG" == true ]]; then
+            BASH="$BASH -x"
+          fi
+
+          echo "BUILD_TIMESTAMP=$BUILD_TIMESTAMP"
+          echo "GIT_BRANCH=$GIT_BRANCH"
+          echo "GIT=$GIT"
+          $BASH releng/org.eclipse.oomph.releng/hudson/promote.sh
+        '''
+      }
+    }
+  }
+}
+
+def void echoVariables() {
+  echo """
+BUILD_TYPE=${env.BUILD_TYPE}
+RESTRICTED_VERSION=${env.RESTRICTED_VERSION}
+BUILD_KEY=${env.BUILD_KEY}
+BUILD_LABEL=${env.BUILD_LABEL}
+PROMOTE=${params.PROMOTE}
+SIGN=${env.SIGN}
+NOTARIZE=${env.NOTARIZE}
+SKIP_TESTS=${env.SKIP_TESTS}
+SCRIPT_DEBUG=${env.SCRIPT_DEBUG}
+BRANCH_NAME=${env.BRANCH_NAME}
+BUILD_TIMESTAMP=${env.BUILD_TIMESTAMP}
+GIT=${env.GIT}
+GIT_COMMIT=${env.GIT_COMMIT}
+GIT_BRANCH=${env.GIT_BRANCH}
+"""
+}
+
+def void mvn() {
+  wrap([$class: 'Xvnc', useXauthority: true]) {
+    sh '''
+      mvn \
+      clean \
+      verify \
+      --no-transfer-progress \
+      -DskipTests=$SKIP_TESTS \
+      -Dmaven.repo.local=$WORKSPACE/.m2/repository \
+      -Dorg.eclipse.justj.p2.manager.build.url=$JOB_URL \
+      -Dbuild.type=$BUILD_TYPE \
+      -DRESTRICTED_VERSION=$RESTRICTED_VERSION \
+      -DPACK_AND_SIGN=$SIGN \
+      -Dbuild.id=$BUILD_NUMBER \
+      -Dgit.commit=$GIT_COMMIT
+    '''
+  }
+}
