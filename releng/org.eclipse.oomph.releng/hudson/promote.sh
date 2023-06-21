@@ -55,14 +55,14 @@ set -o errexit
 #   $WORKSPACE/updates/content.jar
 #   $WORKSPACE/updates/org.eclipse.oomph.site.zip
 #
-#   $WORKSPACE/products/
-#   $WORKSPACE/products/eclipse-inst(-jre)?(-restricted)?-(linux|mac|win)64.(tar.gz|dmg|exe|zip)
-#   $WORKSPACE/products/repository/
-#   $WORKSPACE/products/repository/binary/
-#   $WORKSPACE/products/repository/features/
-#   $WORKSPACE/products/repository/plugins/
-#   $WORKSPACE/products/repository/artifacts.jar
-#   $WORKSPACE/products/repository/content.jar
+#   $WORKSPACE/installer-products/
+#   $WORKSPACE/installer-products/eclipse-inst(-jre)?(-restricted)?-(linux|mac|win)64.(tar.gz|dmg|exe|zip)
+#   $WORKSPACE/installer-products/repository/
+#   $WORKSPACE/installer-products/repository/binary/
+#   $WORKSPACE/installer-products/repository/features/
+#   $WORKSPACE/installer-products/repository/plugins/
+#   $WORKSPACE/installer-products/repository/artifacts.jar
+#   $WORKSPACE/installer-products/repository/content.jar
 #
 ##################################################################################################
 
@@ -123,7 +123,7 @@ rm -rf $PRODUCTS_TMP
 mkdir $PRODUCTS_TMP
 mkdir $PRODUCTS_TMP/latest
 
-cd $WORKSPACE/products
+cd $WORKSPACE/installer-products
 for f in *.exe *.zip *.tar.gz *.dmg; do
   echo "Promoting $f to $PRODUCTS_TMP/latest"
   cp -a $f $PRODUCTS_TMP/latest
@@ -136,7 +136,7 @@ done
 
 cd $WORKSPACE
 cp -a $PROPERTIES $PRODUCTS_TMP/latest/product.properties
-cp -a $WORKSPACE/products/repository $PRODUCTS_TMP/latest
+cp -a $WORKSPACE/installer-products/repository $PRODUCTS_TMP/latest
 $BASH $SCRIPTS/adjustArtifactRepository.sh \
   $PRODUCTS_TMP/latest/repository \
   $PRODUCTS/latest/repository \
@@ -148,7 +148,7 @@ $BASH $SCRIPTS/adjustContentRepository.sh \
 
 if [[ "$BUILD_TYPE" != nightly ]]; then
   cp -a $PROPERTIES $PRODUCTS_TMP/product.properties
-  cp -a $WORKSPACE/products/repository $PRODUCTS_TMP
+  cp -a $WORKSPACE/installer-products/repository $PRODUCTS_TMP
   $BASH $SCRIPTS/adjustArtifactRepository.sh \
     $PRODUCTS_TMP/repository \
     $PRODUCTS/repository \

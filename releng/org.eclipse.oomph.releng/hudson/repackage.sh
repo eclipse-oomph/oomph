@@ -22,11 +22,12 @@ cd $WORKSPACE/updates
 echo "Zipping update site"
 zip -r -9 -qq org.eclipse.oomph.site.zip * -x plugins/*.pack.gz
 
-PRODUCTS=$WORKSPACE/products
+PRODUCTS=$WORKSPACE/installer-products
 rm -rf $PRODUCTS
 mkdir $PRODUCTS
 
 TMP=$WORKSPACE/eclipse-installer
+rm -rf $TMP
 
 TIMESTAMP=$(date +%s%N)
 echo "Copying repackaged-products"
