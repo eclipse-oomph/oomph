@@ -122,7 +122,7 @@ Eike Stepper - initial API and implementation
         <artifactId>tycho-source-plugin</artifactId>
         <executions>
           <execution>
-            <id>attach-source</id>
+            <id>plugin-source</id>
             <goals>
               <goal>plugin-source</goal>
             </goals>
