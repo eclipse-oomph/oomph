@@ -144,10 +144,14 @@ pipeline {
               env.SIGN = true
             } else {
               env.SIGN = false
+              env.NOTARIZE = false
+              env.PROMOTE = false
             }
           } else {
             useCredentials = false
             env.SIGN = false
+            env.NOTARIZE = false
+            env.PROMOTE = false
           }
 
           echoVariables()
@@ -265,7 +269,7 @@ BUILD_TYPE=${env.BUILD_TYPE}
 RESTRICTED_VERSION=${env.RESTRICTED_VERSION}
 BUILD_KEY=${env.BUILD_KEY}
 BUILD_LABEL=${env.BUILD_LABEL}
-PROMOTE=${params.PROMOTE}
+PROMOTE=${env.PROMOTE}
 SIGN=${env.SIGN}
 NOTARIZE=${env.NOTARIZE}
 SKIP_TESTS=${env.SKIP_TESTS}
