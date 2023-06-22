@@ -28,8 +28,8 @@ Eike Stepper - initial API and implementation
   <build>
     <plugins>
       <plugin>
-        <groupId>org.eclipse.tycho.extras</groupId>
-        <artifactId>tycho-source-feature-plugin</artifactId>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>tycho-source-plugin</artifactId>
         <configuration>
           <skip>true</skip>
         </configuration>
