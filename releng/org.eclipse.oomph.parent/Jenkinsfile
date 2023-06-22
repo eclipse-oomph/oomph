@@ -6,9 +6,9 @@ pipeline {
     label "centos-latest"
   }
 
-//  triggers {
-//     cron('H 23 * * *')
-//  }
+  triggers {
+     cron('H 23 * * *')
+  }
 
   options {
     timeout(time: 120, unit: 'MINUTES')
@@ -104,7 +104,7 @@ pipeline {
 
     booleanParam(
       name: 'SKIP_TESTS',
-      defaultValue: true,
+      defaultValue: false,
       description: '''
         Whether to use -DskipTests=${SKIP_TESTS} during the Maven/Tycho build.
       '''
