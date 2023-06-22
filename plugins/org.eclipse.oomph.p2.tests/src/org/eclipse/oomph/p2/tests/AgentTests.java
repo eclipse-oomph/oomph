@@ -328,8 +328,8 @@ public class AgentTests extends AbstractP2Test
     Agent agent = getAgent();
     File installFolder = new File(getUserHome(), "app1");
 
-    String oldVersion = "com.jcraft.jsch_0.1.46.v201205102330.jar";
-    String newVersion = "com.jcraft.jsch_0.1.50.v201310081430.jar";
+    String oldVersion = "com.jcraft.jsch_0.1.55.v20190404-1902.jar";
+    String newVersion = "com.jcraft.jsch_0.1.55.v20221112-0806.jar";
 
     ProfileCreator creator = agent.addProfile("profile-app1", "Installation");
     Profile profile = creator.setCacheFolder(installFolder).setInstallFolder(installFolder).create();
@@ -338,7 +338,7 @@ public class AgentTests extends AbstractP2Test
     ProfileTransaction transaction1 = profile.change();
     ProfileDefinition profileDefinition = transaction1.getProfileDefinition();
     profileDefinition.getRequirements()
-        .add(P2Factory.eINSTANCE.createRequirement("com.jcraft.jsch", new VersionRange("[0.1.46.v201205102330,0.1.46.v201205102330]")));
+        .add(P2Factory.eINSTANCE.createRequirement("com.jcraft.jsch", new VersionRange("[0.1.55.v20190404-1902,0.1.55.v20190404-1902]")));
     profileDefinition.getRepositories().add(P2Factory.eINSTANCE.createRepository(PLATFORM_OLD.toURI().toString()));
 
     commitProfileTransaction(transaction1, true);
@@ -364,7 +364,7 @@ public class AgentTests extends AbstractP2Test
     // Update (add new version)
     ProfileTransaction transaction3 = profile.change().setRemoveExistingInstallableUnits(true);
     transaction3.getProfileDefinition().getRequirements()
-        .add(P2Factory.eINSTANCE.createRequirement("com.jcraft.jsch", new VersionRange("[0.1.50.v201310081430,0.1.50.v201310081430]")));
+        .add(P2Factory.eINSTANCE.createRequirement("com.jcraft.jsch", new VersionRange("[0.1.55.v20221112-0806,0.1.55.v20221112-0806]")));
 
     commitProfileTransaction(transaction3, true);
     assertThat(plugins.list().length, is(2));
@@ -378,7 +378,7 @@ public class AgentTests extends AbstractP2Test
     Agent agent = getAgent();
     File installFolder = new File(getUserHome(), "app1");
 
-    String oldVersion = "com.jcraft.jsch_0.1.46.v201205102330.jar";
+    String oldVersion = "com.jcraft.jsch_0.1.55.v20190404-1902.jar";
 
     ProfileCreator creator = agent.addProfile("profile-app1", "Installation");
     Profile profile = creator.setCacheFolder(installFolder).setInstallFolder(installFolder).create();

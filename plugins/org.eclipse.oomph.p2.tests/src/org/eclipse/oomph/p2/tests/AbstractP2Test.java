@@ -18,6 +18,7 @@ import org.eclipse.oomph.p2.core.ProfileTransaction;
 import org.eclipse.oomph.p2.internal.core.AgentManagerImpl;
 import org.eclipse.oomph.p2.internal.core.P2CorePlugin;
 import org.eclipse.oomph.tests.AbstractTest;
+import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.PropertiesUtil;
 
 import org.eclipse.core.runtime.CoreException;
@@ -36,12 +37,14 @@ import org.eclipse.equinox.p2.repository.artifact.IArtifactRepositoryManager;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
 
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
 import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Eike Stepper
@@ -137,8 +140,20 @@ public abstract class AbstractP2Test extends AbstractTest
   {
     mirror("https://download.eclipse.org/modeling/emf/cdo/drops/R20130918-0029", CDO_OLD, CDO_FILTER);
     mirror("https://download.eclipse.org/modeling/emf/cdo/drops/R20140218-1655", CDO_NEW, CDO_FILTER);
-    mirror("https://download.eclipse.org/eclipse/updates/4.28/R-4.28-202306050440", PLATFORM_OLD, PLATFORM_FILTER);
-    mirror("https://download.eclipse.org/eclipse/updates/4.27/R-4.27-202303020300", PLATFORM_NEW, PLATFORM_FILTER);
+    mirror("https://download.eclipse.org/eclipse/updates/4.25/R-4.25-202208311800", PLATFORM_OLD, PLATFORM_FILTER);
+    mirror("https://download.eclipse.org/eclipse/updates/4.28/R-4.28-202306050440", PLATFORM_NEW, PLATFORM_FILTER);
+  }
+
+  @AfterClass
+  public static void tearDownAfterClass() throws Exception
+  {
+    if (Boolean.FALSE)
+    {
+      IOUtil.deleteBestEffort(CDO_OLD, true);
+      IOUtil.deleteBestEffort(CDO_NEW, true);
+      IOUtil.deleteBestEffort(PLATFORM_OLD, true);
+      IOUtil.deleteBestEffort(PLATFORM_NEW, true);
+    }
   }
 
   private static void mirror(String repo, File local, VersionedIdFilter filter) throws Exception
@@ -234,7 +249,8 @@ public abstract class AbstractP2Test extends AbstractTest
       targetRepository.setProperty(IRepository.PROP_COMPRESSED, "true");
 
       List<IInstallableUnit> ius = new ArrayList<>();
-      for (IInstallableUnit iu : P2Util.asIterable(sourceRepository.query(QueryUtil.createIUAnyQuery(), null)))
+      Set<IInstallableUnit> allIUs = sourceRepository.query(QueryUtil.createIUAnyQuery(), null).toSet();
+      for (IInstallableUnit iu : allIUs)
       {
         if (filter == null || filter.matches(iu))
         {
