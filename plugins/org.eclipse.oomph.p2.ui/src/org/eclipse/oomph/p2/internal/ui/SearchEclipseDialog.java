@@ -166,9 +166,29 @@ public abstract class SearchEclipseDialog extends OomphDialog
     return dockable;
   }
 
-  public void setInitialFilterString(String initialFilterString)
+  public void setFilterString(Requirement requirement)
   {
-    this.initialFilterString = initialFilterString;
+    setFilterString(getFilterString(requirement));
+  }
+
+  public void setFilterString(String filterString)
+  {
+    if (initialFilterString == null)
+    {
+      initialFilterString = filterString;
+    }
+    else if (filterString != null)
+    {
+      UIUtil.asyncExec(capabilitiesViewer.getControl(), new Runnable()
+      {
+        @Override
+        public void run()
+        {
+          filterText.setText(filterString);
+          filterText.setSelection(filterString.length());
+        }
+      });
+    }
   }
 
   protected abstract void setSelected(Item item);
@@ -1427,15 +1447,15 @@ public abstract class SearchEclipseDialog extends OomphDialog
     }
 
     @Override
-    protected void setSelected(Item item)
-    {
-      setSelectedRepository(item != null && item.isRepository() ? item.getText() : null);
-    }
-
-    @Override
     protected void selectionChanged(IWorkbenchPart part, ISelection selection)
     {
       setSelectedRepository(selectedRepository);
+    }
+
+    @Override
+    protected void setSelected(Item item)
+    {
+      setSelectedRepository(item != null && item.isRepository() ? item.getText() : null);
     }
 
     @Override
@@ -1639,11 +1659,6 @@ public abstract class SearchEclipseDialog extends OomphDialog
     protected void selectionChanged(IWorkbenchPart part, ISelection selection)
     {
       setSelectedRequirement(selectedRequirement);
-    }
-
-    public void setInitialFilterString(Requirement requirement)
-    {
-      setInitialFilterString(getFilterString(requirement));
     }
 
     @Override

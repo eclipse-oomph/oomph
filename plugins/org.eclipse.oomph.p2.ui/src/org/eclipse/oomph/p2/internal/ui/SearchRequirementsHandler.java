@@ -37,7 +37,7 @@ public class SearchRequirementsHandler extends AbstractHandler
         Requirement requirement = ObjectUtil.adapt(object, Requirement.class);
         if (requirement != null)
         {
-          searchEclipseRequirementsDialog.setInitialFilterString(requirement);
+          searchEclipseRequirementsDialog.setFilterString(requirement);
           break;
         }
       }
