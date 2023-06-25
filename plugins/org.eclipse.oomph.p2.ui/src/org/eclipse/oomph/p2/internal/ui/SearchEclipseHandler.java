@@ -23,12 +23,12 @@ import org.eclipse.ui.handlers.HandlerUtil;
 /**
  * @author Ed Merks
  */
-public class SearchRequirementsHandler extends AbstractHandler
+public abstract class SearchEclipseHandler extends AbstractHandler
 {
   @Override
   public Object execute(ExecutionEvent event) throws ExecutionException
   {
-    SearchEclipseDialog.Requirements searchEclipseRequirementsDialog = RepositoryExplorer.getSearchEclipseRequirementDialog();
+    SearchEclipseDialog dialog = getSearchEclipseDialog();
     ISelection selection = HandlerUtil.getCurrentSelection(event);
     if (selection instanceof IStructuredSelection)
     {
@@ -37,12 +37,38 @@ public class SearchRequirementsHandler extends AbstractHandler
         Requirement requirement = ObjectUtil.adapt(object, Requirement.class);
         if (requirement != null)
         {
-          searchEclipseRequirementsDialog.setFilterString(requirement);
+          dialog.setFilterString(requirement);
           break;
         }
       }
     }
 
     return null;
+  }
+
+  protected abstract SearchEclipseDialog getSearchEclipseDialog();
+
+  /**
+   * @author Eike Stepper
+   */
+  public static final class Repositories extends SearchEclipseHandler
+  {
+    @Override
+    protected SearchEclipseDialog getSearchEclipseDialog()
+    {
+      return RepositoryExplorer.getSearchEclipseRepositoriesDialog();
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  public static final class Requirements extends SearchEclipseHandler
+  {
+    @Override
+    protected SearchEclipseDialog getSearchEclipseDialog()
+    {
+      return RepositoryExplorer.getSearchEclipseRequirementDialog();
+    }
   }
 }

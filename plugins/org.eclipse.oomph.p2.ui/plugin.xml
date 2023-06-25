@@ -89,7 +89,7 @@
       <handler
             commandId="org.eclipse.oomph.p2.ui.SearchRepositories">
          <class
-               class="org.eclipse.oomph.p2.internal.ui.SearchRepositoriesHandler">
+               class="org.eclipse.oomph.p2.internal.ui.SearchEclipseHandler$Repositories">
          </class>
          <activeWhen>
              <iterate
@@ -105,7 +105,7 @@
       <handler
             commandId="org.eclipse.oomph.p2.ui.SearchRequirements">
          <class
-               class="org.eclipse.oomph.p2.internal.ui.SearchRequirementsHandler">
+               class="org.eclipse.oomph.p2.internal.ui.SearchEclipseHandler$Requirements">
          </class>
          <activeWhen>
              <iterate
