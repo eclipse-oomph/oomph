@@ -1,36 +1,78 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.8"?>
-<target name="Generated from Oomph" sequenceNumber="120">
+<target name="Generated from Oomph" sequenceNumber="121">
   <locations>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-      <unit id="org.eclipse.core.runtime.feature.feature.group" version="0.0.0"/>
-      <unit id="org.eclipse.egit.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.emf.sdk.feature.group" version="0.0.0"/>
-      <unit id="org.eclipse.equinox.executable.feature.group" version="0.0.0"/>
-      <unit id="org.eclipse.justj.openjdk.hotspot.jre.minimal.stripped.feature.group" version="0.0.0"/>
-      <unit id="org.eclipse.m2e.feature.feature.group" version="0.0.0"/>
-      <unit id="org.eclipse.m2e.pde.feature.feature.group" version="0.0.0"/>
+      <repository location="https://download.eclipse.org/modeling/emf/emf/builds/milestone/latest"/>
+    </location>
+    <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+      <unit id="org.apache.ant" version="0.0.0"/>
+      <unit id="org.eclipse.egit.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.jetty.servlet" version="0.0.0"/>
+      <repository location="https://download.eclipse.org/egit/updates-stable-nightly"/>
+    </location>
+    <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+      <unit id="javax.activation" version="0.0.0"/>
       <unit id="org.eclipse.mylyn.builds.sdk.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.mylyn.sdk_feature.feature.group" version="0.0.0"/>
+      <repository location="https://download.eclipse.org/mylyn/updates/nightly/latest"/>
+    </location>
+    <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+      <unit id="org.eclipse.nebula.widgets.cdatetime" version="0.0.0"/>
       <unit id="org.eclipse.nebula.widgets.tablecombo" version="0.0.0"/>
-      <unit id="org.eclipse.sdk.feature.group" version="0.0.0"/>
+      <repository location="https://download.eclipse.org/nebula/snapshot"/>
+    </location>
+    <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+      <unit id="org.eclipse.m2e.feature.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.m2e.pde.feature.feature.group" version="0.0.0"/>
+      <repository location="https://download.eclipse.org/technology/m2e/snapshots/latest"/>
+    </location>
+    <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
       <unit id="org.eclipse.swtbot.eclipse.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.swtbot.generator" version="0.0.0"/>
+      <repository location="https://download.eclipse.org/technology/swtbot/snapshots"/>
+    </location>
+    <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+      <unit id="com.google.guava" version="0.0.0"/>
+      <unit id="jakarta.activation" version="0.0.0"/>
+      <unit id="javax.annotation" version="0.0.0"/>
+      <unit id="javax.inject" version="0.0.0"/>
+      <unit id="org.apache.batik.css" version="0.0.0"/>
+      <unit id="org.apache.commons.collections" version="0.0.0"/>
+      <unit id="org.apache.commons.compress" version="0.0.0"/>
+      <unit id="org.apache.httpcomponents.client5.httpclient5-win" version="0.0.0"/>
+      <unit id="org.apache.lucene.analysis-smartcn" version="0.0.0"/>
+      <unit id="org.junit" version="0.0.0"/>
+      <repository location="https://download.eclipse.org/tools/orbit/downloads/latest-R"/>
+    </location>
+    <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+      <unit id="org.eclipse.justj.openjdk.hotspot.jre.minimal.stripped.feature.group" version="0.0.0"/>
+      <repository location="https://download.eclipse.org/justj/jres/17/updates/milestone/latest"/>
+    </location>
+    <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
       <unit id="org.eclipse.userstorage.oauth" version="0.0.0"/>
       <unit id="org.eclipse.userstorage.tests" version="0.0.0"/>
-      <repository location="https://download.eclipse.org/eclipse/updates/4.29-I-builds"/>
-      <repository location="https://download.eclipse.org/egit/updates-stable-nightly"/>
-      <repository location="https://download.eclipse.org/justj/jres/17/updates/milestone/latest"/>
-      <repository location="https://download.eclipse.org/modeling/emf/emf/builds/milestone/latest"/>
-      <repository location="https://download.eclipse.org/mylyn/updates/nightly/latest"/>
-      <repository location="https://download.eclipse.org/nebula/snapshot"/>
-      <repository location="https://download.eclipse.org/rt/ecf/3.14.38/site.p2/3.14.38.v20230507-1923"/>
-      <repository location="https://download.eclipse.org/technology/m2e/snapshots/latest"/>
-      <repository location="https://download.eclipse.org/technology/swtbot/snapshots"/>
-      <repository location="https://download.eclipse.org/tools/orbit/downloads/drops/R20230531010532/repository"/>
-      <repository location="https://download.eclipse.org/tools/orbit/downloads/latest-R"/>
       <repository location="https://download.eclipse.org/usssdk/updates/latest"/>
+    </location>
+    <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+      <unit id="org.eclipse.wst.xml.core" version="0.0.0"/>
+      <unit id="org.jdom" version="0.0.0"/>
       <repository location="https://download.eclipse.org/webtools/downloads/drops/R3.29.0/R-3.29.0-20230303230236/repository"/>
+    </location>
+    <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+      <unit id="org.eclipse.ecf.core.feature.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.ecf.filetransfer.httpclient5.feature.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.ecf.filetransfer.ssl.feature.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.ecf.provider.jmdns" version="0.0.0"/>
+      <repository location="https://download.eclipse.org/rt/ecf/3.14.38/site.p2/3.14.38.v20230507-1923"/>
+    </location>
+    <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+      <unit id="org.eclipse.core.runtime.feature.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.executable.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.equinox.p2.ui.discovery" version="0.0.0"/>
+      <unit id="org.eclipse.sdk.feature.group" version="0.0.0"/>
+      <repository location="https://download.eclipse.org/eclipse/updates/4.29-I-builds"/>
     </location>
   </locations>
 </target>

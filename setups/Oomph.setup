@@ -467,11 +467,11 @@
         </detail>
         <detail
             key="singleLocation">
-          <value>true</value>
+          <value>false</value>
         </detail>
         <detail
             key="sortLocations">
-          <value>true</value>
+          <value>false</value>
         </detail>
         <detail
             key="includeAllPlatforms">
@@ -484,6 +484,10 @@
         <detail
             key="ignoreJavaRequirements">
           <value>false</value>
+        </detail>
+        <detail
+            key="minimizeImplicitUnits">
+          <value>true</value>
         </detail>
       </annotation>
       <requirement
@@ -509,15 +513,25 @@
       <repositoryList
           name="2023-09">
         <repository
-            url="https://download.eclipse.org/usssdk/updates/latest"/>
+            url="https://download.eclipse.org/modeling/emf/emf/builds/milestone/latest"/>
         <repository
             url="https://download.eclipse.org/egit/updates-stable-nightly"/>
         <repository
+            url="https://download.eclipse.org/mylyn/updates/nightly/latest"/>
+        <repository
+            url="https://download.eclipse.org/nebula/snapshot"/>
+        <repository
+            url="https://download.eclipse.org/technology/m2e/snapshots/latest"/>
+        <repository
+            url="https://download.eclipse.org/technology/swtbot/snapshots"/>
+        <repository
             url="https://download.eclipse.org/tools/orbit/downloads/latest-R"/>
         <repository
-            url="https://download.eclipse.org/tools/orbit/downloads/drops/R20230531010532/repository"/>
+            url="https://download.eclipse.org/justj/jres/17/updates/milestone/latest"/>
         <repository
-            url="https://download.eclipse.org/modeling/emf/emf/builds/milestone/latest"/>
+            url="https://download.eclipse.org/usssdk/updates/latest"/>
+        <repository
+            url="https://download.eclipse.org/webtools/downloads/drops/R3.29.0/R-3.29.0-20230303230236/repository"/>
         <repository
             url="https://download.eclipse.org/rt/ecf/3.14.38/site.p2/3.14.38.v20230507-1923">
           <annotation>
@@ -527,18 +541,6 @@
             </detail>
           </annotation>
         </repository>
-        <repository
-            url="https://download.eclipse.org/mylyn/updates/nightly/latest"/>
-        <repository
-            url="https://download.eclipse.org/technology/m2e/snapshots/latest"/>
-        <repository
-            url="https://download.eclipse.org/nebula/snapshot"/>
-        <repository
-            url="https://download.eclipse.org/technology/swtbot/snapshots"/>
-        <repository
-            url="https://download.eclipse.org/webtools/downloads/drops/R3.29.0/R-3.29.0-20230303230236/repository"/>
-        <repository
-            url="https://download.eclipse.org/justj/jres/17/updates/milestone/latest"/>
       </repositoryList>
       <repositoryList
           name="2023-06">
