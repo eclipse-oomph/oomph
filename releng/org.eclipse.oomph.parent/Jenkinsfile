@@ -238,8 +238,8 @@ pipeline {
       }
       steps {
         echoVariables()
+        cleanWs()
         unstash 'promote-stash'
-        
         script {
           env.GIT=env.WORKSPACE
         }
