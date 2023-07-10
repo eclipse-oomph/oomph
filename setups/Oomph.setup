@@ -398,6 +398,7 @@
   </setupTask>
   <setupTask
       xsi:type="setup:ResourceCreationTask"
+      excludedTriggers="BOOTSTRAP"
       targetURL="${github.clone.oomph.github.location|uri}/.project"
       encoding="UTF-8">
     <description>Create a .project file in the Oomph's .github repository</description>
@@ -467,7 +468,7 @@
         </detail>
         <detail
             key="singleLocation">
-          <value>false</value>
+          <value>true</value>
         </detail>
         <detail
             key="sortLocations">
@@ -487,6 +488,10 @@
         </detail>
         <detail
             key="minimizeImplicitUnits">
+          <value>true</value>
+        </detail>
+        <detail
+            key="generateImplicitUnits">
           <value>true</value>
         </detail>
       </annotation>
