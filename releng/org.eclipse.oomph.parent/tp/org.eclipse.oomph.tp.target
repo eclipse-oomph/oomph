@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.8"?>
-<target name="Generated from Oomph" sequenceNumber="122">
+<target name="Generated from Oomph" sequenceNumber="123">
   <locations>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
       <unit id="bcpg" version="0.0.0"/>
@@ -19,6 +19,7 @@
       <unit id="jakarta.xml.bind" version="0.0.0"/>
       <unit id="javaewah" version="0.0.0"/>
       <unit id="javax.activation" version="0.0.0"/>
+      <unit id="javax.xml" version="0.0.0"/>
       <unit id="net.i2p.crypto.eddsa" version="0.0.0"/>
       <unit id="org.apache.aries.spifly.dynamic.bundle" version="0.0.0"/>
       <unit id="org.apache.commons.cli" version="0.0.0"/>
@@ -41,6 +42,8 @@
       <unit id="org.apache.sshd.osgi" version="0.0.0"/>
       <unit id="org.apache.sshd.sftp" version="0.0.0"/>
       <unit id="org.apache.ws.commons.util" version="0.0.0"/>
+      <unit id="org.apache.xerces" version="0.0.0"/>
+      <unit id="org.apache.xml.resolver" version="0.0.0"/>
       <unit id="org.apache.xmlrpc.client" version="0.0.0"/>
       <unit id="org.apache.xmlrpc.common" version="0.0.0"/>
       <unit id="org.eclipse.core.runtime.feature.feature.group" version="0.0.0"/>
@@ -71,19 +74,19 @@
       <unit id="org.eclipse.m2e.archetype.maven-artifact-transfer" version="0.0.0"/>
       <unit id="org.eclipse.m2e.feature.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.m2e.pde.feature.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.mylyn.bugzilla.feature.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.mylyn.builds.sdk.feature.group" version="0.0.0"/>
-      <unit id="org.eclipse.mylyn.commons.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.mylyn.commons.feature.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.mylyn.commons.identity.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.mylyn.commons.net" version="0.0.0"/>
       <unit id="org.eclipse.mylyn.commons.notifications.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.mylyn.commons.repositories.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.mylyn.commons.repositories.http.feature.group" version="0.0.0"/>
-      <unit id="org.eclipse.mylyn.commons.sdk.util" version="0.0.0"/>
       <unit id="org.eclipse.mylyn.commons.xmlrpc" version="0.0.0"/>
-      <unit id="org.eclipse.mylyn.context_feature.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.mylyn.context.feature.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.mylyn.discovery.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.mylyn.monitor.feature.group" version="0.0.0"/>
-      <unit id="org.eclipse.mylyn.sdk_feature.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.mylyn.tasks.feature.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.mylyn.team_feature.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.mylyn.versions.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.nebula.cwt" version="0.0.0"/>
