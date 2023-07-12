@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.8"?>
-<target name="Generated from Oomph" sequenceNumber="123">
+<target name="Generated from Oomph" sequenceNumber="124">
   <locations>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
       <unit id="bcpg" version="0.0.0"/>
@@ -87,8 +87,8 @@
       <unit id="org.eclipse.mylyn.discovery.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.mylyn.monitor.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.mylyn.tasks.feature.feature.group" version="0.0.0"/>
-      <unit id="org.eclipse.mylyn.team_feature.feature.group" version="0.0.0"/>
-      <unit id="org.eclipse.mylyn.versions.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.mylyn.team.feature.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.mylyn.versions.feature.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.nebula.cwt" version="0.0.0"/>
       <unit id="org.eclipse.nebula.widgets.cdatetime" version="0.0.0"/>
       <unit id="org.eclipse.nebula.widgets.tablecombo" version="0.0.0"/>
