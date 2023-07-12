@@ -69,7 +69,13 @@ pipeline {
         <a href="https://github.com/eclipse-oomph/oomph/blob/master/releng/org.eclipse.oomph.releng/hudson/composeRepositories.sh">composeRepositories.sh</a> and
         <a href="https://github.com/eclipse-oomph/oomph/blob/master/releng/org.eclipse.oomph.releng/hudson/promote.sh">promote.sh</a>.
         <br/>
-        It is generally left blank except for <b>BUILD_TYPE == release</b>, this could be qualifier appended to the BUILD_KEY, e.g., "<b>a</b>" to produce a <b>1.30.0-a</b> release.
+        It is left blank for nightly builds.
+        For <b>BUILD_TYPE == milestone</b>, this should be full version qualifier appended to the computed build version, e.g., "<b>1.30.0-M1</b>" to produce a <b>S20230412-102423-1.30.0-M1</b> milestone.
+        <br/>
+        <br/>
+        For <b>BUILD_TYPE == release</b>, and for a respin, this could be qualifier appended to the BUILD_KEY, e.g., "<b>a</b>" to produce a <b>1.30.0-a</b> release.
+        <br/>
+        Consult <a href="https://download.eclipse.org/justj/?file=oomph/drops/release">https://download.eclipse.org/oomph/drops/milestone</a> for the next available milestone version.
         <br/>
         Consult <a href="https://download.eclipse.org/justj/?file=oomph/drops/release">https://download.eclipse.org/oomph/drops/release</a> for the next available release version.
       '''
