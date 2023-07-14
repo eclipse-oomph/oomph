@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.8"?>
-<target name="Generated from Oomph" sequenceNumber="124">
+<target name="Generated from Oomph" sequenceNumber="125">
   <locations>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
       <unit id="bcpg" version="0.0.0"/>
@@ -51,11 +51,9 @@
       <unit id="org.eclipse.e4.tools.services" version="0.0.0"/>
       <unit id="org.eclipse.ecf.core.feature.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.ecf.core.ssl.feature.feature.group" version="0.0.0"/>
-      <unit id="org.eclipse.ecf.discovery" version="0.0.0"/>
       <unit id="org.eclipse.ecf.filetransfer.feature.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.ecf.filetransfer.httpclient5.feature.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.ecf.filetransfer.ssl.feature.feature.group" version="0.0.0"/>
-      <unit id="org.eclipse.ecf.provider.jmdns" version="0.0.0"/>
       <unit id="org.eclipse.egit.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.emf.sdk.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.equinox.executable.feature.group" version="0.0.0"/>
@@ -75,17 +73,14 @@
       <unit id="org.eclipse.m2e.feature.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.m2e.pde.feature.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.mylyn.bugzilla.feature.feature.group" version="0.0.0"/>
-      <unit id="org.eclipse.mylyn.builds.sdk.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.mylyn.builds.feature.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.mylyn.commons.feature.feature.group" version="0.0.0"/>
-      <unit id="org.eclipse.mylyn.commons.identity.feature.group" version="0.0.0"/>
-      <unit id="org.eclipse.mylyn.commons.net" version="0.0.0"/>
-      <unit id="org.eclipse.mylyn.commons.notifications.feature.group" version="0.0.0"/>
-      <unit id="org.eclipse.mylyn.commons.repositories.feature.group" version="0.0.0"/>
-      <unit id="org.eclipse.mylyn.commons.repositories.http.feature.group" version="0.0.0"/>
-      <unit id="org.eclipse.mylyn.commons.xmlrpc" version="0.0.0"/>
+      <unit id="org.eclipse.mylyn.commons.identity.feature.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.mylyn.commons.notifications.feature.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.mylyn.commons.repositories.feature.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.mylyn.context.feature.feature.group" version="0.0.0"/>
-      <unit id="org.eclipse.mylyn.discovery.feature.group" version="0.0.0"/>
-      <unit id="org.eclipse.mylyn.monitor.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.mylyn.discovery.feature.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.mylyn.monitor.feature.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.mylyn.tasks.feature.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.mylyn.team.feature.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.mylyn.versions.feature.feature.group" version="0.0.0"/>
@@ -106,7 +101,6 @@
       <unit id="org.eclipse.wst.common.uriresolver" version="0.0.0"/>
       <unit id="org.eclipse.wst.sse.core" version="0.0.0"/>
       <unit id="org.eclipse.wst.xml.core" version="0.0.0"/>
-      <unit id="org.glassfish.hk2.osgi-resource-locator" version="0.0.0"/>
       <unit id="org.hamcrest.library" version="0.0.0"/>
       <unit id="org.jdom" version="0.0.0"/>
       <unit id="org.objectweb.asm" version="0.0.0"/>

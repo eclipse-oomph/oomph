@@ -8,5 +8,5 @@
   <requirement
       name="org.eclipse.mylyn.bugzilla.feature.feature.group"/>
   <requirement
-      name="org.eclipse.mylyn.builds.sdk.feature.group"/>
+      name="org.eclipse.mylyn.builds.feature.feature.group"/>
 </targlets:ComponentExtension>
