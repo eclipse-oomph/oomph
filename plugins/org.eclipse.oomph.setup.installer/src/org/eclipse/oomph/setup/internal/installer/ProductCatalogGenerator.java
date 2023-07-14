@@ -194,7 +194,8 @@ public class ProductCatalogGenerator implements IApplication
       "org.eclipse.mylyn.git.feature.group", //
       "org.eclipse.mylyn.hudson.feature.group", //
       "org.eclipse.mylyn.ide_feature.feature.group", //
-      "org.eclipse.mylyn.java_feature.feature.group" //
+      "org.eclipse.mylyn.java_feature.feature.group", //
+      "org.eclipse.mylyn.pde_feature.feature.group" //
   });
 
   private static final String ALL_PRODUCT_ID = "all";
