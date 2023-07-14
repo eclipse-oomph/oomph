@@ -72,7 +72,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2023-06/r/eclipse-ide-java-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2023-09/m1/eclipse-ide-java-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -84,14 +84,14 @@
           label="Eclipse IDE for Java Developers (2023-09)">
         <requirement
             name="epp.package.java"
-            versionRange="[4.28.0,5.0.0)"
+            versionRange="[4.29.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.28.0,5.0.0)"/>
+            versionRange="[4.29.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.28.0,5.0.0)"/>
+            versionRange="[4.29.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -113,19 +113,19 @@
         <requirement
             name="org.eclipse.m2e.logback.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.commons.activity.feature.group"/>
+            name="org.eclipse.mylyn.commons.activity.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.egit.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.git.feature.group"/>
+            name="org.eclipse.mylyn.git.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.github.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.hudson.feature.group"/>
+            name="org.eclipse.mylyn.ide.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.ide_feature.feature.group"/>
+            name="org.eclipse.mylyn.jdt.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.java_feature.feature.group"/>
+            name="org.eclipse.mylyn.jenkins.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.reviews.feature.feature.group"/>
         <requirement
@@ -136,10 +136,30 @@
             name="org.eclipse.tm.terminal.feature.feature.group"/>
         <requirement
             name="org.eclipse.wildwebdeveloper.xml.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.activity.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.git.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.hudson.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.ide_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.java_feature.feature.group"
+            optional="true"
+            max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2023-09"/>
+            url="https://download.eclipse.org/technology/epp/packages/2023-09/202307131200"/>
         <repository
-            url="https://download.eclipse.org/releases/2023-09">
+            url="https://download.eclipse.org/releases/2023-09/202307141000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -234,7 +254,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2023-06/r/eclipse-ide-java-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2023-09/m1/eclipse-ide-java-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -246,14 +266,14 @@
           label="Eclipse IDE for Java Developers (2023-09)">
         <requirement
             name="epp.package.java"
-            versionRange="[4.28.0,5.0.0)"
+            versionRange="[4.29.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.28.0,5.0.0)"/>
+            versionRange="[4.29.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.28.0,5.0.0)"/>
+            versionRange="[4.29.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -275,19 +295,19 @@
         <requirement
             name="org.eclipse.m2e.logback.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.commons.activity.feature.group"/>
+            name="org.eclipse.mylyn.commons.activity.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.egit.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.git.feature.group"/>
+            name="org.eclipse.mylyn.git.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.github.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.hudson.feature.group"/>
+            name="org.eclipse.mylyn.ide.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.ide_feature.feature.group"/>
+            name="org.eclipse.mylyn.jdt.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.java_feature.feature.group"/>
+            name="org.eclipse.mylyn.jenkins.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.reviews.feature.feature.group"/>
         <requirement
@@ -298,10 +318,30 @@
             name="org.eclipse.tm.terminal.feature.feature.group"/>
         <requirement
             name="org.eclipse.wildwebdeveloper.xml.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.activity.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.git.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.hudson.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.ide_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.java_feature.feature.group"
+            optional="true"
+            max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2023-09"/>
+            url="https://download.eclipse.org/technology/epp/packages/2023-09/202307131200"/>
         <repository
-            url="https://download.eclipse.org/releases/2023-09">
+            url="https://download.eclipse.org/releases/2023-09/202307141000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -2205,7 +2245,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2023-06/r/eclipse-ide-enterprise-java-and-web-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2023-09/m1/eclipse-ide-enterprise-java-and-web-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -2217,14 +2257,14 @@
           label="Eclipse IDE for Enterprise Java and Web Developers (2023-09)">
         <requirement
             name="epp.package.jee"
-            versionRange="[4.28.0,5.0.0)"
+            versionRange="[4.29.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.28.0,5.0.0)"/>
+            versionRange="[4.29.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.28.0,5.0.0)"/>
+            versionRange="[4.29.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -2366,21 +2406,21 @@
         <requirement
             name="org.eclipse.m2e.wtp.jsf.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.commons.activity.feature.group"/>
+            name="org.eclipse.mylyn.commons.activity.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.egit.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.git.feature.group"/>
+            name="org.eclipse.mylyn.git.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.github.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.hudson.feature.group"/>
+            name="org.eclipse.mylyn.ide.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.ide_feature.feature.group"/>
+            name="org.eclipse.mylyn.jdt.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.java_feature.feature.group"/>
+            name="org.eclipse.mylyn.jenkins.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.pde_feature.feature.group"/>
+            name="org.eclipse.mylyn.pde.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.reviews.feature.feature.group"/>
         <requirement
@@ -2401,10 +2441,30 @@
             name="org.eclipse.wst.server_adapters.feature.feature.group"/>
         <requirement
             name="org.eclipse.wst.xsl.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.activity.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.git.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.hudson.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.ide_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.java_feature.feature.group"
+            optional="true"
+            max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2023-09"/>
+            url="https://download.eclipse.org/technology/epp/packages/2023-09/202307131200"/>
         <repository
-            url="https://download.eclipse.org/releases/2023-09">
+            url="https://download.eclipse.org/releases/2023-09/202307141000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -2631,7 +2691,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2023-06/r/eclipse-ide-enterprise-java-and-web-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2023-09/m1/eclipse-ide-enterprise-java-and-web-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -2643,14 +2703,14 @@
           label="Eclipse IDE for Enterprise Java and Web Developers (2023-09)">
         <requirement
             name="epp.package.jee"
-            versionRange="[4.28.0,5.0.0)"
+            versionRange="[4.29.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.28.0,5.0.0)"/>
+            versionRange="[4.29.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.28.0,5.0.0)"/>
+            versionRange="[4.29.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -2792,21 +2852,21 @@
         <requirement
             name="org.eclipse.m2e.wtp.jsf.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.commons.activity.feature.group"/>
+            name="org.eclipse.mylyn.commons.activity.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.egit.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.git.feature.group"/>
+            name="org.eclipse.mylyn.git.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.github.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.hudson.feature.group"/>
+            name="org.eclipse.mylyn.ide.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.ide_feature.feature.group"/>
+            name="org.eclipse.mylyn.jdt.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.java_feature.feature.group"/>
+            name="org.eclipse.mylyn.jenkins.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.pde_feature.feature.group"/>
+            name="org.eclipse.mylyn.pde.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.reviews.feature.feature.group"/>
         <requirement
@@ -2827,10 +2887,30 @@
             name="org.eclipse.wst.server_adapters.feature.feature.group"/>
         <requirement
             name="org.eclipse.wst.xsl.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.activity.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.git.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.hudson.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.ide_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.java_feature.feature.group"
+            optional="true"
+            max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2023-09"/>
+            url="https://download.eclipse.org/technology/epp/packages/2023-09/202307131200"/>
         <repository
-            url="https://download.eclipse.org/releases/2023-09">
+            url="https://download.eclipse.org/releases/2023-09/202307141000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -7728,7 +7808,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2023-06/r/eclipse-ide-cc-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2023-09/m1/eclipse-ide-cc-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -7740,14 +7820,14 @@
           label="Eclipse IDE for C/C++ Developers (2023-09)">
         <requirement
             name="epp.package.cpp"
-            versionRange="[4.28.0,5.0.0)"
+            versionRange="[4.29.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.28.0,5.0.0)"/>
+            versionRange="[4.29.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.28.0,5.0.0)"/>
+            versionRange="[4.29.0,5.0.0)"/>
         <requirement
             name="org.eclipse.cdt.autotools.feature.group"/>
         <requirement
@@ -7770,8 +7850,6 @@
             name="org.eclipse.cdt.launch.serial.feature.feature.group"/>
         <requirement
             name="org.eclipse.cdt.meson.feature.group"/>
-        <requirement
-            name="org.eclipse.cdt.mylyn.feature.group"/>
         <requirement
             name="org.eclipse.cdt.testsrunner.feature.feature.group"/>
         <requirement
@@ -7799,17 +7877,19 @@
         <requirement
             name="org.eclipse.linuxtools.valgrind.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.commons.activity.feature.group"/>
+            name="org.eclipse.mylyn.cdt.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.activity.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.egit.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.git.feature.group"/>
+            name="org.eclipse.mylyn.git.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.github.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.hudson.feature.group"/>
+            name="org.eclipse.mylyn.ide.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.ide_feature.feature.group"/>
+            name="org.eclipse.mylyn.jenkins.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.reviews.feature.feature.group"/>
         <requirement
@@ -7826,10 +7906,30 @@
             name="org.eclipse.tracecompass.lttng2.kernel.feature.group"/>
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.activity.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.git.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.hudson.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.ide_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.java_feature.feature.group"
+            optional="true"
+            max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2023-09"/>
+            url="https://download.eclipse.org/technology/epp/packages/2023-09/202307131200"/>
         <repository
-            url="https://download.eclipse.org/releases/2023-09">
+            url="https://download.eclipse.org/releases/2023-09/202307141000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -7958,7 +8058,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2023-06/r/eclipse-ide-cc-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2023-09/m1/eclipse-ide-cc-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -7970,14 +8070,14 @@
           label="Eclipse IDE for C/C++ Developers (2023-09)">
         <requirement
             name="epp.package.cpp"
-            versionRange="[4.28.0,5.0.0)"
+            versionRange="[4.29.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.28.0,5.0.0)"/>
+            versionRange="[4.29.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.28.0,5.0.0)"/>
+            versionRange="[4.29.0,5.0.0)"/>
         <requirement
             name="org.eclipse.cdt.autotools.feature.group"/>
         <requirement
@@ -8000,8 +8100,6 @@
             name="org.eclipse.cdt.launch.serial.feature.feature.group"/>
         <requirement
             name="org.eclipse.cdt.meson.feature.group"/>
-        <requirement
-            name="org.eclipse.cdt.mylyn.feature.group"/>
         <requirement
             name="org.eclipse.cdt.testsrunner.feature.feature.group"/>
         <requirement
@@ -8029,17 +8127,19 @@
         <requirement
             name="org.eclipse.linuxtools.valgrind.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.commons.activity.feature.group"/>
+            name="org.eclipse.mylyn.cdt.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.activity.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.egit.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.git.feature.group"/>
+            name="org.eclipse.mylyn.git.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.github.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.hudson.feature.group"/>
+            name="org.eclipse.mylyn.ide.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.ide_feature.feature.group"/>
+            name="org.eclipse.mylyn.jenkins.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.reviews.feature.feature.group"/>
         <requirement
@@ -8056,10 +8156,30 @@
             name="org.eclipse.tracecompass.lttng2.kernel.feature.group"/>
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.activity.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.git.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.hudson.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.ide_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.java_feature.feature.group"
+            optional="true"
+            max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2023-09"/>
+            url="https://download.eclipse.org/technology/epp/packages/2023-09/202307131200"/>
         <repository
-            url="https://download.eclipse.org/releases/2023-09">
+            url="https://download.eclipse.org/releases/2023-09/202307141000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -10714,7 +10834,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2023-06/r/eclipse-ide-embedded-cc-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2023-09/m1/eclipse-ide-embedded-cc-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -10726,14 +10846,14 @@
           label="Eclipse IDE for Embedded C/C++ Developers (2023-09)">
         <requirement
             name="epp.package.embedcpp"
-            versionRange="[4.28.0,5.0.0)"
+            versionRange="[4.29.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.28.0,5.0.0)"/>
+            versionRange="[4.29.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.28.0,5.0.0)"/>
+            versionRange="[4.29.0,5.0.0)"/>
         <requirement
             name="org.eclipse.cdt.autotools.feature.group"/>
         <requirement
@@ -10756,8 +10876,6 @@
             name="org.eclipse.cdt.launch.serial.feature.feature.group"/>
         <requirement
             name="org.eclipse.cdt.meson.feature.group"/>
-        <requirement
-            name="org.eclipse.cdt.mylyn.feature.group"/>
         <requirement
             name="org.eclipse.cdt.testsrunner.feature.feature.group"/>
         <requirement
@@ -10817,17 +10935,19 @@
         <requirement
             name="org.eclipse.linuxtools.valgrind.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.commons.activity.feature.group"/>
+            name="org.eclipse.mylyn.cdt.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.activity.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.egit.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.git.feature.group"/>
+            name="org.eclipse.mylyn.git.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.github.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.hudson.feature.group"/>
+            name="org.eclipse.mylyn.ide.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.ide_feature.feature.group"/>
+            name="org.eclipse.mylyn.jenkins.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.reviews.feature.feature.group"/>
         <requirement
@@ -10844,10 +10964,30 @@
             name="org.eclipse.tracecompass.lttng2.kernel.feature.group"/>
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.activity.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.git.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.hudson.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.ide_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.java_feature.feature.group"
+            optional="true"
+            max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2023-09"/>
+            url="https://download.eclipse.org/technology/epp/packages/2023-09/202307131200"/>
         <repository
-            url="https://download.eclipse.org/releases/2023-09">
+            url="https://download.eclipse.org/releases/2023-09/202307141000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -11008,7 +11148,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2023-06/r/eclipse-ide-embedded-cc-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2023-09/m1/eclipse-ide-embedded-cc-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -11020,14 +11160,14 @@
           label="Eclipse IDE for Embedded C/C++ Developers (2023-09)">
         <requirement
             name="epp.package.embedcpp"
-            versionRange="[4.28.0,5.0.0)"
+            versionRange="[4.29.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.28.0,5.0.0)"/>
+            versionRange="[4.29.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.28.0,5.0.0)"/>
+            versionRange="[4.29.0,5.0.0)"/>
         <requirement
             name="org.eclipse.cdt.autotools.feature.group"/>
         <requirement
@@ -11050,8 +11190,6 @@
             name="org.eclipse.cdt.launch.serial.feature.feature.group"/>
         <requirement
             name="org.eclipse.cdt.meson.feature.group"/>
-        <requirement
-            name="org.eclipse.cdt.mylyn.feature.group"/>
         <requirement
             name="org.eclipse.cdt.testsrunner.feature.feature.group"/>
         <requirement
@@ -11111,17 +11249,19 @@
         <requirement
             name="org.eclipse.linuxtools.valgrind.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.commons.activity.feature.group"/>
+            name="org.eclipse.mylyn.cdt.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.activity.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.egit.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.git.feature.group"/>
+            name="org.eclipse.mylyn.git.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.github.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.hudson.feature.group"/>
+            name="org.eclipse.mylyn.ide.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.ide_feature.feature.group"/>
+            name="org.eclipse.mylyn.jenkins.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.reviews.feature.feature.group"/>
         <requirement
@@ -11138,10 +11278,30 @@
             name="org.eclipse.tracecompass.lttng2.kernel.feature.group"/>
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.activity.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.git.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.hudson.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.ide_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.java_feature.feature.group"
+            optional="true"
+            max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2023-09"/>
+            url="https://download.eclipse.org/technology/epp/packages/2023-09/202307131200"/>
         <repository
-            url="https://download.eclipse.org/releases/2023-09">
+            url="https://download.eclipse.org/releases/2023-09/202307141000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -12655,7 +12815,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2023-06/r/eclipse-ide-php-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2023-09/m1/eclipse-ide-php-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -12667,14 +12827,14 @@
           label="Eclipse IDE for PHP Developers (2023-09)">
         <requirement
             name="epp.package.php"
-            versionRange="[4.28.0,5.0.0)"
+            versionRange="[4.29.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.28.0,5.0.0)"/>
+            versionRange="[4.29.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.28.0,5.0.0)"/>
+            versionRange="[4.29.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -12684,17 +12844,17 @@
         <requirement
             name="org.eclipse.jgit.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.commons.activity.feature.group"/>
+            name="org.eclipse.mylyn.commons.activity.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.egit.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.git.feature.group"/>
+            name="org.eclipse.mylyn.git.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.github.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.hudson.feature.group"/>
+            name="org.eclipse.mylyn.ide.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.ide_feature.feature.group"/>
+            name="org.eclipse.mylyn.jenkins.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.reviews.feature.feature.group"/>
         <requirement
@@ -12703,8 +12863,6 @@
             name="org.eclipse.php.composer.feature.group"/>
         <requirement
             name="org.eclipse.php.feature.group"/>
-        <requirement
-            name="org.eclipse.php.mylyn.feature.group"/>
         <requirement
             name="org.eclipse.php.phpunit.feature.feature.group"/>
         <requirement
@@ -12719,10 +12877,30 @@
             name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.activity.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.git.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.hudson.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.ide_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.java_feature.feature.group"
+            optional="true"
+            max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2023-09"/>
+            url="https://download.eclipse.org/technology/epp/packages/2023-09/202307131200"/>
         <repository
-            url="https://download.eclipse.org/releases/2023-09">
+            url="https://download.eclipse.org/releases/2023-09/202307141000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -12817,7 +12995,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2023-06/r/eclipse-ide-php-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2023-09/m1/eclipse-ide-php-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -12829,14 +13007,14 @@
           label="Eclipse IDE for PHP Developers (2023-09)">
         <requirement
             name="epp.package.php"
-            versionRange="[4.28.0,5.0.0)"
+            versionRange="[4.29.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.28.0,5.0.0)"/>
+            versionRange="[4.29.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.28.0,5.0.0)"/>
+            versionRange="[4.29.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -12846,17 +13024,17 @@
         <requirement
             name="org.eclipse.jgit.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.commons.activity.feature.group"/>
+            name="org.eclipse.mylyn.commons.activity.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.egit.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.git.feature.group"/>
+            name="org.eclipse.mylyn.git.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.github.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.hudson.feature.group"/>
+            name="org.eclipse.mylyn.ide.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.ide_feature.feature.group"/>
+            name="org.eclipse.mylyn.jenkins.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.reviews.feature.feature.group"/>
         <requirement
@@ -12865,8 +13043,6 @@
             name="org.eclipse.php.composer.feature.group"/>
         <requirement
             name="org.eclipse.php.feature.group"/>
-        <requirement
-            name="org.eclipse.php.mylyn.feature.group"/>
         <requirement
             name="org.eclipse.php.phpunit.feature.feature.group"/>
         <requirement
@@ -12881,10 +13057,30 @@
             name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.activity.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.git.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.hudson.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.ide_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.java_feature.feature.group"
+            optional="true"
+            max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2023-09"/>
+            url="https://download.eclipse.org/technology/epp/packages/2023-09/202307131200"/>
         <repository
-            url="https://download.eclipse.org/releases/2023-09">
+            url="https://download.eclipse.org/releases/2023-09/202307141000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -14759,7 +14955,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2023-06/r/eclipse-ide-eclipse-committers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2023-09/m1/eclipse-ide-eclipse-committers</value>
         </detail>
         <detail
             key="shortcut">
@@ -14771,14 +14967,14 @@
           label="Eclipse IDE for Eclipse Committers (2023-09)">
         <requirement
             name="epp.package.committers"
-            versionRange="[4.28.0,5.0.0)"
+            versionRange="[4.29.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.28.0,5.0.0)"/>
+            versionRange="[4.29.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.28.0,5.0.0)"/>
+            versionRange="[4.29.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -14808,21 +15004,21 @@
         <requirement
             name="org.eclipse.m2e.pde.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.commons.activity.feature.group"/>
+            name="org.eclipse.mylyn.commons.activity.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.egit.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.git.feature.group"/>
+            name="org.eclipse.mylyn.git.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.github.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.hudson.feature.group"/>
+            name="org.eclipse.mylyn.ide.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.ide_feature.feature.group"/>
+            name="org.eclipse.mylyn.jdt.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.java_feature.feature.group"/>
+            name="org.eclipse.mylyn.jenkins.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.pde_feature.feature.group"/>
+            name="org.eclipse.mylyn.pde.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.reviews.feature.feature.group"/>
         <requirement
@@ -14847,10 +15043,30 @@
             name="org.eclipse.wildwebdeveloper.embedder.node.feature.feature.group"/>
         <requirement
             name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.activity.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.git.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.hudson.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.ide_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.java_feature.feature.group"
+            optional="true"
+            max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2023-09"/>
+            url="https://download.eclipse.org/technology/epp/packages/2023-09/202307131200"/>
         <repository
-            url="https://download.eclipse.org/releases/2023-09">
+            url="https://download.eclipse.org/releases/2023-09/202307141000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -14969,7 +15185,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2023-06/r/eclipse-ide-eclipse-committers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2023-09/m1/eclipse-ide-eclipse-committers</value>
         </detail>
         <detail
             key="shortcut">
@@ -14981,14 +15197,14 @@
           label="Eclipse IDE for Eclipse Committers (2023-09)">
         <requirement
             name="epp.package.committers"
-            versionRange="[4.28.0,5.0.0)"
+            versionRange="[4.29.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.28.0,5.0.0)"/>
+            versionRange="[4.29.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.28.0,5.0.0)"/>
+            versionRange="[4.29.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -15018,21 +15234,21 @@
         <requirement
             name="org.eclipse.m2e.pde.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.commons.activity.feature.group"/>
+            name="org.eclipse.mylyn.commons.activity.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.egit.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.git.feature.group"/>
+            name="org.eclipse.mylyn.git.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.github.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.hudson.feature.group"/>
+            name="org.eclipse.mylyn.ide.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.ide_feature.feature.group"/>
+            name="org.eclipse.mylyn.jdt.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.java_feature.feature.group"/>
+            name="org.eclipse.mylyn.jenkins.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.pde_feature.feature.group"/>
+            name="org.eclipse.mylyn.pde.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.reviews.feature.feature.group"/>
         <requirement
@@ -15057,10 +15273,30 @@
             name="org.eclipse.wildwebdeveloper.embedder.node.feature.feature.group"/>
         <requirement
             name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.activity.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.git.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.hudson.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.ide_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.java_feature.feature.group"
+            optional="true"
+            max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2023-09"/>
+            url="https://download.eclipse.org/technology/epp/packages/2023-09/202307131200"/>
         <repository
-            url="https://download.eclipse.org/releases/2023-09">
+            url="https://download.eclipse.org/releases/2023-09/202307141000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -17666,7 +17902,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2023-06/r/eclipse-ide-java-and-dsl-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2023-09/m1/eclipse-ide-java-and-dsl-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -17678,14 +17914,14 @@
           label="Eclipse DSL Tools (2023-09)">
         <requirement
             name="epp.package.dsl"
-            versionRange="[4.28.0,5.0.0)"
+            versionRange="[4.29.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.28.0,5.0.0)"/>
+            versionRange="[4.29.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.28.0,5.0.0)"/>
+            versionRange="[4.29.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -17719,9 +17955,9 @@
         <requirement
             name="org.eclipse.xtext.sdk.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2023-09"/>
+            url="https://download.eclipse.org/technology/epp/packages/2023-09/202307131200"/>
         <repository
-            url="https://download.eclipse.org/releases/2023-09">
+            url="https://download.eclipse.org/releases/2023-09/202307141000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -17804,7 +18040,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2023-06/r/eclipse-ide-java-and-dsl-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2023-09/m1/eclipse-ide-java-and-dsl-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -17816,14 +18052,14 @@
           label="Eclipse DSL Tools (2023-09)">
         <requirement
             name="epp.package.dsl"
-            versionRange="[4.28.0,5.0.0)"
+            versionRange="[4.29.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.28.0,5.0.0)"/>
+            versionRange="[4.29.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.28.0,5.0.0)"/>
+            versionRange="[4.29.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -17857,9 +18093,9 @@
         <requirement
             name="org.eclipse.xtext.sdk.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2023-09"/>
+            url="https://download.eclipse.org/technology/epp/packages/2023-09/202307131200"/>
         <repository
-            url="https://download.eclipse.org/releases/2023-09">
+            url="https://download.eclipse.org/releases/2023-09/202307141000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -19509,7 +19745,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2023-06/r/eclipse-ide-rcp-and-rap-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2023-09/m1/eclipse-ide-rcp-and-rap-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -19521,14 +19757,14 @@
           label="Eclipse for RCP and RAP Developers (2023-09)">
         <requirement
             name="epp.package.rcp"
-            versionRange="[4.28.0,5.0.0)"
+            versionRange="[4.29.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.28.0,5.0.0)"/>
+            versionRange="[4.29.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.28.0,5.0.0)"/>
+            versionRange="[4.29.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
             versionRange="[3.19.0,4.0.0)"/>
@@ -19560,21 +19796,21 @@
         <requirement
             name="org.eclipse.m2e.pde.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.commons.activity.feature.group"/>
+            name="org.eclipse.mylyn.commons.activity.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.egit.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.git.feature.group"/>
+            name="org.eclipse.mylyn.git.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.github.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.hudson.feature.group"/>
+            name="org.eclipse.mylyn.ide.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.ide_feature.feature.group"/>
+            name="org.eclipse.mylyn.jdt.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.java_feature.feature.group"/>
+            name="org.eclipse.mylyn.jenkins.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.pde_feature.feature.group"/>
+            name="org.eclipse.mylyn.pde.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.reviews.feature.feature.group"/>
         <requirement
@@ -19595,10 +19831,30 @@
             name="org.eclipse.tm.terminal.feature.feature.group"/>
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.activity.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.git.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.hudson.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.ide_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.java_feature.feature.group"
+            optional="true"
+            max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2023-09"/>
+            url="https://download.eclipse.org/technology/epp/packages/2023-09/202307131200"/>
         <repository
-            url="https://download.eclipse.org/releases/2023-09">
+            url="https://download.eclipse.org/releases/2023-09/202307141000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -19715,7 +19971,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2023-06/r/eclipse-ide-rcp-and-rap-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2023-09/m1/eclipse-ide-rcp-and-rap-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -19727,14 +19983,14 @@
           label="Eclipse for RCP and RAP Developers (2023-09)">
         <requirement
             name="epp.package.rcp"
-            versionRange="[4.28.0,5.0.0)"
+            versionRange="[4.29.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.28.0,5.0.0)"/>
+            versionRange="[4.29.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.28.0,5.0.0)"/>
+            versionRange="[4.29.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
             versionRange="[3.19.0,4.0.0)"/>
@@ -19766,21 +20022,21 @@
         <requirement
             name="org.eclipse.m2e.pde.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.commons.activity.feature.group"/>
+            name="org.eclipse.mylyn.commons.activity.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.egit.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.git.feature.group"/>
+            name="org.eclipse.mylyn.git.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.github.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.hudson.feature.group"/>
+            name="org.eclipse.mylyn.ide.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.ide_feature.feature.group"/>
+            name="org.eclipse.mylyn.jdt.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.java_feature.feature.group"/>
+            name="org.eclipse.mylyn.jenkins.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.pde_feature.feature.group"/>
+            name="org.eclipse.mylyn.pde.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.reviews.feature.feature.group"/>
         <requirement
@@ -19801,10 +20057,30 @@
             name="org.eclipse.tm.terminal.feature.feature.group"/>
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.activity.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.git.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.hudson.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.ide_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.java_feature.feature.group"
+            optional="true"
+            max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2023-09"/>
+            url="https://download.eclipse.org/technology/epp/packages/2023-09/202307131200"/>
         <repository
-            url="https://download.eclipse.org/releases/2023-09">
+            url="https://download.eclipse.org/releases/2023-09/202307141000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -22072,7 +22348,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2023-06/r/eclipse-modeling-tools</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2023-09/m1/eclipse-modeling-tools</value>
         </detail>
         <detail
             key="shortcut">
@@ -22084,14 +22360,14 @@
           label="Eclipse Modeling Tools (2023-09)">
         <requirement
             name="epp.package.modeling"
-            versionRange="[4.28.0,5.0.0)"
+            versionRange="[4.29.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.28.0,5.0.0)"/>
+            versionRange="[4.29.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.28.0,5.0.0)"/>
+            versionRange="[4.29.0,5.0.0)"/>
         <requirement
             name="org.eclipse.e4.core.tools.feature.feature.group"/>
         <requirement
@@ -22135,21 +22411,21 @@
         <requirement
             name="org.eclipse.jgit.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.commons.activity.feature.group"/>
+            name="org.eclipse.mylyn.commons.activity.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.egit.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.git.feature.group"/>
+            name="org.eclipse.mylyn.git.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.github.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.hudson.feature.group"/>
+            name="org.eclipse.mylyn.ide.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.ide_feature.feature.group"/>
+            name="org.eclipse.mylyn.jdt.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.java_feature.feature.group"/>
+            name="org.eclipse.mylyn.jenkins.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.pde_feature.feature.group"/>
+            name="org.eclipse.mylyn.pde.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.reviews.feature.feature.group"/>
         <requirement
@@ -22170,10 +22446,30 @@
             name="org.eclipse.uml2.sdk.feature.group"/>
         <requirement
             name="org.eclipse.xsd.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.activity.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.git.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.hudson.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.ide_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.java_feature.feature.group"
+            optional="true"
+            max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2023-09"/>
+            url="https://download.eclipse.org/technology/epp/packages/2023-09/202307131200"/>
         <repository
-            url="https://download.eclipse.org/releases/2023-09">
+            url="https://download.eclipse.org/releases/2023-09/202307141000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -22302,7 +22598,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2023-06/r/eclipse-modeling-tools</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2023-09/m1/eclipse-modeling-tools</value>
         </detail>
         <detail
             key="shortcut">
@@ -22314,14 +22610,14 @@
           label="Eclipse Modeling Tools (2023-09)">
         <requirement
             name="epp.package.modeling"
-            versionRange="[4.28.0,5.0.0)"
+            versionRange="[4.29.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.28.0,5.0.0)"/>
+            versionRange="[4.29.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.28.0,5.0.0)"/>
+            versionRange="[4.29.0,5.0.0)"/>
         <requirement
             name="org.eclipse.e4.core.tools.feature.feature.group"/>
         <requirement
@@ -22365,21 +22661,21 @@
         <requirement
             name="org.eclipse.jgit.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.commons.activity.feature.group"/>
+            name="org.eclipse.mylyn.commons.activity.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.egit.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.git.feature.group"/>
+            name="org.eclipse.mylyn.git.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.github.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.hudson.feature.group"/>
+            name="org.eclipse.mylyn.ide.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.ide_feature.feature.group"/>
+            name="org.eclipse.mylyn.jdt.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.java_feature.feature.group"/>
+            name="org.eclipse.mylyn.jenkins.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.pde_feature.feature.group"/>
+            name="org.eclipse.mylyn.pde.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.reviews.feature.feature.group"/>
         <requirement
@@ -22400,10 +22696,30 @@
             name="org.eclipse.uml2.sdk.feature.group"/>
         <requirement
             name="org.eclipse.xsd.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.activity.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.git.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.hudson.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.ide_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.java_feature.feature.group"
+            optional="true"
+            max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2023-09"/>
+            url="https://download.eclipse.org/technology/epp/packages/2023-09/202307131200"/>
         <repository
-            url="https://download.eclipse.org/releases/2023-09">
+            url="https://download.eclipse.org/releases/2023-09/202307141000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -24951,7 +25267,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2023-06/r/eclipse-ide-scientific-computing</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2023-09/m1/eclipse-ide-scientific-computing</value>
         </detail>
         <detail
             key="shortcut">
@@ -24963,14 +25279,14 @@
           label="Eclipse for Scientific Computing (2023-09)">
         <requirement
             name="epp.package.parallel"
-            versionRange="[4.28.0,5.0.0)"
+            versionRange="[4.29.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.28.0,5.0.0)"/>
+            versionRange="[4.29.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.28.0,5.0.0)"/>
+            versionRange="[4.29.0,5.0.0)"/>
         <requirement
             name="org.eclipse.cdt.autotools.feature.group"/>
         <requirement
@@ -24986,8 +25302,6 @@
         <requirement
             name="org.eclipse.cdt.launch.remote.feature.group"/>
         <requirement
-            name="org.eclipse.cdt.mylyn.feature.group"/>
-        <requirement
             name="org.eclipse.cdt.testsrunner.feature.feature.group"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
@@ -24996,17 +25310,19 @@
         <requirement
             name="org.eclipse.jgit.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.commons.activity.feature.group"/>
+            name="org.eclipse.mylyn.cdt.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.activity.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.egit.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.git.feature.group"/>
+            name="org.eclipse.mylyn.git.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.github.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.hudson.feature.group"/>
+            name="org.eclipse.mylyn.ide.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.ide_feature.feature.group"/>
+            name="org.eclipse.mylyn.jenkins.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.reviews.feature.feature.group"/>
         <requirement
@@ -25031,10 +25347,30 @@
             name="org.eclipse.tm.terminal.feature.feature.group"/>
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.activity.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.git.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.hudson.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.ide_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.java_feature.feature.group"
+            optional="true"
+            max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2023-09"/>
+            url="https://download.eclipse.org/technology/epp/packages/2023-09/202307131200"/>
         <repository
-            url="https://download.eclipse.org/releases/2023-09">
+            url="https://download.eclipse.org/releases/2023-09/202307141000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -25145,7 +25481,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2023-06/r/eclipse-ide-scientific-computing</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2023-09/m1/eclipse-ide-scientific-computing</value>
         </detail>
         <detail
             key="shortcut">
@@ -25157,14 +25493,14 @@
           label="Eclipse for Scientific Computing (2023-09)">
         <requirement
             name="epp.package.parallel"
-            versionRange="[4.28.0,5.0.0)"
+            versionRange="[4.29.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.28.0,5.0.0)"/>
+            versionRange="[4.29.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.28.0,5.0.0)"/>
+            versionRange="[4.29.0,5.0.0)"/>
         <requirement
             name="org.eclipse.cdt.autotools.feature.group"/>
         <requirement
@@ -25180,8 +25516,6 @@
         <requirement
             name="org.eclipse.cdt.launch.remote.feature.group"/>
         <requirement
-            name="org.eclipse.cdt.mylyn.feature.group"/>
-        <requirement
             name="org.eclipse.cdt.testsrunner.feature.feature.group"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
@@ -25190,17 +25524,19 @@
         <requirement
             name="org.eclipse.jgit.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.commons.activity.feature.group"/>
+            name="org.eclipse.mylyn.cdt.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.activity.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.egit.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.git.feature.group"/>
+            name="org.eclipse.mylyn.git.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.github.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.hudson.feature.group"/>
+            name="org.eclipse.mylyn.ide.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.ide_feature.feature.group"/>
+            name="org.eclipse.mylyn.jenkins.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.reviews.feature.feature.group"/>
         <requirement
@@ -25225,10 +25561,30 @@
             name="org.eclipse.tm.terminal.feature.feature.group"/>
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.activity.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.git.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.hudson.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.ide_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.java_feature.feature.group"
+            optional="true"
+            max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2023-09"/>
+            url="https://download.eclipse.org/technology/epp/packages/2023-09/202307131200"/>
         <repository
-            url="https://download.eclipse.org/releases/2023-09">
+            url="https://download.eclipse.org/releases/2023-09/202307141000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -27511,7 +27867,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2023-06/r/eclipse-ide-scout-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2023-09/m1/eclipse-ide-scout-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -27523,14 +27879,14 @@
           label="Eclipse for Scout Developers (2023-09)">
         <requirement
             name="epp.package.scout"
-            versionRange="[4.28.0,5.0.0)"
+            versionRange="[4.29.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.28.0,5.0.0)"/>
+            versionRange="[4.29.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.28.0,5.0.0)"/>
+            versionRange="[4.29.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -27552,19 +27908,19 @@
         <requirement
             name="org.eclipse.m2e.lemminx.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.commons.activity.feature.group"/>
+            name="org.eclipse.mylyn.commons.activity.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.egit.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.git.feature.group"/>
+            name="org.eclipse.mylyn.git.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.github.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.hudson.feature.group"/>
+            name="org.eclipse.mylyn.ide.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.ide_feature.feature.group"/>
+            name="org.eclipse.mylyn.jdt.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.java_feature.feature.group"/>
+            name="org.eclipse.mylyn.jenkins.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.reviews.feature.feature.group"/>
         <requirement
@@ -27577,10 +27933,30 @@
             name="org.eclipse.wst.web_ui.feature.feature.group"/>
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.activity.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.git.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.hudson.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.ide_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.java_feature.feature.group"
+            optional="true"
+            max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2023-09"/>
+            url="https://download.eclipse.org/technology/epp/packages/2023-09/202307131200"/>
         <repository
-            url="https://download.eclipse.org/releases/2023-09">
+            url="https://download.eclipse.org/releases/2023-09/202307141000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -27677,7 +28053,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2023-06/r/eclipse-ide-scout-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2023-09/m1/eclipse-ide-scout-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -27689,14 +28065,14 @@
           label="Eclipse for Scout Developers (2023-09)">
         <requirement
             name="epp.package.scout"
-            versionRange="[4.28.0,5.0.0)"
+            versionRange="[4.29.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.28.0,5.0.0)"/>
+            versionRange="[4.29.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.28.0,5.0.0)"/>
+            versionRange="[4.29.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -27718,19 +28094,19 @@
         <requirement
             name="org.eclipse.m2e.lemminx.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.commons.activity.feature.group"/>
+            name="org.eclipse.mylyn.commons.activity.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.egit.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.git.feature.group"/>
+            name="org.eclipse.mylyn.git.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.github.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.hudson.feature.group"/>
+            name="org.eclipse.mylyn.ide.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.ide_feature.feature.group"/>
+            name="org.eclipse.mylyn.jdt.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.java_feature.feature.group"/>
+            name="org.eclipse.mylyn.jenkins.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.reviews.feature.feature.group"/>
         <requirement
@@ -27743,10 +28119,30 @@
             name="org.eclipse.wst.web_ui.feature.feature.group"/>
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.activity.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.git.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.hudson.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.ide_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.java_feature.feature.group"
+            optional="true"
+            max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2023-09"/>
+            url="https://download.eclipse.org/technology/epp/packages/2023-09/202307131200"/>
         <repository
-            url="https://download.eclipse.org/releases/2023-09">
+            url="https://download.eclipse.org/releases/2023-09/202307141000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -32438,16 +32834,16 @@
           label="Eclipse Platform (2023-09)">
         <requirement
             name="org.eclipse.platform.ide"
-            versionRange="[4.28.0,5.0.0)"
+            versionRange="[4.29.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.28.0,5.0.0)"/>
+            versionRange="[4.29.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.28.0,5.0.0)"/>
+            versionRange="[4.29.0,5.0.0)"/>
         <repository
-            url="https://download.eclipse.org/releases/2023-09">
+            url="https://download.eclipse.org/releases/2023-09/202307141000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -32504,16 +32900,16 @@
           label="Eclipse Platform (2023-09)">
         <requirement
             name="org.eclipse.platform.ide"
-            versionRange="[4.28.0,5.0.0)"
+            versionRange="[4.29.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.28.0,5.0.0)"/>
+            versionRange="[4.29.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.28.0,5.0.0)"/>
+            versionRange="[4.29.0,5.0.0)"/>
         <repository
-            url="https://download.eclipse.org/releases/2023-09">
+            url="https://download.eclipse.org/releases/2023-09/202307141000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>

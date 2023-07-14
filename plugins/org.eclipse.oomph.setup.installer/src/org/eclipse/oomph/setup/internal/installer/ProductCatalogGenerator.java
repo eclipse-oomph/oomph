@@ -189,6 +189,14 @@ public class ProductCatalogGenerator implements IApplication
       "epp.package.automotive" //
   });
 
+  private static final List<String> OBSOELETE_MYLYN_FEATURES = Arrays.asList(new String[] { //
+      "org.eclipse.mylyn.commons.activity.feature.group", //
+      "org.eclipse.mylyn.git.feature.group", //
+      "org.eclipse.mylyn.hudson.feature.group", //
+      "org.eclipse.mylyn.ide_feature.feature.group", //
+      "org.eclipse.mylyn.java_feature.feature.group" //
+  });
+
   private static final String ALL_PRODUCT_ID = "all";
 
   private static final List<String> SPECIAL_PRODUCT_IDS = Arrays.asList(new String[] { "org.eclipse.platform.ide" });
@@ -1607,6 +1615,7 @@ public class ProductCatalogGenerator implements IApplication
     P2Task p2Task = SetupP2Factory.eINSTANCE.createP2Task();
     p2Task.setLabel(p2TaskLabel);
 
+    List<Requirement> obsoleteMylynRequirements = new ArrayList<Requirement>();
     if (!ALL_PRODUCT_ID.equals(productName) && !ECLIPSE_PLATFORM_SDK_PRODUCT_ID.equals(productName))
     {
       Requirement requirement = P2Factory.eINSTANCE.createRequirement();
@@ -1617,7 +1626,8 @@ public class ProductCatalogGenerator implements IApplication
       addAdditionalInstallRootIURequirements(p2Task.getRequirements(), productName, train);
       for (Requirement additionalRequirement : p2Task.getRequirements())
       {
-        if ("org.eclipse.passage.ldc.feature.feature.group".equals(additionalRequirement.getName()))
+        String additionalRequirementName = additionalRequirement.getName();
+        if ("org.eclipse.passage.ldc.feature.feature.group".equals(additionalRequirementName))
         {
           if (compareTrains(train, "2022-03") < 0)
           {
@@ -1631,6 +1641,24 @@ public class ProductCatalogGenerator implements IApplication
             break;
           }
         }
+
+        if (compareTrains(train, "2023-09") == 0)
+        {
+          if (additionalRequirementName.startsWith("org.eclipse.mylyn") && !additionalRequirementName.contains("mylyn.wiki"))
+          {
+            if (obsoleteMylynRequirements.isEmpty())
+            {
+              for (String obsoleteMylynFeature : OBSOELETE_MYLYN_FEATURES)
+              {
+                Requirement obsoleteMylynRequirement = P2Factory.eINSTANCE.createRequirement();
+                obsoleteMylynRequirement.setName(obsoleteMylynFeature);
+                obsoleteMylynRequirement.setMin(0);
+                obsoleteMylynRequirement.setMax(0);
+                obsoleteMylynRequirements.add(obsoleteMylynRequirement);
+              }
+            }
+          }
+        }
       }
     }
     else
@@ -1639,6 +1667,8 @@ public class ProductCatalogGenerator implements IApplication
       addAllRootIURequirements(requirements, versionSegment, ius);
       requirements.move(0, requirements.size() - 1);
     }
+
+    p2Task.getRequirements().addAll(obsoleteMylynRequirements);
 
     if (!SPECIAL_PRODUCT_IDS.contains(productName) && packageRepository != null)
     {
