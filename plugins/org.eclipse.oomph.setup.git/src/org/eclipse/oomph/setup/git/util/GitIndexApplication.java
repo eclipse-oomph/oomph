@@ -79,6 +79,7 @@ public class GitIndexApplication implements IApplication
       "https://git.eclipse.org/r/sequoyah/org.eclipse.sequoyah", //
       "https://github.com/eclipse/org.eclipse.scout.docs", //
       "https://git.eclipse.org/r/webtools/org.eclipse.webtools.java-ee-config", //
+      "https://gitlab.eclipse.org/eclipse/sw360/playground.git", //
       "" //
   ));
 
@@ -94,6 +95,8 @@ public class GitIndexApplication implements IApplication
       "https://git.eclipse.org/r/servertools/webtools.servertools.docs", //
       "https://git.eclipse.org/r/statet/org.eclipse.statet", //
       "https://git.eclipse.org/r/tcf/org.eclipse.tcf.agent", //
+      "https://git.eclipse.org/r/webtools/webtools.maps", //
+      "https://git.eclipse.org/r/webtools/webtools.releng.aggregator", //
       "https://github.com/deeplearning4j/deeplearning4j-docs", //
       "https://github.com/eclipse-actf/org.eclipse.actf.visualization.releng", //
       "https://github.com/eclipse-babel/server", //
@@ -167,6 +170,26 @@ public class GitIndexApplication implements IApplication
       "https://github.com/eclipse/omr", //
       "https://github.com/eclipse/org.eclipse.riena.3xtargets", //
       "https://github.com/eclipse/org.eclipse.riena.setup", //
+      "https://github.com/eclipse/org.eclipse.sensinact", //
+      "https://github.com/eclipse/org.eclipse.sensinact.studioweb", //
+      "https://github.com/eclipse/winery-topologymodeler", //
+      "https://github.com/eclipse/xacc", //
+      "https://github.com/eclipse/xtext-archive", //
+      "https://github.com/osgi/osgi.enroute.site", //
+      "https://gitlab.eclipse.org/eclipse/asciidoc-lang/asciidoc-lang", //
+      "https://gitlab.eclipse.org/eclipse/asciidoc-lang/asciidoc-tck", //
+      "https://gitlab.eclipse.org/eclipse/austen/austen", //
+      "https://gitlab.eclipse.org/eclipse/dash/org.eclipse.dash.handbook", //
+      "https://gitlab.eclipse.org/eclipse/gmf-tooling/org.eclipse.gmf-tooling.uml2tools.releng", //
+      "https://gitlab.eclipse.org/eclipse/mpc/org-eclipse-epp-mpc", //
+      "https://gitlab.eclipse.org/eclipse/osee/org.eclipse.ote", //
+      "https://gitlab.eclipse.org/eclipse/plato/bok", //
+      "https://gitlab.eclipse.org/eclipse/plato/www", //
+      "https://gitlab.eclipse.org/eclipse/rtsc/org.eclipse.rtsc.contrib", //
+      "https://gitlab.eclipse.org/eclipse/rtsc/org.eclipse.rtsc.test", //
+      "https://gitlab.eclipse.org/eclipse/rtsc/org.eclipse.rtsc.training", //
+      "https://gitlab.eclipse.org/eclipse/sw361/playground-git", //
+
       "" //
   ));
 
@@ -283,9 +306,7 @@ public class GitIndexApplication implements IApplication
       "https://git.eclipse.org/r/webtools-common/webtools.common.fproj", //
       "https://git.eclipse.org/r/webtools-common/webtools.common.snippets", //
       "https://git.eclipse.org/r/webtools-common/webtools.common.tests", //
-      "https://git.eclipse.org/r/webtools/webtools.maps", //
       "https://git.eclipse.org/r/webtools/webtools.releng", //
-      "https://git.eclipse.org/r/webtools/webtools.releng.aggregator", //
       "https://git.eclipse.org/r/xwt/org.eclipse.xwt", //
       "https://github.com/deeplearning4j/deeplearning4j", //
       "https://github.com/deeplearning4j/deeplearning4j-examples", //
@@ -469,10 +490,8 @@ public class GitIndexApplication implements IApplication
       "https://github.com/eclipse/org.eclipse.riena.plugins.archive", //
       "https://github.com/eclipse/org.eclipse.riena.rap", //
       "https://github.com/eclipse/org.eclipse.riena.toolbox", //
-      "https://github.com/eclipse/org.eclipse.sensinact", //
       "https://github.com/eclipse/org.eclipse.sensinact.gateway", //
       "https://github.com/eclipse/org.eclipse.sensinact.studio", //
-      "https://github.com/eclipse/org.eclipse.sensinact.studioweb", //
       "https://github.com/eclipse/packager", //
       "https://github.com/eclipse/poosl", //
       "https://github.com/eclipse/rdf4j", //
@@ -496,56 +515,39 @@ public class GitIndexApplication implements IApplication
       "https://github.com/eclipse/tm4e", //
       "https://github.com/eclipse/transformer", //
       "https://github.com/eclipse/winery", //
-      "https://github.com/eclipse/winery-topologymodeler", //
-      "https://github.com/eclipse/xacc", //
       "https://github.com/eclipse/xsemantics", //
       "https://github.com/eclipse/xtext", //
-      "https://github.com/eclipse/xtext-archive", //
       "https://github.com/osgi/jakartarest-osgi", //
       "https://github.com/osgi/osgi", //
       "https://github.com/osgi/osgi-test", //
       "https://github.com/osgi/osgi.enroute", //
-      "https://github.com/osgi/osgi.enroute.site", //
       "https://github.com/osgi/slf4j-osgi", //
       "https://gitlab.eclipse.org/eclipse/amp/org.eclipse.amp", //
-      "https://gitlab.eclipse.org/eclipse/asciidoc-lang/asciidoc-lang", //
-      "https://gitlab.eclipse.org/eclipse/asciidoc-lang/asciidoc-tck", //
-      "https://gitlab.eclipse.org/eclipse/austen/austen", //
       "https://gitlab.eclipse.org/eclipse/camf/org.eclipse.camf", //
       "https://gitlab.eclipse.org/eclipse/comma/comma", //
-      "https://gitlab.eclipse.org/eclipse/dash/org.eclipse.dash.handbook", //
       "https://gitlab.eclipse.org/eclipse/ease/ease", //
       "https://gitlab.eclipse.org/eclipse/ease/ease-scripts", //
       "https://gitlab.eclipse.org/eclipse/escet/escet", //
       "https://gitlab.eclipse.org/eclipse/etrice/etrice", //
       "https://gitlab.eclipse.org/eclipse/gmf-tooling/org.eclipse.gmf-tooling", //
       "https://gitlab.eclipse.org/eclipse/gmf-tooling/org.eclipse.gmf-tooling.uml2tools", //
-      "https://gitlab.eclipse.org/eclipse/gmf-tooling/org.eclipse.gmf-tooling.uml2tools.releng", //
       "https://gitlab.eclipse.org/eclipse/graphiti/graphiti", //
       "https://gitlab.eclipse.org/eclipse/hawk/hawk", //
       "https://gitlab.eclipse.org/eclipse/ice/ice", //
       "https://gitlab.eclipse.org/eclipse/jwt/org.eclipse.soa.jwt", //
       "https://gitlab.eclipse.org/eclipse/lsat/lsat", //
       "https://gitlab.eclipse.org/eclipse/mangrove/org.eclipse.mangrove", //
-      "https://gitlab.eclipse.org/eclipse/mpc/org-eclipse-epp-mpc", //
       "https://gitlab.eclipse.org/eclipse/mpc/org.eclipse.epp.mpc", //
       "https://gitlab.eclipse.org/eclipse/mtj/org.eclipse.mtj", //
       "https://gitlab.eclipse.org/eclipse/ogee/org.eclipse.ogee", //
-      "https://gitlab.eclipse.org/eclipse/osee/org.eclipse.ote", //
       "https://gitlab.eclipse.org/eclipse/papyrus/org.eclipse.papyrus-domainservices", //
       "https://gitlab.eclipse.org/eclipse/papyrus/org.eclipse.papyrus-web", //
-      "https://gitlab.eclipse.org/eclipse/plato/bok", //
-      "https://gitlab.eclipse.org/eclipse/plato/www", //
       "https://gitlab.eclipse.org/eclipse/rtsc/org.eclipse.rtsc.committer", //
-      "https://gitlab.eclipse.org/eclipse/rtsc/org.eclipse.rtsc.contrib", //
-      "https://gitlab.eclipse.org/eclipse/rtsc/org.eclipse.rtsc.test", //
-      "https://gitlab.eclipse.org/eclipse/rtsc/org.eclipse.rtsc.training", //
       "https://gitlab.eclipse.org/eclipse/rtsc/org.eclipse.rtsc.xdccore", //
       "https://gitlab.eclipse.org/eclipse/set/set", //
       "https://gitlab.eclipse.org/eclipse/statet/statet", //
       "https://gitlab.eclipse.org/eclipse/subversive/subversive", //
       "https://gitlab.eclipse.org/eclipse/sw360/playground-git", //
-      "https://gitlab.eclipse.org/eclipse/sw360/playground.git", //
       "https://gitlab.eclipse.org/eclipse/technology/dash/dash-maven", //
       "https://gitlab.eclipse.org/eclipse/technology/dash/dashboard", //
       "https://gitlab.eclipse.org/eclipse/technology/dash/eclipse-api-for-java", //
