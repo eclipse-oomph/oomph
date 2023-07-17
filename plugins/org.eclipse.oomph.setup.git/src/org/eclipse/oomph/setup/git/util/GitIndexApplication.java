@@ -78,10 +78,22 @@ public class GitIndexApplication implements IApplication
   private static Set<String> BROKEN_REPOSITORIES = new TreeSet<>(Set.of( //
       "https://git.eclipse.org/r/sequoyah/org.eclipse.sequoyah", //
       "https://github.com/eclipse/org.eclipse.scout.docs", //
+      "https://git.eclipse.org/r/webtools/org.eclipse.webtools.java-ee-config", //
       "" //
   ));
 
   private static Set<String> NON_JAVA_REPOSITORIES = new TreeSet<>(Set.of( //
+      "https://git.eclipse.org/r/efm/org.eclipse.efm-hibou", //
+      "https://git.eclipse.org/r/efm/org.eclipse.efm-symbex", //
+      "https://git.eclipse.org/r/jsf/webtools.jsf.docs", //
+      "https://git.eclipse.org/r/ldt/org.eclipse.metalua", //
+      "https://git.eclipse.org/r/rtsc/org.eclipse.rtsc.contrib", //
+      "https://git.eclipse.org/r/rtsc/org.eclipse.rtsc.test", //
+      "https://git.eclipse.org/r/rtsc/org.eclipse.rtsc.training", //
+      "https://git.eclipse.org/r/servertools/webtools.servertools.devsupport", //
+      "https://git.eclipse.org/r/servertools/webtools.servertools.docs", //
+      "https://git.eclipse.org/r/statet/org.eclipse.statet", //
+      "https://git.eclipse.org/r/tcf/org.eclipse.tcf.agent", //
       "https://github.com/deeplearning4j/deeplearning4j-docs", //
       "https://github.com/eclipse-actf/org.eclipse.actf.visualization.releng", //
       "https://github.com/eclipse-babel/server", //
@@ -174,9 +186,7 @@ public class GitIndexApplication implements IApplication
       "https://git.eclipse.org/r/dltk/org.eclipse.dltk.tcl", //
       "https://git.eclipse.org/r/edapt/org.eclipse.emf.edapt", //
       "https://git.eclipse.org/r/eef/org.eclipse.eef", //
-      "https://git.eclipse.org/r/efm/org.eclipse.efm-hibou", //
       "https://git.eclipse.org/r/efm/org.eclipse.efm-modeling", //
-      "https://git.eclipse.org/r/efm/org.eclipse.efm-symbex", //
       "https://git.eclipse.org/r/egerrit/org.eclipse.egerrit", //
       "https://git.eclipse.org/r/egit/egit", //
       "https://git.eclipse.org/r/emfatic/org.eclipse.emfatic", //
@@ -193,11 +203,9 @@ public class GitIndexApplication implements IApplication
       "https://git.eclipse.org/r/jeetools/webtools.javaee", //
       "https://git.eclipse.org/r/jgit/jgit", //
       "https://git.eclipse.org/r/jsf/webtools.jsf", //
-      "https://git.eclipse.org/r/jsf/webtools.jsf.docs", //
       "https://git.eclipse.org/r/jsf/webtools.jsf.tests", //
       "https://git.eclipse.org/r/jubula/org.eclipse.jubula.core", //
       "https://git.eclipse.org/r/ldt/org.eclipse.ldt", //
-      "https://git.eclipse.org/r/ldt/org.eclipse.metalua", //
       "https://git.eclipse.org/r/mat/org.eclipse.mat", //
       "https://git.eclipse.org/r/mdht/org.eclipse.mdht", //
       "https://git.eclipse.org/r/mmt/org.eclipse.atl", //
@@ -235,13 +243,8 @@ public class GitIndexApplication implements IApplication
       "https://git.eclipse.org/r/refactor/org.eclipse.emf.refactor.refactoring", //
       "https://git.eclipse.org/r/refactor/org.eclipse.emf.refactor.smells", //
       "https://git.eclipse.org/r/rtsc/org.eclipse.rtsc.committer", //
-      "https://git.eclipse.org/r/rtsc/org.eclipse.rtsc.contrib", //
-      "https://git.eclipse.org/r/rtsc/org.eclipse.rtsc.test", //
-      "https://git.eclipse.org/r/rtsc/org.eclipse.rtsc.training", //
       "https://git.eclipse.org/r/rtsc/org.eclipse.rtsc.xdccore", //
       "https://git.eclipse.org/r/servertools/webtools.servertools", //
-      "https://git.eclipse.org/r/servertools/webtools.servertools.devsupport", //
-      "https://git.eclipse.org/r/servertools/webtools.servertools.docs", //
       "https://git.eclipse.org/r/servertools/webtools.servertools.tests", //
       "https://git.eclipse.org/r/skills/org.eclipse.skills", //
       "https://git.eclipse.org/r/sourceediting/webtools.sourceediting", //
@@ -251,7 +254,6 @@ public class GitIndexApplication implements IApplication
       "https://git.eclipse.org/r/sourceediting/webtools.sourceediting.xsl", //
       "https://git.eclipse.org/r/sourceediting/webtools.sourceediting.xsl.tests", //
       "https://git.eclipse.org/r/sphinx/org.eclipse.sphinx", //
-      "https://git.eclipse.org/r/statet/org.eclipse.statet", //
       "https://git.eclipse.org/r/statet/org.eclipse.statet-commons", //
       "https://git.eclipse.org/r/statet/org.eclipse.statet-docmlet", //
       "https://git.eclipse.org/r/statet/org.eclipse.statet-eutils", //
@@ -263,7 +265,6 @@ public class GitIndexApplication implements IApplication
       "https://git.eclipse.org/r/stem/org.eclipse.stem.data.earthscience", //
       "https://git.eclipse.org/r/swtbot/org.eclipse.swtbot", //
       "https://git.eclipse.org/r/tcf/org.eclipse.tcf", //
-      "https://git.eclipse.org/r/tcf/org.eclipse.tcf.agent", //
       "https://git.eclipse.org/r/tea/tea", //
       "https://git.eclipse.org/r/tigerstripe/org.eclipse.tigerstripe", //
       "https://git.eclipse.org/r/tm/org.eclipse.tm", //
@@ -282,7 +283,6 @@ public class GitIndexApplication implements IApplication
       "https://git.eclipse.org/r/webtools-common/webtools.common.fproj", //
       "https://git.eclipse.org/r/webtools-common/webtools.common.snippets", //
       "https://git.eclipse.org/r/webtools-common/webtools.common.tests", //
-      "https://git.eclipse.org/r/webtools/org.eclipse.webtools.java-ee-config", //
       "https://git.eclipse.org/r/webtools/webtools.maps", //
       "https://git.eclipse.org/r/webtools/webtools.releng", //
       "https://git.eclipse.org/r/webtools/webtools.releng.aggregator", //
