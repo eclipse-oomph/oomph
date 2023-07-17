@@ -153,6 +153,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.commons.repositories.http.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.git.feature.group"
             optional="true"
             max="0"/>
@@ -348,6 +352,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.commons.repositories.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.repositories.http.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -2490,6 +2498,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.commons.repositories.http.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.git.feature.group"
             optional="true"
             max="0"/>
@@ -2949,6 +2961,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.commons.repositories.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.repositories.http.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -7987,6 +8003,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.commons.repositories.http.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.git.feature.group"
             optional="true"
             max="0"/>
@@ -8250,6 +8270,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.commons.repositories.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.repositories.http.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -11077,6 +11101,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.commons.repositories.http.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.git.feature.group"
             optional="true"
             max="0"/>
@@ -11404,6 +11432,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.commons.repositories.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.repositories.http.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -13022,6 +13054,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.commons.repositories.http.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.git.feature.group"
             optional="true"
             max="0"/>
@@ -13215,6 +13251,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.commons.repositories.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.repositories.http.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -15220,6 +15260,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.commons.repositories.http.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.git.feature.group"
             optional="true"
             max="0"/>
@@ -15463,6 +15507,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.commons.repositories.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.repositories.http.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -20040,6 +20088,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.commons.repositories.http.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.git.feature.group"
             optional="true"
             max="0"/>
@@ -20279,6 +20331,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.commons.repositories.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.repositories.http.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -22687,6 +22743,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.commons.repositories.http.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.git.feature.group"
             optional="true"
             max="0"/>
@@ -22950,6 +23010,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.commons.repositories.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.repositories.http.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -25620,6 +25684,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.commons.repositories.http.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.git.feature.group"
             optional="true"
             max="0"/>
@@ -25847,6 +25915,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.commons.repositories.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.repositories.http.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -28238,6 +28310,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.commons.repositories.http.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.git.feature.group"
             optional="true"
             max="0"/>
@@ -28437,6 +28513,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.commons.repositories.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.repositories.http.feature.group"
             optional="true"
             max="0"/>
         <requirement
