@@ -137,11 +137,15 @@
         <requirement
             name="org.eclipse.wildwebdeveloper.xml.feature.feature.group"/>
         <requirement
+            name="org.eclipse.mylyn.commons.activity.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.commons.feature.group"
             optional="true"
             max="0"/>
         <requirement
-            name="org.eclipse.mylyn.commons.activity.feature.group"
+            name="org.eclipse.mylyn.commons.notifications.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -331,11 +335,15 @@
         <requirement
             name="org.eclipse.wildwebdeveloper.xml.feature.feature.group"/>
         <requirement
+            name="org.eclipse.mylyn.commons.activity.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.commons.feature.group"
             optional="true"
             max="0"/>
         <requirement
-            name="org.eclipse.mylyn.commons.activity.feature.group"
+            name="org.eclipse.mylyn.commons.notifications.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -2466,11 +2474,15 @@
         <requirement
             name="org.eclipse.wst.xsl.feature.feature.group"/>
         <requirement
+            name="org.eclipse.mylyn.commons.activity.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.commons.feature.group"
             optional="true"
             max="0"/>
         <requirement
-            name="org.eclipse.mylyn.commons.activity.feature.group"
+            name="org.eclipse.mylyn.commons.notifications.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -2924,11 +2936,15 @@
         <requirement
             name="org.eclipse.wst.xsl.feature.feature.group"/>
         <requirement
+            name="org.eclipse.mylyn.commons.activity.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.commons.feature.group"
             optional="true"
             max="0"/>
         <requirement
-            name="org.eclipse.mylyn.commons.activity.feature.group"
+            name="org.eclipse.mylyn.commons.notifications.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -7955,11 +7971,15 @@
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
         <requirement
+            name="org.eclipse.mylyn.commons.activity.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.commons.feature.group"
             optional="true"
             max="0"/>
         <requirement
-            name="org.eclipse.mylyn.commons.activity.feature.group"
+            name="org.eclipse.mylyn.commons.notifications.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -8217,11 +8237,15 @@
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
         <requirement
+            name="org.eclipse.mylyn.commons.activity.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.commons.feature.group"
             optional="true"
             max="0"/>
         <requirement
-            name="org.eclipse.mylyn.commons.activity.feature.group"
+            name="org.eclipse.mylyn.commons.notifications.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -11037,11 +11061,15 @@
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
         <requirement
+            name="org.eclipse.mylyn.commons.activity.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.commons.feature.group"
             optional="true"
             max="0"/>
         <requirement
-            name="org.eclipse.mylyn.commons.activity.feature.group"
+            name="org.eclipse.mylyn.commons.notifications.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -11363,11 +11391,15 @@
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
         <requirement
+            name="org.eclipse.mylyn.commons.activity.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.commons.feature.group"
             optional="true"
             max="0"/>
         <requirement
-            name="org.eclipse.mylyn.commons.activity.feature.group"
+            name="org.eclipse.mylyn.commons.notifications.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -12974,11 +13006,15 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <requirement
+            name="org.eclipse.mylyn.commons.activity.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.commons.feature.group"
             optional="true"
             max="0"/>
         <requirement
-            name="org.eclipse.mylyn.commons.activity.feature.group"
+            name="org.eclipse.mylyn.commons.notifications.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -13166,11 +13202,15 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <requirement
+            name="org.eclipse.mylyn.commons.activity.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.commons.feature.group"
             optional="true"
             max="0"/>
         <requirement
-            name="org.eclipse.mylyn.commons.activity.feature.group"
+            name="org.eclipse.mylyn.commons.notifications.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -15164,11 +15204,15 @@
         <requirement
             name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
         <requirement
+            name="org.eclipse.mylyn.commons.activity.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.commons.feature.group"
             optional="true"
             max="0"/>
         <requirement
-            name="org.eclipse.mylyn.commons.activity.feature.group"
+            name="org.eclipse.mylyn.commons.notifications.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -15406,11 +15450,15 @@
         <requirement
             name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
         <requirement
+            name="org.eclipse.mylyn.commons.activity.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.commons.feature.group"
             optional="true"
             max="0"/>
         <requirement
-            name="org.eclipse.mylyn.commons.activity.feature.group"
+            name="org.eclipse.mylyn.commons.notifications.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -19976,11 +20024,15 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <requirement
+            name="org.eclipse.mylyn.commons.activity.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.commons.feature.group"
             optional="true"
             max="0"/>
         <requirement
-            name="org.eclipse.mylyn.commons.activity.feature.group"
+            name="org.eclipse.mylyn.commons.notifications.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -20214,11 +20266,15 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <requirement
+            name="org.eclipse.mylyn.commons.activity.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.commons.feature.group"
             optional="true"
             max="0"/>
         <requirement
-            name="org.eclipse.mylyn.commons.activity.feature.group"
+            name="org.eclipse.mylyn.commons.notifications.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -22615,11 +22671,15 @@
         <requirement
             name="org.eclipse.xsd.sdk.feature.group"/>
         <requirement
+            name="org.eclipse.mylyn.commons.activity.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.commons.feature.group"
             optional="true"
             max="0"/>
         <requirement
-            name="org.eclipse.mylyn.commons.activity.feature.group"
+            name="org.eclipse.mylyn.commons.notifications.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -22877,11 +22937,15 @@
         <requirement
             name="org.eclipse.xsd.sdk.feature.group"/>
         <requirement
+            name="org.eclipse.mylyn.commons.activity.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.commons.feature.group"
             optional="true"
             max="0"/>
         <requirement
-            name="org.eclipse.mylyn.commons.activity.feature.group"
+            name="org.eclipse.mylyn.commons.notifications.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -25540,11 +25604,15 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <requirement
+            name="org.eclipse.mylyn.commons.activity.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.commons.feature.group"
             optional="true"
             max="0"/>
         <requirement
-            name="org.eclipse.mylyn.commons.activity.feature.group"
+            name="org.eclipse.mylyn.commons.notifications.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -25766,11 +25834,15 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <requirement
+            name="org.eclipse.mylyn.commons.activity.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.commons.feature.group"
             optional="true"
             max="0"/>
         <requirement
-            name="org.eclipse.mylyn.commons.activity.feature.group"
+            name="org.eclipse.mylyn.commons.notifications.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -28150,11 +28222,15 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <requirement
+            name="org.eclipse.mylyn.commons.activity.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.commons.feature.group"
             optional="true"
             max="0"/>
         <requirement
-            name="org.eclipse.mylyn.commons.activity.feature.group"
+            name="org.eclipse.mylyn.commons.notifications.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -28348,11 +28424,15 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <requirement
+            name="org.eclipse.mylyn.commons.activity.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.commons.feature.group"
             optional="true"
             max="0"/>
         <requirement
-            name="org.eclipse.mylyn.commons.activity.feature.group"
+            name="org.eclipse.mylyn.commons.notifications.feature.group"
             optional="true"
             max="0"/>
         <requirement
