@@ -69,7 +69,7 @@
             <configuration>
               <argLine>
                 -Xmx2g
-                -Dorg.eclipse.oomph.setup.git.util.GitIndexApplication.test=true
+                -Dorg.eclipse.oomph.setup.git.util.GitIndexApplication.test=false
                 -Dorg.eclipse.oomph.setup.git.util.GitIndexApplication.static=true
               </argLine>
               <appArgLine>
