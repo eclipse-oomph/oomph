@@ -156,7 +156,6 @@ public class GitIndexApplication implements IApplication
       "https://git.eclipse.org/r/rtsc/org.eclipse.rtsc.test", //
       "https://git.eclipse.org/r/rtsc/org.eclipse.rtsc.training", //
       "https://git.eclipse.org/r/rtsc/org.eclipse.rtsc.xdccore", //
-      "https://git.eclipse.org/r/sequoyah/org.eclipse.sequoyah", //
       "https://git.eclipse.org/r/servertools/webtools.servertools", //
       "https://git.eclipse.org/r/servertools/webtools.servertools.devsupport", //
       "https://git.eclipse.org/r/servertools/webtools.servertools.docs", //
@@ -637,15 +636,26 @@ public class GitIndexApplication implements IApplication
         return true;
       }
 
-      if (id.startsWith("adoptium") || id.startsWith("automotive") || id.startsWith("dt") || id.startsWith("ecd") || id.startsWith("ee4j")
-          || id.startsWith("iot") || id.startsWith("locationtech") || id.startsWith("polarsys") || id.startsWith("oniro") || id.startsWith("technology.openj9")
-          || id.startsWith("tools.titan") || id.startsWith("technology.microprofile") || id.startsWith("technology.edc") //
-          || id.startsWith("technology.openk")//
-          || id.startsWith("eclipse.e4")//
-          || id.startsWith("technology.osbp")//
-          || id.startsWith("technology.graphene")//
-          || id.startsWith("technology.pass")//
-          || id.startsWith("openhw")//
+      if (id.startsWith("adoptium") //
+          || id.startsWith("automotive") //
+          || id.startsWith("dt") //
+          || id.startsWith("ecd") //
+          || id.startsWith("ee4j") //
+          || id.startsWith("iot") //
+          || id.startsWith("locationtech") //
+          || id.startsWith("polarsys") //
+          || id.startsWith("oniro") //
+          || id.startsWith("technology.openj9") //
+          || id.startsWith("tools.titan") //
+          || id.startsWith("technology.microprofile") //
+          || id.startsWith("technology.edc") //
+          || id.startsWith("technology.openk") //
+          || id.startsWith("eclipse.e4") //
+          || id.startsWith("technology.osbp") //
+          || id.startsWith("technology.graphene") //
+          || id.startsWith("technology.pass") //
+          || id.startsWith("tools.sequoyah") //
+          || id.startsWith("openhw") //
           || id.startsWith("technology.recommenders"))
       {
         return true;
