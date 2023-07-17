@@ -191,6 +191,7 @@ public class ProductCatalogGenerator implements IApplication
 
   private static final List<String> OBSOELETE_MYLYN_FEATURES = Arrays.asList(new String[] { //
       "org.eclipse.mylyn.builds.feature.group", //
+      "org.eclipse.mylyn.bugzilla_feature.feature.group", //
       "org.eclipse.mylyn.commons.activity.feature.group", //
       "org.eclipse.mylyn.commons.feature.group", //
       "org.eclipse.mylyn.commons.notifications.feature.group", //

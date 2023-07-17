@@ -141,6 +141,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.bugzilla_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.commons.activity.feature.group"
             optional="true"
             max="0"/>
@@ -352,6 +356,10 @@
             name="org.eclipse.wildwebdeveloper.xml.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.builds.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.bugzilla_feature.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -2510,6 +2518,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.bugzilla_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.commons.activity.feature.group"
             optional="true"
             max="0"/>
@@ -2985,6 +2997,10 @@
             name="org.eclipse.wst.xsl.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.builds.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.bugzilla_feature.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -8039,6 +8055,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.bugzilla_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.commons.activity.feature.group"
             optional="true"
             max="0"/>
@@ -8318,6 +8338,10 @@
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.builds.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.bugzilla_feature.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -11161,6 +11185,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.bugzilla_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.commons.activity.feature.group"
             optional="true"
             max="0"/>
@@ -11504,6 +11532,10 @@
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.builds.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.bugzilla_feature.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -13138,6 +13170,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.bugzilla_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.commons.activity.feature.group"
             optional="true"
             max="0"/>
@@ -13347,6 +13383,10 @@
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.builds.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.bugzilla_feature.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -15368,6 +15408,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.bugzilla_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.commons.activity.feature.group"
             optional="true"
             max="0"/>
@@ -15627,6 +15671,10 @@
             name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.builds.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.bugzilla_feature.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -20220,6 +20268,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.bugzilla_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.commons.activity.feature.group"
             optional="true"
             max="0"/>
@@ -20475,6 +20527,10 @@
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.builds.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.bugzilla_feature.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -22899,6 +22955,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.bugzilla_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.commons.activity.feature.group"
             optional="true"
             max="0"/>
@@ -23178,6 +23238,10 @@
             name="org.eclipse.xsd.sdk.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.builds.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.bugzilla_feature.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -25864,6 +25928,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.bugzilla_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.commons.activity.feature.group"
             optional="true"
             max="0"/>
@@ -26107,6 +26175,10 @@
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.builds.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.bugzilla_feature.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -28514,6 +28586,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.bugzilla_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.commons.activity.feature.group"
             optional="true"
             max="0"/>
@@ -28729,6 +28805,10 @@
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <requirement
             name="org.eclipse.mylyn.builds.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.bugzilla_feature.feature.group"
             optional="true"
             max="0"/>
         <requirement
