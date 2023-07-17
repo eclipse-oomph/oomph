@@ -212,7 +212,24 @@ Eike Stepper - initial API and implementation
         <module>../../releng/org.eclipse.oomph.releng</module>
         <module>../../releng/org.eclipse.oomph.releng.helpcenter</module>
         <module>../../sites/org.eclipse.oomph.site</module>
+      </modules>
+    </profile>
+    <profile>
+      <id>product</id>
+      <activation>
+        <property>
+          <name>PRODUCT</name>
+          <value>!false</value>
+        </property>
+      </activation>
+      <modules>
         <module>../../products/org.eclipse.oomph.setup.installer.product</module>
+      </modules>
+    </profile>
+    <profile>
+      <id>git-index</id>
+      <modules>
+        <module>git-index</module>
       </modules>
     </profile>
     <profile>

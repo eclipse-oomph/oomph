@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2023 Ed Merks (Kriens, Switzerland) and others.
+  All rights reserved. This program and the accompanying materials
+  are made available under the terms of the Eclipse Public License v2.0
+  which accompanies this distribution, and is available at
+  http://www.eclipse.org/legal/epl-v20.html
+
+  Contributors:
+    Ed Merks - initial API and implementation
+-->
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+	  <groupId>org.eclipse.oomph</groupId>
+	  <artifactId>org.eclipse.oomph.parent</artifactId>
+	  <version>1.0.0-SNAPSHOT</version>
+    <relativePath>..</relativePath>
+  </parent>
+  <groupId>org.eclipse.oomph</groupId>
+  <artifactId>git-index</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <properties>
+    <eclipse.repo>https://download.eclipse.org/releases/2023-06</eclipse.repo>
+    <oomph.repo>${project.baseUri}../../../sites/org.eclipse.oomph.site/target/repository</oomph.repo>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.eclipse.tycho.extras</groupId>
+        <artifactId>tycho-eclipserun-plugin</artifactId>
+        <version>${tycho-version}</version>
+        <configuration>
+          <executionEnvironment>JavaSE-17</executionEnvironment>
+          <dependencies>
+            <dependency>
+              <artifactId>org.eclipse.oomph.setup.git</artifactId>
+              <type>eclipse-plugin</type>
+            </dependency>
+            <dependency>
+              <artifactId>org.apache.felix.scr</artifactId>
+              <type>eclipse-plugin</type>
+            </dependency>
+          </dependencies>
+          <repositories>
+            <repository>
+              <id>eclipse.repo</id>
+              <layout>p2</layout>
+              <url>${eclipse.repo}</url>
+            </repository>
+            <repository>
+              <id>oomph.repo</id>
+              <layout>p2</layout>
+              <url>${oomph.repo}</url>
+            </repository>
+          </repositories>
+        </configuration>
+        <executions>
+          <execution>
+            <id>git-index</id>
+            <goals>
+              <goal>eclipse-run</goal>
+            </goals>
+            <phase>verify</phase>
+            <configuration>
+              <argLine>
+                -Xmx3.5g
+              </argLine>
+              <appArgLine>
+                -consoleLog
+                -application org.eclipse.oomph.setup.git.GitIndexer
+                -data @None
+                -nosplash
+                target/cache
+                target/git-index.zip
+              </appArgLine>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+    </plugins>
+  </build>
+
+</project>

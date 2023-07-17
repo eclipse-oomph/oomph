@@ -21,4 +21,17 @@
             genModel="model/Git.genmodel"/>
    </extension>
 
+   <extension
+         id="GitIndexer"
+         point="org.eclipse.core.runtime.applications">
+      <application
+            cardinality="singleton-global"
+            thread="main"
+            visible="true">
+         <run
+               class="org.eclipse.oomph.setup.git.util.GitIndexApplication">
+         </run>
+      </application>
+   </extension>
+
 </plugin>
