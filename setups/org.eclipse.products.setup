@@ -176,6 +176,10 @@
             name="org.eclipse.mylyn.pde_feature.feature.group"
             optional="true"
             max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.versions.feature.group"
+            optional="true"
+            max="0"/>
         <repository
             url="https://download.eclipse.org/technology/epp/packages/2023-09/202307131200"/>
         <repository
@@ -376,6 +380,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.pde_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.versions.feature.group"
             optional="true"
             max="0"/>
         <repository
@@ -2521,6 +2529,10 @@
             name="org.eclipse.mylyn.pde_feature.feature.group"
             optional="true"
             max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.versions.feature.group"
+            optional="true"
+            max="0"/>
         <repository
             url="https://download.eclipse.org/technology/epp/packages/2023-09/202307131200"/>
         <repository
@@ -2985,6 +2997,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.pde_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.versions.feature.group"
             optional="true"
             max="0"/>
         <repository
@@ -8026,6 +8042,10 @@
             name="org.eclipse.mylyn.pde_feature.feature.group"
             optional="true"
             max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.versions.feature.group"
+            optional="true"
+            max="0"/>
         <repository
             url="https://download.eclipse.org/technology/epp/packages/2023-09/202307131200"/>
         <repository
@@ -8294,6 +8314,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.pde_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.versions.feature.group"
             optional="true"
             max="0"/>
         <repository
@@ -11124,6 +11148,10 @@
             name="org.eclipse.mylyn.pde_feature.feature.group"
             optional="true"
             max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.versions.feature.group"
+            optional="true"
+            max="0"/>
         <repository
             url="https://download.eclipse.org/technology/epp/packages/2023-09/202307131200"/>
         <repository
@@ -11456,6 +11484,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.pde_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.versions.feature.group"
             optional="true"
             max="0"/>
         <repository
@@ -13077,6 +13109,10 @@
             name="org.eclipse.mylyn.pde_feature.feature.group"
             optional="true"
             max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.versions.feature.group"
+            optional="true"
+            max="0"/>
         <repository
             url="https://download.eclipse.org/technology/epp/packages/2023-09/202307131200"/>
         <repository
@@ -13275,6 +13311,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.pde_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.versions.feature.group"
             optional="true"
             max="0"/>
         <repository
@@ -15283,6 +15323,10 @@
             name="org.eclipse.mylyn.pde_feature.feature.group"
             optional="true"
             max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.versions.feature.group"
+            optional="true"
+            max="0"/>
         <repository
             url="https://download.eclipse.org/technology/epp/packages/2023-09/202307131200"/>
         <repository
@@ -15531,6 +15575,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.pde_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.versions.feature.group"
             optional="true"
             max="0"/>
         <repository
@@ -20111,6 +20159,10 @@
             name="org.eclipse.mylyn.pde_feature.feature.group"
             optional="true"
             max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.versions.feature.group"
+            optional="true"
+            max="0"/>
         <repository
             url="https://download.eclipse.org/technology/epp/packages/2023-09/202307131200"/>
         <repository
@@ -20355,6 +20407,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.pde_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.versions.feature.group"
             optional="true"
             max="0"/>
         <repository
@@ -22766,6 +22822,10 @@
             name="org.eclipse.mylyn.pde_feature.feature.group"
             optional="true"
             max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.versions.feature.group"
+            optional="true"
+            max="0"/>
         <repository
             url="https://download.eclipse.org/technology/epp/packages/2023-09/202307131200"/>
         <repository
@@ -23034,6 +23094,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.pde_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.versions.feature.group"
             optional="true"
             max="0"/>
         <repository
@@ -25707,6 +25771,10 @@
             name="org.eclipse.mylyn.pde_feature.feature.group"
             optional="true"
             max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.versions.feature.group"
+            optional="true"
+            max="0"/>
         <repository
             url="https://download.eclipse.org/technology/epp/packages/2023-09/202307131200"/>
         <repository
@@ -25939,6 +26007,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.pde_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.versions.feature.group"
             optional="true"
             max="0"/>
         <repository
@@ -28333,6 +28405,10 @@
             name="org.eclipse.mylyn.pde_feature.feature.group"
             optional="true"
             max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.versions.feature.group"
+            optional="true"
+            max="0"/>
         <repository
             url="https://download.eclipse.org/technology/epp/packages/2023-09/202307131200"/>
         <repository
@@ -28537,6 +28613,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.pde_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.versions.feature.group"
             optional="true"
             max="0"/>
         <repository
