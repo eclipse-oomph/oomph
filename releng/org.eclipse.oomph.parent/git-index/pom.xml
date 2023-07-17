@@ -69,11 +69,11 @@
             <configuration>
               <argLine>
                 -Xmx3.5g
+                -Dorg.eclipse.oomph.setup.git.util.GitIndexApplication.test=true
               </argLine>
               <appArgLine>
                 -consoleLog
                 -application org.eclipse.oomph.setup.git.GitIndexer
-                -data @None
                 -nosplash
                 target/cache
                 target/git-index.zip
