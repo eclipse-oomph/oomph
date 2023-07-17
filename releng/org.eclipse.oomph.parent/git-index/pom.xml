@@ -68,7 +68,7 @@
             <phase>verify</phase>
             <configuration>
               <argLine>
-                -Xmx3.5g
+                -Xmx2g
                 -Dorg.eclipse.oomph.setup.git.util.GitIndexApplication.test=true
               </argLine>
               <appArgLine>
