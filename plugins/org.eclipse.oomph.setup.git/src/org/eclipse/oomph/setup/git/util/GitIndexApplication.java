@@ -68,7 +68,7 @@ public class GitIndexApplication implements IApplication
 
   private static final Pattern GITLAB_ECLIPSE_REPO_PATTERN = Pattern.compile("https://gitlab.eclipse.org/(([^/]+)/(.*))");
 
-  private static final Pattern PACKAGE_PATTERN = Pattern.compile("package\\s+(([^.]+)[^;]+)\\s*;");
+  private static final Pattern PACKAGE_PATTERN = Pattern.compile("package\\s+(([^.]+)\\.[^;]+)\\s*;");
 
   private static final Pattern LOG_PATTERN = Pattern.compile(",| 0%| 25%| 50%| 75%| 100%");
 
@@ -204,6 +204,23 @@ public class GitIndexApplication implements IApplication
       "https://gitlab.eclipse.org/eclipse/rtsc/org.eclipse.rtsc.test", //
       "https://gitlab.eclipse.org/eclipse/rtsc/org.eclipse.rtsc.training", //
       "https://gitlab.eclipse.org/eclipse/sw361/playground-git", //
+
+      "https://github.com/eclipse-ee4j/ee4j", //
+      "https://github.com/eclipse-ee4j/glassfish-docs", //
+      "https://github.com/eclipse-ee4j/glassfish-repackaged", //
+      "https://github.com/eclipse-ee4j/gransasso", //
+      "https://github.com/eclipse-ee4j/jakartaee-firstcup", //
+      "https://github.com/eclipse-ee4j/jakartaee-release", //
+      "https://github.com/eclipse-ee4j/jakartaee-renames", //
+      "https://github.com/eclipse-ee4j/jakartaee-tutorial", //
+      "https://github.com/eclipse-ee4j/jersey-web", //
+      "https://github.com/jakartaee/inject-spec", //
+      "https://github.com/jakartaee/jakartaee-api", //
+      "https://github.com/jakartaee/jakartaee-documentation", //
+      "https://github.com/jakartaee/jakartaee-platform", //
+      "https://github.com/jakartaee/jakartaee-schemas", //
+      "https://github.com/jakartaee/mail-spec", //
+      "https://github.com/jakartaee/managed-beans", //
 
       "" //
   ));
@@ -355,6 +372,76 @@ public class GitIndexApplication implements IApplication
       "https://github.com/eclipse-dataspacetck/cvf", //
       "https://github.com/eclipse-datatools/datatools", //
       "https://github.com/eclipse-ecoretools/ecoretools", //
+      "https://github.com/eclipse-ee4j/angus-activation", //
+      "https://github.com/eclipse-ee4j/angus-mail", //
+      "https://github.com/eclipse-ee4j/batch-api", //
+      "https://github.com/eclipse-ee4j/cargotracker", //
+      "https://github.com/eclipse-ee4j/cdi-cpl", //
+      "https://github.com/eclipse-ee4j/concurro", //
+      "https://github.com/eclipse-ee4j/eclipselink", //
+      "https://github.com/eclipse-ee4j/eclipselink-asm", //
+      "https://github.com/eclipse-ee4j/eclipselink-build-support", //
+      "https://github.com/eclipse-ee4j/eclipselink-oracleddlparser", //
+      "https://github.com/eclipse-ee4j/eclipselink-releng", //
+      "https://github.com/eclipse-ee4j/eclipselink-workbench", //
+      "https://github.com/eclipse-ee4j/enterprise-deployment", //
+      "https://github.com/eclipse-ee4j/exousia", //
+      "https://github.com/eclipse-ee4j/expressly", //
+      "https://github.com/eclipse-ee4j/genericmessagingra", //
+      "https://github.com/eclipse-ee4j/glassfish", //
+      "https://github.com/eclipse-ee4j/glassfish-build-maven-plugin", //
+      "https://github.com/eclipse-ee4j/glassfish-copyright-plugin", //
+      "https://github.com/eclipse-ee4j/glassfish-fighterfish", //
+      "https://github.com/eclipse-ee4j/glassfish-ha-api", //
+      "https://github.com/eclipse-ee4j/glassfish-hk2", //
+      "https://github.com/eclipse-ee4j/glassfish-hk2-extra", //
+      "https://github.com/eclipse-ee4j/glassfish-jsftemplating", //
+      "https://github.com/eclipse-ee4j/glassfish-logging-annotation-processor", //
+      "https://github.com/eclipse-ee4j/glassfish-maven-embedded-plugin", //
+      "https://github.com/eclipse-ee4j/glassfish-security-plugin", //
+      "https://github.com/eclipse-ee4j/glassfish-shoal", //
+      "https://github.com/eclipse-ee4j/glassfish-spec-version-maven-plugin", //
+      "https://github.com/eclipse-ee4j/glassfish-woodstock", //
+      "https://github.com/eclipse-ee4j/grizzly", //
+      "https://github.com/eclipse-ee4j/grizzly-ahc", //
+      "https://github.com/eclipse-ee4j/grizzly-memcached", //
+      "https://github.com/eclipse-ee4j/grizzly-npn", //
+      "https://github.com/eclipse-ee4j/grizzly-thrift", //
+      "https://github.com/eclipse-ee4j/jax-rpc-api", //
+      "https://github.com/eclipse-ee4j/jax-rpc-ri", //
+      "https://github.com/eclipse-ee4j/jaxb-dtd-parser", //
+      "https://github.com/eclipse-ee4j/jaxb-fi", //
+      "https://github.com/eclipse-ee4j/jaxb-istack-commons", //
+      "https://github.com/eclipse-ee4j/jaxb-ri", //
+      "https://github.com/eclipse-ee4j/jaxb-stax-ex", //
+      "https://github.com/eclipse-ee4j/jaxr-api", //
+      "https://github.com/eclipse-ee4j/jaxr-ri", //
+      "https://github.com/eclipse-ee4j/jersey", //
+      "https://github.com/eclipse-ee4j/krazo", //
+      "https://github.com/eclipse-ee4j/krazo-extensions", //
+      "https://github.com/eclipse-ee4j/management-api", //
+      "https://github.com/eclipse-ee4j/metro-jax-ws", //
+      "https://github.com/eclipse-ee4j/metro-mimepull", //
+      "https://github.com/eclipse-ee4j/metro-package-rename-task", //
+      "https://github.com/eclipse-ee4j/metro-policy", //
+      "https://github.com/eclipse-ee4j/metro-saaj", //
+      "https://github.com/eclipse-ee4j/metro-ws-test-harness", //
+      "https://github.com/eclipse-ee4j/metro-wsit", //
+      "https://github.com/eclipse-ee4j/metro-xmlstreambuffer", //
+      "https://github.com/eclipse-ee4j/mojarra", //
+      "https://github.com/eclipse-ee4j/mojarra-jsf-extensions", //
+      "https://github.com/eclipse-ee4j/odi", //
+      "https://github.com/eclipse-ee4j/openmq", //
+      "https://github.com/eclipse-ee4j/orb", //
+      "https://github.com/eclipse-ee4j/orb-gmbal", //
+      "https://github.com/eclipse-ee4j/orb-gmbal-commons", //
+      "https://github.com/eclipse-ee4j/orb-gmbal-pfl", //
+      "https://github.com/eclipse-ee4j/parsson", //
+      "https://github.com/eclipse-ee4j/soteria", //
+      "https://github.com/eclipse-ee4j/starter", //
+      "https://github.com/eclipse-ee4j/tyrus", //
+      "https://github.com/eclipse-ee4j/wasp", //
+      "https://github.com/eclipse-ee4j/yasson", //
       "https://github.com/eclipse-efx/efxclipse", //
       "https://github.com/eclipse-efx/efxclipse-drift", //
       "https://github.com/eclipse-efx/efxclipse-eclipse", //
@@ -532,6 +619,42 @@ public class GitIndexApplication implements IApplication
       "https://github.com/eclipse/winery", //
       "https://github.com/eclipse/xsemantics", //
       "https://github.com/eclipse/xtext", //
+      "https://github.com/jakartaee/authentication", //
+      "https://github.com/jakartaee/authorization", //
+      "https://github.com/jakartaee/cdi", //
+      "https://github.com/jakartaee/common-annotations-api", //
+      "https://github.com/jakartaee/concurrency", //
+      "https://github.com/jakartaee/config", //
+      "https://github.com/jakartaee/connectors", //
+      "https://github.com/jakartaee/data", //
+      "https://github.com/jakartaee/enterprise-beans", //
+      "https://github.com/jakartaee/expression-language", //
+      "https://github.com/jakartaee/faces", //
+      "https://github.com/jakartaee/inject", //
+      "https://github.com/jakartaee/interceptors", //
+      "https://github.com/jakartaee/jaf-api", //
+      "https://github.com/jakartaee/jax-ws-api", //
+      "https://github.com/jakartaee/jaxb-api", //
+      "https://github.com/jakartaee/jsonb-api", //
+      "https://github.com/jakartaee/jsonp-api", //
+      "https://github.com/jakartaee/jws-api", //
+      "https://github.com/jakartaee/mail-api", //
+      "https://github.com/jakartaee/messaging", //
+      "https://github.com/jakartaee/messaging-proposals", //
+      "https://github.com/jakartaee/mvc", //
+      "https://github.com/jakartaee/nosql", //
+      "https://github.com/jakartaee/pages", //
+      "https://github.com/jakartaee/persistence", //
+      "https://github.com/jakartaee/rest", //
+      "https://github.com/jakartaee/rpc", //
+      "https://github.com/jakartaee/saaj-api", //
+      "https://github.com/jakartaee/security", //
+      "https://github.com/jakartaee/servlet", //
+      "https://github.com/jakartaee/tags", //
+      "https://github.com/jakartaee/transactions", //
+      "https://github.com/jakartaee/validation", //
+      "https://github.com/jakartaee/validation-spec", //
+      "https://github.com/jakartaee/websocket", //
       "https://github.com/osgi/jakartarest-osgi", //
       "https://github.com/osgi/osgi", //
       "https://github.com/osgi/osgi-test", //
@@ -666,7 +789,6 @@ public class GitIndexApplication implements IApplication
           || id.startsWith("automotive") //
           || id.startsWith("dt") //
           || id.startsWith("ecd") //
-          || id.startsWith("ee4j") //
           || id.startsWith("iot") //
           || id.startsWith("locationtech") //
           || id.startsWith("polarsys") //
@@ -978,6 +1100,12 @@ public class GitIndexApplication implements IApplication
   private void cleanupRepos(Set<String> repos)
   {
     repos.removeIf(it -> {
+      if ((it.startsWith("https://github.com/eclipse-ee4j") || it.startsWith("https://github.com/jakartae"))
+          && (it.contains("tck") || it.contains("-doc-") || it.contains("examples") || it.contains("samples")))
+      {
+        return true;
+      }
+
       if (BROKEN_REPOSITORIES.contains(it) || NON_JAVA_REPOSITORIES.contains(it))
       {
         return true;
