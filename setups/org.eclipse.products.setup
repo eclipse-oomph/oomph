@@ -145,6 +145,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.context_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.commons.activity.feature.group"
             optional="true"
             max="0"/>
@@ -186,6 +190,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.pde_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.team_feature.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -363,6 +371,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.context_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.commons.activity.feature.group"
             optional="true"
             max="0"/>
@@ -404,6 +416,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.pde_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.team_feature.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -2522,6 +2538,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.context_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.commons.activity.feature.group"
             optional="true"
             max="0"/>
@@ -2563,6 +2583,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.pde_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.team_feature.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -3004,6 +3028,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.context_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.commons.activity.feature.group"
             optional="true"
             max="0"/>
@@ -3045,6 +3073,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.pde_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.team_feature.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -8059,6 +8091,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.context_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.commons.activity.feature.group"
             optional="true"
             max="0"/>
@@ -8100,6 +8136,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.pde_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.team_feature.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -8345,6 +8385,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.context_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.commons.activity.feature.group"
             optional="true"
             max="0"/>
@@ -8386,6 +8430,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.pde_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.team_feature.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -11189,6 +11237,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.context_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.commons.activity.feature.group"
             optional="true"
             max="0"/>
@@ -11230,6 +11282,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.pde_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.team_feature.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -11539,6 +11595,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.context_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.commons.activity.feature.group"
             optional="true"
             max="0"/>
@@ -11580,6 +11640,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.pde_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.team_feature.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -13174,6 +13238,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.context_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.commons.activity.feature.group"
             optional="true"
             max="0"/>
@@ -13215,6 +13283,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.pde_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.team_feature.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -13390,6 +13462,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.context_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.commons.activity.feature.group"
             optional="true"
             max="0"/>
@@ -13431,6 +13507,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.pde_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.team_feature.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -15412,6 +15492,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.context_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.commons.activity.feature.group"
             optional="true"
             max="0"/>
@@ -15453,6 +15537,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.pde_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.team_feature.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -15678,6 +15766,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.context_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.commons.activity.feature.group"
             optional="true"
             max="0"/>
@@ -15719,6 +15811,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.pde_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.team_feature.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -20272,6 +20368,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.context_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.commons.activity.feature.group"
             optional="true"
             max="0"/>
@@ -20313,6 +20413,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.pde_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.team_feature.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -20534,6 +20638,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.context_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.commons.activity.feature.group"
             optional="true"
             max="0"/>
@@ -20575,6 +20683,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.pde_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.team_feature.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -22959,6 +23071,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.context_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.commons.activity.feature.group"
             optional="true"
             max="0"/>
@@ -23000,6 +23116,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.pde_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.team_feature.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -23245,6 +23365,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.context_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.commons.activity.feature.group"
             optional="true"
             max="0"/>
@@ -23286,6 +23410,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.pde_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.team_feature.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -25932,6 +26060,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.context_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.commons.activity.feature.group"
             optional="true"
             max="0"/>
@@ -25973,6 +26105,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.pde_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.team_feature.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -26182,6 +26318,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.context_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.commons.activity.feature.group"
             optional="true"
             max="0"/>
@@ -26223,6 +26363,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.pde_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.team_feature.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -28590,6 +28734,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.context_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.commons.activity.feature.group"
             optional="true"
             max="0"/>
@@ -28631,6 +28779,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.pde_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.team_feature.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -28812,6 +28964,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.context_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.commons.activity.feature.group"
             optional="true"
             max="0"/>
@@ -28853,6 +29009,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.pde_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.team_feature.feature.group"
             optional="true"
             max="0"/>
         <requirement
