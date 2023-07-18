@@ -181,6 +181,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.commons.identity.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.ide_feature.feature.group"
             optional="true"
             max="0"/>
@@ -408,6 +412,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.hudson.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.identity.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -2582,6 +2590,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.commons.identity.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.ide_feature.feature.group"
             optional="true"
             max="0"/>
@@ -3073,6 +3085,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.hudson.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.identity.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -8143,6 +8159,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.commons.identity.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.ide_feature.feature.group"
             optional="true"
             max="0"/>
@@ -8438,6 +8458,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.hudson.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.identity.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -11297,6 +11321,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.commons.identity.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.ide_feature.feature.group"
             optional="true"
             max="0"/>
@@ -11656,6 +11684,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.hudson.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.identity.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -13306,6 +13338,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.commons.identity.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.ide_feature.feature.group"
             optional="true"
             max="0"/>
@@ -13531,6 +13567,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.hudson.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.identity.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -15568,6 +15608,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.commons.identity.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.ide_feature.feature.group"
             optional="true"
             max="0"/>
@@ -15843,6 +15887,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.hudson.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.identity.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -20452,6 +20500,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.commons.identity.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.ide_feature.feature.group"
             optional="true"
             max="0"/>
@@ -20723,6 +20775,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.hudson.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.identity.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -23163,6 +23219,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.commons.identity.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.ide_feature.feature.group"
             optional="true"
             max="0"/>
@@ -23458,6 +23518,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.hudson.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.identity.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -26160,6 +26224,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.commons.identity.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.ide_feature.feature.group"
             optional="true"
             max="0"/>
@@ -26419,6 +26487,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.hudson.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.identity.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -28842,6 +28914,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.commons.identity.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.ide_feature.feature.group"
             optional="true"
             max="0"/>
@@ -29073,6 +29149,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.hudson.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.commons.identity.feature.group"
             optional="true"
             max="0"/>
         <requirement
