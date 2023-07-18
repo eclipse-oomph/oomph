@@ -17,10 +17,13 @@ import org.eclipse.oomph.setup.Project;
 import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.Stream;
+import org.eclipse.oomph.setup.VariableTask;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
+import org.eclipse.oomph.setup.internal.core.StringFilterRegistry;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
+import org.eclipse.oomph.setup.util.StringExpander;
 import org.eclipse.oomph.ui.DockableDialog;
 import org.eclipse.oomph.ui.DockableDialog.Factory;
 import org.eclipse.oomph.ui.FilteredTreeWithoutWorkbench;
@@ -733,9 +736,22 @@ public class OpenDiscoveredType extends OomphDialog
 
         Map<String, URI> remoteURIs = new HashMap<>();
         Resource resource = resourceSet.getResource(SetupContext.INDEX_SETUP_URI, true);
+        Map<String, String> variables = new HashMap<>();
         for (Iterator<EObject> it = resource.getAllContents(); it.hasNext();)
         {
           EObject eObject = it.next();
+          if (eObject instanceof VariableTask)
+          {
+            VariableTask variable = (VariableTask)eObject;
+            String value = variable.getValue();
+            if (value == null)
+            {
+              value = variable.getDefaultValue();
+            }
+
+            variables.put(variable.getName(), value);
+          }
+
           EClass eClass = eObject.eClass();
           if ("GitCloneTask".equals(eClass.getName())) //$NON-NLS-1$
           {
@@ -745,6 +761,27 @@ public class OpenDiscoveredType extends OomphDialog
               String remoteURI = (String)eObject.eGet(eStructuralFeature);
               if (remoteURI != null)
               {
+                String expandedRemoteURI = new StringExpander()
+                {
+                  @Override
+                  protected String resolve(String key)
+                  {
+                    return variables.get(key);
+                  }
+
+                  @Override
+                  protected boolean isUnexpanded(String key)
+                  {
+                    return false;
+                  }
+
+                  @Override
+                  protected String filter(String value, String filterName)
+                  {
+                    return StringFilterRegistry.INSTANCE.filter(value, filterName);
+                  }
+                }.expandString(remoteURI);
+
                 Scope scope = ((SetupTask)eObject).getScope();
                 if (scope instanceof Stream)
                 {
@@ -754,21 +791,21 @@ public class OpenDiscoveredType extends OomphDialog
                 if (scope instanceof Project)
                 {
                   URI uri = EcoreUtil.getURI(scope);
-                  URI oldURI = remoteURIs.put(remoteURI, uri);
+                  URI oldURI = remoteURIs.put(expandedRemoteURI, uri);
                   if (oldURI != null)
                   {
-                    if (oldURI.toString().contains(remoteURI))
+                    if (oldURI.toString().contains(expandedRemoteURI))
                     {
-                      remoteURIs.put(remoteURI, oldURI);
+                      remoteURIs.put(expandedRemoteURI, oldURI);
                     }
                     else
                     {
-                      int index = remoteURI.indexOf("/"); //$NON-NLS-1$
+                      int index = expandedRemoteURI.indexOf("/"); //$NON-NLS-1$
                       if (index != -1)
                       {
-                        if (oldURI.toString().toLowerCase().contains(remoteURI.substring(0, index).toLowerCase()))
+                        if (oldURI.toString().toLowerCase().contains(expandedRemoteURI.substring(0, index).toLowerCase()))
                         {
-                          remoteURIs.put(remoteURI, oldURI);
+                          remoteURIs.put(expandedRemoteURI, oldURI);
                         }
                       }
                     }
