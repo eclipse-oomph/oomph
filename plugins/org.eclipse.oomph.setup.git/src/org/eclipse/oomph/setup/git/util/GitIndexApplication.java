@@ -43,6 +43,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashSet;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -67,7 +68,21 @@ public class GitIndexApplication implements IApplication
 
   private static final Pattern GITLAB_ECLIPSE_REPO_PATTERN = Pattern.compile("https://gitlab.eclipse.org/(([^/]+)/(.*))");
 
-  private static final Pattern PACKAGE_PATTERN = Pattern.compile("package\\s+([^;]+)\\s*;");
+  private static final Pattern PACKAGE_PATTERN = Pattern.compile("package\\s+(([^.]+)[^;]+)\\s*;");
+
+  private static final Pattern LOG_PATTERN = Pattern.compile(",| 0%| 25%| 50%| 75%| 100%");
+
+  private static final Set<String> PACKAGE_PREFIXES = new LinkedHashSet<String>();
+
+  static
+  {
+    for (String code : Locale.getISOCountries())
+    {
+      PACKAGE_PREFIXES.add(code.toLowerCase());
+    }
+
+    PACKAGE_PREFIXES.addAll(Set.of("com", "org", "net", "edu", "gov", "mil", "io", "java", "javax", "jakarta"));
+  }
 
   private static Set<String> TEST_REPOSITORIES = new TreeSet<>(Set.of( //
       "https://git.eclipse.org/r/jgit/jgit", //
@@ -758,14 +773,7 @@ public class GitIndexApplication implements IApplication
       @Override
       public void log(String line)
       {
-        if (line.contains("%"))
-        {
-          if (line.contains("0%"))
-          {
-            System.out.println(line);
-          }
-        }
-        else
+        if (LOG_PATTERN.matcher(line).find())
         {
           System.out.println(line);
         }
@@ -837,19 +845,23 @@ public class GitIndexApplication implements IApplication
                 var matcher = PACKAGE_PATTERN.matcher(line);
                 if (matcher.find())
                 {
-                  var relativePath = cloneFolder.relativize(file.getParent()).toString().replace('\\', '/');
-                  var packageName = matcher.group(1);
-                  var className = fileName.substring(0, fileName.length() - ".java".length());
-                  var packagePath = "/" + packageName.replace('.', '/');
-                  if (relativePath.endsWith(packagePath))
+                  var packagePrefix = matcher.group(2);
+                  if (PACKAGE_PREFIXES.contains(packagePrefix))
                   {
-                    var relativeBasePath = relativePath.substring(0, relativePath.length() - packagePath.length());
-                    javaCount.incrementAndGet();
-                    repositoryIndex.computeIfAbsent(base, key -> new TreeMap<>()).computeIfAbsent(relativeBasePath, key -> new TreeMap<>())
-                        .computeIfAbsent(packageName, key -> new TreeSet<>()).add(className);
-                  }
+                    var relativePath = cloneFolder.relativize(file.getParent()).toString().replace('\\', '/');
+                    var packageName = matcher.group(1);
+                    var className = fileName.substring(0, fileName.length() - ".java".length());
+                    var packagePath = "/" + packageName.replace('.', '/');
+                    if (relativePath.endsWith(packagePath))
+                    {
+                      var relativeBasePath = relativePath.substring(0, relativePath.length() - packagePath.length());
+                      javaCount.incrementAndGet();
+                      repositoryIndex.computeIfAbsent(base, key -> new TreeMap<>()).computeIfAbsent(relativeBasePath, key -> new TreeMap<>())
+                          .computeIfAbsent(packageName, key -> new TreeSet<>()).add(className);
+                    }
 
-                  return FileVisitResult.CONTINUE;
+                    return FileVisitResult.CONTINUE;
+                  }
                 }
               }
             }
