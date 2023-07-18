@@ -189,6 +189,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.monitor.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.pde_feature.feature.group"
             optional="true"
             max="0"/>
@@ -412,6 +416,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.java_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.monitor.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -2582,6 +2590,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.monitor.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.pde_feature.feature.group"
             optional="true"
             max="0"/>
@@ -3069,6 +3081,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.java_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.monitor.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -8135,6 +8151,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.monitor.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.pde_feature.feature.group"
             optional="true"
             max="0"/>
@@ -8426,6 +8446,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.java_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.monitor.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -11281,6 +11305,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.monitor.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.pde_feature.feature.group"
             optional="true"
             max="0"/>
@@ -11636,6 +11664,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.java_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.monitor.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -13282,6 +13314,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.monitor.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.pde_feature.feature.group"
             optional="true"
             max="0"/>
@@ -13503,6 +13539,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.java_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.monitor.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -15536,6 +15576,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.monitor.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.pde_feature.feature.group"
             optional="true"
             max="0"/>
@@ -15807,6 +15851,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.java_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.monitor.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -20412,6 +20460,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.monitor.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.pde_feature.feature.group"
             optional="true"
             max="0"/>
@@ -20679,6 +20731,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.java_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.monitor.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -23115,6 +23171,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.monitor.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.pde_feature.feature.group"
             optional="true"
             max="0"/>
@@ -23406,6 +23466,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.java_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.monitor.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -26104,6 +26168,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.monitor.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.pde_feature.feature.group"
             optional="true"
             max="0"/>
@@ -26359,6 +26427,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.java_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.monitor.feature.group"
             optional="true"
             max="0"/>
         <requirement
@@ -28778,6 +28850,10 @@
             optional="true"
             max="0"/>
         <requirement
+            name="org.eclipse.mylyn.monitor.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
             name="org.eclipse.mylyn.pde_feature.feature.group"
             optional="true"
             max="0"/>
@@ -29005,6 +29081,10 @@
             max="0"/>
         <requirement
             name="org.eclipse.mylyn.java_feature.feature.group"
+            optional="true"
+            max="0"/>
+        <requirement
+            name="org.eclipse.mylyn.monitor.feature.group"
             optional="true"
             max="0"/>
         <requirement

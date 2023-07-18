@@ -203,6 +203,7 @@ public class ProductCatalogGenerator implements IApplication
       "org.eclipse.mylyn.hudson.feature.group", //
       "org.eclipse.mylyn.ide_feature.feature.group", //
       "org.eclipse.mylyn.java_feature.feature.group", //
+      "org.eclipse.mylyn.monitor.feature.group", //
       "org.eclipse.mylyn.pde_feature.feature.group", //
       "org.eclipse.mylyn.team_feature.feature.group", //
       "org.eclipse.mylyn.versions.feature.group", //
