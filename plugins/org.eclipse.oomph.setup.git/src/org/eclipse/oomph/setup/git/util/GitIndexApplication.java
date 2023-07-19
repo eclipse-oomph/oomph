@@ -27,6 +27,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.net.CookieManager;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.net.http.HttpClient;
@@ -370,6 +371,27 @@ public class GitIndexApplication implements IApplication
       "https://gitlab.eclipse.org/eclipse/openpass/yase", //
       "https://gitlab.eclipse.org/eclipse/scm/scm", //
 
+      "https://github.com/adoptium/Incubator", //
+      "https://github.com/adoptium/adoptium", //
+      "https://github.com/adoptium/adoptium-support", //
+      "https://github.com/adoptium/adoptium.net", //
+      "https://github.com/adoptium/api.adoptium.net", //
+      "https://github.com/adoptium/aqa-test-tools", //
+      "https://github.com/adoptium/blog.adoptium.net", //
+      "https://github.com/adoptium/build-jdk", //
+      "https://github.com/adoptium/bumblebench", //
+      "https://github.com/adoptium/ci-jenkins-pipelines", //
+      "https://github.com/adoptium/containers", //
+      "https://github.com/adoptium/dash.adoptium.net", //
+      "https://github.com/adoptium/documentation", //
+      "https://github.com/adoptium/github-release-scripts", //
+      "https://github.com/adoptium/infrastructure", //
+      "https://github.com/adoptium/jenkins-helper", //
+      "https://github.com/adoptium/jmc-build", //
+      "https://github.com/adoptium/marketplace-data", //
+      "https://github.com/adoptium/mirror-scripts", //
+      "https://github.com/adoptium/run-aqa", //
+
       "" //
   ));
 
@@ -499,6 +521,14 @@ public class GitIndexApplication implements IApplication
       "https://git.eclipse.org/r/webtools-common/webtools.common.tests", //
       "https://git.eclipse.org/r/webtools/webtools.releng", //
       "https://git.eclipse.org/r/xwt/org.eclipse.xwt", //
+      "https://github.com/adoptium/STF", //
+      "https://github.com/adoptium/TKG", //
+      "https://github.com/adoptium/aqa-systemtest", //
+      "https://github.com/adoptium/aqa-tests", //
+      "https://github.com/adoptium/emt4j", //
+      "https://github.com/adoptium/installer", //
+      "https://github.com/adoptium/jdk", //
+      "https://github.com/adoptium/temurin-build", //
       "https://github.com/deeplearning4j/deeplearning4j", //
       "https://github.com/deeplearning4j/deeplearning4j-examples", //
       "https://github.com/eclipse-acceleo/acceleo", //
@@ -971,8 +1001,7 @@ public class GitIndexApplication implements IApplication
         return true;
       }
 
-      if (id.startsWith("adoptium") //
-          || id.startsWith("dt") //
+      if (id.startsWith("dt") //
           || id.startsWith("ecd") //
           || id.startsWith("iot") //
           || id.startsWith("locationtech") //
@@ -1291,6 +1320,17 @@ public class GitIndexApplication implements IApplication
         return true;
       }
 
+      if (it.matches("https://github.com/adoptium/.+jdk.+") || it.matches("https://github.com/adoptium/jdk.+"))
+      {
+        return true;
+      }
+
+      if ((it.startsWith("https://github.com/eclipse-ee4j") || it.startsWith("https://github.com/jakartae"))
+          && (it.contains("tck") || it.contains("-doc-") || it.contains("examples") || it.contains("samples")))
+      {
+        return true;
+      }
+
       if (BROKEN_REPOSITORIES.contains(it) || NON_JAVA_REPOSITORIES.contains(it))
       {
         return true;
@@ -1302,7 +1342,7 @@ public class GitIndexApplication implements IApplication
       }
 
       return it.endsWith("/.github") || it.endsWith("/ui-best-practices") || it.endsWith("/.eclipsefdn") || it.contains("www.eclipse.org")
-          || it.endsWith(".incubator") || it.contains("website") || it.endsWith(".github.io") || it.endsWith(".binaries");
+          || it.endsWith(".incubator") || it.contains("website") || it.endsWith(".github.io") || it.endsWith("binaries");
     });
   }
 
@@ -1396,10 +1436,13 @@ public class GitIndexApplication implements IApplication
 
   private static class ContentHandler
   {
-    private Path cache;
+    private final Path cache;
+
+    private final HttpClient httpClient;
 
     public ContentHandler(String cache)
     {
+      httpClient = HttpClient.newBuilder().followRedirects(HttpClient.Redirect.NORMAL).cookieHandler(new CookieManager()).build();
       try
       {
         if (cache != null)
@@ -1419,7 +1462,6 @@ public class GitIndexApplication implements IApplication
 
     protected String basicGetContent(URI uri) throws IOException, InterruptedException
     {
-      var httpClient = HttpClient.newBuilder().followRedirects(HttpClient.Redirect.NORMAL).build();
       var requestBuilder = HttpRequest.newBuilder(uri).GET();
       var request = requestBuilder.build();
       var response = httpClient.send(request, BodyHandlers.ofString());
