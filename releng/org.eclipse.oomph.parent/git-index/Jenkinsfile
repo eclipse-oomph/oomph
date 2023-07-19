@@ -1,0 +1,144 @@
+pipeline {
+
+  agent {
+    label "centos-latest"
+  }
+
+  triggers {
+     cron('H 21 * * 7')
+  }
+
+  options {
+    timeout(time: 24, unit: 'HOURS')
+    buildDiscarder(logRotator(numToKeepStr:'5'))
+    disableConcurrentBuilds(abortPrevious: true)
+  }
+
+  tools {
+    maven 'apache-maven-latest'
+    jdk 'temurin-jdk17-latest'
+  }
+
+  environment {
+    CHECKOUT = 'false'
+    CLONE_URL = 'https://github.com/eclipse-oomph/oomph'
+    CLONE_BRANCH = 'master'
+    BUILD_TIMESTAMP = sh(returnStdout: true, script: 'date +%Y%m%d-%H%M%S').trim()
+  }
+
+  parameters {
+    booleanParam(
+      name: 'PROMOTE',
+      defaultValue: true,
+      description: '''
+        Whether to copy git-index to the actual location.
+      '''
+    )
+  }
+
+  stages {
+    stage('Display Parameters') {
+      steps {
+        script {
+          env.PROMOTE = params.PROMOTE
+          env.GIT=env.WORKSPACE
+          echoVariables()
+        }
+      }
+    }
+
+    stage('Git Checkout') {
+      when {
+        environment name: 'CHECKOUT', value: 'true'
+      }
+      steps {
+        script {
+          def gitVariables = checkout(
+            poll: false,
+            scm: [
+              $class: 'GitSCM',
+              branches: [[name: '*' + "${env.CLONE_BRANCH}"]],
+              doGenerateSubmoduleConfigurations: false,
+              submoduleCfg: [],
+              userRemoteConfigs: [[url: "${env.CLONE_URL}.git" ]]
+            ]
+          )
+
+          echo "$gitVariables"
+          env.GIT_COMMIT = gitVariables.GIT_COMMIT
+          env.GIT_BRANCH = gitVariables.GIT_BRANCH
+          echoVariables()
+        }
+      }
+    }
+
+    stage('Build') {
+      steps {
+        script {
+          mvn()
+          if (params.PROMOTE) {
+            sshagent(['projects-storage.eclipse.org-bot-ssh']) {
+              sh '''
+                set -o pipefail
+                LOGIN="genie.oomph@projects-storage.eclipse.org"
+                OOMPH_DIR="/home/data/httpd/download.eclipse.org/oomph"
+
+                echo "Promoting"
+                PUBLISH_ARGUMENT="${OOMPH_DIR}/git/"
+                ssh ${LOGIN} "mkdir -p ${PUBLISH_ARGUMENT}"
+                scp releng/org.eclipse.oomph.parent/git-index/target/git-index.zip ${LOGIN}:${PUBLISH_ARGUMENT}/git-index-new.zip
+                ssh ${LOGIN} "cd ${PUBLISH_ARGUMENT}; ls git-index-new.zip; echo mv git-index-new.zip git-index.zip"
+              '''
+            }
+          }
+        }
+      }
+
+      post {
+        always {
+          archiveArtifacts artifacts: '**/git-index/target/**', allowEmptyArchive: true
+        }
+      }
+    }
+  }
+
+  post {
+    failure {
+      emailext (
+        subject: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+        body: """FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':
+          Check console output at ${env.BUILD_URL}""",
+        recipientProviders: [[$class: 'DevelopersRecipientProvider']],
+        to: 'ed.merks@gmail.com'
+      )
+    }
+  }
+}
+
+def void echoVariables() {
+  echo """
+PROMOTE=${env.PROMOTE}
+BRANCH_NAME=${env.BRANCH_NAME}
+GIT=${env.GIT}
+GIT_COMMIT=${env.GIT_COMMIT}
+GIT_BRANCH=${env.GIT_BRANCH}
+"""
+}
+
+def void mvn() {
+  wrap([$class: 'Xvnc', useXauthority: true]) {
+    sh '''
+      mvn \
+      clean \
+      verify \
+      --no-transfer-progress \
+      -P git-index \
+      -DPRODUCT=false \
+      -DskipTests=true \
+      -Dmaven.repo.local=$WORKSPACE/.m2/repository \
+      -DPACK_AND_SIGN=false \
+      -Dbuild.id=$BUILD_NUMBER \
+      -Dgit.commit=$GIT_COMMIT
+    '''
+  }
+}

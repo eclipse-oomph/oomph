@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.pde.ui.RuntimeWorkbench">
+    <setAttribute key="additional_plugins"/>
+    <booleanAttribute key="append.args" value="true"/>
+    <stringAttribute key="application" value="org.eclipse.oomph.setup.git.GitIndexer"/>
+    <booleanAttribute key="askclear" value="true"/>
+    <booleanAttribute key="automaticAdd" value="true"/>
+    <booleanAttribute key="automaticValidate" value="true"/>
+    <stringAttribute key="bootstrap" value=""/>
+    <stringAttribute key="checked" value="[NONE]"/>
+    <booleanAttribute key="clearConfig" value="true"/>
+    <booleanAttribute key="clearws" value="false"/>
+    <booleanAttribute key="clearwslog" value="false"/>
+    <stringAttribute key="configLocation" value="${workspace_loc}/.metadata/.plugins/org.eclipse.pde.core/Git Indexer"/>
+    <booleanAttribute key="default" value="false"/>
+    <setAttribute key="deselected_workspace_bundles">
+        <setEntry value="org.eclipse.oomph.base"/>
+        <setEntry value="org.eclipse.oomph.base.edit"/>
+        <setEntry value="org.eclipse.oomph.extractor.lib"/>
+        <setEntry value="org.eclipse.oomph.extractor.lib.tests"/>
+        <setEntry value="org.eclipse.oomph.gitbash"/>
+        <setEntry value="org.eclipse.oomph.jreinfo"/>
+        <setEntry value="org.eclipse.oomph.jreinfo.ui"/>
+        <setEntry value="org.eclipse.oomph.jreinfo.win32.x86_64"/>
+        <setEntry value="org.eclipse.oomph.junit"/>
+        <setEntry value="org.eclipse.oomph.launches"/>
+        <setEntry value="org.eclipse.oomph.manifests"/>
+        <setEntry value="org.eclipse.oomph.ostools"/>
+        <setEntry value="org.eclipse.oomph.p2"/>
+        <setEntry value="org.eclipse.oomph.p2.core"/>
+        <setEntry value="org.eclipse.oomph.p2.doc"/>
+        <setEntry value="org.eclipse.oomph.p2.edit"/>
+        <setEntry value="org.eclipse.oomph.p2.tests"/>
+        <setEntry value="org.eclipse.oomph.p2.ui"/>
+        <setEntry value="org.eclipse.oomph.predicates"/>
+        <setEntry value="org.eclipse.oomph.predicates.edit"/>
+        <setEntry value="org.eclipse.oomph.preferences"/>
+        <setEntry value="org.eclipse.oomph.preferences.edit"/>
+        <setEntry value="org.eclipse.oomph.preferences.editor"/>
+        <setEntry value="org.eclipse.oomph.projectconfig"/>
+        <setEntry value="org.eclipse.oomph.projectconfig.edit"/>
+        <setEntry value="org.eclipse.oomph.projectconfig.editor"/>
+        <setEntry value="org.eclipse.oomph.projectcopy"/>
+        <setEntry value="org.eclipse.oomph.releng"/>
+        <setEntry value="org.eclipse.oomph.releng.helpcenter"/>
+        <setEntry value="org.eclipse.oomph.resources"/>
+        <setEntry value="org.eclipse.oomph.resources.edit"/>
+        <setEntry value="org.eclipse.oomph.setup"/>
+        <setEntry value="org.eclipse.oomph.setup.core"/>
+        <setEntry value="org.eclipse.oomph.setup.doc"/>
+        <setEntry value="org.eclipse.oomph.setup.edit"/>
+        <setEntry value="org.eclipse.oomph.setup.editor"/>
+        <setEntry value="org.eclipse.oomph.setup.git"/>
+        <setEntry value="org.eclipse.oomph.setup.git.edit"/>
+        <setEntry value="org.eclipse.oomph.setup.installer"/>
+        <setEntry value="org.eclipse.oomph.setup.installer.tests"/>
+        <setEntry value="org.eclipse.oomph.setup.jdt"/>
+        <setEntry value="org.eclipse.oomph.setup.jdt.edit"/>
+        <setEntry value="org.eclipse.oomph.setup.launching"/>
+        <setEntry value="org.eclipse.oomph.setup.launching.edit"/>
+        <setEntry value="org.eclipse.oomph.setup.maven"/>
+        <setEntry value="org.eclipse.oomph.setup.maven.edit"/>
+        <setEntry value="org.eclipse.oomph.setup.mylyn"/>
+        <setEntry value="org.eclipse.oomph.setup.mylyn.edit"/>
+        <setEntry value="org.eclipse.oomph.setup.p2"/>
+        <setEntry value="org.eclipse.oomph.setup.p2.edit"/>
+        <setEntry value="org.eclipse.oomph.setup.pde"/>
+        <setEntry value="org.eclipse.oomph.setup.pde.edit"/>
+        <setEntry value="org.eclipse.oomph.setup.projects"/>
+        <setEntry value="org.eclipse.oomph.setup.projects.edit"/>
+        <setEntry value="org.eclipse.oomph.setup.projectset"/>
+        <setEntry value="org.eclipse.oomph.setup.projectset.edit"/>
+        <setEntry value="org.eclipse.oomph.setup.sdk"/>
+        <setEntry value="org.eclipse.oomph.setup.sync"/>
+        <setEntry value="org.eclipse.oomph.setup.sync.tests"/>
+        <setEntry value="org.eclipse.oomph.setup.targlets"/>
+        <setEntry value="org.eclipse.oomph.setup.targlets.edit"/>
+        <setEntry value="org.eclipse.oomph.setup.tests"/>
+        <setEntry value="org.eclipse.oomph.setup.ui"/>
+        <setEntry value="org.eclipse.oomph.setup.ui.ide"/>
+        <setEntry value="org.eclipse.oomph.setup.ui.questionnaire"/>
+        <setEntry value="org.eclipse.oomph.setup.workbench"/>
+        <setEntry value="org.eclipse.oomph.setup.workbench.edit"/>
+        <setEntry value="org.eclipse.oomph.setup.workingsets"/>
+        <setEntry value="org.eclipse.oomph.setup.workingsets.edit"/>
+        <setEntry value="org.eclipse.oomph.targlets"/>
+        <setEntry value="org.eclipse.oomph.targlets.core"/>
+        <setEntry value="org.eclipse.oomph.targlets.doc"/>
+        <setEntry value="org.eclipse.oomph.targlets.edit"/>
+        <setEntry value="org.eclipse.oomph.targlets.editor"/>
+        <setEntry value="org.eclipse.oomph.targlets.tests"/>
+        <setEntry value="org.eclipse.oomph.targlets.ui"/>
+        <setEntry value="org.eclipse.oomph.tests"/>
+        <setEntry value="org.eclipse.oomph.ui"/>
+        <setEntry value="org.eclipse.oomph.ui.tests"/>
+        <setEntry value="org.eclipse.oomph.util"/>
+        <setEntry value="org.eclipse.oomph.util.doc"/>
+        <setEntry value="org.eclipse.oomph.util.pde"/>
+        <setEntry value="org.eclipse.oomph.version"/>
+        <setEntry value="org.eclipse.oomph.version.digest"/>
+        <setEntry value="org.eclipse.oomph.version.tests"/>
+        <setEntry value="org.eclipse.oomph.version.ui"/>
+        <setEntry value="org.eclipse.oomph.workingsets"/>
+        <setEntry value="org.eclipse.oomph.workingsets.edit"/>
+        <setEntry value="org.eclipse.oomph.workingsets.editor"/>
+    </setAttribute>
+    <stringAttribute key="featureDefaultLocation" value="workspace"/>
+    <stringAttribute key="featurePluginResolution" value="workspace"/>
+    <booleanAttribute key="includeOptional" value="true"/>
+    <stringAttribute key="location" value="@None"/>
+    <booleanAttribute key="org.eclipse.debug.core.ATTR_FORCE_SYSTEM_CONSOLE_ENCODING" value="false"/>
+    <stringAttribute key="org.eclipse.debug.ui.ATTR_CAPTURE_IN_FILE" value="${project_loc:/org.eclipse.oomph.setup.git}/git.log"/>
+    <booleanAttribute key="org.eclipse.jdt.launching.ATTR_ATTR_USE_ARGFILE" value="false"/>
+    <booleanAttribute key="org.eclipse.jdt.launching.ATTR_SHOW_CODEDETAILS_IN_EXCEPTION_MESSAGES" value="true"/>
+    <stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-17"/>
+    <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-os ${target.os} -ws ${target.ws} -arch ${target.arch} -nl ${target.nl} -consoleLog&#13;&#10;cache  git-index.zip"/>
+    <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.pde.ui.workbenchClasspathProvider"/>
+    <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dorg.eclipse.oomph.setup.git.util.GitIndexApplication.github.pat.preference=org.eclipse.oomph/hosts/raw.githubusercontent.com/password&#13;&#10;-Dorg.eclipse.oomph.setup.git.util.GitIndexApplication.test=false&#13;&#10;-Dorg.eclipse.oomph.setup.git.util.GitIndexApplication.test.new=false&#13;&#10;-Dorg.eclipse.oomph.setup.git.util.GitIndexApplication.update=${resource_loc:/org.eclipse.oomph.setup.git/src/org/eclipse/oomph/setup/git/util/GitIndexApplication.java}&#13;&#10;-Duser.home=${system_property:user.home}"/>
+    <stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="${project_loc:/org.eclipse.oomph.setup.git}"/>
+    <booleanAttribute key="pde.generated.config" value="false"/>
+    <stringAttribute key="pde.version" value="3.3"/>
+    <stringAttribute key="product" value="org.eclipse.equinox.p2.director.product"/>
+    <setAttribute key="selected_features">
+        <setEntry value="org.eclipse.oomph.setup.git:default"/>
+        <setEntry value="org.eclipse.platform:default"/>
+    </setAttribute>
+    <setAttribute key="selected_target_bundles"/>
+    <setAttribute key="selected_workspace_bundles"/>
+    <booleanAttribute key="show_selected_only" value="false"/>
+    <booleanAttribute key="tracing" value="false"/>
+    <booleanAttribute key="useCustomFeatures" value="true"/>
+    <booleanAttribute key="useDefaultConfig" value="true"/>
+    <booleanAttribute key="useDefaultConfigArea" value="true"/>
+    <booleanAttribute key="useProduct" value="false"/>
+</launchConfiguration>

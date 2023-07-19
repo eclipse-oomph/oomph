@@ -20,6 +20,9 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.egit.core.EclipseGitProgressTransformer;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
+import org.eclipse.equinox.security.storage.ISecurePreferences;
+import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
+import org.eclipse.equinox.security.storage.StorageException;
 import org.eclipse.jgit.api.Git;
 
 import java.io.BufferedOutputStream;
@@ -97,15 +100,27 @@ public class GitIndexApplication implements IApplication
       "https://git.eclipse.org/r/webtools/org.eclipse.webtools.java-ee-config", //
       "https://gitlab.eclipse.org/eclipse/sw360/playground.git", //
       "https://github.com/eclipse-tractusx/portal-assets", // Has file name with ':'
+      "https://github.com/eclipse-arrowhead/profile-library-sysml", // Has file name with ':'
       "https://gitlab.eclipse.org/eclipse/openpass/simopenpass", //
+      "https://github.com/eclipse-esmf/esmf-documentation", //
+      "https://gitlab.eclipse.org/eclipse/titan/titan.applications.iot-functiontest-framework", //
+      "https://gitlab.eclipse.org/eclipse/titan/titan.applications.iot.loadtest.framework", //
       "" //
   ));
 
   private static Set<String> NON_JAVA_REPOSITORIES = new TreeSet<>(Set.of( //
+      "https://git.eclipse.org/r/4diac/org.eclipse.4diac.examples", //
+      "https://git.eclipse.org/r/4diac/org.eclipse.4diac.forte", //
+      "https://git.eclipse.org/r/duttile/duttile", //
       "https://git.eclipse.org/r/efm/org.eclipse.efm-hibou", //
       "https://git.eclipse.org/r/efm/org.eclipse.efm-symbex", //
+      "https://git.eclipse.org/r/esf/test-esf", //
       "https://git.eclipse.org/r/jsf/webtools.jsf.docs", //
       "https://git.eclipse.org/r/ldt/org.eclipse.metalua", //
+      "https://git.eclipse.org/r/mdmbl/org.eclipse.mdm.api.uml", //
+      "https://git.eclipse.org/r/mdmbl/org.eclipse.mdmbl", //
+      "https://git.eclipse.org/r/paho.incubator/org.eclipse.paho.mqtt.lua", //
+      "https://git.eclipse.org/r/paho.incubator/smidge", //
       "https://git.eclipse.org/r/rtsc/org.eclipse.rtsc.contrib", //
       "https://git.eclipse.org/r/rtsc/org.eclipse.rtsc.test", //
       "https://git.eclipse.org/r/rtsc/org.eclipse.rtsc.training", //
@@ -115,9 +130,180 @@ public class GitIndexApplication implements IApplication
       "https://git.eclipse.org/r/tcf/org.eclipse.tcf.agent", //
       "https://git.eclipse.org/r/webtools/webtools.maps", //
       "https://git.eclipse.org/r/webtools/webtools.releng.aggregator", //
+      "https://github.com/adoptium/adoptium", //
+      "https://github.com/adoptium/adoptium.net", //
+      "https://github.com/adoptium/adoptium-support", //
+      "https://github.com/adoptium/api.adoptium.net", //
+      "https://github.com/adoptium/aqa-test-tools", //
+      "https://github.com/adoptium/blog.adoptium.net", //
+      "https://github.com/adoptium/build-jdk", //
+      "https://github.com/adoptium/bumblebench", //
+      "https://github.com/adoptium/ci-jenkins-pipelines", //
+      "https://github.com/adoptium/containers", //
+      "https://github.com/adoptium/dash.adoptium.net", //
+      "https://github.com/adoptium/documentation", //
+      "https://github.com/adoptium/github-release-scripts", //
+      "https://github.com/adoptium/Incubator", //
+      "https://github.com/adoptium/infrastructure", //
+      "https://github.com/adoptium/jenkins-helper", //
+      "https://github.com/adoptium/jmc-build", //
+      "https://github.com/adoptium/marketplace-data", //
+      "https://github.com/adoptium/mirror-scripts", //
+      "https://github.com/adoptium/run-aqa", //
       "https://github.com/deeplearning4j/deeplearning4j-docs", //
+      "https://github.com/eclipse/adaaa", //
+      "https://github.com/eclipse/adore", //
+      "https://github.com/eclipse/agileuml", //
+      "https://github.com/eclipse/capella-addons", //
+      "https://github.com/eclipse/capella-gitadapter", //
+      "https://github.com/eclipse/capella-pipeline-library", //
+      "https://github.com/eclipse/capella-releng-parent", //
+      "https://github.com/eclipse/che", //
+      "https://github.com/eclipse/che-theia-activity-tracker", //
+      "https://github.com/eclipse/che-theia-dashboard-extension", //
+      "https://github.com/eclipse/che-theia-emacs-plugin", //
+      "https://github.com/eclipse/che-theia-env-variables-plugin", //
+      "https://github.com/eclipse/che-theia-factory-extension", //
+      "https://github.com/eclipse/che-theia-github-plugin", //
+      "https://github.com/eclipse/che-theia-hosted-plugin-manager-extension", //
+      "https://github.com/eclipse/che-theia-java-plugin", //
+      "https://github.com/eclipse/che-theia-machines-plugin", //
+      "https://github.com/eclipse/che-theia-samples", //
+      "https://github.com/eclipse/che-theia-ssh-plugin", //
+      "https://github.com/eclipse/che-theia-task-plugin", //
+      "https://github.com/eclipse/che-theia-terminal-extension", //
+      "https://github.com/eclipse/che-theia-vi-plugin", //
+      "https://github.com/eclipse/cloe", //
+      "https://github.com/eclipse/diafanis", //
+      "https://github.com/eclipse/dirigible-samples", //
+      "https://github.com/eclipse/eclipsefuro", //
+      "https://github.com/eclipse/eclipsefuro-web", //
+      "https://github.com/eclipse/editdor", //
+      "https://github.com/eclipse/elk-models", //
+      "https://github.com/eclipse/gemoc-studio-extras", //
+      "https://github.com/eclipse/hara-ddiclient", //
+      "https://github.com/eclipse/hawkbit-clients-golang", //
+      "https://github.com/eclipse/iottestware", //
+      "https://github.com/eclipse/iottestware.coap", //
+      "https://github.com/eclipse/iottestware.dashboard", //
+      "https://github.com/eclipse/iottestware.fuzzing", //
+      "https://github.com/eclipse/iottestware.mqtt", //
+      "https://github.com/eclipse/iottestware.opcua", //
+      "https://github.com/eclipse/iottestware.performance", //
+      "https://github.com/eclipse/jetty.docker", //
+      "https://github.com/eclipse/jetty.parent", //
+      "https://github.com/eclipse/keyple", //
+      "https://github.com/eclipse/keyple-card-calypso-cpp-lib", //
+      "https://github.com/eclipse/keyple-card-generic-cpp-lib", //
+      "https://github.com/eclipse/keyple-common-cpp-api", //
+      "https://github.com/eclipse/keyple-cpp", //
+      "https://github.com/eclipse/keyple-cpp-example", //
+      "https://github.com/eclipse/keyple-cpp-meta", //
+      "https://github.com/eclipse/keyple-ops", //
+      "https://github.com/eclipse/keyple-plugin-android-nfc-java-lib", //
+      "https://github.com/eclipse/keyple-plugin-android-omapi-java-lib", //
+      "https://github.com/eclipse/keyple-plugin-cpp-api", //
+      "https://github.com/eclipse/keyple-plugin-pcsc-cpp-lib", //
+      "https://github.com/eclipse/keyple-plugin-stub-cpp-lib", //
+      "https://github.com/eclipse/keyple-service-cpp-lib", //
+      "https://github.com/eclipse/keyple-service-resource-cpp-lib", //
+      "https://github.com/eclipse/keyple-util-cpp-lib", //
+      "https://github.com/eclipse/kiso-testing", //
+      "https://github.com/eclipse/kiso-testing-python-uds", //
+      "https://github.com/eclipse/kiso-testing-testapp", //
+      "https://github.com/eclipse/kiso-testing-vscode", //
+      "https://github.com/eclipse/kuksa.hardware", //
+      "https://github.com/eclipse/kuksa.val", //
+      "https://github.com/eclipse/kuksa.val.feeders", //
+      "https://github.com/eclipse/kuksa.val.services", //
+      "https://github.com/eclipse/kura-apps", //
+      "https://github.com/eclipse/leshan.osgi", //
+      "https://github.com/eclipse/lyo.oslc-ui", //
+      "https://github.com/eclipse/microprofile-bom", //
+      "https://github.com/eclipse/microprofile-build-infra", //
+      "https://github.com/eclipse/microprofile-evolution-process", //
+      "https://github.com/eclipse/microprofile-marketing", //
+      "https://github.com/eclipse/microprofile-parent", //
+      "https://github.com/eclipse/microprofile-service-mesh", //
+      "https://github.com/eclipse/mosquitto", //
+      "https://github.com/eclipse/mosquitto.rsmb", //
+      "https://github.com/eclipse/mraa", //
+      "https://github.com/eclipse/n4js-tutorials", //
+      "https://github.com/eclipse/omr", //
+      "https://github.com/eclipse/openmcx", //
+      "https://github.com/eclipse/open-vsx.org", //
+      "https://github.com/eclipse/org.eclipse.riena.3xtargets", //
+      "https://github.com/eclipse/org.eclipse.riena.setup", //
+      "https://github.com/eclipse/org.eclipse.sensinact", //
+      "https://github.com/eclipse/org.eclipse.sensinact.studioweb", //
+      "https://github.com/eclipse/orion", //
+      "https://github.com/eclipse/orion.electron", //
+      "https://github.com/eclipse/orion.server.node", //
+      "https://github.com/eclipse/packages", //
+      "https://github.com/eclipse/packages-c2e-provisioning", //
+      "https://github.com/eclipse/paho.golang", //
+      "https://github.com/eclipse/paho.mqtt.c", //
+      "https://github.com/eclipse/paho.mqtt.cpp", //
+      "https://github.com/eclipse/paho.mqtt.d", //
+      "https://github.com/eclipse/paho.mqtt.embedded-c", //
+      "https://github.com/eclipse/paho.mqtt.golang", //
+      "https://github.com/eclipse/paho.mqtt.javascript", //
+      "https://github.com/eclipse/paho.mqtt.m2mqtt", //
+      "https://github.com/eclipse/paho.mqtt.python", //
+      "https://github.com/eclipse/paho.mqtt.ruby", //
+      "https://github.com/eclipse/paho.mqtt.rust", //
+      "https://github.com/eclipse/paho.mqtt.testing", //
+      "https://github.com/eclipse/paho.mqtt-sn.embedded-c", //
+      "https://github.com/eclipse/sommr", //
+      "https://github.com/eclipse/sprotty-layout", //
+      "https://github.com/eclipse/streamsheets", //
+      "https://github.com/eclipse/theia-generator-plugin", //
+      "https://github.com/eclipse/theia-java-extension", //
+      "https://github.com/eclipse/theia-plugin-packager", //
+      "https://github.com/eclipse/theia-python-extension", //
+      "https://github.com/eclipse/theia-yeoman-plugin", //
+      "https://github.com/eclipse/tinydtls", //
+      "https://github.com/eclipse/unide.python", //
+      "https://github.com/eclipse/upm", //
+      "https://github.com/eclipse/wakaama", //
+      "https://github.com/eclipse/winery-topologymodeler", //
+      "https://github.com/eclipse/xacc", //
+      "https://github.com/eclipse/xtext-archive", //
+      "https://github.com/eclipse-4diac/4diac-examples", //
+      "https://github.com/eclipse-4diac/4diac-fbe", //
+      "https://github.com/eclipse-4diac/4diac-fortebuildcontainer", //
+      "https://github.com/eclipse-4diac/4diac-toolchain", //
+      "https://github.com/eclipse-aaspe/aaspe", //
+      "https://github.com/eclipse-aaswc/aaswc", //
       "https://github.com/eclipse-actf/org.eclipse.actf.visualization.releng", //
+      "https://github.com/eclipse-agail/agail-security", //
+      "https://github.com/eclipse-agail/agile-api-spec", //
+      "https://github.com/eclipse-agail/agile-cli", //
+      "https://github.com/eclipse-agail/agile-data", //
+      "https://github.com/eclipse-agail/agile-dbus", //
+      "https://github.com/eclipse-agail/agile-kura", //
+      "https://github.com/eclipse-agail/agile-sdk", //
+      "https://github.com/eclipse-ankaios/ankaios", //
+      "https://github.com/eclipse-arche/arche", //
+      "https://github.com/eclipse-arrowhead/core-c", //
+      "https://github.com/eclipse-arrowhead/core-go-generic", //
+      "https://github.com/eclipse-arrowhead/core-java-spring", //
+      "https://github.com/eclipse-arrowhead/documentation", //
+      "https://github.com/eclipse-arrowhead/roadmap", //
       "https://github.com/eclipse-babel/server", //
+      "https://github.com/eclipse-basyx/basyx-applications", //
+      "https://github.com/eclipse-basyx/basyx-cpp-components", //
+      "https://github.com/eclipse-basyx/basyx-cpp-sdk", //
+      "https://github.com/eclipse-basyx/basyx-dotnet", //
+      "https://github.com/eclipse-basyx/basyx-dotnet-applications", //
+      "https://github.com/eclipse-basyx/basyx-dotnet-components", //
+      "https://github.com/eclipse-basyx/basyx-dotnet-examples", //
+      "https://github.com/eclipse-basyx/basyx-dotnet-sdk", //
+      "https://github.com/eclipse-basyx/basyx-python-sdk", //
+      "https://github.com/eclipse-basyx/basyx-rust-sdk", //
+      "https://github.com/eclipse-bfb/bfb-client", //
+      "https://github.com/eclipse-bfb/bfb-specs", //
+      "https://github.com/eclipse-bfb/bfb-tooling", //
       "https://github.com/eclipse-cbi/ansible-playbooks", //
       "https://github.com/eclipse-cbi/best-practices", //
       "https://github.com/eclipse-cbi/buildkitd-okd", //
@@ -134,106 +320,54 @@ public class GitIndexApplication implements IApplication
       "https://github.com/eclipse-cdo/cdo.www", //
       "https://github.com/eclipse-cdt/cdt-infra", //
       "https://github.com/eclipse-cdt/cdt-vscode", //
-      "https://github.com/eclipse-emf-compare/emf-compare-acceptance", //
-      "https://github.com/eclipse-emf-compare/emf-compare-releng", //
-      "https://github.com/eclipse-equinox/equinox.bundles", //
-      "https://github.com/eclipse-equinox/equinox.framework", //
-      "https://github.com/eclipse-iceoryx/iceoryx", //
-      "https://github.com/eclipse-iceoryx/iceoryx-automotive-soa", //
-      "https://github.com/eclipse-iceoryx/iceoryx-gateway-dds", //
-      "https://github.com/eclipse-iceoryx/iceoryx-project-template", //
-      "https://github.com/eclipse-iceoryx/iceoryx-rs", //
-      "https://github.com/eclipse-iceoryx/iceoryx-web", //
-      "https://github.com/eclipse-jdt/eclipse.jdt", //
-      "https://github.com/eclipse-justj/justj", //
-      "https://github.com/eclipse-pde/eclipse.pde.build", //
-      "https://github.com/eclipse-platform/eclipse.platform.common", //
-      "https://github.com/eclipse-platform/eclipse.platform.debug", //
-      "https://github.com/eclipse-platform/eclipse.platform.releng", //
-      "https://github.com/eclipse-platform/eclipse.platform.resources", //
-      "https://github.com/eclipse-platform/eclipse.platform.runtime", //
-      "https://github.com/eclipse-platform/eclipse.platform.team", //
-      "https://github.com/eclipse-platform/eclipse.platform.text", //
-      "https://github.com/eclipse-platform/eclipse.platform.ua", //
-      "https://github.com/eclipse-platform/eclipse.platform.ui.tools", //
-      "https://github.com/eclipse-ptp/ptp.doc", //
-      "https://github.com/eclipse-rmf/org.eclipse.rmf.documentation", //
-      "https://github.com/eclipse-scava/scava-datasets", //
-      "https://github.com/eclipse-scout/scout.ci", //
-      "https://github.com/eclipse-scout/scout.maven-master", //
-      "https://github.com/eclipse-set/build", //
-      "https://github.com/eclipse-sirius/sirius-specs", //
-      "https://github.com/eclipse-store/docs-site", //
-      "https://github.com/eclipse-sw360/sw360-frontend", //
-      "https://github.com/eclipse-vertx/vertx-launcher", //
-      "https://github.com/eclipse-xpanse/xpanse-iam", //
-      "https://github.com/eclipse-xpanse/xpanse-relops", //
-      "https://github.com/eclipse-xpanse/xpanse-ui", //
-      "https://github.com/eclipse/agileuml", //
-      "https://github.com/eclipse/eclipsefuro", //
-      "https://github.com/eclipse/eclipsefuro-web", //
-      "https://github.com/eclipse/elk-models", //
-      "https://github.com/eclipse/gemoc-studio-extras", //
-      "https://github.com/eclipse/iottestware", //
-      "https://github.com/eclipse/iottestware.coap", //
-      "https://github.com/eclipse/iottestware.dashboard", //
-      "https://github.com/eclipse/iottestware.fuzzing", //
-      "https://github.com/eclipse/iottestware.mqtt", //
-      "https://github.com/eclipse/iottestware.opcua", //
-      "https://github.com/eclipse/iottestware.performance", //
-      "https://github.com/eclipse/jetty.docker", //
-      "https://github.com/eclipse/jetty.parent", //
-      "https://github.com/eclipse/lyo.oslc-ui", //
-      "https://github.com/eclipse/n4js-tutorials", //
-      "https://github.com/eclipse/omr", //
-      "https://github.com/eclipse/org.eclipse.riena.3xtargets", //
-      "https://github.com/eclipse/org.eclipse.riena.setup", //
-      "https://github.com/eclipse/org.eclipse.sensinact", //
-      "https://github.com/eclipse/org.eclipse.sensinact.studioweb", //
-      "https://github.com/eclipse/winery-topologymodeler", //
-      "https://github.com/eclipse/xacc", //
-      "https://github.com/eclipse/xtext-archive", //
-      "https://github.com/osgi/osgi.enroute.site", //
-      "https://gitlab.eclipse.org/eclipse/asciidoc-lang/asciidoc-lang", //
-      "https://gitlab.eclipse.org/eclipse/asciidoc-lang/asciidoc-tck", //
-      "https://gitlab.eclipse.org/eclipse/austen/austen", //
-      "https://gitlab.eclipse.org/eclipse/dash/org.eclipse.dash.handbook", //
-      "https://gitlab.eclipse.org/eclipse/gmf-tooling/org.eclipse.gmf-tooling.uml2tools.releng", //
-      "https://gitlab.eclipse.org/eclipse/mpc/org-eclipse-epp-mpc", //
-      "https://gitlab.eclipse.org/eclipse/osee/org.eclipse.ote", //
-      "https://gitlab.eclipse.org/eclipse/plato/bok", //
-      "https://gitlab.eclipse.org/eclipse/plato/www", //
-      "https://gitlab.eclipse.org/eclipse/rtsc/org.eclipse.rtsc.contrib", //
-      "https://gitlab.eclipse.org/eclipse/rtsc/org.eclipse.rtsc.test", //
-      "https://gitlab.eclipse.org/eclipse/rtsc/org.eclipse.rtsc.training", //
-      "https://gitlab.eclipse.org/eclipse/sw361/playground-git", //
-
-      "https://github.com/eclipse-ee4j/ee4j", //
-      "https://github.com/eclipse-ee4j/glassfish-docs", //
-      "https://github.com/eclipse-ee4j/glassfish-repackaged", //
-      "https://github.com/eclipse-ee4j/gransasso", //
-      "https://github.com/eclipse-ee4j/jakartaee-firstcup", //
-      "https://github.com/eclipse-ee4j/jakartaee-release", //
-      "https://github.com/eclipse-ee4j/jakartaee-renames", //
-      "https://github.com/eclipse-ee4j/jakartaee-tutorial", //
-      "https://github.com/eclipse-ee4j/jersey-web", //
-      "https://github.com/jakartaee/inject-spec", //
-      "https://github.com/jakartaee/jakartaee-api", //
-      "https://github.com/jakartaee/jakartaee-documentation", //
-      "https://github.com/jakartaee/jakartaee-platform", //
-      "https://github.com/jakartaee/jakartaee-schemas", //
-      "https://github.com/jakartaee/mail-spec", //
-      "https://github.com/jakartaee/managed-beans", //
-
-      "https://git.eclipse.org/r/mdmbl/org.eclipse.mdm.api.uml", //
-      "https://git.eclipse.org/r/mdmbl/org.eclipse.mdmbl", //
-      "https://github.com/eclipse-ankaios/ankaios", //
-      "https://github.com/eclipse-arche/arche", //
-      "https://github.com/eclipse-bfb/bfb-client", //
-      "https://github.com/eclipse-bfb/bfb-specs", //
-      "https://github.com/eclipse-bfb/bfb-tooling", //
+      "https://github.com/eclipse-cdt-cloud/cdt-amalgamator", //
+      "https://github.com/eclipse-cdt-cloud/cdt-cloud", //
+      "https://github.com/eclipse-cdt-cloud/cdt-cloud-blueprint", //
+      "https://github.com/eclipse-cdt-cloud/cdt-gdb-adapter", //
+      "https://github.com/eclipse-cdt-cloud/cdt-gdb-vscode", //
+      "https://github.com/eclipse-cdt-cloud/clangd-contexts", //
+      "https://github.com/eclipse-cdt-cloud/theia-trace-extension", //
+      "https://github.com/eclipse-cdt-cloud/timeline-chart", //
+      "https://github.com/eclipse-cdt-cloud/trace-server-protocol", //
+      "https://github.com/eclipse-cdt-cloud/tsp-python-client", //
+      "https://github.com/eclipse-cdt-cloud/tsp-typescript-client", //
+      "https://github.com/eclipse-cdt-cloud/vscode-memory-inspector", //
+      "https://github.com/eclipse-cdt-cloud/vscode-trace-extension", //
+      "https://github.com/eclipse-cdt-cloud/vscode-trace-server", //
+      "https://github.com/eclipse-cdt-cloud/vscode-websocket-adapter", //
       "https://github.com/eclipse-chariott/Agemo", //
       "https://github.com/eclipse-chariott/chariott", //
+      "https://github.com/eclipse-che/blog", //
+      "https://github.com/eclipse-che/che-archetypes", //
+      "https://github.com/eclipse-che/che-dashboard", //
+      "https://github.com/eclipse-che/che-dependencies", //
+      "https://github.com/eclipse-che/che-dev", //
+      "https://github.com/eclipse-che/che-devfile-registry", //
+      "https://github.com/eclipse-che/che-dockerfiles", //
+      "https://github.com/eclipse-che/che-docs", //
+      "https://github.com/eclipse-che/che-docs-vale-style", //
+      "https://github.com/eclipse-che/che-editor-gwt-ide", //
+      "https://github.com/eclipse-che/che-go-jsonrpc", //
+      "https://github.com/eclipse-che/che-jwtproxy", //
+      "https://github.com/eclipse-che/che-machine-exec", //
+      "https://github.com/eclipse-che/che-operator", //
+      "https://github.com/eclipse-che/che-parent", //
+      "https://github.com/eclipse-che/che-plugin-broker", //
+      "https://github.com/eclipse-che/che-plugin-registry", //
+      "https://github.com/eclipse-che/che-release", //
+      "https://github.com/eclipse-che/che-tests", //
+      "https://github.com/eclipse-che/che-theia", //
+      "https://github.com/eclipse-che/che-workspace-client", //
+      "https://github.com/eclipse-che/che-workspace-loader", //
+      "https://github.com/eclipse-che4z/che-che4z", //
+      "https://github.com/eclipse-che4z/che-che4z-explorer-for-endevor", //
+      "https://github.com/eclipse-che4z/che-che4z-lsp-for-hlasm", //
+      "https://github.com/eclipse-che4z/che-che4z-zos-resource-explorer", //
+      "https://github.com/eclipse-cyclonedds/cyclonedds", //
+      "https://github.com/eclipse-cyclonedds/cyclonedds-cxx", //
+      "https://github.com/eclipse-cyclonedds/cyclonedds-python", //
+      "https://github.com/eclipse-ditto/ditto-clients-golang", //
+      "https://github.com/eclipse-ditto/ditto-clients-python", //
       "https://github.com/eclipse-ecal/ecal", //
       "https://github.com/eclipse-ecal/ecal-camera-samples", //
       "https://github.com/eclipse-ecal/ecal-core", //
@@ -248,9 +382,120 @@ public class GitIndexApplication implements IApplication
       "https://github.com/eclipse-ecal/rosidl_typesupport_protobuf", //
       "https://github.com/eclipse-ecal/tcp_pubsub", //
       "https://github.com/eclipse-ecal/udpcap", //
+      "https://github.com/eclipse-edc/Collateral", //
+      "https://github.com/eclipse-edc/DataDashboard", //
+      "https://github.com/eclipse-edc/docs", //
+      "https://github.com/eclipse-edc/IDS-CodeGeneration", //
+      "https://github.com/eclipse-edc/JenkinsPipelines", //
+      "https://github.com/eclipse-edc/Publications", //
+      "https://github.com/eclipse-edc/Release", //
+      "https://github.com/eclipse-edc/Template-Basic", //
+      "https://github.com/eclipse-ee4j/ee4j", //
+      "https://github.com/eclipse-ee4j/glassfish-docs", //
+      "https://github.com/eclipse-ee4j/glassfish-repackaged", //
+      "https://github.com/eclipse-ee4j/gransasso", //
+      "https://github.com/eclipse-ee4j/jakartaee-firstcup", //
+      "https://github.com/eclipse-ee4j/jakartaee-release", //
+      "https://github.com/eclipse-ee4j/jakartaee-renames", //
+      "https://github.com/eclipse-ee4j/jakartaee-tutorial", //
+      "https://github.com/eclipse-ee4j/jersey-web", //
+      "https://github.com/eclipse-embed-cdt/assets", //
+      "https://github.com/eclipse-embed-cdt/Liqp", //
+      "https://github.com/eclipse-embed-cdt/web-jekyll", //
+      "https://github.com/eclipse-embed-cdt/web-preview", //
+      "https://github.com/eclipse-emfcloud/emfcloud", //
+      "https://github.com/eclipse-emfcloud/emfcloud-modelserver-theia", //
+      "https://github.com/eclipse-emfcloud/jsonforms-property-view", //
+      "https://github.com/eclipse-emfcloud/modelserver-node", //
+      "https://github.com/eclipse-emfcloud/theia-tree-editor", //
+      "https://github.com/eclipse-emf-compare/emf-compare-acceptance", //
+      "https://github.com/eclipse-emf-compare/emf-compare-releng", //
+      "https://github.com/eclipse-equinox/equinox.bundles", //
+      "https://github.com/eclipse-equinox/equinox.framework", //
+      "https://github.com/eclipse-esmf/esmf-antora-ui", //
+      "https://github.com/eclipse-esmf/esmf-aspect-model-editor", //
+      "https://github.com/eclipse-esmf/esmf-manufacturing-information-model", //
+      "https://github.com/eclipse-esmf/esmf-parent", //
+      "https://github.com/eclipse-esmf/esmf-sdk-js-aspect-model-loader", //
+      "https://github.com/eclipse-esmf/esmf-sdk-js-schematics", //
+      "https://github.com/eclipse-esmf/esmf-sdk-js-schematics-demo", //
+      "https://github.com/eclipse-esmf/esmf-sdk-py-aspect-model-loader", //
+      "https://github.com/eclipse-esmf/esmf-sdk-py-pandas-dataframe", //
+      "https://github.com/eclipse-fog05/examples", //
+      "https://github.com/eclipse-fog05/fog05", //
+      "https://github.com/eclipse-fog05/fog05-go", //
+      "https://github.com/eclipse-fog05/fog05-hypervisor-containerd", //
+      "https://github.com/eclipse-fog05/fog05-hypervisor-kvm", //
+      "https://github.com/eclipse-fog05/fog05-hypervisor-lxd", //
+      "https://github.com/eclipse-fog05/fog05-hypervisor-native", //
+      "https://github.com/eclipse-fog05/fog05-hypervisor-ros2", //
+      "https://github.com/eclipse-fog05/fog05-networking-linux", //
+      "https://github.com/eclipse-fog05/fog05-python", //
+      "https://github.com/eclipse-glsp/glsp", //
+      "https://github.com/eclipse-glsp/glsp-client", //
+      "https://github.com/eclipse-glsp/glsp-playwright", //
+      "https://github.com/eclipse-glsp/glsp-server-node", //
+      "https://github.com/eclipse-glsp/glsp-theia-integration", //
+      "https://github.com/eclipse-glsp/glsp-vscode-integration", //
       "https://github.com/eclipse-heimlig/heimlig", //
       "https://github.com/eclipse-ibeji/freyja", //
       "https://github.com/eclipse-ibeji/ibeji", //
+      "https://github.com/eclipse-iceoryx/iceoryx", //
+      "https://github.com/eclipse-iceoryx/iceoryx-automotive-soa", //
+      "https://github.com/eclipse-iceoryx/iceoryx-gateway-dds", //
+      "https://github.com/eclipse-iceoryx/iceoryx-project-template", //
+      "https://github.com/eclipse-iceoryx/iceoryx-rs", //
+      "https://github.com/eclipse-iceoryx/iceoryx-web", //
+      "https://github.com/eclipse-iofog/agent-go", //
+      "https://github.com/eclipse-iofog/common-logging", //
+      "https://github.com/eclipse-iofog/Controller", //
+      "https://github.com/eclipse-iofog/core-networking", //
+      "https://github.com/eclipse-iofog/demo", //
+      "https://github.com/eclipse-iofog/documentation", //
+      "https://github.com/eclipse-iofog/ECN-Viewer", //
+      "https://github.com/eclipse-iofog/HardwareAbstraction", //
+      "https://github.com/eclipse-iofog/helm", //
+      "https://github.com/eclipse-iofog/homebrew-iofogctl", //
+      "https://github.com/eclipse-iofog/integrations", //
+      "https://github.com/eclipse-iofog/iofog.org", //
+      "https://github.com/eclipse-iofog/iofog-c-sdk", //
+      "https://github.com/eclipse-iofog/iofog-csharp-sdk", //
+      "https://github.com/eclipse-iofog/iofogctl", //
+      "https://github.com/eclipse-iofog/iofog-docker-images", //
+      "https://github.com/eclipse-iofog/iofog-go-sdk", //
+      "https://github.com/eclipse-iofog/iofog-kubelet", //
+      "https://github.com/eclipse-iofog/iofog-nodejs-sdk", //
+      "https://github.com/eclipse-iofog/iofog-operator", //
+      "https://github.com/eclipse-iofog/iofog-platform", //
+      "https://github.com/eclipse-iofog/iofog-python-sdk", //
+      "https://github.com/eclipse-iofog/iofog-scheduler", //
+      "https://github.com/eclipse-iofog/port-manager", //
+      "https://github.com/eclipse-iofog/restblue", //
+      "https://github.com/eclipse-iofog/router", //
+      "https://github.com/eclipse-iofog/test-runner", //
+      "https://github.com/eclipse-jdt/eclipse.jdt", //
+      "https://github.com/eclipse-justj/justj", //
+      "https://github.com/eclipse-kanto/azure-connector", //
+      "https://github.com/eclipse-kanto/container-management", //
+      "https://github.com/eclipse-kanto/file-backup", //
+      "https://github.com/eclipse-kanto/file-upload", //
+      "https://github.com/eclipse-kanto/kanto", //
+      "https://github.com/eclipse-kanto/local-digital-twins", //
+      "https://github.com/eclipse-kanto/meta-kanto", //
+      "https://github.com/eclipse-kanto/software-update", //
+      "https://github.com/eclipse-kanto/suite-bootstrapping", //
+      "https://github.com/eclipse-kanto/suite-connector", //
+      "https://github.com/eclipse-kanto/system-metrics", //
+      "https://github.com/eclipse-kanto/update-manager", //
+      "https://github.com/eclipse-keypop/keypop", //
+      "https://github.com/eclipse-keypop/keypop-calypso-card-cpp-api", //
+      "https://github.com/eclipse-keypop/keypop-calypso-card-java-api", //
+      "https://github.com/eclipse-keypop/keypop-calypso-crypto-legacysam-cpp-api", //
+      "https://github.com/eclipse-keypop/keypop-calypso-crypto-legacysam-java-api", //
+      "https://github.com/eclipse-keypop/keypop-card-cpp-api", //
+      "https://github.com/eclipse-keypop/keypop-card-java-api", //
+      "https://github.com/eclipse-keypop/keypop-reader-cpp-api", //
+      "https://github.com/eclipse-keypop/keypop-reader-java-api", //
       "https://github.com/eclipse-kuksa/kuksa-actions", //
       "https://github.com/eclipse-kuksa/kuksa-databroker", //
       "https://github.com/eclipse-kuksa/kuksa-viss", //
@@ -292,10 +537,112 @@ public class GitIndexApplication implements IApplication
       "https://github.com/eclipse-muto/liveui-vue", //
       "https://github.com/eclipse-muto/messages", //
       "https://github.com/eclipse-muto/sandbox", //
+      "https://github.com/eclipse-openj9/build-openj9", //
+      "https://github.com/eclipse-openj9/openj9-docs", //
+      "https://github.com/eclipse-openj9/openj9-docs-staging", //
+      "https://github.com/eclipse-openj9/openj9-jenkins", //
+      "https://github.com/eclipse-openj9/openj9-omr", //
+      "https://github.com/eclipse-opensmartclide/smartclide", //
+      "https://github.com/eclipse-opensmartclide/smartclide-Backend-REST-Client", //
+      "https://github.com/eclipse-opensmartclide/smartclide-Che-REST-Client", //
+      "https://github.com/eclipse-opensmartclide/smartclide-che-theia", //
+      "https://github.com/eclipse-opensmartclide/smartclide-cicd-gitlab", //
+      "https://github.com/eclipse-opensmartclide/smartclide-deployment-extension", //
+      "https://github.com/eclipse-opensmartclide/smartclide-deployment-interpreter-theia", //
+      "https://github.com/eclipse-opensmartclide/smartclide-deployment-service", //
+      "https://github.com/eclipse-opensmartclide/smartclide-design-pattern-selection-theia", //
+      "https://github.com/eclipse-opensmartclide/smartclide-devfiles", //
+      "https://github.com/eclipse-opensmartclide/smartclide-docs", //
+      "https://github.com/eclipse-opensmartclide/smartclide-external-project-importer", //
+      "https://github.com/eclipse-opensmartclide/smartclide-frontend-comm", //
+      "https://github.com/eclipse-opensmartclide/smartclide-ide-front-end", //
+      "https://github.com/eclipse-opensmartclide/smartclide-ide-front-end-theme", //
+      "https://github.com/eclipse-opensmartclide/smartclide-jbpm", //
+      "https://github.com/eclipse-opensmartclide/smartclide-perftestgen-theia", //
+      "https://github.com/eclipse-opensmartclide/smartclide-security-patterns", //
+      "https://github.com/eclipse-opensmartclide/smartclide-ServDB", //
+      "https://github.com/eclipse-opensmartclide/smartclide-Service-Creation-Testing", //
+      "https://github.com/eclipse-opensmartclide/smartclide-service-creation-theia", //
+      "https://github.com/eclipse-opensmartclide/smartclide-service-discovery-poc", //
+      "https://github.com/eclipse-opensmartclide/smartclide-smart-assistant", //
+      "https://github.com/eclipse-opensmartclide/smartclide-smart-assistant-theia", //
+      "https://github.com/eclipse-opensmartclide/smartclide-task-service-discovery", //
+      "https://github.com/eclipse-opensmartclide/smartclide-td-reusability-theia", //
       "https://github.com/eclipse-p3com/p3com", //
+      "https://github.com/eclipse-pass/main", //
+      "https://github.com/eclipse-pass/pass-acceptance-testing/", //
+      "https://github.com/eclipse-pass/pass-auth", //
+      "https://github.com/eclipse-pass/pass-data-model/", //
+      "https://github.com/eclipse-pass/pass-docker", //
+      "https://github.com/eclipse-pass/pass-docker-mailserver/", //
+      "https://github.com/eclipse-pass/pass-download-service/", //
+      "https://github.com/eclipse-pass/pass-dupe-checker/", //
+      "https://github.com/eclipse-pass/pass-ember-adapter/", //
+      "https://github.com/eclipse-pass/pass-metadata-schemas/", //
+      "https://github.com/eclipse-pass/pass-policy-service/", //
+      "https://github.com/eclipse-pass/pass-ui/", //
+      "https://github.com/eclipse-pass/pass-ui-public/", //
+      "https://github.com/eclipse-pass/playground", //
+      "https://github.com/eclipse-passage/passage-docs", //
+      "https://github.com/eclipse-passage/passage-images", //
+      "https://github.com/eclipse-pde/eclipse.pde.build", //
+      "https://github.com/eclipse-platform/eclipse.platform.common", //
+      "https://github.com/eclipse-platform/eclipse.platform.debug", //
+      "https://github.com/eclipse-platform/eclipse.platform.releng", //
+      "https://github.com/eclipse-platform/eclipse.platform.resources", //
+      "https://github.com/eclipse-platform/eclipse.platform.runtime", //
+      "https://github.com/eclipse-platform/eclipse.platform.team", //
+      "https://github.com/eclipse-platform/eclipse.platform.text", //
+      "https://github.com/eclipse-platform/eclipse.platform.ua", //
+      "https://github.com/eclipse-platform/eclipse.platform.ui.tools", //
+      "https://github.com/eclipse-ptp/ptp.doc", //
+      "https://github.com/eclipse-rmf/org.eclipse.rmf.documentation", //
+      "https://github.com/eclipse-scava/scava-datasets", //
+      "https://github.com/eclipse-scout/scout.ci", //
+      "https://github.com/eclipse-scout/scout.maven-master", //
       "https://github.com/eclipse-sdv-blueprints/fleet-management", //
       "https://github.com/eclipse-sdv-blueprints/insurance", //
       "https://github.com/eclipse-sdv-blueprints/ros-racer", //
+      "https://github.com/eclipse-set/build", //
+      "https://github.com/eclipse-sirius/sirius-specs", //
+      "https://github.com/eclipse-slm/ansible", //
+      "https://github.com/eclipse-slm/awx", //
+      "https://github.com/eclipse-slm/molecule", //
+      "https://github.com/eclipse-slm/molecule_vsphere", //
+      "https://github.com/eclipse-slm/slm-ansible-role-basyx-server", //
+      "https://github.com/eclipse-slm/slm-ansible-role-consul", //
+      "https://github.com/eclipse-slm/slm-ansible-role-docker", //
+      "https://github.com/eclipse-slm/slm-ansible-role-inventory-helper", //
+      "https://github.com/eclipse-slm/slm-ansible-role-node-exporter", //
+      "https://github.com/eclipse-slm/slm-cc-base", //
+      "https://github.com/eclipse-slm/slm-dc-docker", //
+      "https://github.com/eclipse-slm/slm-dc-docker-portainer", //
+      "https://github.com/eclipse-slm/slm-dc-docker-swarm", //
+      "https://github.com/eclipse-slm/slm-dc-docker-tcp", //
+      "https://github.com/eclipse-slm/slm-dc-dummy", //
+      "https://github.com/eclipse-slm/slm-dc-k3s", //
+      "https://github.com/eclipse-slm/slm-dc-k8s", //
+      "https://github.com/eclipse-sparkplug/sparkplug.listings", //
+      "https://github.com/eclipse-sprotty/sprotty", //
+      "https://github.com/eclipse-sprotty/sprotty-theia", //
+      "https://github.com/eclipse-sprotty/sprotty-vscode", //
+      "https://github.com/eclipse-store/docs-site", //
+      "https://github.com/eclipse-sw360/sw360-frontend", //
+      "https://github.com/eclipse-theia/cryptodetector", //
+      "https://github.com/eclipse-theia/dugite-extra", //
+      "https://github.com/eclipse-theia/dugite-no-gpl", //
+      "https://github.com/eclipse-theia/generator-theia-extension", //
+      "https://github.com/eclipse-theia/security-audit", //
+      "https://github.com/eclipse-theia/theia", //
+      "https://github.com/eclipse-theia/theia-blueprint", //
+      "https://github.com/eclipse-theia/theia-cpp-extensions", //
+      "https://github.com/eclipse-theia/theia-e2e-test-suite", //
+      "https://github.com/eclipse-theia/theia-playwright-template", //
+      "https://github.com/eclipse-theia/theia-vscodecov", //
+      "https://github.com/eclipse-theia/vscode-builtin-extensions", //
+      "https://github.com/eclipse-theia/vscode-theia-comparator", //
+      "https://github.com/eclipse-thingweb/node-wot", //
+      "https://github.com/eclipse-thingweb/playground", //
       "https://github.com/eclipse-tractusx/app-dashboard", //
       "https://github.com/eclipse-tractusx/charts", //
       "https://github.com/eclipse-tractusx/daps-helm-chart", //
@@ -323,8 +670,8 @@ public class GitIndexApplication implements IApplication
       "https://github.com/eclipse-tractusx/sldt-semantic-models", //
       "https://github.com/eclipse-tractusx/ssi-docu", //
       "https://github.com/eclipse-tractusx/testdata-provider", //
-      "https://github.com/eclipse-tractusx/tractus-x-release", //
       "https://github.com/eclipse-tractusx/tractusx-quality-checks", //
+      "https://github.com/eclipse-tractusx/tractus-x-release", //
       "https://github.com/eclipse-tractusx/vas-country-risk", //
       "https://github.com/eclipse-uprotocol/uprotocol-android", //
       "https://github.com/eclipse-uprotocol/uprotocol-core-api", //
@@ -349,54 +696,148 @@ public class GitIndexApplication implements IApplication
       "https://github.com/eclipse-velocitas/vehicle-model-python", //
       "https://github.com/eclipse-velocitas/velocitas-docs", //
       "https://github.com/eclipse-velocitas/velocitas-project-generator-npm", //
-      "https://github.com/eclipse/adaaa", //
-      "https://github.com/eclipse/adore", //
-      "https://github.com/eclipse/cloe", //
-      "https://github.com/eclipse/kuksa.hardware", //
-      "https://github.com/eclipse/kuksa.val", //
-      "https://github.com/eclipse/kuksa.val.feeders", //
-      "https://github.com/eclipse/kuksa.val.services", //
-      "https://github.com/eclipse/openmcx", //
-      "https://github.com/eclipse/sommr", //
+      "https://github.com/eclipse-vertx/vertx-launcher", //
+      "https://github.com/eclipse-volttron/docker", //
+      "https://github.com/eclipse-volttron/github-tooling", //
+      "https://github.com/eclipse-volttron/volttron-actuator", //
+      "https://github.com/eclipse-volttron/volttron-ansible", //
+      "https://github.com/eclipse-volttron/volttron-bacnet-proxy", //
+      "https://github.com/eclipse-volttron/volttron-boptest", //
+      "https://github.com/eclipse-volttron/volttron-core", //
+      "https://github.com/eclipse-volttron/volttron-dnp3-master", //
+      "https://github.com/eclipse-volttron/volttron-dnp3-outstation", //
+      "https://github.com/eclipse-volttron/volttron-docs", //
+      "https://github.com/eclipse-volttron/volttron-energyplus", //
+      "https://github.com/eclipse-volttron/volttron-forward-historian", //
+      "https://github.com/eclipse-volttron/volttron-gridappsd", //
+      "https://github.com/eclipse-volttron/volttron-lib-auth", //
+      "https://github.com/eclipse-volttron/volttron-lib-bacnet-driver", //
+      "https://github.com/eclipse-volttron/volttron-lib-base-driver", //
+      "https://github.com/eclipse-volttron/volttron-lib-base-historian", //
+      "https://github.com/eclipse-volttron/volttron-lib-curve", //
+      "https://github.com/eclipse-volttron/volttron-lib-dnp3-driver", //
+      "https://github.com/eclipse-volttron/volttron-lib-fake-driver", //
+      "https://github.com/eclipse-volttron/volttron-lib-modbus-driver", //
+      "https://github.com/eclipse-volttron/volttron-lib-modbustk-driver", //
+      "https://github.com/eclipse-volttron/volttron-lib-rmq", //
+      "https://github.com/eclipse-volttron/volttron-lib-sql-historian", //
+      "https://github.com/eclipse-volttron/volttron-lib-tagging", //
+      "https://github.com/eclipse-volttron/volttron-lib-tls", //
+      "https://github.com/eclipse-volttron/volttron-lib-web", //
+      "https://github.com/eclipse-volttron/volttron-lib-zmq", //
+      "https://github.com/eclipse-volttron/volttron-listener", //
+      "https://github.com/eclipse-volttron/volttron-mongo-tagging", //
+      "https://github.com/eclipse-volttron/volttron-openadr-ven", //
+      "https://github.com/eclipse-volttron/volttron-platform-driver", //
+      "https://github.com/eclipse-volttron/volttron-postgresql-historian", //
+      "https://github.com/eclipse-volttron/volttron-sql-historian", //
+      "https://github.com/eclipse-volttron/volttron-sqlite-historian", //
+      "https://github.com/eclipse-volttron/volttron-sqlite-tagging", //
+      "https://github.com/eclipse-volttron/volttron-testing", //
+      "https://github.com/eclipse-volttron/volttron-web-client", //
+      "https://github.com/eclipse-xpanse/xpanse-iam", //
+      "https://github.com/eclipse-xpanse/xpanse-relops", //
+      "https://github.com/eclipse-xpanse/xpanse-ui", //
+      "https://github.com/eclipse-zenoh/homebrew-zenoh", //
+      "https://github.com/eclipse-zenoh/roadmap", //
+      "https://github.com/eclipse-zenoh/zenoh", //
+      "https://github.com/eclipse-zenoh/zenoh-backend-filesystem", //
+      "https://github.com/eclipse-zenoh/zenoh-backend-influxdb", //
+      "https://github.com/eclipse-zenoh/zenoh-backend-rocksdb", //
+      "https://github.com/eclipse-zenoh/zenoh-backend-s3", //
+      "https://github.com/eclipse-zenoh/zenoh-backend-sql", //
+      "https://github.com/eclipse-zenoh/zenoh-c", //
+      "https://github.com/eclipse-zenoh/zenoh-cpp", //
+      "https://github.com/eclipse-zenoh/zenoh-csharp", //
+      "https://github.com/eclipse-zenoh/zenoh-demos", //
+      "https://github.com/eclipse-zenoh/zenoh-flow", //
+      "https://github.com/eclipse-zenoh/zenoh-flow-python", //
+      "https://github.com/eclipse-zenoh/zenoh-go", //
+      "https://github.com/eclipse-zenoh/zenoh-pico", //
+      "https://github.com/eclipse-zenoh/zenoh-plugin-dds", //
+      "https://github.com/eclipse-zenoh/zenoh-plugin-mqtt", //
+      "https://github.com/eclipse-zenoh/zenoh-plugin-ros1", //
+      "https://github.com/eclipse-zenoh/zenoh-plugin-webserver", //
+      "https://github.com/eclipse-zenoh/zenoh-plugin-zenoh-flow", //
+      "https://github.com/eclipse-zenoh/zenoh-python", //
+      "https://github.com/jakartaee/inject-spec", //
+      "https://github.com/jakartaee/jakartaee-api", //
+      "https://github.com/jakartaee/jakartaee-documentation", //
+      "https://github.com/jakartaee/jakartaee-platform", //
+      "https://github.com/jakartaee/jakartaee-schemas", //
+      "https://github.com/jakartaee/mail-spec", //
+      "https://github.com/jakartaee/managed-beans", //
+      "https://github.com/jkubeio/ci", //
+      "https://github.com/jkubeio/jkube-images", //
+      "https://github.com/jkubeio/katacoda-scenarios", //
+      "https://github.com/locationtech/geoperil", //
+      "https://github.com/locationtech/rasterframes", //
+      "https://github.com/locationtech/sfcurve", //
+      "https://github.com/openhwgroup/core-v-mcu", //
+      "https://github.com/openhwgroup/core-v-mcu-devkit", //
+      "https://github.com/openhwgroup/core-v-verif", //
+      "https://github.com/openhwgroup/cv32e40p", //
+      "https://github.com/openhwgroup/cv32e40s", //
+      "https://github.com/openhwgroup/cv32e40x", //
+      "https://github.com/openhwgroup/cv32e40x-dv", //
+      "https://github.com/openhwgroup/cva6", //
+      "https://github.com/openhwgroup/cvw", //
+      "https://github.com/osgi/osgi.enroute.site", //
+      "https://github.com/polarsys/b612", //
+      "https://github.com/polarsys/libims", //
       "https://gitlab.eclipse.org/eclipse/ambientlight/ambient-light-services", //
       "https://gitlab.eclipse.org/eclipse/app4mc/org.eclipse.app4mc.tools.rtc", //
       "https://gitlab.eclipse.org/eclipse/app4mc/org.eclipse.app4mc.tools.simulation", //
       "https://gitlab.eclipse.org/eclipse/app4mc/org.eclipse.app4mc.tools.simulation.examples", //
+      "https://gitlab.eclipse.org/eclipse/asciidoc-lang/asciidoc-lang", //
+      "https://gitlab.eclipse.org/eclipse/asciidoc-lang/asciidoc-tck", //
+      "https://gitlab.eclipse.org/eclipse/austen/austen", //
+      "https://gitlab.eclipse.org/eclipse/dash/org.eclipse.dash.handbook", //
+      "https://gitlab.eclipse.org/eclipse/gmf-tooling/org.eclipse.gmf-tooling.uml2tools.releng", //
+      "https://gitlab.eclipse.org/eclipse/graphene/ai-interfaces", //
+      "https://gitlab.eclipse.org/eclipse/graphene/eclipse-graphene", //
+      "https://gitlab.eclipse.org/eclipse/graphene/generic-parallel-orchestrator", //
+      "https://gitlab.eclipse.org/eclipse/graphene/playground-app", //
+      "https://gitlab.eclipse.org/eclipse/graphene/tutorials", //
+      "https://gitlab.eclipse.org/eclipse/mpc/org-eclipse-epp-mpc", //
+      "https://gitlab.eclipse.org/eclipse/openk-coremodules/org.eclipse.openk-coremodules.contactBaseData.documentation", //
+      "https://gitlab.eclipse.org/eclipse/openk-coremodules/org.eclipse.openk-coremodules.contactBaseData.frontend", //
+      "https://gitlab.eclipse.org/eclipse/openk-coremodules/org.eclipse.openk-coremodules.portalFE", //
+      "https://gitlab.eclipse.org/eclipse/openk-usermodules/org.eclipse.openk-usermodules.elogbookFE", //
+      "https://gitlab.eclipse.org/eclipse/openk-usermodules/org.eclipse.openk-usermodules.gridFailureInformation.documentation", //
+      "https://gitlab.eclipse.org/eclipse/openk-usermodules/org.eclipse.openk-usermodules.gridFailureInformation.frontend", //
+      "https://gitlab.eclipse.org/eclipse/openk-usermodules/org.eclipse.openk-usermodules.plannedGridMeasures.documentation", //
+      "https://gitlab.eclipse.org/eclipse/openk-usermodules/org.eclipse.openk-usermodules.plannedGridMeasures.frontend", //
+      "https://gitlab.eclipse.org/eclipse/openk-usermodules/org.eclipse.openk-usermodules.standbyPlanning.docu", //
+      "https://gitlab.eclipse.org/eclipse/openk-usermodules/org.eclipse.openk-usermodules.standbyPlanning.frontend", //
+      "https://gitlab.eclipse.org/eclipse/openk-usermodules/org.eclipse.openk-usermodules.statementPublicAffairs.documentation", //
+      "https://gitlab.eclipse.org/eclipse/openk-usermodules/org.eclipse.openk-usermodules.statementPublicAffairs.frontend", //
       "https://gitlab.eclipse.org/eclipse/openpass/mantle-api", //
       "https://gitlab.eclipse.org/eclipse/openpass/map-sdk", //
-      "https://gitlab.eclipse.org/eclipse/openpass/opSimulation", //
       "https://gitlab.eclipse.org/eclipse/openpass/openscenario1_engine", //
       "https://gitlab.eclipse.org/eclipse/openpass/opgui", //
+      "https://gitlab.eclipse.org/eclipse/openpass/opSimulation", //
       "https://gitlab.eclipse.org/eclipse/openpass/opvisualizer", //
       "https://gitlab.eclipse.org/eclipse/openpass/yase", //
+      "https://gitlab.eclipse.org/eclipse/osbp/org.eclipse.osbp.dependencies", //
+      "https://gitlab.eclipse.org/eclipse/osbp/org.eclipse.osbp.dependencies.p2", //
+      "https://gitlab.eclipse.org/eclipse/osbp/org.eclipse.osbp.dependencies-mbp", //
+      "https://gitlab.eclipse.org/eclipse/osbp/org.eclipse.osbp.fork.jpos", //
+      "https://gitlab.eclipse.org/eclipse/osee/org.eclipse.ote", //
+      "https://gitlab.eclipse.org/eclipse/plato/bok", //
+      "https://gitlab.eclipse.org/eclipse/plato/www", //
+      "https://gitlab.eclipse.org/eclipse/rtsc/org.eclipse.rtsc.contrib", //
+      "https://gitlab.eclipse.org/eclipse/rtsc/org.eclipse.rtsc.test", //
+      "https://gitlab.eclipse.org/eclipse/rtsc/org.eclipse.rtsc.training", //
       "https://gitlab.eclipse.org/eclipse/scm/scm", //
-
-      "https://github.com/adoptium/Incubator", //
-      "https://github.com/adoptium/adoptium", //
-      "https://github.com/adoptium/adoptium-support", //
-      "https://github.com/adoptium/adoptium.net", //
-      "https://github.com/adoptium/api.adoptium.net", //
-      "https://github.com/adoptium/aqa-test-tools", //
-      "https://github.com/adoptium/blog.adoptium.net", //
-      "https://github.com/adoptium/build-jdk", //
-      "https://github.com/adoptium/bumblebench", //
-      "https://github.com/adoptium/ci-jenkins-pipelines", //
-      "https://github.com/adoptium/containers", //
-      "https://github.com/adoptium/dash.adoptium.net", //
-      "https://github.com/adoptium/documentation", //
-      "https://github.com/adoptium/github-release-scripts", //
-      "https://github.com/adoptium/infrastructure", //
-      "https://github.com/adoptium/jenkins-helper", //
-      "https://github.com/adoptium/jmc-build", //
-      "https://github.com/adoptium/marketplace-data", //
-      "https://github.com/adoptium/mirror-scripts", //
-      "https://github.com/adoptium/run-aqa", //
-
+      "https://gitlab.eclipse.org/eclipse/sw361/playground-git", //
+      "https://gitlab.eclipse.org/eclipse/titan/titan.vs-code-extension", //
       "" //
   ));
 
   private static Set<String> REPOSITORIES = new TreeSet<>(Set.of( //
       // generated-repositories
+      "https://git.eclipse.org/r/4diac/org.eclipse.4diac.ide", //
       "https://git.eclipse.org/r/apogy/apogy", //
       "https://git.eclipse.org/r/app4mc/org.eclipse.app4mc", //
       "https://git.eclipse.org/r/app4mc/org.eclipse.app4mc.addon.migration", //
@@ -419,6 +860,8 @@ public class GitIndexApplication implements IApplication
       "https://git.eclipse.org/r/egit/egit", //
       "https://git.eclipse.org/r/emfatic/org.eclipse.emfatic", //
       "https://git.eclipse.org/r/emfclient/org.eclipse.emf.ecp.core", //
+      "https://git.eclipse.org/r/esf/esf-infra", //
+      "https://git.eclipse.org/r/esf/esf-tools", //
       "https://git.eclipse.org/r/gemini.dbaccess/org.eclipse.gemini.dbaccess", //
       "https://git.eclipse.org/r/gemini.jpa/org.eclipse.gemini.jpa", //
       "https://git.eclipse.org/r/gemini.management/org.eclipse.gemini.managment", //
@@ -453,6 +896,7 @@ public class GitIndexApplication implements IApplication
       "https://git.eclipse.org/r/nattable/org.eclipse.nebula.widgets.nattable", //
       "https://git.eclipse.org/r/objectteams/org.eclipse.objectteams", //
       "https://git.eclipse.org/r/ocl/org.eclipse.ocl", //
+      "https://git.eclipse.org/r/om2m/org.eclipse.om2m", //
       "https://git.eclipse.org/r/osee/org.eclipse.osee", //
       "https://git.eclipse.org/r/osee/org.eclipse.ote", //
       "https://git.eclipse.org/r/papyrus-rt/org.eclipse.papyrus-rt", //
@@ -531,17 +975,36 @@ public class GitIndexApplication implements IApplication
       "https://github.com/adoptium/temurin-build", //
       "https://github.com/deeplearning4j/deeplearning4j", //
       "https://github.com/deeplearning4j/deeplearning4j-examples", //
+      "https://github.com/eclipse-aas4j/aas4j", //
+      "https://github.com/eclipse-aas4j/aas4j-model-generator", //
+      "https://github.com/eclipse-aas4j/aas4j-transformation-library", //
       "https://github.com/eclipse-acceleo/acceleo", //
       "https://github.com/eclipse-actf/org.eclipse.actf", //
       "https://github.com/eclipse-actf/org.eclipse.actf.ai", //
       "https://github.com/eclipse-actf/org.eclipse.actf.common", //
       "https://github.com/eclipse-actf/org.eclipse.actf.examples", //
       "https://github.com/eclipse-actf/org.eclipse.actf.visualization", //
+      "https://github.com/eclipse-agail/agile-ble", //
+      "https://github.com/eclipse-agail/agile-core", //
+      "https://github.com/eclipse-agail/agile-dbus-java-interface", //
+      "https://github.com/eclipse-agail/agile-dummy-protocol", //
+      "https://github.com/eclipse-agail/agile-recommender", //
+      "https://github.com/eclipse-arrowhead/application-library-java-spring", //
       "https://github.com/eclipse-aspectj/ajdt", //
       "https://github.com/eclipse-aspectj/aspectj", //
       "https://github.com/eclipse-aspectj/eclipse.jdt.core", //
       "https://github.com/eclipse-babel/plugins", //
+      "https://github.com/eclipse-basyx/basyx-archive", //
+      "https://github.com/eclipse-basyx/basyx-databridge", //
+      "https://github.com/eclipse-basyx/basyx-demonstrators", //
+      "https://github.com/eclipse-basyx/basyx-java-components", //
+      "https://github.com/eclipse-basyx/basyx-java-examples", //
+      "https://github.com/eclipse-basyx/basyx-java-sdk", //
+      "https://github.com/eclipse-basyx/basyx-java-server-sdk", //
       "https://github.com/eclipse-birt/birt", //
+      "https://github.com/eclipse-californium/californium", //
+      "https://github.com/eclipse-californium/californium.actinium", //
+      "https://github.com/eclipse-californium/californium.tools", //
       "https://github.com/eclipse-cbi/eclipse-cbi-tycho-example", //
       "https://github.com/eclipse-cbi/hipp2jipp", //
       "https://github.com/eclipse-cbi/macos-notarization-service", //
@@ -556,11 +1019,33 @@ public class GitIndexApplication implements IApplication
       "https://github.com/eclipse-cdt/cdt", //
       "https://github.com/eclipse-cdt/cdt-lsp", //
       "https://github.com/eclipse-cdt/cdt-new-managedbuild-prototype", //
+      "https://github.com/eclipse-che/che-lib", //
+      "https://github.com/eclipse-che/che-ls-jdt", //
+      "https://github.com/eclipse-che/che-plugin-svn", //
+      "https://github.com/eclipse-che/che-server", //
+      "https://github.com/eclipse-che4z/che-che4z-lsp-for-cobol", //
       "https://github.com/eclipse-cognicrypt/CogniCrypt", //
       "https://github.com/eclipse-corrosion/corrosion", //
       "https://github.com/eclipse-dataspacetck/cvf", //
       "https://github.com/eclipse-datatools/datatools", //
+      "https://github.com/eclipse-ditto/ditto", //
+      "https://github.com/eclipse-ditto/ditto-clients", //
+      "https://github.com/eclipse-ditto/ditto-examples", //
+      "https://github.com/eclipse-ditto/ditto-testing", //
       "https://github.com/eclipse-ecoretools/ecoretools", //
+      "https://github.com/eclipse-edc/Connector", //
+      "https://github.com/eclipse-edc/FederatedCatalog", //
+      "https://github.com/eclipse-edc/GradlePlugins", //
+      "https://github.com/eclipse-edc/IDS-Serializer", //
+      "https://github.com/eclipse-edc/IdentityHub", //
+      "https://github.com/eclipse-edc/MinimumViableDataspace", //
+      "https://github.com/eclipse-edc/RegistrationService", //
+      "https://github.com/eclipse-edc/Runtime-Metamodel", //
+      "https://github.com/eclipse-edc/Samples", //
+      "https://github.com/eclipse-edc/Technology-Aws", //
+      "https://github.com/eclipse-edc/Technology-Azure", //
+      "https://github.com/eclipse-edc/Technology-Gcp", //
+      "https://github.com/eclipse-edc/TrustFrameworkAdoption", //
       "https://github.com/eclipse-ee4j/angus-activation", //
       "https://github.com/eclipse-ee4j/angus-mail", //
       "https://github.com/eclipse-ee4j/batch-api", //
@@ -635,18 +1120,40 @@ public class GitIndexApplication implements IApplication
       "https://github.com/eclipse-efx/efxclipse-drift", //
       "https://github.com/eclipse-efx/efxclipse-eclipse", //
       "https://github.com/eclipse-efx/efxclipse-rt", //
+      "https://github.com/eclipse-embed-cdt/eclipse-plugins", //
+      "https://github.com/eclipse-embed-cdt/org.eclipse.epp.packages", //
       "https://github.com/eclipse-emf-compare/emf-compare", //
       "https://github.com/eclipse-emf-compare/emf-compare-cli", //
       "https://github.com/eclipse-emf-parsley/emf-parsley", //
       "https://github.com/eclipse-emf/org.eclipse.emf", //
+      "https://github.com/eclipse-emfcloud/coffee-editor", //
+      "https://github.com/eclipse-emfcloud/ecore-glsp", //
+      "https://github.com/eclipse-emfcloud/emfcloud-modelserver", //
+      "https://github.com/eclipse-emfcloud/emfjson-jackson", //
+      "https://github.com/eclipse-emfcloud/model-validation", //
+      "https://github.com/eclipse-emfcloud/modelserver-glsp-integration", //
       "https://github.com/eclipse-emfstore/org.eclipse.emf.emfstore.core", //
       "https://github.com/eclipse-equinox/equinox", //
       "https://github.com/eclipse-equinox/p2", //
+      "https://github.com/eclipse-esmf/esmf-aspect-model-editor-backend", //
+      "https://github.com/eclipse-esmf/esmf-sdk", //
+      "https://github.com/eclipse-esmf/esmf-semantic-aspect-meta-model", //
+      "https://github.com/eclipse-glsp/glsp-eclipse-integration", //
+      "https://github.com/eclipse-glsp/glsp-examples", //
+      "https://github.com/eclipse-glsp/glsp-server", //
+      "https://github.com/eclipse-hono/hono", //
+      "https://github.com/eclipse-hono/hono-extras", //
+      "https://github.com/eclipse-iofog/Agent", //
+      "https://github.com/eclipse-iofog/Connector", //
+      "https://github.com/eclipse-iofog/example-microservices", //
+      "https://github.com/eclipse-iofog/iofog-java-sdk", //
+      "https://github.com/eclipse-iofog/test-message-generator", //
       "https://github.com/eclipse-jdt/eclipse.jdt.core", //
       "https://github.com/eclipse-jdt/eclipse.jdt.debug", //
       "https://github.com/eclipse-jdt/eclipse.jdt.ui", //
       "https://github.com/eclipse-jsdt/webtools.jsdt", //
       "https://github.com/eclipse-justj/justj.tools", //
+      "https://github.com/eclipse-leshan/leshan", //
       "https://github.com/eclipse-linuxtools/org.eclipse.linuxtools", //
       "https://github.com/eclipse-linuxtools/org.eclipse.linuxtools.eclipse-build", //
       "https://github.com/eclipse-lsp4j/lsp4j", //
@@ -660,10 +1167,50 @@ public class GitIndexApplication implements IApplication
       "https://github.com/eclipse-mylyn/org.eclipse.mylyn", //
       "https://github.com/eclipse-mylyn/org.eclipse.mylyn.docs", //
       "https://github.com/eclipse-oomph/oomph", //
+      "https://github.com/eclipse-openj9/openj9", //
+      "https://github.com/eclipse-openj9/openj9-systemtest", //
+      "https://github.com/eclipse-openj9/openj9-utils", //
+      "https://github.com/eclipse-opensmartclide/kie-wb-common", //
+      "https://github.com/eclipse-opensmartclide/kie-wb-distributions", //
+      "https://github.com/eclipse-opensmartclide/smartclide-TD-Interest", //
+      "https://github.com/eclipse-opensmartclide/smartclide-TD-Principal", //
+      "https://github.com/eclipse-opensmartclide/smartclide-TD-Reusability-Index", //
+      "https://github.com/eclipse-opensmartclide/smartclide-api-gateway", //
+      "https://github.com/eclipse-opensmartclide/smartclide-architectural-pattern", //
+      "https://github.com/eclipse-opensmartclide/smartclide-broker", //
+      "https://github.com/eclipse-opensmartclide/smartclide-cicd", //
+      "https://github.com/eclipse-opensmartclide/smartclide-context", //
+      "https://github.com/eclipse-opensmartclide/smartclide-db-api", //
+      "https://github.com/eclipse-opensmartclide/smartclide-deployment-interpreter-service", //
+      "https://github.com/eclipse-opensmartclide/smartclide-security", //
+      "https://github.com/eclipse-opensmartclide/smartclide-service-creation", //
+      "https://github.com/eclipse-opensmartclide/smartclide-service-registry-poc", //
       "https://github.com/eclipse-orbit/ebr", //
       "https://github.com/eclipse-orbit/orbit", //
       "https://github.com/eclipse-orbit/orbit-simrel", //
       "https://github.com/eclipse-packaging/packages", //
+      "https://github.com/eclipse-pass/modeshape/", //
+      "https://github.com/eclipse-pass/pass-authz/", //
+      "https://github.com/eclipse-pass/pass-core", //
+      "https://github.com/eclipse-pass/pass-data-migration/", //
+      "https://github.com/eclipse-pass/pass-deposit-services/", //
+      "https://github.com/eclipse-pass/pass-doi-service/", //
+      "https://github.com/eclipse-pass/pass-fcrepo-jms/", //
+      "https://github.com/eclipse-pass/pass-fcrepo-jsonld/", //
+      "https://github.com/eclipse-pass/pass-fcrepo-module-auth-rbacl/", //
+      "https://github.com/eclipse-pass/pass-grant-loader/", //
+      "https://github.com/eclipse-pass/pass-indexer-checker/", //
+      "https://github.com/eclipse-pass/pass-indexer/", //
+      "https://github.com/eclipse-pass/pass-java-client/", //
+      "https://github.com/eclipse-pass/pass-journal-loader/", //
+      "https://github.com/eclipse-pass/pass-messaging-support/", //
+      "https://github.com/eclipse-pass/pass-nihms-loader/", //
+      "https://github.com/eclipse-pass/pass-notification-services/", //
+      "https://github.com/eclipse-pass/pass-package-providers/", //
+      "https://github.com/eclipse-pass/pass-support", //
+      "https://github.com/eclipse-passage/chronograph", //
+      "https://github.com/eclipse-passage/passage", //
+      "https://github.com/eclipse-passage/passage-spring", //
       "https://github.com/eclipse-pde/eclipse.pde", //
       "https://github.com/eclipse-pdt/pdt", //
       "https://github.com/eclipse-platform/eclipse.platform", //
@@ -688,6 +1235,10 @@ public class GitIndexApplication implements IApplication
       "https://github.com/eclipse-sirius/sirius-desktop", //
       "https://github.com/eclipse-sirius/sirius-emf-json", //
       "https://github.com/eclipse-sirius/sirius-web", //
+      "https://github.com/eclipse-slm/awx-jwt-authenticator", //
+      "https://github.com/eclipse-slm/slm", //
+      "https://github.com/eclipse-sparkplug/sparkplug", //
+      "https://github.com/eclipse-sprotty/sprotty-server", //
       "https://github.com/eclipse-store/store", //
       "https://github.com/eclipse-sw360/sw360", //
       "https://github.com/eclipse-tomled/tomled", //
@@ -731,15 +1282,32 @@ public class GitIndexApplication implements IApplication
       "https://github.com/eclipse-wildwebdeveloper/wildwebdeveloper", //
       "https://github.com/eclipse-windowbuilder/windowbuilder", //
       "https://github.com/eclipse-xpanse/xpanse", //
+      "https://github.com/eclipse-zenoh/zenoh-java", //
       "https://github.com/eclipse/Xpect", //
       "https://github.com/eclipse/aCute", //
       "https://github.com/eclipse/amalgam", //
+      "https://github.com/eclipse/amlen", //
       "https://github.com/eclipse/andmore", //
       "https://github.com/eclipse/buildship", //
+      "https://github.com/eclipse/capella", //
+      "https://github.com/eclipse/capella-basic-vp", //
+      "https://github.com/eclipse/capella-cybersecurity", //
+      "https://github.com/eclipse/capella-deferred-merge", //
+      "https://github.com/eclipse/capella-filtering", //
+      "https://github.com/eclipse/capella-requirements-vp", //
+      "https://github.com/eclipse/capella-sss-transition", //
+      "https://github.com/eclipse/capella-studio", //
+      "https://github.com/eclipse/capella-textual-editor", //
+      "https://github.com/eclipse/capella-tools", //
+      "https://github.com/eclipse/capella-vpms", //
+      "https://github.com/eclipse/capella-xhtml-docgen", //
+      "https://github.com/eclipse/capella-xmlpivot", //
+      "https://github.com/eclipse/cft", //
       "https://github.com/eclipse/chemclipse", //
       "https://github.com/eclipse/dartboard", //
       "https://github.com/eclipse/dash-licenses", //
       "https://github.com/eclipse/dawnsci", //
+      "https://github.com/eclipse/dirigible", //
       "https://github.com/eclipse/eavp", //
       "https://github.com/eclipse/ecf", //
       "https://github.com/eclipse/eclemma", //
@@ -766,6 +1334,9 @@ public class GitIndexApplication implements IApplication
       "https://github.com/eclipse/gmf-notation", //
       "https://github.com/eclipse/gmf-runtime", //
       "https://github.com/eclipse/gsc-ec-converter", //
+      "https://github.com/eclipse/hawkbit", //
+      "https://github.com/eclipse/hawkbit-examples", //
+      "https://github.com/eclipse/hawkbit-extensions", //
       "https://github.com/eclipse/ice", //
       "https://github.com/eclipse/imagen", //
       "https://github.com/eclipse/january", //
@@ -776,10 +1347,35 @@ public class GitIndexApplication implements IApplication
       "https://github.com/eclipse/jetty.project", //
       "https://github.com/eclipse/jetty.toolchain", //
       "https://github.com/eclipse/jifa", //
+      "https://github.com/eclipse/jkube", //
       "https://github.com/eclipse/jnosql", //
       "https://github.com/eclipse/jnosql-communication-driver", //
       "https://github.com/eclipse/jnosql-extensions", //
+      "https://github.com/eclipse/kapua", //
+      "https://github.com/eclipse/keti", //
+      "https://github.com/eclipse/keyple-card-calypso-crypto-legacysam-java-lib", //
+      "https://github.com/eclipse/keyple-card-calypso-java-lib", //
+      "https://github.com/eclipse/keyple-card-generic-java-lib", //
+      "https://github.com/eclipse/keyple-common-java-api", //
+      "https://github.com/eclipse/keyple-distributed-local-java-api", //
+      "https://github.com/eclipse/keyple-distributed-local-java-lib", //
+      "https://github.com/eclipse/keyple-distributed-network-java-lib", //
+      "https://github.com/eclipse/keyple-distributed-remote-java-api", //
+      "https://github.com/eclipse/keyple-distributed-remote-java-lib", //
+      "https://github.com/eclipse/keyple-integration-java-test", //
+      "https://github.com/eclipse/keyple-java", //
+      "https://github.com/eclipse/keyple-java-example", //
+      "https://github.com/eclipse/keyple-plugin-cardresource-java-lib", //
+      "https://github.com/eclipse/keyple-plugin-java-api", //
+      "https://github.com/eclipse/keyple-plugin-pcsc-java-lib", //
+      "https://github.com/eclipse/keyple-plugin-stub-java-lib", //
+      "https://github.com/eclipse/keyple-service-java-lib", //
+      "https://github.com/eclipse/keyple-service-resource-java-lib", //
+      "https://github.com/eclipse/keyple-util-java-lib", //
+      "https://github.com/eclipse/kitalpha", //
+      "https://github.com/eclipse/kitalpha-addons", //
       "https://github.com/eclipse/kuksa.cloud", //
+      "https://github.com/eclipse/kura", //
       "https://github.com/eclipse/lemminx", //
       "https://github.com/eclipse/lemminx-maven", //
       "https://github.com/eclipse/lsp4e", //
@@ -791,10 +1387,35 @@ public class GitIndexApplication implements IApplication
       "https://github.com/eclipse/lyo.designer", //
       "https://github.com/eclipse/lyo.docs", //
       "https://github.com/eclipse/lyo.testsuite", //
+      "https://github.com/eclipse/microprofile", //
+      "https://github.com/eclipse/microprofile-conference", //
+      "https://github.com/eclipse/microprofile-config", //
+      "https://github.com/eclipse/microprofile-context-propagation", //
+      "https://github.com/eclipse/microprofile-fault-tolerance", //
+      "https://github.com/eclipse/microprofile-graphql", //
+      "https://github.com/eclipse/microprofile-health", //
+      "https://github.com/eclipse/microprofile-jwt-auth", //
+      "https://github.com/eclipse/microprofile-lra", //
+      "https://github.com/eclipse/microprofile-metrics", //
+      "https://github.com/eclipse/microprofile-open-api", //
+      "https://github.com/eclipse/microprofile-opentracing", //
+      "https://github.com/eclipse/microprofile-reactive-messaging", //
+      "https://github.com/eclipse/microprofile-reactive-streams-operators", //
+      "https://github.com/eclipse/microprofile-rest-client", //
+      "https://github.com/eclipse/microprofile-samples", //
+      "https://github.com/eclipse/microprofile-sandbox", //
+      "https://github.com/eclipse/microprofile-service-mesh-service-a", //
+      "https://github.com/eclipse/microprofile-service-mesh-service-b", //
+      "https://github.com/eclipse/microprofile-starter", //
+      "https://github.com/eclipse/microprofile-telemetry", //
+      "https://github.com/eclipse/milo", //
+      "https://github.com/eclipse/mita", //
       "https://github.com/eclipse/mosaic", //
       "https://github.com/eclipse/mwe", //
       "https://github.com/eclipse/n4js", //
       "https://github.com/eclipse/nebula", //
+      "https://github.com/eclipse/oneofour", //
+      "https://github.com/eclipse/openvsx", //
       "https://github.com/eclipse/org.eclipse.emf.diffmerge.coevolution", //
       "https://github.com/eclipse/org.eclipse.emf.diffmerge.core", //
       "https://github.com/eclipse/org.eclipse.emf.diffmerge.patch", //
@@ -808,7 +1429,12 @@ public class GitIndexApplication implements IApplication
       "https://github.com/eclipse/org.eclipse.riena.toolbox", //
       "https://github.com/eclipse/org.eclipse.sensinact.gateway", //
       "https://github.com/eclipse/org.eclipse.sensinact.studio", //
+      "https://github.com/eclipse/orion.client", //
+      "https://github.com/eclipse/orion.server", //
       "https://github.com/eclipse/packager", //
+      "https://github.com/eclipse/paho.mqtt-spy", //
+      "https://github.com/eclipse/paho.mqtt.android", //
+      "https://github.com/eclipse/paho.mqtt.java", //
       "https://github.com/eclipse/poosl", //
       "https://github.com/eclipse/rdf4j", //
       "https://github.com/eclipse/rdf4j-doc", //
@@ -828,9 +1454,14 @@ public class GitIndexApplication implements IApplication
       "https://github.com/eclipse/steady", //
       "https://github.com/eclipse/sumo", //
       "https://github.com/eclipse/swtchart", //
+      "https://github.com/eclipse/tahu", //
       "https://github.com/eclipse/texlipse", //
       "https://github.com/eclipse/tm4e", //
       "https://github.com/eclipse/transformer", //
+      "https://github.com/eclipse/unide", //
+      "https://github.com/eclipse/unide.java", //
+      "https://github.com/eclipse/vorto", //
+      "https://github.com/eclipse/vorto-examples", //
       "https://github.com/eclipse/winery", //
       "https://github.com/eclipse/xsemantics", //
       "https://github.com/eclipse/xtext", //
@@ -870,11 +1501,24 @@ public class GitIndexApplication implements IApplication
       "https://github.com/jakartaee/validation", //
       "https://github.com/jakartaee/validation-spec", //
       "https://github.com/jakartaee/websocket", //
+      "https://github.com/jkubeio/jkube-integration-tests", //
+      "https://github.com/locationtech/geogig", //
+      "https://github.com/locationtech/geomesa", //
+      "https://github.com/locationtech/geotrellis", //
+      "https://github.com/locationtech/geowave", //
+      "https://github.com/locationtech/jts", //
+      "https://github.com/locationtech/proj4j", //
+      "https://github.com/locationtech/spatial4j", //
+      "https://github.com/locationtech/udig-platform", //
+      "https://github.com/openhwgroup/core-v-ide-cdt", //
+      "https://github.com/openhwgroup/core-v-sdk", //
       "https://github.com/osgi/jakartarest-osgi", //
       "https://github.com/osgi/osgi", //
       "https://github.com/osgi/osgi-test", //
       "https://github.com/osgi/osgi.enroute", //
       "https://github.com/osgi/slf4j-osgi", //
+      "https://github.com/polarsys/ng661designer", //
+      "https://github.com/polarsys/time4sys", //
       "https://gitlab.eclipse.org/eclipse/amp/org.eclipse.amp", //
       "https://gitlab.eclipse.org/eclipse/app4mc/org.eclipse.app4mc.cloud", //
       "https://gitlab.eclipse.org/eclipse/app4mc/org.eclipse.app4mc.examples", //
@@ -882,6 +1526,7 @@ public class GitIndexApplication implements IApplication
       "https://gitlab.eclipse.org/eclipse/app4mc/org.eclipse.app4mc.rtclib", //
       "https://gitlab.eclipse.org/eclipse/app4mc/org.eclipse.app4mc.tools", //
       "https://gitlab.eclipse.org/eclipse/camf/org.eclipse.camf", //
+      "https://gitlab.eclipse.org/eclipse/chess/chess", //
       "https://gitlab.eclipse.org/eclipse/comma/comma", //
       "https://gitlab.eclipse.org/eclipse/dco/developer-console", //
       "https://gitlab.eclipse.org/eclipse/ease/ease", //
@@ -890,6 +1535,14 @@ public class GitIndexApplication implements IApplication
       "https://gitlab.eclipse.org/eclipse/etrice/etrice", //
       "https://gitlab.eclipse.org/eclipse/gmf-tooling/org.eclipse.gmf-tooling", //
       "https://gitlab.eclipse.org/eclipse/gmf-tooling/org.eclipse.gmf-tooling.uml2tools", //
+      "https://gitlab.eclipse.org/eclipse/graphene/common-dataservice", //
+      "https://gitlab.eclipse.org/eclipse/graphene/design-studio-backend", //
+      "https://gitlab.eclipse.org/eclipse/graphene/federation", //
+      "https://gitlab.eclipse.org/eclipse/graphene/kubernetes-client", //
+      "https://gitlab.eclipse.org/eclipse/graphene/nexus-client", //
+      "https://gitlab.eclipse.org/eclipse/graphene/onboarding", //
+      "https://gitlab.eclipse.org/eclipse/graphene/playground-deployer", //
+      "https://gitlab.eclipse.org/eclipse/graphene/portal-marketplace", //
       "https://gitlab.eclipse.org/eclipse/graphiti/graphiti", //
       "https://gitlab.eclipse.org/eclipse/hawk/hawk", //
       "https://gitlab.eclipse.org/eclipse/ice/ice", //
@@ -899,6 +1552,38 @@ public class GitIndexApplication implements IApplication
       "https://gitlab.eclipse.org/eclipse/mpc/org.eclipse.epp.mpc", //
       "https://gitlab.eclipse.org/eclipse/mtj/org.eclipse.mtj", //
       "https://gitlab.eclipse.org/eclipse/ogee/org.eclipse.ogee", //
+      "https://gitlab.eclipse.org/eclipse/om2m/om2m", //
+      "https://gitlab.eclipse.org/eclipse/opencert/opencert", //
+      "https://gitlab.eclipse.org/eclipse/openk-coremodules/org.eclipse.openk-coremodules.authandauth", //
+      "https://gitlab.eclipse.org/eclipse/openk-coremodules/org.eclipse.openk-coremodules.contactBaseData.backend", //
+      "https://gitlab.eclipse.org/eclipse/openk-usermodules/org.eclipse.openk-usermodules.elogbook", //
+      "https://gitlab.eclipse.org/eclipse/openk-usermodules/org.eclipse.openk-usermodules.gridFailureInformation.backend", //
+      "https://gitlab.eclipse.org/eclipse/openk-usermodules/org.eclipse.openk-usermodules.mics.centralService", //
+      "https://gitlab.eclipse.org/eclipse/openk-usermodules/org.eclipse.openk-usermodules.mics.homeService", //
+      "https://gitlab.eclipse.org/eclipse/openk-usermodules/org.eclipse.openk-usermodules.plannedGridMeasures.backend", //
+      "https://gitlab.eclipse.org/eclipse/openk-usermodules/org.eclipse.openk-usermodules.standbyPlanning.backend", //
+      "https://gitlab.eclipse.org/eclipse/openk-usermodules/org.eclipse.openk-usermodules.statementPublicAffairs.backend", //
+      "https://gitlab.eclipse.org/eclipse/osbp/org.eclipse.osbp.abstractstatemachine", //
+      "https://gitlab.eclipse.org/eclipse/osbp/org.eclipse.osbp.authentication", //
+      "https://gitlab.eclipse.org/eclipse/osbp/org.eclipse.osbp.authentication.ui", //
+      "https://gitlab.eclipse.org/eclipse/osbp/org.eclipse.osbp.autowireHelper", //
+      "https://gitlab.eclipse.org/eclipse/osbp/org.eclipse.osbp.blob", //
+      "https://gitlab.eclipse.org/eclipse/osbp/org.eclipse.osbp.bpm", //
+      "https://gitlab.eclipse.org/eclipse/osbp/org.eclipse.osbp.bpm.api", //
+      "https://gitlab.eclipse.org/eclipse/osbp/org.eclipse.osbp.bpmn2.ecore", //
+      "https://gitlab.eclipse.org/eclipse/osbp/org.eclipse.osbp.core.api", //
+      "https://gitlab.eclipse.org/eclipse/osbp/org.eclipse.osbp.datainterchange.api", //
+      "https://gitlab.eclipse.org/eclipse/osbp/org.eclipse.osbp.display", //
+      "https://gitlab.eclipse.org/eclipse/osbp/org.eclipse.osbp.display.api", //
+      "https://gitlab.eclipse.org/eclipse/osbp/org.eclipse.osbp.dsl", //
+      "https://gitlab.eclipse.org/eclipse/osbp/org.eclipse.osbp.dsl.metadata.service", //
+      "https://gitlab.eclipse.org/eclipse/osbp/org.eclipse.osbp.ecview.addons", //
+      "https://gitlab.eclipse.org/eclipse/osbp/org.eclipse.osbp.ecview.core", //
+      "https://gitlab.eclipse.org/eclipse/osbp/org.eclipse.osbp.ecview.extension", //
+      "https://gitlab.eclipse.org/eclipse/osbp/org.eclipse.osbp.ecview.extension.api", //
+      "https://gitlab.eclipse.org/eclipse/osbp/org.eclipse.osbp.eventbroker", //
+      "https://gitlab.eclipse.org/eclipse/osbp/org.eclipse.osbp.filter", //
+      "https://gitlab.eclipse.org/eclipse/osbp/org.eclipse.osbp.fork.mihalis.opal.imageSelector.osgi", //
       "https://gitlab.eclipse.org/eclipse/papyrus/org.eclipse.papyrus-domainservices", //
       "https://gitlab.eclipse.org/eclipse/papyrus/org.eclipse.papyrus-web", //
       "https://gitlab.eclipse.org/eclipse/rtsc/org.eclipse.rtsc.committer", //
@@ -915,6 +1600,10 @@ public class GitIndexApplication implements IApplication
       "https://gitlab.eclipse.org/eclipse/technology/dash/org.eclipse.dash.handbook", //
       "https://gitlab.eclipse.org/eclipse/teneo/org.eclipse.emf.teneo", //
       "https://gitlab.eclipse.org/eclipse/texo/org.eclipse.emf.texo", //
+      "https://gitlab.eclipse.org/eclipse/titan/titan.EclipsePlug-ins", //
+      "https://gitlab.eclipse.org/eclipse/titan/titan.core", //
+      "https://gitlab.eclipse.org/eclipse/titan/titan.language-server", //
+      "https://gitlab.eclipse.org/eclipse/titan/titan.misc", //
       "https://gitlab.eclipse.org/eclipse/trace4cps/trace4cps", //
       "https://gitlab.eclipse.org/eclipse/upr/upr", //
       "https://gitlab.eclipse.org/eclipse/xfsc/authenticationauthorization", //
@@ -1001,22 +1690,8 @@ public class GitIndexApplication implements IApplication
         return true;
       }
 
-      if (id.startsWith("dt") //
-          || id.startsWith("ecd") //
-          || id.startsWith("iot") //
-          || id.startsWith("locationtech") //
-          || id.startsWith("polarsys") //
-          || id.startsWith("oniro") //
-          || id.startsWith("technology.openj9") //
-          || id.startsWith("tools.titan") //
-          || id.startsWith("technology.microprofile") //
-          || id.startsWith("technology.edc") //
-          || id.startsWith("technology.openk") //
+      if (id.startsWith("oniro") //
           || id.startsWith("eclipse.e4") //
-          || id.startsWith("technology.osbp") //
-          || id.startsWith("technology.graphene") //
-          || id.startsWith("technology.pass") //
-          || id.startsWith("openhw") //
           || id.startsWith("technology.recommenders"))
       {
         return true;
@@ -1037,25 +1712,32 @@ public class GitIndexApplication implements IApplication
       }
     });
 
-    var update = System.getProperty("org.eclipse.oomph.setup.git.util.GitIndexApplication.update");
-    if (update != null)
+    if ("true".equals(System.getProperty("org.eclipse.oomph.setup.git.util.GitIndexApplication.test.new")))
     {
-      var self = Path.of(update);
-      var content = Files.readString(self);
-      Pattern GENERATED_REPOSITORIES_SECTION = Pattern.compile("( *// generated-repositories(\r?\n)).*?( *// generated-repositories\r?\n)", Pattern.DOTALL);
-      var matcher = GENERATED_REPOSITORIES_SECTION.matcher(content);
-      if (matcher.find())
+      repositories.removeAll(REPOSITORIES);
+    }
+    else
+    {
+      var update = System.getProperty("org.eclipse.oomph.setup.git.util.GitIndexApplication.update");
+      if (update != null)
       {
-        var updatedContent = new StringBuilder();
-        var literals = new ArrayList<String>();
-        for (var repository : repositories)
+        var self = Path.of(update);
+        var content = Files.readString(self);
+        Pattern GENERATED_REPOSITORIES_SECTION = Pattern.compile("( *// generated-repositories(\r?\n)).*?( *// generated-repositories\r?\n)", Pattern.DOTALL);
+        var matcher = GENERATED_REPOSITORIES_SECTION.matcher(content);
+        if (matcher.find())
         {
-          literals.add("      \"" + Matcher.quoteReplacement(repository) + "\"");
-        }
+          var updatedContent = new StringBuilder();
+          var literals = new ArrayList<String>();
+          for (var repository : repositories)
+          {
+            literals.add("      \"" + Matcher.quoteReplacement(repository) + "\"");
+          }
 
-        matcher.appendReplacement(updatedContent, "$1" + String.join(", //" + matcher.group(2), literals) + "$2$3");
-        matcher.appendTail(updatedContent);
-        Files.writeString(self, updatedContent);
+          matcher.appendReplacement(updatedContent, "$1" + String.join(", //" + matcher.group(2), literals) + "$2$3");
+          matcher.appendTail(updatedContent);
+          Files.writeString(self, updatedContent);
+        }
       }
     }
 
@@ -1325,6 +2007,12 @@ public class GitIndexApplication implements IApplication
         return true;
       }
 
+      if (it.matches(
+          "https://gitlab.eclipse.org/eclipse/titan/titan.(ProtocolModules|ProtocolEmulations|TestPorts|Libraries|ApplicationLibraries|Applications|Servers|ObjectOriented).*"))
+      {
+        return true;
+      }
+
       if ((it.startsWith("https://github.com/eclipse-ee4j") || it.startsWith("https://github.com/jakartae"))
           && (it.contains("tck") || it.contains("-doc-") || it.contains("examples") || it.contains("samples")))
       {
@@ -1440,8 +2128,22 @@ public class GitIndexApplication implements IApplication
 
     private final HttpClient httpClient;
 
-    public ContentHandler(String cache)
+    private final String pat;
+
+    public ContentHandler(String cache) throws StorageException
     {
+      String githubPATPreference = System.getProperty("org.eclipse.oomph.setup.git.util.GitIndexApplication.github.pat.preference");
+      if (githubPATPreference != null)
+      {
+        int slash = githubPATPreference.lastIndexOf('/');
+        ISecurePreferences node = SecurePreferencesFactory.getDefault().node(githubPATPreference.substring(0, slash));
+        pat = node.get(githubPATPreference.substring(slash + 1), null);
+      }
+      else
+      {
+        pat = null;
+      }
+
       httpClient = HttpClient.newBuilder().followRedirects(HttpClient.Redirect.NORMAL).cookieHandler(new CookieManager()).build();
       try
       {
@@ -1463,6 +2165,13 @@ public class GitIndexApplication implements IApplication
     protected String basicGetContent(URI uri) throws IOException, InterruptedException
     {
       var requestBuilder = HttpRequest.newBuilder(uri).GET();
+
+      if (pat != null && "api.github.com".equals(uri.getHost()))
+      {
+        requestBuilder.header("Authorization", "Bearer " + pat);
+        requestBuilder.header("X-GitHub-Api-Version", "2022-11-28");
+      }
+
       var request = requestBuilder.build();
       var response = httpClient.send(request, BodyHandlers.ofString());
       var statusCode = response.statusCode();
@@ -1470,6 +2179,7 @@ public class GitIndexApplication implements IApplication
       {
         throw new IOException("status code " + statusCode + " -> " + uri);
       }
+
       return response.body();
     }
 
