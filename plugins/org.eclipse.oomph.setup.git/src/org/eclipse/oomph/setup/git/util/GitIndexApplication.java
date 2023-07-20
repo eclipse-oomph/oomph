@@ -254,6 +254,7 @@ public class GitIndexApplication implements IApplication
       "https://github.com/eclipse/paho.mqtt.rust", //
       "https://github.com/eclipse/paho.mqtt.testing", //
       "https://github.com/eclipse/paho.mqtt-sn.embedded-c", //
+      "https://github.com/eclipse/rdf4j-doc", //
       "https://github.com/eclipse/sommr", //
       "https://github.com/eclipse/sprotty-layout", //
       "https://github.com/eclipse/streamsheets", //
@@ -1437,7 +1438,6 @@ public class GitIndexApplication implements IApplication
       "https://github.com/eclipse/paho.mqtt.java", //
       "https://github.com/eclipse/poosl", //
       "https://github.com/eclipse/rdf4j", //
-      "https://github.com/eclipse/rdf4j-doc", //
       "https://github.com/eclipse/rdf4j-storage", //
       "https://github.com/eclipse/rdf4j-testsuite", //
       "https://github.com/eclipse/rdf4j-tools", //
