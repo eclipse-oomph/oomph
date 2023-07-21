@@ -87,7 +87,7 @@ pipeline {
                 PUBLISH_ARGUMENT="${OOMPH_DIR}/git/"
                 ssh ${LOGIN} "mkdir -p ${PUBLISH_ARGUMENT}"
                 scp releng/org.eclipse.oomph.parent/git-index/target/git-index.zip ${LOGIN}:${PUBLISH_ARGUMENT}/git-index-new.zip
-                ssh ${LOGIN} "cd ${PUBLISH_ARGUMENT}; ls git-index-new.zip; echo mv git-index-new.zip git-index.zip"
+                ssh ${LOGIN} "cd ${PUBLISH_ARGUMENT}; ls -sail git-index-new.zip; mv git-index-new.zip git-index.zip"
               '''
             }
           }
