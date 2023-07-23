@@ -840,9 +840,6 @@ public class GitIndexApplication implements IApplication
       // generated-repositories
       "https://git.eclipse.org/r/4diac/org.eclipse.4diac.ide", //
       "https://git.eclipse.org/r/apogy/apogy", //
-      "https://git.eclipse.org/r/app4mc/org.eclipse.app4mc", //
-      "https://git.eclipse.org/r/app4mc/org.eclipse.app4mc.addon.migration", //
-      "https://git.eclipse.org/r/app4mc/org.eclipse.app4mc.addon.transformation", //
       "https://git.eclipse.org/r/bpmn2-modeler/org.eclipse.bpmn2-modeler", //
       "https://git.eclipse.org/r/bpmn2/org.eclipse.bpmn2", //
       "https://git.eclipse.org/r/capra/org.eclipse.capra", //
@@ -895,7 +892,6 @@ public class GitIndexApplication implements IApplication
       "https://git.eclipse.org/r/modisco/org.eclipse.modisco", //
       "https://git.eclipse.org/r/mpc/org.eclipse.epp.mpc", //
       "https://git.eclipse.org/r/nattable/org.eclipse.nebula.widgets.nattable", //
-      "https://git.eclipse.org/r/objectteams/org.eclipse.objectteams", //
       "https://git.eclipse.org/r/ocl/org.eclipse.ocl", //
       "https://git.eclipse.org/r/om2m/org.eclipse.om2m", //
       "https://git.eclipse.org/r/osee/org.eclipse.osee", //
@@ -1154,6 +1150,9 @@ public class GitIndexApplication implements IApplication
       "https://github.com/eclipse-jdt/eclipse.jdt.ui", //
       "https://github.com/eclipse-jsdt/webtools.jsdt", //
       "https://github.com/eclipse-justj/justj.tools", //
+      "https://github.com/eclipse-keypop/keypop-calypso-crypto-asymmetric-java-api", //
+      "https://github.com/eclipse-keypop/keypop-calypso-crypto-symmetric-java-api", //
+      "https://github.com/eclipse-leda/leda-contrib-vscode-extensions", //
       "https://github.com/eclipse-leshan/leshan", //
       "https://github.com/eclipse-linuxtools/org.eclipse.linuxtools", //
       "https://github.com/eclipse-linuxtools/org.eclipse.linuxtools.eclipse-build", //
@@ -1520,6 +1519,9 @@ public class GitIndexApplication implements IApplication
       "https://github.com/polarsys/ng661designer", //
       "https://github.com/polarsys/time4sys", //
       "https://gitlab.eclipse.org/eclipse/amp/org.eclipse.amp", //
+      "https://gitlab.eclipse.org/eclipse/app4mc/org.eclipse.app4mc", //
+      "https://gitlab.eclipse.org/eclipse/app4mc/org.eclipse.app4mc.addon.migration", //
+      "https://gitlab.eclipse.org/eclipse/app4mc/org.eclipse.app4mc.addon.transformation", //
       "https://gitlab.eclipse.org/eclipse/app4mc/org.eclipse.app4mc.cloud", //
       "https://gitlab.eclipse.org/eclipse/app4mc/org.eclipse.app4mc.examples", //
       "https://gitlab.eclipse.org/eclipse/app4mc/org.eclipse.app4mc.releng", //
@@ -1551,6 +1553,7 @@ public class GitIndexApplication implements IApplication
       "https://gitlab.eclipse.org/eclipse/mangrove/org.eclipse.mangrove", //
       "https://gitlab.eclipse.org/eclipse/mpc/org.eclipse.epp.mpc", //
       "https://gitlab.eclipse.org/eclipse/mtj/org.eclipse.mtj", //
+      "https://gitlab.eclipse.org/eclipse/objectteams/objectteams", //
       "https://gitlab.eclipse.org/eclipse/ogee/org.eclipse.ogee", //
       "https://gitlab.eclipse.org/eclipse/om2m/om2m", //
       "https://gitlab.eclipse.org/eclipse/opencert/opencert", //
@@ -2030,7 +2033,7 @@ public class GitIndexApplication implements IApplication
       }
 
       return it.endsWith("/.github") || it.endsWith("/ui-best-practices") || it.endsWith("/.eclipsefdn") || it.contains("www.eclipse.org")
-          || it.endsWith(".incubator") || it.contains("website") || it.endsWith(".github.io") || it.endsWith("binaries");
+          || it.endsWith(".incubator") || it.contains("website") || it.endsWith(".github.io") || it.endsWith("binaries") || it.contains("-ghsa-");
     });
   }
 
