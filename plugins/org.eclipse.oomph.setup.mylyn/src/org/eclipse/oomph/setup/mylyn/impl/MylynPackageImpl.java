@@ -581,9 +581,8 @@ public class MylynPackageImpl extends EPackageImpl implements MylynPackage
     addAnnotation(mylynQueriesTaskEClass, source,
         new String[] { "installableUnits", "org.eclipse.mylyn.tasks.core org.eclipse.mylyn.tasks.ui org.eclipse.mylyn.bugzilla_feature.feature.group" //$NON-NLS-1$ //$NON-NLS-2$
         });
-    addAnnotation(mylynBuildsTaskEClass, source,
-        new String[] { "installableUnits", "org.eclipse.mylyn.tasks.core org.eclipse.mylyn.tasks.ui org.eclipse.mylyn.hudson.feature.group" //$NON-NLS-1$ //$NON-NLS-2$
-        });
+    addAnnotation(mylynBuildsTaskEClass, source, new String[] { "installableUnits", "org.eclipse.mylyn.tasks.core org.eclipse.mylyn.tasks.ui" //$NON-NLS-1$ //$NON-NLS-2$
+    });
   }
 
   /**

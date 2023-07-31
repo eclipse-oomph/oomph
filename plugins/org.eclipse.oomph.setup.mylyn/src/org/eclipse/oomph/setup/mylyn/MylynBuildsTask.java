@@ -31,7 +31,7 @@ import org.eclipse.emf.common.util.EList;
  * </ul>
  *
  * @see org.eclipse.oomph.setup.mylyn.MylynPackage#getMylynBuildsTask()
- * @model annotation="http://www.eclipse.org/oomph/setup/Enablement installableUnits='org.eclipse.mylyn.tasks.core org.eclipse.mylyn.tasks.ui org.eclipse.mylyn.hudson.feature.group'"
+ * @model annotation="http://www.eclipse.org/oomph/setup/Enablement installableUnits='org.eclipse.mylyn.tasks.core org.eclipse.mylyn.tasks.ui'"
  *        annotation="http://www.eclipse.org/oomph/setup/ValidTriggers triggers='STARTUP MANUAL'"
  * @generated
  */
