@@ -30,9 +30,13 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.osgi.service.datalocation.Location;
 import org.eclipse.osgi.util.NLS;
 
+import org.osgi.framework.Bundle;
+
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.net.URL;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -522,7 +526,19 @@ public final class JREManager
 
       if (Platform.OS_WIN32.equals(os))
       {
-        System.loadLibrary("jreinfo.dll"); //$NON-NLS-1$
+        try
+        {
+          Bundle bundle = Platform.getBundle("org.eclipse.oomph.jreinfo.win32.x86_64"); //$NON-NLS-1$
+          URL libraryURL = bundle.getEntry("jreinfo.dll"); //$NON-NLS-1$
+          URL fileLibraryURL = FileLocator.toFileURL(libraryURL);
+          String libraryPath = Path.of(fileLibraryURL.toURI()).toRealPath().toString();
+          System.load(libraryPath);
+        }
+        catch (Exception ex)
+        {
+          JREInfoPlugin.INSTANCE.log(ex);
+        }
+
         return OSType.Win;
       }
 
