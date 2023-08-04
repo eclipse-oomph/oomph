@@ -833,6 +833,16 @@ public class GitIndexApplication implements IApplication
       "https://gitlab.eclipse.org/eclipse/scm/scm", //
       "https://gitlab.eclipse.org/eclipse/sw361/playground-git", //
       "https://gitlab.eclipse.org/eclipse/titan/titan.vs-code-extension", //
+      "https://github.com/eclipse-babel/translations", //
+      "https://github.com/eclipse-thingweb/test-things", //
+      "https://gitlab.eclipse.org/eclipse/autowrx/autowrx", //
+      "https://gitlab.eclipse.org/eclipse/drops/drops-agent", //
+      "https://gitlab.eclipse.org/eclipse/openpass/road-logic-suite", //
+      "https://github.com/eclipse-chariott/chariott-example-applications", //
+      "https://github.com/eclipse-keypop/keypop-calypso-crypto-asymmetric-cpp-api", //
+      "https://github.com/eclipse-keypop/keypop-calypso-crypto-symmetric-cpp-api", //
+      "https://github.com/eclipse-openxilenv/openxilenv", //
+      "https://github.com/eclipse-velocitas/velocitas-lib", //
       "" //
   ));
 
@@ -867,7 +877,6 @@ public class GitIndexApplication implements IApplication
       "https://git.eclipse.org/r/gemini.web/org.eclipse.gemini.web.gemini-web-container", //
       "https://git.eclipse.org/r/gendoc/org.eclipse.gendoc", //
       "https://git.eclipse.org/r/handly/org.eclipse.handly", //
-      "https://git.eclipse.org/r/hawk/hawk", //
       "https://git.eclipse.org/r/henshin/org.eclipse.emft.henshin", //
       "https://git.eclipse.org/r/jeetools/webtools.javaee", //
       "https://git.eclipse.org/r/jgit/jgit", //
@@ -931,12 +940,6 @@ public class GitIndexApplication implements IApplication
       "https://git.eclipse.org/r/sourceediting/webtools.sourceediting.xsl", //
       "https://git.eclipse.org/r/sourceediting/webtools.sourceediting.xsl.tests", //
       "https://git.eclipse.org/r/sphinx/org.eclipse.sphinx", //
-      "https://git.eclipse.org/r/statet/org.eclipse.statet-commons", //
-      "https://git.eclipse.org/r/statet/org.eclipse.statet-docmlet", //
-      "https://git.eclipse.org/r/statet/org.eclipse.statet-eutils", //
-      "https://git.eclipse.org/r/statet/org.eclipse.statet-ltk", //
-      "https://git.eclipse.org/r/statet/org.eclipse.statet-r", //
-      "https://git.eclipse.org/r/statet/org.eclipse.statet-rj", //
       "https://git.eclipse.org/r/stem/org.eclipse.stem", //
       "https://git.eclipse.org/r/stem/org.eclipse.stem.data", //
       "https://git.eclipse.org/r/stem/org.eclipse.stem.data.earthscience", //
@@ -1148,6 +1151,7 @@ public class GitIndexApplication implements IApplication
       "https://github.com/eclipse-jdt/eclipse.jdt.core", //
       "https://github.com/eclipse-jdt/eclipse.jdt.debug", //
       "https://github.com/eclipse-jdt/eclipse.jdt.ui", //
+      "https://github.com/eclipse-jdtls/eclipse.jdt.ls", //
       "https://github.com/eclipse-jsdt/webtools.jsdt", //
       "https://github.com/eclipse-justj/justj.tools", //
       "https://github.com/eclipse-keypop/keypop-calypso-crypto-asymmetric-java-api", //
@@ -1187,6 +1191,7 @@ public class GitIndexApplication implements IApplication
       "https://github.com/eclipse-opensmartclide/smartclide-service-registry-poc", //
       "https://github.com/eclipse-orbit/ebr", //
       "https://github.com/eclipse-orbit/orbit", //
+      "https://github.com/eclipse-orbit/orbit-legacy", //
       "https://github.com/eclipse-orbit/orbit-simrel", //
       "https://github.com/eclipse-packaging/packages", //
       "https://github.com/eclipse-pass/modeshape/", //
@@ -1313,7 +1318,6 @@ public class GitIndexApplication implements IApplication
       "https://github.com/eclipse/eclemma", //
       "https://github.com/eclipse/eclipse-collections", //
       "https://github.com/eclipse/eclipse-collections-kata", //
-      "https://github.com/eclipse/eclipse.jdt.ls", //
       "https://github.com/eclipse/efbt", //
       "https://github.com/eclipse/elk", //
       "https://github.com/eclipse/emf-query", //
@@ -1937,6 +1941,12 @@ public class GitIndexApplication implements IApplication
       {
         for (var i = 1; i < 10; i++)
         {
+          if (org.startsWith("eclipse/"))
+          {
+            System.err.println(org);
+            org = org.replace('/', '-');
+          }
+
           var repos = contentHandler.getContent("https://api.github.com/orgs/" + org + "/repos?page=" + i);
           var urls = getValues("html_url", repos);
           urls.remove("https://github.com/" + org);
@@ -2029,6 +2039,12 @@ public class GitIndexApplication implements IApplication
 
       if (it.contains("/org.eclipse.mylyn.") && !it.endsWith("/org.eclipse.mylyn.docs"))
       {
+        return true;
+      }
+
+      if (it.matches("https://github.com/[^/]+"))
+      {
+        // Remove if it's an organization.
         return true;
       }
 
@@ -2175,15 +2191,22 @@ public class GitIndexApplication implements IApplication
         requestBuilder.header("X-GitHub-Api-Version", "2022-11-28");
       }
 
-      var request = requestBuilder.build();
-      var response = httpClient.send(request, BodyHandlers.ofString());
-      var statusCode = response.statusCode();
-      if (statusCode != 200)
+      try
       {
-        throw new IOException("status code " + statusCode + " -> " + uri);
-      }
+        var request = requestBuilder.build();
+        var response = httpClient.send(request, BodyHandlers.ofString());
+        var statusCode = response.statusCode();
+        if (statusCode != 200)
+        {
+          throw new IOException("status code " + statusCode + " -> " + uri);
+        }
 
-      return response.body();
+        return response.body();
+      }
+      catch (IOException ex)
+      {
+        throw new IOException(ex.getMessage() + " -> " + uri, ex);
+      }
     }
 
     protected Path getCachePath(URI uri)
