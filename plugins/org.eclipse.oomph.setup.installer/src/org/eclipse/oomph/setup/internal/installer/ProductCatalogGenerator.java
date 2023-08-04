@@ -759,9 +759,8 @@ public class ProductCatalogGenerator implements IApplication
     }
 
     URI trustedKeys = outputLocation.trimSegments(1).appendSegment("keys").appendSegment("trusted-keys.asc");
-    try (ArmoredOutputStream out = new ArmoredOutputStream(uriConverter.createOutputStream(trustedKeys)))
+    try (ArmoredOutputStream out = ArmoredOutputStream.builder().setVersion(null).build(uriConverter.createOutputStream(trustedKeys)))
     {
-      out.setHeader("Version", null);
       for (PGPPublicKey key : pgpKeys.values())
       {
         key.encode(out);
