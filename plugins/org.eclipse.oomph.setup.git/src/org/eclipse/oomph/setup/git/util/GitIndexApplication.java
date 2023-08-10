@@ -843,6 +843,16 @@ public class GitIndexApplication implements IApplication
       "https://github.com/eclipse-keypop/keypop-calypso-crypto-symmetric-cpp-api", //
       "https://github.com/eclipse-openxilenv/openxilenv", //
       "https://github.com/eclipse-velocitas/velocitas-lib", //
+      "https://github.com/eclipse-tractusx/asset-tracking-platform", //
+      "https://github.com/eclipse-tractusx/eclipse-tractusx.github.io.largefiles", //
+      "https://github.com/eclipse-tractusx/eco-pass-kit", //
+      "https://github.com/eclipse-tractusx/pcf-exchange-kit", //
+      "https://github.com/eclipse-tractusx/tutorial-resources", //
+      "https://gitlab.eclipse.org/eclipse/aidge/aidge", //
+      "https://gitlab.eclipse.org/eclipse/aidge/aidge_backend_cpu", //
+      "https://gitlab.eclipse.org/eclipse/aidge/aidge_core", //
+      "https://gitlab.eclipse.org/eclipse/aidge/aidge_module_template", //
+      "https://gitlab.eclipse.org/eclipse/aidge/aidge_onnx", //
       "" //
   ));
 
@@ -1228,6 +1238,7 @@ public class GitIndexApplication implements IApplication
       "https://github.com/eclipse-ptp/ptp.photran", //
       "https://github.com/eclipse-rap/org.eclipse.rap", //
       "https://github.com/eclipse-rap/org.eclipse.rap.tools", //
+      "https://github.com/eclipse-rdf4j/rdf4j", //
       "https://github.com/eclipse-rmf/org.eclipse.rmf", //
       "https://github.com/eclipse-scout/scout.rt", //
       "https://github.com/eclipse-scout/scout.sdk", //
@@ -1286,6 +1297,7 @@ public class GitIndexApplication implements IApplication
       "https://github.com/eclipse-virgo/virgo-root", //
       "https://github.com/eclipse-wildwebdeveloper/wildwebdeveloper", //
       "https://github.com/eclipse-windowbuilder/windowbuilder", //
+      "https://github.com/eclipse-xpanse/terraform-boot", //
       "https://github.com/eclipse-xpanse/xpanse", //
       "https://github.com/eclipse-zenoh/zenoh-java", //
       "https://github.com/eclipse/Xpect", //
@@ -1440,7 +1452,6 @@ public class GitIndexApplication implements IApplication
       "https://github.com/eclipse/paho.mqtt.android", //
       "https://github.com/eclipse/paho.mqtt.java", //
       "https://github.com/eclipse/poosl", //
-      "https://github.com/eclipse/rdf4j", //
       "https://github.com/eclipse/rdf4j-storage", //
       "https://github.com/eclipse/rdf4j-testsuite", //
       "https://github.com/eclipse/rdf4j-tools", //
