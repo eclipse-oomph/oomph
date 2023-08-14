@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.8"?>
-<target name="Generated from Oomph" sequenceNumber="125">
+<target name="Generated from Oomph" sequenceNumber="127">
   <locations>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
       <unit id="bcpg" version="0.0.0"/>
@@ -25,6 +25,7 @@
       <unit id="org.apache.commons.cli" version="0.0.0"/>
       <unit id="org.apache.commons.collections" version="0.0.0"/>
       <unit id="org.apache.commons.commons-beanutils" version="0.0.0"/>
+      <unit id="org.apache.commons.commons-codec" version="0.0.0"/>
       <unit id="org.apache.commons.compress" version="0.0.0"/>
       <unit id="org.apache.commons.httpclient" version="0.0.0"/>
       <unit id="org.apache.commons.io" version="0.0.0"/>
@@ -101,6 +102,7 @@
       <unit id="org.eclipse.wst.common.uriresolver" version="0.0.0"/>
       <unit id="org.eclipse.wst.sse.core" version="0.0.0"/>
       <unit id="org.eclipse.wst.xml.core" version="0.0.0"/>
+      <unit id="org.hamcrest" version="0.0.0"/>
       <unit id="org.hamcrest.library" version="0.0.0"/>
       <unit id="org.jdom" version="0.0.0"/>
       <unit id="org.objectweb.asm" version="0.0.0"/>
@@ -115,7 +117,7 @@
       <unit id="org.sat4j.core" version="0.0.0"/>
       <unit id="org.sat4j.pb" version="0.0.0"/>
       <unit id="slf4j.api" version="0.0.0"/>
-      <unit id="slf4j.nop" version="0.0.0"/>
+      <unit id="slf4j.simple" version="0.0.0"/>
       <repository location="https://download.eclipse.org/modeling/emf/emf/builds/milestone/latest"/>
       <repository location="https://download.eclipse.org/egit/updates-stable-nightly"/>
       <repository location="https://download.eclipse.org/mylyn/updates/nightly/latest"/>
