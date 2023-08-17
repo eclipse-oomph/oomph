@@ -8,7 +8,7 @@ Thanks for your interest in this project.
 
 You can set up a pre-configured IDE for the development of Oomph using the following link.
 
-[![Create Eclipse Development Environment for Oomph](https://download.eclipse.org/oomph/www/setups/svg/oomph.svg)](https://www.eclipse.org/setups/installer/?url=https://www.eclipse.org/setups/installer/?url=https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/configurations/OomphConfiguration.setup&show=true "Click to open Eclipse-Installer Auto Launch or drag onto your running installer's title area")
+[![Create Eclipse Development Environment for Oomph](https://download.eclipse.org/oomph/www/setups/svg/oomph.svg)](https://www.eclipse.org/setups/installer/?url=https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/configurations/OomphConfiguration.setup&show=true "Click to open Eclipse-Installer Auto Launch or drag onto your running installer's title area")
 
 ## General Processes and Workflows
 
