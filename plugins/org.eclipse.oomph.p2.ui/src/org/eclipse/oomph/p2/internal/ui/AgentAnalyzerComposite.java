@@ -19,6 +19,7 @@ import org.eclipse.oomph.p2.internal.core.AgentAnalyzer.AnalyzedProfile;
 import org.eclipse.oomph.p2.internal.core.AgentAnalyzer.Handler;
 import org.eclipse.oomph.ui.ErrorDialog;
 import org.eclipse.oomph.ui.UIUtil;
+import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.util.SubMonitor;
 
@@ -1316,7 +1317,10 @@ public class AgentAnalyzerComposite extends Composite
       if (tableViewer == null)
       {
         tableViewer = viewer;
-        tableViewer.getTable().addControlListener(this);
+        if (!OS.INSTANCE.isLinux())
+        {
+          tableViewer.getTable().addControlListener(this);
+        }
       }
 
       if (input != null)
@@ -1433,7 +1437,7 @@ public class AgentAnalyzerComposite extends Composite
           TableColumn column = columns[i];
           tableWidth -= column.getWidth();
 
-          if (firstTime)
+          if (firstTime && !OS.INSTANCE.isLinux())
           {
             column.addControlListener(columnListener);
           }
