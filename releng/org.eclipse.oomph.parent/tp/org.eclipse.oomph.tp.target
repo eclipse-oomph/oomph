@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.8"?>
-<target name="Generated from Oomph" sequenceNumber="127">
+<target name="Generated from Oomph" sequenceNumber="128">
   <locations>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
       <unit id="bcpg" version="0.0.0"/>
@@ -80,7 +80,6 @@
       <unit id="org.eclipse.mylyn.commons.notifications.feature.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.mylyn.commons.repositories.feature.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.mylyn.context.feature.feature.group" version="0.0.0"/>
-      <unit id="org.eclipse.mylyn.discovery.feature.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.mylyn.monitor.feature.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.mylyn.tasks.feature.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.mylyn.team.feature.feature.group" version="0.0.0"/>
