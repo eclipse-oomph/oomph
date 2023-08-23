@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.8"?>
-<target name="Generated from Oomph" sequenceNumber="128">
+<target name="Generated from Oomph" sequenceNumber="129">
   <locations>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
       <unit id="bcpg" version="0.0.0"/>
@@ -66,11 +66,6 @@
       <unit id="org.eclipse.jgit.http.apache.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.jgit.ssh.apache.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.justj.openjdk.hotspot.jre.minimal.stripped.feature.group" version="0.0.0"/>
-      <unit id="org.eclipse.m2e.archetype.archetype-catalog" version="0.0.0"/>
-      <unit id="org.eclipse.m2e.archetype.archetype-common" version="0.0.0"/>
-      <unit id="org.eclipse.m2e.archetype.archetype-descriptor" version="0.0.0"/>
-      <unit id="org.eclipse.m2e.archetype.jdom2" version="0.0.0"/>
-      <unit id="org.eclipse.m2e.archetype.maven-artifact-transfer" version="0.0.0"/>
       <unit id="org.eclipse.m2e.feature.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.m2e.pde.feature.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.mylyn.bugzilla.feature.feature.group" version="0.0.0"/>
@@ -103,7 +98,9 @@
       <unit id="org.eclipse.wst.xml.core" version="0.0.0"/>
       <unit id="org.hamcrest" version="0.0.0"/>
       <unit id="org.hamcrest.library" version="0.0.0"/>
+      <unit id="org.jaxen" version="0.0.0"/>
       <unit id="org.jdom" version="0.0.0"/>
+      <unit id="org.jdom2" version="0.0.0"/>
       <unit id="org.objectweb.asm" version="0.0.0"/>
       <unit id="org.objectweb.asm.commons" version="0.0.0"/>
       <unit id="org.objectweb.asm.tree" version="0.0.0"/>
