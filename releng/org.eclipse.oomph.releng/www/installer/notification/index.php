@@ -65,6 +65,7 @@ else
 
 $question = htmlEntities("../question/$version_parameter");
 $problem = htmlEntities("../problem/$version_parameter");
+$sponsor = "https://www.eclipse.org/sponsor/ide/";
 
 # Add page-specific Nav bars here
 # Format is Link text, link URL (can be http://www.someothersite.com/), target (_self, _blank), level (1, 2 or 3)
@@ -111,24 +112,24 @@ $html = <<<EOHTML
 
     <hr>
     <h3>What Can I Do to Support the Eclipse Community?</h3>
-    <a href="https://www.eclipse.org/donate/ide/?scope=Eclipse%20Installer" target="_blank">
+    <a href="$sponsor?scope=Eclipse%20Installer" target="_blank">
     <img style="animation-name: wiggle; animation-duration: 3s; animation-iteration-count: infinite; animation-delay: 2s; animation-direction: alternate;" src="../FriendsOfEclipse.png"/>
     </a>
     &nbsp;&nbsp;
-    <a href="https://www.eclipse.org/donate/ide/?scope=Eclipse%20Installer" target="_blank" class="btn btn-huge btn-primary" style="animation-name: wiggle; animation-duration: 3s; animation-iteration-count: infinite; animation-delay: 2s; animation-direction: alternate;"><i class="fa fa-star"></i> Donate</a>
+    <a href="$sponsor?scope=Eclipse%20Installer" target="_blank" class="btn btn-huge btn-primary" style="animation-name: wiggle; animation-duration: 3s; animation-iteration-count: infinite; animation-delay: 2s; animation-direction: alternate;"><i class="fa fa-star"></i> Sponsor</a>
 
     <hr>
     <h4><b>Invest Your Money</b></h4>
     <ul>
       <li>
       If you love Eclipse as much as we do, 
-      join the elite club and become a <a href="https://www.eclipse.org/donate/donorlist.php?start=0#all" target="_blank">Friend of Eclipse</a> by <a href="https://www.eclipse.org/donate/ide/?scope=Eclipse%20Installer" target="_blank">donating</a> a token of your appreciation.
+      join the elite club and become a Friend of Eclipse by <a href="$sponsor?scope=Eclipse%20Installer" target="_blank">giving</a> a token of your appreciation.
       </li>
       <li>
-      If you work for a company, encourge your employeer to become an <a href="https://www.eclipse.org/membership/" target="_blank">Eclipse Member</a>.
+      If you work for a company, encourage your employer to become an <a href="https://www.eclipse.org/membership/" target="_blank">Eclipse Member</a>.
       </li>
       <li>
-      If you want influence, join an <a href="https://www.eclipse.org/org/workinggroups/" target="_blank">Eclipse Working Group</a>.
+      If you want influence, join the <a href="https://eclipseide.org/working-group/" target="_blank">Eclipse IDE Working Group</a>.
       </li>
       <li>
       If you've built cool technology, <a href="https://www.eclipse.org/projects/handbook/#starting" target="_blank">start your own Eclipse Project</a>.
@@ -201,7 +202,7 @@ EOHTML;
     $App->generatePage($theme, $Menu, $Nav, $pageAuthor, $pageKeywords, $pageTitle, $html, $Breadcrumb);
     $contents = ob_get_contents();
     ob_end_clean();
-    $contents = preg_replace('/(<a href="https:\/\/www.eclipse.org\/donate\/)(" class="btn btn-huge) btn-info("><i class="fa fa-star">)/', "\\1ide/?scope=Eclipse%20Installer\\2 btn-primary\\3", $contents);
+    $contents = preg_replace('#<a href="https://www.eclipse.org/donate/" class="btn btn-huge btn-info"><i class="fa fa-star"></i> Donate</a></div>#', '<a href="https://www.eclipse.org/sponsor/ide/?scope=Eclipse%20Installer" class="btn btn-huge btn-primary"><i class="fa fa-star"></i> Sponsor</a></div>', $contents);
     echo "$contents";;
 
 ?>

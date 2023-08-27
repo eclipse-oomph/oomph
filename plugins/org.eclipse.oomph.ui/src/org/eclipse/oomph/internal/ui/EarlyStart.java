@@ -140,7 +140,7 @@ public class EarlyStart implements IStartup
             try
             {
               IWorkbenchBrowserSupport browserSupport = PlatformUI.getWorkbench().getBrowserSupport();
-              IWebBrowser browser = browserSupport.createBrowser(IWorkbenchBrowserSupport.AS_EDITOR, "donate", "NLS Report", "Oomph's NLS Report"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+              IWebBrowser browser = browserSupport.createBrowser(IWorkbenchBrowserSupport.AS_EDITOR, "nls-report", "NLS Report", "Oomph's NLS Report"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
               browser.openURL(report.toURI().toURL());
             }
             catch (Exception ex)

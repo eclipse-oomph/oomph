@@ -112,7 +112,7 @@ EOHTML;
     $App->generatePage($theme, $Menu, $Nav, $pageAuthor, $pageKeywords, $pageTitle, $html, $Breadcrumb);
     $contents = ob_get_contents();
     ob_end_clean();
-    $contents = preg_replace('/(<a href="https:\/\/www.eclipse.org\/donate\/)(" class="btn btn-huge) btn-info("><i class="fa fa-star">)/', "\\1ide/?scope=Eclipse%20Installer\\2 btn-primary\\3", $contents);
+    $contents = preg_replace('#<a href="https://www.eclipse.org/donate/" class="btn btn-huge btn-info"><i class="fa fa-star"></i> Donate</a></div>#', '<a href="https://www.eclipse.org/sponsor/ide/?scope=Eclipse%20Installer" class="btn btn-huge btn-primary"><i class="fa fa-star"></i> Sponsor</a></div>', $contents);
     echo "$contents";
 
 ?>

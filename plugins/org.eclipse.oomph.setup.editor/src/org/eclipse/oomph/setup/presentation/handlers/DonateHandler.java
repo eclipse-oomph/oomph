@@ -63,7 +63,7 @@ public class DonateHandler extends AbstractHandler
         style |= IWorkbenchBrowserSupport.LOCATION_BAR;
       }
 
-      IWebBrowser browser = browserSupport.createBrowser(style, "donate", SetupEditorPlugin.INSTANCE.getString("_UI_Donate_label"), donating); //$NON-NLS-1$ //$NON-NLS-2$
+      IWebBrowser browser = browserSupport.createBrowser(style, "sponsor", SetupEditorPlugin.INSTANCE.getString("_UI_Donate_label"), donating); //$NON-NLS-1$ //$NON-NLS-2$
       browser.openURL(new URL(donating));
 
       // Look for the internal browser instance.
@@ -110,7 +110,7 @@ public class DonateHandler extends AbstractHandler
                       try
                       {
                         // Instead open the link in an external browser.
-                        IWebBrowser browser = browserSupport.createBrowser(IWorkbenchBrowserSupport.AS_EXTERNAL, "external_donate", //$NON-NLS-1$
+                        IWebBrowser browser = browserSupport.createBrowser(IWorkbenchBrowserSupport.AS_EXTERNAL, "external_sponsor", //$NON-NLS-1$
                             SetupEditorPlugin.INSTANCE.getString("_UI_Donate_label"), donating); //$NON-NLS-1$
                         browser.openURL(new URL(event.location));
                       }
