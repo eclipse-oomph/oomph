@@ -115,18 +115,19 @@
     <stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-17"/>
     <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-os ${target.os} -ws ${target.ws} -arch ${target.arch} -nl ${target.nl} -consoleLog&#13;&#10;cache  git-index.zip"/>
     <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.pde.ui.workbenchClasspathProvider"/>
-    <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dorg.eclipse.oomph.setup.git.util.GitIndexApplication.github.pat.preference=org.eclipse.oomph/hosts/raw.githubusercontent.com/password&#13;&#10;-Dorg.eclipse.oomph.setup.git.util.GitIndexApplication.test=false&#13;&#10;-Dorg.eclipse.oomph.setup.git.util.GitIndexApplication.test.new=false&#13;&#10;-Dorg.eclipse.oomph.setup.git.util.GitIndexApplication.update=${resource_loc:/org.eclipse.oomph.setup.git/src/org/eclipse/oomph/setup/git/util/GitIndexApplication.java}&#13;&#10;-Duser.home=${system_property:user.home}"/>
+    <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dorg.eclipse.oomph.setup.git.util.GitIndexApplication.github.pat.preference=org.eclipse.oomph/hosts/raw.githubusercontent.com/password&#13;&#10;-Dorg.eclipse.oomph.setup.git.util.GitIndexApplication.test=false&#13;&#10;-Dxorg.eclipse.oomph.setup.git.util.GitIndexApplication.test.new=true&#13;&#10;-Dorg.eclipse.oomph.setup.git.util.GitIndexApplication.update=${resource_loc:/org.eclipse.oomph.setup.git/src/org/eclipse/oomph/setup/git/util/GitIndexApplication.java}&#13;&#10;-Duser.home=${system_property:user.home}"/>
     <stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="${project_loc:/org.eclipse.oomph.setup.git}"/>
     <booleanAttribute key="pde.generated.config" value="false"/>
     <stringAttribute key="pde.version" value="3.3"/>
     <stringAttribute key="product" value="org.eclipse.equinox.p2.director.product"/>
     <setAttribute key="selected_features">
+        <setEntry value="org.eclipse.egit:default"/>
         <setEntry value="org.eclipse.oomph.setup.git:default"/>
         <setEntry value="org.eclipse.platform:default"/>
     </setAttribute>
     <setAttribute key="selected_target_bundles"/>
     <setAttribute key="selected_workspace_bundles"/>
-    <booleanAttribute key="show_selected_only" value="false"/>
+    <booleanAttribute key="show_selected_only" value="true"/>
     <booleanAttribute key="tracing" value="false"/>
     <booleanAttribute key="useCustomFeatures" value="true"/>
     <booleanAttribute key="useDefaultConfig" value="true"/>
