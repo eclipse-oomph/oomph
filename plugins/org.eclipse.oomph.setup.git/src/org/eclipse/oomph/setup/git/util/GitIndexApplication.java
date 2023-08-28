@@ -667,6 +667,7 @@ public class GitIndexApplication implements IApplication
       "https://github.com/eclipse-tractusx/puris", //
       "https://github.com/eclipse-tractusx/puris-frontend", //
       "https://github.com/eclipse-tractusx/sig-infra", //
+      "https://github.com/eclipse-tractusx/sig-security", //
       "https://github.com/eclipse-tractusx/sig-release", //
       "https://github.com/eclipse-tractusx/sldt-semantic-models", //
       "https://github.com/eclipse-tractusx/ssi-docu", //
@@ -841,6 +842,7 @@ public class GitIndexApplication implements IApplication
       "https://github.com/eclipse-chariott/chariott-example-applications", //
       "https://github.com/eclipse-keypop/keypop-calypso-crypto-asymmetric-cpp-api", //
       "https://github.com/eclipse-keypop/keypop-calypso-crypto-symmetric-cpp-api", //
+      "https://github.com/eclipse-keypop/keypop-ops", //
       "https://github.com/eclipse-openxilenv/openxilenv", //
       "https://github.com/eclipse-velocitas/velocitas-lib", //
       "https://github.com/eclipse-tractusx/asset-tracking-platform", //
@@ -853,6 +855,7 @@ public class GitIndexApplication implements IApplication
       "https://gitlab.eclipse.org/eclipse/aidge/aidge_core", //
       "https://gitlab.eclipse.org/eclipse/aidge/aidge_module_template", //
       "https://gitlab.eclipse.org/eclipse/aidge/aidge_onnx", //
+      "https://github.com/eclipse-langium/langium", //
       "" //
   ));
 
@@ -874,7 +877,6 @@ public class GitIndexApplication implements IApplication
       "https://git.eclipse.org/r/edapt/org.eclipse.emf.edapt", //
       "https://git.eclipse.org/r/eef/org.eclipse.eef", //
       "https://git.eclipse.org/r/efm/org.eclipse.efm-modeling", //
-      "https://git.eclipse.org/r/egerrit/org.eclipse.egerrit", //
       "https://git.eclipse.org/r/egit/egit", //
       "https://git.eclipse.org/r/emfatic/org.eclipse.emfatic", //
       "https://git.eclipse.org/r/emfclient/org.eclipse.emf.ecp.core", //
@@ -909,7 +911,6 @@ public class GitIndexApplication implements IApplication
       "https://git.eclipse.org/r/mmt/org.eclipse.qvtd", //
       "https://git.eclipse.org/r/mmt/org.eclipse.qvto", //
       "https://git.eclipse.org/r/modisco/org.eclipse.modisco", //
-      "https://git.eclipse.org/r/mpc/org.eclipse.epp.mpc", //
       "https://git.eclipse.org/r/nattable/org.eclipse.nebula.widgets.nattable", //
       "https://git.eclipse.org/r/ocl/org.eclipse.ocl", //
       "https://git.eclipse.org/r/om2m/org.eclipse.om2m", //
@@ -1130,6 +1131,7 @@ public class GitIndexApplication implements IApplication
       "https://github.com/eclipse-efx/efxclipse-drift", //
       "https://github.com/eclipse-efx/efxclipse-eclipse", //
       "https://github.com/eclipse-efx/efxclipse-rt", //
+      "https://github.com/eclipse-egerrit/egerrit", //
       "https://github.com/eclipse-embed-cdt/eclipse-plugins", //
       "https://github.com/eclipse-embed-cdt/org.eclipse.epp.packages", //
       "https://github.com/eclipse-emf-compare/emf-compare", //
@@ -1176,6 +1178,7 @@ public class GitIndexApplication implements IApplication
       "https://github.com/eclipse-m2e/m2e-wtp", //
       "https://github.com/eclipse-m2e/m2e-wtp-jpa", //
       "https://github.com/eclipse-m2e/org.eclipse.m2e.workspace", //
+      "https://github.com/eclipse-mpc/epp.mpc", //
       "https://github.com/eclipse-muto/liveui", //
       "https://github.com/eclipse-muto/liveui-samples", //
       "https://github.com/eclipse-mylyn/org.eclipse.mylyn", //
@@ -1247,7 +1250,6 @@ public class GitIndexApplication implements IApplication
       "https://github.com/eclipse-set/model", //
       "https://github.com/eclipse-set/set", //
       "https://github.com/eclipse-set/toolboxmodel", //
-      "https://github.com/eclipse-sirius/sirius-components", //
       "https://github.com/eclipse-sirius/sirius-desktop", //
       "https://github.com/eclipse-sirius/sirius-emf-json", //
       "https://github.com/eclipse-sirius/sirius-web", //
@@ -1278,6 +1280,7 @@ public class GitIndexApplication implements IApplication
       "https://github.com/eclipse-tractusx/tractusx-edc", //
       "https://github.com/eclipse-tractusx/vas-country-risk-backend", //
       "https://github.com/eclipse-tycho/tycho", //
+      "https://github.com/eclipse-uprotocol/uprotocol-platform-android-api", //
       "https://github.com/eclipse-uprotocol/uprotocol-sdk-java", //
       "https://github.com/eclipse-uprotocol/uprotocol-spec", //
       "https://github.com/eclipse-vertx/vert.x", //
@@ -1566,7 +1569,6 @@ public class GitIndexApplication implements IApplication
       "https://gitlab.eclipse.org/eclipse/jwt/org.eclipse.soa.jwt", //
       "https://gitlab.eclipse.org/eclipse/lsat/lsat", //
       "https://gitlab.eclipse.org/eclipse/mangrove/org.eclipse.mangrove", //
-      "https://gitlab.eclipse.org/eclipse/mpc/org.eclipse.epp.mpc", //
       "https://gitlab.eclipse.org/eclipse/mtj/org.eclipse.mtj", //
       "https://gitlab.eclipse.org/eclipse/objectteams/objectteams", //
       "https://gitlab.eclipse.org/eclipse/ogee/org.eclipse.ogee", //
@@ -1606,7 +1608,6 @@ public class GitIndexApplication implements IApplication
       "https://gitlab.eclipse.org/eclipse/papyrus/org.eclipse.papyrus-web", //
       "https://gitlab.eclipse.org/eclipse/rtsc/org.eclipse.rtsc.committer", //
       "https://gitlab.eclipse.org/eclipse/rtsc/org.eclipse.rtsc.xdccore", //
-      "https://gitlab.eclipse.org/eclipse/set/set", //
       "https://gitlab.eclipse.org/eclipse/statet/statet", //
       "https://gitlab.eclipse.org/eclipse/subversive/subversive", //
       "https://gitlab.eclipse.org/eclipse/sw360/playground-git", //
@@ -1618,10 +1619,7 @@ public class GitIndexApplication implements IApplication
       "https://gitlab.eclipse.org/eclipse/technology/dash/org.eclipse.dash.handbook", //
       "https://gitlab.eclipse.org/eclipse/teneo/org.eclipse.emf.teneo", //
       "https://gitlab.eclipse.org/eclipse/texo/org.eclipse.emf.texo", //
-      "https://gitlab.eclipse.org/eclipse/titan/titan.EclipsePlug-ins", //
-      "https://gitlab.eclipse.org/eclipse/titan/titan.core", //
       "https://gitlab.eclipse.org/eclipse/titan/titan.language-server", //
-      "https://gitlab.eclipse.org/eclipse/titan/titan.misc", //
       "https://gitlab.eclipse.org/eclipse/trace4cps/trace4cps", //
       "https://gitlab.eclipse.org/eclipse/upr/upr", //
       "https://gitlab.eclipse.org/eclipse/xfsc/authenticationauthorization", //
