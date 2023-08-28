@@ -10,7 +10,7 @@ Bundle-ClassPath: .
 Require-Bundle: org.eclipse.help;bundle-version="[3.3.0,4.0.0)";resolution:=optional,
  org.eclipse.core.runtime;bundle-version="[3.24.0,4.0.0)";resolution:=optional;visibility:=reexport,
  org.eclipse.oomph.util.pde;bundle-version="[1.12.0,2.0.0)";resolution:=optional;visibility:=reexport,
- org.eclipse.oomph.ui;bundle-version="[1.19.0,2.0.0)";resolution:=optional;visibility:=reexport,
+ org.eclipse.oomph.ui;bundle-version="[1.20.0,2.0.0)";resolution:=optional;visibility:=reexport,
  org.eclipse.oomph.base.edit;bundle-version="[1.17.0,2.0.0)";resolution:=optional;visibility:=reexport,
  org.eclipse.oomph.predicates.edit;bundle-version="[1.15.0,2.0.0)";resolution:=optional;visibility:=reexport,
  org.eclipse.oomph.resources;bundle-version="[1.18.0,2.0.0)";resolution:=optional;visibility:=reexport,
