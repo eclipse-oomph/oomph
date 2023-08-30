@@ -1457,8 +1457,8 @@ public class ProductCatalogGenerator implements IApplication
   {
     EMap<String, String> productCatalogBrandingInfos = getBrandingInfos(productCatalog);
     productCatalogBrandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_URI, eclipseBrandingNotificationURI.toString());
-    productCatalogBrandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_LABEL, "DONATE");
-    productCatalogBrandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_TOOLTIP, "Sponsor to the Eclipse IDE");
+    productCatalogBrandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_LABEL, "SPONSOR");
+    productCatalogBrandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_TOOLTIP, "Sponsor the Eclipse IDE");
     productCatalogBrandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_ANIMATION_STYLE, "REPEAT");
     // productCatalogBrandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_COLOR, "color://rgb/172/5/209");
     // brandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_SCOPE, productCatalog.getLabel());
@@ -1472,7 +1472,7 @@ public class ProductCatalogGenerator implements IApplication
       {
         // A copy of the annotations on the catalog because these end up in another catalog.
         productBrandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_URI, eclipseBrandingNotificationURI.toString());
-        productBrandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_LABEL, "DONATE");
+        productBrandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_LABEL, "SPONSOR");
         productBrandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_ANIMATION_STYLE, "REPEAT");
         productBrandingInfos.put(AnnotationConstants.KEY_APP_NAME, "Eclipse");
         // productBrandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_COLOR, "color://rgb/12/184/198");
@@ -1480,7 +1480,7 @@ public class ProductCatalogGenerator implements IApplication
       }
 
       // productBrandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_COLOR, "color://rgb/12/184/198");
-      productBrandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_TOOLTIP, "Sponsor to the " + product.getLabel());
+      productBrandingInfos.put(AnnotationConstants.KEY_NOTIFICATION_TOOLTIP, "Sponsor the " + product.getLabel());
 
       if (Boolean.FALSE)
       {
