@@ -23,11 +23,11 @@
     </detail>
     <detail
         key="notificationLabel">
-      <value>DONATE</value>
+      <value>SPONSOR</value>
     </detail>
     <detail
         key="notificationTooltip">
-      <value>Donate to the Eclipse Community</value>
+      <value>Sponsor the Eclipse IDE</value>
     </detail>
     <detail
         key="notificationAnimationStyle">
@@ -61,7 +61,7 @@
       </detail>
       <detail
           key="notificationTooltip">
-        <value>Donate to the Eclipse Community for the Eclipse IDE for Java Developers</value>
+        <value>Sponsor the Eclipse IDE for Java Developers</value>
       </detail>
     </annotation>
     <version
@@ -72,7 +72,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2023-09/m3/eclipse-ide-java-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2023-09/rc1/eclipse-ide-java-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -213,9 +213,9 @@
             optional="true"
             max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2023-09/202308241200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2023-09/202308311200"/>
         <repository
-            url="https://download.eclipse.org/releases/2023-09/202308251000">
+            url="https://download.eclipse.org/releases/2023-09/202309011000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -310,7 +310,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2023-09/m3/eclipse-ide-java-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2023-09/rc1/eclipse-ide-java-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -451,9 +451,9 @@
             optional="true"
             max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2023-09/202308241200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2023-09/202308311200"/>
         <repository
-            url="https://download.eclipse.org/releases/2023-09/202308251000">
+            url="https://download.eclipse.org/releases/2023-09/202309011000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -2285,7 +2285,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.34.0"/>
+            url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.35.0"/>
       </setupTask>
     </version>
     <version
@@ -2331,7 +2331,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.34.0"/>
+            url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.35.0"/>
       </setupTask>
     </version>
     <description>The essential tools for any Java developer, including a Java IDE, a Git client, XML Editor, Maven and Gradle integration</description>
@@ -2346,7 +2346,7 @@
       </detail>
       <detail
           key="notificationTooltip">
-        <value>Donate to the Eclipse Community for the Eclipse IDE for Enterprise Java and Web Developers</value>
+        <value>Sponsor the Eclipse IDE for Enterprise Java and Web Developers</value>
       </detail>
     </annotation>
     <version
@@ -2357,7 +2357,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2023-09/m3/eclipse-ide-enterprise-java-and-web-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2023-09/rc1/eclipse-ide-enterprise-java-and-web-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -2630,9 +2630,9 @@
             optional="true"
             max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2023-09/202308241200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2023-09/202308311200"/>
         <repository
-            url="https://download.eclipse.org/releases/2023-09/202308251000">
+            url="https://download.eclipse.org/releases/2023-09/202309011000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -2859,7 +2859,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2023-09/m3/eclipse-ide-enterprise-java-and-web-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2023-09/rc1/eclipse-ide-enterprise-java-and-web-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -3132,9 +3132,9 @@
             optional="true"
             max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2023-09/202308241200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2023-09/202308311200"/>
         <repository
-            url="https://download.eclipse.org/releases/2023-09/202308251000">
+            url="https://download.eclipse.org/releases/2023-09/202309011000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -7949,7 +7949,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.34.0"/>
+            url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.35.0"/>
       </setupTask>
     </version>
     <version
@@ -7998,7 +7998,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.34.0"/>
+            url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.35.0"/>
       </setupTask>
     </version>
     <description>
@@ -8021,7 +8021,7 @@
       </detail>
       <detail
           key="notificationTooltip">
-        <value>Donate to the Eclipse Community for the Eclipse IDE for C/C++ Developers</value>
+        <value>Sponsor the Eclipse IDE for C/C++ Developers</value>
       </detail>
     </annotation>
     <version
@@ -8032,7 +8032,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2023-09/m3/eclipse-ide-cc-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2023-09/rc1/eclipse-ide-cc-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -8207,9 +8207,9 @@
             optional="true"
             max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2023-09/202308241200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2023-09/202308311200"/>
         <repository
-            url="https://download.eclipse.org/releases/2023-09/202308251000">
+            url="https://download.eclipse.org/releases/2023-09/202309011000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -8338,7 +8338,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2023-09/m3/eclipse-ide-cc-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2023-09/rc1/eclipse-ide-cc-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -8513,9 +8513,9 @@
             optional="true"
             max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2023-09/202308241200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2023-09/202308311200"/>
         <repository
-            url="https://download.eclipse.org/releases/2023-09/202308251000">
+            url="https://download.eclipse.org/releases/2023-09/202309011000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -11101,7 +11101,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.34.0"/>
+            url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.35.0"/>
       </setupTask>
     </version>
     <version
@@ -11144,7 +11144,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.34.0"/>
+            url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.35.0"/>
       </setupTask>
     </version>
     <description>An IDE for C/C++ developers.</description>
@@ -11159,7 +11159,7 @@
       </detail>
       <detail
           key="notificationTooltip">
-        <value>Donate to the Eclipse Community for the Eclipse IDE for Embedded C/C++ Developers</value>
+        <value>Sponsor the Eclipse IDE for Embedded C/C++ Developers</value>
       </detail>
     </annotation>
     <version
@@ -11170,7 +11170,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2023-09/m3/eclipse-ide-embedded-cc-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2023-09/rc1/eclipse-ide-embedded-cc-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -11377,9 +11377,9 @@
             optional="true"
             max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2023-09/202308241200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2023-09/202308311200"/>
         <repository
-            url="https://download.eclipse.org/releases/2023-09/202308251000">
+            url="https://download.eclipse.org/releases/2023-09/202309011000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -11540,7 +11540,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2023-09/m3/eclipse-ide-embedded-cc-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2023-09/rc1/eclipse-ide-embedded-cc-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -11747,9 +11747,9 @@
             optional="true"
             max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2023-09/202308241200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2023-09/202308311200"/>
         <repository
-            url="https://download.eclipse.org/releases/2023-09/202308251000">
+            url="https://download.eclipse.org/releases/2023-09/202309011000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -13252,7 +13252,7 @@
       </detail>
       <detail
           key="notificationTooltip">
-        <value>Donate to the Eclipse Community for the Eclipse IDE for PHP Developers</value>
+        <value>Sponsor the Eclipse IDE for PHP Developers</value>
       </detail>
     </annotation>
     <version
@@ -13263,7 +13263,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2023-09/m3/eclipse-ide-php-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2023-09/rc1/eclipse-ide-php-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -13311,6 +13311,8 @@
             name="org.eclipse.php.composer.feature.group"/>
         <requirement
             name="org.eclipse.php.feature.group"/>
+        <requirement
+            name="org.eclipse.php.mylyn.feature.group"/>
         <requirement
             name="org.eclipse.php.phpunit.feature.feature.group"/>
         <requirement
@@ -13402,9 +13404,9 @@
             optional="true"
             max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2023-09/202308241200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2023-09/202308311200"/>
         <repository
-            url="https://download.eclipse.org/releases/2023-09/202308251000">
+            url="https://download.eclipse.org/releases/2023-09/202309011000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -13499,7 +13501,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2023-09/m3/eclipse-ide-php-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2023-09/rc1/eclipse-ide-php-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -13547,6 +13549,8 @@
             name="org.eclipse.php.composer.feature.group"/>
         <requirement
             name="org.eclipse.php.feature.group"/>
+        <requirement
+            name="org.eclipse.php.mylyn.feature.group"/>
         <requirement
             name="org.eclipse.php.phpunit.feature.feature.group"/>
         <requirement
@@ -13638,9 +13642,9 @@
             optional="true"
             max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2023-09/202308241200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2023-09/202308311200"/>
         <repository
-            url="https://download.eclipse.org/releases/2023-09/202308251000">
+            url="https://download.eclipse.org/releases/2023-09/202309011000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -15504,7 +15508,7 @@
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="notificationTooltip">
-        <value>Donate to the Eclipse Community for the Eclipse IDE for Eclipse Committers</value>
+        <value>Sponsor the Eclipse IDE for Eclipse Committers</value>
       </detail>
     </annotation>
     <version
@@ -15515,7 +15519,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2023-09/m3/eclipse-ide-eclipse-committers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2023-09/rc1/eclipse-ide-eclipse-committers</value>
         </detail>
         <detail
             key="shortcut">
@@ -15680,9 +15684,9 @@
             optional="true"
             max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2023-09/202308241200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2023-09/202308311200"/>
         <repository
-            url="https://download.eclipse.org/releases/2023-09/202308251000">
+            url="https://download.eclipse.org/releases/2023-09/202309011000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -15801,7 +15805,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2023-09/m3/eclipse-ide-eclipse-committers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2023-09/rc1/eclipse-ide-eclipse-committers</value>
         </detail>
         <detail
             key="shortcut">
@@ -15966,9 +15970,9 @@
             optional="true"
             max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2023-09/202308241200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2023-09/202308311200"/>
         <repository
-            url="https://download.eclipse.org/releases/2023-09/202308251000">
+            url="https://download.eclipse.org/releases/2023-09/202309011000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -18563,7 +18567,7 @@
       </detail>
       <detail
           key="notificationTooltip">
-        <value>Donate to the Eclipse Community for the Eclipse IDE for Java and DSL Developers</value>
+        <value>Sponsor the Eclipse IDE for Java and DSL Developers</value>
       </detail>
     </annotation>
     <version
@@ -18574,7 +18578,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2023-09/m3/eclipse-ide-java-and-dsl-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2023-09/rc1/eclipse-ide-java-and-dsl-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -18627,9 +18631,9 @@
         <requirement
             name="org.eclipse.xtext.sdk.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2023-09/202308241200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2023-09/202308311200"/>
         <repository
-            url="https://download.eclipse.org/releases/2023-09/202308251000">
+            url="https://download.eclipse.org/releases/2023-09/202309011000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -18712,7 +18716,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2023-09/m3/eclipse-ide-java-and-dsl-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2023-09/rc1/eclipse-ide-java-and-dsl-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -18765,9 +18769,9 @@
         <requirement
             name="org.eclipse.xtext.sdk.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2023-09/202308241200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2023-09/202308311200"/>
         <repository
-            url="https://download.eclipse.org/releases/2023-09/202308251000">
+            url="https://download.eclipse.org/releases/2023-09/202309011000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -20342,7 +20346,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.34.0"/>
+            url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.35.0"/>
       </setupTask>
     </version>
     <version
@@ -20391,7 +20395,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.34.0"/>
+            url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.35.0"/>
       </setupTask>
     </version>
     <description>The essential tools for Java and DSL developers, including a Java &amp; Xtend IDE, a DSL Framework (Xtext), a Git client, XML Editor, and Maven integration.</description>
@@ -20406,7 +20410,7 @@
       </detail>
       <detail
           key="notificationTooltip">
-        <value>Donate to the Eclipse Community for the Eclipse IDE for RCP and RAP Developers</value>
+        <value>Sponsor the Eclipse IDE for RCP and RAP Developers</value>
       </detail>
     </annotation>
     <version
@@ -20417,7 +20421,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2023-09/m3/eclipse-ide-rcp-and-rap-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2023-09/rc1/eclipse-ide-rcp-and-rap-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -20580,9 +20584,9 @@
             optional="true"
             max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2023-09/202308241200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2023-09/202308311200"/>
         <repository
-            url="https://download.eclipse.org/releases/2023-09/202308251000">
+            url="https://download.eclipse.org/releases/2023-09/202309011000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -20699,7 +20703,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2023-09/m3/eclipse-ide-rcp-and-rap-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2023-09/rc1/eclipse-ide-rcp-and-rap-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -20862,9 +20866,9 @@
             optional="true"
             max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2023-09/202308241200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2023-09/202308311200"/>
         <repository
-            url="https://download.eclipse.org/releases/2023-09/202308251000">
+            url="https://download.eclipse.org/releases/2023-09/202309011000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -23057,7 +23061,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.34.0"/>
+            url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.35.0"/>
       </setupTask>
     </version>
     <version
@@ -23106,7 +23110,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.34.0"/>
+            url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.35.0"/>
       </setupTask>
     </version>
     <description>A complete set of tools for developers who want to create Eclipse plug-ins, Rich Client Applications or Remote Application Platform (RCP+RAP), plus Maven and Gradle tooling, and an XML editor. It contains the EGit tooling for accessing Git version control systems, and Eclipse Passage which helps with license management for Eclipse-based products.</description>
@@ -23121,7 +23125,7 @@
       </detail>
       <detail
           key="notificationTooltip">
-        <value>Donate to the Eclipse Community for the Eclipse Modeling Tools</value>
+        <value>Sponsor the Eclipse Modeling Tools</value>
       </detail>
     </annotation>
     <version
@@ -23132,7 +23136,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2023-09/m3/eclipse-modeling-tools</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2023-09/rc1/eclipse-modeling-tools</value>
         </detail>
         <detail
             key="shortcut">
@@ -23307,9 +23311,9 @@
             optional="true"
             max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2023-09/202308241200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2023-09/202308311200"/>
         <repository
-            url="https://download.eclipse.org/releases/2023-09/202308251000">
+            url="https://download.eclipse.org/releases/2023-09/202309011000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -23438,7 +23442,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2023-09/m3/eclipse-modeling-tools</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2023-09/rc1/eclipse-modeling-tools</value>
         </detail>
         <detail
             key="shortcut">
@@ -23613,9 +23617,9 @@
             optional="true"
             max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2023-09/202308241200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2023-09/202308311200"/>
         <repository
-            url="https://download.eclipse.org/releases/2023-09/202308251000">
+            url="https://download.eclipse.org/releases/2023-09/202309011000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -26084,7 +26088,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.34.0"/>
+            url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.35.0"/>
       </setupTask>
     </version>
     <version
@@ -26133,7 +26137,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.34.0"/>
+            url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.35.0"/>
       </setupTask>
     </version>
     <description>
@@ -26152,7 +26156,7 @@
       </detail>
       <detail
           key="notificationTooltip">
-        <value>Donate to the Eclipse Community for the Eclipse IDE for Scientific Computing</value>
+        <value>Sponsor the Eclipse IDE for Scientific Computing</value>
       </detail>
     </annotation>
     <version
@@ -26163,7 +26167,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2023-09/m3/eclipse-ide-scientific-computing</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2023-09/rc1/eclipse-ide-scientific-computing</value>
         </detail>
         <detail
             key="shortcut">
@@ -26320,9 +26324,9 @@
             optional="true"
             max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2023-09/202308241200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2023-09/202308311200"/>
         <repository
-            url="https://download.eclipse.org/releases/2023-09/202308251000">
+            url="https://download.eclipse.org/releases/2023-09/202309011000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -26433,7 +26437,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2023-09/m3/eclipse-ide-scientific-computing</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2023-09/rc1/eclipse-ide-scientific-computing</value>
         </detail>
         <detail
             key="shortcut">
@@ -26590,9 +26594,9 @@
             optional="true"
             max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2023-09/202308241200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2023-09/202308311200"/>
         <repository
-            url="https://download.eclipse.org/releases/2023-09/202308251000">
+            url="https://download.eclipse.org/releases/2023-09/202309011000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -28806,7 +28810,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.34.0"/>
+            url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.35.0"/>
       </setupTask>
     </version>
     <version
@@ -28849,7 +28853,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.34.0"/>
+            url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.35.0"/>
       </setupTask>
     </version>
     <description>Tools for C, C++, Fortran, and UPC, including MPI, OpenMP, OpenACC, a parallel debugger, and remotely building, running and monitoring applications.</description>
@@ -28864,7 +28868,7 @@
       </detail>
       <detail
           key="notificationTooltip">
-        <value>Donate to the Eclipse Community for the Eclipse IDE for Scout Developers</value>
+        <value>Sponsor the Eclipse IDE for Scout Developers</value>
       </detail>
     </annotation>
     <version
@@ -28875,7 +28879,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2023-09/m3/eclipse-ide-scout-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2023-09/rc1/eclipse-ide-scout-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -29018,9 +29022,9 @@
             optional="true"
             max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2023-09/202308241200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2023-09/202308311200"/>
         <repository
-            url="https://download.eclipse.org/releases/2023-09/202308251000">
+            url="https://download.eclipse.org/releases/2023-09/202309011000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -29117,7 +29121,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2023-09/m3/eclipse-ide-scout-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2023-09/rc1/eclipse-ide-scout-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -29260,9 +29264,9 @@
             optional="true"
             max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2023-09/202308241200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2023-09/202308311200"/>
         <repository
-            url="https://download.eclipse.org/releases/2023-09/202308251000">
+            url="https://download.eclipse.org/releases/2023-09/202309011000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -31079,7 +31083,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.34.0"/>
+            url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.35.0"/>
       </setupTask>
     </version>
     <version
@@ -31128,7 +31132,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.34.0"/>
+            url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.35.0"/>
       </setupTask>
     </version>
     <description>&lt;a href=&quot;http://www.eclipse.org/scout&quot;>Eclipse Scout&lt;/a> is a Java/HTML5 framework to develop business applications that run on the desktop, on tablets and mobile devices. This package includes Eclipse IDE support for Scout developers and source code.</description>
@@ -31147,7 +31151,7 @@
       </detail>
       <detail
           key="notificationTooltip">
-        <value>Donate to the Eclipse Community for the Eclipse IDE for Web and JavaScript Developers</value>
+        <value>Sponsor the Eclipse IDE for Web and JavaScript Developers</value>
       </detail>
     </annotation>
     <version
@@ -32275,7 +32279,7 @@
       </detail>
       <detail
           key="notificationTooltip">
-        <value>Donate to the Eclipse Community for the Eclipse IDE for Testers</value>
+        <value>Sponsor the Eclipse IDE for Testers</value>
       </detail>
     </annotation>
     <version
@@ -33107,7 +33111,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.34.0"/>
+            url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.35.0"/>
       </setupTask>
     </version>
     <version
@@ -33146,7 +33150,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.34.0"/>
+            url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.35.0"/>
       </setupTask>
     </version>
     <description>This package contains Eclipse features that support the software development quality assurance process, such as Jubula.</description>
@@ -33165,7 +33169,7 @@
       </detail>
       <detail
           key="notificationTooltip">
-        <value>Donate to the Eclipse Community for the Eclipse IDE for Rust Developers</value>
+        <value>Sponsor the Eclipse IDE for Rust Developers</value>
       </detail>
     </annotation>
     <version
@@ -33935,7 +33939,7 @@
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="notificationTooltip">
-        <value>Donate to the Eclipse Community for the Eclipse Platform</value>
+        <value>Sponsor the Eclipse Platform</value>
       </detail>
     </annotation>
     <version
@@ -33967,7 +33971,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.29.0,5.0.0)"/>
         <repository
-            url="https://download.eclipse.org/releases/2023-09/202308251000">
+            url="https://download.eclipse.org/releases/2023-09/202309011000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -34037,7 +34041,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.29.0,5.0.0)"/>
         <repository
-            url="https://download.eclipse.org/releases/2023-09/202308251000">
+            url="https://download.eclipse.org/releases/2023-09/202309011000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -35056,7 +35060,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.34.0"/>
+            url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.35.0"/>
       </setupTask>
     </version>
     <version
@@ -35097,7 +35101,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.34.0"/>
+            url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.35.0"/>
       </setupTask>
     </version>
     <description>This package contains the absolute minimal IDE, suitable only as a base for installing other tools.</description>
@@ -35116,7 +35120,7 @@
       </detail>
       <detail
           key="notificationTooltip">
-        <value>Donate to the Eclipse Community for the Eclipse IDE for Java and Report Developers</value>
+        <value>Sponsor the Eclipse IDE for Java and Report Developers</value>
       </detail>
     </annotation>
     <version
@@ -36959,7 +36963,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.34.0"/>
+            url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.35.0"/>
       </setupTask>
     </version>
     <version
@@ -37004,7 +37008,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.34.0"/>
+            url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.35.0"/>
       </setupTask>
     </version>
     <description>Java EE tools and BIRT reporting tool for Java developers to create Java EE and Web applications that also have reporting needs.</description>
@@ -37019,7 +37023,7 @@
       </detail>
       <detail
           key="notificationTooltip">
-        <value>Donate to the Eclipse Community for the Eclipse for Android Developers</value>
+        <value>Sponsor the Eclipse for Android Developers</value>
       </detail>
     </annotation>
     <version
@@ -37299,7 +37303,7 @@
       </detail>
       <detail
           key="notificationTooltip">
-        <value>Donate to the Eclipse Community for the Eclipse IDE for Automotive Software Developers</value>
+        <value>Sponsor the Eclipse IDE for Automotive Software Developers</value>
       </detail>
     </annotation>
     <version
@@ -37536,7 +37540,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.34.0"/>
+            url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.35.0"/>
       </setupTask>
     </version>
     <version
@@ -37585,7 +37589,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.34.0"/>
+            url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.35.0"/>
       </setupTask>
     </version>
     <description>This package contains frameworks and tools used for the development of embedded automotive software: In addition to Eclipse Platform, Java Development Tools, and Plug-in Development Environment, it includes EMF, Sphinx, GMF, Xtext, Xtend, Xpand, UML2, selected other modeling components, C/C++ development tools, and XML/XSD editors and tools. To keep the package at a reasonable size, it includes only the runtime binaries but no source code and no developer documentation.</description>
@@ -37600,7 +37604,7 @@
       </detail>
       <detail
           key="notificationTooltip">
-        <value>Donate to the Eclipse Community for the Eclipse Standard</value>
+        <value>Sponsor the Eclipse Standard</value>
       </detail>
     </annotation>
     <version
@@ -37774,7 +37778,7 @@
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
         <repository
-            url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.34.0"/>
+            url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.35.0"/>
       </setupTask>
     </version>
     <description>
