@@ -54,6 +54,7 @@ import org.eclipse.emf.common.util.EList;
  *        annotation="http://www.eclipse.org/oomph/setup/Variable name='jre.location-18' type='JRE' label='JRE 18 Location' description='The location of a JDK or JRE compatible with Java 18.' version='JavaSE-18'"
  *        annotation="http://www.eclipse.org/oomph/setup/Variable name='jre.location-19' type='JRE' label='JRE 19 Location' description='The location of a JDK or JRE compatible with Java 19.' version='JavaSE-19'"
  *        annotation="http://www.eclipse.org/oomph/setup/Variable name='jre.location-20' type='JRE' label='JRE 20 Location' description='The location of a JDK or JRE compatible with Java 20.' version='JavaSE-20'"
+ *        annotation="http://www.eclipse.org/oomph/setup/Variable name='jre.location-21' type='JRE' label='JRE 21 Location' description='The location of a JDK or JRE compatible with Java 21.' version='JavaSE-21'"
  * @generated
  */
 public interface JRETask extends SetupTask

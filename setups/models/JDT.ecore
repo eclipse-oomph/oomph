@@ -93,6 +93,10 @@
         <details key="value" value="${jre.location-20}"/>
         <details key="label" value="JRE 20 Location"/>
       </eAnnotations>
+      <eAnnotations source="Choice">
+        <details key="value" value="${jre.location-21}"/>
+        <details key="label" value="JRE 21 Location"/>
+      </eAnnotations>
       <details key="name" value="jre.location-1.1"/>
       <details key="type" value="JRE"/>
       <details key="label" value="JRE 1.1 Location"/>
@@ -159,6 +163,22 @@
       <eAnnotations source="Choice">
         <details key="value" value="${jre.location-17}"/>
         <details key="label" value="JRE 17 Location"/>
+      </eAnnotations>
+      <eAnnotations source="Choice">
+        <details key="value" value="${jre.location-18}"/>
+        <details key="label" value="JRE 18 Location"/>
+      </eAnnotations>
+      <eAnnotations source="Choice">
+        <details key="value" value="${jre.location-19}"/>
+        <details key="label" value="JRE 19 Location"/>
+      </eAnnotations>
+      <eAnnotations source="Choice">
+        <details key="value" value="${jre.location-20}"/>
+        <details key="label" value="JRE 20 Location"/>
+      </eAnnotations>
+      <eAnnotations source="Choice">
+        <details key="value" value="${jre.location-21}"/>
+        <details key="label" value="JRE 21 Location"/>
       </eAnnotations>
       <details key="name" value="jre.location-1.2"/>
       <details key="type" value="JRE"/>
@@ -235,6 +255,10 @@
         <details key="value" value="${jre.location-20}"/>
         <details key="label" value="JRE 20 Location"/>
       </eAnnotations>
+      <eAnnotations source="Choice">
+        <details key="value" value="${jre.location-21}"/>
+        <details key="label" value="JRE 21 Location"/>
+      </eAnnotations>
       <details key="name" value="jre.location-1.3"/>
       <details key="type" value="JRE"/>
       <details key="label" value="JRE 1.3 Location"/>
@@ -306,6 +330,10 @@
         <details key="value" value="${jre.location-20}"/>
         <details key="label" value="JRE 20 Location"/>
       </eAnnotations>
+      <eAnnotations source="Choice">
+        <details key="value" value="${jre.location-21}"/>
+        <details key="label" value="JRE 21 Location"/>
+      </eAnnotations>
       <details key="name" value="jre.location-1.4"/>
       <details key="type" value="JRE"/>
       <details key="label" value="JRE 1.4 Location"/>
@@ -373,6 +401,10 @@
         <details key="value" value="${jre.location-20}"/>
         <details key="label" value="JRE 20 Location"/>
       </eAnnotations>
+      <eAnnotations source="Choice">
+        <details key="value" value="${jre.location-21}"/>
+        <details key="label" value="JRE 21 Location"/>
+      </eAnnotations>
       <details key="name" value="jre.location-1.5"/>
       <details key="type" value="JRE"/>
       <details key="label" value="JRE 1.5 Location"/>
@@ -436,6 +468,10 @@
         <details key="value" value="${jre.location-20}"/>
         <details key="label" value="JRE 20 Location"/>
       </eAnnotations>
+      <eAnnotations source="Choice">
+        <details key="value" value="${jre.location-21}"/>
+        <details key="label" value="JRE 21 Location"/>
+      </eAnnotations>
       <details key="name" value="jre.location-1.6"/>
       <details key="type" value="JRE"/>
       <details key="label" value="JRE 1.6 Location"/>
@@ -495,6 +531,10 @@
         <details key="value" value="${jre.location-20}"/>
         <details key="label" value="JRE 20 Location"/>
       </eAnnotations>
+      <eAnnotations source="Choice">
+        <details key="value" value="${jre.location-21}"/>
+        <details key="label" value="JRE 21 Location"/>
+      </eAnnotations>
       <details key="name" value="jre.location-1.7"/>
       <details key="type" value="JRE"/>
       <details key="label" value="JRE 1.7 Location"/>
@@ -550,6 +590,10 @@
         <details key="value" value="${jre.location-20}"/>
         <details key="label" value="JRE 20 Location"/>
       </eAnnotations>
+      <eAnnotations source="Choice">
+        <details key="value" value="${jre.location-21}"/>
+        <details key="label" value="JRE 21 Location"/>
+      </eAnnotations>
       <details key="name" value="jre.location-1.8"/>
       <details key="type" value="JRE"/>
       <details key="label" value="JRE 1.8 Location"/>
@@ -601,6 +645,10 @@
         <details key="value" value="${jre.location-20}"/>
         <details key="label" value="JRE 20 Location"/>
       </eAnnotations>
+      <eAnnotations source="Choice">
+        <details key="value" value="${jre.location-21}"/>
+        <details key="label" value="JRE 21 Location"/>
+      </eAnnotations>
       <details key="name" value="jre.location-9"/>
       <details key="type" value="JRE"/>
       <details key="label" value="JRE 9 Location"/>
@@ -648,6 +696,10 @@
         <details key="value" value="${jre.location-20}"/>
         <details key="label" value="JRE 20 Location"/>
       </eAnnotations>
+      <eAnnotations source="Choice">
+        <details key="value" value="${jre.location-21}"/>
+        <details key="label" value="JRE 21 Location"/>
+      </eAnnotations>
       <details key="name" value="jre.location-10"/>
       <details key="type" value="JRE"/>
       <details key="label" value="JRE 10 Location"/>
@@ -691,6 +743,10 @@
         <details key="value" value="${jre.location-20}"/>
         <details key="label" value="JRE 20 Location"/>
       </eAnnotations>
+      <eAnnotations source="Choice">
+        <details key="value" value="${jre.location-21}"/>
+        <details key="label" value="JRE 21 Location"/>
+      </eAnnotations>
       <details key="name" value="jre.location-11"/>
       <details key="type" value="JRE"/>
       <details key="label" value="JRE 11 Location"/>
@@ -730,6 +786,10 @@
         <details key="value" value="${jre.location-20}"/>
         <details key="label" value="JRE 20 Location"/>
       </eAnnotations>
+      <eAnnotations source="Choice">
+        <details key="value" value="${jre.location-21}"/>
+        <details key="label" value="JRE 21 Location"/>
+      </eAnnotations>
       <details key="name" value="jre.location-12"/>
       <details key="type" value="JRE"/>
       <details key="label" value="JRE 12 Location"/>
@@ -765,6 +825,10 @@
         <details key="value" value="${jre.location-20}"/>
         <details key="label" value="JRE 20 Location"/>
       </eAnnotations>
+      <eAnnotations source="Choice">
+        <details key="value" value="${jre.location-21}"/>
+        <details key="label" value="JRE 21 Location"/>
+      </eAnnotations>
       <details key="name" value="jre.location-13"/>
       <details key="type" value="JRE"/>
       <details key="label" value="JRE 13 Location"/>
@@ -796,6 +860,10 @@
         <details key="value" value="${jre.location-20}"/>
         <details key="label" value="JRE 20 Location"/>
       </eAnnotations>
+      <eAnnotations source="Choice">
+        <details key="value" value="${jre.location-21}"/>
+        <details key="label" value="JRE 21 Location"/>
+      </eAnnotations>
       <details key="name" value="jre.location-14"/>
       <details key="type" value="JRE"/>
       <details key="label" value="JRE 14 Location"/>
@@ -823,6 +891,10 @@
         <details key="value" value="${jre.location-20}"/>
         <details key="label" value="JRE 20 Location"/>
       </eAnnotations>
+      <eAnnotations source="Choice">
+        <details key="value" value="${jre.location-21}"/>
+        <details key="label" value="JRE 21 Location"/>
+      </eAnnotations>
       <details key="name" value="jre.location-15"/>
       <details key="type" value="JRE"/>
       <details key="label" value="JRE 15 Location"/>
@@ -846,6 +918,10 @@
         <details key="value" value="${jre.location-20}"/>
         <details key="label" value="JRE 20 Location"/>
       </eAnnotations>
+      <eAnnotations source="Choice">
+        <details key="value" value="${jre.location-21}"/>
+        <details key="label" value="JRE 21 Location"/>
+      </eAnnotations>
       <details key="name" value="jre.location-16"/>
       <details key="type" value="JRE"/>
       <details key="label" value="JRE 16 Location"/>
@@ -865,6 +941,10 @@
         <details key="value" value="${jre.location-20}"/>
         <details key="label" value="JRE 20 Location"/>
       </eAnnotations>
+      <eAnnotations source="Choice">
+        <details key="value" value="${jre.location-21}"/>
+        <details key="label" value="JRE 21 Location"/>
+      </eAnnotations>
       <details key="name" value="jre.location-17"/>
       <details key="type" value="JRE"/>
       <details key="label" value="JRE 17 Location"/>
@@ -880,6 +960,10 @@
         <details key="value" value="${jre.location-20}"/>
         <details key="label" value="JRE 20 Location"/>
       </eAnnotations>
+      <eAnnotations source="Choice">
+        <details key="value" value="${jre.location-21}"/>
+        <details key="label" value="JRE 21 Location"/>
+      </eAnnotations>
       <details key="name" value="jre.location-18"/>
       <details key="type" value="JRE"/>
       <details key="label" value="JRE 18 Location"/>
@@ -891,6 +975,10 @@
         <details key="value" value="${jre.location-20}"/>
         <details key="label" value="JRE 20 Location"/>
       </eAnnotations>
+      <eAnnotations source="Choice">
+        <details key="value" value="${jre.location-21}"/>
+        <details key="label" value="JRE 21 Location"/>
+      </eAnnotations>
       <details key="name" value="jre.location-19"/>
       <details key="type" value="JRE"/>
       <details key="label" value="JRE 19 Location"/>
@@ -898,11 +986,22 @@
       <details key="version" value="JavaSE-19"/>
     </eAnnotations>
     <eAnnotations source="http://www.eclipse.org/oomph/setup/Variable">
+      <eAnnotations source="Choice">
+        <details key="value" value="${jre.location-21}"/>
+        <details key="label" value="JRE 21 Location"/>
+      </eAnnotations>
       <details key="name" value="jre.location-20"/>
       <details key="type" value="JRE"/>
       <details key="label" value="JRE 20 Location"/>
       <details key="description" value="The location of a JDK or JRE compatible with Java 20."/>
       <details key="version" value="JavaSE-20"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/oomph/setup/Variable">
+      <details key="name" value="jre.location-21"/>
+      <details key="type" value="JRE"/>
+      <details key="label" value="JRE 21 Location"/>
+      <details key="description" value="The location of a JDK or JRE compatible with Java 21."/>
+      <details key="version" value="JavaSE-21"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
