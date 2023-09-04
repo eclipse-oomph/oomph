@@ -33,7 +33,7 @@ pipeline {
             fi
 
             scp ${LOGIN}:${OOMPH_DIR}/products/latest/eclipse-inst-jre-linux64.tar.gz .
-            tar -xf eclipse-inst-jre-linux64.tar.gz
+            tar -xf --warning=no-unknown-keyword eclipse-inst-jre-linux64.tar.gz
 
             eclipse-installer/eclipse-inst \
               -application org.eclipse.oomph.setup.core.SetupArchiver \
