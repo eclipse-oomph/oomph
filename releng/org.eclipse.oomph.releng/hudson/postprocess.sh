@@ -45,7 +45,7 @@ cd $tmp
 
 if [[ $file == *.tar.gz ]]; then
 
-  tar -xzf $file
+  tar --warning=no-unknown-keyword -xzf $file
   bash $script $file $args
 
   if [[ $file == *mac64* ]]; then

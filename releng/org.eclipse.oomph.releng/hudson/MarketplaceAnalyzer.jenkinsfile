@@ -44,7 +44,7 @@ pipeline {
             OOMPH_DIR="/home/data/httpd/download.eclipse.org/oomph"
 
             scp ${LOGIN}:${OOMPH_DIR}/products/latest/eclipse-inst-linux64.tar.gz .
-            tar -xf eclipse-inst-linux64.tar.gz
+            tar --warning=no-unknown-keyword -xf eclipse-inst-linux64.tar.gz
 
             OUTPUT="report"
 
