@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.8"?>
-<target name="Generated from Oomph" sequenceNumber="130">
+<target name="Generated from Oomph" sequenceNumber="131">
   <locations>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
       <unit id="bcpg" version="0.0.0"/>
@@ -10,15 +10,15 @@
       <unit id="com.google.gson" version="0.0.0"/>
       <unit id="com.google.guava" version="0.0.0"/>
       <unit id="com.google.guava.failureaccess" version="0.0.0"/>
+      <unit id="com.googlecode.javaewah.JavaEWAH" version="0.0.0"/>
       <unit id="com.sun.jna" version="0.0.0"/>
       <unit id="com.sun.jna.platform" version="0.0.0"/>
       <unit id="com.sun.xml.bind" version="0.0.0"/>
       <unit id="jakarta.activation" version="0.0.0"/>
-      <unit id="jakarta.annotation-api" version="0.0.0"/>
-      <unit id="jakarta.inject.jakarta.inject-api" version="0.0.0"/>
       <unit id="jakarta.xml.bind" version="0.0.0"/>
-      <unit id="javaewah" version="0.0.0"/>
       <unit id="javax.activation" version="0.0.0"/>
+      <unit id="javax.annotation" version="0.0.0"/>
+      <unit id="javax.inject" version="0.0.0"/>
       <unit id="javax.xml" version="0.0.0"/>
       <unit id="jaxen" version="0.0.0"/>
       <unit id="net.i2p.crypto.eddsa" version="0.0.0"/>
@@ -124,7 +124,7 @@
       <repository location="https://download.eclipse.org/justj/jres/17/updates/milestone/latest"/>
       <repository location="https://download.eclipse.org/usssdk/updates/latest"/>
       <repository location="https://download.eclipse.org/webtools/downloads/drops/R3.29.0/R-3.29.0-20230303230236/repository"/>
-      <repository location="https://download.eclipse.org/rt/ecf/3.14.38/site.p2/3.14.38.v20230507-1923"/>
+      <repository location="https://download.eclipse.org/rt/ecf/3.14.39/site.p2/3.14.39.v20230529-2152"/>
       <repository location="https://download.eclipse.org/eclipse/updates/4.29-I-builds"/>
     </location>
   </locations>
