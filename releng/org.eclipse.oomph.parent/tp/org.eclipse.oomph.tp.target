@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.8"?>
-<target name="Generated from Oomph" sequenceNumber="131">
+<target name="Generated from Oomph" sequenceNumber="132">
   <locations>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
       <unit id="bcpg" version="0.0.0"/>
       <unit id="bcpkix" version="0.0.0"/>
       <unit id="bcprov" version="0.0.0"/>
       <unit id="bcutil" version="0.0.0"/>
+      <unit id="com.evolvedbinary.thirdparty.org.apache.xmlrpc.xmlrpc-client" version="0.0.0"/>
       <unit id="com.google.gson" version="0.0.0"/>
       <unit id="com.google.guava" version="0.0.0"/>
       <unit id="com.google.guava.failureaccess" version="0.0.0"/>
@@ -14,12 +15,10 @@
       <unit id="com.sun.jna" version="0.0.0"/>
       <unit id="com.sun.jna.platform" version="0.0.0"/>
       <unit id="com.sun.xml.bind" version="0.0.0"/>
-      <unit id="jakarta.activation" version="0.0.0"/>
-      <unit id="jakarta.xml.bind" version="0.0.0"/>
+      <unit id="jakarta.annotation-api" version="0.0.0"/>
+      <unit id="jakarta.inject.jakarta.inject-api" version="0.0.0"/>
+      <unit id="jakarta.xml.bind-api" version="0.0.0"/>
       <unit id="javax.activation" version="0.0.0"/>
-      <unit id="javax.annotation" version="0.0.0"/>
-      <unit id="javax.inject" version="0.0.0"/>
-      <unit id="javax.xml" version="0.0.0"/>
       <unit id="jaxen" version="0.0.0"/>
       <unit id="net.i2p.crypto.eddsa" version="0.0.0"/>
       <unit id="org.apache.aries.spifly.dynamic.bundle" version="0.0.0"/>
@@ -27,7 +26,7 @@
       <unit id="org.apache.commons.collections" version="0.0.0"/>
       <unit id="org.apache.commons.commons-beanutils" version="0.0.0"/>
       <unit id="org.apache.commons.commons-codec" version="0.0.0"/>
-      <unit id="org.apache.commons.compress" version="0.0.0"/>
+      <unit id="org.apache.commons.commons-compress" version="0.0.0"/>
       <unit id="org.apache.commons.httpclient" version="0.0.0"/>
       <unit id="org.apache.commons.io" version="0.0.0"/>
       <unit id="org.apache.commons.jxpath" version="0.0.0"/>
@@ -46,8 +45,6 @@
       <unit id="org.apache.ws.commons.util" version="0.0.0"/>
       <unit id="org.apache.xerces" version="0.0.0"/>
       <unit id="org.apache.xml.resolver" version="0.0.0"/>
-      <unit id="org.apache.xmlrpc.client" version="0.0.0"/>
-      <unit id="org.apache.xmlrpc.common" version="0.0.0"/>
       <unit id="org.eclipse.core.runtime.feature.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.e4.tools.emf.ui" version="0.0.0"/>
       <unit id="org.eclipse.e4.tools.services" version="0.0.0"/>
@@ -113,7 +110,7 @@
       <unit id="org.sat4j.core" version="0.0.0"/>
       <unit id="org.sat4j.pb" version="0.0.0"/>
       <unit id="slf4j.api" version="0.0.0"/>
-      <unit id="slf4j.simple" version="0.0.0"/>
+      <unit id="slf4j.nop" version="0.0.0"/>
       <repository location="https://download.eclipse.org/modeling/emf/emf/builds/milestone/latest"/>
       <repository location="https://download.eclipse.org/egit/updates-stable-nightly"/>
       <repository location="https://download.eclipse.org/mylyn/updates/nightly/latest"/>
@@ -125,7 +122,7 @@
       <repository location="https://download.eclipse.org/usssdk/updates/latest"/>
       <repository location="https://download.eclipse.org/webtools/downloads/drops/R3.29.0/R-3.29.0-20230303230236/repository"/>
       <repository location="https://download.eclipse.org/rt/ecf/3.14.39/site.p2/3.14.39.v20230529-2152"/>
-      <repository location="https://download.eclipse.org/eclipse/updates/4.29-I-builds"/>
+      <repository location="https://download.eclipse.org/eclipse/updates/4.29/R-4.29-202309031000"/>
     </location>
   </locations>
 </target>
