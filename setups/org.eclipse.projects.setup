@@ -427,10 +427,15 @@
     <setupTask
         xsi:type="setup:VariableTask"
         name="eclipse.latest.p2"
-        value="https://download.eclipse.org/eclipse/updates/4.29-I-builds"
-        label="Eclipse Latest I-Build p2 Repository - 4.29">
+        value="https://download.eclipse.org/eclipse/updates/4.30-I-builds"
+        label="Eclipse Latest I-Build p2 Repository - 4.30">
       <description>The update site of the latest Eclipse project's builds, typically an I-Build for the next release</description>
     </setupTask>
+    <setupTask
+        xsi:type="setup:VariableTask"
+        name="eclipse.4.29.release.p2"
+        value="https://download.eclipse.org/eclipse/updates/4.29/R-4.29-202309031000"
+        label="Eclipse 4.29 Release p2 Repository"/>
     <setupTask
         xsi:type="setup:VariableTask"
         name="eclipse.4.28.release.p2"
@@ -474,8 +479,8 @@
     <setupTask
         xsi:type="setup:VariableTask"
         name="eclipse.latest.release.p2"
-        value="${eclipse.4.28.release.p2}"
-        label="Eclipse Latest Release p2 Repository - 4.28">
+        value="${eclipse.4.29.release.p2}"
+        label="Eclipse Latest Release p2 Repository - 4.29">
       <description>The update site of the latest released Eclipse project's builds, always an R-Build for the most recent release</description>
     </setupTask>
     <setupTask
@@ -486,6 +491,9 @@
         label="Target Platform">
       <annotation
           source="http://www.eclipse.org/oomph/setup/GlobalVariable"/>
+      <choice
+          value="2023-12"
+          label="Eclipse 2023-12 - 4.30"/>
       <choice
           value="2023-09"
           label="Eclipse 2023-09 - 4.29"/>
@@ -587,7 +595,7 @@
     <setupTask
         xsi:type="setup:VariableTask"
         name="eclipse.target.platform.latest"
-        value="2023-09"
+        value="2023-12"
         storageURI="scope://Workspace"
         label="Target Platform Latest">
       <annotation
@@ -597,7 +605,7 @@
     <setupTask
         xsi:type="setup:VariableTask"
         name="eclipse.target.platform.latest.released"
-        value="2023-06"
+        value="2023-09"
         storageURI="scope://Workspace"
         label="Target Platform Latest Released">
       <annotation
@@ -612,6 +620,9 @@
         label="API Baseline Target Platform">
       <annotation
           source="http://www.eclipse.org/oomph/setup/GlobalVariable"/>
+      <choice
+          value="2023-09"
+          label="Eclipse 2023-09 - 4.29"/>
       <choice
           value="2023-06"
           label="Eclipse 2023-06 - 4.28"/>
@@ -707,7 +718,7 @@
     <setupTask
         xsi:type="setup:VariableTask"
         name="eclipse.api.baseline.target.platform.latest.released"
-        value="2023-06"
+        value="2023-09"
         storageURI="scope://Workspace"
         label="Target Platform Latest Released">
       <annotation
@@ -850,9 +861,14 @@
       <repositoryList
           name="None"/>
       <repositoryList
-          name="2023-09">
+          name="2023-12">
         <repository
             url="${eclipse.latest.p2}"/>
+      </repositoryList>
+      <repositoryList
+          name="2023-09">
+        <repository
+            url="${eclipse.4.29.release.p2}"/>
       </repositoryList>
       <repositoryList
           name="2023-06">
@@ -1017,6 +1033,11 @@
         includeSources="false">
       <repositoryList
           name="None"/>
+      <repositoryList
+          name="2023-09">
+        <repository
+            url="${eclipse.4.29.release.p2}"/>
+      </repositoryList>
       <repositoryList
           name="2023-06">
         <repository

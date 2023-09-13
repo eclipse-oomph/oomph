@@ -516,6 +516,38 @@
       <sourceLocator
           rootFolder="${github.clone.oomph.github.location}"/>
       <repositoryList
+          name="2023-12">
+        <repository
+            url="https://download.eclipse.org/modeling/emf/emf/builds/milestone/latest"/>
+        <repository
+            url="https://download.eclipse.org/egit/updates-stable-nightly"/>
+        <repository
+            url="https://download.eclipse.org/mylyn/updates/nightly/latest"/>
+        <repository
+            url="https://download.eclipse.org/nebula/snapshot"/>
+        <repository
+            url="https://download.eclipse.org/technology/m2e/snapshots/latest"/>
+        <repository
+            url="https://download.eclipse.org/technology/swtbot/snapshots"/>
+        <repository
+            url="https://download.eclipse.org/tools/orbit/downloads/latest-R"/>
+        <repository
+            url="https://download.eclipse.org/justj/jres/17/updates/milestone/latest"/>
+        <repository
+            url="https://download.eclipse.org/usssdk/updates/latest"/>
+        <repository
+            url="https://download.eclipse.org/webtools/downloads/drops/R3.29.0/R-3.29.0-20230303230236/repository"/>
+        <repository
+            url="https://download.eclipse.org/rt/ecf/3.14.39/site.p2/3.14.39.v20230529-2152">
+          <annotation>
+            <detail
+                key="justification">
+              <value>Needed for Mylyn</value>
+            </detail>
+          </annotation>
+        </repository>
+      </repositoryList>
+      <repositoryList
           name="2023-09">
         <repository
             url="https://download.eclipse.org/modeling/emf/emf/builds/milestone/latest"/>
@@ -538,7 +570,7 @@
         <repository
             url="https://download.eclipse.org/webtools/downloads/drops/R3.29.0/R-3.29.0-20230303230236/repository"/>
         <repository
-            url="https://download.eclipse.org/rt/ecf/3.14.38/site.p2/3.14.38.v20230507-1923">
+            url="https://download.eclipse.org/rt/ecf/3.14.39/site.p2/3.14.39.v20230529-2152">
           <annotation>
             <detail
                 key="justification">
