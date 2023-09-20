@@ -18,7 +18,6 @@ import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.core.runtime.Platform;
 
-import org.apache.hc.client5.http.utils.DateUtils;
 import org.osgi.framework.Bundle;
 
 import java.io.BufferedReader;
@@ -39,11 +38,14 @@ import java.net.SocketException;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -647,7 +649,7 @@ public final class HTTPServer
 
     protected static String formatDate(long lastModified)
     {
-      return DateUtils.formatDate(new Date(lastModified));
+      return DateTimeFormatter.RFC_1123_DATE_TIME.format(OffsetDateTime.ofInstant(Instant.ofEpochMilli(lastModified), ZoneOffset.UTC));
     }
 
     protected static void sendResponse(DataOutputStream output, String status, String fileName, long lastModified, boolean ignoreExceptions)
@@ -708,7 +710,7 @@ public final class HTTPServer
       }
       catch (IOException ex)
       {
-        if (ignoreExceptions || (ex instanceof SocketException && ex.getMessage().equals("Software caused connection abort: socket write error")))
+        if (ignoreExceptions || ex instanceof SocketException && ex.getMessage().equals("Software caused connection abort: socket write error"))
         {
           return;
         }

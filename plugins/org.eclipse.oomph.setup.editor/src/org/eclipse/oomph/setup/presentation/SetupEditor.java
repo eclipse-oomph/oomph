@@ -281,6 +281,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.Writer;
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.net.CookieStore;
 import java.net.HttpCookie;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -6213,13 +6216,22 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
     private void applyCookies()
     {
-      List<java.net.URI> uris = ECFURIHandlerImpl.COOKIE_STORE.getURIs();
-      for (java.net.URI cookieURI : uris)
+      CookieHandler cookieHandler = CookieManager.getDefault();
+      if (cookieHandler instanceof CookieManager)
       {
-        String url = cookieURI.toString();
-        for (HttpCookie httpCookie : ECFURIHandlerImpl.COOKIE_STORE.get(cookieURI))
+        CookieManager cookieManager = (CookieManager)cookieHandler;
+        CookieStore cookieStore = cookieManager.getCookieStore();
+        if (cookieStore != null)
         {
-          Browser.setCookie(httpCookie.getValue(), url);
+          for (java.net.URI uri : cookieStore.getURIs())
+          {
+            for (HttpCookie httpCookie : cookieStore.get(uri))
+            {
+              {
+                Browser.setCookie(httpCookie.getValue(), uri.toString());
+              }
+            }
+          }
         }
       }
     }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.8"?>
-<target name="Generated from Oomph" sequenceNumber="133">
+<target name="Generated from Oomph" sequenceNumber="136">
   <locations>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
       <unit id="bcpg" version="0.0.0"/>
@@ -23,6 +23,7 @@
       <unit id="net.i2p.crypto.eddsa" version="0.0.0"/>
       <unit id="org.apache.aries.spifly.dynamic.bundle" version="0.0.0"/>
       <unit id="org.apache.commons.cli" version="0.0.0"/>
+      <unit id="org.apache.commons.codec" version="0.0.0"/>
       <unit id="org.apache.commons.collections" version="0.0.0"/>
       <unit id="org.apache.commons.commons-beanutils" version="0.0.0"/>
       <unit id="org.apache.commons.commons-codec" version="0.0.0"/>
@@ -31,6 +32,7 @@
       <unit id="org.apache.commons.io" version="0.0.0"/>
       <unit id="org.apache.commons.jxpath" version="0.0.0"/>
       <unit id="org.apache.commons.lang" version="0.0.0"/>
+      <unit id="org.apache.commons.logging" version="0.0.0"/>
       <unit id="org.apache.felix.scr" version="0.0.0"/>
       <unit id="org.apache.httpcomponents.httpclient" version="0.0.0"/>
       <unit id="org.apache.httpcomponents.httpcore" version="0.0.0"/>
@@ -51,7 +53,7 @@
       <unit id="org.eclipse.ecf.core.feature.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.ecf.core.ssl.feature.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.ecf.filetransfer.feature.feature.group" version="0.0.0"/>
-      <unit id="org.eclipse.ecf.filetransfer.httpclient5.feature.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.ecf.filetransfer.httpclientjava.feature.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.ecf.filetransfer.ssl.feature.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.egit.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.emf.sdk.feature.group" version="0.0.0"/>
@@ -59,6 +61,7 @@
       <unit id="org.eclipse.equinox.p2.discovery" version="0.0.0"/>
       <unit id="org.eclipse.equinox.p2.discovery.compatibility" version="0.0.0"/>
       <unit id="org.eclipse.equinox.p2.ui.discovery" version="0.0.0"/>
+      <unit id="org.eclipse.jetty.servlet-api" version="0.0.0"/>
       <unit id="org.eclipse.jgit.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.jgit.gpg.bc.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.jgit.http.apache.feature.group" version="0.0.0"/>
@@ -80,7 +83,9 @@
       <unit id="org.eclipse.nebula.cwt" version="0.0.0"/>
       <unit id="org.eclipse.nebula.widgets.cdatetime" version="0.0.0"/>
       <unit id="org.eclipse.nebula.widgets.tablecombo" version="0.0.0"/>
+      <unit id="org.eclipse.orbit.xml-apis-ext" version="0.0.0"/>
       <unit id="org.eclipse.sdk.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.search.core" version="0.0.0"/>
       <unit id="org.eclipse.swtbot.eclipse.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.swtbot.generator" version="0.0.0"/>
       <unit id="org.eclipse.userstorage" version="0.0.0"/>
@@ -98,6 +103,7 @@
       <unit id="org.hamcrest.library" version="0.0.0"/>
       <unit id="org.jdom" version="0.0.0"/>
       <unit id="org.jdom2" version="0.0.0"/>
+      <unit id="org.mortbay.jasper.apache-jsp" version="0.0.0"/>
       <unit id="org.objectweb.asm" version="0.0.0"/>
       <unit id="org.objectweb.asm.commons" version="0.0.0"/>
       <unit id="org.objectweb.asm.tree" version="0.0.0"/>
@@ -121,7 +127,6 @@
       <repository location="https://download.eclipse.org/justj/jres/17/updates/milestone/latest"/>
       <repository location="https://download.eclipse.org/usssdk/updates/latest"/>
       <repository location="https://download.eclipse.org/webtools/downloads/drops/R3.29.0/R-3.29.0-20230303230236/repository"/>
-      <repository location="https://download.eclipse.org/rt/ecf/3.14.39/site.p2/3.14.39.v20230529-2152"/>
       <repository location="https://download.eclipse.org/eclipse/updates/4.30-I-builds"/>
     </location>
   </locations>

@@ -501,9 +501,6 @@
           name="org.eclipse.m2e.pde.feature.feature.group"/>
       <requirement
           name="org.eclipse.justj.openjdk.hotspot.jre.minimal.stripped.feature.group"/>
-      <requirement
-          name="org.apache.httpcomponents.httpclient"
-          versionRange="[4.5.0,4.6.0)"/>
       <sourceLocator
           rootFolder="${github.clone.oomph.location}">
         <predicate
@@ -537,15 +534,6 @@
             url="https://download.eclipse.org/usssdk/updates/latest"/>
         <repository
             url="https://download.eclipse.org/webtools/downloads/drops/R3.29.0/R-3.29.0-20230303230236/repository"/>
-        <repository
-            url="https://download.eclipse.org/rt/ecf/3.14.39/site.p2/3.14.39.v20230529-2152">
-          <annotation>
-            <detail
-                key="justification">
-              <value>Needed for Mylyn</value>
-            </detail>
-          </annotation>
-        </repository>
       </repositoryList>
       <repositoryList
           name="2023-09">

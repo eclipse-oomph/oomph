@@ -385,6 +385,18 @@ public class CachingTransport extends Transport
           ReflectUtil.setValue("exception", status, wrappedException); //$NON-NLS-1$
         }
       }
+      else
+      {
+        Throwable statusException = exception.getStatus().getException();
+        if (statusException != null)
+        {
+          String message = statusException.getMessage();
+          if (message.startsWith("HTTP/1.1") && uri.getPath() != null && uri.getPath().startsWith("/stats/")) //$NON-NLS-1$ //$NON-NLS-2$
+          {
+            throw new FileNotFoundException(NLS.bind("File not found: {0}", uri)); //$NON-NLS-1$ // This is what ECF normally throws.
+          }
+        }
+      }
 
       throw exception;
     }

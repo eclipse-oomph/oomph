@@ -23,7 +23,6 @@ import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.util.PropertiesUtil;
-import org.eclipse.oomph.util.ReflectUtil;
 import org.eclipse.oomph.util.StringUtil;
 import org.eclipse.oomph.util.WorkerPool;
 
@@ -50,7 +49,6 @@ import org.eclipse.ecf.core.util.Proxy;
 import org.eclipse.ecf.core.util.ProxyAddress;
 import org.eclipse.ecf.filetransfer.BrowseFileTransferException;
 import org.eclipse.ecf.filetransfer.IFileTransferListener;
-import org.eclipse.ecf.filetransfer.IIncomingFileTransfer;
 import org.eclipse.ecf.filetransfer.IRemoteFile;
 import org.eclipse.ecf.filetransfer.IRemoteFileInfo;
 import org.eclipse.ecf.filetransfer.IRemoteFileSystemBrowserContainerAdapter;
@@ -65,7 +63,6 @@ import org.eclipse.ecf.filetransfer.events.IIncomingFileTransferReceiveDoneEvent
 import org.eclipse.ecf.filetransfer.events.IIncomingFileTransferReceiveStartEvent;
 import org.eclipse.ecf.filetransfer.events.IRemoteFileSystemBrowseEvent;
 import org.eclipse.ecf.filetransfer.events.IRemoteFileSystemEvent;
-import org.eclipse.ecf.filetransfer.identity.IFileID;
 import org.eclipse.ecf.provider.filetransfer.identity.FileTransferID;
 import org.eclipse.ecf.provider.filetransfer.identity.FileTransferNamespace;
 import org.eclipse.ecf.provider.filetransfer.util.ProxySetupHelper;
@@ -75,9 +72,6 @@ import org.eclipse.equinox.security.storage.ISecurePreferences;
 import org.eclipse.equinox.security.storage.StorageException;
 import org.eclipse.osgi.util.NLS;
 
-import org.apache.hc.client5.http.cookie.BasicCookieStore;
-import org.apache.hc.client5.http.cookie.Cookie;
-import org.apache.hc.client5.http.utils.DateUtils;
 import org.osgi.framework.Version;
 
 import java.io.ByteArrayInputStream;
@@ -87,18 +81,14 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.CookieManager;
-import java.net.CookieStore;
-import java.net.HttpCookie;
 import java.net.HttpURLConnection;
 import java.net.SocketTimeoutException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.ArrayList;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -124,8 +114,6 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
   public static final String OPTION_PROXY_AUTHORIZATION = "OPTION_PROXY_AUTHORIZATION"; //$NON-NLS-1$
 
   public static final String OPTION_MONITOR = "OPTION_MONITOR"; //$NON-NLS-1$
-
-  public static final CookieStore COOKIE_STORE = FileTransferListener.DELEGATING_COOKIE_STORE;
 
   public static final String OPTION_LOGIN_URI = "OPTION_LOGIN_URI"; //$NON-NLS-1$
 
@@ -460,11 +448,6 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
     return defaultAuthorizationHandler;
   }
 
-  private static String getHost(java.net.URI uri)
-  {
-    return uri.getHost();
-  }
-
   private static String getHost(URI uri)
   {
     String authority = uri.authority();
@@ -478,11 +461,12 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
     return null;
   }
 
-  private static Date parseHTTPDate(String string)
+  private static Long parseHTTPDate(String string)
   {
     try
     {
-      return DateUtils.parseDate(string);
+      ZonedDateTime zdt = ZonedDateTime.parse(string, DateTimeFormatter.RFC_1123_DATE_TIME);
+      return zdt.toInstant().toEpochMilli();
     }
     catch (Exception ex)
     {
@@ -823,11 +807,6 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
    */
   private static final class FileTransferListener implements IFileTransferListener, ConnectionListener
   {
-    @SuppressWarnings("all")
-    private static final BasicCookieStore COOKIE_STORE = new BasicCookieStore();
-
-    private static final DelegatingCookieStore DELEGATING_COOKIE_STORE = new DelegatingCookieStore(COOKIE_STORE);
-
     public final CountDownLatch receiveLatch = new CountDownLatch(1);
 
     public final String expectedETag;
@@ -863,8 +842,6 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
           receiveLatch.countDown();
           return;
         }
-
-        applyCookieStore(connectStartEvent);
       }
       else if (event instanceof IIncomingFileTransferReceiveStartEvent)
       {
@@ -885,15 +862,15 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
         Map responseHeaders = receiveStartEvent.getResponseHeaders();
         if (responseHeaders != null)
         {
-          eTag = (String)responseHeaders.get("ETag"); //$NON-NLS-1$
+          eTag = getValue(responseHeaders, "ETag"); //$NON-NLS-1$
 
-          String lastModifiedValue = (String)responseHeaders.get("Last-Modified"); //$NON-NLS-1$
+          String lastModifiedValue = getValue(responseHeaders, "Last-Modified"); //$NON-NLS-1$
           if (lastModifiedValue != null)
           {
-            Date date = parseHTTPDate(lastModifiedValue.toString());
-            if (date != null)
+            Long time = parseHTTPDate(lastModifiedValue.toString());
+            if (time != null)
             {
-              lastModified = date.getTime();
+              lastModified = time;
               if (eTag == null)
               {
                 eTag = Long.toString(lastModified);
@@ -943,101 +920,25 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
       }
     }
 
-    private static void applyCookieStore(final IFileTransferConnectStartEvent connectStartEvent)
+    @SuppressWarnings("rawtypes")
+    private static String getValue(Map responseHeaders, String key)
     {
-      IIncomingFileTransfer fileTransfer = ObjectUtil.adapt(connectStartEvent, IIncomingFileTransfer.class);
-      final IFileID fileID = connectStartEvent.getFileID();
-      try
+      Object value = responseHeaders.get(key);
+      if (value instanceof String)
       {
-        if (fileTransfer != null)
+        return (String)value;
+      }
+
+      if (value instanceof List<?>)
+      {
+        List<?> list = (List)value;
+        if (list.size() == 1)
         {
-          Object httpClient = ReflectUtil.getValue("httpClient", fileTransfer); //$NON-NLS-1$
-
-          if (TRACE)
-          {
-            System.out.println(NLS.bind(Messages.ECFURIHandlerImpl_ManageCookies_message, fileID.getURI(), httpClient));
-          }
-
-          ReflectUtil.setValue(ReflectUtil.getField(httpClient.getClass(), "cookieStore"), httpClient, new org.apache.hc.client5.http.cookie.CookieStore() //$NON-NLS-1$
-          {
-            @Override
-            @SuppressWarnings("all")
-            public List<Cookie> getCookies()
-            {
-              return COOKIE_STORE.getCookies();
-            }
-
-            @Override
-            @SuppressWarnings("all")
-            public boolean clearExpired(Date date)
-            {
-              synchronized (COOKIE_STORE)
-              {
-                List<Cookie> originalCookies = new ArrayList<>(COOKIE_STORE.getCookies());
-                COOKIE_STORE.clearExpired(date);
-                List<Cookie> remainingCookies = COOKIE_STORE.getCookies();
-                originalCookies.removeAll(remainingCookies);
-
-                for (Cookie cookie : originalCookies)
-                {
-                  HttpCookie httpCookie = createCookie(cookie);
-                  DELEGATING_COOKIE_STORE.basicRemove(null, new HttpCookie(cookie.getName(), cookie.getValue()));
-                }
-
-                return !originalCookies.isEmpty();
-              }
-            }
-
-            @Override
-            @SuppressWarnings("all")
-            public void clear()
-            {
-              COOKIE_STORE.clear();
-              DELEGATING_COOKIE_STORE.basicRemoveAll();
-            }
-
-            @Override
-            @SuppressWarnings("all")
-            public void addCookie(Cookie cookie)
-            {
-              try
-              {
-                java.net.URI uri = fileID.getURI();
-                HttpCookie httpCookie = createCookie(cookie);
-                DELEGATING_COOKIE_STORE.basicAdd(uri, httpCookie);
-              }
-              catch (Exception ex)
-              {
-                // Ignore bad information.
-              }
-
-              COOKIE_STORE.addCookie(cookie);
-            }
-
-            public HttpCookie createCookie(Cookie cookie)
-            {
-              HttpCookie httpCookie = new HttpCookie(cookie.getName(), cookie.getValue());
-              httpCookie.setDomain(cookie.getDomain());
-              httpCookie.setPath(cookie.getPath());
-              return httpCookie;
-            }
-          }, true);
+          return (String)list.get(0);
         }
       }
-      catch (Throwable throwable)
-      {
-        if (TRACE)
-        {
-          try
-          {
-            System.out.println(NLS.bind(Messages.ECFURIHandlerImpl_FailedToManage_message, fileID.getURI()));
-          }
-          catch (URISyntaxException ex)
-          {
-            System.out.println(NLS.bind(Messages.ECFURIHandlerImpl_BadFileID_message, fileID));
-          }
-        }
-      }
+
+      return null;
     }
 
     @Override
@@ -1062,111 +963,6 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
     public int getErrorCode()
     {
       return ((IncomingFileTransferException)exception).getErrorCode();
-    }
-
-    /**
-     * @author Ed Merks
-     */
-    private static class DelegatingCookieStore implements CookieStore
-    {
-      private final CookieStore delegate = new CookieManager().getCookieStore();
-
-      private final BasicCookieStore basicCookieStore;
-
-      public DelegatingCookieStore(BasicCookieStore basicCookieStore)
-      {
-        this.basicCookieStore = basicCookieStore;
-      }
-
-      @Override
-      public void add(java.net.URI uri, HttpCookie httpCookie)
-      {
-        basicAdd(uri, httpCookie);
-        basicCookieStore.addCookie(createCookie(uri, httpCookie));
-      }
-
-      public void basicAdd(java.net.URI uri, HttpCookie httpCookie)
-      {
-        if (TRACE)
-        {
-          System.out.println(NLS.bind(Messages.ECFURIHandlerImpl_AddingCookie_message, uri, httpCookie));
-        }
-
-        delegate.add(uri, httpCookie);
-      }
-
-      @Override
-      public List<HttpCookie> get(java.net.URI uri)
-      {
-        return delegate.get(uri);
-      }
-
-      @Override
-      public List<HttpCookie> getCookies()
-      {
-        return delegate.getCookies();
-      }
-
-      @Override
-      public List<java.net.URI> getURIs()
-      {
-        return delegate.getURIs();
-      }
-
-      @Override
-      public boolean remove(java.net.URI uri, HttpCookie httpCookie)
-      {
-        org.apache.hc.client5.http.impl.cookie.BasicClientCookie basicClientCookie = createCookie(uri, httpCookie);
-        basicClientCookie.setExpiryDate(new Date(System.currentTimeMillis() - 1000));
-        basicCookieStore.addCookie(basicClientCookie);
-        return basicRemove(uri, httpCookie);
-      }
-
-      public boolean basicRemove(java.net.URI uri, HttpCookie cookie)
-      {
-        if (TRACE)
-        {
-          System.out.println(NLS.bind(Messages.ECFURIHandlerImpl_AddingCookie_message, uri, cookie));
-        }
-
-        return delegate.remove(uri, cookie);
-      }
-
-      @Override
-      public boolean removeAll()
-      {
-        basicCookieStore.clear();
-        return basicRemoveAll();
-      }
-
-      public boolean basicRemoveAll()
-      {
-        return delegate.removeAll();
-      }
-
-      private org.apache.hc.client5.http.impl.cookie.BasicClientCookie createCookie(java.net.URI uri, HttpCookie httpCookie)
-      {
-        org.apache.hc.client5.http.impl.cookie.BasicClientCookie basicClientCookie = new org.apache.hc.client5.http.impl.cookie.BasicClientCookie(
-            httpCookie.getName(), httpCookie.getValue());
-        basicClientCookie.setPath(httpCookie.getPath());
-        if (uri != null)
-        {
-          basicClientCookie.setDomain(uri.getHost());
-        }
-
-        if (httpCookie.hasExpired())
-        {
-          basicClientCookie.setExpiryDate(new Date(System.currentTimeMillis() - 1000));
-        }
-
-        return basicClientCookie;
-      }
-
-      @Override
-      public String toString()
-      {
-        return getCookies().toString();
-      }
     }
   }
 
@@ -2911,21 +2707,6 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
               // Return here so that we don't needlessly put the same authorization back the map.
               return true;
             }
-
-            java.net.URI javaNetFormURI;
-            try
-            {
-              javaNetFormURI = new java.net.URI(formURI.toString());
-            }
-            catch (URISyntaxException ex)
-            {
-              throw new IOExceptionWithCause(ex);
-            }
-
-            for (HttpCookie httpCookie : COOKIE_STORE.get(javaNetFormURI))
-            {
-              COOKIE_STORE.remove(javaNetFormURI, httpCookie);
-            }
           }
 
           URI formActionURI = readForm(formURI);
@@ -3125,35 +2906,6 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
       connection.setDoOutput(true);
       connection.setInstanceFollowRedirects(false);
 
-      java.net.URI uri;
-      try
-      {
-        uri = url.toURI();
-      }
-      catch (URISyntaxException ex)
-      {
-        throw new IOExceptionWithCause(ex);
-      }
-
-      // Be sure to add cookies, e.g., any cookies returned when the form was read earlier.
-      List<HttpCookie> cookies = COOKIE_STORE.get(uri);
-      for (HttpCookie httpCookie : cookies)
-      {
-        connection.addRequestProperty("Cookie", httpCookie.toString().replace("\"", "")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-      }
-
-      if (TRACE)
-      {
-        StringBuilder details = new StringBuilder();
-        for (HttpCookie httpCookie : cookies)
-        {
-          details.append(StringUtil.NL).append("    ").append(httpCookie); //$NON-NLS-1$
-        }
-
-        System.out.println(tracePrefix
-            + (details.length() == 0 ? Messages.ECFURIHandlerImpl_UsingNoCookies_message : Messages.ECFURIHandlerImpl_UsingCookies_message + details));
-      }
-
       handleProxy(connection);
 
       String form = getForm(parameterValues, secureParameters, true);
@@ -3175,27 +2927,6 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
       {
         // Look for the cookies...
         Map<String, List<String>> headerFields = connection.getHeaderFields();
-        List<String> list = headerFields.get("Set-Cookie"); //$NON-NLS-1$
-        if (list != null)
-        {
-          for (String value : list)
-          {
-            List<HttpCookie> httpCookies = HttpCookie.parse(value);
-            for (HttpCookie httpCookie : httpCookies)
-            {
-              httpCookie.setDomain(getHost(uri));
-
-              // Some sites serve up bogus expiry information that results in the cookie not being added to the store.
-              if (httpCookie.getMaxAge() == 0)
-              {
-                httpCookie.setMaxAge(-1);
-              }
-
-              ECFURIHandlerImpl.COOKIE_STORE.add(uri, httpCookie);
-              result = true;
-            }
-          }
-        }
 
         // Allow subclasses to also inspect the header fields.
         if (result)

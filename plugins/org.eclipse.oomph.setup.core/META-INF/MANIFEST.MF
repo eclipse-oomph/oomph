@@ -1,14 +1,13 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.oomph.setup.core;singleton:=true
-Bundle-Version: 1.28.0.qualifier
+Bundle-Version: 1.29.0.qualifier
 Bundle-ClassPath: .
 Bundle-Name: %pluginName
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.24.0,4.0.0)",
  org.eclipse.core.resources;bundle-version="[3.5.0,4.0.0)";resolution:=optional,
- org.apache.httpcomponents.client5.httpclient5;bundle-version="[5.0.0,6.0.0)",
  org.eclipse.ecf.filetransfer;bundle-version="[5.0.0,6.0.0)",
  org.eclipse.ecf.identity;bundle-version="[3.1.0,4.0.0)",
  org.eclipse.ecf.provider.filetransfer;bundle-version="[3.1.0,4.0.0)",
@@ -32,7 +31,7 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.24.0,4.0.0)",
  org.eclipse.equinox.p2.updatesite;bundle-version="[1.0.0,2.0.0)",
  org.eclipse.equinox.security;bundle-version="[1.0.0,2.0.0)",
  org.eclipse.oomph.base.edit;bundle-version="[1.17.0,2.0.0)",
- org.eclipse.oomph.p2.core;bundle-version="[1.26.0,2.0.0)",
+ org.eclipse.oomph.p2.core;bundle-version="[1.27.0,2.0.0)",
  org.eclipse.oomph.setup;bundle-version="[1.27.0,2.0.0)";visibility:=reexport,
  org.eclipse.oomph.setup.p2;bundle-version="[1.20.0,2.0.0)",
  org.eclipse.oomph.preferences;bundle-version="[1.14.0,2.0.0)",
@@ -40,7 +39,7 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.24.0,4.0.0)",
 Import-Package: org.bouncycastle.openpgp;version="[1.65.0,2.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-ActivationPolicy: lazy
-Export-Package: org.eclipse.oomph.setup.internal.core;version="1.28.0";x-internal:=true,
- org.eclipse.oomph.setup.internal.core.util;version="1.28.0";x-internal:=true
+Export-Package: org.eclipse.oomph.setup.internal.core;version="1.29.0";x-internal:=true,
+ org.eclipse.oomph.setup.internal.core.util;version="1.29.0";x-internal:=true
 Bundle-Activator: org.eclipse.oomph.setup.internal.core.SetupCorePlugin$Implementation
 Automatic-Module-Name: org.eclipse.oomph.setup.core
