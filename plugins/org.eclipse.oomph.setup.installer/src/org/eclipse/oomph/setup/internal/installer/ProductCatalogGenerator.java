@@ -1775,7 +1775,7 @@ public class ProductCatalogGenerator implements IApplication
     }
 
     String configurationID = "tooling" + (SPECIAL_PRODUCT_IDS.contains(productName) || ALL_PRODUCT_ID.equals(productName) ? "epp.package.java"
-        : ECLIPSE_PLATFORM_SDK_PRODUCT_ID.equals(productName) ? "org.eclipse.platform.sdk" : productName) + ".configuration";
+        : ECLIPSE_PLATFORM_SDK_PRODUCT_ID.equals(productName) ? "org.eclipse.platform.ide" : productName) + ".configuration";
     Iterator<IInstallableUnit> configurationIUs = P2Util.asIterable(metadDataRepository.query(QueryUtil.createIUQuery(configurationID), null)).iterator();
     if (configurationIUs.hasNext())
     {

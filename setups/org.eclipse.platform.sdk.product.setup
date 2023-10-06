@@ -1023,7 +1023,7 @@
       <requirement
           name="org.eclipse.sdk.ide"
           versionRange="[4.2.0,5.0.0)"
-          filter="(|(&amp;(osgi.arch=ia64_32)(osgi.os=hpux)(osgi.ws=gtk))(&amp;(osgi.arch=ppc)(osgi.os=aix)(osgi.ws=gtk))(&amp;(osgi.arch=ppc)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=ppc64)(osgi.os=aix)(osgi.ws=gtk))(&amp;(osgi.arch=ppc64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=s390)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=s390x)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=sparc)(osgi.os=solaris)(osgi.ws=gtk))(&amp;(osgi.arch=x86)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86)(osgi.os=solaris)(osgi.ws=gtk))(&amp;(osgi.arch=x86)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
+          filter="(|(&amp;(osgi.arch=ia64_32)(osgi.os=hpux)(osgi.ws=gtk))(&amp;(osgi.arch=ppc)(osgi.os=aix)(osgi.ws=gtk))(&amp;(osgi.arch=ppc64)(osgi.os=aix)(osgi.ws=gtk))(&amp;(osgi.arch=s390)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=s390x)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=sparc)(osgi.os=solaris)(osgi.ws=gtk))(&amp;(osgi.arch=x86)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86)(osgi.os=solaris)(osgi.ws=gtk))(&amp;(osgi.arch=x86)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
       <repository
           url="https://download.eclipse.org/eclipse/updates/4.2/R-4.2.2-201302041200"/>
       <repository
