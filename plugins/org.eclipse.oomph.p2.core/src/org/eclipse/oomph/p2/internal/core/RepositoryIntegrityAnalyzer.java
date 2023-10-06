@@ -455,7 +455,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     ResourceSet resourceSet = new ResourceSetImpl();
     final URIConverter uriConverter = resourceSet.getURIConverter();
     resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new GenericXMLResourceFactoryImpl());
-    URI aggregatorURI = URI.createURI("https://git.eclipse.org/c/simrel/org.eclipse.simrel.build.git/plain/simrel.aggr");
+    URI aggregatorURI = URI.createURI("https://raw.githubusercontent.com/eclipse-simrel/simrel.build/main/simrel.aggr");
     Resource aggregatorResource = resourceSet.getResource(aggregatorURI, true);
     // aggregatorResource.save(System.out, null);
 
