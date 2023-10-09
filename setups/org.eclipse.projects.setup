@@ -1228,7 +1228,6 @@
   <project href="interim/GMFRuntime.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse/ice/master/org.eclipse.ice.aggregator/ICE.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-jdt/eclipse.jdt/master/org.eclipse.jdt.releng/JDT.setup#/"/>
-  <project href="https://git.eclipse.org/c/jubula/org.eclipse.jubula.core.git/plain/org.eclipse.jubula.project.configuration/oomph/jubula.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-justj/justj.tools/master/releng/org.eclipse.justj.tools.releng/JustJ.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse/kura/develop/kura/setups/kura.setup#/"/>
   <project href="interim/MPC.setup#/"/>
