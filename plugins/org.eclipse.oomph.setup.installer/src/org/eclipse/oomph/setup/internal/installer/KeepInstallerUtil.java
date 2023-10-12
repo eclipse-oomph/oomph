@@ -99,7 +99,8 @@ public final class KeepInstallerUtil
     if (OS.INSTANCE.isWin())
     {
       String launcher = OS.getCurrentLauncher(false);
-      return launcher != null && launcher.startsWith(PropertiesUtil.getTmpDir());
+      String canonicalTmpDir = IOUtil.getCanonicalFile(new File(PropertiesUtil.getTmpDir())).toString();
+      return launcher != null && launcher.startsWith(canonicalTmpDir);
     }
 
     return false;
