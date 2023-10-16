@@ -24,6 +24,7 @@ import org.eclipse.oomph.util.CollectionUtil;
 import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.ObjectUtil;
+import org.eclipse.oomph.util.ReflectUtil;
 import org.eclipse.oomph.util.StringUtil;
 import org.eclipse.oomph.util.XMLUtil;
 import org.eclipse.oomph.util.ZIPUtil;
@@ -4955,7 +4956,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
             }
             else
             {
-              String name = removeLast();
+              String name = removeLastX();
               if (name != null)
               {
                 add(ELEMENT_CLOSE_START);
@@ -4978,7 +4979,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
             add(ELEMENT_END);
             super.addText(replaceLineSeparator(surroundElementContent(content)));
             add(ELEMENT_CLOSE_START);
-            String name = removeLast();
+            String name = removeLastX();
             add(ELEMENT_NAME_START);
             add(name);
             add(ELEMENT_NAME_END);
@@ -4989,9 +4990,21 @@ public class RepositoryIntegrityAnalyzer implements IApplication
           @Override
           public void endEmptyElement()
           {
-            removeLast();
+            removeLastX();
             add(EMPTY_ELEMENT_END);
             lastElementIsStart = false;
+          }
+
+          private String removeLastX()
+          {
+            try
+            {
+              return ReflectUtil.invokeMethod("removeLastElement", this);
+            }
+            catch (Exception ex)
+            {
+              return ReflectUtil.invokeMethod("removeLast", this);
+            }
           }
         }
       }
