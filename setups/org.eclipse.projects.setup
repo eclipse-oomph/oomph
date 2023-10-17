@@ -1221,7 +1221,7 @@
   <project href="interim/EMFCompare.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-emf-parsley/emf-parsley/master/devtools/org.eclipse.emf.parsley.oomph/EMFParsley.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-packaging/packages/master/releng/org.eclipse.epp.config/oomph/EPP.setup#/"/>
-  <project href="https://git.eclipse.org/c/epsilon/org.eclipse.epsilon.git/plain/releng/org.eclipse.epsilon.releng/epsilonDev.setup#/"/>
+  <project href="https://raw.githubusercontent.com/eclipse/epsilon/main/releng/org.eclipse.epsilon.releng/epsilonDev.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-equinox/equinox/master/releng/org.eclipse.equinox.releng/Equinox.setup#/"/>
   <project href="interim/GEF.setup#/"/>
   <project href="interim/GMFNotation.setup#/"/>
