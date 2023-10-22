@@ -23,6 +23,9 @@ import org.eclipse.swt.widgets.Display;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -171,6 +174,17 @@ public final class KeepInstallerUtil
     String launcherName = new File(launcher).getName();
     File permanentLauncher = new File(target, launcherName);
 
+    File permanentLauncherIni = new File(target, launcherName.substring(0, launcherName.lastIndexOf('.')) + ".ini"); //$NON-NLS-1$
+    List<String> vmArgs = ManagementFactory.getRuntimeMXBean().getInputArguments();
+    try
+    {
+      adjustIni(permanentLauncherIni, vmArgs);
+    }
+    catch (IOException ex)
+    {
+      SetupInstallerPlugin.INSTANCE.log(ex);
+    }
+
     if (startPermanentInstaller)
     {
       // Include the application arguments in this launch.
@@ -218,5 +232,26 @@ public final class KeepInstallerUtil
   public static void setKeepInstaller(boolean keep)
   {
     PREF_KEPT.set(keep);
+  }
+
+  private static void adjustIni(File iniPath, List<String> vmArgs) throws IOException
+  {
+    Path path = iniPath.toPath();
+    List<String> lines = Files.readAllLines(path);
+
+    if (lines.indexOf("-vmargs") == -1) //$NON-NLS-1$
+    {
+      lines.add("-vmargs"); //$NON-NLS-1$
+    }
+
+    for (String vmArg : vmArgs)
+    {
+      if (!lines.contains(vmArg))
+      {
+        lines.add(vmArg);
+      }
+    }
+
+    Files.write(path, lines);
   }
 }
