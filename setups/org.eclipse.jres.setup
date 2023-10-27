@@ -9,7 +9,7 @@
     label="JRE">
   <setupTask
       xsi:type="setup.p2:P2Task"
-      label="JRE 11.0.20.1">
+      label="JRE 11.0.21">
     <requirement
         name="org.eclipse.justj.openjdk.hotspot.jre.full.feature.group"
         filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux))(&amp;(osgi.arch=aarch64)(osgi.os=macosx))(&amp;(osgi.arch=ppc64le)(osgi.os=linux))(&amp;(osgi.arch=x86_64)(osgi.os=linux))(&amp;(osgi.arch=x86_64)(osgi.os=macosx))(&amp;(osgi.arch=x86_64)(osgi.os=win32)))"/>
