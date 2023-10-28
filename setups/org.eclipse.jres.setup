@@ -22,7 +22,7 @@
   </setupTask>
   <setupTask
       xsi:type="setup.p2:P2Task"
-      label="JRE 17.0.8.1">
+      label="JRE 17.0.9">
     <annotation
         source="http://www.eclipse.org/oomph/setup/JRESpecificTasks">
       <content
@@ -42,7 +42,7 @@
   </setupTask>
   <setupTask
       xsi:type="setup.p2:P2Task"
-      label="JRE 21.0.0">
+      label="JRE 21.0.1">
     <annotation
         source="http://www.eclipse.org/oomph/setup/JRESpecificTasks">
       <content
@@ -57,7 +57,7 @@
     </annotation>
     <requirement
         name="org.eclipse.justj.openjdk.hotspot.jre.full.feature.group"
-        filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux))(&amp;(osgi.arch=aarch64)(osgi.os=macosx))(&amp;(osgi.arch=x86_64)(osgi.os=linux))(&amp;(osgi.arch=x86_64)(osgi.os=macosx))(&amp;(osgi.arch=x86_64)(osgi.os=win32)))"/>
+        filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux))(&amp;(osgi.arch=aarch64)(osgi.os=macosx))(&amp;(osgi.arch=ppc64le)(osgi.os=linux))(&amp;(osgi.arch=x86_64)(osgi.os=linux))(&amp;(osgi.arch=x86_64)(osgi.os=macosx))(&amp;(osgi.arch=x86_64)(osgi.os=win32)))"/>
     <repository
         url="https://download.eclipse.org/justj/jres/21/updates/release/latest"/>
     <description>
