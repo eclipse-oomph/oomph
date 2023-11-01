@@ -134,6 +134,8 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
 
   private static final String TRUE = Boolean.TRUE.toString();
 
+  private static final String FALSE = Boolean.FALSE.toString();
+
   private static final String SETTINGS_NAMESPACE = "http://maven.apache.org/SETTINGS/1.0.0"; //$NON-NLS-1$
 
   public TargetDefinitionGenerator()
@@ -195,7 +197,21 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
     final boolean generateImplicitUnits = isAnnotationDetail(annotation, ANNOTATION_GENERATE_IMPLICIT_UNITS, false);
     final boolean minimizeImplicitUnits = isAnnotationDetail(annotation, ANNOTATION_MINIMIZE_IMPLICIT_UNITS, false);
     final boolean ignoreJavaRequirements = isAnnotationDetail(annotation, ANNOTATION_IGNORE_JAVA_REQUIREMENTS, true);
-    final boolean versions = isAnnotationDetail(annotation, ANNOTATION_GENERATE_VERSIONS, false);
+    String detail = getAnnotationDetail(annotation, ANNOTATION_GENERATE_VERSIONS, Boolean.toString(false));
+    final Pattern versionsPattern;
+    if (TRUE.equalsIgnoreCase(detail))
+    {
+      versionsPattern = Pattern.compile(".*"); //$NON-NLS-1$
+    }
+    else if (FALSE.equalsIgnoreCase(detail) || StringUtil.isEmpty(detail))
+    {
+      versionsPattern = Pattern.compile(""); //$NON-NLS-1$
+    }
+    else
+    {
+      versionsPattern = Pattern.compile(detail);
+    }
+
     final boolean includeAllPlatforms = isAnnotationDetail(annotation, ANNOTATION_INCLUDE_ALL_PLATFORMS, targlet.isIncludeAllPlatforms());
     final boolean includeConfigurePhase = isAnnotationDetail(annotation, ANNOTATION_INCLUDE_CONFIGURE_PHASE, true);
     final String includeMode = getAnnotationDetail(annotation, ANNOTATION_INCLUDE_MODE,
@@ -292,7 +308,7 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
 
               for (IInstallableUnit iu : list)
               {
-                elements.add(formatElement(iu, versions, escaper));
+                elements.add(formatElement(iu, versionsPattern.matcher(iu.getId()).matches(), escaper));
               }
 
               for (String element : elements)
@@ -344,7 +360,7 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
 
               for (IInstallableUnit iu : list)
               {
-                elements.add(formatElement(iu, versions, escaper));
+                elements.add(formatElement(iu, versionsPattern.matcher(iu.getId()).matches(), escaper));
               }
 
               for (String element : elements)
