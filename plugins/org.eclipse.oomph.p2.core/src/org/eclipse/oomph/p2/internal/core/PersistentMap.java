@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -39,6 +40,8 @@ import java.util.Set;
  */
 public abstract class PersistentMap<E>
 {
+  private final Charset charset;
+
   private final File file;
 
   private final File tempFile;
@@ -47,8 +50,9 @@ public abstract class PersistentMap<E>
 
   private final Map<String, E> elements = new LinkedHashMap<>();
 
-  public PersistentMap(File file)
+  public PersistentMap(File file, Charset charset)
   {
+    this.charset = charset;
     this.file = file;
 
     if (file != null)
@@ -123,6 +127,11 @@ public abstract class PersistentMap<E>
   public final File getFile()
   {
     return file;
+  }
+
+  public final Charset getCharset()
+  {
+    return charset;
   }
 
   public final synchronized Set<String> getElementKeys()
@@ -219,7 +228,7 @@ public abstract class PersistentMap<E>
 
     try
     {
-      infoReader = new FileReader(file);
+      infoReader = new FileReader(file, charset);
       BufferedReader bufferedReader = new BufferedReader(infoReader);
 
       String line;
@@ -279,7 +288,7 @@ public abstract class PersistentMap<E>
           }
         }
 
-        tempWriter = new FileWriter(tempFile);
+        tempWriter = new FileWriter(tempFile, charset);
         BufferedWriter bufferedWriter = new BufferedWriter(tempWriter);
 
         List<String> sortedKeys = new ArrayList<>(elements.keySet());
@@ -379,7 +388,7 @@ public abstract class PersistentMap<E>
     {
       try
       {
-        return new FileWriter(lockFile);
+        return new FileWriter(lockFile, charset);
       }
       catch (IOException ex)
       {

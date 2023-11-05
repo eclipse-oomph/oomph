@@ -126,7 +126,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
     this.agentManager = agentManager;
     this.location = location;
 
-    bundlePoolMap = new PersistentMap<>(new File(location, "pools.info")) //$NON-NLS-1$
+    bundlePoolMap = new PersistentMap<>(new File(location, "pools.info"), agentManager.getCharset()) //$NON-NLS-1$
     {
       @Override
       protected BundlePool createElement(String key, String extraInfo)
@@ -156,7 +156,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
       }
     };
 
-    profileMap = new PersistentMap<>(new File(location, "profiles.info")) //$NON-NLS-1$
+    profileMap = new PersistentMap<>(new File(location, "profiles.info"), agentManager.getCharset()) //$NON-NLS-1$
     {
       @Override
       protected Profile createElement(String profileID, String extraInfo)

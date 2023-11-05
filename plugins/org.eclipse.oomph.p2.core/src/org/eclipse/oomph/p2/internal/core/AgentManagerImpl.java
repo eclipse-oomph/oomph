@@ -32,6 +32,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -48,6 +50,8 @@ public class AgentManagerImpl implements AgentManager
   private static final String AGENT_SUFFIX = ":agent"; //$NON-NLS-1$
 
   public static AgentManager instance;
+
+  private final Charset charset;
 
   private final PersistentMap<Agent> agentMap;
 
@@ -68,11 +72,41 @@ public class AgentManagerImpl implements AgentManager
   {
     defaultAgentLocation = new File(userHome, ".p2"); //$NON-NLS-1$
 
+    File encodingFile = new File(defaultAgentLocation, "encoding.info"); //$NON-NLS-1$
+    Charset charset;
+    try
+    {
+      charset = new PersistentMap<Charset>(encodingFile, StandardCharsets.UTF_8)
+      {
+        {
+          load();
+        }
+
+        @Override
+        protected Charset createElement(String key, String extraInfo)
+        {
+          return Charset.forName(key);
+        }
+
+        @Override
+        protected void initializeFirstTime()
+        {
+          addElement(Charset.defaultCharset().name(), null);
+        }
+      }.getElements().iterator().next();
+    }
+    catch (Exception ex)
+    {
+      charset = Charset.defaultCharset();
+    }
+
+    this.charset = charset;
+
     File folder = P2CorePlugin.getUserStateFolder(userHome);
     File infoFile = new File(folder, "agents.info"); //$NON-NLS-1$
     defaultsFile = new File(folder, "defaults.info"); //$NON-NLS-1$
 
-    agentMap = new PersistentMap<Agent>(infoFile)
+    agentMap = new PersistentMap<Agent>(infoFile, charset)
     {
       @Override
       protected Agent loadElement(String key, String extraInfo)
@@ -140,6 +174,11 @@ public class AgentManagerImpl implements AgentManager
     };
 
     agentMap.load();
+  }
+
+  public Charset getCharset()
+  {
+    return charset;
   }
 
   public PersistentMap<Agent> getAgentMap()
