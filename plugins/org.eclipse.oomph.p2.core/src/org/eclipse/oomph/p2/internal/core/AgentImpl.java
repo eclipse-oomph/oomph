@@ -63,6 +63,8 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 
 import java.io.File;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -126,7 +128,9 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
     this.agentManager = agentManager;
     this.location = location;
 
-    bundlePoolMap = new PersistentMap<>(new File(location, "pools.info"), agentManager.getCharset()) //$NON-NLS-1$
+    Charset charset = agentManager == null ? StandardCharsets.UTF_8 : agentManager.getCharset();
+
+    bundlePoolMap = new PersistentMap<>(new File(location, "pools.info"), charset) //$NON-NLS-1$
     {
       @Override
       protected BundlePool createElement(String key, String extraInfo)
@@ -156,7 +160,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
       }
     };
 
-    profileMap = new PersistentMap<>(new File(location, "profiles.info"), agentManager.getCharset()) //$NON-NLS-1$
+    profileMap = new PersistentMap<>(new File(location, "profiles.info"), charset) //$NON-NLS-1$
     {
       @Override
       protected Profile createElement(String profileID, String extraInfo)
@@ -253,7 +257,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
   @Override
   public boolean isCurrent()
   {
-    return agentManager.getCurrentAgent() == this;
+    return agentManager != null && agentManager.getCurrentAgent() == this;
   }
 
   @Override
@@ -281,7 +285,10 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
   @Override
   protected void doDelete()
   {
-    agentManager.deleteAgent(this);
+    if (agentManager != null)
+    {
+      agentManager.deleteAgent(this);
+    }
   }
 
   public PersistentMap<BundlePool> getBundlePoolMap()
