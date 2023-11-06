@@ -313,7 +313,7 @@ public class ReleaseManager implements IReleaseManager
         pluginVersion = "0.0.0"; //$NON-NLS-1$
       }
 
-      Element child = new Element(IElement.Type.PLUGIN, versionable.getId(), null, pluginVersion, versionable.isFragment());
+      Element child = new Element(IElement.Type.PLUGIN, versionable.getId(), null, pluginVersion, false);
       if (resolve)
       {
         child.resolveVersion();

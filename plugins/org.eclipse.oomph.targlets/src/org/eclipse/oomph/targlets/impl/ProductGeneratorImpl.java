@@ -101,12 +101,8 @@ public class ProductGeneratorImpl extends ModelElementImpl implements ProductGen
           addRequirements(componentDefinition, productDescriptor.getFeatures(IProductDescriptor.INCLUDED_FEATURES | IProductDescriptor.ROOT_FEATURES),
               Requirement.FEATURE_SUFFIX, false);
         }
-        else
-        {
-          addRequirements(componentDefinition, productDescriptor.getBundles(false), "", false); //$NON-NLS-1$
-        }
 
-        addRequirements(componentDefinition, productDescriptor.getFragments(), "", true); //$NON-NLS-1$
+        addRequirements(componentDefinition, productDescriptor.getBundles(), "", false); //$NON-NLS-1$
 
         IInstallableUnit iu = ComponentDefGeneratorImpl.generateIU(componentDefinition, qualifierReplacement);
         result.add(iu);
