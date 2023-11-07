@@ -89,6 +89,7 @@ public class FreeDesktopSupport implements DesktopSupport
         // no luck then...
       }
     }
+
     if (module != null && !StringUtil.isEmpty(module.trim()))
     {
       desktopFile.append("env GTK_IM_MODULE=");
@@ -97,14 +98,12 @@ public class FreeDesktopSupport implements DesktopSupport
     }
     desktopFile.append(executable).append("\n");
 
+    desktopFile.append("Categories=Development;IDE;");
     if (groupName != null)
     {
-      desktopFile.append("Categories=").append(groupName).append("\n");
+      desktopFile.append(groupName);
     }
-    else
-    {
-      desktopFile.append("Categories=Development;IDE;\n");
-    }
+    desktopFile.append("\n");
 
     File icon = new File(executable.getParentFile(), "icon.xpm");
     if (icon.isFile())
