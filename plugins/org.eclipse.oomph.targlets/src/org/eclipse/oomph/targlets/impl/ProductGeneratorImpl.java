@@ -26,6 +26,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.equinox.internal.p2.publisher.eclipse.IProductDescriptor;
 import org.eclipse.equinox.internal.p2.publisher.eclipse.ProductFile;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
@@ -34,8 +35,11 @@ import org.eclipse.equinox.p2.metadata.Version;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * <!-- begin-user-doc -->
@@ -46,6 +50,24 @@ import java.util.Map;
  */
 public class ProductGeneratorImpl extends ModelElementImpl implements ProductGenerator
 {
+  private static final Set<String> FRAGMENT_SUFFIXES;
+
+  static
+  {
+    Set<String> suffixes = new LinkedHashSet<String>();
+    for (String os : Platform.knownOSValues())
+    {
+      suffixes.add('.' + os);
+    }
+
+    for (String arch : Platform.knownOSArchValues())
+    {
+      suffixes.add('.' + arch);
+    }
+
+    FRAGMENT_SUFFIXES = Collections.unmodifiableSet(suffixes);
+  }
+
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -99,16 +121,16 @@ public class ProductGeneratorImpl extends ModelElementImpl implements ProductGen
         if (productDescriptor.useFeatures())
         {
           addRequirements(componentDefinition, productDescriptor.getFeatures(IProductDescriptor.INCLUDED_FEATURES | IProductDescriptor.ROOT_FEATURES),
-              Requirement.FEATURE_SUFFIX, false);
+              Requirement.FEATURE_SUFFIX);
         }
 
-        addRequirements(componentDefinition, productDescriptor.getBundles(), "", false); //$NON-NLS-1$
+        addRequirements(componentDefinition, productDescriptor.getBundles(), ""); //$NON-NLS-1$
 
         IInstallableUnit iu = ComponentDefGeneratorImpl.generateIU(componentDefinition, qualifierReplacement);
         result.add(iu);
       }
 
-      private void addRequirements(ComponentDefinition componentDefinition, List<IVersionedId> versionedIds, String idSuffix, boolean optional)
+      private void addRequirements(ComponentDefinition componentDefinition, List<IVersionedId> versionedIds, String idSuffix)
       {
         EList<Requirement> requirements = componentDefinition.getRequirements();
 
@@ -118,7 +140,13 @@ public class ProductGeneratorImpl extends ModelElementImpl implements ProductGen
           Version version = versionedId.getVersion();
 
           Requirement requirement = P2Factory.eINSTANCE.createRequirement(id, version, true);
-          requirement.setOptional(optional);
+
+          int index = id.lastIndexOf('.');
+          if (index != -1 && FRAGMENT_SUFFIXES.contains(id.substring(index)))
+          {
+            requirement.setOptional(true);
+          }
+
           requirements.add(requirement);
         }
       }
