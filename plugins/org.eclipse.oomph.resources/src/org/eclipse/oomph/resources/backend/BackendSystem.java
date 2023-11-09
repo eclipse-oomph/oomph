@@ -227,13 +227,18 @@ public abstract class BackendSystem extends BackendContainer
       }
     }
 
-    doAccept(backendResource, visitor, monitor);
-
-    synchronized (visitorCounter)
+    try
     {
-      if (visitorCounter.decrementAndGet() == 0)
+      doAccept(backendResource, visitor, monitor);
+    }
+    finally
+    {
+      synchronized (visitorCounter)
       {
-        endVisitor();
+        if (visitorCounter.decrementAndGet() == 0)
+        {
+          endVisitor();
+        }
       }
     }
   }

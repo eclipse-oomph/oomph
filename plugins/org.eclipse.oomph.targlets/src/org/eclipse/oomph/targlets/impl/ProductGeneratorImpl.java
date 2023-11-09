@@ -19,6 +19,7 @@ import org.eclipse.oomph.targlets.ProductGenerator;
 import org.eclipse.oomph.targlets.TargletFactory;
 import org.eclipse.oomph.targlets.TargletPackage;
 import org.eclipse.oomph.util.Predicate;
+import org.eclipse.oomph.util.ReflectUtil;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
@@ -35,6 +36,7 @@ import org.eclipse.equinox.p2.metadata.Version;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -124,7 +126,15 @@ public class ProductGeneratorImpl extends ModelElementImpl implements ProductGen
               Requirement.FEATURE_SUFFIX);
         }
 
-        addRequirements(componentDefinition, productDescriptor.getBundles(), ""); //$NON-NLS-1$
+        try
+        {
+          Method oldGetBundlesMethod = ReflectUtil.getMethod(IProductDescriptor.class, "getBundles", boolean.class); //$NON-NLS-1$
+          addRequirements(componentDefinition, ReflectUtil.invokeMethod(oldGetBundlesMethod, productDescriptor, true), ""); //$NON-NLS-1$
+        }
+        catch (RuntimeException ex)
+        {
+          addRequirements(componentDefinition, productDescriptor.getBundles(), ""); //$NON-NLS-1$
+        }
 
         IInstallableUnit iu = ComponentDefGeneratorImpl.generateIU(componentDefinition, qualifierReplacement);
         result.add(iu);
