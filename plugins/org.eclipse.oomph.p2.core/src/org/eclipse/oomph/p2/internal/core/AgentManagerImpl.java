@@ -71,8 +71,8 @@ public class AgentManagerImpl implements AgentManager
   public AgentManagerImpl(final File userHome)
   {
     defaultAgentLocation = new File(userHome, ".p2"); //$NON-NLS-1$
-
-    File encodingFile = new File(defaultAgentLocation, "encoding.info"); //$NON-NLS-1$
+    File folder = P2CorePlugin.getUserStateFolder(userHome);
+    File encodingFile = new File(folder, "encoding.info"); //$NON-NLS-1$
     Charset charset;
     try
     {
@@ -102,7 +102,6 @@ public class AgentManagerImpl implements AgentManager
 
     this.charset = charset;
 
-    File folder = P2CorePlugin.getUserStateFolder(userHome);
     File infoFile = new File(folder, "agents.info"); //$NON-NLS-1$
     defaultsFile = new File(folder, "defaults.info"); //$NON-NLS-1$
 
