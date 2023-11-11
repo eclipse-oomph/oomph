@@ -3,142 +3,28 @@
 <target name="Generated from Oomph" sequenceNumber="139">
   <locations>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-      <unit id="bcpg" version="0.0.0"/>
-      <unit id="bcpkix" version="0.0.0"/>
-      <unit id="bcprov" version="0.0.0"/>
-      <unit id="bcutil" version="0.0.0"/>
-      <unit id="com.evolvedbinary.thirdparty.org.apache.xmlrpc.xmlrpc-client" version="0.0.0"/>
-      <unit id="com.google.gson" version="0.0.0"/>
-      <unit id="com.google.guava" version="0.0.0"/>
-      <unit id="com.google.guava.failureaccess" version="0.0.0"/>
-      <unit id="com.googlecode.javaewah.JavaEWAH" version="0.0.0"/>
-      <unit id="com.sun.el.javax.el" version="0.0.0"/>
-      <unit id="com.sun.jna" version="0.0.0"/>
-      <unit id="com.sun.jna.platform" version="0.0.0"/>
-      <unit id="com.sun.xml.bind" version="0.0.0"/>
-      <unit id="jakarta.annotation-api" version="0.0.0"/>
-      <unit id="jakarta.inject.jakarta.inject-api" version="0.0.0"/>
-      <unit id="jakarta.xml.bind-api" version="0.0.0"/>
-      <unit id="javax.activation" version="0.0.0"/>
-      <unit id="jaxen" version="0.0.0"/>
-      <unit id="net.i2p.crypto.eddsa" version="0.0.0"/>
-      <unit id="org.apache.aries.spifly.dynamic.bundle" version="0.0.0"/>
-      <unit id="org.apache.batik.constants" version="0.0.0"/>
-      <unit id="org.apache.batik.css" version="0.0.0"/>
-      <unit id="org.apache.batik.i18n" version="0.0.0"/>
-      <unit id="org.apache.batik.util" version="0.0.0"/>
-      <unit id="org.apache.commons.cli" version="0.0.0"/>
-      <unit id="org.apache.commons.codec" version="0.0.0"/>
-      <unit id="org.apache.commons.collections" version="0.0.0"/>
-      <unit id="org.apache.commons.commons-beanutils" version="0.0.0"/>
-      <unit id="org.apache.commons.commons-codec" version="0.0.0"/>
-      <unit id="org.apache.commons.commons-compress" version="0.0.0"/>
-      <unit id="org.apache.commons.commons-io" version="0.0.0"/>
-      <unit id="org.apache.commons.httpclient" version="0.0.0"/>
-      <unit id="org.apache.commons.jxpath" version="0.0.0"/>
-      <unit id="org.apache.commons.lang" version="0.0.0"/>
-      <unit id="org.apache.commons.logging" version="0.0.0"/>
-      <unit id="org.apache.felix.scr" version="0.0.0"/>
-      <unit id="org.apache.httpcomponents.httpclient" version="0.0.0"/>
-      <unit id="org.apache.httpcomponents.httpcore" version="0.0.0"/>
-      <unit id="org.apache.lucene.analysis-common" version="0.0.0"/>
-      <unit id="org.apache.lucene.analysis-smartcn" version="0.0.0"/>
-      <unit id="org.apache.lucene.core" version="0.0.0"/>
-      <unit id="org.apache.lucene.queries" version="0.0.0"/>
-      <unit id="org.apache.lucene.queryparser" version="0.0.0"/>
-      <unit id="org.apache.lucene.sandbox" version="0.0.0"/>
-      <unit id="org.apache.sshd.osgi" version="0.0.0"/>
-      <unit id="org.apache.sshd.sftp" version="0.0.0"/>
-      <unit id="org.apache.ws.commons.util" version="0.0.0"/>
-      <unit id="org.apache.xerces" version="0.0.0"/>
-      <unit id="org.apache.xml.resolver" version="0.0.0"/>
       <unit id="org.eclipse.core.runtime.feature.feature.group" version="0.0.0"/>
-      <unit id="org.eclipse.e4.tools.emf.ui" version="0.0.0"/>
-      <unit id="org.eclipse.e4.tools.services" version="0.0.0"/>
-      <unit id="org.eclipse.ecf.core.feature.feature.group" version="0.0.0"/>
-      <unit id="org.eclipse.ecf.core.ssl.feature.feature.group" version="0.0.0"/>
-      <unit id="org.eclipse.ecf.filetransfer.feature.feature.group" version="0.0.0"/>
-      <unit id="org.eclipse.ecf.filetransfer.httpclientjava.feature.feature.group" version="0.0.0"/>
-      <unit id="org.eclipse.ecf.filetransfer.ssl.feature.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.egit.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.emf.sdk.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.equinox.executable.feature.group" version="0.0.0"/>
-      <unit id="org.eclipse.equinox.p2.discovery" version="0.0.0"/>
-      <unit id="org.eclipse.equinox.p2.discovery.compatibility" version="0.0.0"/>
-      <unit id="org.eclipse.equinox.p2.ui.discovery" version="0.0.0"/>
-      <unit id="org.eclipse.jetty.ee8.security" version="0.0.0"/>
-      <unit id="org.eclipse.jetty.ee8.server" version="0.0.0"/>
-      <unit id="org.eclipse.jetty.ee8.servlet" version="0.0.0"/>
-      <unit id="org.eclipse.jetty.http" version="0.0.0"/>
-      <unit id="org.eclipse.jetty.io" version="0.0.0"/>
-      <unit id="org.eclipse.jetty.security" version="0.0.0"/>
-      <unit id="org.eclipse.jetty.server" version="0.0.0"/>
-      <unit id="org.eclipse.jetty.servlet" version="0.0.0"/>
-      <unit id="org.eclipse.jetty.servlet-api" version="0.0.0"/>
-      <unit id="org.eclipse.jetty.session" version="0.0.0"/>
-      <unit id="org.eclipse.jetty.util" version="0.0.0"/>
-      <unit id="org.eclipse.jgit.feature.group" version="0.0.0"/>
-      <unit id="org.eclipse.jgit.gpg.bc.feature.group" version="0.0.0"/>
-      <unit id="org.eclipse.jgit.http.apache.feature.group" version="0.0.0"/>
-      <unit id="org.eclipse.jgit.ssh.apache.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.justj.openjdk.hotspot.jre.minimal.stripped.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.m2e.feature.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.m2e.pde.feature.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.mylyn.bugzilla.feature.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.mylyn.builds.feature.feature.group" version="0.0.0"/>
-      <unit id="org.eclipse.mylyn.commons.feature.feature.group" version="0.0.0"/>
-      <unit id="org.eclipse.mylyn.commons.identity.feature.feature.group" version="0.0.0"/>
-      <unit id="org.eclipse.mylyn.commons.notifications.feature.feature.group" version="0.0.0"/>
-      <unit id="org.eclipse.mylyn.commons.repositories.feature.feature.group" version="0.0.0"/>
-      <unit id="org.eclipse.mylyn.context.feature.feature.group" version="0.0.0"/>
-      <unit id="org.eclipse.mylyn.monitor.feature.feature.group" version="0.0.0"/>
-      <unit id="org.eclipse.mylyn.tasks.feature.feature.group" version="0.0.0"/>
-      <unit id="org.eclipse.mylyn.team.feature.feature.group" version="0.0.0"/>
-      <unit id="org.eclipse.mylyn.versions.feature.feature.group" version="0.0.0"/>
-      <unit id="org.eclipse.nebula.cwt" version="0.0.0"/>
-      <unit id="org.eclipse.nebula.widgets.cdatetime" version="0.0.0"/>
       <unit id="org.eclipse.nebula.widgets.tablecombo" version="0.0.0"/>
-      <unit id="org.eclipse.orbit.xml-apis-ext" version="0.0.0"/>
       <unit id="org.eclipse.sdk.feature.group" version="0.0.0"/>
-      <unit id="org.eclipse.search.core" version="0.0.0"/>
       <unit id="org.eclipse.swtbot.eclipse.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.swtbot.generator" version="0.0.0"/>
-      <unit id="org.eclipse.userstorage" version="0.0.0"/>
       <unit id="org.eclipse.userstorage.oauth" version="0.0.0"/>
       <unit id="org.eclipse.userstorage.tests" version="0.0.0"/>
-      <unit id="org.eclipse.userstorage.ui" version="0.0.0"/>
-      <unit id="org.eclipse.wst.common.core" version="0.0.0"/>
-      <unit id="org.eclipse.wst.common.emf" version="0.0.0"/>
-      <unit id="org.eclipse.wst.common.environment" version="0.0.0"/>
-      <unit id="org.eclipse.wst.common.frameworks" version="0.0.0"/>
-      <unit id="org.eclipse.wst.common.uriresolver" version="0.0.0"/>
-      <unit id="org.eclipse.wst.sse.core" version="0.0.0"/>
-      <unit id="org.eclipse.wst.xml.core" version="0.0.0"/>
-      <unit id="org.hamcrest" version="0.0.0"/>
-      <unit id="org.hamcrest.library" version="0.0.0"/>
-      <unit id="org.jdom" version="0.0.0"/>
-      <unit id="org.jdom2" version="0.0.0"/>
-      <unit id="org.mortbay.jasper.apache-jsp" version="0.0.0"/>
-      <unit id="org.objectweb.asm" version="0.0.0"/>
-      <unit id="org.objectweb.asm.commons" version="0.0.0"/>
-      <unit id="org.objectweb.asm.tree" version="0.0.0"/>
-      <unit id="org.objectweb.asm.tree.analysis" version="0.0.0"/>
-      <unit id="org.objectweb.asm.util" version="0.0.0"/>
-      <unit id="org.osgi.annotation.bundle" version="0.0.0"/>
-      <unit id="org.osgi.annotation.versioning" version="0.0.0"/>
-      <unit id="org.osgi.service.component.annotations" version="0.0.0"/>
-      <unit id="org.osgi.service.metatype.annotations" version="0.0.0"/>
-      <unit id="org.sat4j.core" version="0.0.0"/>
-      <unit id="org.sat4j.pb" version="0.0.0"/>
-      <unit id="slf4j.api" version="0.0.0"/>
-      <unit id="slf4j.nop" version="0.0.0"/>
       <repository location="https://download.eclipse.org/modeling/emf/emf/builds/milestone/latest"/>
       <repository location="https://download.eclipse.org/egit/updates-stable-nightly"/>
       <repository location="https://download.eclipse.org/mylyn/updates/nightly/latest"/>
       <repository location="https://download.eclipse.org/nebula/snapshot"/>
       <repository location="https://download.eclipse.org/technology/m2e/snapshots/latest"/>
       <repository location="https://download.eclipse.org/technology/swtbot/snapshots"/>
-      <repository location="https://download.eclipse.org/tools/orbit/downloads/latest-R"/>
+      <repository location="https://download.eclipse.org/tools/orbit/simrel/orbit-aggregation/nightly/latest"/>
       <repository location="https://download.eclipse.org/justj/jres/17/updates/milestone/latest"/>
       <repository location="https://download.eclipse.org/usssdk/updates/latest"/>
       <repository location="https://download.eclipse.org/webtools/downloads/drops/R3.29.0/R-3.29.0-20230303230236/repository"/>
