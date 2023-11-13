@@ -6227,11 +6227,19 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
           {
             for (HttpCookie httpCookie : cookieStore.get(uri))
             {
-              {
-                Browser.setCookie(httpCookie.getValue(), uri.toString());
-              }
+              Browser.setCookie(httpCookie.getValue(), uri.toString());
             }
           }
+        }
+      }
+
+      List<java.net.URI> uris = ECFURIHandlerImpl.COOKIE_STORE.getURIs();
+      for (java.net.URI cookieURI : uris)
+      {
+        String url = cookieURI.toString();
+        for (HttpCookie httpCookie : ECFURIHandlerImpl.COOKIE_STORE.get(cookieURI))
+        {
+          Browser.setCookie(httpCookie.getValue(), url);
         }
       }
     }

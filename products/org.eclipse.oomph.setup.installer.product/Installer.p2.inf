@@ -2,6 +2,7 @@ properties.0.name = org.eclipse.oomph.p2.iu.compatibility
 properties.0.value = Major
 
 instructions.configure=\
+  setProgramProperty(propName:org.eclipse.ecf.provider.filetransfer.excludeContributors,propValue:org.eclipse.ecf.provider.filetransfer.httpclientjava);\
   setProgramProperty(propName:eclipse.p2.max.threads,propValue:10);\
   setProgramProperty(propName:oomph.p2.repository.retry,propValue:2);\
   setProgramProperty(propName:org.eclipse.update.reconcile,propValue:false);\
@@ -13,6 +14,7 @@ instructions.configure=\
   setProgramProperty(propName:oomph.setup.jre.choice,propValue:true);
 
 instructions.unconfigure=\
+  setProgramProperty(propName:org.eclipse.ecf.provider.filetransfer.excludeContributors,propValue:);\
   setProgramProperty(propName:eclipse.p2.max.threads,propValue:);\
   setProgramProperty(propName:oomph.p2.repository.retry,propValue:);\
   setProgramProperty(propName:org.eclipse.update.reconcile,propValue:);\
