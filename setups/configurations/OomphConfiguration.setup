@@ -33,7 +33,7 @@
   <description>
     &lt;p>
     The &lt;a href=&quot;https://projects.eclipse.org/projects/tools.oomph&quot;/>Oomph&lt;/a> Development Environment configuration provisions a dedicated development environment 
-    for the complete set of source projects used by &lt;a href=&quot;https://ci.eclipse.org/oomph/&quot;>Oomphs's build server&lt;/a> 
+    for the complete set of source projects used by &lt;a href=&quot;https://ci.eclipse.org/oomph/&quot;>Oomph's build server&lt;/a> 
     to produce &lt;a href=&quot;https://download.eclipse.org/oomph/updates/?d&quot;>Oomph's update sites&lt;/a>.
     &lt;/p>
     &lt;p>
