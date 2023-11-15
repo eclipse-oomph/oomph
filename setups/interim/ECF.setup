@@ -335,7 +335,8 @@
     </targlet>
   </setupTask>
   <setupTask
-      xsi:type="setup.workingsets:WorkingSetTask">
+      xsi:type="setup.workingsets:WorkingSetTask"
+      id="ecf.workingsets">
     <workingSet
         name="ECF Bundles">
       <predicate
@@ -348,7 +349,7 @@
             nature="org.eclipse.pde.PluginNature"/>
         <operand
             xsi:type="workingsets:ExclusionPredicate"
-            excludedWorkingSet="//@setupTasks.4/@workingSets[name='ECF%20Examples'] //@setupTasks.4/@workingSets[name='ECF%20Tests']"/>
+            excludedWorkingSet="//'ecf.workingsets'/@workingSets[name='ECF%20Examples'] //'ecf.workingsets'/@workingSets[name='ECF%20Tests']"/>
       </predicate>
     </workingSet>
     <workingSet
@@ -399,7 +400,7 @@
             project="org.eclipse.ecf"/>
         <operand
             xsi:type="workingsets:ExclusionPredicate"
-            excludedWorkingSet="//@setupTasks.4/@workingSets[name='ECF%20Bundles'] //@setupTasks.4/@workingSets[name='ECF%20Features'] //@setupTasks.4/@workingSets[name='ECF%20Examples'] //@setupTasks.4/@workingSets[name='ECF%20Tests']"/>
+            excludedWorkingSet="//'ecf.workingsets'/@workingSets[name='ECF%20Bundles'] //'ecf.workingsets'/@workingSets[name='ECF%20Features'] //'ecf.workingsets'/@workingSets[name='ECF%20Examples'] //'ecf.workingsets'/@workingSets[name='ECF%20Tests']"/>
       </predicate>
     </workingSet>
   </setupTask>
