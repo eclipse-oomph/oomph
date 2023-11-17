@@ -87,6 +87,8 @@
             versionRange="[4.30.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
+            name="org.eclipse.ecf.filetransfer.httpclient5.feature.feature.group"/>
+        <requirement
             name="org.eclipse.platform.feature.group"
             versionRange="[4.30.0,5.0.0)"/>
         <requirement
@@ -331,6 +333,8 @@
             name="epp.package.java"
             versionRange="[4.30.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
+        <requirement
+            name="org.eclipse.ecf.filetransfer.httpclient5.feature.feature.group"/>
         <requirement
             name="org.eclipse.platform.feature.group"
             versionRange="[4.30.0,5.0.0)"/>
@@ -2471,6 +2475,8 @@
             versionRange="[4.30.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
+            name="org.eclipse.ecf.filetransfer.httpclient5.feature.feature.group"/>
+        <requirement
             name="org.eclipse.platform.feature.group"
             versionRange="[4.30.0,5.0.0)"/>
         <requirement
@@ -2979,6 +2985,8 @@
             name="epp.package.jee"
             versionRange="[4.30.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
+        <requirement
+            name="org.eclipse.ecf.filetransfer.httpclient5.feature.feature.group"/>
         <requirement
             name="org.eclipse.platform.feature.group"
             versionRange="[4.30.0,5.0.0)"/>
@@ -8377,6 +8385,8 @@
             versionRange="[4.30.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
+            name="org.eclipse.ecf.filetransfer.httpclient5.feature.feature.group"/>
+        <requirement
             name="org.eclipse.platform.feature.group"
             versionRange="[4.30.0,5.0.0)"/>
         <requirement
@@ -8689,6 +8699,8 @@
             name="epp.package.cpp"
             versionRange="[4.30.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
+        <requirement
+            name="org.eclipse.ecf.filetransfer.httpclient5.feature.feature.group"/>
         <requirement
             name="org.eclipse.platform.feature.group"
             versionRange="[4.30.0,5.0.0)"/>
@@ -11648,6 +11660,8 @@
             versionRange="[4.30.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
+            name="org.eclipse.ecf.filetransfer.httpclient5.feature.feature.group"/>
+        <requirement
             name="org.eclipse.platform.feature.group"
             versionRange="[4.30.0,5.0.0)"/>
         <requirement
@@ -12024,6 +12038,8 @@
             name="epp.package.embedcpp"
             versionRange="[4.30.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
+        <requirement
+            name="org.eclipse.ecf.filetransfer.httpclient5.feature.feature.group"/>
         <requirement
             name="org.eclipse.platform.feature.group"
             versionRange="[4.30.0,5.0.0)"/>
@@ -13906,6 +13922,8 @@
             versionRange="[4.30.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
+            name="org.eclipse.ecf.filetransfer.httpclient5.feature.feature.group"/>
+        <requirement
             name="org.eclipse.platform.feature.group"
             versionRange="[4.30.0,5.0.0)"/>
         <requirement
@@ -14150,6 +14168,8 @@
             name="epp.package.php"
             versionRange="[4.30.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
+        <requirement
+            name="org.eclipse.ecf.filetransfer.httpclient5.feature.feature.group"/>
         <requirement
             name="org.eclipse.platform.feature.group"
             versionRange="[4.30.0,5.0.0)"/>
@@ -16261,6 +16281,8 @@
             versionRange="[4.30.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
+            name="org.eclipse.ecf.filetransfer.httpclient5.feature.feature.group"/>
+        <requirement
             name="org.eclipse.platform.feature.group"
             versionRange="[4.30.0,5.0.0)"/>
         <requirement
@@ -16553,6 +16575,8 @@
             name="epp.package.committers"
             versionRange="[4.30.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
+        <requirement
+            name="org.eclipse.ecf.filetransfer.httpclient5.feature.feature.group"/>
         <requirement
             name="org.eclipse.platform.feature.group"
             versionRange="[4.30.0,5.0.0)"/>
@@ -19443,6 +19467,8 @@
             versionRange="[4.30.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
+            name="org.eclipse.ecf.filetransfer.httpclient5.feature.feature.group"/>
+        <requirement
             name="org.eclipse.platform.feature.group"
             versionRange="[4.30.0,5.0.0)"/>
         <requirement
@@ -19587,6 +19613,8 @@
             name="epp.package.dsl"
             versionRange="[4.30.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
+        <requirement
+            name="org.eclipse.ecf.filetransfer.httpclient5.feature.feature.group"/>
         <requirement
             name="org.eclipse.platform.feature.group"
             versionRange="[4.30.0,5.0.0)"/>
@@ -21373,6 +21401,8 @@
             versionRange="[4.30.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
+            name="org.eclipse.ecf.filetransfer.httpclient5.feature.feature.group"/>
+        <requirement
             name="org.eclipse.platform.feature.group"
             versionRange="[4.30.0,5.0.0)"/>
         <requirement
@@ -21661,6 +21691,8 @@
             name="epp.package.rcp"
             versionRange="[4.30.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
+        <requirement
+            name="org.eclipse.ecf.filetransfer.httpclient5.feature.feature.group"/>
         <requirement
             name="org.eclipse.platform.feature.group"
             versionRange="[4.30.0,5.0.0)"/>
@@ -24209,6 +24241,8 @@
             versionRange="[4.30.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
+            name="org.eclipse.ecf.filetransfer.httpclient5.feature.feature.group"/>
+        <requirement
             name="org.eclipse.platform.feature.group"
             versionRange="[4.30.0,5.0.0)"/>
         <requirement
@@ -24521,6 +24555,8 @@
             name="epp.package.modeling"
             versionRange="[4.30.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
+        <requirement
+            name="org.eclipse.ecf.filetransfer.httpclient5.feature.feature.group"/>
         <requirement
             name="org.eclipse.platform.feature.group"
             versionRange="[4.30.0,5.0.0)"/>
@@ -27373,6 +27409,8 @@
             versionRange="[4.30.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
+            name="org.eclipse.ecf.filetransfer.httpclient5.feature.feature.group"/>
+        <requirement
             name="org.eclipse.platform.feature.group"
             versionRange="[4.30.0,5.0.0)"/>
         <requirement
@@ -27649,6 +27687,8 @@
             name="epp.package.parallel"
             versionRange="[4.30.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
+        <requirement
+            name="org.eclipse.ecf.filetransfer.httpclient5.feature.feature.group"/>
         <requirement
             name="org.eclipse.platform.feature.group"
             versionRange="[4.30.0,5.0.0)"/>
@@ -30200,6 +30240,8 @@
             versionRange="[4.30.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
+            name="org.eclipse.ecf.filetransfer.httpclient5.feature.feature.group"/>
+        <requirement
             name="org.eclipse.platform.feature.group"
             versionRange="[4.30.0,5.0.0)"/>
         <requirement
@@ -30448,6 +30490,8 @@
             name="epp.package.scout"
             versionRange="[4.30.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
+        <requirement
+            name="org.eclipse.ecf.filetransfer.httpclient5.feature.feature.group"/>
         <requirement
             name="org.eclipse.platform.feature.group"
             versionRange="[4.30.0,5.0.0)"/>
@@ -35372,6 +35416,8 @@
             versionRange="[4.30.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
+            name="org.eclipse.ecf.filetransfer.httpclient5.feature.feature.group"/>
+        <requirement
             name="org.eclipse.platform.feature.group"
             versionRange="[4.30.0,5.0.0)"/>
         <requirement
@@ -35448,6 +35494,8 @@
             name="org.eclipse.platform.ide"
             versionRange="[4.30.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
+        <requirement
+            name="org.eclipse.ecf.filetransfer.httpclient5.feature.feature.group"/>
         <requirement
             name="org.eclipse.platform.feature.group"
             versionRange="[4.30.0,5.0.0)"/>
