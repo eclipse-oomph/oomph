@@ -95,6 +95,8 @@
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
+      <repository
+          url="https://download.eclipse.org/mpc/drops/1.10.2/v20231116-1812"/>
     </setupTask>
   </version>
   <version name="latest.released"
@@ -205,6 +207,8 @@
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
+      <repository
+          url="https://download.eclipse.org/mpc/drops/1.10.2/v20231116-1812"/>
     </setupTask>
   </version>
   <version name="2023-09"
