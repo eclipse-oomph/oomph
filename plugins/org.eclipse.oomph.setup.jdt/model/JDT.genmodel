@@ -17,6 +17,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute JDT.ecore#//JRETask/executionEnvironmentDefault"/>
       <genFeatures createChild="false" propertyMultiLine="true" ecoreFeature="ecore:EAttribute JDT.ecore#//JRETask/vMArguments"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference JDT.ecore#//JRETask/jRELibraries"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute JDT.ecore#//JRETask/defaultExecutionEnvironments"/>
     </genClasses>
     <genClasses ecoreClass="JDT.ecore#//JRELibrary">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute JDT.ecore#//JRELibrary/libraryPath"/>

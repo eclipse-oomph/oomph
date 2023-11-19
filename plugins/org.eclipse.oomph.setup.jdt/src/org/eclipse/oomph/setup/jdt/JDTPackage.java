@@ -233,13 +233,22 @@ public interface JDTPackage extends EPackage
   int JRE_TASK__JRE_LIBRARIES = SetupPackage.SETUP_TASK_FEATURE_COUNT + 6;
 
   /**
+   * The feature id for the '<em><b>Default Execution Environments</b></em>' attribute list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int JRE_TASK__DEFAULT_EXECUTION_ENVIRONMENTS = SetupPackage.SETUP_TASK_FEATURE_COUNT + 7;
+
+  /**
    * The number of structural features of the '<em>JRE Task</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int JRE_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 7;
+  int JRE_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 8;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.jdt.impl.JRELibraryImpl <em>JRE Library</em>}' class.
@@ -366,6 +375,17 @@ public interface JDTPackage extends EPackage
   EReference getJRETask_JRELibraries();
 
   /**
+   * Returns the meta object for the attribute list '{@link org.eclipse.oomph.setup.jdt.JRETask#getDefaultExecutionEnvironments <em>Default Execution Environments</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute list '<em>Default Execution Environments</em>'.
+   * @see org.eclipse.oomph.setup.jdt.JRETask#getDefaultExecutionEnvironments()
+   * @see #getJRETask()
+   * @generated
+   */
+  EAttribute getJRETask_DefaultExecutionEnvironments();
+
+  /**
    * Returns the meta object for class '{@link org.eclipse.oomph.setup.jdt.JRELibrary <em>JRE Library</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -485,6 +505,14 @@ public interface JDTPackage extends EPackage
      * @generated
      */
     EReference JRE_TASK__JRE_LIBRARIES = eINSTANCE.getJRETask_JRELibraries();
+
+    /**
+     * The meta object literal for the '<em><b>Default Execution Environments</b></em>' attribute list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute JRE_TASK__DEFAULT_EXECUTION_ENVIRONMENTS = eINSTANCE.getJRETask_DefaultExecutionEnvironments();
 
     /**
      * The meta object literal for the '{@link org.eclipse.oomph.setup.jdt.impl.JRELibraryImpl <em>JRE Library</em>}' class.

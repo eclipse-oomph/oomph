@@ -21,6 +21,7 @@ import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.common.util.UniqueEList;
@@ -35,7 +36,9 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import org.eclipse.jdt.launching.IVMInstallType;
 import org.eclipse.jdt.launching.JavaRuntime;
+import org.eclipse.jdt.launching.environments.IExecutionEnvironment;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -105,6 +108,7 @@ public class JRETaskItemProvider extends SetupTaskItemProvider
       addVMInstallTypePropertyDescriptor(object);
       addExecutionEnvironmentDefaultPropertyDescriptor(object);
       addVMArgumentsPropertyDescriptor(object);
+      addDefaultExecutionEnvironmentsPropertyDescriptor(object);
     }
     return itemPropertyDescriptors;
   }
@@ -236,6 +240,33 @@ public class JRETaskItemProvider extends SetupTaskItemProvider
   }
 
   /**
+   * This adds a property descriptor for the Default Execution Environments feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated NOT
+   */
+  protected void addDefaultExecutionEnvironmentsPropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(new ItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_JRETask_defaultExecutionEnvironments_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_JRETask_defaultExecutionEnvironments_feature", "_UI_JRETask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        JDTPackage.Literals.JRE_TASK__DEFAULT_EXECUTION_ENVIRONMENTS, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null)
+    {
+      @Override
+      public Collection<?> getChoiceOfValues(Object object)
+      {
+        List<String> result = new ArrayList<>();
+        for (IExecutionEnvironment executionEnvironment : JavaRuntime.getExecutionEnvironmentsManager().getExecutionEnvironments())
+        {
+          result.add(executionEnvironment.getId());
+        }
+
+        return result;
+      }
+    });
+  }
+
+  /**
    * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
    * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
    * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -322,6 +353,12 @@ public class JRETaskItemProvider extends SetupTaskItemProvider
       }
     }
 
+    EList<String> defaultExecutionEnvironments = jre.getDefaultExecutionEnvironments();
+    if (!defaultExecutionEnvironments.isEmpty())
+    {
+      label += " {" + String.join(", ", defaultExecutionEnvironments) + "}"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+    }
+
     return label;
   }
 
@@ -345,6 +382,7 @@ public class JRETaskItemProvider extends SetupTaskItemProvider
       case JDTPackage.JRE_TASK__VM_INSTALL_TYPE:
       case JDTPackage.JRE_TASK__EXECUTION_ENVIRONMENT_DEFAULT:
       case JDTPackage.JRE_TASK__VM_ARGUMENTS:
+      case JDTPackage.JRE_TASK__DEFAULT_EXECUTION_ENVIRONMENTS:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
         return;
       case JDTPackage.JRE_TASK__JRE_LIBRARIES:

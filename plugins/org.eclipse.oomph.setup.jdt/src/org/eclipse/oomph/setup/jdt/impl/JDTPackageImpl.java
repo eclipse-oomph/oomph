@@ -209,6 +209,17 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
    * @generated
    */
   @Override
+  public EAttribute getJRETask_DefaultExecutionEnvironments()
+  {
+    return (EAttribute)jreTaskEClass.getEStructuralFeatures().get(7);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public EClass getJRELibrary()
   {
     return jreLibraryEClass;
@@ -278,6 +289,7 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
     createEAttribute(jreTaskEClass, JRE_TASK__EXECUTION_ENVIRONMENT_DEFAULT);
     createEAttribute(jreTaskEClass, JRE_TASK__VM_ARGUMENTS);
     createEReference(jreTaskEClass, JRE_TASK__JRE_LIBRARIES);
+    createEAttribute(jreTaskEClass, JRE_TASK__DEFAULT_EXECUTION_ENVIRONMENTS);
 
     jreLibraryEClass = createEClass(JRE_LIBRARY);
     createEAttribute(jreLibraryEClass, JRE_LIBRARY__LIBRARY_PATH);
@@ -338,6 +350,8 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getJRETask_JRELibraries(), getJRELibrary(), null, "jRELibraries", null, 0, -1, JRETask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getJRETask_DefaultExecutionEnvironments(), ecorePackage.getEString(), "defaultExecutionEnvironments", null, 0, -1, JRETask.class, //$NON-NLS-1$
+        !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(jreLibraryEClass, JRELibrary.class, "JRELibrary", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
     initEAttribute(getJRELibrary_LibraryPath(), ecorePackage.getEString(), "libraryPath", null, 1, 1, JRELibrary.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
@@ -1369,6 +1383,9 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
         "name", "vmArguments" //$NON-NLS-1$ //$NON-NLS-2$
     });
     addAnnotation(getJRETask_JRELibraries(), source, new String[] { "name", "jreLibrary" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getJRETask_DefaultExecutionEnvironments(), source, new String[] { "kind", "element", //$NON-NLS-1$ //$NON-NLS-2$
+        "name", "defaultExecutionEnvironment" //$NON-NLS-1$ //$NON-NLS-2$
     });
   }
 

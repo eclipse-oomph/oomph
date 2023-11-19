@@ -30,6 +30,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.eclipse.oomph.setup.jdt.JRETask#isExecutionEnvironmentDefault <em>Execution Environment Default</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.jdt.JRETask#getVMArguments <em>VM Arguments</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.jdt.JRETask#getJRELibraries <em>JRE Libraries</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.jdt.JRETask#getDefaultExecutionEnvironments <em>Default Execution Environments</em>}</li>
  * </ul>
  *
  * @see org.eclipse.oomph.setup.jdt.JDTPackage#getJRETask()
@@ -237,5 +238,17 @@ public interface JRETask extends SetupTask
    * @generated
    */
   EList<JRELibrary> getJRELibraries();
+
+  /**
+   * Returns the value of the '<em><b>Default Execution Environments</b></em>' attribute list.
+   * The list contents are of type {@link java.lang.String}.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Default Execution Environments</em>' attribute list.
+   * @see org.eclipse.oomph.setup.jdt.JDTPackage#getJRETask_DefaultExecutionEnvironments()
+   * @model extendedMetaData="kind='element' name='defaultExecutionEnvironment'"
+   * @generated
+   */
+  EList<String> getDefaultExecutionEnvironments();
 
 } // JRETask

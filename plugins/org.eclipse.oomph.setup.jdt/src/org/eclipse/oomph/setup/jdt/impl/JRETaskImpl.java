@@ -24,6 +24,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
@@ -63,6 +64,7 @@ import java.util.List;
  *   <li>{@link org.eclipse.oomph.setup.jdt.impl.JRETaskImpl#isExecutionEnvironmentDefault <em>Execution Environment Default</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.jdt.impl.JRETaskImpl#getVMArguments <em>VM Arguments</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.jdt.impl.JRETaskImpl#getJRELibraries <em>JRE Libraries</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.jdt.impl.JRETaskImpl#getDefaultExecutionEnvironments <em>Default Execution Environments</em>}</li>
  * </ul>
  *
  * @generated
@@ -198,6 +200,16 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
    * @ordered
    */
   protected EList<JRELibrary> jRELibraries;
+
+  /**
+   * The cached value of the '{@link #getDefaultExecutionEnvironments() <em>Default Execution Environments</em>}' attribute list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getDefaultExecutionEnvironments()
+   * @generated
+   * @ordered
+   */
+  protected EList<String> defaultExecutionEnvironments;
 
   /**
    * <!-- begin-user-doc -->
@@ -421,6 +433,21 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
    * @generated
    */
   @Override
+  public EList<String> getDefaultExecutionEnvironments()
+  {
+    if (defaultExecutionEnvironments == null)
+    {
+      defaultExecutionEnvironments = new EDataTypeUniqueEList<>(String.class, this, JDTPackage.JRE_TASK__DEFAULT_EXECUTION_ENVIRONMENTS);
+    }
+    return defaultExecutionEnvironments;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
     switch (featureID)
@@ -455,6 +482,8 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
         return getVMArguments();
       case JDTPackage.JRE_TASK__JRE_LIBRARIES:
         return getJRELibraries();
+      case JDTPackage.JRE_TASK__DEFAULT_EXECUTION_ENVIRONMENTS:
+        return getDefaultExecutionEnvironments();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -492,6 +521,10 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
         getJRELibraries().clear();
         getJRELibraries().addAll((Collection<? extends JRELibrary>)newValue);
         return;
+      case JDTPackage.JRE_TASK__DEFAULT_EXECUTION_ENVIRONMENTS:
+        getDefaultExecutionEnvironments().clear();
+        getDefaultExecutionEnvironments().addAll((Collection<? extends String>)newValue);
+        return;
     }
     super.eSet(featureID, newValue);
   }
@@ -527,6 +560,9 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
       case JDTPackage.JRE_TASK__JRE_LIBRARIES:
         getJRELibraries().clear();
         return;
+      case JDTPackage.JRE_TASK__DEFAULT_EXECUTION_ENVIRONMENTS:
+        getDefaultExecutionEnvironments().clear();
+        return;
     }
     super.eUnset(featureID);
   }
@@ -556,6 +592,8 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
         return VM_ARGUMENTS_EDEFAULT == null ? vMArguments != null : !VM_ARGUMENTS_EDEFAULT.equals(vMArguments);
       case JDTPackage.JRE_TASK__JRE_LIBRARIES:
         return jRELibraries != null && !jRELibraries.isEmpty();
+      case JDTPackage.JRE_TASK__DEFAULT_EXECUTION_ENVIRONMENTS:
+        return defaultExecutionEnvironments != null && !defaultExecutionEnvironments.isEmpty();
     }
     return super.eIsSet(featureID);
   }
@@ -586,6 +624,8 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
     result.append(executionEnvironmentDefault);
     result.append(", vMArguments: "); //$NON-NLS-1$
     result.append(vMArguments);
+    result.append(", defaultExecutionEnvironments: "); //$NON-NLS-1$
+    result.append(defaultExecutionEnvironments);
     result.append(')');
     return result.toString();
   }
@@ -636,20 +676,21 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     return JREHelper.isNeeded(context, getName(), getVersion(), getLocation(), getVMInstallType(), isExecutionEnvironmentDefault(),
-        sanitizeArguments(getVMArguments()), getJRELibraries());
+        getDefaultExecutionEnvironments(), sanitizeArguments(getVMArguments()), getJRELibraries());
   }
 
   @Override
   public void perform(SetupTaskContext context) throws Exception
   {
-    JREHelper.perform(context, getName(), getVersion(), getLocation(), getVMInstallType(), isExecutionEnvironmentDefault(), sanitizeArguments(getVMArguments()),
-        getJRELibraries());
+    JREHelper.perform(context, getName(), getVersion(), getLocation(), getVMInstallType(), isExecutionEnvironmentDefault(), getDefaultExecutionEnvironments(),
+        sanitizeArguments(getVMArguments()), getJRELibraries());
   }
 
   private static class JREHelper
   {
     public static void perform(SetupTaskContext context, String name, String version, String location, String vmInstallTypeID,
-        boolean executionEnvironmentDefault, String vmArguments, Collection<JRELibrary> jreLibraries) throws Exception
+        boolean executionEnvironmentDefault, List<String> defaultExecutionEnvironments, String vmArguments, Collection<JRELibrary> jreLibraries)
+        throws Exception
     {
       IVMInstallType[] types = JavaRuntime.getVMInstallTypes();
       for (IVMInstallType type : types)
@@ -768,13 +809,13 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
             JavaRuntime.setDefaultVMInstall(realVM, new NullProgressMonitor());
           }
 
-          if (executionEnvironmentDefault)
+          if (executionEnvironmentDefault || !defaultExecutionEnvironments.isEmpty())
           {
             IExecutionEnvironment[] executionEnvironments = JavaRuntime.getExecutionEnvironmentsManager().getExecutionEnvironments();
             for (IExecutionEnvironment executionEnvironment : executionEnvironments)
             {
               String id = executionEnvironment.getId();
-              if (id.equals(version) || "CDC-1.1/Foundation-1.1".equals(id) && "J2SE-1.4".equals(version)) //$NON-NLS-1$ //$NON-NLS-2$
+              if (id.equals(version) || defaultExecutionEnvironments.contains(id) || "CDC-1.1/Foundation-1.1".equals(id) && "J2SE-1.4".equals(version)) //$NON-NLS-1$ //$NON-NLS-2$
               {
                 if (executionEnvironment.getDefaultVM() == null)
                 {
@@ -791,7 +832,8 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
     }
 
     public static boolean isNeeded(SetupTaskContext context, String name, String version, String location, String vmInstallTypeID,
-        boolean executionEnvironmentDefault, String vmArguments, Collection<JRELibrary> jreLibraries) throws Exception
+        boolean executionEnvironmentDefault, List<String> defaultExecutionEnvironements, String vmArguments, Collection<JRELibrary> jreLibraries)
+        throws Exception
     {
       // If there is already a VM install for this name...
       IVMInstall vmInstall = getVMInstall(name, vmInstallTypeID);
@@ -824,13 +866,13 @@ public class JRETaskImpl extends SetupTaskImpl implements JRETask
         }
 
         // If this JRE should be the execution environment default.
-        if (executionEnvironmentDefault)
+        if (executionEnvironmentDefault || !defaultExecutionEnvironements.isEmpty())
         {
           IExecutionEnvironment[] executionEnvironments = JavaRuntime.getExecutionEnvironmentsManager().getExecutionEnvironments();
           for (IExecutionEnvironment executionEnvironment : executionEnvironments)
           {
             String id = executionEnvironment.getId();
-            if (id.equals(version) || "CDC-1.1/Foundation-1.1".equals(id) && "J2SE-1.4".equals(version)) //$NON-NLS-1$ //$NON-NLS-2$
+            if (id.equals(version) || defaultExecutionEnvironements.contains(id) || "CDC-1.1/Foundation-1.1".equals(id) && "J2SE-1.4".equals(version)) //$NON-NLS-1$ //$NON-NLS-2$
             {
               // If the corresponding execution environment has no default, then the task is still needed, even though the JRE already exists.
               if (executionEnvironment.getDefaultVM() == null)
