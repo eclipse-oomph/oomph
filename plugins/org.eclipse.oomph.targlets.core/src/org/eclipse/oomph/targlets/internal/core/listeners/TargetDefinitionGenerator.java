@@ -706,6 +706,11 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
         continue;
       }
 
+      if (iu.getFilter() != null)
+      {
+        continue;
+      }
+
       if ("true".equals(iu.getProperty(TargletContainer.IU_PROPERTY_SOURCE))) //$NON-NLS-1$
       {
         continue;
