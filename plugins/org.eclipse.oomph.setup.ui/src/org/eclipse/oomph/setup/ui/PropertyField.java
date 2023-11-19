@@ -23,9 +23,11 @@ import org.eclipse.oomph.setup.VariableType;
 import org.eclipse.oomph.setup.internal.core.SetupCorePlugin;
 import org.eclipse.oomph.setup.internal.core.util.Authenticator;
 import org.eclipse.oomph.util.IOUtil;
+import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.ui.dialogs.WorkspaceResourceDialog;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.eclipse.emf.edit.provider.IItemFontProvider;
 import org.eclipse.emf.edit.ui.provider.ExtendedFontRegistry;
@@ -45,6 +47,8 @@ import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.VerifyEvent;
@@ -98,6 +102,7 @@ public abstract class PropertyField
 
     field.setLabelText(label);
     field.setToolTip(variable.getDescription());
+    field.setLink(variable.getLink());
 
     GridData gridData = field.getLabelGridData();
     gridData.widthHint = 150;
@@ -195,6 +200,8 @@ public abstract class PropertyField
 
   private String labelText;
 
+  private URI link;
+
   private String toolTip;
 
   private Label label;
@@ -233,6 +240,16 @@ public abstract class PropertyField
     }
 
     this.labelText = labelText.trim();
+  }
+
+  public final URI getLink()
+  {
+    return link;
+  }
+
+  public final void setLink(URI link)
+  {
+    this.link = link;
   }
 
   public final void setBold(boolean bold)
@@ -315,7 +332,22 @@ public abstract class PropertyField
     label.setLayoutData(labelGridData);
     if (labelText != null)
     {
-      label.setText(labelText + ":"); //$NON-NLS-1$
+      if (link != null)
+      {
+        label.setText(labelText + ": \uD83D\uDD17"); //$NON-NLS-1$
+        label.addMouseListener(new MouseAdapter()
+        {
+          @Override
+          public void mouseDown(MouseEvent e)
+          {
+            OS.INSTANCE.openSystemBrowser(link.toString());
+          }
+        });
+      }
+      else
+      {
+        label.setText(labelText + ":"); //$NON-NLS-1$
+      }
     }
 
     Control control = createControl(parent);

@@ -373,6 +373,7 @@
         <details key="name" value="choice"/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="link" eType="ecore:EDataType ../../org.eclipse.oomph.base/model/Base.ecore#//URI"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="VariableChoice" eSuperTypes="../../org.eclipse.oomph.base/model/Base.ecore#//ModelElement">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">

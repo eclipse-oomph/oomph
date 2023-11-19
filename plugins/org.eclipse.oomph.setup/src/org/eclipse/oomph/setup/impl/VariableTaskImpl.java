@@ -54,6 +54,7 @@ import java.util.Set;
  *   <li>{@link org.eclipse.oomph.setup.impl.VariableTaskImpl#getStorageURI <em>Storage URI</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.VariableTaskImpl#getLabel <em>Label</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.VariableTaskImpl#getChoices <em>Choices</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.impl.VariableTaskImpl#getLink <em>Link</em>}</li>
  * </ul>
  *
  * @generated
@@ -199,6 +200,26 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
    * @ordered
    */
   protected EList<VariableChoice> choices;
+
+  /**
+   * The default value of the '{@link #getLink() <em>Link</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getLink()
+   * @generated
+   * @ordered
+   */
+  protected static final URI LINK_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getLink() <em>Link</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getLink()
+   * @generated
+   * @ordered
+   */
+  protected URI link = LINK_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -374,6 +395,33 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public URI getLink()
+  {
+    return link;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void setLink(URI newLink)
+  {
+    URI oldLink = link;
+    link = newLink;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, SetupPackage.VARIABLE_TASK__LINK, oldLink, link));
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
    * @generated NOT
    */
   public boolean isStorePromptedValue()
@@ -460,6 +508,8 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
         return getLabel();
       case SetupPackage.VARIABLE_TASK__CHOICES:
         return getChoices();
+      case SetupPackage.VARIABLE_TASK__LINK:
+        return getLink();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -500,6 +550,9 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
         getChoices().clear();
         getChoices().addAll((Collection<? extends VariableChoice>)newValue);
         return;
+      case SetupPackage.VARIABLE_TASK__LINK:
+        setLink((URI)newValue);
+        return;
     }
     super.eSet(featureID, newValue);
   }
@@ -538,6 +591,9 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
       case SetupPackage.VARIABLE_TASK__CHOICES:
         getChoices().clear();
         return;
+      case SetupPackage.VARIABLE_TASK__LINK:
+        setLink(LINK_EDEFAULT);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -568,6 +624,8 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
         return LABEL_EDEFAULT == null ? label != null : !LABEL_EDEFAULT.equals(label);
       case SetupPackage.VARIABLE_TASK__CHOICES:
         return choices != null && !choices.isEmpty();
+      case SetupPackage.VARIABLE_TASK__LINK:
+        return LINK_EDEFAULT == null ? link != null : !LINK_EDEFAULT.equals(link);
     }
     return super.eIsSet(featureID);
   }
@@ -631,6 +689,11 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
     {
       getAnnotations().add(EcoreUtil.copy(annotation));
       setStorageURI(variableTask.getStorageURI());
+    }
+
+    if (getLink() == null)
+    {
+      setLink(variableTask.getLink());
     }
   }
 

@@ -67,6 +67,7 @@ public class VariableTaskItemProvider extends SetupTaskItemProvider
       addDefaultValuePropertyDescriptor(object);
       addStorageURIPropertyDescriptor(object);
       addLabelPropertyDescriptor(object);
+      addLinkPropertyDescriptor(object);
     }
     return itemPropertyDescriptors;
   }
@@ -151,6 +152,20 @@ public class VariableTaskItemProvider extends SetupTaskItemProvider
         getString("_UI_VariableTask_label_feature"), //$NON-NLS-1$
         getString("_UI_PropertyDescriptor_description", "_UI_VariableTask_label_feature", "_UI_VariableTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.VARIABLE_TASK__LABEL, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+  }
+
+  /**
+   * This adds a property descriptor for the Link feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addLinkPropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_VariableTask_link_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_VariableTask_link_feature", "_UI_VariableTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        SetupPackage.Literals.VARIABLE_TASK__LINK, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
   /**
@@ -308,6 +323,7 @@ public class VariableTaskItemProvider extends SetupTaskItemProvider
       case SetupPackage.VARIABLE_TASK__DEFAULT_VALUE:
       case SetupPackage.VARIABLE_TASK__STORAGE_URI:
       case SetupPackage.VARIABLE_TASK__LABEL:
+      case SetupPackage.VARIABLE_TASK__LINK:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
         return;
       case SetupPackage.VARIABLE_TASK__CHOICES:

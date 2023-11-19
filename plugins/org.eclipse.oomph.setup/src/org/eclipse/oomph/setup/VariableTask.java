@@ -29,6 +29,7 @@ import org.eclipse.emf.common.util.URI;
  *   <li>{@link org.eclipse.oomph.setup.VariableTask#getStorageURI <em>Storage URI</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.VariableTask#getLabel <em>Label</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.VariableTask#getChoices <em>Choices</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.VariableTask#getLink <em>Link</em>}</li>
  * </ul>
  *
  * @see org.eclipse.oomph.setup.SetupPackage#getVariableTask()
@@ -224,5 +225,27 @@ public interface VariableTask extends SetupTask
    * @generated
    */
   EList<VariableChoice> getChoices();
+
+  /**
+   * Returns the value of the '<em><b>Link</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Link</em>' attribute.
+   * @see #setLink(URI)
+   * @see org.eclipse.oomph.setup.SetupPackage#getVariableTask_Link()
+   * @model dataType="org.eclipse.oomph.base.URI"
+   * @generated
+   */
+  URI getLink();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.setup.VariableTask#getLink <em>Link</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Link</em>' attribute.
+   * @see #getLink()
+   * @generated
+   */
+  void setLink(URI value);
 
 } // VariableTask

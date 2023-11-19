@@ -2153,13 +2153,22 @@ public interface SetupPackage extends EPackage
   int VARIABLE_TASK__CHOICES = SETUP_TASK_FEATURE_COUNT + 7;
 
   /**
+   * The feature id for the '<em><b>Link</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int VARIABLE_TASK__LINK = SETUP_TASK_FEATURE_COUNT + 8;
+
+  /**
    * The number of structural features of the '<em>Variable Task</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int VARIABLE_TASK_FEATURE_COUNT = SETUP_TASK_FEATURE_COUNT + 8;
+  int VARIABLE_TASK_FEATURE_COUNT = SETUP_TASK_FEATURE_COUNT + 9;
 
   /**
    * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
@@ -4388,6 +4397,17 @@ public interface SetupPackage extends EPackage
   EReference getVariableTask_Choices();
 
   /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.VariableTask#getLink <em>Link</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Link</em>'.
+   * @see org.eclipse.oomph.setup.VariableTask#getLink()
+   * @see #getVariableTask()
+   * @generated
+   */
+  EAttribute getVariableTask_Link();
+
+  /**
    * Returns the meta object for class '{@link org.eclipse.oomph.setup.SetupTask <em>Task</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -6023,6 +6043,14 @@ public interface SetupPackage extends EPackage
      * @generated
      */
     EReference VARIABLE_TASK__CHOICES = eINSTANCE.getVariableTask_Choices();
+
+    /**
+     * The meta object literal for the '<em><b>Link</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute VARIABLE_TASK__LINK = eINSTANCE.getVariableTask_Link();
 
     /**
      * The meta object literal for the '{@link org.eclipse.oomph.setup.impl.SetupTaskImpl <em>Task</em>}' class.
