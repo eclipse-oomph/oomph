@@ -1136,6 +1136,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
         return delegate.getURIs();
       }
 
+      @SuppressWarnings("deprecation")
       @Override
       public boolean remove(java.net.URI uri, HttpCookie httpCookie)
       {
@@ -1167,6 +1168,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
         return delegate.removeAll();
       }
 
+      @SuppressWarnings("deprecation")
       private org.apache.hc.client5.http.impl.cookie.BasicClientCookie createCookie(java.net.URI uri, HttpCookie httpCookie)
       {
         org.apache.hc.client5.http.impl.cookie.BasicClientCookie basicClientCookie = new org.apache.hc.client5.http.impl.cookie.BasicClientCookie(
