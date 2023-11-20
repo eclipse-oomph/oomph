@@ -90,13 +90,19 @@ public final class RootAnalyzer
   public static void removeImplicitUnits(Set<IInstallableUnit> ius, IQueryable<IInstallableUnit> queryable, IProgressMonitor monitor, boolean onlyIfRedundant,
       boolean ignoreJavaRequirements)
   {
+    removeImplicitUnits(ius, queryable, monitor, onlyIfRedundant, ignoreJavaRequirements, true);
+  }
+
+  public static void removeImplicitUnits(Set<IInstallableUnit> ius, IQueryable<IInstallableUnit> queryable, IProgressMonitor monitor, boolean onlyIfRedundant,
+      boolean ignoreJavaRequirements, boolean ignorePropertiesMatchRequirements)
+  {
     Set<IInstallableUnit> rootIUs = new HashSet<>(ius);
     Set<IInstallableUnit> currentlyVisitingIUs = new HashSet<>();
     Set<IInstallableUnit> visitedIUs = new HashSet<>();
 
     for (IInstallableUnit iu : ius)
     {
-      removeImplicitUnits(iu, rootIUs, currentlyVisitingIUs, visitedIUs, queryable, monitor, onlyIfRedundant, ignoreJavaRequirements);
+      removeImplicitUnits(iu, rootIUs, currentlyVisitingIUs, visitedIUs, queryable, monitor, onlyIfRedundant, ignoreJavaRequirements, ignoreJavaRequirements);
     }
 
     if (rootIUs.size() < ius.size())
@@ -107,14 +113,17 @@ public final class RootAnalyzer
 
   private static void removeImplicitUnits(IInstallableUnit iu, Set<IInstallableUnit> rootIUs, Set<IInstallableUnit> currentlyVisitingIUs,
       Set<IInstallableUnit> visitedIUs, IQueryable<IInstallableUnit> queryable, IProgressMonitor monitor, boolean onlyIfRedundant,
-      boolean ignoreJavaRequirements)
+      boolean ignoreJavaRequirements, boolean ignorePropertiesMatchRequirements)
   {
     if (visitedIUs.add(iu))
     {
       currentlyVisitingIUs.add(iu);
       for (IRequirement requirement : iu.getRequirements())
       {
-        if (!isTypeRequirement(requirement) && !ignoreJavaRequirements || !isJavaPackageRequirment(requirement))
+        if (!isTypeRequirement(requirement) && //
+            (requirement.getMin() != 0 || requirement.isGreedy()) //
+            && (!ignoreJavaRequirements || !isJavaPackageRequirment(requirement))
+            && (!ignorePropertiesMatchRequirements || !isPropertiesMatchRequirement(requirement)))
         {
           for (IInstallableUnit requiredIU : P2Util.asIterable(queryable.query(QueryUtil.createMatchQuery(requirement.getMatches()), null)))
           {
@@ -127,7 +136,8 @@ public final class RootAnalyzer
                 rootIUs.remove(requiredIU);
               }
 
-              removeImplicitUnits(requiredIU, rootIUs, currentlyVisitingIUs, visitedIUs, queryable, monitor, onlyIfRedundant, ignoreJavaRequirements);
+              removeImplicitUnits(requiredIU, rootIUs, currentlyVisitingIUs, visitedIUs, queryable, monitor, onlyIfRedundant, ignoreJavaRequirements,
+                  ignorePropertiesMatchRequirements);
             }
           }
         }
@@ -174,5 +184,11 @@ public final class RootAnalyzer
     }
 
     return false;
+  }
+
+  @SuppressWarnings("restriction")
+  private static boolean isPropertiesMatchRequirement(IRequirement requirement)
+  {
+    return requirement instanceof org.eclipse.equinox.internal.p2.metadata.RequiredPropertiesMatch;
   }
 }
