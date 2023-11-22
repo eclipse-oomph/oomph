@@ -335,6 +335,7 @@ public abstract class PropertyField
       if (link != null)
       {
         label.setText(labelText + ": \uD83D\uDD17"); //$NON-NLS-1$
+        label.setCursor(label.getDisplay().getSystemCursor(SWT.CURSOR_HAND));
         label.addMouseListener(new MouseAdapter()
         {
           @Override
