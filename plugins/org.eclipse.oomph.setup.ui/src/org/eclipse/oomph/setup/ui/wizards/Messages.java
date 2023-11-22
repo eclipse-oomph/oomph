@@ -101,6 +101,8 @@ public class Messages extends NLS
 
   public static String ConfirmationPage_labelProvider_tasks;
 
+  public static String ConfirmationPage_labelProvider_tasks_for;
+
   public static String ConfirmationPage_copyAction_text;
 
   public static String ConfirmationPage_column_nestedElements;

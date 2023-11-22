@@ -18,6 +18,8 @@ import org.eclipse.oomph.internal.ui.OomphDragAdapter;
 import org.eclipse.oomph.internal.ui.OomphEditingDomain;
 import org.eclipse.oomph.internal.ui.OomphTransferDelegate;
 import org.eclipse.oomph.setup.CompoundTask;
+import org.eclipse.oomph.setup.InstallationTask;
+import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.User;
@@ -563,7 +565,19 @@ public class ConfirmationPage extends SetupWizardPage
         if (object == ROOT_ELEMENT)
         {
           Trigger trigger = getTrigger();
-          return NLS.bind(Messages.ConfirmationPage_labelProvider_tasks, StringUtil.cap(getText(trigger).toLowerCase()));
+          String location = null;
+          if (trigger == Trigger.BOOTSTRAP)
+          {
+            InstallationTask installationTask = (InstallationTask)EcoreUtil.getObjectByType(getPerformer().getTriggeredSetupTasks(),
+                SetupPackage.Literals.INSTALLATION_TASK);
+            if (installationTask != null)
+            {
+              location = installationTask.getLocation();
+            }
+          }
+
+          return NLS.bind(location == null ? Messages.ConfirmationPage_labelProvider_tasks : Messages.ConfirmationPage_labelProvider_tasks_for,
+              StringUtil.cap(getText(trigger).toLowerCase()), location);
         }
 
         return super.getText(object);
