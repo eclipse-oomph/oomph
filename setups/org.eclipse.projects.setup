@@ -830,6 +830,59 @@
         </setupTask>
       </setupTask>
     </setupTask>
+    <setupTask
+        xsi:type="setup:CompoundTask"
+        name="GitLab">
+      <setupTask
+          xsi:type="setup:VariableTask"
+          name="github.git.authentication.style"
+          value="anonymous"
+          label="Github Git Authentication Style">
+        <annotation
+            source="http://www.eclipse.org/oomph/setup/GlobalVariable"/>
+        <choice
+            value="anonymous"
+            label="Anonymous Authentication"/>
+        <choice
+            value="ssh"
+            label="SSH Authentication"/>
+        <description>Choose the style of authentication used to access  Github Git clones</description>
+      </setupTask>
+      <setupTask
+          xsi:type="setup:CompoundTask"
+          filter="(&amp;(!(gitlab.git.authentication.style=ssh)))"
+          name="Anonymous Git Authentication">
+        <setupTask
+            xsi:type="setup:VariableTask"
+            name="gitlab.remoteURIs"
+            label="GitLab repository">
+          <choice
+              value="https://gitlab.eclipse.org/@{remoteURI}.git"
+              label="HTTPS (read-only, anonymous)"/>
+          <choice
+              value="git@gitlab.eclipse.org:@{remoteURI}.git"
+              label="Git (read-write)"/>
+          <description>Choose from the available GitLab URIs</description>
+        </setupTask>
+      </setupTask>
+      <setupTask
+          xsi:type="setup:CompoundTask"
+          filter="(gitlab.git.authentication.style=ssh)"
+          name="SSH Authentication">
+        <setupTask
+            xsi:type="setup:VariableTask"
+            name="gitlab.remoteURIs"
+            label="GitLab repository">
+          <choice
+              value="git@gitlab.eclipse.org:@{remoteURI}.git"
+              label="Git (read-write)"/>
+          <choice
+              value="https://gitlab.eclipse.org/@{remoteURI}.git"
+              label="HTTPS (read-only, anonymous)"/>
+          <description>Choose from the available GitLab URIs</description>
+        </setupTask>
+      </setupTask>
+    </setupTask>
   </setupTask>
   <setupTask
       xsi:type="setup:WorkspaceTask"
@@ -1225,6 +1278,7 @@
   <project href="https://raw.githubusercontent.com/eclipse/epsilon/main/releng/org.eclipse.epsilon.releng/epsilonDev.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-equinox/equinox/master/releng/org.eclipse.equinox.releng/Equinox.setup#/"/>
   <project href="interim/GEF.setup#/"/>
+  <project href="interim/GEFFX.setup#/"/>
   <project href="interim/GMFNotation.setup#/"/>
   <project href="interim/GMFRuntime.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse/ice/master/org.eclipse.ice.aggregator/ICE.setup#/"/>
