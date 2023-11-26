@@ -194,6 +194,7 @@ public abstract class OS
     Process process = processBuilder.start();
     process.getInputStream().close();
     process.getOutputStream().close();
+    Thread.sleep(1000);
     process.getErrorStream().close();
     return process;
   }
