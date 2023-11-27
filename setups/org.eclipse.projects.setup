@@ -1281,6 +1281,7 @@
   <project href="interim/GEFFX.setup#/"/>
   <project href="interim/GMFNotation.setup#/"/>
   <project href="interim/GMFRuntime.setup#/"/>
+  <project href="https://gitlab.eclipse.org/eclipse/graphiti/graphiti/-/raw/master/parent/Graphiti.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse/ice/master/org.eclipse.ice.aggregator/ICE.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-jdt/eclipse.jdt/master/org.eclipse.jdt.releng/JDT.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-justj/justj.tools/master/releng/org.eclipse.justj.tools.releng/JustJ.setup#/"/>
