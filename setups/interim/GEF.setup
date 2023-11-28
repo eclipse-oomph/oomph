@@ -28,9 +28,8 @@
   </setupTask>
   <setupTask
       xsi:type="jdt:JRETask"
-      version="JavaSE-11"
-      location="${jre.location-11}"
-      name="JRE for JavaSE-11">
+      version="JavaSE-17"
+      location="${jre.location-17}">
     <description>Define the JRE needed to compile and run the Java projects of ${scope.project.label}</description>
   </setupTask>
   <setupTask
@@ -89,12 +88,18 @@
         <value>remoteURI</value>
       </detail>
     </annotation>
+    <configSections
+        name="branch">
+      <properties
+          key="autoSetupRebase"
+          value="always"/>
+    </configSections>
     <description>${scope.project.label}</description>
   </setupTask>
   <setupTask
       xsi:type="setup.targlets:TargletTask">
     <targlet
-        name="GEF Classic">
+        name="GEF">
       <requirement
           name="org.eclipse.sdk.feature.group"/>
       <requirement
@@ -153,36 +158,6 @@
     </workingSet>
     <description>The dynamic working sets for CBI P2 Repository Aggregator</description>
   </setupTask>
-  <setupTask
-      xsi:type="setup:StringSubstitutionTask"
-      name="maven.build.java.home"
-      value="${jre.location-11}">
-    <description>The location used to specify JAVA_HOME in the External Tools Configurations.</description>
-  </setupTask>
-  <setupTask
-      xsi:type="setup:VariableTask"
-      filter="(osgi.os=win32)"
-      type="FILE"
-      name="maven.build.command"
-      defaultValue="mvn.cmd"
-      label="Maven Command">
-    <description>The absolute path location of the mvn command that will execute mvn on your operating system; it is used in the External Tools Configurations. You may leave the default if you don't intend to do Maven builds.</description>
-  </setupTask>
-  <setupTask
-      xsi:type="setup:VariableTask"
-      filter="(!(osgi.os=win32))"
-      type="FILE"
-      name="maven.build.command"
-      defaultValue="mvn"
-      label="Maven Command">
-    <description>The absolute path location of the mvn command that will execute mvn on your operating system; it is used in the External Tools Configurations. You may leave the default if you don't intend to do Maven builds.</description>
-  </setupTask>
-  <setupTask
-      xsi:type="setup:StringSubstitutionTask"
-      name="maven.build.command"
-      value="${maven.build.command}">
-    <description>The location of the mvn command that will execute mvn on your operating system; it is used in the External Tools Configurations.</description>
-  </setupTask>
   <stream name="master"
       label="Master">
     <setupTask
@@ -197,5 +172,5 @@
   <logicalProjectContainer
       xsi:type="setup:ProjectCatalog"
       href="../org.eclipse.setup#//@projectCatalogs[name='org.eclipse']"/>
-  <description>Common Build Infrastructure</description>
+  <description>Graphical Ediing Framework Classic</description>
 </setup:Project>

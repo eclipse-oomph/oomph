@@ -177,13 +177,13 @@ public class ProductCatalogGenerator implements IApplication
       "epp.package.dsl", //
       "epp.package.rcp", //
       "epp.package.modeling", //
-      "epp.package.parallel", //
       "epp.package.scout", //
-      "epp.package.javascript", //
-      "epp.package.testing", //
-      "epp.package.rust", //
       "org.eclipse.platform.ide", //
       ECLIPSE_PLATFORM_SDK_PRODUCT_IDE_ID, //
+      "epp.package.parallel", //
+      "epp.package.rust", //
+      "epp.package.javascript", //
+      "epp.package.testing", //
       "epp.package.reporting", //
       "epp.package.android", //
       "epp.package.automotive" //
@@ -1710,6 +1710,26 @@ public class ProductCatalogGenerator implements IApplication
     }
 
     productVersion.getSetupTasks().add(p2Task);
+
+    if (Boolean.FALSE && ECLIPSE_PLATFORM_SDK_PRODUCT_ID.equals(productName) && compareTrains(train, "2023-12") == 0)
+    {
+      Repository mpcRepository = P2Factory.eINSTANCE.createRepository("https://download.eclipse.org/mpc/drops/1.10.2/v20231116-1812");
+      p2Task.getRepositories().add(mpcRepository);
+
+      if (!ALL_PRODUCT_ID.equals(productName))
+      {
+        Requirement requirement = P2Factory.eINSTANCE.createRequirement();
+        requirement.setName("org.eclipse.ecf.filetransfer.httpclient5.feature.feature.group");
+        requirement.setVersionRange(VersionRange.emptyRange);
+        p2Task.getRequirements().add(1, requirement);
+
+        EclipseIniTask eclipseIniTask = SetupFactory.eINSTANCE.createEclipseIniTask();
+        eclipseIniTask.setVm(true);
+        eclipseIniTask.setOption("-Dorg.eclipse.ecf.provider.filetransfer.excludeContributors=");
+        eclipseIniTask.setValue("org.eclipse.ecf.provider.filetransfer.httpclientjava");
+        productVersion.getSetupTasks().add(eclipseIniTask);
+      }
+    }
 
     String idPrefix = "tooling" + (SPECIAL_PRODUCT_IDS.contains(productName) || ALL_PRODUCT_ID.equals(productName) ? "epp.package.java"
         : ECLIPSE_PLATFORM_SDK_PRODUCT_ID.equals(productName) ? "org.eclipse.platform.sdk" : productName) + ".ini.";
