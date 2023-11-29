@@ -221,7 +221,7 @@
         </detail>
         <detail
             key="extraUnits">
-          <value>jakarta.annotation-api_1.3.5,org.apache.commons.lang</value>
+          <value>jakarta.annotation-api_1.3.5,org.apache.commons.lang,org.apache.commons.logging</value>
         </detail>
         <detail
             key="singleLocation">

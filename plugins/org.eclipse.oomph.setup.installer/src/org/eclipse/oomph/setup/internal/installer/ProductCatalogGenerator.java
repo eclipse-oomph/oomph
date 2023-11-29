@@ -39,6 +39,7 @@ import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.p2.P2Task;
 import org.eclipse.oomph.setup.p2.SetupP2Factory;
+import org.eclipse.oomph.setup.p2.SetupP2Package;
 import org.eclipse.oomph.util.CollectionUtil;
 import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.IOUtil;
@@ -668,6 +669,16 @@ public class ProductCatalogGenerator implements IApplication
             eclipseIniTask.setOption("-Xmx");
             eclipseIniTask.setValue("5g");
             product.getSetupTasks().add(eclipseIniTask);
+
+            EList<ProductVersion> productVersions = product.getVersions();
+            ProductVersion stagingProductVersion = EcoreUtil.copy(productVersions.get(2));
+            stagingProductVersion.setName("staging");
+            stagingProductVersion.setLabel("Staging (" + stagingProductVersion.getLabel() + ")");
+            P2Task p2Task = (P2Task)EcoreUtil.getObjectByType(stagingProductVersion.getSetupTasks(), SetupP2Package.Literals.P2_TASK);
+            Repository repository = p2Task.getRepositories().get(0);
+            repository.getAnnotations().clear();
+            repository.setURL(repository.getURL().replaceAll("(.+/)releases(/[^/]+).*", "$1staging$2"));
+            productVersions.add(2, stagingProductVersion);
 
             allProductResource.getContents().add(product);
 
