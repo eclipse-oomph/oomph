@@ -22,60 +22,6 @@ https://www.eclipse.org/legal/epl-2.0.
 
 SPDX-License-Identifier: EPL-2.0
 
-## Source Code
-
-The project maintains the following source code repositories:
-
-* https://git.eclipse.org/c/oomph/org.eclipse.oomph.git
-* https://git.eclipse.org/c/oomph/org.eclipse.oomph.incubator.git
-* https://git.eclipse.org/c/oomph/org.eclipse.oomph.setups.git
-* https://git.eclipse.org/c/oomph/uss.git
-
-## Third-party Content
-
-This project leverages the following third party content.
-
-Apache Commons Codec (1.6)
-
-* License: Apache License, 2.0
-
-Apache Commons Logging Jar (1.1.1)
-
-* License: Apache License, 2.0
-
-Apache HttpComponents Client (4.2.6)
-
-* License: Apache License, 2.0
-
-Apache HttpComponents Client 4.3.6 (4.3.6)
-
-* License: Apache License, 2.0
-
-Google Font OpenSans-Regular.ttf (1.10.0)
-
-* License: Apache License, 2.0
-* Project: https://www.google.com/fonts
-* Source: https://www.google.com/fonts#UsePlace:use/Collection:Open+Sans
-
-httpcomponent Core 4.3.3 (4.3.3)
-
-* License: Apache License, 2.0, Public Domain
-
-jdk.java.net version 13 AND LATER (n/a)
-
-* License: GPL-2.0-only WITH classpath-exception-2.0 AND GPL-2.0-only WITH
-   OpenJDK-assembly-exception-1.0 AND Apache-2.0 AND Unicode-TOU AND
-   BSD-3-Clause AND W3C AND MIT AND BSD-2-Clause AND ICU AND MPL-2.0 AND IJG AND
-   Apache-1.1 AND W3C-2015-05-13 AND NTP AND (MIT 
-
-jna-platform (4.1.0)
-
-* License: Apache License, 2.0
-
-mockito (1.9.5)
-
-* License: Apache License, 2.0, New BSD license, MIT license
-
 ## Cryptography
 
 Content may contain encryption software. The country in which you are currently
