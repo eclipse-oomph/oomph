@@ -1309,7 +1309,7 @@
   <project href="https://git.eclipse.org/c/rmf/org.eclipse.rmf.git/plain/org.eclipse.rmf.releng/oomph/RMF.setup#/"/>
   <project href="https://git.eclipse.org/c/scout/oomph.git/plain/Scout.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-simrel/simrel.build/main/SimRel.setup#/"/>
-  <project href="https://git.eclipse.org/c/sirius/org.eclipse.sirius.git/plain/releng/org.eclipse.sirius.settings/Sirius.setup#/"/>
+  <project href="https://raw.githubusercontent.com/eclipse-sirius/sirius-desktop/master/releng/org.eclipse.sirius.settings/Sirius.setup#/"/>
   <project href="https://git.eclipse.org/c/skills/org.eclipse.skills.git/plain/releng/org.eclipse.skills.releng/oomph/skills.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse/smarthome/master/targetplatform/EclipseSmartHome.setup#/"/>
   <project href="https://git.eclipse.org/c/swtbot/org.eclipse.swtbot.git/plain/devtools/oomph/SWTBot.setup#/"/>
@@ -1317,7 +1317,7 @@
   <project href="https://raw.githubusercontent.com/eclipse/texlipse/master/EclipseTeXlipse.setup#/"/>
   <project href="https://git.eclipse.org/c/tracecompass/org.eclipse.tracecompass.git/plain/TraceCompass.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-tycho/tycho/master/setup/Tycho.setup#/"/>
-  <project href="https://git.eclipse.org/c/uml2/org.eclipse.uml2.git/plain/releng/org.eclipse.uml2.build-feature/UML2.setup#/"/>
+  <project href="https://raw.githubusercontent.com/eclipse-uml2/uml2/master/releng/org.eclipse.uml2.build-feature/UML2.setup#/"/>
   <project href="https://git.eclipse.org/c/usssdk/org.eclipse.usssdk.git/plain/org.eclipse.userstorage.releng/UserStorage.setup#/"/>
   <project href="https://git.eclipse.org/c/viatra/org.eclipse.viatra.git/plain/releng/org.eclipse.viatra.setup/VIATRAEMF.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse/windowbuilder/master/setups/WindowBuilder.setup#/"/>
