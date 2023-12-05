@@ -515,6 +515,29 @@
       <sourceLocator
           rootFolder="${github.clone.oomph.github.location}"/>
       <repositoryList
+          name="2024-03">
+        <repository
+            url="https://download.eclipse.org/modeling/emf/emf/builds/milestone/latest"/>
+        <repository
+            url="https://download.eclipse.org/egit/updates-stable-nightly"/>
+        <repository
+            url="https://download.eclipse.org/mylyn/updates/nightly/latest"/>
+        <repository
+            url="https://download.eclipse.org/nebula/snapshot"/>
+        <repository
+            url="https://download.eclipse.org/technology/m2e/snapshots/latest"/>
+        <repository
+            url="https://download.eclipse.org/technology/swtbot/snapshots"/>
+        <repository
+            url="https://download.eclipse.org/tools/orbit/simrel/orbit-aggregation/nightly/latest"/>
+        <repository
+            url="https://download.eclipse.org/justj/jres/17/updates/milestone/latest"/>
+        <repository
+            url="https://download.eclipse.org/usssdk/updates/latest"/>
+        <repository
+            url="https://download.eclipse.org/webtools/downloads/drops/R3.32.0/R-3.32.0-20231114230950/repository"/>
+      </repositoryList>
+      <repositoryList
           name="2023-12">
         <repository
             url="https://download.eclipse.org/modeling/emf/emf/builds/milestone/latest"/>
