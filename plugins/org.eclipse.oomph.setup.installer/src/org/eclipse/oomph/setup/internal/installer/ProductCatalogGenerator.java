@@ -33,6 +33,7 @@ import org.eclipse.oomph.setup.ProductVersion;
 import org.eclipse.oomph.setup.RedirectionTask;
 import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.SetupFactory;
+import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.VariableTask;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl;
@@ -451,7 +452,7 @@ public class ProductCatalogGenerator implements IApplication
   {
     return new String[] { "juno", "kepler", "luna", "mars", "neon", "oxygen", "photon", "2018-09", "2018-12", "2019-03", "2019-06", "2019-09", "2019-12",
         "2020-03", "2020-06", "2020-09", "2020-12", "2021-03", "2021-06", "2021-09", "2021-12", "2022-03", "2022-06", "2022-09", "2022-12", "2023-03",
-        "2023-06", "2023-09", "2023-12" };
+        "2023-06", "2023-09", "2023-12", "2024-03" };
   }
 
   private URI getEclipsePlatformSite(String train)
@@ -677,8 +678,18 @@ public class ProductCatalogGenerator implements IApplication
             P2Task p2Task = (P2Task)EcoreUtil.getObjectByType(stagingProductVersion.getSetupTasks(), SetupP2Package.Literals.P2_TASK);
             Repository repository = p2Task.getRepositories().get(0);
             repository.getAnnotations().clear();
-            repository.setURL(repository.getURL().replaceAll("(.+/)releases(/[^/]+).*", "$1staging$2"));
+
+            Function<String, String> toStaging = url -> url.replaceAll("(.+/)releases(/[^/]+).*", "$1staging$2");
+            repository.setURL(toStaging.apply(repository.getURL()));
             productVersions.add(2, stagingProductVersion);
+
+            RedirectionTask redirectionTask = (RedirectionTask)EcoreUtil.getObjectByType(stagingProductVersion.getSetupTasks(),
+                SetupPackage.Literals.REDIRECTION_TASK);
+            if (redirectionTask != null)
+            {
+              redirectionTask.setSourceURL(toStaging.apply(redirectionTask.getSourceURL()));
+              redirectionTask.setTargetURL(toStaging.apply(redirectionTask.getTargetURL()));
+            }
 
             allProductResource.getContents().add(product);
 
