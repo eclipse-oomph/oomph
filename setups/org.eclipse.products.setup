@@ -80,10 +80,6 @@
         </detail>
       </annotation>
       <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2024-03"
-          targetURL="https://download.eclipse.org/releases/2023-12"/>
-      <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Java Developers (2024-03)">
         <requirement
@@ -140,6 +136,8 @@
             name="org.eclipse.tm.terminal.feature.feature.group"/>
         <requirement
             name="org.eclipse.wildwebdeveloper.xml.feature.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/technology/epp/packages/2024-03"/>
         <repository
             url="https://download.eclipse.org/releases/2024-03">
           <annotation
@@ -244,10 +242,6 @@
         </detail>
       </annotation>
       <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2024-03"
-          targetURL="https://download.eclipse.org/releases/2023-12"/>
-      <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Java Developers (2024-03)">
         <requirement
@@ -304,6 +298,8 @@
             name="org.eclipse.tm.terminal.feature.feature.group"/>
         <requirement
             name="org.eclipse.wildwebdeveloper.xml.feature.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/technology/epp/packages/2024-03"/>
         <repository
             url="https://download.eclipse.org/releases/2024-03">
           <annotation
@@ -2463,10 +2459,6 @@
         </detail>
       </annotation>
       <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2024-03"
-          targetURL="https://download.eclipse.org/releases/2023-12"/>
-      <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Enterprise Java and Web Developers (2024-03)">
         <requirement
@@ -2655,6 +2647,8 @@
             name="org.eclipse.wst.server_adapters.feature.feature.group"/>
         <requirement
             name="org.eclipse.wst.xsl.feature.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/technology/epp/packages/2024-03"/>
         <repository
             url="https://download.eclipse.org/releases/2024-03">
           <annotation
@@ -2891,10 +2885,6 @@
         </detail>
       </annotation>
       <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2024-03"
-          targetURL="https://download.eclipse.org/releases/2023-12"/>
-      <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Enterprise Java and Web Developers (2024-03)">
         <requirement
@@ -3083,6 +3073,8 @@
             name="org.eclipse.wst.server_adapters.feature.feature.group"/>
         <requirement
             name="org.eclipse.wst.xsl.feature.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/technology/epp/packages/2024-03"/>
         <repository
             url="https://download.eclipse.org/releases/2024-03">
           <annotation
@@ -8500,10 +8492,6 @@
         </detail>
       </annotation>
       <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2024-03"
-          targetURL="https://download.eclipse.org/releases/2023-12"/>
-      <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for C/C++ Developers (2024-03)">
         <requirement
@@ -8594,6 +8582,8 @@
             name="org.eclipse.tracecompass.lttng2.kernel.feature.group"/>
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/technology/epp/packages/2024-03"/>
         <repository
             url="https://download.eclipse.org/releases/2024-03">
           <annotation
@@ -8732,10 +8722,6 @@
         </detail>
       </annotation>
       <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2024-03"
-          targetURL="https://download.eclipse.org/releases/2023-12"/>
-      <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for C/C++ Developers (2024-03)">
         <requirement
@@ -8826,6 +8812,8 @@
             name="org.eclipse.tracecompass.lttng2.kernel.feature.group"/>
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/technology/epp/packages/2024-03"/>
         <repository
             url="https://download.eclipse.org/releases/2024-03">
           <annotation
@@ -11804,10 +11792,6 @@
         </detail>
       </annotation>
       <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2024-03"
-          targetURL="https://download.eclipse.org/releases/2023-12"/>
-      <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Embedded C/C++ Developers (2024-03)">
         <requirement
@@ -11930,6 +11914,8 @@
             name="org.eclipse.tracecompass.lttng2.kernel.feature.group"/>
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/technology/epp/packages/2024-03"/>
         <repository
             url="https://download.eclipse.org/releases/2024-03">
           <annotation
@@ -12100,10 +12086,6 @@
         </detail>
       </annotation>
       <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2024-03"
-          targetURL="https://download.eclipse.org/releases/2023-12"/>
-      <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Embedded C/C++ Developers (2024-03)">
         <requirement
@@ -12226,6 +12208,8 @@
             name="org.eclipse.tracecompass.lttng2.kernel.feature.group"/>
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/technology/epp/packages/2024-03"/>
         <repository
             url="https://download.eclipse.org/releases/2024-03">
           <annotation
@@ -14127,10 +14111,6 @@
         </detail>
       </annotation>
       <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2024-03"
-          targetURL="https://download.eclipse.org/releases/2023-12"/>
-      <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for PHP Developers (2024-03)">
         <requirement
@@ -14187,6 +14167,8 @@
             name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/technology/epp/packages/2024-03"/>
         <repository
             url="https://download.eclipse.org/releases/2024-03">
           <annotation
@@ -14291,10 +14273,6 @@
         </detail>
       </annotation>
       <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2024-03"
-          targetURL="https://download.eclipse.org/releases/2023-12"/>
-      <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for PHP Developers (2024-03)">
         <requirement
@@ -14351,6 +14329,8 @@
             name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/technology/epp/packages/2024-03"/>
         <repository
             url="https://download.eclipse.org/releases/2024-03">
           <annotation
@@ -16481,10 +16461,6 @@
         </detail>
       </annotation>
       <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2024-03"
-          targetURL="https://download.eclipse.org/releases/2023-12"/>
-      <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Eclipse Committers (2024-03)">
         <requirement
@@ -16565,6 +16541,8 @@
             name="org.eclipse.wildwebdeveloper.embedder.node.feature.feature.group"/>
         <requirement
             name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/technology/epp/packages/2024-03"/>
         <repository
             url="https://download.eclipse.org/releases/2024-03">
           <annotation
@@ -16693,10 +16671,6 @@
         </detail>
       </annotation>
       <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2024-03"
-          targetURL="https://download.eclipse.org/releases/2023-12"/>
-      <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Eclipse Committers (2024-03)">
         <requirement
@@ -16777,6 +16751,8 @@
             name="org.eclipse.wildwebdeveloper.embedder.node.feature.feature.group"/>
         <requirement
             name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/technology/epp/packages/2024-03"/>
         <repository
             url="https://download.eclipse.org/releases/2024-03">
           <annotation
@@ -19686,10 +19662,6 @@
         </detail>
       </annotation>
       <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2024-03"
-          targetURL="https://download.eclipse.org/releases/2023-12"/>
-      <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse DSL Tools (2024-03)">
         <requirement
@@ -19734,6 +19706,8 @@
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <requirement
             name="org.eclipse.xtext.sdk.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/technology/epp/packages/2024-03"/>
         <repository
             url="https://download.eclipse.org/releases/2024-03">
           <annotation
@@ -19826,10 +19800,6 @@
         </detail>
       </annotation>
       <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2024-03"
-          targetURL="https://download.eclipse.org/releases/2023-12"/>
-      <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse DSL Tools (2024-03)">
         <requirement
@@ -19874,6 +19844,8 @@
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <requirement
             name="org.eclipse.xtext.sdk.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/technology/epp/packages/2024-03"/>
         <repository
             url="https://download.eclipse.org/releases/2024-03">
           <annotation
@@ -21679,10 +21651,6 @@
         </detail>
       </annotation>
       <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2024-03"
-          targetURL="https://download.eclipse.org/releases/2023-12"/>
-      <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for RCP and RAP Developers (2024-03)">
         <requirement
@@ -21761,6 +21729,8 @@
             name="org.eclipse.tm.terminal.feature.feature.group"/>
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/technology/epp/packages/2024-03"/>
         <repository
             url="https://download.eclipse.org/releases/2024-03">
           <annotation
@@ -21887,10 +21857,6 @@
         </detail>
       </annotation>
       <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2024-03"
-          targetURL="https://download.eclipse.org/releases/2023-12"/>
-      <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for RCP and RAP Developers (2024-03)">
         <requirement
@@ -21969,6 +21935,8 @@
             name="org.eclipse.tm.terminal.feature.feature.group"/>
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/technology/epp/packages/2024-03"/>
         <repository
             url="https://download.eclipse.org/releases/2024-03">
           <annotation
@@ -24536,10 +24504,6 @@
         </detail>
       </annotation>
       <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2024-03"
-          targetURL="https://download.eclipse.org/releases/2023-12"/>
-      <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse Modeling Tools (2024-03)">
         <requirement
@@ -24630,6 +24594,8 @@
             name="org.eclipse.uml2.sdk.feature.group"/>
         <requirement
             name="org.eclipse.xsd.sdk.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/technology/epp/packages/2024-03"/>
         <repository
             url="https://download.eclipse.org/releases/2024-03">
           <annotation
@@ -24768,10 +24734,6 @@
         </detail>
       </annotation>
       <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2024-03"
-          targetURL="https://download.eclipse.org/releases/2023-12"/>
-      <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse Modeling Tools (2024-03)">
         <requirement
@@ -24862,6 +24824,8 @@
             name="org.eclipse.uml2.sdk.feature.group"/>
         <requirement
             name="org.eclipse.xsd.sdk.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/technology/epp/packages/2024-03"/>
         <repository
             url="https://download.eclipse.org/releases/2024-03">
           <annotation
@@ -27733,10 +27697,6 @@
         </detail>
       </annotation>
       <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2024-03"
-          targetURL="https://download.eclipse.org/releases/2023-12"/>
-      <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for Scout Developers (2024-03)">
         <requirement
@@ -27795,6 +27755,8 @@
             name="org.eclipse.wst.web_ui.feature.feature.group"/>
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/technology/epp/packages/2024-03"/>
         <repository
             url="https://download.eclipse.org/releases/2024-03">
           <annotation
@@ -27901,10 +27863,6 @@
         </detail>
       </annotation>
       <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2024-03"
-          targetURL="https://download.eclipse.org/releases/2023-12"/>
-      <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for Scout Developers (2024-03)">
         <requirement
@@ -27963,6 +27921,8 @@
             name="org.eclipse.wst.web_ui.feature.feature.group"/>
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/technology/epp/packages/2024-03"/>
         <repository
             url="https://download.eclipse.org/releases/2024-03">
           <annotation
@@ -30106,10 +30066,6 @@
         </detail>
       </annotation>
       <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2024-03"
-          targetURL="https://download.eclipse.org/releases/2023-12"/>
-      <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse Platform (2024-03)">
         <requirement
@@ -30175,10 +30131,6 @@
           <value>Eclipse Platform - 2024-03</value>
         </detail>
       </annotation>
-      <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2024-03"
-          targetURL="https://download.eclipse.org/releases/2023-12"/>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse Platform (2024-03)">

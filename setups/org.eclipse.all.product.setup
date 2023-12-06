@@ -57,10 +57,6 @@
       </detail>
     </annotation>
     <setupTask
-        xsi:type="setup:RedirectionTask"
-        sourceURL="https://download.eclipse.org/releases/2024-03"
-        targetURL="https://download.eclipse.org/releases/2023-12"/>
-    <setupTask
         xsi:type="setup.p2:P2Task"
         label="Eclipse Eierlegende Wollmilchsau (2024-03)">
       <requirement
@@ -171,10 +167,6 @@
       </detail>
     </annotation>
     <setupTask
-        xsi:type="setup:RedirectionTask"
-        sourceURL="https://download.eclipse.org/staging/2024-03"
-        targetURL="https://download.eclipse.org/staging/2023-12"/>
-    <setupTask
         xsi:type="setup.p2:P2Task"
         label="Eclipse Eierlegende Wollmilchsau (2024-03)">
       <requirement
@@ -226,10 +218,6 @@
         <value>Eclipse Eierlegende Wollmilchsau - 2024-03</value>
       </detail>
     </annotation>
-    <setupTask
-        xsi:type="setup:RedirectionTask"
-        sourceURL="https://download.eclipse.org/releases/2024-03"
-        targetURL="https://download.eclipse.org/releases/2023-12"/>
     <setupTask
         xsi:type="setup.p2:P2Task"
         label="Eclipse Eierlegende Wollmilchsau (2024-03)">

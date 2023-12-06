@@ -51,6 +51,8 @@
         name="org.eclipse.swtbot.eclipse.test.junit.feature.group"/>
     <requirement
         name="org.eclipse.oomph.setup.launching.feature.group"/>
+    <requirement
+        name="org.eclipse.oomph.preferences.feature.group"/>
     <repository
         url="https://download.eclipse.org/modeling/emf/emf/builds/nightly/latest"/>
     <repository
