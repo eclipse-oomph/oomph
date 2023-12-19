@@ -32,6 +32,10 @@
         href="configurations/OomphConfiguration.setup#/"/>
   </annotation>
   <setupTask
+      xsi:type="setup:VariableTask"
+      name="swtbot.p2"
+      value="https://download.eclipse.org/technology/swtbot/releases/latest"/>
+  <setupTask
       xsi:type="setup.p2:P2Task"
       label="Oomph">
     <requirement
@@ -58,7 +62,7 @@
     <repository
         url="https://download.eclipse.org/egit/updates-stable-nightly"/>
     <repository
-        url="https://download.eclipse.org/technology/swtbot/snapshots"/>
+        url="${swtbot.p2}"/>
     <repository
         url="${oomph.update.url}"/>
   </setupTask>
@@ -529,7 +533,7 @@
         <repository
             url="https://download.eclipse.org/technology/m2e/snapshots/latest"/>
         <repository
-            url="https://download.eclipse.org/technology/swtbot/snapshots"/>
+            url="${swtbot.p2}"/>
         <repository
             url="https://download.eclipse.org/tools/orbit/simrel/orbit-aggregation/nightly/latest"/>
         <repository
