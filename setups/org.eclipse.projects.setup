@@ -1298,7 +1298,7 @@
   <project href="https://raw.githubusercontent.com/eclipse-packaging/packages/master/releng/org.eclipse.epp.config/oomph/EPP.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse/epsilon/main/releng/org.eclipse.epsilon.releng/epsilonDev.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-equinox/equinox/master/releng/org.eclipse.equinox.releng/Equinox.setup#/"/>
-  <project href="interim/GEF.setup#/"/>
+  <project href="https://raw.githubusercontent.com/eclipse/gef-classic/master/setup/GEF.setup#/"/>
   <project href="interim/GEFFX.setup#/"/>
   <project href="interim/GMFNotation.setup#/"/>
   <project href="interim/GMFRuntime.setup#/"/>
