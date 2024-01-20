@@ -50,7 +50,10 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.services.IServiceLocator;
@@ -323,6 +326,34 @@ public final class UIUtil
     {
       text.selectAll();
     }
+  }
+
+  public static List<IViewPart> findViews(String viewId)
+  {
+    List<IViewPart> result = new ArrayList<>();
+    if (WORKBENCH != null)
+    {
+      for (IWorkbenchWindow window : WORKBENCH.getWorkbenchWindows())
+      {
+        for (IWorkbenchPage page : window.getPages())
+        {
+          IViewReference viewReference = page.findViewReference(viewId);
+          if (viewReference != null)
+          {
+            IViewPart view = viewReference.getView(false);
+            if (view != null)
+            {
+              if (!result.contains(view))
+              {
+                result.add(view);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    return result;
   }
 
   private static Text findTextControl(Object control)

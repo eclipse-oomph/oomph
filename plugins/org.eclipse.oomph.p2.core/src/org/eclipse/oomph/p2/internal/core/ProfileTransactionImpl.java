@@ -202,7 +202,7 @@ public class ProfileTransactionImpl implements ProfileTransaction
 
     iuProperties.putAll(cleanIUProperties);
 
-    mirrors = SimpleArtifactRepository.MIRRORS_ENABLED;
+    mirrors = isMirrorsEnabled();
   }
 
   @Override
@@ -839,9 +839,16 @@ public class ProfileTransactionImpl implements ProfileTransaction
     }
   }
 
+  @SuppressWarnings("nls")
+  private static boolean isMirrorsEnabled()
+  {
+    return !"false".equals(org.eclipse.equinox.internal.p2.artifact.repository.Activator.getContext().getProperty("eclipse.p2.mirrors"));
+  }
+
+  @SuppressWarnings("nls")
   private void initMirrors(final List<Runnable> cleanup)
   {
-    final boolean wasMirrors = SimpleArtifactRepository.MIRRORS_ENABLED;
+    final boolean wasMirrors = isMirrorsEnabled();
     if (mirrors != wasMirrors)
     {
       try
@@ -867,7 +874,16 @@ public class ProfileTransactionImpl implements ProfileTransaction
       }
       catch (Throwable ex)
       {
-        // Ignore
+        System.setProperty("eclipse.p2.mirrors", Boolean.toString(mirrors));
+
+        cleanup.add(new Runnable()
+        {
+          @Override
+          public void run()
+          {
+            System.setProperty("eclipse.p2.mirrors", Boolean.toString(wasMirrors));
+          }
+        });
       }
     }
   }

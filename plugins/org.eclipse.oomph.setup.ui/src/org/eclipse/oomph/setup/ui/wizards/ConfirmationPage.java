@@ -745,10 +745,7 @@ public class ConfirmationPage extends SetupWizardPage
         List<Object> result = new ArrayList<>();
         for (Object child : super.getElements(object))
         {
-          if (!(child instanceof SetupTask))
-          {
-            result.add(child);
-          }
+          result.add(child);
         }
 
         return result.toArray();
