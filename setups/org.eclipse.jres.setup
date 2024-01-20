@@ -22,7 +22,7 @@
   </setupTask>
   <setupTask
       xsi:type="setup.p2:P2Task"
-      label="JRE 17.0.9">
+      label="JRE 17.0.10">
     <annotation
         source="http://www.eclipse.org/oomph/setup/JRESpecificTasks">
       <content
