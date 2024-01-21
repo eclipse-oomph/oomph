@@ -203,6 +203,7 @@ public class GitCloneTaskItemProvider extends SetupTaskItemProvider
     {
       super.getChildrenFeatures(object);
       childrenFeatures.add(GitPackage.Literals.GIT_CLONE_TASK__CONFIG_SECTIONS);
+      childrenFeatures.add(GitPackage.Literals.GIT_CLONE_TASK__CONFIGURATIONS);
     }
     return childrenFeatures;
   }
@@ -288,6 +289,7 @@ public class GitCloneTaskItemProvider extends SetupTaskItemProvider
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
         return;
       case GitPackage.GIT_CLONE_TASK__CONFIG_SECTIONS:
+      case GitPackage.GIT_CLONE_TASK__CONFIGURATIONS:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
         return;
     }

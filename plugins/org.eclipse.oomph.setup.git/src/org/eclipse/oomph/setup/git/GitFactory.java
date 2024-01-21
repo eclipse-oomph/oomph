@@ -31,6 +31,15 @@ public interface GitFactory extends EFactory
   GitFactory eINSTANCE = org.eclipse.oomph.setup.git.impl.GitFactoryImpl.init();
 
   /**
+   * Returns a new object of class '<em>Configuration Task</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Configuration Task</em>'.
+   * @generated
+   */
+  GitConfigurationTask createGitConfigurationTask();
+
+  /**
    * Returns a new object of class '<em>Clone Task</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

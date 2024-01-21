@@ -27,21 +27,27 @@ public class Messages extends NLS
 
   public static String GitCloneTaskImpl_CloningRepo_message;
 
-  public static String GitCloneTaskImpl_ConfigureSubmodule_message;
+  public static String GitCloneTaskImpl_Configure_message;
 
   public static String GitCloneTaskImpl_CreatingLocalBranch_message;
 
-  public static String GitCloneTaskImpl_CreatingLocalTab_message;
+  public static String GitCloneTaskImpl_CreatingLocalTag_message;
 
   public static String GitCloneTaskImpl_DeletingClone_message;
 
   public static String GitCloneTaskImpl_FetchingRefSpec_message;
+
+  public static String GitCloneTaskImpl_NonEmptyTargetFolder_message;
 
   public static String GitCloneTaskImpl_OpeningClone_message;
 
   public static String GitCloneTaskImpl_ResettingHard_message;
 
   public static String GitCloneTaskImpl_SettingConfig_message;
+
+  public static String GitCloneTaskImpl_SetttingConfigProperty_message;
+
+  public static String GitCloneTaskImpl_UnsettingConfigProperty_message;
 
   static
   {

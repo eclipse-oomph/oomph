@@ -16,6 +16,7 @@ import org.eclipse.oomph.setup.git.ConfigProperty;
 import org.eclipse.oomph.setup.git.ConfigSection;
 import org.eclipse.oomph.setup.git.ConfigSubsection;
 import org.eclipse.oomph.setup.git.GitCloneTask;
+import org.eclipse.oomph.setup.git.GitConfigurationTask;
 import org.eclipse.oomph.setup.git.GitPackage;
 
 import org.eclipse.emf.common.notify.Adapter;
@@ -92,6 +93,12 @@ public class GitAdapterFactory extends AdapterFactoryImpl
     }
 
     @Override
+    public Adapter caseGitConfigurationTask(GitConfigurationTask object)
+    {
+      return createGitConfigurationTaskAdapter();
+    }
+
+    @Override
     public Adapter caseConfigSection(ConfigSection object)
     {
       return createConfigSectionAdapter();
@@ -140,6 +147,21 @@ public class GitAdapterFactory extends AdapterFactoryImpl
   public Adapter createAdapter(Notifier target)
   {
     return modelSwitch.doSwitch((EObject)target);
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.oomph.setup.git.GitConfigurationTask <em>Configuration Task</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.oomph.setup.git.GitConfigurationTask
+   * @generated
+   */
+  public Adapter createGitConfigurationTaskAdapter()
+  {
+    return null;
   }
 
   /**

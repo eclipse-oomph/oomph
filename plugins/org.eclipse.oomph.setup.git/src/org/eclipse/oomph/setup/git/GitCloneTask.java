@@ -32,6 +32,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.eclipse.oomph.setup.git.GitCloneTask#isRecursive <em>Recursive</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.git.GitCloneTask#getConfigSections <em>Config Sections</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.git.GitCloneTask#isRestrictToCheckoutBranch <em>Restrict To Checkout Branch</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.git.GitCloneTask#getConfigurations <em>Configurations</em>}</li>
  * </ul>
  *
  * @see org.eclipse.oomph.setup.git.GitPackage#getGitCloneTask()
@@ -270,5 +271,17 @@ public interface GitCloneTask extends SetupTask
    * @generated
    */
   void setRestrictToCheckoutBranch(boolean value);
+
+  /**
+   * Returns the value of the '<em><b>Configurations</b></em>' containment reference list.
+   * The list contents are of type {@link org.eclipse.oomph.setup.git.GitConfigurationTask}.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Configurations</em>' containment reference list.
+   * @see org.eclipse.oomph.setup.git.GitPackage#getGitCloneTask_Configurations()
+   * @model containment="true" transient="true" changeable="false"
+   * @generated
+   */
+  EList<GitConfigurationTask> getConfigurations();
 
 } // GitCloneTask

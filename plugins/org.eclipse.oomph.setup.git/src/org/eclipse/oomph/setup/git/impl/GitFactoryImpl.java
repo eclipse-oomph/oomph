@@ -14,6 +14,7 @@ import org.eclipse.oomph.setup.git.ConfigProperty;
 import org.eclipse.oomph.setup.git.ConfigSection;
 import org.eclipse.oomph.setup.git.ConfigSubsection;
 import org.eclipse.oomph.setup.git.GitCloneTask;
+import org.eclipse.oomph.setup.git.GitConfigurationTask;
 import org.eclipse.oomph.setup.git.GitFactory;
 import org.eclipse.oomph.setup.git.GitPackage;
 
@@ -77,6 +78,8 @@ public class GitFactoryImpl extends EFactoryImpl implements GitFactory
     {
       case GitPackage.GIT_CLONE_TASK:
         return createGitCloneTask();
+      case GitPackage.GIT_CONFIGURATION_TASK:
+        return createGitConfigurationTask();
       case GitPackage.CONFIG_SECTION:
         return createConfigSection();
       case GitPackage.CONFIG_SUBSECTION:
@@ -86,6 +89,18 @@ public class GitFactoryImpl extends EFactoryImpl implements GitFactory
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
     }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public GitConfigurationTask createGitConfigurationTask()
+  {
+    GitConfigurationTaskImpl gitConfigurationTask = new GitConfigurationTaskImpl();
+    return gitConfigurationTask;
   }
 
   /**

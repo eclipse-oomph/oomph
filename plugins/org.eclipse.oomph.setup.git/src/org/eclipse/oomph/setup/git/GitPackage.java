@@ -72,6 +72,16 @@ public interface GitPackage extends EPackage
   GitPackage eINSTANCE = org.eclipse.oomph.setup.git.impl.GitPackageImpl.init();
 
   /**
+   * The meta object id for the '{@link org.eclipse.oomph.setup.git.impl.GitConfigurationTaskImpl <em>Configuration Task</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.oomph.setup.git.impl.GitConfigurationTaskImpl
+   * @see org.eclipse.oomph.setup.git.impl.GitPackageImpl#getGitConfigurationTask()
+   * @generated
+   */
+  int GIT_CONFIGURATION_TASK = 1;
+
+  /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.git.impl.GitCloneTaskImpl <em>Clone Task</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -253,13 +263,139 @@ public interface GitPackage extends EPackage
   int GIT_CLONE_TASK__RESTRICT_TO_CHECKOUT_BRANCH = SetupPackage.SETUP_TASK_FEATURE_COUNT + 8;
 
   /**
+   * The feature id for the '<em><b>Configurations</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GIT_CLONE_TASK__CONFIGURATIONS = SetupPackage.SETUP_TASK_FEATURE_COUNT + 9;
+
+  /**
    * The number of structural features of the '<em>Clone Task</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int GIT_CLONE_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 9;
+  int GIT_CLONE_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 10;
+
+  /**
+   * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GIT_CONFIGURATION_TASK__ANNOTATIONS = SetupPackage.SETUP_TASK__ANNOTATIONS;
+
+  /**
+   * The feature id for the '<em><b>ID</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GIT_CONFIGURATION_TASK__ID = SetupPackage.SETUP_TASK__ID;
+
+  /**
+   * The feature id for the '<em><b>Description</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GIT_CONFIGURATION_TASK__DESCRIPTION = SetupPackage.SETUP_TASK__DESCRIPTION;
+
+  /**
+   * The feature id for the '<em><b>Scope Type</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GIT_CONFIGURATION_TASK__SCOPE_TYPE = SetupPackage.SETUP_TASK__SCOPE_TYPE;
+
+  /**
+   * The feature id for the '<em><b>Excluded Triggers</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GIT_CONFIGURATION_TASK__EXCLUDED_TRIGGERS = SetupPackage.SETUP_TASK__EXCLUDED_TRIGGERS;
+
+  /**
+   * The feature id for the '<em><b>Disabled</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GIT_CONFIGURATION_TASK__DISABLED = SetupPackage.SETUP_TASK__DISABLED;
+
+  /**
+   * The feature id for the '<em><b>Predecessors</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GIT_CONFIGURATION_TASK__PREDECESSORS = SetupPackage.SETUP_TASK__PREDECESSORS;
+
+  /**
+   * The feature id for the '<em><b>Successors</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GIT_CONFIGURATION_TASK__SUCCESSORS = SetupPackage.SETUP_TASK__SUCCESSORS;
+
+  /**
+   * The feature id for the '<em><b>Restrictions</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GIT_CONFIGURATION_TASK__RESTRICTIONS = SetupPackage.SETUP_TASK__RESTRICTIONS;
+
+  /**
+   * The feature id for the '<em><b>Filter</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GIT_CONFIGURATION_TASK__FILTER = SetupPackage.SETUP_TASK__FILTER;
+
+  /**
+   * The feature id for the '<em><b>Remote URI Pattern</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GIT_CONFIGURATION_TASK__REMOTE_URI_PATTERN = SetupPackage.SETUP_TASK_FEATURE_COUNT + 0;
+
+  /**
+   * The feature id for the '<em><b>Config Sections</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GIT_CONFIGURATION_TASK__CONFIG_SECTIONS = SetupPackage.SETUP_TASK_FEATURE_COUNT + 1;
+
+  /**
+   * The number of structural features of the '<em>Configuration Task</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int GIT_CONFIGURATION_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 2;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.git.impl.ConfigSubsectionImpl <em>Config Subsection</em>}' class.
@@ -269,7 +405,7 @@ public interface GitPackage extends EPackage
    * @see org.eclipse.oomph.setup.git.impl.GitPackageImpl#getConfigSubsection()
    * @generated
    */
-  int CONFIG_SUBSECTION = 2;
+  int CONFIG_SUBSECTION = 3;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -306,7 +442,7 @@ public interface GitPackage extends EPackage
    * @see org.eclipse.oomph.setup.git.impl.GitPackageImpl#getConfigSection()
    * @generated
    */
-  int CONFIG_SECTION = 1;
+  int CONFIG_SECTION = 2;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -352,7 +488,7 @@ public interface GitPackage extends EPackage
    * @see org.eclipse.oomph.setup.git.impl.GitPackageImpl#getConfigProperty()
    * @generated
    */
-  int CONFIG_PROPERTY = 3;
+  int CONFIG_PROPERTY = 4;
 
   /**
    * The feature id for the '<em><b>Key</b></em>' attribute.
@@ -373,13 +509,63 @@ public interface GitPackage extends EPackage
   int CONFIG_PROPERTY__VALUE = 1;
 
   /**
+   * The feature id for the '<em><b>Force</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CONFIG_PROPERTY__FORCE = 2;
+
+  /**
+   * The feature id for the '<em><b>Recursive</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int CONFIG_PROPERTY__RECURSIVE = 3;
+
+  /**
    * The number of structural features of the '<em>Config Property</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int CONFIG_PROPERTY_FEATURE_COUNT = 2;
+  int CONFIG_PROPERTY_FEATURE_COUNT = 4;
+
+  /**
+   * Returns the meta object for class '{@link org.eclipse.oomph.setup.git.GitConfigurationTask <em>Configuration Task</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Configuration Task</em>'.
+   * @see org.eclipse.oomph.setup.git.GitConfigurationTask
+   * @generated
+   */
+  EClass getGitConfigurationTask();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.git.GitConfigurationTask#getRemoteURIPattern <em>Remote URI Pattern</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Remote URI Pattern</em>'.
+   * @see org.eclipse.oomph.setup.git.GitConfigurationTask#getRemoteURIPattern()
+   * @see #getGitConfigurationTask()
+   * @generated
+   */
+  EAttribute getGitConfigurationTask_RemoteURIPattern();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link org.eclipse.oomph.setup.git.GitConfigurationTask#getConfigSections <em>Config Sections</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Config Sections</em>'.
+   * @see org.eclipse.oomph.setup.git.GitConfigurationTask#getConfigSections()
+   * @see #getGitConfigurationTask()
+   * @generated
+   */
+  EReference getGitConfigurationTask_ConfigSections();
 
   /**
    * Returns the meta object for class '{@link org.eclipse.oomph.setup.git.GitCloneTask <em>Clone Task</em>}'.
@@ -491,6 +677,17 @@ public interface GitPackage extends EPackage
   EAttribute getGitCloneTask_RestrictToCheckoutBranch();
 
   /**
+   * Returns the meta object for the containment reference list '{@link org.eclipse.oomph.setup.git.GitCloneTask#getConfigurations <em>Configurations</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Configurations</em>'.
+   * @see org.eclipse.oomph.setup.git.GitCloneTask#getConfigurations()
+   * @see #getGitCloneTask()
+   * @generated
+   */
+  EReference getGitCloneTask_Configurations();
+
+  /**
    * Returns the meta object for class '{@link org.eclipse.oomph.setup.git.ConfigSection <em>Config Section</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -576,6 +773,28 @@ public interface GitPackage extends EPackage
   EAttribute getConfigProperty_Value();
 
   /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.git.ConfigProperty#isForce <em>Force</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Force</em>'.
+   * @see org.eclipse.oomph.setup.git.ConfigProperty#isForce()
+   * @see #getConfigProperty()
+   * @generated
+   */
+  EAttribute getConfigProperty_Force();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.git.ConfigProperty#isRecursive <em>Recursive</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Recursive</em>'.
+   * @see org.eclipse.oomph.setup.git.ConfigProperty#isRecursive()
+   * @see #getConfigProperty()
+   * @generated
+   */
+  EAttribute getConfigProperty_Recursive();
+
+  /**
    * Returns the factory that creates the instances of the model.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -599,6 +818,32 @@ public interface GitPackage extends EPackage
    */
   interface Literals
   {
+    /**
+     * The meta object literal for the '{@link org.eclipse.oomph.setup.git.impl.GitConfigurationTaskImpl <em>Configuration Task</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.oomph.setup.git.impl.GitConfigurationTaskImpl
+     * @see org.eclipse.oomph.setup.git.impl.GitPackageImpl#getGitConfigurationTask()
+     * @generated
+     */
+    EClass GIT_CONFIGURATION_TASK = eINSTANCE.getGitConfigurationTask();
+
+    /**
+     * The meta object literal for the '<em><b>Remote URI Pattern</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute GIT_CONFIGURATION_TASK__REMOTE_URI_PATTERN = eINSTANCE.getGitConfigurationTask_RemoteURIPattern();
+
+    /**
+     * The meta object literal for the '<em><b>Config Sections</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference GIT_CONFIGURATION_TASK__CONFIG_SECTIONS = eINSTANCE.getGitConfigurationTask_ConfigSections();
+
     /**
      * The meta object literal for the '{@link org.eclipse.oomph.setup.git.impl.GitCloneTaskImpl <em>Clone Task</em>}' class.
      * <!-- begin-user-doc -->
@@ -682,6 +927,14 @@ public interface GitPackage extends EPackage
     EAttribute GIT_CLONE_TASK__RESTRICT_TO_CHECKOUT_BRANCH = eINSTANCE.getGitCloneTask_RestrictToCheckoutBranch();
 
     /**
+     * The meta object literal for the '<em><b>Configurations</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference GIT_CLONE_TASK__CONFIGURATIONS = eINSTANCE.getGitCloneTask_Configurations();
+
+    /**
      * The meta object literal for the '{@link org.eclipse.oomph.setup.git.impl.ConfigSectionImpl <em>Config Section</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -750,6 +1003,22 @@ public interface GitPackage extends EPackage
      * @generated
      */
     EAttribute CONFIG_PROPERTY__VALUE = eINSTANCE.getConfigProperty_Value();
+
+    /**
+     * The meta object literal for the '<em><b>Force</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute CONFIG_PROPERTY__FORCE = eINSTANCE.getConfigProperty_Force();
+
+    /**
+     * The meta object literal for the '<em><b>Recursive</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute CONFIG_PROPERTY__RECURSIVE = eINSTANCE.getConfigProperty_Recursive();
 
   }
 

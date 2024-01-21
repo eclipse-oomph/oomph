@@ -22,6 +22,12 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Git.ecore#//GitCloneTask/recursive"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Git.ecore#//GitCloneTask/configSections"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Git.ecore#//GitCloneTask/restrictToCheckoutBranch"/>
+      <genFeatures property="None" children="true" createChild="false" ecoreFeature="ecore:EReference Git.ecore#//GitCloneTask/configurations"/>
+    </genClasses>
+    <genClasses ecoreClass="Git.ecore#//GitConfigurationTask">
+      <genFeatures createChild="false" propertyDescription="A pattern used to match against the resolved URI of Git clone tasks"
+          ecoreFeature="ecore:EAttribute Git.ecore#//GitConfigurationTask/remoteURIPattern"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Git.ecore#//GitConfigurationTask/configSections"/>
     </genClasses>
     <genClasses ecoreClass="Git.ecore#//ConfigSection">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Git.ecore#//ConfigSection/subsections"/>
@@ -34,6 +40,10 @@
     <genClasses ecoreClass="Git.ecore#//ConfigProperty">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Git.ecore#//ConfigProperty/key"/>
       <genFeatures createChild="false" propertyMultiLine="true" ecoreFeature="ecore:EAttribute Git.ecore#//ConfigProperty/value"/>
+      <genFeatures createChild="false" propertyDescription="Whether to force the property to the specified value even if the property is set to a different value"
+          ecoreFeature="ecore:EAttribute Git.ecore#//ConfigProperty/force"/>
+      <genFeatures createChild="false" propertyDescription="Whether to apply this configuration property also on submodules"
+          ecoreFeature="ecore:EAttribute Git.ecore#//ConfigProperty/recursive"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

@@ -16,6 +16,7 @@ import org.eclipse.oomph.setup.git.ConfigProperty;
 import org.eclipse.oomph.setup.git.ConfigSection;
 import org.eclipse.oomph.setup.git.ConfigSubsection;
 import org.eclipse.oomph.setup.git.GitCloneTask;
+import org.eclipse.oomph.setup.git.GitConfigurationTask;
 import org.eclipse.oomph.setup.git.GitFactory;
 import org.eclipse.oomph.setup.git.GitPackage;
 
@@ -33,6 +34,13 @@ import org.eclipse.emf.ecore.impl.EPackageImpl;
  */
 public class GitPackageImpl extends EPackageImpl implements GitPackage
 {
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass gitConfigurationTaskEClass = null;
+
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -129,6 +137,39 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
     // Update the registry and return the package
     EPackage.Registry.INSTANCE.put(GitPackage.eNS_URI, theGitPackage);
     return theGitPackage;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EClass getGitConfigurationTask()
+  {
+    return gitConfigurationTaskEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EAttribute getGitConfigurationTask_RemoteURIPattern()
+  {
+    return (EAttribute)gitConfigurationTaskEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EReference getGitConfigurationTask_ConfigSections()
+  {
+    return (EReference)gitConfigurationTaskEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -247,6 +288,17 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
    * @generated
    */
   @Override
+  public EReference getGitCloneTask_Configurations()
+  {
+    return (EReference)gitCloneTaskEClass.getEStructuralFeatures().get(9);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public EClass getConfigSection()
   {
     return configSectionEClass;
@@ -335,6 +387,28 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
    * @generated
    */
   @Override
+  public EAttribute getConfigProperty_Force()
+  {
+    return (EAttribute)configPropertyEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EAttribute getConfigProperty_Recursive()
+  {
+    return (EAttribute)configPropertyEClass.getEStructuralFeatures().get(3);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public GitFactory getGitFactory()
   {
     return (GitFactory)getEFactoryInstance();
@@ -373,6 +447,11 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
     createEAttribute(gitCloneTaskEClass, GIT_CLONE_TASK__RECURSIVE);
     createEReference(gitCloneTaskEClass, GIT_CLONE_TASK__CONFIG_SECTIONS);
     createEAttribute(gitCloneTaskEClass, GIT_CLONE_TASK__RESTRICT_TO_CHECKOUT_BRANCH);
+    createEReference(gitCloneTaskEClass, GIT_CLONE_TASK__CONFIGURATIONS);
+
+    gitConfigurationTaskEClass = createEClass(GIT_CONFIGURATION_TASK);
+    createEAttribute(gitConfigurationTaskEClass, GIT_CONFIGURATION_TASK__REMOTE_URI_PATTERN);
+    createEReference(gitConfigurationTaskEClass, GIT_CONFIGURATION_TASK__CONFIG_SECTIONS);
 
     configSectionEClass = createEClass(CONFIG_SECTION);
     createEReference(configSectionEClass, CONFIG_SECTION__SUBSECTIONS);
@@ -384,6 +463,8 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
     configPropertyEClass = createEClass(CONFIG_PROPERTY);
     createEAttribute(configPropertyEClass, CONFIG_PROPERTY__KEY);
     createEAttribute(configPropertyEClass, CONFIG_PROPERTY__VALUE);
+    createEAttribute(configPropertyEClass, CONFIG_PROPERTY__FORCE);
+    createEAttribute(configPropertyEClass, CONFIG_PROPERTY__RECURSIVE);
   }
 
   /**
@@ -423,6 +504,7 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
 
     // Add supertypes to classes
     gitCloneTaskEClass.getESuperTypes().add(theSetupPackage.getSetupTask());
+    gitConfigurationTaskEClass.getESuperTypes().add(theSetupPackage.getSetupTask());
     configSectionEClass.getESuperTypes().add(getConfigSubsection());
 
     // Initialize classes and features; add operations and parameters
@@ -445,6 +527,14 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
         IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getGitCloneTask_RestrictToCheckoutBranch(), ecorePackage.getEBoolean(), "restrictToCheckoutBranch", "false", 0, 1, GitCloneTask.class, //$NON-NLS-1$ //$NON-NLS-2$
         !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getGitCloneTask_Configurations(), getGitConfigurationTask(), null, "configurations", null, 0, -1, GitCloneTask.class, IS_TRANSIENT, //$NON-NLS-1$
+        !IS_VOLATILE, !IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(gitConfigurationTaskEClass, GitConfigurationTask.class, "GitConfigurationTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getGitConfigurationTask_RemoteURIPattern(), ecorePackage.getEString(), "remoteURIPattern", "", 1, 1, GitConfigurationTask.class, //$NON-NLS-1$ //$NON-NLS-2$
+        !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getGitConfigurationTask_ConfigSections(), getConfigSection(), null, "configSections", null, 0, -1, GitConfigurationTask.class, !IS_TRANSIENT, //$NON-NLS-1$
+        !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(configSectionEClass, ConfigSection.class, "ConfigSection", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
     initEReference(getConfigSection_Subsections(), getConfigSubsection(), null, "subsections", null, 0, -1, ConfigSection.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
@@ -461,6 +551,10 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getConfigProperty_Value(), ecorePackage.getEString(), "value", null, 0, 1, ConfigProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getConfigProperty_Force(), ecorePackage.getEBoolean(), "force", null, 0, 1, ConfigProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
+        !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getConfigProperty_Recursive(), ecorePackage.getEBoolean(), "recursive", "true", 0, 1, ConfigProperty.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$ //$NON-NLS-2$
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Create resource
     createResource("https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/models/Git.ecore");
@@ -543,6 +637,8 @@ public class GitPackageImpl extends EPackageImpl implements GitPackage
   {
     String source = "http://www.eclipse.org/oomph/setup/ValidTriggers"; //$NON-NLS-1$
     addAnnotation(gitCloneTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(gitConfigurationTaskEClass, source, new String[] { "triggers", "STARTUP MANUAL" //$NON-NLS-1$ //$NON-NLS-2$
     });
   }
 

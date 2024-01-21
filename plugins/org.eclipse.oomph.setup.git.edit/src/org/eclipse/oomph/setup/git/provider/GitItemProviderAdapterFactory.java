@@ -94,6 +94,31 @@ public class GitItemProviderAdapterFactory extends GitAdapterFactory implements 
   }
 
   /**
+   * This keeps track of the one adapter used for all {@link org.eclipse.oomph.setup.git.GitConfigurationTask} instances.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected GitConfigurationTaskItemProvider gitConfigurationTaskItemProvider;
+
+  /**
+   * This creates an adapter for a {@link org.eclipse.oomph.setup.git.GitConfigurationTask}.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Adapter createGitConfigurationTaskAdapter()
+  {
+    if (gitConfigurationTaskItemProvider == null)
+    {
+      gitConfigurationTaskItemProvider = new GitConfigurationTaskItemProvider(this);
+    }
+
+    return gitConfigurationTaskItemProvider;
+  }
+
+  /**
    * This keeps track of the one adapter used for all {@link org.eclipse.oomph.setup.git.GitCloneTask} instances.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -314,6 +339,10 @@ public class GitItemProviderAdapterFactory extends GitAdapterFactory implements 
     {
       gitCloneTaskItemProvider.dispose();
     }
+    if (gitConfigurationTaskItemProvider != null)
+    {
+      gitConfigurationTaskItemProvider.dispose();
+    }
     if (configSectionItemProvider != null)
     {
       configSectionItemProvider.dispose();
@@ -381,6 +410,8 @@ public class GitItemProviderAdapterFactory extends GitAdapterFactory implements 
       public Object caseAnnotation(Annotation object)
       {
         newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, GitFactory.eINSTANCE.createGitCloneTask()));
+
+        newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, GitFactory.eINSTANCE.createGitConfigurationTask()));
 
         newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, GitFactory.eINSTANCE.createConfigSubsection()));
 
@@ -481,6 +512,9 @@ public class GitItemProviderAdapterFactory extends GitAdapterFactory implements 
       public Object caseSetupTaskContainer(SetupTaskContainer object)
       {
         newChildDescriptors.add(createChildParameter(SetupPackage.Literals.SETUP_TASK_CONTAINER__SETUP_TASKS, GitFactory.eINSTANCE.createGitCloneTask()));
+
+        newChildDescriptors
+            .add(createChildParameter(SetupPackage.Literals.SETUP_TASK_CONTAINER__SETUP_TASKS, GitFactory.eINSTANCE.createGitConfigurationTask()));
 
         return null;
       }

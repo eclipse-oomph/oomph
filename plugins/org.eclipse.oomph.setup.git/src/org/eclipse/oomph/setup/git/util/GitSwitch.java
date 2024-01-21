@@ -16,6 +16,7 @@ import org.eclipse.oomph.setup.git.ConfigProperty;
 import org.eclipse.oomph.setup.git.ConfigSection;
 import org.eclipse.oomph.setup.git.ConfigSubsection;
 import org.eclipse.oomph.setup.git.GitCloneTask;
+import org.eclipse.oomph.setup.git.GitConfigurationTask;
 import org.eclipse.oomph.setup.git.GitPackage;
 
 import org.eclipse.emf.ecore.EObject;
@@ -103,6 +104,24 @@ public class GitSwitch<T> extends Switch<T>
         }
         return result;
       }
+      case GitPackage.GIT_CONFIGURATION_TASK:
+      {
+        GitConfigurationTask gitConfigurationTask = (GitConfigurationTask)theEObject;
+        T result = caseGitConfigurationTask(gitConfigurationTask);
+        if (result == null)
+        {
+          result = caseSetupTask(gitConfigurationTask);
+        }
+        if (result == null)
+        {
+          result = caseModelElement(gitConfigurationTask);
+        }
+        if (result == null)
+        {
+          result = defaultCase(theEObject);
+        }
+        return result;
+      }
       case GitPackage.CONFIG_SECTION:
       {
         ConfigSection configSection = (ConfigSection)theEObject;
@@ -140,6 +159,22 @@ public class GitSwitch<T> extends Switch<T>
       default:
         return defaultCase(theEObject);
     }
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Configuration Task</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Configuration Task</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseGitConfigurationTask(GitConfigurationTask object)
+  {
+    return null;
   }
 
   /**

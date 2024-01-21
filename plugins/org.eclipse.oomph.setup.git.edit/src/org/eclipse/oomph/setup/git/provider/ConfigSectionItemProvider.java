@@ -153,7 +153,7 @@ public class ConfigSectionItemProvider extends ConfigSubsectionItemProvider
    * that can be created under this object.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   @Override
   protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object)
@@ -161,8 +161,6 @@ public class ConfigSectionItemProvider extends ConfigSubsectionItemProvider
     super.collectNewChildDescriptors(newChildDescriptors, object);
 
     newChildDescriptors.add(createChildParameter(GitPackage.Literals.CONFIG_SECTION__SUBSECTIONS, GitFactory.eINSTANCE.createConfigSubsection()));
-
-    newChildDescriptors.add(createChildParameter(GitPackage.Literals.CONFIG_SECTION__SUBSECTIONS, GitFactory.eINSTANCE.createConfigSection()));
   }
 
 }

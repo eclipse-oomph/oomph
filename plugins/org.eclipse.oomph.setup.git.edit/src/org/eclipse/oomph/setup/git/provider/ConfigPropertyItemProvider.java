@@ -65,6 +65,8 @@ public class ConfigPropertyItemProvider extends ItemProviderAdapter
 
       addKeyPropertyDescriptor(object);
       addValuePropertyDescriptor(object);
+      addForcePropertyDescriptor(object);
+      addRecursivePropertyDescriptor(object);
     }
     return itemPropertyDescriptors;
   }
@@ -95,6 +97,34 @@ public class ConfigPropertyItemProvider extends ItemProviderAdapter
         getString("_UI_ConfigProperty_value_feature"), //$NON-NLS-1$
         getString("_UI_PropertyDescriptor_description", "_UI_ConfigProperty_value_feature", "_UI_ConfigProperty_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         GitPackage.Literals.CONFIG_PROPERTY__VALUE, true, true, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+  }
+
+  /**
+   * This adds a property descriptor for the Force feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addForcePropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_ConfigProperty_force_feature"), //$NON-NLS-1$
+        getString("_UI_ConfigProperty_force_description"), //$NON-NLS-1$
+        GitPackage.Literals.CONFIG_PROPERTY__FORCE, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
+  }
+
+  /**
+   * This adds a property descriptor for the Recursive feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addRecursivePropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_ConfigProperty_recursive_feature"), //$NON-NLS-1$
+        getString("_UI_ConfigProperty_recursive_description"), //$NON-NLS-1$
+        GitPackage.Literals.CONFIG_PROPERTY__RECURSIVE, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
   }
 
   /**
@@ -162,6 +192,8 @@ public class ConfigPropertyItemProvider extends ItemProviderAdapter
     {
       case GitPackage.CONFIG_PROPERTY__KEY:
       case GitPackage.CONFIG_PROPERTY__VALUE:
+      case GitPackage.CONFIG_PROPERTY__FORCE:
+      case GitPackage.CONFIG_PROPERTY__RECURSIVE:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
         return;
     }

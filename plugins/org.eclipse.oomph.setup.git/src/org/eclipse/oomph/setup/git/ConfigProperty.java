@@ -23,6 +23,8 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.git.ConfigProperty#getKey <em>Key</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.git.ConfigProperty#getValue <em>Value</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.git.ConfigProperty#isForce <em>Force</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.git.ConfigProperty#isRecursive <em>Recursive</em>}</li>
  * </ul>
  *
  * @see org.eclipse.oomph.setup.git.GitPackage#getConfigProperty()
@@ -82,5 +84,50 @@ public interface ConfigProperty extends EObject
    * @generated
    */
   void setValue(String value);
+
+  /**
+   * Returns the value of the '<em><b>Force</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Force</em>' attribute.
+   * @see #setForce(boolean)
+   * @see org.eclipse.oomph.setup.git.GitPackage#getConfigProperty_Force()
+   * @model
+   * @generated
+   */
+  boolean isForce();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.setup.git.ConfigProperty#isForce <em>Force</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Force</em>' attribute.
+   * @see #isForce()
+   * @generated
+   */
+  void setForce(boolean value);
+
+  /**
+   * Returns the value of the '<em><b>Recursive</b></em>' attribute.
+   * The default value is <code>"true"</code>.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Recursive</em>' attribute.
+   * @see #setRecursive(boolean)
+   * @see org.eclipse.oomph.setup.git.GitPackage#getConfigProperty_Recursive()
+   * @model default="true"
+   * @generated
+   */
+  boolean isRecursive();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.setup.git.ConfigProperty#isRecursive <em>Recursive</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Recursive</em>' attribute.
+   * @see #isRecursive()
+   * @generated
+   */
+  void setRecursive(boolean value);
 
 } // ConfigProperty
