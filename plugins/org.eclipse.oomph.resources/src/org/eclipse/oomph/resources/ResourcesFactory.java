@@ -57,6 +57,15 @@ public interface ResourcesFactory extends EFactory
    */
   MavenProjectFactory createMavenProjectFactory();
 
+  /**
+   * Returns a new object of class '<em>Dynamic Maven Project Factory</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Dynamic Maven Project Factory</em>'.
+   * @generated
+   */
+  DynamicMavenProjectFactory createDynamicMavenProjectFactory();
+
   SourceLocator createSourceLocator(String rootFolder);
 
   SourceLocator createSourceLocator(String rootFolder, boolean locateNestedProjects);

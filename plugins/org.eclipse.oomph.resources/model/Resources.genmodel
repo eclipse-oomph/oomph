@@ -51,5 +51,6 @@
     <genClasses image="false" ecoreClass="Resources.ecore#//XMLProjectFactory"/>
     <genClasses ecoreClass="Resources.ecore#//EclipseProjectFactory"/>
     <genClasses ecoreClass="Resources.ecore#//MavenProjectFactory"/>
+    <genClasses ecoreClass="Resources.ecore#//DynamicMavenProjectFactory"/>
   </genPackages>
 </genmodel:GenModel>

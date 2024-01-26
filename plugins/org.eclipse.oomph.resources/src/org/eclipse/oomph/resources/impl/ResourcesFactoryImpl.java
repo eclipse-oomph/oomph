@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.resources.impl;
 
+import org.eclipse.oomph.resources.DynamicMavenProjectFactory;
 import org.eclipse.oomph.resources.EclipseProjectFactory;
 import org.eclipse.oomph.resources.MavenProjectFactory;
 import org.eclipse.oomph.resources.ResourcesFactory;
@@ -81,6 +82,8 @@ public class ResourcesFactoryImpl extends EFactoryImpl implements ResourcesFacto
         return createEclipseProjectFactory();
       case ResourcesPackage.MAVEN_PROJECT_FACTORY:
         return createMavenProjectFactory();
+      case ResourcesPackage.DYNAMIC_MAVEN_PROJECT_FACTORY:
+        return createDynamicMavenProjectFactory();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
     }
@@ -150,6 +153,18 @@ public class ResourcesFactoryImpl extends EFactoryImpl implements ResourcesFacto
   {
     MavenProjectFactoryImpl mavenProjectFactory = new MavenProjectFactoryImpl();
     return mavenProjectFactory;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public DynamicMavenProjectFactory createDynamicMavenProjectFactory()
+  {
+    DynamicMavenProjectFactory dynamicMavenProjectFactory = new DynamicMavenProjectFactoryImpl();
+    return dynamicMavenProjectFactory;
   }
 
   @Override

@@ -11,6 +11,7 @@
 package org.eclipse.oomph.resources.util;
 
 import org.eclipse.oomph.base.ModelElement;
+import org.eclipse.oomph.resources.DynamicMavenProjectFactory;
 import org.eclipse.oomph.resources.EclipseProjectFactory;
 import org.eclipse.oomph.resources.MavenProjectFactory;
 import org.eclipse.oomph.resources.ProjectFactory;
@@ -175,6 +176,32 @@ public class ResourcesSwitch<T> extends Switch<T>
         }
         return result;
       }
+      case ResourcesPackage.DYNAMIC_MAVEN_PROJECT_FACTORY:
+      {
+        DynamicMavenProjectFactory dynamicMavenProjectFactory = (DynamicMavenProjectFactory)theEObject;
+        T result = caseDynamicMavenProjectFactory(dynamicMavenProjectFactory);
+        if (result == null)
+        {
+          result = caseMavenProjectFactory(dynamicMavenProjectFactory);
+        }
+        if (result == null)
+        {
+          result = caseXMLProjectFactory(dynamicMavenProjectFactory);
+        }
+        if (result == null)
+        {
+          result = caseProjectFactory(dynamicMavenProjectFactory);
+        }
+        if (result == null)
+        {
+          result = caseModelElement(dynamicMavenProjectFactory);
+        }
+        if (result == null)
+        {
+          result = defaultCase(theEObject);
+        }
+        return result;
+      }
       default:
         return defaultCase(theEObject);
     }
@@ -256,6 +283,22 @@ public class ResourcesSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseMavenProjectFactory(MavenProjectFactory object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Dynamic Maven Project Factory</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Dynamic Maven Project Factory</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseDynamicMavenProjectFactory(DynamicMavenProjectFactory object)
   {
     return null;
   }

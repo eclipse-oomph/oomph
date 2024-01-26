@@ -12,6 +12,7 @@ package org.eclipse.oomph.resources.impl;
 
 import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.predicates.PredicatesPackage;
+import org.eclipse.oomph.resources.DynamicMavenProjectFactory;
 import org.eclipse.oomph.resources.EclipseProjectFactory;
 import org.eclipse.oomph.resources.MavenProjectFactory;
 import org.eclipse.oomph.resources.ProjectFactory;
@@ -75,6 +76,13 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
    * @generated
    */
   private EClass mavenProjectFactoryEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass dynamicMavenProjectFactoryEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -357,6 +365,17 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
    * @generated
    */
   @Override
+  public EClass getDynamicMavenProjectFactory()
+  {
+    return dynamicMavenProjectFactoryEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public EDataType getProjectHandler()
   {
     return projectHandlerEDataType;
@@ -450,6 +469,8 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
 
     mavenProjectFactoryEClass = createEClass(MAVEN_PROJECT_FACTORY);
 
+    dynamicMavenProjectFactoryEClass = createEClass(DYNAMIC_MAVEN_PROJECT_FACTORY);
+
     // Create data types
     projectHandlerEDataType = createEDataType(PROJECT_HANDLER);
     backendContainerEDataType = createEDataType(BACKEND_CONTAINER);
@@ -499,6 +520,7 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
     xmlProjectFactoryEClass.getESuperTypes().add(getProjectFactory());
     eclipseProjectFactoryEClass.getESuperTypes().add(getXMLProjectFactory());
     mavenProjectFactoryEClass.getESuperTypes().add(getXMLProjectFactory());
+    dynamicMavenProjectFactoryEClass.getESuperTypes().add(getMavenProjectFactory());
 
     // Initialize classes, features, and operations; add parameters
     initEClass(sourceLocatorEClass, SourceLocator.class, "SourceLocator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
@@ -549,6 +571,9 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
     initEClass(eclipseProjectFactoryEClass, EclipseProjectFactory.class, "EclipseProjectFactory", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
     initEClass(mavenProjectFactoryEClass, MavenProjectFactory.class, "MavenProjectFactory", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+
+    initEClass(dynamicMavenProjectFactoryEClass, DynamicMavenProjectFactory.class, "DynamicMavenProjectFactory", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
+        IS_GENERATED_INSTANCE_CLASS);
 
     // Initialize data types
     initEDataType(projectHandlerEDataType, ProjectHandler.class, "ProjectHandler", !IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$

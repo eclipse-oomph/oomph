@@ -52,7 +52,7 @@ public class MavenProjectFactoryImpl extends XMLProjectFactoryImpl implements Ma
   @Override
   protected String getXMLFileName()
   {
-    return "pom.xml"; //$NON-NLS-1$
+    return POM_XML;
   }
 
   @Override

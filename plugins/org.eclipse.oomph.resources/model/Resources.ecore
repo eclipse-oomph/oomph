@@ -74,4 +74,5 @@
       serializable="false"/>
   <eClassifiers xsi:type="ecore:EDataType" name="ProgressMonitor" instanceClassName="org.eclipse.core.runtime.IProgressMonitor"
       serializable="false"/>
+  <eClassifiers xsi:type="ecore:EClass" name="DynamicMavenProjectFactory" eSuperTypes="#//MavenProjectFactory"/>
 </ecore:EPackage>

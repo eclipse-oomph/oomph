@@ -10,7 +10,10 @@
  */
 package org.eclipse.oomph.setup.maven.impl;
 
+import org.eclipse.oomph.resources.DynamicMavenProjectFactory;
 import org.eclipse.oomph.resources.MavenProjectFactory;
+import org.eclipse.oomph.resources.ProjectFactory;
+import org.eclipse.oomph.resources.ResourcesFactory;
 import org.eclipse.oomph.resources.SourceLocator;
 import org.eclipse.oomph.resources.backend.BackendContainer;
 import org.eclipse.oomph.resources.backend.BackendResource;
@@ -25,6 +28,7 @@ import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
@@ -466,7 +470,18 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
       String projectFolder = projectInfo.getPomFile().getParent();
       BackendContainer backendContainer = (BackendContainer)BackendResource.get(projectFolder);
 
-      IProject project = sourceLocator.loadProject(MavenProjectFactory.LIST, backendContainer, MonitorUtil.create(monitor, 1));
+      EList<ProjectFactory> factories = new BasicEList<>(MavenProjectFactory.LIST);
+      if (!projectInfo.getPomFile().getName().equals(MavenProjectFactory.POM_XML))
+      {
+        // Check for alternate pom.xml file names (e.g., .polyglot.pom.tycho)
+        DynamicMavenProjectFactory altFactory = ResourcesFactory.eINSTANCE.createDynamicMavenProjectFactory();
+        altFactory.setXMLFileName(projectInfo.getPomFile().getName());
+        altFactory.getExcludedPaths().addAll(factories.get(0).getExcludedPaths());
+        factories.add(altFactory);
+      }
+
+      IProject project = sourceLocator.loadProject(factories, backendContainer, MonitorUtil.create(monitor, 1));
+
       if (project != null)
       {
         if (sourceLocator.matches(project))
