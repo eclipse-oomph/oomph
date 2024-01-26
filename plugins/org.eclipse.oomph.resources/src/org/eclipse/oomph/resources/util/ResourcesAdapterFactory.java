@@ -11,6 +11,7 @@
 package org.eclipse.oomph.resources.util;
 
 import org.eclipse.oomph.base.ModelElement;
+import org.eclipse.oomph.resources.DynamicMavenProjectFactory;
 import org.eclipse.oomph.resources.EclipseProjectFactory;
 import org.eclipse.oomph.resources.MavenProjectFactory;
 import org.eclipse.oomph.resources.ProjectFactory;
@@ -116,6 +117,12 @@ public class ResourcesAdapterFactory extends AdapterFactoryImpl
     }
 
     @Override
+    public Adapter caseDynamicMavenProjectFactory(DynamicMavenProjectFactory object)
+    {
+      return createDynamicMavenProjectFactoryAdapter();
+    }
+
+    @Override
     public Adapter caseModelElement(ModelElement object)
     {
       return createModelElementAdapter();
@@ -213,6 +220,21 @@ public class ResourcesAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createMavenProjectFactoryAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.eclipse.oomph.resources.DynamicMavenProjectFactory <em>Dynamic Maven Project Factory</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.eclipse.oomph.resources.DynamicMavenProjectFactory
+   * @generated
+   */
+  public Adapter createDynamicMavenProjectFactoryAdapter()
   {
     return null;
   }

@@ -178,6 +178,31 @@ public class ResourcesItemProviderAdapterFactory extends ResourcesAdapterFactory
   }
 
   /**
+   * This keeps track of the one adapter used for all {@link org.eclipse.oomph.resources.DynamicMavenProjectFactory} instances.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected DynamicMavenProjectFactoryItemProvider dynamicMavenProjectFactoryItemProvider;
+
+  /**
+   * This creates an adapter for a {@link org.eclipse.oomph.resources.DynamicMavenProjectFactory}.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Adapter createDynamicMavenProjectFactoryAdapter()
+  {
+    if (dynamicMavenProjectFactoryItemProvider == null)
+    {
+      dynamicMavenProjectFactoryItemProvider = new DynamicMavenProjectFactoryItemProvider(this);
+    }
+
+    return dynamicMavenProjectFactoryItemProvider;
+  }
+
+  /**
    * This returns the root adapter factory that contains this factory.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -338,6 +363,10 @@ public class ResourcesItemProviderAdapterFactory extends ResourcesAdapterFactory
     {
       mavenProjectFactoryItemProvider.dispose();
     }
+    if (dynamicMavenProjectFactoryItemProvider != null)
+    {
+      dynamicMavenProjectFactoryItemProvider.dispose();
+    }
   }
 
   /**
@@ -397,6 +426,8 @@ public class ResourcesItemProviderAdapterFactory extends ResourcesAdapterFactory
         newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, ResourcesFactory.eINSTANCE.createEclipseProjectFactory()));
 
         newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, ResourcesFactory.eINSTANCE.createMavenProjectFactory()));
+
+        newChildDescriptors.add(createChildParameter(BasePackage.Literals.ANNOTATION__CONTENTS, ResourcesFactory.eINSTANCE.createDynamicMavenProjectFactory()));
 
         return null;
       }

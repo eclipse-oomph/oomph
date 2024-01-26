@@ -482,6 +482,88 @@ public interface ResourcesPackage extends EPackage
   int MAVEN_PROJECT_FACTORY_OPERATION_COUNT = XML_PROJECT_FACTORY_OPERATION_COUNT + 0;
 
   /**
+   * The meta object id for the '{@link org.eclipse.oomph.resources.impl.DynamicMavenProjectFactoryImpl <em>Dynamic Maven Project Factory</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.oomph.resources.impl.DynamicMavenProjectFactoryImpl
+   * @see org.eclipse.oomph.resources.impl.ResourcesPackageImpl#getDynamicMavenProjectFactory()
+   * @generated
+   */
+  int DYNAMIC_MAVEN_PROJECT_FACTORY = 5;
+
+  /**
+   * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DYNAMIC_MAVEN_PROJECT_FACTORY__ANNOTATIONS = MAVEN_PROJECT_FACTORY__ANNOTATIONS;
+
+  /**
+   * The feature id for the '<em><b>Excluded Paths</b></em>' attribute list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DYNAMIC_MAVEN_PROJECT_FACTORY__EXCLUDED_PATHS = MAVEN_PROJECT_FACTORY__EXCLUDED_PATHS;
+
+  /**
+   * The feature id for the '<em><b>XML File Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DYNAMIC_MAVEN_PROJECT_FACTORY__XML_FILE_NAME = MAVEN_PROJECT_FACTORY_FEATURE_COUNT + 0;
+
+  /**
+   * The number of structural features of the '<em>Dynamic Maven Project Factory</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DYNAMIC_MAVEN_PROJECT_FACTORY_FEATURE_COUNT = MAVEN_PROJECT_FACTORY_FEATURE_COUNT + 1;
+
+  /**
+   * The operation id for the '<em>Get Annotation</em>' operation.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DYNAMIC_MAVEN_PROJECT_FACTORY___GET_ANNOTATION__STRING = MAVEN_PROJECT_FACTORY___GET_ANNOTATION__STRING;
+
+  /**
+   * The operation id for the '<em>Create Project</em>' operation.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DYNAMIC_MAVEN_PROJECT_FACTORY___CREATE_PROJECT__BACKENDCONTAINER_BACKENDCONTAINER_IPROGRESSMONITOR = MAVEN_PROJECT_FACTORY___CREATE_PROJECT__BACKENDCONTAINER_BACKENDCONTAINER_IPROGRESSMONITOR;
+
+  /**
+   * The operation id for the '<em>Is Excluded Path</em>' operation.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DYNAMIC_MAVEN_PROJECT_FACTORY___IS_EXCLUDED_PATH__BACKENDCONTAINER_BACKENDCONTAINER = MAVEN_PROJECT_FACTORY___IS_EXCLUDED_PATH__BACKENDCONTAINER_BACKENDCONTAINER;
+
+  /**
+   * The number of operations of the '<em>Dynamic Maven Project Factory</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DYNAMIC_MAVEN_PROJECT_FACTORY_OPERATION_COUNT = MAVEN_PROJECT_FACTORY_OPERATION_COUNT + 0;
+
+  /**
    * The meta object id for the '<em>Project Handler</em>' data type.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -489,7 +571,7 @@ public interface ResourcesPackage extends EPackage
    * @see org.eclipse.oomph.resources.impl.ResourcesPackageImpl#getProjectHandler()
    * @generated
    */
-  int PROJECT_HANDLER = 5;
+  int PROJECT_HANDLER = 6;
 
   /**
    * The meta object id for the '<em>Backend Container</em>' data type.
@@ -499,7 +581,7 @@ public interface ResourcesPackage extends EPackage
    * @see org.eclipse.oomph.resources.impl.ResourcesPackageImpl#getBackendContainer()
    * @generated
    */
-  int BACKEND_CONTAINER = 6;
+  int BACKEND_CONTAINER = 7;
 
   /**
    * The meta object id for the '<em>Multi Status</em>' data type.
@@ -509,7 +591,7 @@ public interface ResourcesPackage extends EPackage
    * @see org.eclipse.oomph.resources.impl.ResourcesPackageImpl#getMultiStatus()
    * @generated
    */
-  int MULTI_STATUS = 7;
+  int MULTI_STATUS = 8;
 
   /**
    * The meta object id for the '<em>Progress Monitor</em>' data type.
@@ -519,7 +601,7 @@ public interface ResourcesPackage extends EPackage
    * @see org.eclipse.oomph.resources.impl.ResourcesPackageImpl#getProgressMonitor()
    * @generated
    */
-  int PROGRESS_MONITOR = 8;
+  int PROGRESS_MONITOR = 9;
 
   /**
    * Returns the meta object for class '{@link org.eclipse.oomph.resources.SourceLocator <em>Source Locator</em>}'.
@@ -686,6 +768,27 @@ public interface ResourcesPackage extends EPackage
    * @generated
    */
   EClass getMavenProjectFactory();
+
+  /**
+   * Returns the meta object for class '{@link org.eclipse.oomph.resources.DynamicMavenProjectFactory <em>Dynamic Maven Project Factory</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Dynamic Maven Project Factory</em>'.
+   * @see org.eclipse.oomph.resources.DynamicMavenProjectFactory
+   * @generated
+   */
+  EClass getDynamicMavenProjectFactory();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.resources.DynamicMavenProjectFactory#getXMLFileName <em>XML File Name</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>XML File Name</em>'.
+   * @see org.eclipse.oomph.resources.DynamicMavenProjectFactory#getXMLFileName()
+   * @see #getDynamicMavenProjectFactory()
+   * @generated
+   */
+  EAttribute getDynamicMavenProjectFactory_XMLFileName();
 
   /**
    * Returns the meta object for data type '{@link org.eclipse.oomph.resources.ProjectHandler <em>Project Handler</em>}'.
@@ -896,6 +999,24 @@ public interface ResourcesPackage extends EPackage
      * @generated
      */
     EClass MAVEN_PROJECT_FACTORY = eINSTANCE.getMavenProjectFactory();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.oomph.resources.impl.DynamicMavenProjectFactoryImpl <em>Dynamic Maven Project Factory</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.oomph.resources.impl.DynamicMavenProjectFactoryImpl
+     * @see org.eclipse.oomph.resources.impl.ResourcesPackageImpl#getDynamicMavenProjectFactory()
+     * @generated
+     */
+    EClass DYNAMIC_MAVEN_PROJECT_FACTORY = eINSTANCE.getDynamicMavenProjectFactory();
+
+    /**
+     * The meta object literal for the '<em><b>XML File Name</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute DYNAMIC_MAVEN_PROJECT_FACTORY__XML_FILE_NAME = eINSTANCE.getDynamicMavenProjectFactory_XMLFileName();
 
     /**
      * The meta object literal for the '<em>Project Handler</em>' data type.

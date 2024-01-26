@@ -12,6 +12,7 @@ package org.eclipse.oomph.resources.impl;
 
 import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.oomph.predicates.PredicatesPackage;
+import org.eclipse.oomph.resources.DynamicMavenProjectFactory;
 import org.eclipse.oomph.resources.EclipseProjectFactory;
 import org.eclipse.oomph.resources.MavenProjectFactory;
 import org.eclipse.oomph.resources.ProjectFactory;
@@ -75,6 +76,13 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
    * @generated
    */
   private EClass mavenProjectFactoryEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass dynamicMavenProjectFactoryEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -357,6 +365,28 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
    * @generated
    */
   @Override
+  public EClass getDynamicMavenProjectFactory()
+  {
+    return dynamicMavenProjectFactoryEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EAttribute getDynamicMavenProjectFactory_XMLFileName()
+  {
+    return (EAttribute)dynamicMavenProjectFactoryEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public EDataType getProjectHandler()
   {
     return projectHandlerEDataType;
@@ -450,6 +480,9 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
 
     mavenProjectFactoryEClass = createEClass(MAVEN_PROJECT_FACTORY);
 
+    dynamicMavenProjectFactoryEClass = createEClass(DYNAMIC_MAVEN_PROJECT_FACTORY);
+    createEAttribute(dynamicMavenProjectFactoryEClass, DYNAMIC_MAVEN_PROJECT_FACTORY__XML_FILE_NAME);
+
     // Create data types
     projectHandlerEDataType = createEDataType(PROJECT_HANDLER);
     backendContainerEDataType = createEDataType(BACKEND_CONTAINER);
@@ -499,6 +532,7 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
     xmlProjectFactoryEClass.getESuperTypes().add(getProjectFactory());
     eclipseProjectFactoryEClass.getESuperTypes().add(getXMLProjectFactory());
     mavenProjectFactoryEClass.getESuperTypes().add(getXMLProjectFactory());
+    dynamicMavenProjectFactoryEClass.getESuperTypes().add(getMavenProjectFactory());
 
     // Initialize classes, features, and operations; add parameters
     initEClass(sourceLocatorEClass, SourceLocator.class, "SourceLocator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
@@ -549,6 +583,11 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
     initEClass(eclipseProjectFactoryEClass, EclipseProjectFactory.class, "EclipseProjectFactory", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
     initEClass(mavenProjectFactoryEClass, MavenProjectFactory.class, "MavenProjectFactory", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+
+    initEClass(dynamicMavenProjectFactoryEClass, DynamicMavenProjectFactory.class, "DynamicMavenProjectFactory", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
+        IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getDynamicMavenProjectFactory_XMLFileName(), ecorePackage.getEString(), "xMLFileName", null, 0, 1, DynamicMavenProjectFactory.class, //$NON-NLS-1$
+        !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Initialize data types
     initEDataType(projectHandlerEDataType, ProjectHandler.class, "ProjectHandler", !IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
@@ -611,6 +650,8 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
     addAnnotation(getSourceLocator_Predicates(), source, new String[] { "name", "predicate" //$NON-NLS-1$ //$NON-NLS-2$
     });
     addAnnotation(getProjectFactory_ExcludedPaths(), source, new String[] { "name", "excludedPath" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(getDynamicMavenProjectFactory_XMLFileName(), source, new String[] { "name", "xmlFileName" //$NON-NLS-1$ //$NON-NLS-2$
     });
   }
 

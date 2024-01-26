@@ -25,6 +25,8 @@ import org.eclipse.emf.common.util.EList;
  */
 public interface MavenProjectFactory extends XMLProjectFactory
 {
-  public static final EList<ProjectFactory> LIST = ECollections.singletonEList((ProjectFactory)ResourcesFactory.eINSTANCE.createMavenProjectFactory());
+  public static final EList<ProjectFactory> LIST = ECollections.singletonEList(ResourcesFactory.eINSTANCE.createMavenProjectFactory());
+
+  public static final String POM_XML = "pom.xml"; //$NON-NLS-1$
 
 } // MavenProjectFactory
