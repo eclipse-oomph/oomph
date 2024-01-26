@@ -66,6 +66,13 @@
   <eClassifiers xsi:type="ecore:EClass" name="XMLProjectFactory" abstract="true" eSuperTypes="#//ProjectFactory"/>
   <eClassifiers xsi:type="ecore:EClass" name="EclipseProjectFactory" eSuperTypes="#//XMLProjectFactory"/>
   <eClassifiers xsi:type="ecore:EClass" name="MavenProjectFactory" eSuperTypes="#//XMLProjectFactory"/>
+  <eClassifiers xsi:type="ecore:EClass" name="DynamicMavenProjectFactory" eSuperTypes="#//MavenProjectFactory">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="xMLFileName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="name" value="xmlFileName"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="ProjectHandler" instanceClassName="org.eclipse.oomph.resources.ProjectHandler"
       serializable="false"/>
   <eClassifiers xsi:type="ecore:EDataType" name="BackendContainer" instanceClassName="org.eclipse.oomph.resources.backend.BackendContainer"
