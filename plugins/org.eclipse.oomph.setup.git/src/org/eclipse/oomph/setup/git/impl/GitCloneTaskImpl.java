@@ -864,18 +864,12 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
       String checkoutBranch = getCheckoutBranch();
       String remoteName = getRemoteName();
       String pushURI = getPushURI();
-      boolean hasCheckout = hasCheckout(repository, checkoutBranch);
 
       Map<String, GitConfigurationTask> configurations = new LinkedHashMap<>();
       boolean changed = configureRepository(context, configurations, true, repository, false, isRecursive(), false, checkoutBranch,
           isRestrictToCheckoutBranch(), remoteName, remoteURI, pushURI, getConfigSections(), getGerritPatterns(context));
 
       getConfigurations().addAll(configurations.values());
-
-      if (!hasCheckout)
-      {
-        return true;
-      }
 
       bypassCloning = true;
 
@@ -921,7 +915,6 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
               MonitorUtil.create(monitor, 50));)
       {
         Repository repository = git.getRepository();
-        boolean hasCheckout = hasCheckout(repository, checkoutBranch);
         Set<String> gerritPatterns = getGerritPatterns(context);
 
         configureRepository(context, null, root, repository, true, isRecursive, !bypassCloning, checkoutBranch, isRestrictToCheckoutBranch, remoteName,
@@ -933,7 +926,7 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
         // because then we can't determine what's wrong with the current state.
         workDirExisted = true;
 
-        if (!bypassCloning || !hasCheckout)
+        if (!bypassCloning)
         {
           Ref branchRef = findRef(repository, Constants.R_REMOTES + remoteName + "/" + checkoutBranch); //$NON-NLS-1$
           Ref tagRef = findRef(repository, Constants.R_TAGS + checkoutBranch);
@@ -1669,11 +1662,6 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
     {
       return false;
     }
-  }
-
-  private static boolean hasCheckout(Repository repository, String checkoutBranch) throws IOException
-  {
-    return findRef(repository, Constants.R_HEADS + checkoutBranch) != null;
   }
 
   @Deprecated
