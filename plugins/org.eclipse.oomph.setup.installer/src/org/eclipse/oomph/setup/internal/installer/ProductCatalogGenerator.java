@@ -213,6 +213,9 @@ public class ProductCatalogGenerator implements IApplication
       "org.eclipse.mylyn.versions.feature.group", //
   });
 
+  private static final List<String> OBSOELETE_MYLYN_FEATURES2 = Arrays.asList(new String[] { //
+      "org.eclipse.mylyn.wikitext_feature.feature.group" });
+
   private static final String ALL_PRODUCT_ID = "all";
 
   private static final List<String> SPECIAL_PRODUCT_IDS = Arrays.asList(new String[] { "org.eclipse.platform.ide" });
@@ -1677,13 +1680,15 @@ public class ProductCatalogGenerator implements IApplication
           }
         }
 
-        if (compareTrains(train, "2023-09") == 0)
+        boolean is_2023_09 = compareTrains(train, "2023-09") == 0;
+        boolean is_2024_03 = compareTrains(train, "2024-03") == 0;
+        if (is_2023_09 || is_2024_03)
         {
           if (additionalRequirementName.startsWith("org.eclipse.mylyn") && !additionalRequirementName.contains("mylyn.wiki"))
           {
             if (obsoleteMylynRequirements.isEmpty())
             {
-              for (String obsoleteMylynFeature : OBSOELETE_MYLYN_FEATURES)
+              for (String obsoleteMylynFeature : is_2024_03 ? OBSOELETE_MYLYN_FEATURES2 : OBSOELETE_MYLYN_FEATURES)
               {
                 Requirement obsoleteMylynRequirement = P2Factory.eINSTANCE.createRequirement();
                 obsoleteMylynRequirement.setName(obsoleteMylynFeature);

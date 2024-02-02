@@ -72,7 +72,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m1/eclipse-ide-java-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m2/eclipse-ide-java-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -129,17 +129,21 @@
         <requirement
             name="org.eclipse.mylyn.reviews.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+            name="org.eclipse.mylyn.wikitext.feature.feature.group"/>
         <requirement
             name="org.eclipse.tips.feature.feature.group"/>
         <requirement
             name="org.eclipse.tm.terminal.feature.feature.group"/>
         <requirement
             name="org.eclipse.wildwebdeveloper.xml.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.wikitext_feature.feature.group"
+            optional="true"
+            max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2024-03/202401111200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402011200"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-03/202401121000">
+            url="https://download.eclipse.org/releases/2024-03/202402021001">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -234,7 +238,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m1/eclipse-ide-java-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m2/eclipse-ide-java-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -291,17 +295,21 @@
         <requirement
             name="org.eclipse.mylyn.reviews.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+            name="org.eclipse.mylyn.wikitext.feature.feature.group"/>
         <requirement
             name="org.eclipse.tips.feature.feature.group"/>
         <requirement
             name="org.eclipse.tm.terminal.feature.feature.group"/>
         <requirement
             name="org.eclipse.wildwebdeveloper.xml.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.wikitext_feature.feature.group"
+            optional="true"
+            max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2024-03/202401111200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402011200"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-03/202401121000">
+            url="https://download.eclipse.org/releases/2024-03/202402021001">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -2451,7 +2459,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m1/eclipse-ide-enterprise-java-and-web-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m2/eclipse-ide-enterprise-java-and-web-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -2630,7 +2638,7 @@
         <requirement
             name="org.eclipse.mylyn.reviews.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+            name="org.eclipse.mylyn.wikitext.feature.feature.group"/>
         <requirement
             name="org.eclipse.pde.feature.group"/>
         <requirement
@@ -2647,10 +2655,14 @@
             name="org.eclipse.wst.server_adapters.feature.feature.group"/>
         <requirement
             name="org.eclipse.wst.xsl.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.wikitext_feature.feature.group"
+            optional="true"
+            max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2024-03/202401111200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402011200"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-03/202401121000">
+            url="https://download.eclipse.org/releases/2024-03/202402021001">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -2877,7 +2889,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m1/eclipse-ide-enterprise-java-and-web-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m2/eclipse-ide-enterprise-java-and-web-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -3056,7 +3068,7 @@
         <requirement
             name="org.eclipse.mylyn.reviews.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+            name="org.eclipse.mylyn.wikitext.feature.feature.group"/>
         <requirement
             name="org.eclipse.pde.feature.group"/>
         <requirement
@@ -3073,10 +3085,14 @@
             name="org.eclipse.wst.server_adapters.feature.feature.group"/>
         <requirement
             name="org.eclipse.wst.xsl.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.wikitext_feature.feature.group"
+            optional="true"
+            max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2024-03/202401111200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402011200"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-03/202401121000">
+            url="https://download.eclipse.org/releases/2024-03/202402021001">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -8484,7 +8500,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m1/eclipse-ide-cc-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m2/eclipse-ide-cc-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -8569,7 +8585,7 @@
         <requirement
             name="org.eclipse.mylyn.reviews.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+            name="org.eclipse.mylyn.wikitext.feature.feature.group"/>
         <requirement
             name="org.eclipse.tm.terminal.connector.cdtserial.feature.feature.group"/>
         <requirement
@@ -8582,10 +8598,14 @@
             name="org.eclipse.tracecompass.lttng2.kernel.feature.group"/>
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.wikitext_feature.feature.group"
+            optional="true"
+            max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2024-03/202401111200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402011200"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-03/202401121000">
+            url="https://download.eclipse.org/releases/2024-03/202402021001">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -8714,7 +8734,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m1/eclipse-ide-cc-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m2/eclipse-ide-cc-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -8799,7 +8819,7 @@
         <requirement
             name="org.eclipse.mylyn.reviews.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+            name="org.eclipse.mylyn.wikitext.feature.feature.group"/>
         <requirement
             name="org.eclipse.tm.terminal.connector.cdtserial.feature.feature.group"/>
         <requirement
@@ -8812,10 +8832,14 @@
             name="org.eclipse.tracecompass.lttng2.kernel.feature.group"/>
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.wikitext_feature.feature.group"
+            optional="true"
+            max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2024-03/202401111200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402011200"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-03/202401121000">
+            url="https://download.eclipse.org/releases/2024-03/202402021001">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -11784,7 +11808,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m1/eclipse-ide-embedded-cc-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m2/eclipse-ide-embedded-cc-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -11901,7 +11925,7 @@
         <requirement
             name="org.eclipse.mylyn.reviews.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+            name="org.eclipse.mylyn.wikitext.feature.feature.group"/>
         <requirement
             name="org.eclipse.tm.terminal.connector.cdtserial.feature.feature.group"/>
         <requirement
@@ -11914,10 +11938,14 @@
             name="org.eclipse.tracecompass.lttng2.kernel.feature.group"/>
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.wikitext_feature.feature.group"
+            optional="true"
+            max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2024-03/202401111200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402011200"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-03/202401121000">
+            url="https://download.eclipse.org/releases/2024-03/202402021001">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -12078,7 +12106,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m1/eclipse-ide-embedded-cc-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m2/eclipse-ide-embedded-cc-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -12195,7 +12223,7 @@
         <requirement
             name="org.eclipse.mylyn.reviews.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+            name="org.eclipse.mylyn.wikitext.feature.feature.group"/>
         <requirement
             name="org.eclipse.tm.terminal.connector.cdtserial.feature.feature.group"/>
         <requirement
@@ -12208,10 +12236,14 @@
             name="org.eclipse.tracecompass.lttng2.kernel.feature.group"/>
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.wikitext_feature.feature.group"
+            optional="true"
+            max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2024-03/202401111200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402011200"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-03/202401121000">
+            url="https://download.eclipse.org/releases/2024-03/202402021001">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -14103,7 +14135,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m1/eclipse-ide-php-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m2/eclipse-ide-php-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -14146,7 +14178,7 @@
         <requirement
             name="org.eclipse.mylyn.reviews.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+            name="org.eclipse.mylyn.wikitext.feature.feature.group"/>
         <requirement
             name="org.eclipse.php.composer.feature.group"/>
         <requirement
@@ -14167,10 +14199,14 @@
             name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.wikitext_feature.feature.group"
+            optional="true"
+            max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2024-03/202401111200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402011200"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-03/202401121000">
+            url="https://download.eclipse.org/releases/2024-03/202402021001">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -14265,7 +14301,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m1/eclipse-ide-php-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m2/eclipse-ide-php-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -14308,7 +14344,7 @@
         <requirement
             name="org.eclipse.mylyn.reviews.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+            name="org.eclipse.mylyn.wikitext.feature.feature.group"/>
         <requirement
             name="org.eclipse.php.composer.feature.group"/>
         <requirement
@@ -14329,10 +14365,14 @@
             name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.wikitext_feature.feature.group"
+            optional="true"
+            max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2024-03/202401111200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402011200"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-03/202401121000">
+            url="https://download.eclipse.org/releases/2024-03/202402021001">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -16453,7 +16493,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m1/eclipse-ide-eclipse-committers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m2/eclipse-ide-eclipse-committers</value>
         </detail>
         <detail
             key="shortcut">
@@ -16520,7 +16560,7 @@
         <requirement
             name="org.eclipse.mylyn.reviews.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+            name="org.eclipse.mylyn.wikitext.feature.feature.group"/>
         <requirement
             name="org.eclipse.pde.feature.group"/>
         <requirement
@@ -16541,10 +16581,14 @@
             name="org.eclipse.wildwebdeveloper.embedder.node.feature.feature.group"/>
         <requirement
             name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.wikitext_feature.feature.group"
+            optional="true"
+            max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2024-03/202401111200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402011200"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-03/202401121000">
+            url="https://download.eclipse.org/releases/2024-03/202402021001">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -16663,7 +16707,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m1/eclipse-ide-eclipse-committers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m2/eclipse-ide-eclipse-committers</value>
         </detail>
         <detail
             key="shortcut">
@@ -16730,7 +16774,7 @@
         <requirement
             name="org.eclipse.mylyn.reviews.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+            name="org.eclipse.mylyn.wikitext.feature.feature.group"/>
         <requirement
             name="org.eclipse.pde.feature.group"/>
         <requirement
@@ -16751,10 +16795,14 @@
             name="org.eclipse.wildwebdeveloper.embedder.node.feature.feature.group"/>
         <requirement
             name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.wikitext_feature.feature.group"
+            optional="true"
+            max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2024-03/202401111200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402011200"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-03/202401121000">
+            url="https://download.eclipse.org/releases/2024-03/202402021001">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -19654,7 +19702,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m1/eclipse-ide-java-and-dsl-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m2/eclipse-ide-java-and-dsl-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -19697,7 +19745,7 @@
         <requirement
             name="org.eclipse.m2e.logback.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+            name="org.eclipse.mylyn.wikitext.feature.feature.group"/>
         <requirement
             name="org.eclipse.sdk.feature.group"/>
         <requirement
@@ -19707,9 +19755,9 @@
         <requirement
             name="org.eclipse.xtext.sdk.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2024-03/202401111200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402011200"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-03/202401121000">
+            url="https://download.eclipse.org/releases/2024-03/202402021001">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -19792,7 +19840,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m1/eclipse-ide-java-and-dsl-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m2/eclipse-ide-java-and-dsl-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -19835,7 +19883,7 @@
         <requirement
             name="org.eclipse.m2e.logback.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+            name="org.eclipse.mylyn.wikitext.feature.feature.group"/>
         <requirement
             name="org.eclipse.sdk.feature.group"/>
         <requirement
@@ -19845,9 +19893,9 @@
         <requirement
             name="org.eclipse.xtext.sdk.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2024-03/202401111200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402011200"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-03/202401121000">
+            url="https://download.eclipse.org/releases/2024-03/202402021001">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -21643,7 +21691,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m1/eclipse-ide-rcp-and-rap-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m2/eclipse-ide-rcp-and-rap-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -21712,7 +21760,7 @@
         <requirement
             name="org.eclipse.mylyn.reviews.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+            name="org.eclipse.mylyn.wikitext.feature.feature.group"/>
         <requirement
             name="org.eclipse.passage.ldc.feature.feature.group"/>
         <requirement
@@ -21729,10 +21777,14 @@
             name="org.eclipse.tm.terminal.feature.feature.group"/>
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.wikitext_feature.feature.group"
+            optional="true"
+            max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2024-03/202401111200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402011200"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-03/202401121000">
+            url="https://download.eclipse.org/releases/2024-03/202402021001">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -21849,7 +21901,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m1/eclipse-ide-rcp-and-rap-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m2/eclipse-ide-rcp-and-rap-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -21918,7 +21970,7 @@
         <requirement
             name="org.eclipse.mylyn.reviews.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+            name="org.eclipse.mylyn.wikitext.feature.feature.group"/>
         <requirement
             name="org.eclipse.passage.ldc.feature.feature.group"/>
         <requirement
@@ -21935,10 +21987,14 @@
             name="org.eclipse.tm.terminal.feature.feature.group"/>
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.wikitext_feature.feature.group"
+            optional="true"
+            max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2024-03/202401111200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402011200"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-03/202401121000">
+            url="https://download.eclipse.org/releases/2024-03/202402021001">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -24496,7 +24552,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m1/eclipse-modeling-tools</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m2/eclipse-modeling-tools</value>
         </detail>
         <detail
             key="shortcut">
@@ -24577,7 +24633,7 @@
         <requirement
             name="org.eclipse.mylyn.reviews.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+            name="org.eclipse.mylyn.wikitext.feature.feature.group"/>
         <requirement
             name="org.eclipse.ocl.all.sdk.feature.group"/>
         <requirement
@@ -24594,10 +24650,14 @@
             name="org.eclipse.uml2.sdk.feature.group"/>
         <requirement
             name="org.eclipse.xsd.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.wikitext_feature.feature.group"
+            optional="true"
+            max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2024-03/202401111200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402011200"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-03/202401121000">
+            url="https://download.eclipse.org/releases/2024-03/202402021001">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -24726,7 +24786,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m1/eclipse-modeling-tools</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m2/eclipse-modeling-tools</value>
         </detail>
         <detail
             key="shortcut">
@@ -24807,7 +24867,7 @@
         <requirement
             name="org.eclipse.mylyn.reviews.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+            name="org.eclipse.mylyn.wikitext.feature.feature.group"/>
         <requirement
             name="org.eclipse.ocl.all.sdk.feature.group"/>
         <requirement
@@ -24824,10 +24884,14 @@
             name="org.eclipse.uml2.sdk.feature.group"/>
         <requirement
             name="org.eclipse.xsd.sdk.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.wikitext_feature.feature.group"
+            optional="true"
+            max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2024-03/202401111200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402011200"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-03/202401121000">
+            url="https://download.eclipse.org/releases/2024-03/202402021001">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -27689,7 +27753,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m1/eclipse-ide-scout-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m2/eclipse-ide-scout-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -27746,7 +27810,7 @@
         <requirement
             name="org.eclipse.mylyn.reviews.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+            name="org.eclipse.mylyn.wikitext.feature.feature.group"/>
         <requirement
             name="org.eclipse.scout.sdk-feature.feature.group"/>
         <requirement
@@ -27755,10 +27819,14 @@
             name="org.eclipse.wst.web_ui.feature.feature.group"/>
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.wikitext_feature.feature.group"
+            optional="true"
+            max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2024-03/202401111200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402011200"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-03/202401121000">
+            url="https://download.eclipse.org/releases/2024-03/202402021001">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -27855,7 +27923,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m1/eclipse-ide-scout-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m2/eclipse-ide-scout-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -27912,7 +27980,7 @@
         <requirement
             name="org.eclipse.mylyn.reviews.feature.feature.group"/>
         <requirement
-            name="org.eclipse.mylyn.wikitext_feature.feature.group"/>
+            name="org.eclipse.mylyn.wikitext.feature.feature.group"/>
         <requirement
             name="org.eclipse.scout.sdk-feature.feature.group"/>
         <requirement
@@ -27921,10 +27989,14 @@
             name="org.eclipse.wst.web_ui.feature.feature.group"/>
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <requirement
+            name="org.eclipse.mylyn.wikitext_feature.feature.group"
+            optional="true"
+            max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2024-03/202401111200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402011200"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-03/202401121000">
+            url="https://download.eclipse.org/releases/2024-03/202402021001">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -30061,6 +30133,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
+            key="siteURI">
+          <value>https://download.eclipse.org/eclipse/downloads/</value>
+        </detail>
+        <detail
             key="shortcut">
           <value>Eclipse Platform - Latest</value>
         </detail>
@@ -30079,7 +30155,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.31.0,5.0.0)"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-03/202401121000">
+            url="https://download.eclipse.org/releases/2024-03/202402021001">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -30127,6 +30203,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
+            key="siteURI">
+          <value>https://download.eclipse.org/eclipse/downloads/</value>
+        </detail>
+        <detail
             key="shortcut">
           <value>Eclipse Platform - 2024-03</value>
         </detail>
@@ -30145,7 +30225,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.31.0,5.0.0)"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-03/202401121000">
+            url="https://download.eclipse.org/releases/2024-03/202402021001">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
