@@ -131,6 +131,7 @@ public final class SetupCoreUtil
     extensionToFactoryMap.put("targlet", factory); //$NON-NLS-1$
     extensionToFactoryMap.put("def", factory); //$NON-NLS-1$
     extensionToFactoryMap.put("ext", factory); //$NON-NLS-1$
+    extensionToFactoryMap.put(null, factory);
 
     extensionToFactoryMap.put("ecore", new EcoreResourceFactoryImpl()); //$NON-NLS-1$
   }
