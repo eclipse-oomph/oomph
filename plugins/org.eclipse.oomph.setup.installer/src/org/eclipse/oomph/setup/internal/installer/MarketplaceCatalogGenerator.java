@@ -265,19 +265,22 @@ public class MarketplaceCatalogGenerator implements IApplication
         Resource resource = resourceSet.getResource(baseSearchURI, true);
         EObject documentRoot = resource.getContents().get(0);
         EObject marketplace = documentRoot.eContents().get(0);
-        for (EObject search : marketplace.eContents())
+        String searchCount = (String)get(marketplace, "count");
+        if (searchCount == null)
         {
-          int count = Integer.parseInt((String)get(search, "count"));
-          System.err.println("Listing count: " + count);
-          for (int i = 0; i * 10 < count; ++i)
-          {
-            URI listingURI = baseSearchURI.appendQuery("page_num=" + i);
-            uris.add(listingURI);
-          }
+          searchCount = (String)get(marketplace.eContents().get(0), "count");
         }
 
-        loadResources(uris);
+        int count = Integer.parseInt(searchCount);
+        System.err.println("Listing count: " + count);
+        for (int i = 0; i * 10 < count; ++i)
+        {
+          URI listingURI = baseSearchURI.appendQuery("page_num=" + i);
+          uris.add(listingURI);
+        }
       }
+
+      loadResources(uris);
 
       System.out.println("Gathering " + uris.size() + " categories: " + (startListings - startCategories) / 1000);
 
@@ -286,8 +289,13 @@ public class MarketplaceCatalogGenerator implements IApplication
         System.out.println("Loading " + listingURI);
         Resource listingResource = resourceSet.getResource(listingURI, true);
         EObject documentRoot = listingResource.getContents().get(0);
-        EObject marketplace = documentRoot.eContents().get(0);
-        List<AnyType> searches = get(marketplace, "search");
+        List<AnyType> searches = get(documentRoot, "search");
+        if (searches == null)
+        {
+          EObject marketplace = documentRoot.eContents().get(0);
+          searches = get(marketplace, "search");
+        }
+
         for (AnyType search : searches)
         {
           List<AnyType> nodes = get(search, "node");
@@ -373,8 +381,13 @@ public class MarketplaceCatalogGenerator implements IApplication
         }
 
         EObject documentRoot = contents.get(0);
-        EObject marketplace = documentRoot.eContents().get(0);
-        List<AnyType> nodes = get(marketplace, "node");
+        List<AnyType> nodes = get(documentRoot, "node");
+        if (nodes == null)
+        {
+          EObject marketplace = documentRoot.eContents().get(0);
+          nodes = get(marketplace, "node");
+        }
+
         for (AnyType node : nodes)
         {
           String updateURL = getContent(node, "updateurl");
@@ -446,8 +459,13 @@ public class MarketplaceCatalogGenerator implements IApplication
         }
 
         EObject documentRoot = contents.get(0);
-        EObject marketplace = documentRoot.eContents().get(0);
-        List<AnyType> nodes = get(marketplace, "node");
+        List<AnyType> nodes = get(documentRoot, "node");
+        if (nodes == null)
+        {
+          EObject marketplace = documentRoot.eContents().get(0);
+          nodes = get(marketplace, "node");
+        }
+
         for (AnyType node : nodes)
         {
           String id = get(node, "id");
