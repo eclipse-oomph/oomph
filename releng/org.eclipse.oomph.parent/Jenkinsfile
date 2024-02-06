@@ -282,7 +282,7 @@ pipeline {
 }
 
 def void echoVariables() {
-  echo """
+def description = """
 BUILD_TYPE=${env.BUILD_TYPE}
 RESTRICTED_VERSION=${env.RESTRICTED_VERSION}
 BUILD_KEY=${env.BUILD_KEY}
@@ -297,7 +297,9 @@ BUILD_TIMESTAMP=${env.BUILD_TIMESTAMP}
 GIT=${env.GIT}
 GIT_COMMIT=${env.GIT_COMMIT}
 GIT_BRANCH=${env.GIT_BRANCH}
-"""
+""".trim()
+echo description
+currentBuild.description = description.replace("\n", "<br/>")
 }
 
 def void mvn() {
