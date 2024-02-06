@@ -160,7 +160,7 @@ pipeline {
             env.PROMOTE = false
           }
 
-          echoVariables()
+          currentBuild.description = echoVariables().replace("\n", "<br/>")
         }
       }
     }
@@ -194,7 +194,7 @@ pipeline {
             env.SIGN = false
           }
 
-          echoVariables()
+          currentBuild.description = echoVariables().replace("\n", "<br/>")
         }
       }
     }
@@ -281,8 +281,8 @@ pipeline {
   }
 }
 
-def void echoVariables() {
-def description = """
+def String echoVariables() {
+  def description = """
 BUILD_TYPE=${env.BUILD_TYPE}
 RESTRICTED_VERSION=${env.RESTRICTED_VERSION}
 BUILD_KEY=${env.BUILD_KEY}
@@ -298,8 +298,8 @@ GIT=${env.GIT}
 GIT_COMMIT=${env.GIT_COMMIT}
 GIT_BRANCH=${env.GIT_BRANCH}
 """.trim()
-echo description
-currentBuild.description = description.replace("\n", "<br/>")
+  echo description
+  return description
 }
 
 def void mvn() {
