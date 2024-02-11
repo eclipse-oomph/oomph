@@ -111,13 +111,14 @@ public class RemoteDataProvider implements DataProvider
     try
     {
       InputStream contents = new FileInputStream(file);
-
       if (!Boolean.getBoolean("org.eclipse.oomph.setup.sync.gzip.skip")) //$NON-NLS-1$
       {
-        contents = new CompressingInputStream(contents);
+        blob.setContents(new CompressingInputStream(contents));
       }
-
-      blob.setContents(contents);
+      else
+      {
+        blob.setContents(contents);
+      }
     }
     catch (ConflictException ex)
     {

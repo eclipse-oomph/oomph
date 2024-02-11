@@ -122,7 +122,6 @@ public final class VersionUtil
     }
   }
 
-  @SuppressWarnings("resource")
   public static String getLineDelimiter(IFile file) throws IOException
   {
     InputStream inputStream = null;
