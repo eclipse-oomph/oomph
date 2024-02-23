@@ -72,7 +72,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m2/eclipse-ide-java-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m3/eclipse-ide-java-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -141,9 +141,9 @@
             optional="true"
             max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402011200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402221200"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-03/202402021001">
+            url="https://download.eclipse.org/releases/2024-03/202402231000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -238,7 +238,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m2/eclipse-ide-java-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m3/eclipse-ide-java-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -307,9 +307,9 @@
             optional="true"
             max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402011200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402221200"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-03/202402021001">
+            url="https://download.eclipse.org/releases/2024-03/202402231000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -2459,7 +2459,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m2/eclipse-ide-enterprise-java-and-web-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m3/eclipse-ide-enterprise-java-and-web-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -2660,9 +2660,9 @@
             optional="true"
             max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402011200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402221200"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-03/202402021001">
+            url="https://download.eclipse.org/releases/2024-03/202402231000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -2889,7 +2889,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m2/eclipse-ide-enterprise-java-and-web-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m3/eclipse-ide-enterprise-java-and-web-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -3090,9 +3090,9 @@
             optional="true"
             max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402011200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402221200"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-03/202402021001">
+            url="https://download.eclipse.org/releases/2024-03/202402231000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -8500,7 +8500,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m2/eclipse-ide-cc-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m3/eclipse-ide-cc-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -8603,9 +8603,9 @@
             optional="true"
             max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402011200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402221200"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-03/202402021001">
+            url="https://download.eclipse.org/releases/2024-03/202402231000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -8734,7 +8734,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m2/eclipse-ide-cc-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m3/eclipse-ide-cc-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -8837,9 +8837,9 @@
             optional="true"
             max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402011200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402221200"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-03/202402021001">
+            url="https://download.eclipse.org/releases/2024-03/202402231000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -11808,7 +11808,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m2/eclipse-ide-embedded-cc-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m3/eclipse-ide-embedded-cc-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -11943,9 +11943,9 @@
             optional="true"
             max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402011200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402221200"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-03/202402021001">
+            url="https://download.eclipse.org/releases/2024-03/202402231000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -12106,7 +12106,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m2/eclipse-ide-embedded-cc-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m3/eclipse-ide-embedded-cc-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -12241,9 +12241,9 @@
             optional="true"
             max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402011200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402221200"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-03/202402021001">
+            url="https://download.eclipse.org/releases/2024-03/202402231000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -14135,7 +14135,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m2/eclipse-ide-php-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m3/eclipse-ide-php-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -14204,9 +14204,9 @@
             optional="true"
             max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402011200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402221200"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-03/202402021001">
+            url="https://download.eclipse.org/releases/2024-03/202402231000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -14301,7 +14301,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m2/eclipse-ide-php-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m3/eclipse-ide-php-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -14370,9 +14370,9 @@
             optional="true"
             max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402011200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402221200"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-03/202402021001">
+            url="https://download.eclipse.org/releases/2024-03/202402231000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -16493,7 +16493,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m2/eclipse-ide-eclipse-committers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m3/eclipse-ide-eclipse-committers</value>
         </detail>
         <detail
             key="shortcut">
@@ -16586,9 +16586,9 @@
             optional="true"
             max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402011200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402221200"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-03/202402021001">
+            url="https://download.eclipse.org/releases/2024-03/202402231000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -16707,7 +16707,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m2/eclipse-ide-eclipse-committers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m3/eclipse-ide-eclipse-committers</value>
         </detail>
         <detail
             key="shortcut">
@@ -16800,9 +16800,9 @@
             optional="true"
             max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402011200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402221200"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-03/202402021001">
+            url="https://download.eclipse.org/releases/2024-03/202402231000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -19702,7 +19702,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m2/eclipse-ide-java-and-dsl-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m3/eclipse-ide-java-and-dsl-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -19755,9 +19755,9 @@
         <requirement
             name="org.eclipse.xtext.sdk.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402011200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402221200"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-03/202402021001">
+            url="https://download.eclipse.org/releases/2024-03/202402231000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -19840,7 +19840,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m2/eclipse-ide-java-and-dsl-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m3/eclipse-ide-java-and-dsl-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -19893,9 +19893,9 @@
         <requirement
             name="org.eclipse.xtext.sdk.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402011200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402221200"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-03/202402021001">
+            url="https://download.eclipse.org/releases/2024-03/202402231000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -21691,7 +21691,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m2/eclipse-ide-rcp-and-rap-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m3/eclipse-ide-rcp-and-rap-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -21782,9 +21782,9 @@
             optional="true"
             max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402011200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402221200"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-03/202402021001">
+            url="https://download.eclipse.org/releases/2024-03/202402231000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -21901,7 +21901,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m2/eclipse-ide-rcp-and-rap-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m3/eclipse-ide-rcp-and-rap-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -21992,9 +21992,9 @@
             optional="true"
             max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402011200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402221200"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-03/202402021001">
+            url="https://download.eclipse.org/releases/2024-03/202402231000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -24552,7 +24552,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m2/eclipse-modeling-tools</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m3/eclipse-modeling-tools</value>
         </detail>
         <detail
             key="shortcut">
@@ -24655,9 +24655,9 @@
             optional="true"
             max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402011200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402221200"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-03/202402021001">
+            url="https://download.eclipse.org/releases/2024-03/202402231000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -24786,7 +24786,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m2/eclipse-modeling-tools</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m3/eclipse-modeling-tools</value>
         </detail>
         <detail
             key="shortcut">
@@ -24889,9 +24889,9 @@
             optional="true"
             max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402011200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402221200"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-03/202402021001">
+            url="https://download.eclipse.org/releases/2024-03/202402231000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -27753,7 +27753,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m2/eclipse-ide-scout-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m3/eclipse-ide-scout-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -27824,9 +27824,9 @@
             optional="true"
             max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402011200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402221200"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-03/202402021001">
+            url="https://download.eclipse.org/releases/2024-03/202402231000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -27923,7 +27923,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m2/eclipse-ide-scout-developers</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-03/m3/eclipse-ide-scout-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -27994,9 +27994,9 @@
             optional="true"
             max="0"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402011200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2024-03/202402221200"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-03/202402021001">
+            url="https://download.eclipse.org/releases/2024-03/202402231000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -30155,7 +30155,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.31.0,5.0.0)"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-03/202402021001">
+            url="https://download.eclipse.org/releases/2024-03/202402231000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -30225,7 +30225,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.31.0,5.0.0)"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-03/202402021001">
+            url="https://download.eclipse.org/releases/2024-03/202402231000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
