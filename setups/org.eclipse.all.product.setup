@@ -1934,7 +1934,7 @@
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
       <repository
-          url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.36.0"/>
+          url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.37.0"/>
     </setupTask>
   </version>
   <version name="juno"
@@ -1993,7 +1993,7 @@
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
       <repository
-          url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.36.0"/>
+          url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.37.0"/>
     </setupTask>
   </version>
   <description>This package contains all categorized features of the release train. It can do &lt;a href='https://en.wiktionary.org/wiki/eierlegende_Wollmilchsau'>everything&lt;/a>, but it's not pretty.</description>
