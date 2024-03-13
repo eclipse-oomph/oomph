@@ -80,10 +80,6 @@
         </detail>
       </annotation>
       <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2024-06"
-          targetURL="https://download.eclipse.org/releases/2024-03"/>
-      <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Java Developers (2024-06)">
         <requirement
@@ -141,7 +137,9 @@
         <requirement
             name="org.eclipse.wildwebdeveloper.xml.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-06">
+            url="https://download.eclipse.org/technology/epp/packages/2024-06/../2024-03"/>
+        <repository
+            url="https://download.eclipse.org/releases/2024-03/202403131000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -248,10 +246,6 @@
         </detail>
       </annotation>
       <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2024-06"
-          targetURL="https://download.eclipse.org/releases/2024-03"/>
-      <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Java Developers (2024-06)">
         <requirement
@@ -309,7 +303,9 @@
         <requirement
             name="org.eclipse.wildwebdeveloper.xml.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-06">
+            url="https://download.eclipse.org/technology/epp/packages/2024-06/../2024-03"/>
+        <repository
+            url="https://download.eclipse.org/releases/2024-03/202403131000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -2556,10 +2552,6 @@
         </detail>
       </annotation>
       <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2024-06"
-          targetURL="https://download.eclipse.org/releases/2024-03"/>
-      <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Enterprise Java and Web Developers (2024-06)">
         <requirement
@@ -2749,7 +2741,9 @@
         <requirement
             name="org.eclipse.wst.xsl.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-06">
+            url="https://download.eclipse.org/technology/epp/packages/2024-06/../2024-03"/>
+        <repository
+            url="https://download.eclipse.org/releases/2024-03/202403131000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -2988,10 +2982,6 @@
         </detail>
       </annotation>
       <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2024-06"
-          targetURL="https://download.eclipse.org/releases/2024-03"/>
-      <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Enterprise Java and Web Developers (2024-06)">
         <requirement
@@ -3181,7 +3171,9 @@
         <requirement
             name="org.eclipse.wst.xsl.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-06">
+            url="https://download.eclipse.org/technology/epp/packages/2024-06/../2024-03"/>
+        <repository
+            url="https://download.eclipse.org/releases/2024-03/202403131000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -8818,10 +8810,6 @@
         </detail>
       </annotation>
       <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2024-06"
-          targetURL="https://download.eclipse.org/releases/2024-03"/>
-      <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for C/C++ Developers (2024-06)">
         <requirement
@@ -8913,7 +8901,9 @@
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-06">
+            url="https://download.eclipse.org/technology/epp/packages/2024-06/../2024-03"/>
+        <repository
+            url="https://download.eclipse.org/releases/2024-03/202403131000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -9054,10 +9044,6 @@
         </detail>
       </annotation>
       <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2024-06"
-          targetURL="https://download.eclipse.org/releases/2024-03"/>
-      <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for C/C++ Developers (2024-06)">
         <requirement
@@ -9149,7 +9135,9 @@
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-06">
+            url="https://download.eclipse.org/technology/epp/packages/2024-06/../2024-03"/>
+        <repository
+            url="https://download.eclipse.org/releases/2024-03/202403131000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -12249,10 +12237,6 @@
         </detail>
       </annotation>
       <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2024-06"
-          targetURL="https://download.eclipse.org/releases/2024-03"/>
-      <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Embedded C/C++ Developers (2024-06)">
         <requirement
@@ -12376,7 +12360,9 @@
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-06">
+            url="https://download.eclipse.org/technology/epp/packages/2024-06/../2024-03"/>
+        <repository
+            url="https://download.eclipse.org/releases/2024-03/202403131000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -12549,10 +12535,6 @@
         </detail>
       </annotation>
       <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2024-06"
-          targetURL="https://download.eclipse.org/releases/2024-03"/>
-      <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Embedded C/C++ Developers (2024-06)">
         <requirement
@@ -12676,7 +12658,9 @@
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-06">
+            url="https://download.eclipse.org/technology/epp/packages/2024-06/../2024-03"/>
+        <repository
+            url="https://download.eclipse.org/releases/2024-03/202403131000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -14731,10 +14715,6 @@
         </detail>
       </annotation>
       <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2024-06"
-          targetURL="https://download.eclipse.org/releases/2024-03"/>
-      <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for PHP Developers (2024-06)">
         <requirement
@@ -14792,7 +14772,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-06">
+            url="https://download.eclipse.org/technology/epp/packages/2024-06/../2024-03"/>
+        <repository
+            url="https://download.eclipse.org/releases/2024-03/202403131000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -14899,10 +14881,6 @@
         </detail>
       </annotation>
       <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2024-06"
-          targetURL="https://download.eclipse.org/releases/2024-03"/>
-      <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for PHP Developers (2024-06)">
         <requirement
@@ -14960,7 +14938,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-06">
+            url="https://download.eclipse.org/technology/epp/packages/2024-06/../2024-03"/>
+        <repository
+            url="https://download.eclipse.org/releases/2024-03/202403131000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -17178,10 +17158,6 @@
         </detail>
       </annotation>
       <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2024-06"
-          targetURL="https://download.eclipse.org/releases/2024-03"/>
-      <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Eclipse Committers (2024-06)">
         <requirement
@@ -17263,7 +17239,9 @@
         <requirement
             name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-06">
+            url="https://download.eclipse.org/technology/epp/packages/2024-06/../2024-03"/>
+        <repository
+            url="https://download.eclipse.org/releases/2024-03/202403131000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -17394,10 +17372,6 @@
         </detail>
       </annotation>
       <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2024-06"
-          targetURL="https://download.eclipse.org/releases/2024-03"/>
-      <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Eclipse Committers (2024-06)">
         <requirement
@@ -17479,7 +17453,9 @@
         <requirement
             name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-06">
+            url="https://download.eclipse.org/technology/epp/packages/2024-06/../2024-03"/>
+        <repository
+            url="https://download.eclipse.org/releases/2024-03/202403131000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -20500,10 +20476,6 @@
         </detail>
       </annotation>
       <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2024-06"
-          targetURL="https://download.eclipse.org/releases/2024-03"/>
-      <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse DSL Tools (2024-06)">
         <requirement
@@ -20549,7 +20521,9 @@
         <requirement
             name="org.eclipse.xtext.sdk.feature.group"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-06">
+            url="https://download.eclipse.org/technology/epp/packages/2024-06/../2024-03"/>
+        <repository
+            url="https://download.eclipse.org/releases/2024-03/202403131000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -20640,10 +20614,6 @@
         </detail>
       </annotation>
       <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2024-06"
-          targetURL="https://download.eclipse.org/releases/2024-03"/>
-      <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse DSL Tools (2024-06)">
         <requirement
@@ -20689,7 +20659,9 @@
         <requirement
             name="org.eclipse.xtext.sdk.feature.group"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-06">
+            url="https://download.eclipse.org/technology/epp/packages/2024-06/../2024-03"/>
+        <repository
+            url="https://download.eclipse.org/releases/2024-03/202403131000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -22566,10 +22538,6 @@
         </detail>
       </annotation>
       <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2024-06"
-          targetURL="https://download.eclipse.org/releases/2024-03"/>
-      <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for RCP and RAP Developers (2024-06)">
         <requirement
@@ -22649,7 +22617,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-06">
+            url="https://download.eclipse.org/technology/epp/packages/2024-06/../2024-03"/>
+        <repository
+            url="https://download.eclipse.org/releases/2024-03/202403131000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -22778,10 +22748,6 @@
         </detail>
       </annotation>
       <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2024-06"
-          targetURL="https://download.eclipse.org/releases/2024-03"/>
-      <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for RCP and RAP Developers (2024-06)">
         <requirement
@@ -22861,7 +22827,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-06">
+            url="https://download.eclipse.org/technology/epp/packages/2024-06/../2024-03"/>
+        <repository
+            url="https://download.eclipse.org/releases/2024-03/202403131000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -25538,10 +25506,6 @@
         </detail>
       </annotation>
       <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2024-06"
-          targetURL="https://download.eclipse.org/releases/2024-03"/>
-      <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse Modeling Tools (2024-06)">
         <requirement
@@ -25633,7 +25597,9 @@
         <requirement
             name="org.eclipse.xsd.sdk.feature.group"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-06">
+            url="https://download.eclipse.org/technology/epp/packages/2024-06/../2024-03"/>
+        <repository
+            url="https://download.eclipse.org/releases/2024-03/202403131000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -25774,10 +25740,6 @@
         </detail>
       </annotation>
       <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2024-06"
-          targetURL="https://download.eclipse.org/releases/2024-03"/>
-      <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse Modeling Tools (2024-06)">
         <requirement
@@ -25869,7 +25831,9 @@
         <requirement
             name="org.eclipse.xsd.sdk.feature.group"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-06">
+            url="https://download.eclipse.org/technology/epp/packages/2024-06/../2024-03"/>
+        <repository
+            url="https://download.eclipse.org/releases/2024-03/202403131000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -28862,10 +28826,6 @@
         </detail>
       </annotation>
       <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2024-06"
-          targetURL="https://download.eclipse.org/releases/2024-03"/>
-      <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for Scout Developers (2024-06)">
         <requirement
@@ -28925,7 +28885,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-06">
+            url="https://download.eclipse.org/technology/epp/packages/2024-06/../2024-03"/>
+        <repository
+            url="https://download.eclipse.org/releases/2024-03/202403131000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -29034,10 +28996,6 @@
         </detail>
       </annotation>
       <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2024-06"
-          targetURL="https://download.eclipse.org/releases/2024-03"/>
-      <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for Scout Developers (2024-06)">
         <requirement
@@ -29097,7 +29055,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-06">
+            url="https://download.eclipse.org/technology/epp/packages/2024-06/../2024-03"/>
+        <repository
+            url="https://download.eclipse.org/releases/2024-03/202403131000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -31330,10 +31290,6 @@
         </detail>
       </annotation>
       <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2024-06"
-          targetURL="https://download.eclipse.org/releases/2024-03"/>
-      <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse Platform (2024-06)">
         <requirement
@@ -31347,7 +31303,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.31.0,5.0.0)"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-06">
+            url="https://download.eclipse.org/releases/2024-03/202403131000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -31361,7 +31317,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://download.eclipse.org/eclipse/downloads/</value>
+          <value>https://archive.eclipse.org/eclipse/downloads/drops4/R-4.31-202402290520/</value>
         </detail>
         <detail
             key="shortcut">
@@ -31400,10 +31356,6 @@
         </detail>
       </annotation>
       <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2024-06"
-          targetURL="https://download.eclipse.org/releases/2024-03"/>
-      <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse Platform (2024-06)">
         <requirement
@@ -31417,7 +31369,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.31.0,5.0.0)"/>
         <repository
-            url="https://download.eclipse.org/releases/2024-06">
+            url="https://download.eclipse.org/releases/2024-03/202403131000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -31435,7 +31387,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://download.eclipse.org/eclipse/downloads/</value>
+          <value>https://archive.eclipse.org/eclipse/downloads/drops4/R-4.31-202402290520/</value>
         </detail>
         <detail
             key="shortcut">

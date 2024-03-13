@@ -57,10 +57,6 @@
       </detail>
     </annotation>
     <setupTask
-        xsi:type="setup:RedirectionTask"
-        sourceURL="https://download.eclipse.org/releases/2024-06"
-        targetURL="https://download.eclipse.org/releases/2024-03"/>
-    <setupTask
         xsi:type="setup.p2:P2Task"
         label="Eclipse Eierlegende Wollmilchsau (2024-06)">
       <requirement
@@ -95,7 +91,7 @@
       <requirement
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
       <repository
-          url="https://download.eclipse.org/releases/2024-06">
+          url="https://download.eclipse.org/releases/2024-03/202403131000">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
@@ -171,10 +167,6 @@
       </detail>
     </annotation>
     <setupTask
-        xsi:type="setup:RedirectionTask"
-        sourceURL="https://download.eclipse.org/staging/2024-06"
-        targetURL="https://download.eclipse.org/staging/2024-03"/>
-    <setupTask
         xsi:type="setup.p2:P2Task"
         label="Eclipse Eierlegende Wollmilchsau (2024-06)">
       <requirement
@@ -209,7 +201,7 @@
       <requirement
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
       <repository
-          url="https://download.eclipse.org/staging/2024-06"/>
+          url="https://download.eclipse.org/staging/2024-03"/>
     </setupTask>
   </version>
   <version name="2024-06"
@@ -227,10 +219,6 @@
       </detail>
     </annotation>
     <setupTask
-        xsi:type="setup:RedirectionTask"
-        sourceURL="https://download.eclipse.org/releases/2024-06"
-        targetURL="https://download.eclipse.org/releases/2024-03"/>
-    <setupTask
         xsi:type="setup.p2:P2Task"
         label="Eclipse Eierlegende Wollmilchsau (2024-06)">
       <requirement
@@ -265,7 +253,7 @@
       <requirement
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
       <repository
-          url="https://download.eclipse.org/releases/2024-06">
+          url="https://download.eclipse.org/releases/2024-03/202403131000">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
