@@ -39,7 +39,7 @@ pipeline {
 
     choice(
       name: 'RESTRICTED_VERSION',
-      choices: ['2024-03'],
+      choices: ['2024-06'],
       description: '''
         The product version for the restricted variants of the installer.
       '''
@@ -55,7 +55,7 @@ pipeline {
         <br/>
         It is generally left blank and will be determined by the BUILD_TYPE/BUILD_TIMESTAMP, e.g., N20230621-000000.
         <br/>
-        For <b>BUILD_TYPE == release</b>, this should be the version of the release, e.g., <b>1.30.0</b>.
+        For <b>BUILD_TYPE == release</b>, this should be the version of the release, e.g., <b>1.33.0</b>.
         <br/>
         Consult <a href="https://download.eclipse.org/justj/?file=oomph/drops/release">https://download.eclipse.org/oomph/drops/release</a> for the next available release version.
       '''
@@ -71,9 +71,9 @@ pipeline {
         <br/>
         It is left blank for nightly builds.
         <br/>
-        For <b>BUILD_TYPE == milestone</b>, this should be full version qualifier appended to the computed build version, e.g., "<b>1.30.0-M1</b>" to produce a <b>S20230412-102423-1.30.0-M1</b> milestone.
+        For <b>BUILD_TYPE == milestone</b>, this should be full version qualifier appended to the computed build version, e.g., "<b>1.33.0-M1</b>" to produce a <b>S20230412-102423-1.33.0-M1</b> milestone.
         <br/>
-        For <b>BUILD_TYPE == release</b>, and for a respin, this could be qualifier appended to the BUILD_KEY, e.g., "<b>a</b>" to produce a <b>1.30.0-a</b> release.
+        For <b>BUILD_TYPE == release</b>, and for a respin, this could be qualifier appended to the BUILD_KEY, e.g., "<b>a</b>" to produce a <b>1.33.0-a</b> release.
         <br/>
         Consult <a href="https://download.eclipse.org/justj/?file=oomph/drops/milestone">https://download.eclipse.org/oomph/drops/milestone</a> for the next available milestone version.
         <br/>
