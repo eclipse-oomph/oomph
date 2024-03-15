@@ -52,6 +52,7 @@ import java.net.Socket;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -100,6 +101,12 @@ public final class IOUtil
       // Can't happen.
       return null;
     }
+  }
+
+  public static Charset getNativeEncoding()
+  {
+    String encoding = System.getProperty("native.encoding"); //$NON-NLS-1$
+    return encoding != null ? Charset.forName(encoding) : Charset.defaultCharset();
   }
 
   public static boolean isValidFolder(File folder)

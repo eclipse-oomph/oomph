@@ -378,7 +378,7 @@ public class EclipseIniTaskImpl extends SetupTaskImpl implements EclipseIniTask
       context.log(NLS.bind(Messages.EclipseIniTaskImpl_Changing_message, file, getLabel(getValue())));
 
       // Write the ini file with the system's default encoding; the native launcher reads it so.
-      IOUtil.writeLines(file, null, contents);
+      IOUtil.writeLines(file, IOUtil.getNativeEncoding().name(), contents);
       context.setRestartNeeded(NLS.bind(Messages.EclipseIniTaskImpl_FileHasChanged_message, file.getName()));
     }
   }
@@ -386,7 +386,7 @@ public class EclipseIniTaskImpl extends SetupTaskImpl implements EclipseIniTask
   private boolean createNewContent(SetupTaskContext context)
   {
     // Read the existing ini file with the system's default encoding, like the native launcher does.
-    List<String> oldContents = IOUtil.readLines(file, null);
+    List<String> oldContents = IOUtil.readLines(file, IOUtil.getNativeEncoding().name());
     contents = new ArrayList<>(oldContents);
     int vmargsIndex = contents.indexOf("-vmargs"); //$NON-NLS-1$
 

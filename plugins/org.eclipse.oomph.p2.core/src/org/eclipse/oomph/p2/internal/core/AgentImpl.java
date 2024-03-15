@@ -994,7 +994,8 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
     // For generality we'll check the launcher name property to compute the name of the launcher ini.
     String launcherName = profile.getProperty(EclipseTouchpoint.PROFILE_PROP_LAUNCHER_NAME);
     File iniFile = new File(installFolder, launcherName == null ? "eclipse.ini" : launcherName + ".ini"); //$NON-NLS-1$ //$NON-NLS-2$
-    String contents = new String(IOUtil.readFile(iniFile));
+    Charset nativeEncoding = IOUtil.getNativeEncoding();
+    String contents = new String(IOUtil.readFile(iniFile), nativeEncoding);
 
     // We will process all the sections, keeping them in a map from which we'll compute the modified contents.
     Map<String, String> map = new LinkedHashMap<>();
@@ -1123,7 +1124,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
 
     if (!contents.contentEquals(newContents))
     {
-      IOUtil.writeFile(iniFile, newContents.toString().getBytes());
+      IOUtil.writeFile(iniFile, newContents.toString().getBytes(nativeEncoding));
     }
   }
 
