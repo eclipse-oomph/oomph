@@ -13,7 +13,7 @@ if ($result === FALSE) {
   http_response_code(404);
 } else {
   // The id to match.
-  $id = $_GET["id"];
+  $id =htmlentities($_GET["id"]);
   $root = $xmlDoc->documentElement;
 
   // Loop over the children.

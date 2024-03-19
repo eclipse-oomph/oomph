@@ -26,7 +26,7 @@ $pageAuthor     = "Ed Merks";
 
 $eclipse_installer = '<span style="color: #2c2255; font-family: Arial, Helvetica, sans-serif;">eclipse</span> <span class="orange">installer</span>';
 
-$version = $_GET["version"];
+$version = htmlentities($_GET["version"]);
 $version_label = "";
 $version_parameter = "";
 $installer_version = "";

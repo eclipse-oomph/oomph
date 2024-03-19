@@ -50,7 +50,7 @@ $eclipse_installer = '<span style="color: #2c2255; font-family: Arial, Helvetica
 $eclipse_ide = '<span style="color: #2c2255; font-family: Arial, Helvetica, sans-serif;">eclipse</span> <span class="orange">IDE</span>';
 $eclipse_marketplace = '<a style="font-family: Arial, Helvetica, sans-serif;" href="https://marketplace.eclipse.org/" target="eclipse_marketplace"><span style="color: #2c2255;">eclipse market</span><span class="orange">place</span></a>';
 
-$version = $_GET["version"];
+$version = htmlEntities($_GET["version"]);
 $version_label = "";
 $version_parameter = "";
 if (!$version)

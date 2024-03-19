@@ -1,7 +1,7 @@
 <?php
 header( 'Cache-control: no cache' );
 header('Content-type: application/xml');
-$url = $_GET["url"];
+$url = htmlentities($_GET["url"]);
 $path = str_replace("://", "/", $url);
 $contents = @file_get_contents("../setups/$path");
 if ($contents == "") {
