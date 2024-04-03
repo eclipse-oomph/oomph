@@ -222,7 +222,8 @@ public class ProductCatalogGenerator implements IApplication
 
   private static final Set<String> EXCLUDED_IDS = new HashSet<>(Arrays.asList("epp.package.mobile"));
 
-  private static final String EPP_INSTALL_ROOTS_FILTER = "(org.eclipse.epp.install.roots=true)";
+  private static final Pattern EPP_INSTALL_ROOTS_FILTER_PATTERN = Pattern.compile(
+      "\\((org\\.eclipse\\.epp\\.install\\.roots=true|\\|\\(epp\\.package\\.[^.]+\\.install\\.mode\\.root=true\\)\\(org\\.eclipse\\.equinox\\.p2\\.install\\.mode\\.root=true\\))\\)");
 
   private static final Pattern ARCH_OS_FILTER_PATTERN = Pattern.compile("\\(\\&\\(osgi\\.arch=([^)]+)\\)\\(osgi\\.os=([^)]+)\\)\\)");
 
@@ -1066,7 +1067,7 @@ public class ProductCatalogGenerator implements IApplication
           if (filter != null)
           {
             String value = RequirementImpl.formatMatchExpression(filter);
-            if (EPP_INSTALL_ROOTS_FILTER.equals(value))
+            if (isEPPInstallRootFilter(value))
             {
               continue;
             }
@@ -1534,7 +1535,7 @@ public class ProductCatalogGenerator implements IApplication
           if (filter != null)
           {
             String value = RequirementImpl.formatMatchExpression(filter);
-            if (EPP_INSTALL_ROOTS_FILTER.equals(value))
+            if (isEPPInstallRootFilter(value))
             {
               continue;
             }
@@ -2590,7 +2591,7 @@ public class ProductCatalogGenerator implements IApplication
         if (filter != null)
         {
           String value = RequirementImpl.formatMatchExpression(filter);
-          if (EPP_INSTALL_ROOTS_FILTER.equals(value) && !capability.getName().startsWith("org.eclipse.justj.")
+          if (isEPPInstallRootFilter(value) && !capability.getName().startsWith("org.eclipse.justj.")
               && !capability.getName().equals("org.eclipse.oomph.setup.feature.group"))
           {
             rootInstallIUs.add(capability.getName());
@@ -2771,6 +2772,11 @@ public class ProductCatalogGenerator implements IApplication
     }
 
     return repository;
+  }
+
+  private boolean isEPPInstallRootFilter(String filter)
+  {
+    return filter != null && EPP_INSTALL_ROOTS_FILTER_PATTERN.matcher(filter).matches();
   }
 
   /**
