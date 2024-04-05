@@ -51,7 +51,7 @@ else
 
 $question = htmlEntities("../question/$version_parameter");
 $body= "&body=" . htmlEntities(urlencode("I have first considered [asking a question](https://www.eclipse.org/setups/installer/question?version=" . urlencode($version). ").\n\n". 
-  " I understand that without details about the problem and how to reproduce then problem, no one can fix a problem for me.  Therefore I have attached log details and screen captures below:\n```\nLog Details...\n```\n"));
+  "I understand that without details about the problem and how to reproduce the problem, no one can fix a problem for me.  Therefore I have clicked on the `Show Log` link on the red banner and have pasted the log details here:\n```\nLog Details...\n```\n"));
 
 $issue = htmlEntities("https://github.com/eclipse-oomph/oomph/issues/new?title=" . $installer_short_desc . $installer_version . $body);
 
@@ -95,9 +95,10 @@ $html = <<<EOHTML
     </p>
     <p>
     Please provide as much detail as possible.
-    I.e., include screen captures and/or attach log details, as well as information about your operating system version.
+    I.e., include screen captures and/or attach log details by clicking the <b>Show Log</b> link, as well as information about your operating system version.
     </p>
-
+    <br>
+    <img src="../InstallerFailure.png"/>
     <br>
   </div>
 </div>
