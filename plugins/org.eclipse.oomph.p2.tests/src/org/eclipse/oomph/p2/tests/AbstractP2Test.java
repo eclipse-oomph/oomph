@@ -24,6 +24,7 @@ import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.equinox.internal.p2.repository.Transport;
 import org.eclipse.equinox.p2.internal.repository.mirroring.Mirroring;
 import org.eclipse.equinox.p2.metadata.IArtifactKey;
@@ -147,11 +148,28 @@ public abstract class AbstractP2Test extends AbstractTest
       mirror("https://download.eclipse.org/eclipse/updates/4.25/R-4.25-202208311800", PLATFORM_OLD, PLATFORM_FILTER);
       mirror("https://download.eclipse.org/eclipse/updates/4.28/R-4.28-202306050440", PLATFORM_NEW, PLATFORM_FILTER);
     }
-    catch (InterruptedIOException ex)
+    catch (CoreException ex)
+    {
+      handleSetUpFailure(ex.getStatus());
+    }
+  }
+
+  private static void handleSetUpFailure(IStatus status)
+  {
+    Throwable ex = status.getException();
+    if (ex instanceof InterruptedIOException)
     {
       // The ci builds are too often failing with a timeout exception that aborts the whole build.
       // If we can't mirrors these sites then wen can't run the tests.
       Assume.assumeNoException(ex);
+    }
+
+    if (status instanceof MultiStatus)
+    {
+      for (IStatus child : ((MultiStatus)status).getChildren())
+      {
+        handleSetUpFailure(child);
+      }
     }
   }
 
@@ -230,7 +248,6 @@ public abstract class AbstractP2Test extends AbstractTest
   }
 
   public static void mirrorRepository(URI sourceURI, URI targetURI, VersionedIdFilter filter, IProgressMonitor monitor) throws CoreException
-
   {
     mirrorMetadataRepository(sourceURI, targetURI, filter, monitor);
     mirrorArtifactRepository(sourceURI, targetURI, filter, monitor);
