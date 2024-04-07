@@ -33,14 +33,12 @@ import org.eclipse.oomph.setup.ProductVersion;
 import org.eclipse.oomph.setup.RedirectionTask;
 import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.SetupFactory;
-import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.VariableTask;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.p2.P2Task;
 import org.eclipse.oomph.setup.p2.SetupP2Factory;
-import org.eclipse.oomph.setup.p2.SetupP2Package;
 import org.eclipse.oomph.util.CollectionUtil;
 import org.eclipse.oomph.util.IORuntimeException;
 import org.eclipse.oomph.util.IOUtil;
@@ -153,7 +151,11 @@ public class ProductCatalogGenerator implements IApplication
 
   private static final String HTTPS_PACKAGES = "https://download.eclipse.org/technology/epp/packages";
 
+  private static final String HTTPS_PACKAGES_STAGING = "https://download.eclipse.org/technology/epp/staging/repository";
+
   private static final String RELEASES = "https://download.eclipse.org/releases";
+
+  private static final String STAGING = "https://download.eclipse.org/staging/";
 
   private static final String ICON_URL_PREFIX = "https://www.eclipse.org/downloads/images/";
 
@@ -459,6 +461,16 @@ public class ProductCatalogGenerator implements IApplication
         "2023-06", "2023-09", "2023-12", "2024-03", "2024-06" };
   }
 
+  private String getStagingTrain()
+  {
+    return "2024-06";
+  }
+
+  private String getCorrespondingTrain(String train)
+  {
+    return "staging".equals(train) ? getStagingTrain() : train;
+  }
+
   private URI getEclipsePlatformSite(String train)
   {
     String[] trains = getTrains();
@@ -568,7 +580,9 @@ public class ProductCatalogGenerator implements IApplication
           URI.createURI(loadLatestRepository(manager, null, URI.createURI("https://download.eclipse.org/modeling/emf/emf/builds/release/latest"), true)
               .getLocation().toString())).toString();
 
-      new RepositoryLoader(this).perform(TRAINS);
+      RepositoryLoader repositoryLoader = new RepositoryLoader(this);
+      repositoryLoader.perform("staging");
+      repositoryLoader.perform(TRAINS);
 
       System.out.println("#################################################################################################################");
       System.out.println();
@@ -674,27 +688,6 @@ public class ProductCatalogGenerator implements IApplication
             eclipseIniTask.setOption("-Xmx");
             eclipseIniTask.setValue("5g");
             product.getSetupTasks().add(eclipseIniTask);
-
-            EList<ProductVersion> productVersions = product.getVersions();
-            ProductVersion stagingProductVersion = EcoreUtil.copy(productVersions.get(2));
-            stagingProductVersion.setName("staging");
-            stagingProductVersion.setLabel("Staging (" + stagingProductVersion.getLabel() + ")");
-            P2Task p2Task = (P2Task)EcoreUtil.getObjectByType(stagingProductVersion.getSetupTasks(), SetupP2Package.Literals.P2_TASK);
-            Repository repository = p2Task.getRepositories().get(0);
-            repository.getAnnotations().clear();
-
-            Function<String, String> toStaging = url -> url.replaceAll("(.+/)releases(/[^/]+).*", "$1staging$2");
-            repository.setURL(toStaging.apply(repository.getURL()));
-            productVersions.add(2, stagingProductVersion);
-
-            RedirectionTask redirectionTask = (RedirectionTask)EcoreUtil.getObjectByType(stagingProductVersion.getSetupTasks(),
-                SetupPackage.Literals.REDIRECTION_TASK);
-            if (redirectionTask != null)
-            {
-              redirectionTask.setSourceURL(toStaging.apply(redirectionTask.getSourceURL()));
-              redirectionTask.setTargetURL(toStaging.apply(redirectionTask.getTargetURL()));
-            }
-
             allProductResource.getContents().add(product);
 
             allProductResource.save(Collections.singletonMap(Resource.OPTION_SAVE_ONLY_IF_CHANGED, Resource.OPTION_SAVE_ONLY_IF_CHANGED_MEMORY_BUFFER));
@@ -932,7 +925,7 @@ public class ProductCatalogGenerator implements IApplication
   {
     StringBuilder log = new StringBuilder();
 
-    URI originalEPPURI = URI.createURI(HTTPS_PACKAGES + "/" + train);
+    URI originalEPPURI = URI.createURI("staging".equals(train) ? HTTPS_PACKAGES_STAGING : HTTPS_PACKAGES + "/" + train);
     URI eppURI = uriConverter.normalize(originalEPPURI);
     log.append(eppURI);
     boolean isStaging = train.equals(stagingTrain);
@@ -988,7 +981,7 @@ public class ProductCatalogGenerator implements IApplication
 
     Map<String, IInstallableUnit> ius = new HashMap<>();
 
-    URI releaseURI = URI.createURI(RELEASES + "/" + train);
+    URI releaseURI = URI.createURI("staging".equals(train) ? STAGING + getStagingTrain() : RELEASES + "/" + train);
     log.append(releaseURI);
 
     URI effectiveReleaseURI = isFake ? URI.createURI(RELEASES + "/" + getMostRecentRealTrain()) : releaseURI;
@@ -1013,7 +1006,10 @@ public class ProductCatalogGenerator implements IApplication
 
     log.append(" -> ").append(releaseURI).append('\n');
 
-    log.append(generateEclipsePlatformProduct(train));
+    if (!"staging".equals(train))
+    {
+      log.append(generateEclipsePlatformProduct(train));
+    }
 
     generateFullTrainProduct(train, releaseMetaDataRepository, releaseURI);
 
@@ -1476,6 +1472,13 @@ public class ProductCatalogGenerator implements IApplication
           }
         }
       }
+
+      EList<ProductVersion> versions = product.getVersions();
+      int last = versions.size() - 1;
+      if ("staging".equals(versions.get(last).getName()))
+      {
+        versions.move(0, last);
+      }
     }
   }
 
@@ -1576,6 +1579,12 @@ public class ProductCatalogGenerator implements IApplication
 
     ProductVersion productVersion = SetupFactory.eINSTANCE.createProductVersion();
     productVersion.setName(name);
+
+    if ("Staging".equals(label))
+    {
+      label += " (" + getStagingTrain() + ")";
+    }
+
     productVersion.setLabel(label);
     product.getVersions().add(productVersion);
 
@@ -1584,7 +1593,7 @@ public class ProductCatalogGenerator implements IApplication
       BaseUtil.setAnnotation(productVersion, AnnotationConstants.ANNOTATION_BRANDING_INFO, AnnotationConstants.KEY_STATUS,
           AnnotationConstants.VALUE_STATUS_CURRENT);
     }
-    else if (train != getMostRecentTrain() && train != getMostRecentReleasedTrain()
+    else if (train != getMostRecentTrain() && train != getMostRecentReleasedTrain() && !"staging".equals(train)
         && BaseUtil.getAnnotation(product, AnnotationConstants.ANNOTATION_BRANDING_INFO, AnnotationConstants.KEY_STATUS) == null)
     {
       BaseUtil.setAnnotation(productVersion, AnnotationConstants.ANNOTATION_BRANDING_INFO, AnnotationConstants.KEY_STATUS,
@@ -2129,6 +2138,7 @@ public class ProductCatalogGenerator implements IApplication
       }
     }
 
+    Set<String> ids = requirements.stream().map(Requirement::getName).collect(Collectors.toSet());
     if (maxProductIU != null)
     {
       Set<String> rootInstallIUs = getRootInstallIUs(maxProductIU);
@@ -2136,14 +2146,17 @@ public class ProductCatalogGenerator implements IApplication
       {
         for (String id : rootInstallIUs)
         {
-          Requirement requirement = P2Factory.eINSTANCE.createRequirement();
-          if ("2022-12".equals(train) && "org.eclipse.emf.cdo.epp.feature.group".equals(id))
+          if (!ids.contains(id))
           {
-            id = "org.eclipse.emf.cdo.sdk.feature.group";
-          }
+            Requirement requirement = P2Factory.eINSTANCE.createRequirement();
+            if ("2022-12".equals(train) && "org.eclipse.emf.cdo.epp.feature.group".equals(id))
+            {
+              id = "org.eclipse.emf.cdo.sdk.feature.group";
+            }
 
-          requirement.setName(id);
-          requirements.add(requirement);
+            requirement.setName(id);
+            requirements.add(requirement);
+          }
         }
       }
 
@@ -2387,7 +2400,7 @@ public class ProductCatalogGenerator implements IApplication
       InputStream alternativePackages = null;
       try
       {
-        if (!train.equals(getMostRecentTrain()))
+        if (!train.equals(getMostRecentTrain()) && !"staging".equals(train))
         {
           try
           {
@@ -2409,7 +2422,7 @@ public class ProductCatalogGenerator implements IApplication
           }
         }
 
-        URI packagesURI = PACKAGES_URI.trimSegments(1).appendSegment(train).appendSegment("");
+        URI packagesURI = PACKAGES_URI.trimSegments(1).appendSegment(getCorrespondingTrain(train)).appendSegment("");
         URL packagesURL = new URL(packagesURI.toString());
         packages = packagesURL.openStream();
         List<String> lines = IOUtil.readLines(packages, "UTF-8");
@@ -2591,10 +2604,14 @@ public class ProductCatalogGenerator implements IApplication
         if (filter != null)
         {
           String value = RequirementImpl.formatMatchExpression(filter);
-          if (isEPPInstallRootFilter(value) && !capability.getName().startsWith("org.eclipse.justj.")
-              && !capability.getName().equals("org.eclipse.oomph.setup.feature.group"))
+          if (isEPPInstallRootFilter(value))
           {
-            rootInstallIUs.add(capability.getName());
+            String name = capability.getName();
+            if (!name.startsWith("org.eclipse.justj.") && !name.equals("org.eclipse.oomph.setup.feature.group")
+                && !"org.eclipse.platform.feature.group".contains(name))
+            {
+              rootInstallIUs.add(name);
+            }
           }
         }
       }
