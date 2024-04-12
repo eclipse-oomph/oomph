@@ -97,12 +97,12 @@
   </version>
   <version name="latest"
       label="Latest (2024-06)"
-      requiredJavaVersion="17">
+      requiredJavaVersion="21">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/2024-03/r</value>
+        <value>https://www.eclipse.org/downloads/packages/release/2024-06/m1</value>
       </detail>
       <detail
           key="shortcut">
@@ -114,7 +114,7 @@
         label="Eclipse Eierlegende Wollmilchsau (2024-06)">
       <requirement
           name="org.eclipse.platform.ide"
-          versionRange="[4.31.0,5.0.0)"
+          versionRange="[4.32.0,5.0.0)"
           filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
       <requirement
           name="Application Development Frameworks"/>
@@ -144,7 +144,7 @@
       <requirement
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
       <repository
-          url="https://download.eclipse.org/releases/2024-03/202403131000">
+          url="https://download.eclipse.org/releases/2024-06/202404121000">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
@@ -207,12 +207,12 @@
   </version>
   <version name="2024-06"
       label="2024-06"
-      requiredJavaVersion="17">
+      requiredJavaVersion="21">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/2024-03/r</value>
+        <value>https://www.eclipse.org/downloads/packages/release/2024-06/m1</value>
       </detail>
       <detail
           key="shortcut">
@@ -224,7 +224,7 @@
         label="Eclipse Eierlegende Wollmilchsau (2024-06)">
       <requirement
           name="org.eclipse.platform.ide"
-          versionRange="[4.31.0,5.0.0)"
+          versionRange="[4.32.0,5.0.0)"
           filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
       <requirement
           name="Application Development Frameworks"/>
@@ -254,7 +254,7 @@
       <requirement
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
       <repository
-          url="https://download.eclipse.org/releases/2024-03/202403131000">
+          url="https://download.eclipse.org/releases/2024-06/202404121000">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
