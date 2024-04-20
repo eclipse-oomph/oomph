@@ -19,6 +19,8 @@ public class Messages extends NLS
 
   public static String P2TaskImpl_profileProperties;
 
+  public static String P2TaskImpl_removeDescriptor;
+
   public static String P2TaskImpl_resolvingRequirement;
 
   public static String P2TaskImpl_resolvingRequirements;

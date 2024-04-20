@@ -68,6 +68,7 @@ import org.eclipse.equinox.p2.engine.IProfile;
 import org.eclipse.equinox.p2.engine.IProfileRegistry;
 import org.eclipse.equinox.p2.engine.IProvisioningPlan;
 import org.eclipse.equinox.p2.engine.ProvisioningContext;
+import org.eclipse.equinox.p2.metadata.IArtifactKey;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.ILicense;
 import org.eclipse.equinox.p2.planner.IProfileChangeRequest;
@@ -76,7 +77,9 @@ import org.eclipse.equinox.p2.query.IQueryable;
 import org.eclipse.equinox.p2.query.QueryUtil;
 import org.eclipse.equinox.p2.repository.IRepositoryManager;
 import org.eclipse.equinox.p2.repository.IRepositoryReference;
+import org.eclipse.equinox.p2.repository.artifact.ArtifactKeyQuery;
 import org.eclipse.equinox.p2.repository.artifact.IArtifactRepositoryManager;
+import org.eclipse.equinox.p2.repository.artifact.IFileArtifactRepository;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepositoryManager;
 import org.eclipse.osgi.util.NLS;
@@ -789,6 +792,17 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     profileDefinition.setRequirements(requirements);
     profileDefinition.setRepositories(repositories);
     profileDefinition.setProfileProperties(getProfileProperties());
+
+    IFileArtifactRepository fileArtifactRepository = profile.getBundlePool().getFileArtifactRepository();
+    for (IArtifactKey key : fileArtifactRepository.query(ArtifactKeyQuery.ALL_KEYS, null))
+    {
+      File artifactFile = fileArtifactRepository.getArtifactFile(key);
+      if (!artifactFile.exists())
+      {
+        context.log(NLS.bind(Messages.P2TaskImpl_removeDescriptor, artifactFile));
+        fileArtifactRepository.removeDescriptor(key, null);
+      }
+    }
 
     ProfileTransaction.CommitContext commitContext = new ProfileTransaction.CommitContext()
     {
