@@ -26452,8 +26452,6 @@
         <requirement
             name="org.eclipse.emf.ecoretools.design.feature.group"/>
         <requirement
-            name="org.eclipse.emf.ecp.emfforms.sdk.feature.feature.group"/>
-        <requirement
             name="org.eclipse.emf.parsley.sdk.feature.group"/>
         <requirement
             name="org.eclipse.emf.parsley.sdk.source.feature.group"/>
@@ -32427,6 +32425,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
+            key="siteURI">
+          <value>https://download.eclipse.org/eclipse/downloads/</value>
+        </detail>
+        <detail
             key="shortcut">
           <value>Eclipse Platform - Latest</value>
         </detail>
@@ -32492,6 +32494,10 @@
         requiredJavaVersion="21">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://download.eclipse.org/eclipse/downloads/</value>
+        </detail>
         <detail
             key="shortcut">
           <value>Eclipse Platform - 2024-06</value>
