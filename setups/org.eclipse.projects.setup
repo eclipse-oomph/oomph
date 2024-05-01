@@ -1362,7 +1362,6 @@
   <project href="https://git.eclipse.org/c/usssdk/org.eclipse.usssdk.git/plain/org.eclipse.userstorage.releng/UserStorage.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-viatra/org.eclipse.viatra/master/releng/org.eclipse.viatra.setup/VIATRAEMF.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse/windowbuilder/master/setups/WindowBuilder.setup#/"/>
-  <project href="https://git.eclipse.org/c/webtools/webtools.releng.git/plain/installer/WTP.setup#/"/>
   <project href="https://git.eclipse.org/c/m2t/org.eclipse.xpand.git/plain/releng/org.eclipse.xpand.releng/Xpand.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse/Xpect/master/org.eclipse.xpect.releng/Xpect.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse/xsemantics/master/devtools/org.eclipse.xsemantics.workspace/Xsemantics.setup#/"/>
