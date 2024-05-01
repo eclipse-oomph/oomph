@@ -79,6 +79,8 @@ Eike Stepper - initial API and implementation
                 <plugin id="org.bouncycastle.bcprov"/>
                 <plugin id="bcpg"/>
                 <plugin id="bcprov"/>
+                <plugin id="bcpg-jdk18on"/>
+                <plugin id="bcprov-jdk18on"/>
                 <plugin id="org.slf4j.api"/>
                 <plugin id="slf4j.api"/>
                 <plugin id="org.eclipse.nebula.widgets.tablecombo"/>
