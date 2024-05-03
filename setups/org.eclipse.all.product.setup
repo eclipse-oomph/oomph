@@ -102,7 +102,7 @@
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/2024-06/m1</value>
+        <value>https://www.eclipse.org/downloads/packages/release/2024-06/m2</value>
       </detail>
       <detail
           key="shortcut">
@@ -144,7 +144,7 @@
       <requirement
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
       <repository
-          url="https://download.eclipse.org/releases/2024-06/202404121000">
+          url="https://download.eclipse.org/releases/2024-06/202405031000">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
@@ -212,7 +212,7 @@
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/2024-06/m1</value>
+        <value>https://www.eclipse.org/downloads/packages/release/2024-06/m2</value>
       </detail>
       <detail
           key="shortcut">
@@ -254,7 +254,7 @@
       <requirement
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
       <repository
-          url="https://download.eclipse.org/releases/2024-06/202404121000">
+          url="https://download.eclipse.org/releases/2024-06/202405031000">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
