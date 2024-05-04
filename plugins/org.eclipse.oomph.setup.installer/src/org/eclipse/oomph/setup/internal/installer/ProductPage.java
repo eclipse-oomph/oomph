@@ -93,6 +93,7 @@ import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.ui.dnd.LocalTransfer;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
+import org.eclipse.emf.edit.ui.provider.DelegatingStyledCellLabelProvider;
 import org.eclipse.emf.edit.ui.provider.DiagnosticDecorator;
 import org.eclipse.emf.edit.ui.provider.ExtendedImageRegistry;
 
@@ -627,6 +628,8 @@ public class ProductPage extends SetupWizardPage
     collapseAllButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("collapse-all")); //$NON-NLS-1$
     AccessUtil.setKey(collapseAllButton, "collapse"); //$NON-NLS-1$
 
+    ToolItem detailsButton = ProjectPage.createDetailsButton(filterToolBar, getDialogSettings(), "product-location-details"); //$NON-NLS-1$
+
     configurationListener = new ProjectPage.ConfigurationListener(getWizard(), catalogManager, filterToolBar);
     getWizard().addConfigurationListener(configurationListener);
 
@@ -644,7 +647,15 @@ public class ProductPage extends SetupWizardPage
     addHelpCallout(filteredTree.getViewer().getTree(), 1);
 
     productViewer = filteredTree.getViewer();
-    productViewer.setLabelProvider(new AdapterFactoryLabelProvider(adapterFactory));
+    productViewer.setLabelProvider(new DelegatingStyledCellLabelProvider(new ProjectPage.LocationDecoratingLabelProvider(adapterFactory, null, detailsButton)
+    {
+      @Override
+      public String getToolTipText(Object element)
+      {
+        return null;
+      }
+    }));
+
     productViewer.setContentProvider(new AdapterFactoryContentProvider(adapterFactory)
     {
       private final AtomicBoolean selectionMementoTried = new AtomicBoolean();

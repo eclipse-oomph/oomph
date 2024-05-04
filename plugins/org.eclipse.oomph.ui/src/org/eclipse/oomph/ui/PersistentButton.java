@@ -11,10 +11,13 @@
 package org.eclipse.oomph.ui;
 
 import org.eclipse.jface.dialogs.IDialogSettings;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.swt.widgets.ToolItem;
 
 /**
  * @author Eike Stepper
@@ -43,6 +46,22 @@ public class PersistentButton
   public static Button create(Composite parent, int style, boolean defaultSelection, final Persistence persistence)
   {
     return new PersistentButton(parent, style, defaultSelection, persistence).button;
+  }
+
+  public static ToolItem create(ToolBar toolBar, boolean defaultSelection, final Persistence persistence)
+  {
+    ToolItem toolItem = new ToolItem(toolBar, SWT.CHECK);
+    toolItem.setSelection(persistence.load(false));
+    toolItem.addSelectionListener(new SelectionAdapter()
+    {
+      @Override
+      public void widgetSelected(SelectionEvent e)
+      {
+        persistence.save(toolItem.getSelection());
+      }
+    });
+
+    return toolItem;
   }
 
   /**

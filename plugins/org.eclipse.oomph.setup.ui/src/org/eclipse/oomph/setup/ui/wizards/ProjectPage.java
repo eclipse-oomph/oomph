@@ -43,6 +43,7 @@ import org.eclipse.oomph.setup.ui.wizards.SetupWizard.IndexLoader;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard.SelectionMemento;
 import org.eclipse.oomph.ui.ButtonAnimator;
 import org.eclipse.oomph.ui.FilteredTreeWithoutWorkbench;
+import org.eclipse.oomph.ui.PersistentButton;
 import org.eclipse.oomph.ui.StatusDialog;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.OS;
@@ -92,14 +93,18 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.layout.TableColumnLayout;
+import org.eclipse.jface.preference.JFacePreferences;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.AbstractTreeViewer;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -111,6 +116,7 @@ import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ComboBoxViewerCellEditor;
 import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.ICheckStateListener;
@@ -120,8 +126,10 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.LabelProviderChangedEvent;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
@@ -146,6 +154,7 @@ import org.eclipse.swt.events.ShellEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -165,6 +174,8 @@ import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.dialogs.PatternFilter;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -192,7 +203,7 @@ public class ProjectPage extends SetupWizardPage
 
   private ComposedAdapterFactory adapterFactory;
 
-  private ToolTipLabelProvider labelProvider;
+  private LocationDecoratingLabelProvider labelProvider;
 
   private CatalogSelector catalogSelector;
 
@@ -350,6 +361,8 @@ public class ProjectPage extends SetupWizardPage
     collapseAllButton.setImage(SetupUIPlugin.INSTANCE.getSWTImage("collapse-all")); //$NON-NLS-1$
     AccessUtil.setKey(collapseAllButton, "collapse"); //$NON-NLS-1$
 
+    ToolItem detailsButton = createDetailsButton(filterToolBar, getDialogSettings(), "project-location-details"); //$NON-NLS-1$
+
     final boolean supportsIndexSwitching = getPreviousPage() instanceof SetupWizardPage;
     configurationListener = new ConfigurationListener(getWizard(), catalogManager, filterToolBar)
     {
@@ -506,7 +519,7 @@ public class ProjectPage extends SetupWizardPage
       }
     });
 
-    labelProvider = new ToolTipLabelProvider(adapterFactory, toolTipSupport)
+    labelProvider = new LocationDecoratingLabelProvider(adapterFactory, toolTipSupport, detailsButton)
     {
       private final Font baseFont = projectViewer.getControl().getFont();
 
@@ -574,7 +587,7 @@ public class ProjectPage extends SetupWizardPage
       }
     };
 
-    projectViewer.setLabelProvider(labelProvider);
+    projectViewer.setLabelProvider(new DelegatingStyledCellLabelProvider(labelProvider));
     projectViewer.setContentProvider(new AdapterFactoryContentProvider(adapterFactory)
     {
       private boolean applySelectionMemento()
@@ -2650,4 +2663,95 @@ public class ProjectPage extends SetupWizardPage
       return null;
     }
   }
+
+  public static class LocationDecoratingLabelProvider extends ToolTipLabelProvider implements DelegatingStyledCellLabelProvider.IStyledLabelProvider
+  {
+    private final ToolItem toolItem;
+
+    {
+      if (JFaceResources.getColorRegistry().get(JFacePreferences.DECORATIONS_COLOR) == null)
+      {
+        JFaceResources.getColorRegistry().put(JFacePreferences.DECORATIONS_COLOR, new RGB(149, 125, 71));
+      }
+    }
+
+    public LocationDecoratingLabelProvider(ComposedAdapterFactory adapterFactory, ColumnViewerInformationControlToolTipSupport toolTipSupport,
+        ToolItem toolItem)
+    {
+      super(adapterFactory, toolTipSupport);
+      this.toolItem = toolItem;
+      toolItem.addSelectionListener(new SelectionAdapter()
+      {
+        @Override
+        public void widgetSelected(SelectionEvent e)
+        {
+          fireLabelProviderChanged(new LabelProviderChangedEvent(LocationDecoratingLabelProvider.this));
+        }
+      });
+    }
+
+    @Override
+    public StyledString getStyledText(Object element)
+    {
+      StyledString result = new StyledString(getText(element));
+      if (toolItem.getSelection() && element instanceof InternalEObject)
+      {
+        InternalEObject eObject = (InternalEObject)element;
+        Resource resource = eObject.eDirectResource();
+        if (resource != null)
+        {
+          URI uri = resource.getURI();
+          result.append(" - ", StyledString.DECORATIONS_STYLER); //$NON-NLS-1$
+          result.append(uri.toString(), StyledString.DECORATIONS_STYLER);
+
+          URI resolvedURI = uri;
+          ResourceSet resourceSet = resource.getResourceSet();
+          if (resourceSet != null)
+          {
+            resolvedURI = resourceSet.getURIConverter().normalize(resolvedURI);
+          }
+
+          resolvedURI = SetupContext.resolve(resolvedURI);
+
+          if (resolvedURI.isPlatform())
+          {
+            try
+            {
+              URL resolveURL = FileLocator.resolve(new URL(resolvedURI.toString()));
+              resolvedURI = URI.createURI(resolveURL.toString());
+            }
+            catch (IOException ex)
+            {
+              //$FALL-THROUGH$
+            }
+          }
+
+          if (resolvedURI.isArchive())
+          {
+            String authority = resolvedURI.authority();
+            resolvedURI = URI.createURI(authority.substring(0, authority.length() - 1));
+          }
+
+          if (!resolvedURI.equals(uri))
+          {
+            result.append(" \u2192 ", StyledString.DECORATIONS_STYLER); //$NON-NLS-1$
+            result.append(resolvedURI.toString(), StyledString.DECORATIONS_STYLER);
+          }
+        }
+      }
+
+      return result;
+    }
+  }
+
+  public static ToolItem createDetailsButton(ToolBar toolBar, IDialogSettings settings, String key)
+  {
+    PersistentButton.DialogSettingsPersistence persistence = new PersistentButton.DialogSettingsPersistence(settings, key);
+    ToolItem toolItem = PersistentButton.create(toolBar, false, persistence);
+    toolItem.setToolTipText(Messages.ProjectPage_ShowLocationDetails_message);
+    toolItem.setImage(SetupUIPlugin.INSTANCE.getSWTImage("details.png")); //$NON-NLS-1$
+    AccessUtil.setKey(toolItem, "location-details"); //$NON-NLS-1$
+    return toolItem;
+  }
+
 }

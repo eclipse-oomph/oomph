@@ -277,6 +277,8 @@ public class Messages extends NLS
 
   public static String ProjectPage_applyConfigurationButton_tooltip_applyConfig;
 
+  public static String ProjectPage_ShowLocationDetails_message;
+
   public static String SetupWizard_importer_title;
 
   public static String SetupWizard_ExistingProcessPage_errorMessage;
