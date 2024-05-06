@@ -2701,8 +2701,6 @@ public class ProjectPage extends SetupWizardPage
         if (resource != null)
         {
           URI uri = resource.getURI();
-          result.append(" - ", StyledString.DECORATIONS_STYLER); //$NON-NLS-1$
-          result.append(uri.toString(), StyledString.DECORATIONS_STYLER);
 
           URI resolvedURI = uri;
           ResourceSet resourceSet = resource.getResourceSet();
@@ -2732,10 +2730,21 @@ public class ProjectPage extends SetupWizardPage
             resolvedURI = URI.createURI(authority.substring(0, authority.length() - 1));
           }
 
-          if (!resolvedURI.equals(uri))
+          if (SetupContext.isUserScheme(uri.scheme()))
           {
-            result.append(" \u2192 ", StyledString.DECORATIONS_STYLER); //$NON-NLS-1$
+            result.append(" - ", StyledString.DECORATIONS_STYLER); //$NON-NLS-1$
             result.append(resolvedURI.toString(), StyledString.DECORATIONS_STYLER);
+          }
+          else
+          {
+            result.append(" - ", StyledString.DECORATIONS_STYLER); //$NON-NLS-1$
+            result.append(uri.toString(), StyledString.DECORATIONS_STYLER);
+
+            if (!resolvedURI.equals(uri))
+            {
+              result.append(" \u2192 ", StyledString.DECORATIONS_STYLER); //$NON-NLS-1$
+              result.append(resolvedURI.toString(), StyledString.DECORATIONS_STYLER);
+            }
           }
         }
       }
