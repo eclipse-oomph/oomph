@@ -1271,7 +1271,6 @@ public class GitIndexApplication implements IApplication
       "https://github.com/eclipse-edc/Connector", //
       "https://github.com/eclipse-edc/FederatedCatalog", //
       "https://github.com/eclipse-edc/GradlePlugins", //
-      "https://github.com/eclipse-edc/IDS-Serializer", //
       "https://github.com/eclipse-edc/IdentityHub", //
       "https://github.com/eclipse-edc/MinimumViableDataspace", //
       "https://github.com/eclipse-edc/RegistrationService", //
