@@ -12,6 +12,12 @@
 -->
 
 <plugin>
+   <extension
+         point="org.eclipse.ui.keywords">
+      <keyword
+            id="org.eclipse.oomph.projectconfig.keywords"
+            label="%projectconfig.preferenceKeywords"/>
+   </extension>
 
    <extension
          point="org.eclipse.ui.preferencePages">
@@ -19,7 +25,8 @@
             category="org.eclipse.oomph.ui.preferences.OomphPreferencePage"
             class="org.eclipse.oomph.projectconfig.presentation.ProjectConfigPreferencePage"
             id="org.eclipse.oomph.projectconfig.presentation.ProjectConfigPreferencePage"
-            name="Project Configuration">
+            name="%projectconfigPreference.name">
+         <keywordReference id="org.eclipse.oomph.projectconfig.keywords"/>
       </page>
    </extension>
 
@@ -39,17 +46,17 @@
          point="org.eclipse.ui.commands">
       <category
             id="org.eclipse.oomph.projectconfig.editor.commands.category"
-            name="Project Configuration">
+            name="%projectconfig.category.name">
       </category>
       <command
             categoryId="org.eclipse.oomph.projectconfig.editor.commands.category"
             id="org.eclipse.oomph.projectconfig.editor.commands.ApplyPreferenceProfiles"
-            name="Apply Project Configuration">
+            name="%applyProjectConfiguration.label">
       </command>
       <command
             categoryId="org.eclipse.oomph.projectconfig.editor.commands.category"
             id="org.eclipse.oomph.projectconfig.editor.commands.Navigate"
-            name="Navigate">
+            name="%navigate.label">
       </command>
    </extension>
 
@@ -68,7 +75,7 @@
          <command
               commandId="org.eclipse.oomph.projectconfig.editor.commands.ApplyPreferenceProfiles"
               id="org.eclipse.oomph.projectconfig.editor.menus.ApplyPreferenceProfiles"
-              mnemonic="A">
+              mnemonic="%navigate.mnemonic">
          </command>
       </menuContribution>
    </extension>
@@ -83,9 +90,9 @@
 
    <extension point="org.eclipse.ui.contexts">
       <context
-         description="Editing Project Configuration"
+         description="%editProjectConfig.context.description"
          id="org.eclipse.oomph.projectconfig.editor.context"
-         name="Editing Project Configuration"
+         name="%editProjectConfig..context.name"
          parentId="org.eclipse.ui.contexts.window">
       </context>
    </extension>

@@ -14,6 +14,15 @@
 <plugin>
 
    <extension-point id="deferredEarlyStart" name="%extPoint.deferredEarlyStart" schema="schema/deferredEarlyStart.exsd"/>
+   <extension
+         point="org.eclipse.ui.keywords">
+      <keyword
+            id="org.eclipse.oomph.ui.keywords"
+            label="%oomph.preferenceKeywords"/>
+      <keyword
+            id="org.eclipse.oomph.ui.keywords.remote"
+            label="%oomphRemote.preferenceKeywords"/>
+   </extension>
 
    <extension
          point="org.eclipse.ui.preferencePages">
@@ -21,12 +30,14 @@
             class="org.eclipse.oomph.internal.ui.OomphPreferencePage"
             id="org.eclipse.oomph.ui.preferences.OomphPreferencePage"
             name="%oomph">
+         <keywordReference id="org.eclipse.oomph.ui.keywords"/>
       </page>
       <page
             category="org.eclipse.oomph.ui.preferences.OomphPreferencePage"
             class="org.eclipse.oomph.internal.ui.RemoteResourcesPreferencePage"
             id="org.eclipse.oomph.ui.preferences.RemoteResourcesPreferencePage"
             name="%remoteResourcesPreferencePage.name">
+         <keywordReference id="org.eclipse.oomph.ui.keywords.remote"/>
       </page>
    </extension>
 
@@ -114,6 +125,7 @@
             type="java.lang.Object">
       </propertyTester>
    </extension>
+
    <extension
          point="org.eclipse.ui.startup">
       <startup

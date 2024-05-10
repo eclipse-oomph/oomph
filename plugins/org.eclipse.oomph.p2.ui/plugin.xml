@@ -15,12 +15,20 @@
    <extension-point id="profileTypes" name="%extPoint.profileTypes" schema="schema/profileTypes.exsd"/>
 
    <extension
+         point="org.eclipse.ui.keywords">
+      <keyword
+         label="%preferencePage.bundlePools.preferenceKeywords"
+         id="org.eclipse.oomph.p2.ui.keywords"/>
+   </extension>
+
+   <extension
          point="org.eclipse.ui.preferencePages">
       <page
             category="org.eclipse.oomph.ui.preferences.OomphPreferencePage"
             id="org.eclipse.oomph.p2.ui.AgentManagerPreferencePage"
             class="org.eclipse.oomph.p2.internal.ui.AgentManagerPreferencePage"
             name="%preferencePage.bundlePools.name">
+         <keywordReference id="org.eclipse.oomph.p2.ui.keywords"/>
       </page>
    </extension>
 

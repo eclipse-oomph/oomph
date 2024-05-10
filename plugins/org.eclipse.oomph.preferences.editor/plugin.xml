@@ -12,6 +12,12 @@
 -->
 
 <plugin>
+   <extension
+         point="org.eclipse.ui.keywords">
+      <keyword
+            id="org.eclipse.oomph.preferences.keywords"
+            label="%preferencePage.preferenceKeywords"/>
+   </extension>
 
    <extension
          point="org.eclipse.ui.preferencePages">
@@ -19,7 +25,8 @@
             category="org.eclipse.oomph.ui.preferences.OomphPreferencePage"
             class="org.eclipse.oomph.preferences.presentation.AllPreferencesPreferencePage"
             id="org.eclipse.oomph.preferences.presentation.AllPreferencesPreferencePage"
-            name="All Preferences">
+            name="%preferencePage.name">
+         <keywordReference id="org.eclipse.oomph.preferences.keywords"/>
       </page>
    </extension>
 
@@ -60,7 +67,7 @@
             objectClass="org.eclipse.oomph.preferences.PreferenceNode">
          <action
                id="org.eclipse.oomph.preferences.action.OpenEditorAction"
-               label="Open Editor"
+               label="%openEditor.label"
                menubarPath="additions"
                class="org.eclipse.oomph.preferences.presentation.actions.OpenEditorAction"
                enablesFor="1"/>
@@ -73,7 +80,7 @@
             objectClass="org.eclipse.oomph.preferences.PreferenceNode">
          <action
                id="org.eclipse.oomph.preferences.action.ShowInExplorerAction"
-               label="Show in Package Explorer"
+               label="%showInExplorer.label"
                menubarPath="additions"
                class="org.eclipse.oomph.preferences.presentation.actions.ShowInExplorerAction"
                enablesFor="1"/>
@@ -92,20 +99,20 @@
          point="org.eclipse.ui.commands">
       <category
             id="org.eclipse.oomph.preferences.editor.commands.category"
-            name="Project Preference Management">
+            name="%projectPreferenceManagement.category.name">
       </category>
       <command
             categoryId="org.eclipse.oomph.preferences.editor.commands.category"
             id="org.eclipse.oomph.preferences.editor.commands.Navigate"
-            name="Navigate">
+            name="%navigate.label">
       </command>
    </extension>
 
    <extension point="org.eclipse.ui.contexts">
       <context
-         description="Editing Project Configuration Preferences"
+         description="%editingProjectConfigurationPreferences.context.description"
          id="org.eclipse.oomph.preferences.editor.context"
-         name="Editing Project Configuration Preferences"
+         name="%editingProjectConfigurationPreferences.context.name"
          parentId="org.eclipse.ui.contexts.window">
       </context>
    </extension>

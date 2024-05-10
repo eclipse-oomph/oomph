@@ -19,12 +19,20 @@
    </extension>
 
    <extension
+         point="org.eclipse.ui.keywords">
+      <keyword
+            id="org.eclipse.oomph.workingsets.keywords"
+            label="%dynamicWorkingSets.preferenceKeywords"/>
+   </extension>
+
+   <extension
          point="org.eclipse.ui.preferencePages">
       <page
             category="org.eclipse.oomph.ui.preferences.OomphPreferencePage"
             class="org.eclipse.oomph.workingsets.presentation.WorkingSetsPreferencePage"
             id="org.eclipse.oomph.workingsets.presentation.VersionBuilderPreferencePage"
-            name="Dynamic Working Sets">
+            name="%dynamicWorkingSets.preferencePage">
+         <keywordReference id="org.eclipse.oomph.workingsets.keywords"/>
       </page>
    </extension>
 

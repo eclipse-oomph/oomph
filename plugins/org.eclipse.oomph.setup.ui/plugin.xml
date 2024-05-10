@@ -20,6 +20,18 @@
          point="org.eclipse.oomph.ui.deferredEarlyStart">
       <startup class="org.eclipse.oomph.setup.ui.EarlyStartup"/>
    </extension>
+   <extension
+         point="org.eclipse.ui.keywords">
+      <keyword
+            id="org.eclipse.oomph.setup.tasks"
+            label="%setupTasks.preferenceKeywords"/>
+      <keyword
+            id="org.eclipse.oomph.setup.recorder"
+            label="%setupRecorder.preferenceKeywords"/>
+      <keyword
+            id="org.eclipse.oomph.setup.synchronizer"
+            label="%setupSynchronizer.preferenceKeywords"/>
+   </extension>
 
    <extension
          point="org.eclipse.ui.preferencePages">
@@ -28,18 +40,21 @@
             id="org.eclipse.oomph.setup.SetupPreferencePage"
             class="org.eclipse.oomph.setup.ui.SetupPreferencePage"
             name="%setupPreferencePage.name">
+         <keywordReference id="org.eclipse.oomph.setup.tasks"/>
       </page>
       <page
             category="org.eclipse.oomph.setup.SetupPreferencePage"
             id="org.eclipse.oomph.setup.RecorderPreferencePage"
             class="org.eclipse.oomph.setup.ui.recorder.RecorderPreferencePage"
             name="%recorderPreferencePage.name">
+         <keywordReference id="org.eclipse.oomph.setup.recorder"/>
       </page>
       <page
             category="org.eclipse.oomph.setup.SetupPreferencePage"
             id="org.eclipse.oomph.setup.SynchronizerPreferencePage"
             class="org.eclipse.oomph.setup.ui.synchronizer.SynchronizerPreferencePage"
             name="%synchronizerPreferencePage.name">
+         <keywordReference id="org.eclipse.oomph.setup.synchronizer"/>
       </page>
    </extension>
 

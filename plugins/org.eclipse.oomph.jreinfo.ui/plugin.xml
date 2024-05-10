@@ -12,6 +12,12 @@
 -->
 
 <plugin>
+   <extension
+         point="org.eclipse.ui.keywords">
+      <keyword
+         label="%jvmPage.preferenceKeywords"
+         id="org.eclipse.oomph.jreinfo.ui.keywords"/>
+   </extension>
 
    <extension
          point="org.eclipse.ui.preferencePages">
@@ -20,6 +26,7 @@
             id="org.eclipse.oomph.jreinfo.ui.JREPreferencePage"
             class="org.eclipse.oomph.jreinfo.ui.JREPreferencePage"
             name="%jvmPage.name">
+         <keywordReference id="org.eclipse.oomph.jreinfo.ui.keywords"/>
       </page>
    </extension>
 
