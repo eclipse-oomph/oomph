@@ -818,15 +818,13 @@ public final class SetupUIPlugin extends OomphUIPlugin
           for (Iterator<SetupTask> it = neededTasks.iterator(); it.hasNext();)
           {
             SetupTask setupTask = it.next();
-            if (setupTask.getPriority() == SetupTask.PRIORITY_INSTALLATION)
+            if (setupTask.getPriority() != SetupTask.PRIORITY_INSTALLATION)
             {
-              continue;
-            }
-
-            String href = helper.getHREF(setupTask);
-            if (href != null && neededRestartTasks.contains(URI.createURI(href)))
-            {
-              continue;
+              String href = helper.getHREF(setupTask);
+              if (href != null && neededRestartTasks.contains(URI.createURI(href)))
+              {
+                continue;
+              }
             }
 
             it.remove();
