@@ -273,9 +273,10 @@ pipeline {
     failure {
       emailext (
         subject: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-        body: """FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':
-          Check console output at ${env.BUILD_URL}""",
+        body: """[Oomph CI] FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':
+          Check console output at <a href="${env.BUILD_URL}">${env.BUILD_URL}</a>""",
         recipientProviders: [[$class: 'DevelopersRecipientProvider']],
+        mimeType: 'text/html',
         to: 'ed.merks@gmail.com'
       )
     }
