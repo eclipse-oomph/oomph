@@ -1,9 +1,0 @@
-Manifest-Version: 1.0
-Bundle-ManifestVersion: 2
-Bundle-SymbolicName: org.eclipse.oomph.jreinfo.win32.x86_64
-Bundle-Version: 1.8.0.qualifier
-Bundle-Localization: fragment
-Bundle-Name: %pluginName
-Bundle-Vendor: %providerName
-Bundle-NativeCode: jreinfo.dll;osname=win32;processor=x86_64,*
-Fragment-Host: org.eclipse.oomph.jreinfo;bundle-version="[1.16.0,2.0.0)"

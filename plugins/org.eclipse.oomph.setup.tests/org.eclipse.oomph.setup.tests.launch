@@ -19,7 +19,6 @@
         <setEntry value="org.eclipse.oomph.gitbash"/>
         <setEntry value="org.eclipse.oomph.jreinfo"/>
         <setEntry value="org.eclipse.oomph.jreinfo.ui"/>
-        <setEntry value="org.eclipse.oomph.jreinfo.win32.x86_64"/>
         <setEntry value="org.eclipse.oomph.launches"/>
         <setEntry value="org.eclipse.oomph.manifests"/>
         <setEntry value="org.eclipse.oomph.ostools"/>

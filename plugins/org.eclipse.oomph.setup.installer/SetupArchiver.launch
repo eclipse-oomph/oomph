@@ -181,7 +181,6 @@
         <setEntry value="org.eclipse.oomph.base@default:default"/>
         <setEntry value="org.eclipse.oomph.extractor.lib@default:default"/>
         <setEntry value="org.eclipse.oomph.jreinfo.ui@default:default"/>
-        <setEntry value="org.eclipse.oomph.jreinfo.win32.x86_64@default:false"/>
         <setEntry value="org.eclipse.oomph.jreinfo@default:default"/>
         <setEntry value="org.eclipse.oomph.p2.core@default:default"/>
         <setEntry value="org.eclipse.oomph.p2.edit@default:default"/>

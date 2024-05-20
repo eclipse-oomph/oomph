@@ -18,6 +18,7 @@ import org.eclipse.oomph.setup.sync.tests.TestWorkstation.FailureHandler.Expect;
 import org.eclipse.oomph.setup.sync.tests.TestWorkstation.TestSynchronization;
 import org.eclipse.oomph.tests.AbstractTest;
 
+import org.eclipse.userstorage.IStorageService;
 import org.eclipse.userstorage.tests.util.ServerFixture;
 
 import org.junit.FixMethodOrder;
@@ -49,11 +50,24 @@ public class SynchronizerTests extends AbstractTest
     return workstation;
   }
 
+  @SuppressWarnings("restriction")
   @Override
   public void setUp() throws Exception
   {
     super.setUp();
+
+    System.setProperty(org.eclipse.userstorage.internal.StorageProperties.CREDENTIALS_PROVIDER, "org.eclipse.userstorage.tests.util.FixedCredentialsProvider");
+
     workstations.clear();
+
+    for (IStorageService service : IStorageService.Registry.INSTANCE.getServices())
+    {
+      if (service instanceof IStorageService.Dynamic && service.getServiceURI().toString().startsWith("http://localhost:"))
+      {
+        ((IStorageService.Dynamic)service).remove();
+      }
+    }
+
     serverFixture = new ServerFixture(RemoteDataProvider.APPLICATION_TOKEN);
   }
 

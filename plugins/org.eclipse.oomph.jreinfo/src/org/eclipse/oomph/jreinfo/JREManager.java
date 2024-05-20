@@ -27,17 +27,12 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.URIUtil;
 import org.eclipse.osgi.service.datalocation.Location;
 import org.eclipse.osgi.util.NLS;
-
-import org.osgi.framework.Bundle;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
-import java.net.URL;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -403,8 +398,8 @@ public final class JREManager
     JREInfo info = JREInfo.getAll();
     while (info != null)
     {
-      // Ignore the JRE that is embedded in the installation itself.
-      if (installerLocation == null || !isAncestor(installerLocation, new File(info.javaHome)))
+      // Duplicates and the JRE that is embedded in the installer itself.
+      if (!javaHomes.contains(info.javaHome) && (installerLocation == null || !isAncestor(installerLocation, new File(info.javaHome))))
       {
         javaHomes.add(info.javaHome);
       }
@@ -527,19 +522,6 @@ public final class JREManager
 
       if (Platform.OS_WIN32.equals(os))
       {
-        try
-        {
-          Bundle bundle = Platform.getBundle("org.eclipse.oomph.jreinfo.win32.x86_64"); //$NON-NLS-1$
-          URL libraryURL = bundle.getEntry("jreinfo.dll"); //$NON-NLS-1$
-          URL fileLibraryURL = FileLocator.toFileURL(libraryURL);
-          String libraryPath = Path.of(URIUtil.toURI(fileLibraryURL)).toRealPath().toString();
-          System.load(libraryPath);
-        }
-        catch (Exception ex)
-        {
-          JREInfoPlugin.INSTANCE.log(ex);
-        }
-
         return OSType.Win;
       }
 

@@ -80,11 +80,8 @@
         <setEntry value="org.apache.batik.css@default:default"/>
         <setEntry value="org.apache.batik.i18n@default:default"/>
         <setEntry value="org.apache.batik.util@default:default"/>
-        <setEntry value="org.apache.commons.codec@default:default"/>
         <setEntry value="org.apache.commons.httpclient@default:default"/>
-        <setEntry value="org.apache.commons.io@default:default"/>
         <setEntry value="org.apache.commons.jxpath@default:default"/>
-        <setEntry value="org.apache.commons.lang@default:default"/>
         <setEntry value="org.apache.commons.logging@default:default"/>
         <setEntry value="org.apache.felix.gogo.runtime@default:default"/>
         <setEntry value="org.apache.felix.scr@1:true"/>
@@ -213,12 +210,12 @@
         <setEntry value="org.eclipse.jdt.junit@default:default"/>
         <setEntry value="org.eclipse.jdt.launching@default:default"/>
         <setEntry value="org.eclipse.jdt.ui@default:default"/>
-        <setEntry value="org.eclipse.jetty.http@default:default"/>
-        <setEntry value="org.eclipse.jetty.io@default:default"/>
-        <setEntry value="org.eclipse.jetty.security@default:default"/>
-        <setEntry value="org.eclipse.jetty.server@default:default"/>
+        <setEntry value="org.eclipse.jetty.http*12.0.5@default:default"/>
+        <setEntry value="org.eclipse.jetty.io*12.0.5@default:default"/>
+        <setEntry value="org.eclipse.jetty.security*12.0.5@default:default"/>
+        <setEntry value="org.eclipse.jetty.server*12.0.5@default:default"/>
         <setEntry value="org.eclipse.jetty.servlet@default:default"/>
-        <setEntry value="org.eclipse.jetty.util@default:default"/>
+        <setEntry value="org.eclipse.jetty.util*12.0.5@default:default"/>
         <setEntry value="org.eclipse.jface.databinding@default:default"/>
         <setEntry value="org.eclipse.jface.notifications@default:default"/>
         <setEntry value="org.eclipse.jface.text@default:default"/>
@@ -319,7 +316,6 @@
         <setEntry value="org.eclipse.oomph.base@default:default"/>
         <setEntry value="org.eclipse.oomph.extractor.lib@default:default"/>
         <setEntry value="org.eclipse.oomph.jreinfo.ui@default:default"/>
-        <setEntry value="org.eclipse.oomph.jreinfo.win32.x86_64@default:false"/>
         <setEntry value="org.eclipse.oomph.jreinfo@default:default"/>
         <setEntry value="org.eclipse.oomph.junit@default:default"/>
         <setEntry value="org.eclipse.oomph.launches@default:default"/>

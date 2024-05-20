@@ -11,6 +11,7 @@
 package org.eclipse.oomph.jreinfo;
 
 import org.eclipse.oomph.internal.jreinfo.JREInfoPlugin;
+import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.XMLUtil;
 
@@ -24,10 +25,20 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.StringReader;
+import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Stepper
@@ -37,6 +48,8 @@ public final class JREInfo
   private static final boolean SKIP_USER_HOME = PropertiesUtil.isProperty("oomph.jreinfo.skip.user.home"); //$NON-NLS-1$
 
   private static final String[] EXTRA_SEARCH_PATH = PropertiesUtil.getProperty("oomph.jreinfo.extra.search.path", "").split(File.pathSeparator); //$NON-NLS-1$ //$NON-NLS-2$
+
+  private static final Pattern JAVA_HOME_REGISTRY_VALUE_PATTERN = Pattern.compile("\\s*JavaHome\\s*REG_SZ\\s*(.*)\\s*", Pattern.CASE_INSENSITIVE); //$NON-NLS-1$
 
   public String javaHome;
 
@@ -69,29 +82,7 @@ public final class JREInfo
       }
 
       String javaHome = System.getProperty("java.home"); //$NON-NLS-1$
-      if (javaHome != null)
-      {
-        File javaHomeFolder = new File(javaHome);
-        if (javaHomeFolder.isDirectory())
-        {
-          int jdk = 0;
-          try
-          {
-            jdk = isJDK(javaHomeFolder);
-          }
-          catch (FileNotFoundException ex)
-          {
-            //$FALL-THROUGH$
-          }
-
-          JREInfo info = new JREInfo();
-          info.javaHome = javaHomeFolder.getAbsolutePath();
-          info.jdk = jdk;
-          info.next = jreInfo;
-
-          jreInfo = info;
-        }
-      }
+      jreInfo = createJREInfo(jreInfo, javaHome);
 
       if (!SKIP_USER_HOME)
       {
@@ -115,7 +106,74 @@ public final class JREInfo
     return jreInfo;
   }
 
-  private static native JREInfo getAllWin();
+  private static JREInfo createJREInfo(JREInfo jreInfo, String javaHome)
+  {
+    if (javaHome != null)
+    {
+      File javaHomeFolder = new File(javaHome);
+      if (javaHomeFolder.isDirectory())
+      {
+        int jdk = 0;
+        try
+        {
+          jdk = isJDK(javaHomeFolder);
+        }
+        catch (FileNotFoundException ex)
+        {
+          //$FALL-THROUGH$
+        }
+
+        JREInfo info = new JREInfo();
+        info.javaHome = javaHomeFolder.getAbsolutePath();
+        info.jdk = jdk;
+        info.next = jreInfo;
+        return info;
+      }
+    }
+
+    return jreInfo;
+  }
+
+  @SuppressWarnings("nls")
+  private static JREInfo getAllWin()
+  {
+    JREInfo jreInfo = null;
+
+    try
+    {
+      String getenv = System.getenv("ProgramFiles");
+      jreInfo = searchFolder(null, getenv + "/Java");
+    }
+    catch (Exception ex)
+    {
+      //$FALL-THROUGH$
+    }
+
+    String systemRoot = System.getenv("SystemRoot");
+    if (systemRoot != null)
+    {
+      File system32 = new File(systemRoot, "system32");
+      if (system32.isDirectory())
+      {
+        File regExecutable = new File(system32, "reg.exe");
+        if (regExecutable.isFile())
+        {
+          try
+          {
+            String executable = regExecutable.toString();
+            jreInfo = searchRegistry(jreInfo, executable, "QUERY", "HKLM\\Software\\JavaSoft", "/s", "/t", "REG_SZ", "/f", "JavaHome");
+            jreInfo = searchRegistry(jreInfo, executable, "QUERY", "HKLM\\Software\\Wow6432Node\\JavaSoft", "/s", "/t", "REG_SZ", "/f", "JavaHome");
+          }
+          catch (IOException | InterruptedException ex)
+          {
+            //$FALL-THROUGH$
+          }
+        }
+      }
+    }
+
+    return jreInfo;
+  }
 
   private static JREInfo getAllMac()
   {
@@ -248,5 +306,70 @@ public final class JREInfo
     }
 
     return 0;
+  }
+
+  private static JREInfo searchRegistry(JREInfo jreInfo, String... args) throws IOException, InterruptedException
+  {
+    ProcessBuilder builder = new ProcessBuilder(args);
+    Process process = builder.start();
+    OutputStream stdin = process.getOutputStream();
+    stdin.close();
+
+    // Discard error input.
+    InputStream stderr = process.getErrorStream();
+    new StreamHandler(stderr, line -> {
+    }).start();
+
+    Set<File> javaHomes = new LinkedHashSet<File>();
+    InputStream stdout = process.getInputStream();
+    new StreamHandler(stdout, line -> {
+      Matcher matcher = JAVA_HOME_REGISTRY_VALUE_PATTERN.matcher(line);
+      if (matcher.matches())
+      {
+        try
+        {
+          javaHomes.add(new File(matcher.group(1)).getCanonicalFile());
+        }
+        catch (IOException ex)
+        {
+          //$FALL-THROUGH$
+        }
+      }
+    }).start();
+
+    process.waitFor(5, TimeUnit.SECONDS);
+
+    for (File javaHome : javaHomes)
+    {
+      jreInfo = createJREInfo(jreInfo, javaHome.toString());
+    }
+
+    return jreInfo;
+  }
+
+  private static class StreamHandler extends Thread
+  {
+    private final InputStream input;
+
+    private final Consumer<String> consumer;
+
+    public StreamHandler(InputStream input, Consumer<String> consumer)
+    {
+      this.input = input;
+      this.consumer = consumer;
+    }
+
+    @Override
+    public void run()
+    {
+      try (BufferedReader reader = new BufferedReader(new InputStreamReader(input, IOUtil.getNativeEncoding())))
+      {
+        reader.lines().forEach(consumer);
+      }
+      catch (Exception ex)
+      {
+        //$FALL-THROUGH$
+      }
+    }
   }
 }

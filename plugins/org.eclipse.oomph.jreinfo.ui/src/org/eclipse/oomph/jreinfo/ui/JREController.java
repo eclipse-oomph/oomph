@@ -55,7 +55,7 @@ public abstract class JREController implements ISelectionChangedListener
 
   private String javaVersion;
 
-  private int bitness = JREManager.BITNESS;
+  private int bitness;
 
   private JREFilter jreFilter;
 
@@ -111,6 +111,11 @@ public abstract class JREController implements ISelectionChangedListener
 
   public final int getBitness()
   {
+    if (bitness == 0)
+    {
+      bitness = JREManager.BITNESS;
+    }
+
     return bitness;
   }
 
@@ -293,7 +298,7 @@ public abstract class JREController implements ISelectionChangedListener
 
   protected JREFilter createJREFilter()
   {
-    return new JREFilter(javaVersion, bitness, null);
+    return new JREFilter(javaVersion, getBitness(), null);
   }
 
   protected void modelEmpty(boolean empty)
@@ -339,7 +344,7 @@ public abstract class JREController implements ISelectionChangedListener
   {
     if (javaVersion != null)
     {
-      String javaHome = JREManager.INSTANCE.getDefaultJRE(bitness, javaVersion);
+      String javaHome = JREManager.INSTANCE.getDefaultJRE(getBitness(), javaVersion);
       if (javaHome != null)
       {
         Map<File, JRE> jres = JREManager.INSTANCE.getJREs();
@@ -359,7 +364,7 @@ public abstract class JREController implements ISelectionChangedListener
       File javaHome = jre.getJavaHome();
       if (javaHome != null)
       {
-        JREManager.INSTANCE.setDefaultJRE(bitness, javaVersion, javaHome.getAbsolutePath());
+        JREManager.INSTANCE.setDefaultJRE(getBitness(), javaVersion, javaHome.getAbsolutePath());
       }
     }
 
