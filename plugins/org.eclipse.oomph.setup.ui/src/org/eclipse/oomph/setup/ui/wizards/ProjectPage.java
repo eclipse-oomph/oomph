@@ -398,7 +398,7 @@ public class ProjectPage extends SetupWizardPage
       @Override
       protected boolean isLeafMatch(Viewer viewer, Object element)
       {
-        boolean result = super.isLeafMatch(viewer, element);
+        boolean result = wordMatches(labelProvider.getText(element));
         if (!result)
         {
           if (element instanceof Project)
