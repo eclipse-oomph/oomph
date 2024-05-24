@@ -582,7 +582,7 @@ public final class OwnershipMapper
       if (Boolean.TRUE)
       {
         HttpClient client = HttpClient.newHttpClient();
-        String pageURL = "https://projects.eclipse.org/api/projects/?pagesize=50&page=0";
+        String pageURL = "https://projects.eclipse.org/api/projects?pagesize=50";
         for (;;)
         {
           System.out.println("Processing " + pageURL);

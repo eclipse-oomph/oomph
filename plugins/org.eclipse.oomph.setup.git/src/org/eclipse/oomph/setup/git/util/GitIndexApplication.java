@@ -1116,6 +1116,7 @@ public class GitIndexApplication implements IApplication
       "https://gitlab.eclipse.org/eclipse/mdmbl/org.eclipse.mdm.api.uml", //
       "https://gitlab.eclipse.org/eclipse/mdmbl/org.eclipse.mdmbl", //
       "https://gitlab.eclipse.org/eclipse/mpc/org-eclipse-epp-mpc", //
+      "https://gitlab.eclipse.org/eclipse/mpc/org.eclipse.epp.mpc", //
       "https://gitlab.eclipse.org/eclipse/openk-coremodules/org.eclipse.openk-coremodules.contactBaseData.documentation", //
       "https://gitlab.eclipse.org/eclipse/openk-coremodules/org.eclipse.openk-coremodules.contactBaseData.frontend", //
       "https://gitlab.eclipse.org/eclipse/openk-coremodules/org.eclipse.openk-coremodules.portalFE", //
@@ -1892,6 +1893,7 @@ public class GitIndexApplication implements IApplication
       "https://gitlab.eclipse.org/eclipse/refactor/org.eclipse.emf.refactor.metrics", //
       "https://gitlab.eclipse.org/eclipse/refactor/org.eclipse.emf.refactor.refactoring", //
       "https://gitlab.eclipse.org/eclipse/refactor/org.eclipse.emf.refactor.smells", //
+      "https://gitlab.eclipse.org/eclipse/set/set", //
       "https://gitlab.eclipse.org/eclipse/sphinx/org.eclipse.sphinx", //
       "https://gitlab.eclipse.org/eclipse/statet/statet", //
       "https://gitlab.eclipse.org/eclipse/subversive/subversive", //
@@ -1904,7 +1906,10 @@ public class GitIndexApplication implements IApplication
       "https://gitlab.eclipse.org/eclipse/technology/dash/m4e-tools", //
       "https://gitlab.eclipse.org/eclipse/technology/dash/org.eclipse.dash.handbook", //
       "https://gitlab.eclipse.org/eclipse/teneo/org.eclipse.emf.teneo", //
+      "https://gitlab.eclipse.org/eclipse/titan/titan.EclipsePlug-ins", //
+      "https://gitlab.eclipse.org/eclipse/titan/titan.core", //
       "https://gitlab.eclipse.org/eclipse/titan/titan.language-server", //
+      "https://gitlab.eclipse.org/eclipse/titan/titan.misc", //
       "https://gitlab.eclipse.org/eclipse/trace4cps/trace4cps", //
       "https://gitlab.eclipse.org/eclipse/usssdk/org.eclipse.usssdk", //
       "https://gitlab.eclipse.org/eclipse/webtools/releng/webtools-releng", //
@@ -1971,7 +1976,7 @@ public class GitIndexApplication implements IApplication
 
     var projectsBaseURL = "https://projects.eclipse.org/api/projects/?pagesize=50&page=";
     var projectIDs = new TreeSet<String>();
-    for (var i = 0; i < 50; ++i)
+    for (var i = 1; i < 50; ++i)
     {
       var pageURL = projectsBaseURL + i;
       System.out.println("Processing " + pageURL);
@@ -2016,6 +2021,8 @@ public class GitIndexApplication implements IApplication
     if ("true".equals(System.getProperty("org.eclipse.oomph.setup.git.util.GitIndexApplication.test.new")))
     {
       repositories.removeAll(REPOSITORIES);
+      repositories.removeAll(BROKEN_REPOSITORIES);
+      repositories.removeAll(NON_JAVA_REPOSITORIES);
     }
     else
     {
@@ -2249,7 +2256,7 @@ public class GitIndexApplication implements IApplication
             break;
           }
 
-          result.addAll(urls);
+          addAll(result, urls);
         }
       }
     }
@@ -2257,7 +2264,7 @@ public class GitIndexApplication implements IApplication
     var githubRepos = getSection("github_repos", content);
     if (githubRepos != null)
     {
-      result.addAll(getValues("url", githubRepos));
+      addAll(result, getValues("url", githubRepos));
     }
 
     cleanupRepos(result);
@@ -2267,7 +2274,7 @@ public class GitIndexApplication implements IApplication
       var gerritRepos = getSection("gerrit_repos", content);
       if (gerritRepos != null)
       {
-        result.addAll(getValues("url", gerritRepos));
+        addAll(result, getValues("url", gerritRepos));
         cleanupRepos(result);
       }
     }
@@ -2280,9 +2287,9 @@ public class GitIndexApplication implements IApplication
       {
         for (var i = 1; i < 10; i++)
         {
-          var repos = contentHandler.getContent("https://gitlab.eclipse.org/api/v4/groups/" + group.replace("/", "%2f") + "?page=" + i);
+          var repos = contentHandler.getContent("https://gitlab.eclipse.org/api/v4/groups/" + group.replace("\\", "").replace("/", "%2f") + "?page=" + i);
           var urls = getValues("http_url_to_repo", repos);
-          if (!result.addAll(urls.stream().map(it -> it.replaceAll("\\.git$", "")).collect(Collectors.toList())))
+          if (!addAll(result, urls.stream().map(it -> it.replaceAll("\\.git$", "")).collect(Collectors.toSet())))
           {
             break;
           }
@@ -2293,11 +2300,16 @@ public class GitIndexApplication implements IApplication
     var gitlabRepos = getSection("gitlab_repos", content);
     if (githubRepos != null)
     {
-      result.addAll(getValues("url", gitlabRepos));
+      addAll(result, getValues("url", gitlabRepos));
       cleanupRepos(result);
     }
 
     return result;
+  }
+
+  private boolean addAll(Set<String> result, Set<String> values)
+  {
+    return result.addAll(values.stream().map(repo -> repo.replace("\\", "")).collect(Collectors.toSet()));
   }
 
   private void cleanupRepos(Set<String> repos)
