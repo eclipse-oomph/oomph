@@ -89,7 +89,7 @@ public class GitIndexApplication implements IApplication
   }
 
   private static Set<String> TEST_REPOSITORIES = new TreeSet<>(Set.of( //
-      // "https://git.eclipse.org/r/jgit/jgit", //
+      "https://git.eclipse.org/r/stem/org.eclipse.stem", //
       "https://github.com/eclipse-emf/org.eclipse.emf", //
       "https://gitlab.eclipse.org/eclipse/xpand/org.eclipse.xpand" //
   ));
