@@ -42,7 +42,7 @@
   <setupTask
       xsi:type="setup:VariableTask"
       name="oomph.emf.update.url"
-      value="https://download.eclipse.org/modeling/emf/emf/builds/release/2.37.0"
+      value="https://download.eclipse.org/modeling/emf/emf/builds/release/2.38.0"
       label="Oomph's EMF Repository Location">
     <description>The location of the EMF repository for satisifying Oomph's dependencies on EMF</description>
   </setupTask>
@@ -71,7 +71,7 @@
       <requirement
           name="org.eclipse.sdk.ide"
           versionRange="[4.32.0,5.0.0)"
-          filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=ppc64le)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
+          filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=aarch64)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=ppc64le)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
       <repository
           url="https://download.eclipse.org/eclipse/updates/4.32-I-builds"/>
       <repository
@@ -123,7 +123,7 @@
       <requirement
           name="org.eclipse.sdk.ide"
           versionRange="[4.32.0,5.0.0)"
-          filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=ppc64le)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
+          filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=aarch64)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=ppc64le)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
       <repository
           url="https://download.eclipse.org/eclipse/updates/4.32-I-builds"/>
       <repository
@@ -1050,7 +1050,7 @@
       <repository
           url="https://download.eclipse.org/eclipse/updates/4.3/R-4.3.2-201402211700"/>
       <repository
-          url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.37.0"/>
+          url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.38.0"/>
     </setupTask>
   </version>
   <version name="4.2"
@@ -1085,7 +1085,7 @@
       <repository
           url="https://download.eclipse.org/eclipse/updates/4.2/R-4.2.2-201302041200"/>
       <repository
-          url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.37.0"/>
+          url="https://download.eclipse.org/modeling/emf/emf/builds/release/2.38.0"/>
     </setupTask>
   </version>
   <description>This package contains the IDE provided by the Eclipse project's platform build.</description>
