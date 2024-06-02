@@ -41,6 +41,8 @@ import org.eclipse.debug.core.model.IStreamMonitor;
 import org.eclipse.debug.core.model.IStreamsProxy;
 import org.eclipse.osgi.util.NLS;
 
+import java.util.regex.Pattern;
+
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Launch Task</b></em>'.
@@ -58,6 +60,8 @@ import org.eclipse.osgi.util.NLS;
 public class LaunchTaskImpl extends SetupTaskImpl implements LaunchTask
 {
   private static final PropertyFile HISTORY = new PropertyFile(LaunchingPlugin.INSTANCE.getStateLocation().append("launch-history.properties").toFile()); //$NON-NLS-1$
+
+  private static final Pattern ANSI_PATTERN = Pattern.compile("\u001B\\[[;\\d]*m"); //$NON-NLS-1$
 
   /**
    * The default value of the '{@link #getLauncher() <em>Launcher</em>}' attribute.
@@ -355,7 +359,7 @@ public class LaunchTaskImpl extends SetupTaskImpl implements LaunchTask
                 @Override
                 public void streamAppended(String text, IStreamMonitor monitor)
                 {
-                  context.log(text.replace('\r', ' '));
+                  context.log(ANSI_PATTERN.matcher(text.replace("\r\n", "\n")).replaceAll(""), false); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
                 }
               });
             }
@@ -368,7 +372,7 @@ public class LaunchTaskImpl extends SetupTaskImpl implements LaunchTask
                 @Override
                 public void streamAppended(String text, IStreamMonitor monitor)
                 {
-                  context.log(text.replace('\r', ' '), Severity.ERROR);
+                  context.log(ANSI_PATTERN.matcher(text.replace("\r\n", "\n")).replaceAll(""), false, Severity.ERROR); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
                 }
               });
             }

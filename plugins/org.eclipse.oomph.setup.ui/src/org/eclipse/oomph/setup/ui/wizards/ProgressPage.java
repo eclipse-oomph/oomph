@@ -1467,7 +1467,10 @@ public class ProgressPage extends SetupWizardPage
           severity = pair.getElement2();
         }
 
-        line += "\n"; //$NON-NLS-1$
+        if (!line.endsWith("\n")) //$NON-NLS-1$
+        {
+          line += "\n"; //$NON-NLS-1$
+        }
 
         try
         {
