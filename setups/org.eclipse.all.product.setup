@@ -81,8 +81,6 @@
       <requirement
           name="Programming Languages"/>
       <requirement
-          name="SOA Development"/>
-      <requirement
           name="Testing"/>
       <requirement
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
