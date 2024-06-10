@@ -86,6 +86,11 @@ footer {
   display: none;
 }
 
+.img-border {
+  border-radius: 3px;
+  border: 3px solid Gainsboro;
+}
+
 </style>
 
 EOSTYLE;
@@ -110,7 +115,10 @@ if (!$scope)
 else
 {
   $scope = preg_replace('/%2B/', '+', $scope);
+  $scope = str_replace(' (includes Incubating components)', '', $scope);
 }
+
+$display_java_21 = "block";
 
 $version = htmlentities($_GET["version"]);
 $version_label = "";
@@ -121,9 +129,15 @@ if (!$version)
 }
 else
 {
+  if (substr( $version, 0, 4) === "4.33")
+  {
+    $display_java_21 = "none";
+  }
+
   $version_label = " Version:&nbsp;" . $version;
   $version_parameter = "?version=" . $version;
 }
+
 
 $sponsor_parameter = "?scope=" . urlencode($scope);
 $campaign = htmlentities($_GET["campaign"]);
@@ -150,11 +164,15 @@ if ($scope == "Eclipse IDE for C/C++ Developers")
 {
   $branding_image = "https://www.eclipse.org/downloads/images/cdt.png";
 } 
+else if ($scope == "Eclipse IDE for Embedded C/C++ Developers")
+{
+  $branding_image = "https://www.eclipse.org/downloads/images/cdt.png";
+}
 else if ($scope == "Eclipse IDE for Java Developers")
 {
   $branding_image = "https://www.eclipse.org/downloads/images/java.png";
 }
-else if ($scope == "Eclipse IDE for Enterprise Java Developers")
+else if ($scope == "Eclipse IDE for Enterprise Java and Web Developers")
 {
   $branding_image = "https://www.eclipse.org/downloads/images/javaee.png";
 }
@@ -182,10 +200,6 @@ else if ($scope == "Eclipse IDE for Testers")
 {
   $branding_image = "https://www.eclipse.org/downloads/images/testing.png";
 }
-else if ($scope == "Eclipse IDE for Testers")
-{
-  $branding_image = "https://www.eclipse.org/downloads/images/testing.png";
-}
 else if ($scope == "Eclipse IDE for Scientific Computing")
 {
   $branding_image = "https://www.eclipse.org/downloads/images/parallel.png";
@@ -208,7 +222,7 @@ $html = <<<EOHTML
     <div style="font-size: 150%;">
       <img style="width: 3ex; height: 3ex;" src="$branding_image"/>
       <span>$scope</span>
-      <span style="font-size: 66%;">$version_label</span>
+      <span style="font-size: 66%; white-space: nowrap;">$version_label</span>
     </div>
 
     <br/>
@@ -217,8 +231,97 @@ $html = <<<EOHTML
     It's <b>100%</b> free and <b>open source</b>.
     Help keep it that way and make it better.
     </p>
-
     <hr>
+
+    <div id="java-21" style="display: $display_java_21;">
+    <h2><span class="orange" style="font-size: 250%; margin-right: 0.5em; position: absolute; $animation_style">&#x26A0;</span><span style="margin-left: 2.5em;">If you don't read this, <b style="text-shadow: 2px 2px Orange;">bad things</b> will happen.</span></h2>
+    <br/>
+    <input type="checkbox" id="toggle-id-x" class="toggle" checked/>
+    <label for="toggle-id-x" class="toggle-label">$toggle_expand$toggle_collapse What Will Happen? $read_more</label>
+    <div class="toggle-content">
+    <p>
+    The June 12th release of the Eclipse IDE 2024-06 - 4.32 <b>requires Java 21</b>.
+    </p>
+    <p>
+    Depending on how you installed your Eclipse IDE, the following might happen when you update:
+    </p>
+    <ul>
+    <li>
+    <div style="margin-bottom: 1ex;">
+    The IDE will automatically install Java 21 as part of installing the available updates.
+    If the selected update site below is present in the preferences, you will be automatically updated to <a href="https://eclipse.dev/justj/"><img src="https://eclipse.dev/justj/justj_title.svg" style="width: 3em;"/></a> Java 21.
+    </div>
+    <img src="JustJEPPLatestPresent.png" style="width: 40em;" class="img-border"/>
+    </li>
+    <li style="margin-top: 1ex;">
+    <div style="margin-bottom: 1ex;">
+    The IDE will refuse to update all or parts of the available updates and the <code>Next&ThinSpace;&gt;</code> button will not function properly:
+    </div>
+    <img src="CannotUpdate.png" style="width: 40em;" class="img-border"/>
+    </li>
+    <li style="margin-top: 1ex;">
+    <div style="margin-bottom: 1ex;">
+    The IDE will install all available updates but then fail to start:
+    </div>
+    <img src="StartFails.png" class="img-border" style="width: 30em;"/>
+    </li>
+    <li style="margin-top: 1ex;">
+    <div style="margin-bottom: 1ex;">
+    The IDE will install all available updates but will start in an impaired state, e.g., without branding information.
+    </div>
+    <img src="IDEImpaired.png" style="width: 30em;" class="img-border"/>
+    </li>
+    </ul>
+    </div>
+    <hr>
+    <input type="checkbox" id="toggle-id-how" class="toggle" checked/>
+    <label for="toggle-id-how" class="toggle-label">$toggle_expand$toggle_collapse What to Do? $read_more</label>
+    <div class="toggle-content">
+    <p>
+    To prevent or fix problems, follow these steps:
+    </p>
+    <ul>
+    <li>
+    <div style="margin-bottom: 1ex;">
+    If your IDE's installation has a JustJ JRE in the <code>eclipse.ini</code> as follows, it will probably update to Java 21:
+    </div>
+    <pre style="font-size: 87%; margin-left: 0.5em;" class="img-border">-vm
+&lt;home&gt;/.p2/pool/plugins/org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_17.0.11.v20240426-1830/jre/bin</pre>
+    <div style="margin-bottom: 1ex;">
+    To be 100% sure it will update, ensure that <a href="https://download.eclipse.org/justj/epp/release/latest">https://download.eclipse.org/justj/epp/release/latest</a> 
+    is present in the preferences; add it if it is not:
+    </div>
+    <img src="AddJustJEPPLatest.png" style="width: 40em; margin: 1ex;" class="img-border"/>
+    <div style="margin-bottom: 1ex;">
+    An update will then install JustJ Java 21:
+    </div>
+    <img src="JustJ21Install.png" style="width: 40em; margin: 1ex;" class="img-border"/>
+    </li>    
+    <li style="margin-top: 1ex;">
+    <div style="margin-bottom: 1ex;">
+    If your <code>eclipse.ini</code> does not specify a JustJ JRE but a <code>-vm</code> option is present,
+    i.e., you are using an explicitly specified JRE/JDK installed in your system,
+    you should edit the <code>eclipse.ini</code> to specify a Java 21 JRE/JDK like this:
+    </div>
+    <pre class="img-border" style="margin-left: 0.5em;">-vm
+C:\Program Files\Java\jdk-21.0.3+9\bin</pre>
+    You can get Java 21 from <a href="https://adoptium.net/">https://adoptium.net/</a>.
+    </li>
+    <li style="margin-top: 1ex;">
+    <div style="margin-bottom: 1ex;">
+    If your <code>eclipse.ini</code> does not specify <code>-vm</code> at all, then the IDE is using the default system JRE/JDK.
+    You can either edit the <code>eclipse.ini</code> to add the two lines as shown above, with no trailing spaces, to the start of the file,
+    or you can ensure that Java 21 is installed as your default system JRE.
+    </div>
+    </li>
+    <li style="margin-top: 1ex;">
+    If you need to find these instructions again, you can use the IDE's menu <code>Help &rarr; Sponsor</code> to open this page.
+    </li>
+    </ul>
+    </div>
+    <hr>
+    </div>
+
     <h3><b>What Can <span class="orange">I</span> Do to Support the <span style="color: #2c2255;">Eclipse</span> <span class="orange">Community</span>?</b></h3>
     <a href="$sponsor_link" target="_blank">
     <img style="$animation_style" src="../installer/FriendsOfEclipse.png"/>
