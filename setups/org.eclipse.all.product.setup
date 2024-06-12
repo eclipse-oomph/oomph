@@ -43,7 +43,7 @@
       value="5g"
       vm="true"/>
   <version name="staging"
-      label="Staging (2024-06)"
+      label="Staging (2024-09)"
       requiredJavaVersion="21">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
@@ -85,7 +85,7 @@
       <requirement
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
       <repository
-          url="https://download.eclipse.org/staging/2024-06">
+          url="https://download.eclipse.org/staging/2024-09">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
@@ -107,10 +107,6 @@
         <value>Eclipse Eierlegende Wollmilchsau - Latest</value>
       </detail>
     </annotation>
-    <setupTask
-        xsi:type="setup:RedirectionTask"
-        sourceURL="https://download.eclipse.org/releases/2024-09"
-        targetURL="https://download.eclipse.org/releases/2024-06"/>
     <setupTask
         xsi:type="setup.p2:P2Task"
         label="Eclipse Eierlegende Wollmilchsau (2024-09)">
@@ -139,8 +135,6 @@
           name="Performance, Profiling and Tracing Tools"/>
       <requirement
           name="Programming Languages"/>
-      <requirement
-          name="SOA Development"/>
       <requirement
           name="Testing"/>
       <requirement
@@ -220,10 +214,6 @@
       </detail>
     </annotation>
     <setupTask
-        xsi:type="setup:RedirectionTask"
-        sourceURL="https://download.eclipse.org/releases/2024-09"
-        targetURL="https://download.eclipse.org/releases/2024-06"/>
-    <setupTask
         xsi:type="setup.p2:P2Task"
         label="Eclipse Eierlegende Wollmilchsau (2024-09)">
       <requirement
@@ -251,8 +241,6 @@
           name="Performance, Profiling and Tracing Tools"/>
       <requirement
           name="Programming Languages"/>
-      <requirement
-          name="SOA Development"/>
       <requirement
           name="Testing"/>
       <requirement
