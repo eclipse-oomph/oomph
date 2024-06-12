@@ -463,7 +463,7 @@ public class ProductCatalogGenerator implements IApplication
 
   private String getStagingTrain()
   {
-    return "2024-06";
+    return "2024-09";
   }
 
   private String getCorrespondingTrain(String train)
