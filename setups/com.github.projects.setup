@@ -181,6 +181,9 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/GlobalVariable"/>
       <choice
+          value="2024-09"
+          label="Eclipse 2024-09 - 4.33"/>
+      <choice
           value="2024-06"
           label="Eclipse 2024-06 - 4.32"/>
       <choice
@@ -311,6 +314,8 @@
     </modification>
   </setupTask>
   <project href="user:/com.github.projects.setup?name='user.project',label='&lt;User>',description='A container project for local user projects that are virtual members of the Github.com project catalog'#/"/>
+  <project href="interim/Axis1.setup#/"/>
+  <project href="interim/CycloneDX.setup#/"/>
   <project href="https://raw.githubusercontent.com/mougnibas/cook-helper/master/project.setup#/"/>
   <project href="https://raw.githubusercontent.com/JanKoehnlein/FXDiagram/master/de.fxdiagram.docs/FXDiagram.setup#/"/>
   <project href="https://raw.githubusercontent.com/groovy/groovy-eclipse/master/groovy-eclipse.setup#/"/>
