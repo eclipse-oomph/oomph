@@ -434,6 +434,19 @@
     </content>
   </setupTask>
   <setupTask
+      xsi:type="setup:ResourceCreationTask"
+      excludedTriggers="BOOTSTRAP"
+      targetURL="${github.clone.oomph.github.location|uri}/.gitignore"
+      encoding="UTF-8">
+    <description>Create a .gitignore file in the Oomph's .github repository</description>
+    <content>
+      /.project
+      /.settings
+      /.gitignore
+
+    </content>
+  </setupTask>
+  <setupTask
       xsi:type="setup.targlets:TargletTask">
     <targlet
         name="Oomph"
