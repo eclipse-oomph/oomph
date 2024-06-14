@@ -234,7 +234,16 @@ $html = <<<EOHTML
     <hr>
 
     <div id="java-21" style="display: $display_java_21;">
-    <h2><span class="orange" style="font-size: 250%; margin-right: 0.5em; position: absolute; $animation_style">&#x26A0;</span><span style="margin-left: 2.5em;">If you don't read this, <b style="text-shadow: 2px 2px Orange;">bad things</b> will happen.</span></h2>
+    <h2>
+	<span class="orange" style="font-size: 250%; margin-right: 0.5em; margin-top: 0.5ex; position: absolute; $animation_style">&#x26A0;</span>
+    <span style="margin-left: 2.5em;">
+	Is your IDE currently running with Java 17?
+	</span>
+	<br/>
+    <span style="margin-left: 2.5em;">
+	To prevent problems, <b style="text-shadow: 2px 2px Orange;">please read</b> the following carefully.
+	</span>
+    </h2>
     <br/>
     <input type="checkbox" id="toggle-id-x" class="toggle" checked/>
     <label for="toggle-id-x" class="toggle-label">$toggle_expand$toggle_collapse What Will Happen? $read_more</label>
