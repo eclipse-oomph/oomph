@@ -120,7 +120,7 @@ public class OpenManifestHandler extends AbstractProjectHandler
       IEditorInput editorInput = getManifestEditorInputStorage(root);
       if (editorInput != null)
       {
-        org.eclipse.pde.internal.ui.editor.plugin.ManifestEditor.openEditor(editorInput);
+        page.openEditor(editorInput, org.eclipse.pde.internal.ui.IPDEUIConstants.MANIFEST_EDITOR_ID);
       }
     }
   }
