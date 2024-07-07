@@ -1173,13 +1173,55 @@ public class GitIndexApplication implements IApplication
       "https://gitlab.eclipse.org/eclipse/xfsc/train1", //
       "https://gitlab.eclipse.org/eclipse/xfsc/wiki", //
       "https://gitlab.eclipse.org/eclipse/xfsc/xfsc-spec-2", //
+      "https://github.com/eclipse-arrowhead/Client-OPC-UA-Adaptor", //
+      "https://github.com/eclipse-cbi/nexus3-as-code", //
+      "https://github.com/eclipse-daanse/Tutorials", //
+      "https://github.com/eclipse-daanse/org.eclipse.daanse.assert.pdf", //
+      "https://github.com/eclipse-daanse/org.eclipse.daanse.pom", //
+      "https://github.com/eclipse-daanse/org.eclipse.daanse.xmla", //
+      "https://github.com/eclipse-dataspace-dcp/decentralized-claims-protocol", //
+      "https://github.com/eclipse-dataspace-protocol-base/DataspaceProtocol", //
+      "https://github.com/eclipse-emfcloud/modelhub", //
+      "https://github.com/eclipse-jkube/vscode-kport", //
+      "https://github.com/eclipse-osee/org.eclipse.osee", //
+      "https://github.com/eclipse-osee/org.eclipse.ote", //
+      "https://github.com/eclipse-tractusx/emergingtechnologies", //
+      "https://github.com/eclipse-tractusx/sldt-ontology-model", //
+      "https://github.com/eclipse-uprotocol/up-client-mqtt5-java", //
+      "https://github.com/eclipse-uprotocol/up-conan-recipes", //
+      "https://github.com/eclipse-uprotocol/up-discovery-cpp", //
+      "https://github.com/eclipse-uprotocol/up-subscription-cpp", //
+      "https://github.com/eclipse-uprotocol/up-subscription-rust", //
+      "https://github.com/eclipse-uprotocol/up-transport-android-kotlin", //
+      "https://github.com/eclipse-uprotocol/up-transport-android-rust", //
+      "https://github.com/eclipse-uprotocol/up-transport-azure-java", //
+      "https://github.com/eclipse-uprotocol/up-transport-mqtt5-java", //
+      "https://github.com/eclipse-uprotocol/up-transport-mqtt5-python", //
+      "https://github.com/eclipse-uprotocol/up-transport-mqtt5-rust", //
+      "https://github.com/eclipse-uprotocol/up-transport-springboot-java", //
+      "https://github.com/eclipse-uprotocol/up-transport-vsomeip-cpp", //
+      "https://github.com/eclipse-uprotocol/up-transport-vsomeip-python", //
+      "https://github.com/eclipse-uprotocol/up-transport-vsomeip-rust", //
+      "https://github.com/eclipse-uprotocol/up-transport-zenoh-cpp", //
+      "https://github.com/eclipse-uprotocol/up-transport-zenoh-python", //
+      "https://github.com/eclipse-uprotocol/up-transport-zenoh-rust", //
+      "https://github.com/eclipse-velocitas/vehicle-app-kotlin-template", //
+      "https://github.com/eclipse-vertx/vertx5-parent", //
+      "https://github.com/eclipse-wattadvisor/WattAdvisor", //
+      "https://github.com/eclipse-xpanse/xpanse-agent", //
+      "https://gitlab.eclipse.org/eclipse/autowrx/backend-core", //
+      "https://gitlab.eclipse.org/eclipse/autowrx/docs", //
+      "https://gitlab.eclipse.org/eclipse/autowrx/instance-overlay", //
+      "https://gitlab.eclipse.org/eclipse/autowrx/ui-automation-test", //
+      "https://gitlab.eclipse.org/eclipse/graphene/federation4", //
+      "https://gitlab.eclipse.org/eclipse/openk-usermodules/lowVoltageCockpit.documentation", //
+      "https://gitlab.eclipse.org/eclipse/openpass/stochastics-library", //
       ""//
   ));
 
   private static Set<String> REPOSITORIES = new TreeSet<>(Set.of( //
       // generated-repositories
       "https://git.eclipse.org/r/bpmn2-modeler/org.eclipse.bpmn2-modeler", //
-      "https://git.eclipse.org/r/bpmn2/org.eclipse.bpmn2", //
       "https://git.eclipse.org/r/eef/org.eclipse.eef", //
       "https://git.eclipse.org/r/handly/org.eclipse.handly", //
       "https://git.eclipse.org/r/mdht/org.eclipse.mdht", //
@@ -1191,9 +1233,6 @@ public class GitIndexApplication implements IApplication
       "https://git.eclipse.org/r/osee/org.eclipse.ote", //
       "https://git.eclipse.org/r/papyrus-rt/org.eclipse.papyrus-rt", //
       "https://git.eclipse.org/r/ptp/org.eclipse.photran", //
-      "https://git.eclipse.org/r/stem/org.eclipse.stem", //
-      "https://git.eclipse.org/r/stem/org.eclipse.stem.data", //
-      "https://git.eclipse.org/r/stem/org.eclipse.stem.data.earthscience", //
       "https://git.eclipse.org/r/tm/org.eclipse.tm", //
       "https://github.com/adoptium/STF", //
       "https://github.com/adoptium/TKG", //
@@ -1274,6 +1313,14 @@ public class GitIndexApplication implements IApplication
       "https://github.com/eclipse-cognicrypt/CogniCrypt", //
       "https://github.com/eclipse-corrosion/corrosion", //
       "https://github.com/eclipse-daanse/org.eclipse.daanse.common", //
+      "https://github.com/eclipse-daanse/org.eclipse.daanse.emf.dbmapping", //
+      "https://github.com/eclipse-daanse/org.eclipse.daanse.io.fs.watcher", //
+      "https://github.com/eclipse-daanse/org.eclipse.daanse.jakarta.servlet", //
+      "https://github.com/eclipse-daanse/org.eclipse.daanse.jdbc.datasource.metatype.h2", //
+      "https://github.com/eclipse-daanse/org.eclipse.daanse.jdbc.db", //
+      "https://github.com/eclipse-daanse/org.eclipse.daanse.jdbc.loader.csv", //
+      "https://github.com/eclipse-daanse/org.eclipse.daanse.rolap.mapping", //
+      "https://github.com/eclipse-daanse/org.eclipse.daanse.webconsole.branding", //
       "https://github.com/eclipse-dali/webtools.dali", //
       "https://github.com/eclipse-dataspacetck/cvf", //
       "https://github.com/eclipse-datatools/datatools", //
@@ -1431,6 +1478,7 @@ public class GitIndexApplication implements IApplication
       "https://github.com/eclipse-jgit/jgit", //
       "https://github.com/eclipse-jkube/jkube", //
       "https://github.com/eclipse-jkube/jkube-integration-tests", //
+      "https://github.com/eclipse-jkube/kport", //
       "https://github.com/eclipse-jsdt/webtools.jsdt", //
       "https://github.com/eclipse-jsf/webtools.jsf", //
       "https://github.com/eclipse-justj/justj.tools", //
@@ -1544,6 +1592,10 @@ public class GitIndexApplication implements IApplication
       "https://github.com/eclipse-sirius/sirius-emf-json", //
       "https://github.com/eclipse-sirius/sirius-legacy", //
       "https://github.com/eclipse-sirius/sirius-web", //
+      "https://github.com/eclipse-sisu/sisu-project", //
+      "https://github.com/eclipse-sisu/sisu.inject", //
+      "https://github.com/eclipse-sisu/sisu.mojos", //
+      "https://github.com/eclipse-sisu/sisu.plexus", //
       "https://github.com/eclipse-slm/awx-jwt-authenticator", //
       "https://github.com/eclipse-slm/slm", //
       "https://github.com/eclipse-sourceediting/sourceediting", //
@@ -1557,7 +1609,6 @@ public class GitIndexApplication implements IApplication
       "https://github.com/eclipse-syson/syson", //
       "https://github.com/eclipse-tea/tea", //
       "https://github.com/eclipse-texlipse/texlipse", //
-      "https://github.com/eclipse-tomled/tomled", //
       "https://github.com/eclipse-tracecompass/org.eclipse.tracecompass", //
       "https://github.com/eclipse-tracecompass/trace-event-logger", //
       "https://github.com/eclipse-tracecompass/tracecompass-test-traces", //
@@ -1591,6 +1642,7 @@ public class GitIndexApplication implements IApplication
       "https://github.com/eclipse-uprotocol/up-client-android-java", //
       "https://github.com/eclipse-uprotocol/up-java", //
       "https://github.com/eclipse-uprotocol/up-simulator-proxy", //
+      "https://github.com/eclipse-uprotocol/up-transport-android-java", //
       "https://github.com/eclipse-vertx/vert.x", //
       "https://github.com/eclipse-vertx/vertx-auth", //
       "https://github.com/eclipse-vertx/vertx-codegen", //
@@ -1737,8 +1789,6 @@ public class GitIndexApplication implements IApplication
       "https://github.com/eclipse/sequoyah", //
       "https://github.com/eclipse/shellwax", //
       "https://github.com/eclipse/sisu.inject", //
-      "https://github.com/eclipse/sisu.mojos", //
-      "https://github.com/eclipse/sisu.plexus", //
       "https://github.com/eclipse/smartmdsd", //
       "https://github.com/eclipse/steady", //
       "https://github.com/eclipse/swtchart", //
@@ -1823,6 +1873,7 @@ public class GitIndexApplication implements IApplication
       "https://gitlab.eclipse.org/eclipse/app4mc/org.eclipse.app4mc.rtclib", //
       "https://gitlab.eclipse.org/eclipse/app4mc/org.eclipse.app4mc.tools", //
       "https://gitlab.eclipse.org/eclipse/bpmn2-modeler/org.eclipse.bpmn2-modeler", //
+      "https://gitlab.eclipse.org/eclipse/bpmn2/org.eclipse.bpmn2", //
       "https://gitlab.eclipse.org/eclipse/chess/chess", //
       "https://gitlab.eclipse.org/eclipse/comma/comma", //
       "https://gitlab.eclipse.org/eclipse/dco/developer-console", //
@@ -1883,10 +1934,23 @@ public class GitIndexApplication implements IApplication
       "https://gitlab.eclipse.org/eclipse/osbp/org.eclipse.osbp.eventbroker", //
       "https://gitlab.eclipse.org/eclipse/osbp/org.eclipse.osbp.filter", //
       "https://gitlab.eclipse.org/eclipse/osbp/org.eclipse.osbp.fork.mihalis.opal.imageSelector.osgi", //
+      "https://gitlab.eclipse.org/eclipse/papyrus/org.eclipse.papyrus", //
+      "https://gitlab.eclipse.org/eclipse/papyrus/org.eclipse.papyrus-bpmn", //
+      "https://gitlab.eclipse.org/eclipse/papyrus/org.eclipse.papyrus-cdo", //
+      "https://gitlab.eclipse.org/eclipse/papyrus/org.eclipse.papyrus-classic", //
       "https://gitlab.eclipse.org/eclipse/papyrus/org.eclipse.papyrus-designer", //
+      "https://gitlab.eclipse.org/eclipse/papyrus/org.eclipse.papyrus-desktop", //
       "https://gitlab.eclipse.org/eclipse/papyrus/org.eclipse.papyrus-domainservices", //
+      "https://gitlab.eclipse.org/eclipse/papyrus/org.eclipse.papyrus-ease", //
       "https://gitlab.eclipse.org/eclipse/papyrus/org.eclipse.papyrus-manufacturing", //
+      "https://gitlab.eclipse.org/eclipse/papyrus/org.eclipse.papyrus-marte", //
+      "https://gitlab.eclipse.org/eclipse/papyrus/org.eclipse.papyrus-model2doc", //
+      "https://gitlab.eclipse.org/eclipse/papyrus/org.eclipse.papyrus-moka", //
+      "https://gitlab.eclipse.org/eclipse/papyrus/org.eclipse.papyrus-moka.incubation", //
+      "https://gitlab.eclipse.org/eclipse/papyrus/org.eclipse.papyrus-papygame", //
       "https://gitlab.eclipse.org/eclipse/papyrus/org.eclipse.papyrus-robotics", //
+      "https://gitlab.eclipse.org/eclipse/papyrus/org.eclipse.papyrus-sirius", //
+      "https://gitlab.eclipse.org/eclipse/papyrus/org.eclipse.papyrus-sysml16", //
       "https://gitlab.eclipse.org/eclipse/papyrus/org.eclipse.papyrus-web", //
       "https://gitlab.eclipse.org/eclipse/refactor/org.eclipse.emf.refactor.core", //
       "https://gitlab.eclipse.org/eclipse/refactor/org.eclipse.emf.refactor.examples", //
@@ -1896,6 +1960,9 @@ public class GitIndexApplication implements IApplication
       "https://gitlab.eclipse.org/eclipse/set/set", //
       "https://gitlab.eclipse.org/eclipse/sphinx/org.eclipse.sphinx", //
       "https://gitlab.eclipse.org/eclipse/statet/statet", //
+      "https://gitlab.eclipse.org/eclipse/stem/org.eclipse.stem", //
+      "https://gitlab.eclipse.org/eclipse/stem/org.eclipse.stem.data", //
+      "https://gitlab.eclipse.org/eclipse/stem/org.eclipse.stem.data.earthscience", //
       "https://gitlab.eclipse.org/eclipse/subversive/subversive", //
       "https://gitlab.eclipse.org/eclipse/sw360/playground-git", //
       "https://gitlab.eclipse.org/eclipse/tcf/tcf", //
