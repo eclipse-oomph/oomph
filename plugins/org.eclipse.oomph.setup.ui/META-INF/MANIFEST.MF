@@ -2,17 +2,17 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.oomph.setup.ui;singleton:=true
-Bundle-Version: 1.30.0.qualifier
+Bundle-Version: 1.31.0.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: org.eclipse.oomph.setup.ui.SetupUIPlugin$Implementation
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-11
-Export-Package: org.eclipse.oomph.setup.ui;version="1.30.0";x-internal:=true,
- org.eclipse.oomph.setup.ui.actions;version="1.30.0";x-internal:=true,
- org.eclipse.oomph.setup.ui.recorder;version="1.30.0";x-internal:=true,
- org.eclipse.oomph.setup.ui.synchronizer;version="1.30.0";x-internal:=true,
- org.eclipse.oomph.setup.ui.wizards;version="1.30.0";x-internal:=true
+Export-Package: org.eclipse.oomph.setup.ui;version="1.31.0";x-internal:=true,
+ org.eclipse.oomph.setup.ui.actions;version="1.31.0";x-internal:=true,
+ org.eclipse.oomph.setup.ui.recorder;version="1.31.0";x-internal:=true,
+ org.eclipse.oomph.setup.ui.synchronizer;version="1.31.0";x-internal:=true,
+ org.eclipse.oomph.setup.ui.wizards;version="1.31.0";x-internal:=true
 Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.24.0,4.0.0)",
  org.eclipse.core.expressions;bundle-version="[3.4.0,4.0.0)",
  org.eclipse.core.filesystem;bundle-version="[1.0.0,2.0.0)",
@@ -30,7 +30,7 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.24.0,4.0.0)",
  org.eclipse.oomph.setup.edit;bundle-version="[1.17.0,2.0.0)";visibility:=reexport,
  org.eclipse.oomph.setup.p2.edit;bundle-version="[1.16.0,2.0.0)",
  org.eclipse.oomph.setup.sync;bundle-version="[1.17.0,2.0.0)",
- org.eclipse.oomph.ui;bundle-version="[1.22.0,2.0.0)",
+ org.eclipse.oomph.ui;bundle-version="[1.23.0,2.0.0)",
  org.eclipse.oomph.p2.edit;bundle-version="[1.17.0,2.0.0)";visibility:=reexport,
  org.eclipse.oomph.p2.core;bundle-version="[1.29.0,2.0.0)",
  org.eclipse.oomph.p2.ui;bundle-version="[1.22.0,2.0.0)",

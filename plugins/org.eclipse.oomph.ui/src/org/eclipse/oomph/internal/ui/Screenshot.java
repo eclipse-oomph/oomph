@@ -384,7 +384,7 @@ class Screenshot
         // Also take a shot with the borders.
         if (parent != null)
         {
-          Point clientOffset = ((Shell)parent).toControl(shell.toDisplay(0, 0));
+          Point clientOffset = parent.toControl(shell.toDisplay(0, 0));
           Point targetPoint = shell.toDisplay(clientOffset);
 
           bounds.x -= 16;

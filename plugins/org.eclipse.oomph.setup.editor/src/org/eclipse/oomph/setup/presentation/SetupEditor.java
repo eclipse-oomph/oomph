@@ -6531,7 +6531,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       if (input instanceof URI)
       {
         // Handle it just like we are following it as a link and set it into the browser as a URL.
-        event.location = ((URI)input).toString();
+        event.location = input.toString();
         locationListener.changing(event);
         browser.setUrl(event.location);
       }

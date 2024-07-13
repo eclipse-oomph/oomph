@@ -263,7 +263,7 @@ public class TargletContainerUI implements ITargetLocationHandler, IAdapterFacto
         org.eclipse.oomph.targlets.internal.core.Messages.TargletContainer_ResolutionProblems, null);
     for (ITargetLocation location : targetLocations)
     {
-      IStatus status = ((ITargletContainer)location).resolve(target, progress.newChild());
+      IStatus status = location.resolve(target, progress.newChild());
       if (!status.isOK())
       {
         rootStatus.add(status);
@@ -507,7 +507,7 @@ public class TargletContainerUI implements ITargetLocationHandler, IAdapterFacto
     {
       if (element instanceof ITargletContainer)
       {
-        return ((ITargletContainer)element).toString();
+        return element.toString();
       }
 
       return super.getText(element);

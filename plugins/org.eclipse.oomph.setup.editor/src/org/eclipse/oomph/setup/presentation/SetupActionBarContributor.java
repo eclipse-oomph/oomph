@@ -1412,7 +1412,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
   {
     SetupEditor editor = (SetupEditor)getActiveEditor();
     EObject rootObject = editor.getEditingDomain().getResourceSet().getResources().get(0).getContents().get(0);
-    ISelection selection = ((ISelectionProvider)editor).getSelection();
+    ISelection selection = editor.getSelection();
     if (selection instanceof IStructuredSelection)
     {
       IStructuredSelection structuredSelection = (IStructuredSelection)selection;

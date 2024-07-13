@@ -175,18 +175,12 @@ public class SubMonitor implements IProgressMonitorWithBlocking
 
     public void clearBlocked()
     {
-      if (root instanceof IProgressMonitorWithBlocking)
-      {
-        ((IProgressMonitorWithBlocking)root).clearBlocked();
-      }
+      root.clearBlocked();
     }
 
     public void setBlocked(IStatus reason)
     {
-      if (root instanceof IProgressMonitorWithBlocking)
-      {
-        ((IProgressMonitorWithBlocking)root).setBlocked(reason);
-      }
+      root.setBlocked(reason);
     }
 
   }

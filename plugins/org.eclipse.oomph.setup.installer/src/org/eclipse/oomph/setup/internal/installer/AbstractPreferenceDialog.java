@@ -62,7 +62,7 @@ public abstract class AbstractPreferenceDialog extends AbstractSetupDialog imple
     int messageType = IMessageProvider.NONE;
     if (message != null)
     {
-      messageType = ((IMessageProvider)preferencePage).getMessageType();
+      messageType = preferencePage.getMessageType();
     }
 
     if (errorMessage == null)

@@ -195,9 +195,10 @@ public class JUnitDocumentRoot extends MinimalEObjectImpl.Container
    * @see #getTestSuite()
    * @generated
    */
+  @SuppressWarnings("all")
   public void setTestSuite(TestSuite newTestSuite)
   {
-    ((FeatureMap.Internal)getMixed()).set(JUnitPackage.Literals.JUNIT_DOCUMENT_ROOT__TEST_SUITE, newTestSuite);
+    getMixed().set(JUnitPackage.Literals.JUNIT_DOCUMENT_ROOT__TEST_SUITE, newTestSuite);
   }
 
   /**
@@ -239,7 +240,7 @@ public class JUnitDocumentRoot extends MinimalEObjectImpl.Container
    */
   public void setTestSuites(TestSuitesType newTestSuites)
   {
-    ((FeatureMap.Internal)getMixed()).set(JUnitPackage.Literals.JUNIT_DOCUMENT_ROOT__TEST_SUITES, newTestSuites);
+    getMixed().set(JUnitPackage.Literals.JUNIT_DOCUMENT_ROOT__TEST_SUITES, newTestSuites);
   }
 
   /**

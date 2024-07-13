@@ -1408,7 +1408,7 @@ public abstract class PropertyField
         toolTip.append(authenticator.getMessage(IStatus.INFO));
       }
 
-      ((Button)getHelper()).setToolTipText(toolTip.toString());
+      getHelper().setToolTipText(toolTip.toString());
     }
 
     @Override
