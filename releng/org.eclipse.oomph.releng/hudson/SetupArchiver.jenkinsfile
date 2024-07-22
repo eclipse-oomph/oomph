@@ -110,7 +110,7 @@ pipeline {
   }
 
   post {
-    failure {
+    regression {
       mail to: 'ed.merks@gmail.com',
       subject: "[Oomph CI] Build Failure ${currentBuild.fullDisplayName}",
       mimeType: 'text/html',
