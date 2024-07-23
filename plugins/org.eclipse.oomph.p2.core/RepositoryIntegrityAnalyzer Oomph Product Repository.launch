@@ -3,7 +3,7 @@
     <setAttribute key="additional_plugins">
         <setEntry value="com.sun.jna.platform:5.14.0:default:true:default:default"/>
         <setEntry value="com.sun.jna:5.14.0.v20231211-1200:default:true:default:default"/>
-        <setEntry value="org.eclipse.core.net:1.5.400.v20240413-1529:default:true:default:default"/>
+        <setEntry value="org.eclipse.core.net:1.5.500.v20240625-1706:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.event:1.7.100.v20240321-1445:default:true:default:default"/>
         <setEntry value="org.eclipse.osgi.services:3.12.100.v20240327-0645:default:true:default:default"/>
     </setAttribute>
@@ -33,7 +33,7 @@
     <booleanAttribute key="org.eclipse.jdt.launching.ATTR_ATTR_USE_ARGFILE" value="false"/>
     <booleanAttribute key="org.eclipse.jdt.launching.ATTR_SHOW_CODEDETAILS_IN_EXCEPTION_MESSAGES" value="true"/>
     <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_START_ON_FIRST_THREAD" value="true"/>
-    <stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-11"/>
+    <stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-17"/>
     <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-os ${target.os} -ws ${target.ws} -arch ${target.arch} -nl ${target.nl} -consoleLog &#13;&#10;-o ${resource_loc:/org.eclipse.oomph.p2.core}/report/oomph&#13;&#10;https://download.eclipse.org/oomph/products/latest/repository"/>
     <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.pde.ui.workbenchClasspathProvider"/>
     <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dorg.eclipse.emf.ecore.plugin.EcorePlugin.doNotLoadResourcesPlugin=false&#13;&#10;-Duser.home=${system_property:user.home}"/>

@@ -2433,7 +2433,8 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         @Override
         public String getHelpImage()
         {
-          return getImage(URI.createURI("https://git.eclipse.org/c/platform/eclipse.platform.ui.git/plain/bundles/org.eclipse.jface/icons/full/help@2x.png"),
+          return getImage(URI.createURI(
+              "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.images/master/org.eclipse.images/eclipse-svg/org.eclipse.jface/icons/full/help.svg"),
               outputLocation);
         }
 
@@ -2715,22 +2716,22 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
         public String getBinaryImage()
         {
-          return getImage(
-              URI.createURI("https://git.eclipse.org/c/platform/eclipse.platform.ui.git/plain/bundles/org.eclipse.ui.ide/icons/full/etool16/build_exec@2x.png"),
+          return getImage(URI.createURI(
+              "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.images/master/org.eclipse.images/eclipse-svg/org.eclipse.ui.ide/icons/full/etool16/build_exec.svg"),
               outputLocation);
         }
 
         public String getJarImage()
         {
-          return getImage(URI.createURI("https://git.eclipse.org/c/jdt/eclipse.jdt.ui.git/plain/org.eclipse.jdt.ui/icons/full/etool16/exportjar_wiz@2x.png"),
+          return getImage(URI.createURI(
+              "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.images/master/org.eclipse.images/eclipse-svg/org.eclipse.jdt.ui/icons/full/etool16/exportjar_wiz.svg"),
               outputLocation);
         }
 
         public String getPackGZImage()
         {
-          return getImage(
-              URI.createURI(
-                  "https://git.eclipse.org/c/platform/eclipse.platform.ui.git/plain/bundles/org.eclipse.ui.ide/icons/full/etool16/exportzip_wiz@2x.png"),
+          return getImage(URI.createURI(
+              "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.images/master/org.eclipse.images/eclipse-svg/org.eclipse.ui.ide/icons/full/etool16/exportzip_wiz.svg"),
               outputLocation);
         }
 
@@ -2778,56 +2779,63 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         @Override
         public String getLicenseImage()
         {
-          return getImage(URI.createURI("https://git.eclipse.org/c/pde/eclipse.pde.ui.git/plain/ui/org.eclipse.pde.ui/icons/obj16/license_obj@2x.png"),
+          return getImage(URI.createURI(
+              "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.images/master/org.eclipse.images/eclipse-svg/org.eclipse.pde.ui/icons/obj16/license_obj.svg"),
               outputLocation);
         }
 
         @Override
         public String getRepositoryImage()
         {
-          return getImage(
-              URI.createURI("https://git.eclipse.org/c/equinox/rt.equinox.p2.git/plain/bundles/org.eclipse.equinox.p2.ui/icons/obj/metadata_repo_obj@2x.png"),
+          return getImage(URI.createURI(
+              "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.images/master/org.eclipse.images/eclipse-svg/org.eclipse.pde.ui/icons/obj16/metadata_repo_obj.svg"),
               outputLocation);
         }
 
         @Override
         public String getProviderImage()
         {
-          return getImage(URI.createURI("https://git.eclipse.org/c/pde/eclipse.pde.ui.git/plain/ui/org.eclipse.pde/eclipse32.png"), outputLocation);
+          return getImage(URI.createURI(
+              "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.images/master/org.eclipse.images/eclipse-svg/org.eclipse.ant.ui/icons/full/obj16/eclipse_obj.svg"),
+              outputLocation);
         }
 
         @Override
         public String getFeatureImage()
         {
-          return getImage(URI.createURI("https://git.eclipse.org/c/pde/eclipse.pde.ui.git/plain/ui/org.eclipse.pde.ui/icons/obj16/feature_obj@2x.png"),
+          return getImage(URI.createURI(
+              "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.images/master/org.eclipse.images/eclipse-svg/org.eclipse.pde.ui/icons/obj16/feature_obj.svg"),
               outputLocation);
         }
 
         @Override
         public String getProductImage()
         {
-          return getImage(URI.createURI("https://git.eclipse.org/c/pde/eclipse.pde.ui.git/plain/ui/org.eclipse.pde.ui/icons/obj16/product_xml_obj@2x.png"),
+          return getImage(URI.createURI(
+              "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.images/master/org.eclipse.images/eclipse-svg/org.eclipse.pde.ui/icons/obj16/product_xml_obj.svg"),
               outputLocation);
         }
 
         public String getPluginImage()
         {
-          return getImage(URI.createURI("https://git.eclipse.org/c/pde/eclipse.pde.ui.git/plain/ui/org.eclipse.pde.ui/icons/obj16/plugin_obj@2x.png"),
+          return getImage(URI.createURI(
+              "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.images/master/org.eclipse.images/eclipse-svg/org.eclipse.pde.ui/icons/obj16/plugin_obj.svg"),
               outputLocation);
         }
 
         @Override
         public String getBundleImage()
         {
-          return getImage(URI.createURI("https://git.eclipse.org/c/pde/eclipse.pde.ui.git/plain/ui/org.eclipse.pde.ui/icons/obj16/bundle_obj@2x.png"),
+          return getImage(URI.createURI(
+              "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.images/master/org.eclipse.images/eclipse-svg/org.eclipse.pde.ui/icons/obj16/bundle_obj.svg"),
               outputLocation);
         }
 
         @Override
         public String getCategoryImage()
         {
-          return getImage(
-              URI.createURI("https://git.eclipse.org/c/equinox/rt.equinox.p2.git/plain/bundles/org.eclipse.equinox.p2.ui/icons/obj/category_obj@2x.png"),
+          return getImage(URI.createURI(
+              "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.images/master/org.eclipse.images/eclipse-svg/org.eclipse.pde.ui/icons/obj16/category_obj.svg"),
               outputLocation);
         }
 
@@ -3311,7 +3319,8 @@ public class RepositoryIntegrityAnalyzer implements IApplication
       catch (IOException ex)
       {
         System.err.println("###" + ex.getLocalizedMessage());
-        bytes = getImageBytes(URI.createURI("https://git.eclipse.org/c/pde/eclipse.pde.ui.git/plain/ui/org.eclipse.pde.ui/icons/obj16/error_st_obj@2x.png"));
+        bytes = getImageBytes(URI.createURI(
+            "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.images/master/org.eclipse.images/eclipse-svg/org.eclipse.pde.ui/icons/obj16/error_st_obj.svg"));
       }
       finally
       {
@@ -3371,18 +3380,23 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
   private String getOKImage(File cache)
   {
-    return getImage(URI.createURI("https://git.eclipse.org/c/platform/eclipse.platform.ui.git/plain/bundles/org.eclipse.ui/icons/full/obj16/activity@2x.png"),
+    return getImage(URI.createURI(
+        "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.images/master/org.eclipse.images/eclipse-svg/org.eclipse.ui/icons/full/obj16/activity.svg"),
         cache);
   }
 
   private String getErrorImage(File cache)
   {
-    return getImage(URI.createURI("https://git.eclipse.org/c/pde/eclipse.pde.ui.git/plain/ui/org.eclipse.pde.ui/icons/obj16/error_st_obj@2x.png"), cache);
+    return getImage(URI.createURI(
+        "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.images/master/org.eclipse.images/eclipse-svg/org.eclipse.pde.ui/icons/obj16/error_st_obj.svg"),
+        cache);
   }
 
   private String getWarningImage(File cache)
   {
-    return getImage(URI.createURI("https://git.eclipse.org/c/pde/eclipse.pde.ui.git/plain/ui/org.eclipse.pde.ui/icons/obj16/warning_st_obj@2x.png"), cache);
+    return getImage(URI.createURI(
+        "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.images/master/org.eclipse.images/eclipse-svg/org.eclipse.pde.ui/icons/obj16/warning_st_obj.svg"),
+        cache);
   }
 
   private String getImage(String pluginID, String imagePath, File cache)
@@ -4518,7 +4532,8 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     @Override
     public String getHelpImage()
     {
-      return getImage(URI.createURI("https://git.eclipse.org/c/platform/eclipse.platform.ui.git/plain/bundles/org.eclipse.jface/icons/full/help@2x.png"),
+      return getImage(URI.createURI(
+          "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.images/master/org.eclipse.images/eclipse-svg/org.eclipse.jface/icons/full/help.svg"),
           folder);
     }
 
