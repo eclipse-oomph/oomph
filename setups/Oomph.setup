@@ -493,7 +493,7 @@
         </detail>
         <detail
             key="extraUnits">
-          <value>org.eclipse.equinox.executable.feature.group</value>
+          <value>org.eclipse.equinox.executable.feature.group,org.apache.commons.logging_1.2.0</value>
         </detail>
         <detail
             key="singleLocation">
@@ -522,6 +522,10 @@
         <detail
             key="generateImplicitUnits">
           <value>false</value>
+        </detail>
+        <detail
+            key="generateVersions">
+          <value>org.apache.commons.logging</value>
         </detail>
       </annotation>
       <requirement
