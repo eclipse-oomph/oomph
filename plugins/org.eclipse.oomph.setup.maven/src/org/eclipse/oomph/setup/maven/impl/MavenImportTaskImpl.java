@@ -467,15 +467,21 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
 
     try
     {
-      String projectFolder = projectInfo.getPomFile().getParent();
+      File pomFile = projectInfo.getPomFile();
+      String projectFolder = pomFile.getParent();
       BackendContainer backendContainer = (BackendContainer)BackendResource.get(projectFolder);
+      if (isExcluded(sourceLocator, backendContainer))
+      {
+        return;
+      }
 
       EList<ProjectFactory> factories = new BasicEList<>(MavenProjectFactory.LIST);
-      if (!projectInfo.getPomFile().getName().equals(MavenProjectFactory.POM_XML))
+      String pomFileName = pomFile.getName();
+      if (!pomFileName.equals(MavenProjectFactory.POM_XML))
       {
         // Check for alternate pom.xml file names (e.g., .polyglot.pom.tycho)
         DynamicMavenProjectFactory altFactory = ResourcesFactory.eINSTANCE.createDynamicMavenProjectFactory();
-        altFactory.setXMLFileName(projectInfo.getPomFile().getName());
+        altFactory.setXMLFileName(pomFileName);
         altFactory.getExcludedPaths().addAll(factories.get(0).getExcludedPaths());
         factories.add(altFactory);
       }
@@ -522,6 +528,33 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
     {
       monitor.done();
     }
+  }
+
+  private static boolean isExcluded(SourceLocator sourceLocator, BackendContainer backendContainer)
+  {
+    EList<String> excludedPaths = sourceLocator.getExcludedPaths();
+    if (excludedPaths.isEmpty())
+    {
+      return false;
+    }
+
+    String relativePath = backendContainer.getRelativeURI((BackendContainer)BackendResource.get(sourceLocator.getRootFolder())).toString();
+    if (excludedPaths.contains(relativePath))
+    {
+      return true;
+    }
+
+    relativePath += "/"; //$NON-NLS-1$
+
+    for (String excludedPath : excludedPaths)
+    {
+      if (excludedPath.startsWith(relativePath))
+      {
+        return true;
+      }
+    }
+
+    return false;
   }
 
 } // MavenImportTaskImpl

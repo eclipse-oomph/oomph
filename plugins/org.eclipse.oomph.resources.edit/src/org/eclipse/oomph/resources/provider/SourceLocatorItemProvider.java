@@ -18,7 +18,10 @@ import org.eclipse.oomph.resources.SourceLocator;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.provider.AttributeValueWrapperItemProvider;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
@@ -116,8 +119,7 @@ public class SourceLocatorItemProvider extends ModelElementItemProvider
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
-  public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object)
+  public Collection<? extends EStructuralFeature> getChildrenFeaturesGen(Object object)
   {
     if (childrenFeatures == null)
     {
@@ -126,6 +128,33 @@ public class SourceLocatorItemProvider extends ModelElementItemProvider
       childrenFeatures.add(ResourcesPackage.Literals.SOURCE_LOCATOR__PREDICATES);
     }
     return childrenFeatures;
+  }
+
+  @Override
+  public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object)
+  {
+    if (childrenFeatures == null)
+    {
+      super.getChildrenFeatures(object);
+      childrenFeatures.add(0, ResourcesPackage.Literals.SOURCE_LOCATOR__EXCLUDED_PATHS);
+    }
+
+    return childrenFeatures;
+  }
+
+  @Override
+  protected Object createWrapper(EObject object, EStructuralFeature feature, Object value, int index)
+  {
+    return feature == ResourcesPackage.Literals.SOURCE_LOCATOR__EXCLUDED_PATHS
+        ? new AttributeValueWrapperItemProvider(value, object, (EAttribute)feature, index, adapterFactory, getResourceLocator())
+        {
+          @Override
+          public Object getImage(Object object)
+          {
+            return getResourceLocator().getImage("full/obj16/ExcludedPath.png"); //$NON-NLS-1$
+          }
+        }
+        : super.createWrapper(object, feature, value, index);
   }
 
   /**
