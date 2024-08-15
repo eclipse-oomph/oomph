@@ -215,8 +215,7 @@ public class SourceLocatorItemProvider extends ModelElementItemProvider
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
-  public void notifyChanged(Notification notification)
+  public void notifyChangedGen(Notification notification)
   {
     updateChildren(notification);
 
@@ -233,6 +232,19 @@ public class SourceLocatorItemProvider extends ModelElementItemProvider
         return;
     }
     super.notifyChanged(notification);
+  }
+
+  @Override
+  public void notifyChanged(Notification notification)
+  {
+    if (notification.getFeatureID(SourceLocator.class) == ResourcesPackage.SOURCE_LOCATOR__EXCLUDED_PATHS)
+    {
+      fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
+    }
+    else
+    {
+      notifyChangedGen(notification);
+    }
   }
 
   /**
