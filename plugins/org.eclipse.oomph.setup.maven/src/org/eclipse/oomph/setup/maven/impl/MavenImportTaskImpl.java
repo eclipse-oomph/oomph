@@ -544,11 +544,9 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
       return true;
     }
 
-    relativePath += "/"; //$NON-NLS-1$
-
     for (String excludedPath : excludedPaths)
     {
-      if (excludedPath.startsWith(relativePath))
+      if (relativePath.startsWith(excludedPath + "/")) //$NON-NLS-1$
       {
         return true;
       }
