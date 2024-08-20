@@ -135,8 +135,8 @@ public class SourceLocatorItemProvider extends ModelElementItemProvider
   {
     if (childrenFeatures == null)
     {
-      super.getChildrenFeatures(object);
-      childrenFeatures.add(0, ResourcesPackage.Literals.SOURCE_LOCATOR__EXCLUDED_PATHS);
+      getChildrenFeaturesGen(object);
+      childrenFeatures.add(2, ResourcesPackage.Literals.SOURCE_LOCATOR__EXCLUDED_PATHS);
     }
 
     return childrenFeatures;
@@ -239,12 +239,24 @@ public class SourceLocatorItemProvider extends ModelElementItemProvider
   {
     if (notification.getFeatureID(SourceLocator.class) == ResourcesPackage.SOURCE_LOCATOR__EXCLUDED_PATHS)
     {
+      updateChildren(notification);
       fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
     }
     else
     {
       notifyChangedGen(notification);
     }
+  }
+
+  @Override
+  public Object getCreateChildImage(Object owner, Object feature, Object child, Collection<?> selection)
+  {
+    if (feature == ResourcesPackage.Literals.SOURCE_LOCATOR__EXCLUDED_PATHS)
+    {
+      return getResourceLocator().getImage("full/obj16/ExcludedPath.png"); //$NON-NLS-1$
+    }
+
+    return super.getCreateChildImage(owner, feature, child, selection);
   }
 
   /**
@@ -254,8 +266,7 @@ public class SourceLocatorItemProvider extends ModelElementItemProvider
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
-  protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object)
+  protected void collectNewChildDescriptorsGen(Collection<Object> newChildDescriptors, Object object)
   {
     super.collectNewChildDescriptors(newChildDescriptors, object);
 
@@ -290,6 +301,14 @@ public class SourceLocatorItemProvider extends ModelElementItemProvider
     newChildDescriptors.add(createChildParameter(ResourcesPackage.Literals.SOURCE_LOCATOR__PREDICATES, PredicatesFactory.eINSTANCE.createFilePredicate()));
 
     newChildDescriptors.add(createChildParameter(ResourcesPackage.Literals.SOURCE_LOCATOR__PREDICATES, PredicatesFactory.eINSTANCE.createImportedPredicate()));
+  }
+
+  @Override
+  protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object)
+  {
+    newChildDescriptors.add(createChildParameter(ResourcesPackage.Literals.SOURCE_LOCATOR__EXCLUDED_PATHS, "")); //$NON-NLS-1$
+
+    collectNewChildDescriptorsGen(newChildDescriptors, object);
   }
 
 }
