@@ -28,7 +28,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.osgi.service.resolver.VersionRange;
 import org.eclipse.pde.core.IEditableModel;
 import org.eclipse.pde.core.IModel;
 import org.eclipse.pde.core.build.IBuild;
@@ -38,6 +37,8 @@ import org.eclipse.pde.core.plugin.IPluginBase;
 import org.eclipse.pde.core.plugin.IPluginImport;
 import org.eclipse.pde.core.plugin.IPluginModelBase;
 import org.eclipse.pde.core.plugin.PluginRegistry;
+
+import org.osgi.framework.VersionRange;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -128,7 +129,7 @@ public class AddNatureAction extends AbstractAction<IVersionBuilderArguments>
           {
             String importedPluginID = pluginImport.getId();
             String version = pluginImport.getVersion();
-            IPluginModelBase importedPlugin = PluginRegistry.findModel(importedPluginID, new VersionRange(version), null);
+            IPluginModelBase importedPlugin = findModel(importedPluginID, version);
             if (importedPlugin != null)
             {
               IResource childComponentModelFile = importedPlugin.getUnderlyingResource();
@@ -266,6 +267,20 @@ public class AddNatureAction extends AbstractAction<IVersionBuilderArguments>
         IProject project = (IProject)element;
         arguments.applyTo(project);
       }
+    }
+  }
+
+  private static IPluginModelBase findModel(String id, String version)
+  {
+    try
+    {
+      return PluginRegistry.findModel(id, new VersionRange(version));
+    }
+    catch (NoSuchMethodError ex)
+    {
+      @SuppressWarnings("removal")
+      IPluginModelBase result = PluginRegistry.findModel(id, new org.eclipse.osgi.service.resolver.VersionRange(version), null);
+      return result;
     }
   }
 }
