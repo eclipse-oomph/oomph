@@ -1226,6 +1226,18 @@ public class GitIndexApplication implements IApplication
       "https://github.com/eclipse-uprotocol/up-player-cpp", //
       "https://github.com/eclipse-uprotocol/up-recorder-cpp", //
       "https://github.com/eclipse-uprotocol/up-transport-socket", //
+      "https://github.com/eclipse-basyx/basyx-python-framework", //
+      "https://github.com/eclipse-bluechi/bluechi-ppa", //
+      "https://github.com/eclipse-daanse/org.eclipse.daanse.sql", //
+      "https://github.com/eclipse-fa3st/fa3st-registry", //
+      "https://github.com/eclipse-fa3st/fa3st-service", //
+      "https://github.com/eclipse-kuksa/kuksa-perf", //
+      "https://github.com/eclipse-pass/pass-admin-ui", //
+      "https://github.com/eclipse-rap-incubator/org.eclipse.rap.incubator.osgi-packaging", //
+      "https://github.com/eclipse-rap-incubator/org.eclipse.rap.incubator.releng", //
+      "https://github.com/eclipse-tractusx/ssi-dim-wallet-stub", //
+      "https://github.com/eclipse-uprotocol/up-tools", //
+      "https://gitlab.eclipse.org/eclipse/aidge/aidge_backend_arrayfire", //
       ""//
   ));
 
@@ -1250,6 +1262,7 @@ public class GitIndexApplication implements IApplication
       "https://github.com/adoptium/emt4j", //
       "https://github.com/adoptium/installer", //
       "https://github.com/adoptium/jdk", //
+      "https://github.com/adoptium/openj9-systemtest", //
       "https://github.com/adoptium/temurin-build", //
       "https://github.com/deeplearning4j/deeplearning4j", //
       "https://github.com/deeplearning4j/deeplearning4j-examples", //
@@ -1268,7 +1281,6 @@ public class GitIndexApplication implements IApplication
       "https://github.com/eclipse-agail/agile-dbus-java-interface", //
       "https://github.com/eclipse-agail/agile-dummy-protocol", //
       "https://github.com/eclipse-agail/agile-recommender", //
-      "https://github.com/eclipse-aqavit/openj9-systemtest", //
       "https://github.com/eclipse-arrowhead/application-library-java-spring", //
       "https://github.com/eclipse-aspectj/ajdt", //
       "https://github.com/eclipse-aspectj/aspectj", //
@@ -1391,6 +1403,7 @@ public class GitIndexApplication implements IApplication
       "https://github.com/eclipse-ee4j/glassfish-shoal", //
       "https://github.com/eclipse-ee4j/glassfish-spec-version-maven-plugin", //
       "https://github.com/eclipse-ee4j/glassfish-woodstock", //
+      "https://github.com/eclipse-ee4j/glassfish.docker", //
       "https://github.com/eclipse-ee4j/grizzly", //
       "https://github.com/eclipse-ee4j/grizzly-ahc", //
       "https://github.com/eclipse-ee4j/grizzly-memcached", //
@@ -1587,6 +1600,21 @@ public class GitIndexApplication implements IApplication
       "https://github.com/eclipse-platform/eclipse.platform.swt", //
       "https://github.com/eclipse-platform/eclipse.platform.ui", //
       "https://github.com/eclipse-ptp/ptp.photran", //
+      "https://github.com/eclipse-rap-incubator/org.eclipse.rap.incubator.chart", //
+      "https://github.com/eclipse-rap-incubator/org.eclipse.rap.incubator.clientscripting", //
+      "https://github.com/eclipse-rap-incubator/org.eclipse.rap.incubator.cnf", //
+      "https://github.com/eclipse-rap-incubator/org.eclipse.rap.incubator.dropdown", //
+      "https://github.com/eclipse-rap-incubator/org.eclipse.rap.incubator.e4", //
+      "https://github.com/eclipse-rap-incubator/org.eclipse.rap.incubator.e4.compatibility.workbench", //
+      "https://github.com/eclipse-rap-incubator/org.eclipse.rap.incubator.fileupload", //
+      "https://github.com/eclipse-rap-incubator/org.eclipse.rap.incubator.gef", //
+      "https://github.com/eclipse-rap-incubator/org.eclipse.rap.incubator.nebula-grid", //
+      "https://github.com/eclipse-rap-incubator/org.eclipse.rap.incubator.pde", //
+      "https://github.com/eclipse-rap-incubator/org.eclipse.rap.incubator.richtext", //
+      "https://github.com/eclipse-rap-incubator/org.eclipse.rap.incubator.spreadsheet", //
+      "https://github.com/eclipse-rap-incubator/org.eclipse.rap.incubator.tabbed-properties", //
+      "https://github.com/eclipse-rap-incubator/org.eclipse.rap.incubator.themeeditor", //
+      "https://github.com/eclipse-rap-incubator/org.eclipse.rap.incubator.visualization", //
       "https://github.com/eclipse-rap/org.eclipse.rap", //
       "https://github.com/eclipse-rap/org.eclipse.rap.tools", //
       "https://github.com/eclipse-rdf4j/rdf4j", //
@@ -1674,8 +1702,6 @@ public class GitIndexApplication implements IApplication
       "https://github.com/eclipse-virgo/virgo-ide", //
       "https://github.com/eclipse-virgo/virgo-root", //
       "https://github.com/eclipse-webservices/webservices", //
-      "https://github.com/eclipse-webservices/webservices.axis2", //
-      "https://github.com/eclipse-webservices/webservices.jaxws", //
       "https://github.com/eclipse-wildwebdeveloper/wildwebdeveloper", //
       "https://github.com/eclipse-windowbuilder/windowbuilder", //
       "https://github.com/eclipse-wtp-common/webtools.common", //
