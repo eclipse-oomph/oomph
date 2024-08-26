@@ -18,6 +18,7 @@ import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.IdentityCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.command.AddCommand;
@@ -172,7 +173,7 @@ public class AnnotationItemProvider extends ModelElementItemProvider
         return annotation.getSource();
       }
 
-      return annotation.getSource().substring(index + 1);
+      return URI.decode(annotation.getSource().substring(index + 1));
     }
 
     return getString("_UI_Annotation_type"); //$NON-NLS-1$
