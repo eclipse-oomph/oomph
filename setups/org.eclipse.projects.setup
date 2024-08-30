@@ -1363,7 +1363,6 @@
   <project href="interim/Orbit.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-orbit/orbit-simrel/main/OrbitSimRel.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse/packagedrone/master/setups/org.eclipse.packagedrone.oomph/PackageDrone.setup#/"/>
-  <project href="https://git.eclipse.org/c/papyrus/org.eclipse.papyrus.git/plain/releng/org.eclipse.papyrus.oomph/setups/papyrus.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-passage/passage/master/releng/org.eclipse.passage.releng/passage.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-pde/eclipse.pde/master/releng/org.eclipse.pde.setup/PDE.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.releng.aggregator/master/oomph/Platform.setup#/"/>
@@ -1373,7 +1372,6 @@
   <project href="https://git.eclipse.org/c/rmf/org.eclipse.rmf.git/plain/org.eclipse.rmf.releng/oomph/RMF.setup#/"/>
   <project href="https://git.eclipse.org/c/scout/oomph.git/plain/Scout.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-simrel/simrel.build/main/SimRel.setup#/"/>
-  <project href="https://git.eclipse.org/c/skills/org.eclipse.skills.git/plain/releng/org.eclipse.skills.releng/oomph/skills.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse/smarthome/master/targetplatform/EclipseSmartHome.setup#/"/>
   <project href="https://git.eclipse.org/c/swtbot/org.eclipse.swtbot.git/plain/devtools/oomph/SWTBot.setup#/"/>
   <project href="https://git.eclipse.org/c/tea/tea.git/plain/org.eclipse.tea.core_feature/TEA.setup#/"/>
