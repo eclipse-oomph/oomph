@@ -612,7 +612,7 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
   protected Point basicGetInitialSize()
   {
     Point computedSize = super.basicGetInitialSize();
-    computedSize.x = computedSize.x * 21 / 20;
+    computedSize.x = computedSize.x * 23 / 20;
     return computedSize;
   }
 }
