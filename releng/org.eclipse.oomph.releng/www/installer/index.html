@@ -273,11 +273,15 @@
 
       var os = getOS();
       if (os == 'win') {
-        hide('installer-mac'); hide('installer-linux');
+        hide('installer-win-AArch64');
+        hide('installer-mac-x86_64'); hide('installer-linux-x86_64');
+        hide('installer-mac-AArch64'); hide('installer-linux-AArch64');
       } else if (os == 'mac') {
-        hide('installer-win'); hide('installer-linux');
+        hide('installer-win-x86_64'); hide('installer-linux-x86_64');
+        hide('installer-win-AArch64'); hide('installer-linux-AArch64');
       } else if (os == 'linux') {
-        hide('installer-win'); hide('installer-mac');
+        hide('installer-win-x86_64'); hide('installer-mac-x86_64');
+        hide('installer-win-AArch64'); hide('installer-mac-AArch64');
       }
 
       if (url != null) {
@@ -762,9 +766,15 @@ Or as follows in advanced mode:
 If you haven't already installed the Eclipse Installer, you can download it from the following link:
 <br/>
 <br/>
-<a id="installer-win" class="button" href="https://www.eclipse.org/downloads/download.php?file=/oomph/products/eclipse-inst-jre-win64.exe" tooltip="Click to download" target="oomph_mirror">Windows 64 Bit</a>
-<a id="installer-mac" class="button" href="https://www.eclipse.org/downloads/download.php?file=/oomph/products/eclipse-inst-jre-mac64.dmg" tooltip="Click to download" target="oomph_mirror"> Mac OS 64 Bit</a>
-<a id="installer-linux" class="button" href="https://www.eclipse.org/downloads/download.php?file=/oomph/products/eclipse-inst-jre-linux64.tar.gz" tooltip="Click to download" target="oomph_mirror">Linux 64 Bit</a>
+<a id="installer-win-x86_64"  class="button" href="https://www.eclipse.org/downloads/download.php?file=/oomph/products/eclipse-inst-jre-win64.exe"              tooltip="Click to download" target="oomph_mirror">Windows x86_64</a>
+<!-- This one does not currently exist. -->
+<a id="installer-win-AArch64" class="button" href="https://www.eclipse.org/downloads/download.php?file=/oomph/products/eclipse-inst-jre-win64.exe"              tooltip="Click to download" target="oomph_mirror">Windows AArch64</a>
+
+<a id="installer-mac-x86_64"  class="button" href="https://www.eclipse.org/downloads/download.php?file=/oomph/products/eclipse-inst-jre-mac64.dmg"              tooltip="Click to download" target="oomph_mirror">Mac OS x86_64</a>
+<a id="installer-mac-AArch64" class="button" href="https://www.eclipse.org/downloads/download.php?file=/oomph/products/eclipse-inst-jre-mac-aarch64.dmg"        tooltip="Click to download" target="oomph_mirror">Mac OS AArch64</a>
+
+<a id="installer-linux-x86_64"  class="button" href="https://www.eclipse.org/downloads/download.php?file=/oomph/products/eclipse-inst-jre-linux64.tar.gz"       tooltip="Click to download" target="oomph_mirror">Linux x86_64</a>
+<a id="installer-linux-AArch64" class="button" href="https://www.eclipse.org/downloads/download.php?file=/oomph/products/eclipse-inst-jre-linux-aarch64.tar.gz" tooltip="Click to download" target="oomph_mirror">Linux AArch64</a>
 </p>
                 <hr class="clearer"/>
 
