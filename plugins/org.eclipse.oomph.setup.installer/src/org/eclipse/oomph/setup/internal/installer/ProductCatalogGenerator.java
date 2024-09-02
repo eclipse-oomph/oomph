@@ -244,6 +244,8 @@ public class ProductCatalogGenerator implements IApplication
       "https://download.eclipse.org/releases/2022-06/202206151000/plugins/com.google.inject.assistedinject_3.0.0.v201402270930.jar", //
   });
 
+  private static final String BIRT_ALL_IN_ONE_PRODUCT_ID = "org.eclipse.birt.report.designer.all";
+
   private URI outputLocation;
 
   private String stagingTrain;
@@ -391,7 +393,108 @@ public class ProductCatalogGenerator implements IApplication
     ICONS.put("rust", ICON_URL_PREFIX + "corrosion.png");
 
     generate();
+
+    generateBIRT();
+
     return null;
+  }
+
+  private void generateBIRT() throws Exception
+  {
+    Product product = SetupFactory.eINSTANCE.createProduct();
+    product.setName("birt");
+    product.setLabel("Eclipse BIRT Report Designer All-In-One");
+    product.setDescription("This package provides all the tools needed to build high-quality reports quickly and easily.");
+
+    BaseUtil.setAnnotation(product, AnnotationConstants.ANNOTATION_BRANDING_INFO, AnnotationConstants.KEY_IMAGE_URI,
+        "https://raw.githubusercontent.com/eclipse-birt/birt/master/core/org.eclipse.birt.branding/images/p48.png");
+    BaseUtil.setAnnotation(product, AnnotationConstants.ANNOTATION_BRANDING_INFO, AnnotationConstants.KEY_NOTIFICATION_TOOLTIP,
+        "Sponsor the " + product.getLabel());
+    BaseUtil.setAnnotation(product, AnnotationConstants.ANNOTATION_BRANDING_INFO, AnnotationConstants.KEY_SITE_URI,
+        "https://eclipse-birt.github.io/birt-website/");
+
+    for (String type : List.of("Release", "Milestone", "Nightly"))
+    {
+      IMetadataRepository latestRepository = loadLatestRepository(manager,
+          URI.createURI("https://download.eclipse.org/birt/updates/" + type.toLowerCase() + "/latest"), true);
+      Version javaVersion = getRequiredJavaVersion(latestRepository, "tooling" + BIRT_ALL_IN_ONE_PRODUCT_ID);
+
+      System.out.println("Loaded " + latestRepository.getLocation() + " -> " + javaVersion);
+      for (IInstallableUnit iu : P2Util
+          .asIterable(latestRepository.query(QueryUtil.createLatestQuery(QueryUtil.createIUQuery(BIRT_ALL_IN_ONE_PRODUCT_ID)), null)))
+      {
+        Set<String> rootInstallIUs = new TreeSet<>();
+        Set<String> unresolvedRequirements = new TreeSet<>();
+        for (IRequirement requirement : iu.getRequirements())
+        {
+          if (requirement instanceof IRequiredCapability)
+          {
+            IRequiredCapability capability = (IRequiredCapability)requirement;
+            IMatchExpression<IInstallableUnit> filter = capability.getFilter();
+            if (filter != null)
+            {
+              String value = RequirementImpl.formatMatchExpression(filter);
+              if (value.contains("org.eclipse.equinox.p2.install.mode.root=true"))
+              {
+                String name = capability.getName();
+                if (!name.startsWith("org.eclipse.justj.") && !name.equals("org.eclipse.oomph.setup.feature.group") && !"JavaSE".equals(name))
+                {
+                  Set<IInstallableUnit> resolved = latestRepository.query(QueryUtil.createLatestQuery(QueryUtil.createIUQuery(name)), null).toSet();
+                  if (resolved.isEmpty())
+                  {
+                    unresolvedRequirements.add(name);
+                  }
+                  else
+                  {
+                    rootInstallIUs.add(name);
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        for (String unresolvedRequirement : unresolvedRequirements)
+        {
+          System.err.println("   <feature id=\"" + unresolvedRequirement + "\"/>");
+        }
+
+        Version productIUVersion = iu.getVersion();
+
+        ProductVersion productVersion = SetupFactory.eINSTANCE.createProductVersion();
+        productVersion.setName(type.toLowerCase());
+        productVersion.setLabel(type + " (" + productIUVersion.getSegment(0) + '.' + productIUVersion.getSegment(1) + ')');
+        productVersion.setRequiredJavaVersion(javaVersion == null ? "21" : javaVersion.toString().replaceAll("\\.0", ""));
+
+        BaseUtil.setAnnotation(productVersion, AnnotationConstants.ANNOTATION_BRANDING_INFO, AnnotationConstants.SHORTCUT,
+            product.getLabel().replaceAll(" \\(.+\\)", "").replace("/", " and ") + " - " + productVersion.getLabel().replaceAll(" \\(.+\\)", ""));
+
+        product.getVersions().add(productVersion);
+
+        P2Task p2Task = SetupP2Factory.eINSTANCE.createP2Task();
+        p2Task.setLabel("BIRT - " + productVersion.getLabel());
+        productVersion.getSetupTasks().add(p2Task);
+
+        EList<Requirement> requirements = p2Task.getRequirements();
+        requirements.add(P2Factory.eINSTANCE.createRequirement(iu.getId()));
+
+        for (String rootInstallIU : rootInstallIUs)
+        {
+          requirements.add(P2Factory.eINSTANCE.createRequirement(rootInstallIU));
+        }
+
+        EList<Repository> repositories = p2Task.getRepositories();
+        repositories.add(P2Factory.eINSTANCE.createRepository(latestRepository.getLocation().toString()));
+
+        break;
+      }
+    }
+
+    URI birtProductURI = outputLocation.trimSegments(1).appendSegment("org.eclipse.birt.product.setup");
+
+    Resource birtProductResource = new BaseResourceFactoryImpl().createResource(birtProductURI);
+    birtProductResource.getContents().add(product);
+    birtProductResource.save(Collections.singletonMap(Resource.OPTION_SAVE_ONLY_IF_CHANGED, Resource.OPTION_SAVE_ONLY_IF_CHANGED_MEMORY_BUFFER));
   }
 
   private void updateCertificates()
@@ -576,9 +679,9 @@ public class ProductCatalogGenerator implements IApplication
 
       productCatalog.getSetupTasks().addAll(createOomphP2Task(null));
 
-      emfRepositoryLocation = trimEmptyTrailingSegment(
-          URI.createURI(loadLatestRepository(manager, null, URI.createURI("https://download.eclipse.org/modeling/emf/emf/builds/release/latest"), true)
-              .getLocation().toString())).toString();
+      emfRepositoryLocation = trimEmptyTrailingSegment(URI.createURI(
+          loadLatestRepository(manager, URI.createURI("https://download.eclipse.org/modeling/emf/emf/builds/release/latest"), true).getLocation().toString()))
+              .toString();
 
       RepositoryLoader repositoryLoader = new RepositoryLoader(this);
       repositoryLoader.perform("staging");
@@ -986,7 +1089,7 @@ public class ProductCatalogGenerator implements IApplication
 
     URI effectiveReleaseURI = isFake ? URI.createURI(RELEASES + "/" + getMostRecentRealTrain()) : releaseURI;
 
-    IMetadataRepository releaseMetaDataRepository = loadLatestRepository(manager, originalEPPURI, isStaging ? stagingTrainLocation : effectiveReleaseURI,
+    IMetadataRepository releaseMetaDataRepository = loadLatestRepository(manager, isStaging ? stagingTrainLocation : effectiveReleaseURI,
         !(compositeTrains.contains(train) || isStaging && stagingUseComposite));
     if (!isFake)
     {
@@ -1144,7 +1247,7 @@ public class ProductCatalogGenerator implements IApplication
     StringBuilder log = new StringBuilder();
     URI eclipsePlatformSite = getEclipsePlatformSite(train);
     log.append(eclipsePlatformSite + " -> ");
-    IMetadataRepository repository = loadLatestRepository(manager, null, eclipsePlatformSite, true);
+    IMetadataRepository repository = loadLatestRepository(manager, eclipsePlatformSite, true);
     log.append(repository.getLocation() + "\n");
 
     Map<String, Set<IInstallableUnit>> versionIUs = new TreeMap<>();
@@ -1344,7 +1447,7 @@ public class ProductCatalogGenerator implements IApplication
     return result;
   }
 
-  private IMetadataRepository loadLatestRepository(IMetadataRepositoryManager manager, URI eppURI, URI releaseURI, boolean loadLatestChild)
+  private IMetadataRepository loadLatestRepository(IMetadataRepositoryManager manager, URI releaseURI, boolean loadLatestChild)
       throws URISyntaxException, ProvisionException
   {
     IMetadataRepository releaseMetaDataRepository = manager.loadRepository(new java.net.URI(uriConverter.normalize(releaseURI).toString()), null);

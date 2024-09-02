@@ -16,6 +16,7 @@
   <setupTask
       xsi:type="setup:InstallationTask"
       id="installation"/>
+  <product href="org.eclipse.birt.product.setup#/"/>
   <product href="org.eclipse.all.product.setup#/"/>
   <product href="org.eclipse.platform.sdk.product.setup#/"/>
   <product href="https://raw.githubusercontent.com/eclipse-cdo/cdo/master/plugins/org.eclipse.emf.cdo.server.product/CDOServer.setup#/"/>
