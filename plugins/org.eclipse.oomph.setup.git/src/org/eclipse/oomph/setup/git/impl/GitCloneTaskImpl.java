@@ -1664,10 +1664,9 @@ public class GitCloneTaskImpl extends SetupTaskImpl implements GitCloneTask
     }
   }
 
-  @Deprecated
   private static final Ref findRef(Repository repository, String name) throws IOException
   {
-    return repository.getRefDatabase().getRef(name);
+    return repository.getRefDatabase().findRef(name);
   }
 
   private static boolean hasReflog(Git git) throws Exception
