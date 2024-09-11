@@ -35,8 +35,6 @@
               <arg>-warn:-restriction</arg>
             </compilerArgs>
             <useProjectSettings>true</useProjectSettings>
-            <source>1.3</source>
-            <target>1.1</target>
           </configuration>
         </plugin>
       </plugins>
