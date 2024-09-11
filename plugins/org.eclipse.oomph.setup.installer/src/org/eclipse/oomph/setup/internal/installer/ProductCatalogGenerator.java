@@ -415,8 +415,8 @@ public class ProductCatalogGenerator implements IApplication
 
     for (String type : List.of("Release", "Milestone", "Nightly"))
     {
-      IMetadataRepository latestRepository = loadLatestRepository(manager,
-          URI.createURI("https://download.eclipse.org/birt/updates/" + type.toLowerCase() + "/latest"), true);
+      URI repositoryLocation = URI.createURI("https://download.eclipse.org/birt/updates/" + type.toLowerCase() + "/latest");
+      IMetadataRepository latestRepository = loadLatestRepository(manager, repositoryLocation, true);
       Version javaVersion = getRequiredJavaVersion(latestRepository, "tooling" + BIRT_ALL_IN_ONE_PRODUCT_ID);
 
       System.out.println("Loaded " + latestRepository.getLocation() + " -> " + javaVersion);
@@ -484,7 +484,7 @@ public class ProductCatalogGenerator implements IApplication
         }
 
         EList<Repository> repositories = p2Task.getRepositories();
-        repositories.add(P2Factory.eINSTANCE.createRepository(latestRepository.getLocation().toString()));
+        repositories.add(P2Factory.eINSTANCE.createRepository(repositoryLocation.toString()));
 
         break;
       }
@@ -561,7 +561,7 @@ public class ProductCatalogGenerator implements IApplication
   {
     return new String[] { "juno", "kepler", "luna", "mars", "neon", "oxygen", "photon", "2018-09", "2018-12", "2019-03", "2019-06", "2019-09", "2019-12",
         "2020-03", "2020-06", "2020-09", "2020-12", "2021-03", "2021-06", "2021-09", "2021-12", "2022-03", "2022-06", "2022-09", "2022-12", "2023-03",
-        "2023-06", "2023-09", "2023-12", "2024-03", "2024-06", "2024-09" };
+        "2023-06", "2023-09", "2023-12", "2024-03", "2024-06", "2024-09", "2024-12" };
   }
 
   private String getStagingTrain()

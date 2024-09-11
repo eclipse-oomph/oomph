@@ -11,7 +11,7 @@
       source="http://www.eclipse.org/oomph/setup/BrandingInfo">
     <detail
         key="notificationURI">
-      <value>https://www.eclipse.org/setups/sponsor/?scope=${scope}&amp;campaign=2024-06</value>
+      <value>https://www.eclipse.org/setups/sponsor/?scope=${scope}&amp;campaign=2024-09</value>
     </detail>
     <detail
         key="notificationLabel">
@@ -52,7 +52,7 @@
       value="3g"
       vm="true"/>
   <version name="latest"
-      label="Latest (4.33 - 2024-09)"
+      label="Latest (4.34 - 2024-12)"
       requiredJavaVersion="21">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
@@ -67,25 +67,25 @@
     </annotation>
     <setupTask
         xsi:type="setup.p2:P2Task"
-        label="Eclipse SDK (4.33 - 2024-09)">
+        label="Eclipse SDK (4.34 - 2024-12)">
       <requirement
           name="org.eclipse.sdk.ide"
-          versionRange="[4.33.0,5.0.0)"
+          versionRange="[4.34.0,5.0.0)"
           filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=aarch64)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=ppc64le)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
       <repository
-          url="https://download.eclipse.org/eclipse/updates/4.33-I-builds"/>
+          url="https://download.eclipse.org/eclipse/updates/4.34-I-builds"/>
       <repository
           url="https://download.eclipse.org/oomph/updates/latest"/>
     </setupTask>
   </version>
   <version name="latest.released"
-      label="Latest Release (4.32 - 2024-06)"
+      label="Latest Release (4.33 - 2024-09)"
       requiredJavaVersion="21">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://archive.eclipse.org/eclipse/downloads/drops4/R-4.32-202406010610/</value>
+        <value>https://download.eclipse.org/eclipse/downloads/</value>
       </detail>
       <detail
           key="shortcut">
@@ -94,13 +94,40 @@
     </annotation>
     <setupTask
         xsi:type="setup.p2:P2Task"
-        label="Eclipse SDK (4.32 - 2024-06)">
+        label="Eclipse SDK (4.33 - 2024-09)">
       <requirement
           name="org.eclipse.sdk.ide"
-          versionRange="[4.32.0,5.0.0)"
+          versionRange="[4.33.0,5.0.0)"
           filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=aarch64)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=ppc64le)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
       <repository
-          url="https://download.eclipse.org/eclipse/updates/4.32/R-4.32-202406010610"/>
+          url="https://download.eclipse.org/eclipse/updates/4.33/R-4.33-202409030240"/>
+    </setupTask>
+  </version>
+  <version name="4.34"
+      label="4.34 - 2024-12"
+      requiredJavaVersion="21">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="siteURI">
+        <value>https://download.eclipse.org/eclipse/downloads/</value>
+      </detail>
+      <detail
+          key="shortcut">
+        <value>Eclipse SDK - 4.34 - 2024-12</value>
+      </detail>
+    </annotation>
+    <setupTask
+        xsi:type="setup.p2:P2Task"
+        label="Eclipse SDK (4.34 - 2024-12)">
+      <requirement
+          name="org.eclipse.sdk.ide"
+          versionRange="[4.34.0,5.0.0)"
+          filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=aarch64)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=ppc64le)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
+      <repository
+          url="https://download.eclipse.org/eclipse/updates/4.34-I-builds"/>
+      <repository
+          url="https://download.eclipse.org/oomph/updates/latest"/>
     </setupTask>
   </version>
   <version name="4.33"
@@ -108,6 +135,10 @@
       requiredJavaVersion="21">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="status">
+        <value>current</value>
+      </detail>
       <detail
           key="siteURI">
         <value>https://download.eclipse.org/eclipse/downloads/</value>
@@ -125,9 +156,7 @@
           versionRange="[4.33.0,5.0.0)"
           filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=aarch64)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=ppc64le)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
       <repository
-          url="https://download.eclipse.org/eclipse/updates/4.33-I-builds"/>
-      <repository
-          url="https://download.eclipse.org/oomph/updates/latest"/>
+          url="https://download.eclipse.org/eclipse/updates/4.33/R-4.33-202409030240"/>
     </setupTask>
   </version>
   <version name="4.32"
@@ -137,7 +166,7 @@
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="status">
-        <value>current</value>
+        <value>outdated</value>
       </detail>
       <detail
           key="siteURI">

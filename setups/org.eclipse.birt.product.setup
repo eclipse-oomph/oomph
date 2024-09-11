@@ -138,7 +138,7 @@
       <requirement
           name="org.eclipse.wst.xml_userdoc.feature.feature.group"/>
       <repository
-          url="https://download.eclipse.org/birt/updates/milestone/S202409020535"/>
+          url="https://download.eclipse.org/birt/updates/milestone/latest"/>
     </setupTask>
   </version>
   <version name="nightly"
@@ -257,7 +257,7 @@
       <requirement
           name="org.eclipse.wst.xml_userdoc.feature.feature.group"/>
       <repository
-          url="https://download.eclipse.org/birt/updates/nightly/N202409012109"/>
+          url="https://download.eclipse.org/birt/updates/nightly/latest"/>
     </setupTask>
   </version>
   <description>This package provides all the tools needed to build high-quality reports quickly and easily.</description>
