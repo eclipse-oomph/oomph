@@ -704,7 +704,7 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
                               org.eclipse.pde.internal.core.target.IUBundleContainer iuBundleContainer = (org.eclipse.pde.internal.core.target.IUBundleContainer)targetLocation;
 
                               // Create a repository for each repository of that container.
-                              java.net.URI[] repositories = iuBundleContainer.getRepositories();
+                              List<java.net.URI> repositories = getRepositories(iuBundleContainer);
                               for (java.net.URI repo : repositories)
                               {
                                 URI repoURI = URI.createURI(repo.toString());
@@ -1156,6 +1156,20 @@ public class TargletTaskItemProvider extends SetupTaskItemProvider
   public ResourceLocator getResourceLocator()
   {
     return SetupTargletsEditPlugin.INSTANCE;
+  }
+
+  @SuppressWarnings("restriction")
+  private static List<java.net.URI> getRepositories(org.eclipse.pde.internal.core.target.IUBundleContainer iuBundleContainer)
+  {
+    try
+    {
+      return iuBundleContainer.getRepositories();
+    }
+    catch (NoSuchMethodError ex)
+    {
+      java.net.URI[] repositories = ReflectUtil.invokeMethod("getRepositories", iuBundleContainer); //$NON-NLS-1$
+      return Arrays.asList(repositories);
+    }
   }
 
   /**

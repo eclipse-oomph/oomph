@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.8"?>
-<target name="Generated from Oomph" sequenceNumber="146">
+<target name="Generated from Oomph" sequenceNumber="147">
   <locations>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
       <unit id="org.apache.commons.logging" version="1.2.0"/>
@@ -29,7 +29,7 @@
       <repository location="https://download.eclipse.org/justj/jres/17/updates/milestone/latest"/>
       <repository location="https://download.eclipse.org/usssdk/updates/latest"/>
       <repository location="https://download.eclipse.org/webtools/downloads/drops/R3.34.0/S-3.34RC1-20240527184929/repository"/>
-      <repository location="https://download.eclipse.org/eclipse/updates/4.33-I-builds"/>
+      <repository location="https://download.eclipse.org/eclipse/updates/4.34-I-builds"/>
     </location>
   </locations>
 </target>

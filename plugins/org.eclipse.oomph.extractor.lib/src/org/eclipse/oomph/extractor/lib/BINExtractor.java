@@ -31,6 +31,7 @@ import java.util.Vector;
 /**
  * @author Eike Stepper
  */
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public final class BINExtractor extends IO
 {
   private static final String NL = System.getProperty("line.separator"); //$NON-NLS-1$

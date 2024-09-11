@@ -566,7 +566,8 @@ public class ProductCatalogGenerator implements IApplication
 
   private String getStagingTrain()
   {
-    return "2024-09";
+    String[] trains = getTrains();
+    return trains[fakeNextRelease ? trains.length - 2 : trains.length - 1];
   }
 
   private String getCorrespondingTrain(String train)
@@ -828,16 +829,15 @@ public class ProductCatalogGenerator implements IApplication
 
   private void savePGPKeys() throws IOException
   {
-    if (!fakeNextRelease)
+    try
     {
-      try
-      {
-        getPGPKeys(new java.net.URI("https://download.eclipse.org/staging/" + getMostRecentTrain()));
-      }
-      catch (Exception ex)
-      {
-        ex.printStackTrace();
-      }
+      getPGPKeys(new java.net.URI("https://download.eclipse.org/staging/" + getMostRecentRealTrain()));
+      // This has keys that currently are not on the train.
+      getPGPKeys(new java.net.URI("https://download.eclipse.org/wildwebdeveloper/releases/latest"));
+    }
+    catch (Exception ex)
+    {
+      ex.printStackTrace();
     }
 
     for (PGPPublicKey key : new ArrayList<>(pgpKeys.values()))
