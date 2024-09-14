@@ -493,7 +493,7 @@
         </detail>
         <detail
             key="extraUnits">
-          <value>org.eclipse.equinox.executable.feature.group,org.apache.commons.logging_1.2.0</value>
+          <value>org.eclipse.equinox.executable.feature.group,org.apache.commons.logging_1.2.0,org.apache.commons.collections_3.2.2</value>
         </detail>
         <detail
             key="singleLocation">
@@ -525,7 +525,7 @@
         </detail>
         <detail
             key="generateVersions">
-          <value>org.apache.commons.logging</value>
+          <value>org.apache.commons.logging|org.apache.commons.collections</value>
         </detail>
       </annotation>
       <requirement
@@ -574,7 +574,7 @@
         <repository
             url="https://download.eclipse.org/usssdk/updates/latest"/>
         <repository
-            url="https://download.eclipse.org/webtools/downloads/drops/R3.34.0/S-3.34RC1-20240527184929/repository"/>
+            url="https://download.eclipse.org/webtools/downloads/drops/R3.35.0/R-3.35.0-20240825085431/repository"/>
       </repositoryList>
       <repositoryList
           name="2024-09">

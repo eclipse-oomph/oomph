@@ -258,6 +258,26 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     }
   };
 
+  private static final Comparator<IProvidedCapability> PROVIDED_CAPABILITY_COMPARATOR = new Comparator<IProvidedCapability>()
+  {
+    private final Comparator<String> comparator = CommonPlugin.INSTANCE.getComparator();
+
+    @Override
+    public int compare(IProvidedCapability o1, IProvidedCapability o2)
+    {
+      int result = comparator.compare(o1.getNamespace(), o2.getNamespace());
+      if (result == 0)
+      {
+        result = comparator.compare(o1.getName(), o2.getName());
+        if (result == 0)
+        {
+          result = o1.getVersion().compareTo(o2.getVersion());
+        }
+      }
+      return result;
+    }
+  };
+
   private final Map<String, Report.LicenseDetail> details = new LinkedHashMap<>();
 
   private final Map<URI, Report> reports = new LinkedHashMap<>();
@@ -279,6 +299,8 @@ public class RepositoryIntegrityAnalyzer implements IApplication
   private boolean verbose;
 
   private boolean aggregator;
+
+  private boolean packages;
 
   @Override
   public Object start(IApplicationContext context) throws Exception
@@ -323,6 +345,10 @@ public class RepositoryIntegrityAnalyzer implements IApplication
           else if ("-aggregator".equals(option) || "-a".equals(option))
           {
             aggregator = true;
+          }
+          else if ("-packages".equals(option))
+          {
+            packages = true;
           }
           else if ("-test".equals(option) || "-t".equals(option))
           {
@@ -1096,6 +1122,41 @@ public class RepositoryIntegrityAnalyzer implements IApplication
               }
             }
           }
+
+          Set<IProvidedCapability> splitPackages = report.getSplitPackages();
+          Set<IProvidedCapability> inconsistentJarSignatures = report.getInconsistentJarSignatures();
+          for (IProvidedCapability splitPackage : splitPackages)
+          {
+            TestCaseType testCase = createTestCase(testSuite, "validSplitPackages_" + splitPackage.getName() + "_" + splitPackage.getVersion());
+            if (inconsistentJarSignatures.contains(splitPackage))
+            {
+              Set<IInstallableUnit> installableUnits = report.getInstallableUnits(splitPackage);
+              StringBuilder message = new StringBuilder();
+              for (IInstallableUnit iu : installableUnits)
+              {
+                if (message.length() != 0)
+                {
+                  message.append('\n');
+                }
+
+                message.append(iu);
+
+                for (List<Certificate> certificateChain : report.getCertificates(iu))
+                {
+                  String indent = "";
+                  for (Certificate certificate : certificateChain)
+                  {
+                    indent += "  ";
+                    message.append('\n').append(indent).append(report.getCertificateComponents(certificate));
+                  }
+                }
+              }
+
+              addFailure(testCase,
+                  "The package '" + splitPackage.getName() + " " + splitPackage.getVersion() + "' is jar-signed differently by the containing IUs",
+                  message.toString());
+            }
+          }
         }
         else
         {
@@ -1383,6 +1444,8 @@ public class RepositoryIntegrityAnalyzer implements IApplication
       final Map<List<String>, IRequirement> requiredCapabilities = new HashMap<>();
       Map<IRequirement, Future<Set<IInstallableUnit>>> futures = new HashMap<>();
       Map<IRequirement, Set<IInstallableUnit>> requiringIUs = new HashMap<>();
+      Map<IProvidedCapability, Set<IInstallableUnit>> providedPackageCapabilities = new TreeMap<>(PROVIDED_CAPABILITY_COMPARATOR);
+      Set<IInstallableUnit> fragments = new HashSet<>();
       for (IInstallableUnit iu : allIUs)
       {
         for (final IRequirement requirement : iu.getRequirements())
@@ -1407,9 +1470,62 @@ public class RepositoryIntegrityAnalyzer implements IApplication
               @Override
               public Set<IInstallableUnit> call() throws Exception
               {
-                return query(metadataRepository, QueryUtil.createMatchQuery(requirement.getMatches()));
+                return query(metadataRepository, QueryUtil.createMatchQuery(match));
               }
             }));
+          }
+        }
+
+        if (packages && !iu.getId().startsWith("a.jre"))
+        {
+          for (IProvidedCapability providedCapability : iu.getProvidedCapabilities())
+          {
+            String namespace = providedCapability.getNamespace();
+            if ("java.package".equals(namespace))
+            {
+              providedPackageCapabilities.computeIfAbsent(providedCapability, key -> new TreeSet<>()).add(iu);
+            }
+            else if ("osgi.fragment".equals(namespace))
+            {
+              fragments.add(iu);
+            }
+          }
+        }
+      }
+
+      // Check for split package and especially for split signing.
+      Set<IProvidedCapability> splitPackages = new LinkedHashSet<IProvidedCapability>();
+      Set<IProvidedCapability> inconsistentJarSignatures = new LinkedHashSet<IProvidedCapability>();
+      for (Map.Entry<IProvidedCapability, Set<IInstallableUnit>> entry : providedPackageCapabilities.entrySet())
+      {
+        IProvidedCapability key = entry.getKey();
+        ArrayList<IInstallableUnit> ius = new ArrayList<>(entry.getValue());
+        ius.removeAll(fragments);
+        if (ius.size() > 1)
+        {
+          splitPackages.add(key);
+
+          Set<Set<List<Certificate>>> signers = new HashSet<>();
+          for (IInstallableUnit iu : ius)
+          {
+            for (Future<SignedContent> signedContentFuture : signedContentCache.get(iu).values())
+            {
+              Set<List<Certificate>> chains = new LinkedHashSet<List<Certificate>>();
+              SignedContent signedContent = get(signedContentFuture);
+              for (SignerInfo signerInfo : signedContent.getSignerInfos())
+              {
+                Certificate[] certificateChain = signerInfo.getCertificateChain();
+                List<Certificate> certificateList = Arrays.asList(certificateChain);
+                chains.add(certificateList);
+              }
+
+              signers.add(chains);
+            }
+          }
+
+          if (signers.size() > 1)
+          {
+            inconsistentJarSignatures.add(key);
           }
         }
       }
@@ -1864,6 +1980,12 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         }
 
         @Override
+        public boolean isReportingPackages()
+        {
+          return packages;
+        }
+
+        @Override
         public Map<String, String> getCertificateComponents(Certificate certificate)
         {
           SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy'-'MM'-'dd");
@@ -2044,6 +2166,12 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         }
 
         @Override
+        public String getID(List<Certificate> certificateChain)
+        {
+          return Integer.toString(new ArrayList<>(getCertificates().keySet()).indexOf(certificateChain) + 1);
+        }
+
+        @Override
         public Map<List<Certificate>, Map<String, IInstallableUnit>> getInvalidSignatures()
         {
           getCertificates();
@@ -2173,6 +2301,12 @@ public class RepositoryIntegrityAnalyzer implements IApplication
           }
 
           return pgpKeys;
+        }
+
+        @Override
+        public String getID(PGPPublicKey key)
+        {
+          return Integer.toString(new ArrayList<>(getPGPKeys().keySet()).indexOf(key) + 1);
         }
 
         @Override
@@ -2445,6 +2579,14 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         }
 
         @Override
+        public String getSignerImage()
+        {
+          return getImage(URI.createURI(
+              "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.images/master/org.eclipse.images/eclipse-svg/org.eclipse.ui.workbench.texteditor/icons/full/elcl16/edit_template.svg"),
+              outputLocation);
+        }
+
+        @Override
         public Report getParent()
         {
           return parentReport;
@@ -2671,6 +2813,30 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         }
 
         @Override
+        public Set<IProvidedCapability> getAllPackages()
+        {
+          return providedPackageCapabilities.keySet();
+        }
+
+        @Override
+        public Set<IProvidedCapability> getSplitPackages()
+        {
+          return splitPackages;
+        }
+
+        @Override
+        public Set<IProvidedCapability> getInconsistentJarSignatures()
+        {
+          return inconsistentJarSignatures;
+        }
+
+        @Override
+        public Set<IInstallableUnit> getInstallableUnits(IProvidedCapability providedCapability)
+        {
+          return providedPackageCapabilities.get(providedCapability);
+        }
+
+        @Override
         public Set<IInstallableUnit> getResolvedRequirements(IInstallableUnit iu)
         {
           Set<IInstallableUnit> result = new TreeSet<>();
@@ -2828,6 +2994,14 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         {
           return getImage(URI.createURI(
               "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.images/master/org.eclipse.images/eclipse-svg/org.eclipse.pde.ui/icons/obj16/bundle_obj.svg"),
+              outputLocation);
+        }
+
+        @Override
+        public String getPackageImage()
+        {
+          return getImage(URI.createURI(
+              "https://raw.githubusercontent.com/eclipse-platform/eclipse.platform.images/master/org.eclipse.images/eclipse-svg/org.eclipse.jdt.ui/icons/full/obj16/package_obj.svg"),
               outputLocation);
         }
 
@@ -3343,7 +3517,8 @@ public class RepositoryIntegrityAnalyzer implements IApplication
       try
       {
         byte[] imageBytes = getImageBytes(imageURI);
-        key = IOUtil.encodeFileName(XMLTypeFactory.eINSTANCE.convertBase64Binary(IOUtil.getSHA1(new ByteArrayInputStream(imageBytes))).replace('=', '_'));
+        key = IOUtil
+            .encodeFileName(XMLTypeFactory.eINSTANCE.convertBase64Binary(IOUtil.getSHA1(new ByteArrayInputStream(imageBytes))).replaceAll("[=+/]", "_"));
         result = images.get(key);
         if (result == null)
         {
@@ -4275,19 +4450,29 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
     public abstract String getBundleImage();
 
+    public abstract String getPackageImage();
+
+    public abstract String getSignerImage();
+
     public abstract Map<String, String> getCertificateComponents(Certificate certificate);
 
     public abstract boolean isExpired(Certificate certificate);
 
+    public abstract boolean isReportingPackages();
+
     public abstract Map<List<Certificate>, Map<String, IInstallableUnit>> getInvalidSignatures();
 
     public abstract Map<List<Certificate>, Map<String, IInstallableUnit>> getCertificates();
+
+    public abstract String getID(List<Certificate> certificateChain);
 
     public abstract String getUID(PGPPublicKey key);
 
     public abstract String getKeyServerURL(PGPPublicKey key);
 
     public abstract Map<PGPPublicKey, Map<String, IInstallableUnit>> getPGPKeys();
+
+    public abstract String getID(PGPPublicKey key);
 
     public abstract Set<List<Certificate>> getCertificates(IInstallableUnit iu);
 
@@ -4361,11 +4546,24 @@ public class RepositoryIntegrityAnalyzer implements IApplication
       return name;
     }
 
+    public String getVersion(IProvidedCapability providedCapability)
+    {
+      return providedCapability.getVersion().toString();
+    }
+
     public abstract Map<String, List<String>> getBundles();
 
     public abstract boolean isDuplicationExpected(String id);
 
     public abstract Set<IInstallableUnit> getAllIUs();
+
+    public abstract Set<IProvidedCapability> getAllPackages();
+
+    public abstract Set<IProvidedCapability> getSplitPackages();
+
+    public abstract Set<IProvidedCapability> getInconsistentJarSignatures();
+
+    public abstract Set<IInstallableUnit> getInstallableUnits(IProvidedCapability providedCapability);
 
     public Set<IInstallableUnit> getSortedByName(Collection<? extends IInstallableUnit> ius)
     {
@@ -4429,6 +4627,11 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     public String getIUID(IInstallableUnit iu)
     {
       return RepositoryIntegrityAnalyzer.getIUID(iu);
+    }
+
+    public String getProvidedCapabilityID(IProvidedCapability providedCapability)
+    {
+      return RepositoryIntegrityAnalyzer.getProvidedCapabilityID(providedCapability);
     }
 
     public String getFolderID(String folder)

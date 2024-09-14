@@ -173,16 +173,16 @@ span:target {
 <%-[Script]-%>
     <script>
 
-      function match(id) {
-        var filter = document.querySelector('input[name="filter"]:checked');
-        var currentFilter = 'iu-li';
+      function match(filterId, id, filterClass) {
+        var filter = document.querySelector('input[name="' + filterId + '"]:checked');
+        var currentFilter = filterClass;
         if (filter != null && filter.value != 'all') {
           currentFilter = filter.value;
         }
         var e = document.getElementById(id);
         var message = document.getElementById(id + '-error');
         var matchText = e.value;
-        var ius = document.getElementsByClassName('iu-li');
+        var ius = document.getElementsByClassName(filterClass);
         var targets = document.getElementsByClassName(currentFilter);
         var targetsArray = [].slice.call(targets);
         var count = 0;
@@ -205,15 +205,15 @@ span:target {
           }
         }
         if (count == 0 && message.innerHTML == '') {
-            message.innerHTML = 'No matches';
+            message.innerHTML = ' No matches';
         }
       }
 
-      function filterIU(className) {
+      function filterIU(className, filterClass) {
         var e = document.getElementById('subset');
         var matchText = e.value;
         var count = 0;
-        var ius = document.getElementsByClassName('iu-li');
+        var ius = document.getElementsByClassName(filterClass);
         var targets = document.getElementsByClassName(className);
         var targetsArray = [].slice.call(targets);
         for (var i = 0; i < ius.length; i++) {
@@ -236,7 +236,7 @@ span:target {
         }
         var message = document.getElementById('subset-error');
         if (count == 0) {
-            message.innerHTML = 'No matches';
+            message.innerHTML = ' No matches';
         } else {
             message.innerHTML = '';
         }
@@ -327,6 +327,15 @@ span:target {
         }
       }
 
+      function expand_only(id) {
+        var e = document.getElementById(id);
+        var f = document.getElementById(id+"_arrows");
+        if (e.style.display == 'none'){
+          e.style.display = 'block';
+          f.innerHTML = '&#x25E2;';
+        }
+      }
+
       function expand_collapse_inline(id) {
         var e = document.getElementById(id);
         var f = document.getElementById(id+"_arrows");
@@ -339,6 +348,17 @@ span:target {
           e.style.display = 'none';
           if (f !=null) {
             f.innerHTML = '&#x25B7;';
+          }
+        }
+      }
+
+      function expand_only_inline(id) {
+        var e = document.getElementById(id);
+        var f = document.getElementById(id+"_arrows");
+        if (e.style.display == 'none'){
+          e.style.display = 'inline';
+          if (f != null) {
+            f.innerHTML = '&#x25E2;';
           }
         }
       }
@@ -661,7 +681,7 @@ span:target {
   <%List<Report> children = report.getChildren();
     if (!children.isEmpty()) {%>
            <p>
-      <%if (!report.isRoot()) {%>
+    <%if (!report.isRoot()) {%>
              This is a composite update site.
     <%}%>
              In addition to this composite report, reports are also generated for each of the composed children listed in the navigation bar to the left.
@@ -796,6 +816,10 @@ span:target {
              <div class="font-smaller" style="margin-left: <%=2%>em; text-indent: -4em;">
                <button id="<%=id%>_arrows" class="orange bb" style="margin-left: 1em;" onclick="expand_collapse('<%=id%>');">&#x25B7;</button>
                <img alt="Signed" class="fit-image" src="<%=report.getSignedImage(true)%>"/>
+      <%if (report.isReportingPackages()) {%>
+               <img class="fit-image" src="<%=report.getSignerImage()%>"/>
+               <span id="pgp_<%=report.getID(pgpPublicKey)%>" class="signer-id"><%=report.getID(pgpPublicKey)%>&#x1F511;</span>
+      <%}%>
                <span class="text-nowrap"><a href="<%=report.getKeyServerURL(pgpPublicKey)%>" target="keyserver">0x<%=fingerPrint%></a> <%=uid%></span>
                <span style="color: DarkCyan; font-size: 110%;">(<%=entry.getValue().size()%>)</span>
              </div>
@@ -879,6 +903,10 @@ span:target {
                <img alt="Signed" class="fit-image" src="<%=report.getSignedImage(true)%>"/>
           <%if (count == 1) {%>
                <span style="color: DarkCyan; font-size: 110%;">(<%=entry.getValue().size()%>)</span>
+            <%if (report.isReportingPackages()) {%>
+               <img class="fit-image" src="<%=report.getSignerImage()%>"/>
+               <span id="cert_<%=report.getID(certificates)%>" class="signer-id"><%=report.getID(certificates)%>&#x1F512;</span>
+            <%}%>
           <%}%>
           <%for (Map.Entry<String, String> component : components.entrySet()) {
               String key = component.getKey();
@@ -1126,7 +1154,7 @@ span:target {
         }
       }%>
            <h3 style="font-weight: bold;">
-           <button id="ius_arrows" class="orange bb" onclick="expand_collapse('ius'); match('subset');">&#x25B7;</button>
+           <button id="ius_arrows" class="orange bb" onclick="expand_collapse('ius'); match('filter', 'subset', 'iu-li');">&#x25B7;</button>
            <img class="fit-image" src="<%=report.getBundleImage()%>"/>
            Installable Units
            <span style="color: DarkCyan;"><%=ius.size()%></span>
@@ -1135,24 +1163,24 @@ span:target {
     <%}%>
            </h3>
            <div id="ius" style="display:none;">
-             <span style="margin-left: 1em;" class="nowrap">Filter Pattern: <input id="subset" type="text" oninput="match('subset');"> <span style="color: firebrick;" id="subset-error"></span></input></span><br/>
+             <span style="margin-left: 1em;" class="nowrap">Filter Pattern: <input id="subset" type="text" oninput="match('filter', 'subset', 'iu-li');"> <span style="color: firebrick;" id="subset-error"></span></input></span><br/>
     <%if (duplicateCount > 0 || !unsignedIUs.isEmpty() || !badProviderIUs.isEmpty() || !badLicenseIUs.isEmpty() || !brokenBrandingIUs.isEmpty()) {%>
              <span style="margin-left: 1em;">
-               <input id="filter" type="radio" name="filter" value="all" class="filter" onclick="filterIU('iu-li');" checked="checked"> All </input>
+               <input id="filter" type="radio" name="filter" value="all" class="filter" onclick="filterIU('iu-li', 'iu-li');" checked="checked"> All </input>
       <%if (!badLicenseIUs.isEmpty()) {%>
-               <input id="bad-license" type="radio" name="filter" value="bad-license" class="filter" onclick="filterIU('bad-license');"> Bad License </input>
+               <input id="bad-license" type="radio" name="filter" value="bad-license" class="filter" onclick="filterIU('bad-license', 'iu-li');"> Bad License </input>
       <%}%>
       <%if (!unsignedIUs.isEmpty()) {%>
-               <input id="unsigned" type="radio" name="filter" value="unsigned" class="filter" onclick="filterIU('unsigned');"> Unsigned </input>
+               <input id="unsigned" type="radio" name="filter" value="unsigned" class="filter" onclick="filterIU('unsigned', 'iu-li');"> Unsigned </input>
       <%}%>
       <%if (!badProviderIUs.isEmpty()) {%>
-               <input id="bad-provider" type="radio" name="filter" value="bad-provider" class="filter" onclick="filterIU('bad-provider');"> Bad Provider </input>
+               <input id="bad-provider" type="radio" name="filter" value="bad-provider" class="filter" onclick="filterIU('bad-provider', 'iu-li');"> Bad Provider </input>
       <%}%>
       <%if (!brokenBrandingIUs.isEmpty()) {%>
-               <input id="broken-branding" type="radio" name="filter" value="broken-branding" class="filter" onclick="filterIU('broken-branding');"> Broken Branding </input>
+               <input id="broken-branding" type="radio" name="filter" value="broken-branding" class="filter" onclick="filterIU('broken-branding', 'iu-li');"> Broken Branding </input>
       <%}%>
       <%if (duplicateCount > 0) {%>
-               <input id="duplicates" type="radio" name="filter" value="duplicate" class="filter" onclick="filterIU('duplicate');"> Duplicates </input>
+               <input id="duplicates" type="radio" name="filter" value="duplicate" class="filter" onclick="filterIU('duplicate', 'iu-li');"> Duplicates </input>
       <%}%>
              </span>
     <%}%>
@@ -1213,9 +1241,95 @@ span:target {
     <%}%>
              </ul>
            </div>
-           <div style="height: 40ex;">
+  <%}%>
+<%-[Packages]-%>
+  <%Collection<IProvidedCapability> packages = report.getAllPackages();
+    if (!packages.isEmpty()) {
+      Set<IProvidedCapability> splitPackages = report.getSplitPackages();
+      Set<IProvidedCapability> inconsistentJarSignatures = report.getInconsistentJarSignatures();%>
+           <h3 style="font-weight: bold;">
+           <button id="packages_arrows" class="orange bb" onclick="expand_collapse('packages'); match('filter-package', 'package-subset', 'package-li'); expand_collapse_inline('packages_all_arrows');">&#x25B7;</button>
+           <img class="fit-image" src="<%=report.getPackageImage()%>"/>
+           Java Packages
+           <span style="color: DarkCyan;"><%=packages.size()%></span>
+    <%if (splitPackages.size() > 0) {%>
+           <span style="color: DarkCyan; font-size: 60%;"> (<%=splitPackages.size()%> Split)</span>
+    <%}%>
+    <%if (inconsistentJarSignatures.size() > 0) {%>
+           <span style="color: FireBrick; font-size: 60%;"> (<%=inconsistentJarSignatures.size()%> Inconsistent Signatures)</span>
+    <%}%>
+    <%{
+        StringBuilder onClick = new StringBuilder();
+        for (int i = 1, size = packages.size(); i <= size; ++i) {
+          String id = "nested_package_providers" + i;
+          onClick.append("expand2('packages_all_arrows', '").append(id).append("');");
+        }%>
+           <button id="packages_all_arrows" title="Expand All" class="orange bb" style="display: none;" onclick="toggle('packages_all_arrows');<%=onClick%>">&#x25B7;</button>
+    <%}%>
+           </h3>
+           <div id="packages" style="display:none;">
+             <span style="margin-left: 1em;" class="nowrap">Filter Pattern: <input id="package-subset" type="text" oninput="match('filter-package', 'package-subset', 'package-li');"> <span style="color: firebrick;" id="package-subset-error"></span></input></span><br/>
+    <%if (splitPackages.size() > 0) {%>
+             <span style="margin-left: 1em;">
+               <input id="filter-package" type="radio" name="filter-package" value="all" class="filter" onclick="filterIU('package-li', 'package-li');" checked="checked"> All </input>
+               <input id="split-package" type="radio" name="filter-package" value="split-package" class="filter" onclick="filterIU('split-package', 'package-li');"> Split Packages </input>
+      <%if (!inconsistentJarSignatures.isEmpty()) {%>
+               <input id="inconsistent-signatures" type="radio" name="filter-package" value="inconsistent-signatures" class="filter" onclick="filterIU('inconsistent-signatures', 'package-li');"> Inconsistent Signatures </input>
+      <%}%>
+             </span>
+    <%}%>
+             <ul style="list-style-type: none; padding: 0; margin-left: 1em;">
+    <%int count = 0;
+      for (IProvidedCapability providedPackage : packages) {
+        String providedCapabilityID = providedPackage.getName();
+        String id = report.getProvidedCapabilityID(providedPackage);
+        String versionStyle = "";
+        StringBuilder classNames = new StringBuilder();
+        if (splitPackages.contains(providedPackage)) {
+          classNames.append(" split-package");
+        }
+        if (inconsistentJarSignatures.contains(providedPackage)) {
+          classNames.append(" inconsistent-signatures");
+        }
+        String buttonId = "nested_package_providers" + ++count;
+        //%>
+               <li id="_iu_<%=id%>" class="package-li<%=classNames%> font-smaller">
+                 <button id="<%=buttonId%>_arrows" class="orange bb" onclick="expand_collapse('<%=buttonId%>');">&#x25B7;</button>
+                 <img class="fit-image" src="<%=report.getPackageImage()%>"/>
+                 <span style="font-size:100%;"><%=providedCapabilityID%></span>
+                 <span style="color: DarkOliveGreen;<%=versionStyle%>"><%=report.getVersion(providedPackage)%></span>
+                 <ul id="<%=buttonId%>" style="display:none; margin-left: -2em; list-style-type: none;">
+      <%for (IInstallableUnit iu : report.getInstallableUnits(providedPackage)) {%>
+                   <li>
+                     <a href="<%=report.getRelativeIUReportURL(iu)%>">
+                       <img class="fit-image" src="<%=report.getIUImage(iu)%>"/>
+                       <span style="font-size:100%;"><%=iu.getId()%></span>
+                       <span style="color: DarkOliveGreen;<%=versionStyle%>"><%=report.getVersion(iu)%></span>
+                     </a>
+        <%Set<List<Certificate>> certificates = report.getCertificates(iu);
+          Set<PGPPublicKey> iuPGPKeys = report.getPGPKeys(iu);
+          if (!certificates.isEmpty() || !iuPGPKeys.isEmpty()) {%>
+                     (
+          <%for (PGPPublicKey key : iuPGPKeys) {
+              String keyID = report.getID(key);%>
+                     <a href="#pgp_<%=keyID%>" onclick="expand_only('pgpKeys'); expand_only_inline('pgpKeys_all_arrows');"><%=keyID%>&#x1F511;</a>
+          <%}%>
+          <%for (List<Certificate> certificateChain : certificates) {
+              String certID = report.getID(certificateChain);%>
+                     <a href="#cert_<%=certID%>" onclick="expand_only('certificates'); expand_only_inline('certificates_all_arrows');"><%=certID%>&#x1F512;</a>
+          <%}%>
+                     )
+        <%}%>
+                   </li>
+      <%}%>
+                 </ul>
+               </li>
+    <%}%>
+             </ul>
            </div>
   <%}%>
+           <div style="height: 20ex;">
+           </div>
 <%}%>
         </div>
       </div>
