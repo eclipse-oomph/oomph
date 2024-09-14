@@ -1499,6 +1499,9 @@ public class RepositoryIntegrityAnalyzer implements IApplication
       for (Map.Entry<IProvidedCapability, Set<IInstallableUnit>> entry : providedPackageCapabilities.entrySet())
       {
         IProvidedCapability key = entry.getKey();
+        String namespace = key.getNamespace();
+        String name = key.getName();
+        Version version = key.getVersion();
         ArrayList<IInstallableUnit> ius = new ArrayList<>(entry.getValue());
         ius.removeAll(fragments);
         if (ius.size() > 1)
@@ -1506,8 +1509,21 @@ public class RepositoryIntegrityAnalyzer implements IApplication
           splitPackages.add(key);
 
           Set<Set<List<Certificate>>> signers = new HashSet<>();
-          for (IInstallableUnit iu : ius)
+          LOOP: for (IInstallableUnit iu : ius)
           {
+            for (IRequirement requirement : iu.getRequirements())
+            {
+              if (requirement instanceof IRequiredCapability)
+              {
+                IRequiredCapability requiredCapability = (IRequiredCapability)requirement;
+                if (namespace.equals(requiredCapability.getNamespace()) && name.equals(requiredCapability.getName())
+                    && requiredCapability.getRange().isIncluded(version))
+                {
+                  continue LOOP;
+                }
+              }
+            }
+
             for (Future<SignedContent> signedContentFuture : signedContentCache.get(iu).values())
             {
               Set<List<Certificate>> chains = new LinkedHashSet<List<Certificate>>();
