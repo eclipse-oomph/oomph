@@ -233,6 +233,7 @@ $html = <<<EOHTML
     </p>
     <hr>
 
+	<!--
     <div id="java-21" style="display: $display_java_21;">
     <h2>
 	<span class="orange" style="font-size: 250%; margin-right: 0.5em; margin-top: 0.5ex; position: absolute; $animation_style">&#x26A0;</span>
@@ -330,6 +331,7 @@ C:\Program Files\Java\jdk-21.0.3+9\bin</pre>
     </div>
     <hr>
     </div>
+	-->
 
     <h3><b>What Can <span class="orange">I</span> Do to Support the <span style="color: #2c2255;">Eclipse</span> <span class="orange">Community</span>?</b></h3>
     <a href="$sponsor_link" target="_blank">
