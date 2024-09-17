@@ -22,8 +22,127 @@
       <value>https://eclipse-birt.github.io/birt-website/</value>
     </detail>
   </annotation>
+  <version name="release"
+      label="Release (4.17)"
+      requiredJavaVersion="21">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="shortcut">
+        <value>Eclipse BIRT Report Designer All-In-One - Release</value>
+      </detail>
+    </annotation>
+    <setupTask
+        xsi:type="setup.p2:P2Task"
+        label="BIRT - Release (4.17)">
+      <requirement
+          name="org.eclipse.birt.report.designer.all"/>
+      <requirement
+          name="org.eclipse.birt.chart.cshelp.feature.group"/>
+      <requirement
+          name="org.eclipse.birt.chart.feature.group"/>
+      <requirement
+          name="org.eclipse.birt.chart.osgi.runtime.feature.group"/>
+      <requirement
+          name="org.eclipse.birt.cshelp.feature.group"/>
+      <requirement
+          name="org.eclipse.birt.doc.feature.group"/>
+      <requirement
+          name="org.eclipse.birt.example.feature.group"/>
+      <requirement
+          name="org.eclipse.birt.feature.group"/>
+      <requirement
+          name="org.eclipse.birt.report.designer.editor.xml.wtp.feature.group"/>
+      <requirement
+          name="org.eclipse.datatools.common.doc.user.feature.group"/>
+      <requirement
+          name="org.eclipse.datatools.connectivity.doc.user.feature.group"/>
+      <requirement
+          name="org.eclipse.datatools.connectivity.feature.feature.group"/>
+      <requirement
+          name="org.eclipse.datatools.connectivity.oda.designer.core.feature.feature.group"/>
+      <requirement
+          name="org.eclipse.datatools.connectivity.oda.designer.feature.feature.group"/>
+      <requirement
+          name="org.eclipse.datatools.connectivity.oda.feature.feature.group"/>
+      <requirement
+          name="org.eclipse.datatools.doc.user.feature.group"/>
+      <requirement
+          name="org.eclipse.datatools.enablement.apache.derby.feature.feature.group"/>
+      <requirement
+          name="org.eclipse.datatools.enablement.feature.feature.group"/>
+      <requirement
+          name="org.eclipse.datatools.enablement.hsqldb.feature.feature.group"/>
+      <requirement
+          name="org.eclipse.datatools.enablement.ibm.feature.feature.group"/>
+      <requirement
+          name="org.eclipse.datatools.enablement.ingres.feature.feature.group"/>
+      <requirement
+          name="org.eclipse.datatools.enablement.jdbc.feature.feature.group"/>
+      <requirement
+          name="org.eclipse.datatools.enablement.jdt.feature.feature.group"/>
+      <requirement
+          name="org.eclipse.datatools.enablement.msft.feature.feature.group"/>
+      <requirement
+          name="org.eclipse.datatools.enablement.mysql.feature.feature.group"/>
+      <requirement
+          name="org.eclipse.datatools.enablement.oda.designer.feature.feature.group"/>
+      <requirement
+          name="org.eclipse.datatools.enablement.oda.feature.feature.group"/>
+      <requirement
+          name="org.eclipse.datatools.enablement.oracle.feature.feature.group"/>
+      <requirement
+          name="org.eclipse.datatools.enablement.postgresql.feature.feature.group"/>
+      <requirement
+          name="org.eclipse.datatools.enablement.sap.feature.feature.group"/>
+      <requirement
+          name="org.eclipse.datatools.enablement.sqlite.feature.feature.group"/>
+      <requirement
+          name="org.eclipse.datatools.enablement.sybase.feature.feature.group"/>
+      <requirement
+          name="org.eclipse.datatools.intro.feature.group"/>
+      <requirement
+          name="org.eclipse.datatools.modelbase.feature.feature.group"/>
+      <requirement
+          name="org.eclipse.datatools.sqldevtools.data.feature.feature.group"/>
+      <requirement
+          name="org.eclipse.datatools.sqldevtools.ddl.feature.feature.group"/>
+      <requirement
+          name="org.eclipse.datatools.sqldevtools.ddlgen.feature.feature.group"/>
+      <requirement
+          name="org.eclipse.datatools.sqldevtools.feature.feature.group"/>
+      <requirement
+          name="org.eclipse.datatools.sqldevtools.parsers.feature.feature.group"/>
+      <requirement
+          name="org.eclipse.datatools.sqldevtools.results.feature.feature.group"/>
+      <requirement
+          name="org.eclipse.datatools.sqldevtools.schemaobjecteditor.feature.feature.group"/>
+      <requirement
+          name="org.eclipse.datatools.sqldevtools.sqlbuilder.feature.feature.group"/>
+      <requirement
+          name="org.eclipse.datatools.sqltools.doc.user.feature.group"/>
+      <requirement
+          name="org.eclipse.jdt.feature.group"/>
+      <requirement
+          name="org.eclipse.pde.feature.group"/>
+      <requirement
+          name="org.eclipse.platform.feature.group"/>
+      <requirement
+          name="org.eclipse.wst.common_core.feature.feature.group"/>
+      <requirement
+          name="org.eclipse.wst.common_ui.feature.feature.group"/>
+      <requirement
+          name="org.eclipse.wst.xml_core.feature.feature.group"/>
+      <requirement
+          name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+      <requirement
+          name="org.eclipse.wst.xml_userdoc.feature.feature.group"/>
+      <repository
+          url="https://download.eclipse.org/birt/updates/release/latest"/>
+    </setupTask>
+  </version>
   <version name="milestone"
-      label="Milestone (4.17)"
+      label="Milestone (4.18)"
       requiredJavaVersion="21">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
@@ -34,7 +153,7 @@
     </annotation>
     <setupTask
         xsi:type="setup.p2:P2Task"
-        label="BIRT - Milestone (4.17)">
+        label="BIRT - Milestone (4.18)">
       <requirement
           name="org.eclipse.birt.report.designer.all"/>
       <requirement
@@ -142,7 +261,7 @@
     </setupTask>
   </version>
   <version name="nightly"
-      label="Nightly (4.17)"
+      label="Nightly (4.18)"
       requiredJavaVersion="21">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
@@ -153,7 +272,7 @@
     </annotation>
     <setupTask
         xsi:type="setup.p2:P2Task"
-        label="BIRT - Nightly (4.17)">
+        label="BIRT - Nightly (4.18)">
       <requirement
           name="org.eclipse.birt.report.designer.all"/>
       <requirement
