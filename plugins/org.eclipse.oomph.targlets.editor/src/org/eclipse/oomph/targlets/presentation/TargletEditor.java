@@ -17,6 +17,7 @@ import org.eclipse.oomph.internal.ui.OomphTransferDelegate;
 import org.eclipse.oomph.p2.provider.P2ItemProviderAdapterFactory;
 import org.eclipse.oomph.predicates.provider.PredicatesItemProviderAdapterFactory;
 import org.eclipse.oomph.resources.provider.ResourcesItemProviderAdapterFactory;
+import org.eclipse.oomph.targlets.TargletContainer;
 import org.eclipse.oomph.targlets.core.ITargletContainerListener;
 import org.eclipse.oomph.targlets.core.TargletContainerEvent;
 import org.eclipse.oomph.targlets.core.TargletContainerEvent.IDChangedEvent;
@@ -539,8 +540,8 @@ public class TargletEditor extends MultiPageEditorPart
     @Override
     public void targetDefinitionActivated(ITargetDefinition oldTargetDefinition, ITargetDefinition newTargetDefinition) throws Exception
     {
-      EObject rootObject = editingDomain.getResourceSet().getResources().get(0).getContents().get(0);
-      if (rootObject instanceof org.eclipse.oomph.targlets.TargletContainer)
+      TargletContainer targletContainer = getTargletContainer();
+      if (targletContainer != null)
       {
         UIUtil.asyncExec(new Runnable()
         {
@@ -559,10 +560,10 @@ public class TargletEditor extends MultiPageEditorPart
     @Override
     public void handleTargletContainerEvent(TargletContainerEvent event, IProgressMonitor monitor) throws Exception
     {
-      EObject rootObject = editingDomain.getResourceSet().getResources().get(0).getContents().get(0);
-      if (rootObject instanceof org.eclipse.oomph.targlets.TargletContainer)
+      TargletContainer targletContainer = getTargletContainer();
+      if (targletContainer != null)
       {
-        String id = ((org.eclipse.oomph.targlets.TargletContainer)rootObject).getID();
+        String id = targletContainer.getID();
 
         if (event instanceof IDChangedEvent)
         {
@@ -1273,10 +1274,32 @@ public class TargletEditor extends MultiPageEditorPart
     {
       return FindAndReplaceTarget.getAdapter(key, this, TargletEditorPlugin.getPlugin());
     }
+    else if (key.equals(org.eclipse.oomph.targlets.TargletContainer.class))
+    {
+      return key.cast(getTargletContainer());
+    }
     else
     {
       return super.getAdapter(key);
     }
+  }
+
+  public org.eclipse.oomph.targlets.TargletContainer getTargletContainer()
+  {
+    try
+    {
+      EObject rootObject = editingDomain.getResourceSet().getResources().get(0).getContents().get(0);
+      if (rootObject instanceof org.eclipse.oomph.targlets.TargletContainer)
+      {
+        return (org.eclipse.oomph.targlets.TargletContainer)rootObject;
+      }
+    }
+    catch (NullPointerException ex)
+    {
+      //$FALL-THROUGH$
+    }
+
+    return null;
   }
 
   /**
