@@ -208,6 +208,8 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
   private static final String EXPERT_MODE_KEY = "expertMode"; //$NON-NLS-1$
 
+  private static final String SHOW_VERSIONS_KEY = "showVersions"; //$NON-NLS-1$
+
   private static final String CATEGORIZE_ITEMS_KEY = "categorizeItems"; //$NON-NLS-1$
 
   private static final String VERSION_SEGMENT_KEY = "versionSegment"; //$NON-NLS-1$
@@ -266,6 +268,8 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
 
   private boolean expertMode;
 
+  private boolean showVersions;
+
   private boolean categorizeItems;
 
   private boolean compatibleVersion;
@@ -289,6 +293,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     }
 
     expertMode = SETTINGS.getBoolean(EXPERT_MODE_KEY);
+    showVersions = SETTINGS.getBoolean(SHOW_VERSIONS_KEY);
 
     String value = SETTINGS.get(CATEGORIZE_ITEMS_KEY);
     if (value == null || value.length() == 0)
@@ -904,6 +909,22 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
         expertMode = isChecked();
         SETTINGS.put(EXPERT_MODE_KEY, expertMode);
         updateMode();
+      }
+    });
+
+    toolbarManager.add(new Action(Messages.RepositoryExplorer_action_showVersions, IAction.AS_CHECK_BOX)
+    {
+      {
+        setImageDescriptor(P2UIPlugin.INSTANCE.getImageDescriptor("tool16/show_versions.png")); //$NON-NLS-1$
+        setChecked(showVersions);
+      }
+
+      @Override
+      public void run()
+      {
+        showVersions = isChecked();
+        SETTINGS.put(SHOW_VERSIONS_KEY, showVersions);
+        itemsViewer.refresh();
       }
     });
 
@@ -2830,7 +2851,38 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
             }
           }
 
-          return new StyledString(text);
+          StyledString styledString = new StyledString(text);
+
+          if (showVersions && item instanceof VersionedItem)
+          {
+            VersionedItem versionedItem = (VersionedItem)item;
+
+            Map<Version, Set<IMatchExpression<IInstallableUnit>>> versionsMap = versionedItem.getVersions();
+            if (versionsMap != null && !versionsMap.isEmpty())
+            {
+              List<Version> versionsList = new ArrayList<>(versionsMap.keySet());
+              versionsList.sort(Comparator.reverseOrder());
+
+              boolean first = true;
+
+              for (Version version : versionsList)
+              {
+                if (first)
+                {
+                  styledString.append("   "); //$NON-NLS-1$
+                  first = false;
+                }
+                else
+                {
+                  styledString.append(",  "); //$NON-NLS-1$
+                }
+
+                styledString.append(version.toString(), StyledString.DECORATIONS_STYLER);
+              }
+            }
+          }
+
+          return styledString;
         }
 
         @Override

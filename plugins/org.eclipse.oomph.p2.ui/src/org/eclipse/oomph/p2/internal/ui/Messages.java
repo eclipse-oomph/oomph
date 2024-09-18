@@ -297,6 +297,8 @@ public class Messages extends NLS
 
   public static String RepositoryExplorer_action_expertMode;
 
+  public static String RepositoryExplorer_action_showVersions;
+
   public static String RepositoryExplorer_iu_more;
 
   public static String RepositoryExplorer_action_copy;
