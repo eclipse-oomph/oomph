@@ -13,6 +13,8 @@ package org.eclipse.oomph.p2.internal.ui;
 import org.eclipse.oomph.internal.ui.GeneralDragAdapter;
 import org.eclipse.oomph.internal.ui.OomphTransferDelegate;
 import org.eclipse.oomph.p2.P2Factory;
+import org.eclipse.oomph.p2.Repository;
+import org.eclipse.oomph.p2.RepositoryType;
 import org.eclipse.oomph.p2.core.Agent;
 import org.eclipse.oomph.p2.core.AgentManager;
 import org.eclipse.oomph.p2.core.AgentManagerElement;
@@ -830,25 +832,17 @@ public class AgentManagerComposite extends Composite
         List<Object> result = new ArrayList<>();
         for (Object object : ((IStructuredSelection)selection).toArray())
         {
-          if (object instanceof AgentAnalyzer.AnalyzedProfile)
+          if (object instanceof BundlePool)
           {
-            AgentAnalyzer.AnalyzedProfile analyzedProfile = (AnalyzedProfile)object;
-            object = analyzedProfile.getP2Profile();
+            addRepository((BundlePool)object, RepositoryType.ARTIFACT, result);
           }
-
-          if (object instanceof Profile)
+          else if (object instanceof Profile)
           {
-            Profile profile = (Profile)object;
-            File location = profile.getLocation();
-            if (location != null)
-            {
-              result.add(P2Factory.eINSTANCE.createRepository(URI.createFileURI(location.toString()).toString()));
-            }
+            addRepository((Profile)object, RepositoryType.METADATA, result);
           }
           else if (object instanceof AgentAnalyzer.AnalyzedProfile)
           {
-            AgentAnalyzer.AnalyzedProfile analyzedProfile = (AnalyzedProfile)object;
-            analyzedProfile.getP2Profile();
+            addRepository(((AnalyzedProfile)object).getP2Profile(), RepositoryType.METADATA, result);
           }
           else if (object instanceof AgentAnalyzer.AnalyzedArtifact)
           {
@@ -864,6 +858,17 @@ public class AgentManagerComposite extends Composite
         }
 
         return result;
+      }
+
+      private void addRepository(AgentManagerElement element, RepositoryType repositoryType, List<Object> result)
+      {
+        File location = element.getLocation();
+        if (location != null)
+        {
+          Repository repository = P2Factory.eINSTANCE.createRepository(URI.createFileURI(location.toString()).toString());
+          repository.setType(repositoryType);
+          result.add(repository);
+        }
       }
     }, DND_DELEGATES));
   }
