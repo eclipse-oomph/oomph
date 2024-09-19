@@ -21,7 +21,7 @@ Eike Stepper - initial API and implementation
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <tycho.scmUrl>scm:git:https://github.com/eclipse-oomph/oomph.incubator.git</tycho.scmUrl>
-    <tycho-version>4.0.8</tycho-version>
+    <tycho-version>4.0.9</tycho-version>
     <jarsigner-version>1.5.0</jarsigner-version>
     <os-jvm-flags/>
   </properties>
