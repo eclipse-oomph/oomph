@@ -79,7 +79,8 @@ public interface SourceLocator extends ModelElement
    * <!-- end-user-doc -->
    * @return the value of the '<em>Excluded Paths</em>' attribute list.
    * @see org.eclipse.oomph.resources.ResourcesPackage#getSourceLocator_ExcludedPaths()
-   * @model extendedMetaData="name='excludedPath'"
+   * @model unique="false"
+   *        extendedMetaData="name='excludedPath'"
    * @generated
    */
   EList<String> getExcludedPaths();

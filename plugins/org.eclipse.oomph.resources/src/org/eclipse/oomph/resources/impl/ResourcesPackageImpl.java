@@ -539,7 +539,7 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
     initEAttribute(getSourceLocator_RootFolder(), ecorePackage.getEString(), "rootFolder", null, 1, 1, SourceLocator.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getSourceLocator_ExcludedPaths(), ecorePackage.getEString(), "excludedPaths", null, 0, -1, SourceLocator.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
-        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getSourceLocator_ProjectFactories(), getProjectFactory(), null, "projectFactories", null, 0, -1, SourceLocator.class, !IS_TRANSIENT, //$NON-NLS-1$
         !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getSourceLocator_Predicates(), thePredicatesPackage.getPredicate(), null, "predicates", null, 0, -1, SourceLocator.class, !IS_TRANSIENT, //$NON-NLS-1$

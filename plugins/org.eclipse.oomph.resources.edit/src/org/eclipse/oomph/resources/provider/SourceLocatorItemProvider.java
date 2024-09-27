@@ -16,14 +16,19 @@ import org.eclipse.oomph.resources.ResourcesFactory;
 import org.eclipse.oomph.resources.ResourcesPackage;
 import org.eclipse.oomph.resources.SourceLocator;
 
+import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.command.CommandParameter;
+import org.eclipse.emf.edit.command.CreateChildCommand;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.AttributeValueWrapperItemProvider;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.IWrapperItemProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
@@ -311,4 +316,28 @@ public class SourceLocatorItemProvider extends ModelElementItemProvider
     collectNewChildDescriptorsGen(newChildDescriptors, object);
   }
 
+  @Override
+  public Command createCommand(Object object, EditingDomain domain, Class<? extends Command> commandClass, CommandParameter commandParameter)
+  {
+    if (commandParameter.feature == null && commandClass != CreateChildCommand.class)
+    {
+      Collection<?> collection = commandParameter.getCollection();
+      if (collection != null)
+      {
+        for (Object value : collection)
+        {
+          if (value instanceof IWrapperItemProvider)
+          {
+            EStructuralFeature feature = ((IWrapperItemProvider)value).getFeature();
+            if (feature != null)
+            {
+              return super.createCommand(object, domain, commandClass, new CommandParameter(commandParameter.getOwner(), feature, collection));
+            }
+          }
+        }
+      }
+    }
+
+    return super.createCommand(object, domain, commandClass, commandParameter);
+  }
 }

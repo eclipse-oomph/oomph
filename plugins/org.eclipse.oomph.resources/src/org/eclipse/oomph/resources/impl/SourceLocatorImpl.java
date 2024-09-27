@@ -32,7 +32,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
-import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
+import org.eclipse.emf.ecore.util.EDataTypeEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
@@ -195,7 +195,7 @@ public class SourceLocatorImpl extends ModelElementImpl implements SourceLocator
   {
     if (excludedPaths == null)
     {
-      excludedPaths = new EDataTypeUniqueEList<>(String.class, this, ResourcesPackage.SOURCE_LOCATOR__EXCLUDED_PATHS);
+      excludedPaths = new EDataTypeEList<>(String.class, this, ResourcesPackage.SOURCE_LOCATOR__EXCLUDED_PATHS);
     }
     return excludedPaths;
   }
