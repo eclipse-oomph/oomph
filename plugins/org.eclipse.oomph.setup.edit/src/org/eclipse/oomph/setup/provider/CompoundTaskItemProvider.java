@@ -152,8 +152,10 @@ public class CompoundTaskItemProvider extends SetupTaskItemProvider
   @SuppressWarnings("nls")
   public String getText(Object object)
   {
-    String label = ((CompoundTask)object).getName();
-    return label == null || label.length() == 0 ? getString("_UI_CompoundTask_type") : label;
+    CompoundTask compoundTask = (CompoundTask)object;
+    String label = compoundTask.getName();
+    String filter = compoundTask.getFilter();
+    return (label == null || label.length() == 0 ? getString("_UI_CompoundTask_type") : label) + (filter == null ? "" : " " + filter);
   }
 
   /**

@@ -4504,6 +4504,11 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     List<SetupTaskPerformer> performers = new ArrayList<>();
     boolean needsPrompt = false;
 
+    // Add the system property to store the trigger.
+    // This is used to populate the org.eclipse.oomph.setup.internal.core.AbstractSetupTaskContext.filterContextIU
+    // so that this property can be used in filters on setup tasks.
+    System.setProperty("setup.trigger", trigger == null ? "ALL" : trigger.toString()); //$NON-NLS-1$ //$NON-NLS-2$
+
     Map<Object, Set<Object>> composedMap = new LinkedHashMap<>();
     List<VariableTask> allAppliedRuleVariables = new ArrayList<>();
     Set<String> allUndeclaredVariables = new LinkedHashSet<>();
