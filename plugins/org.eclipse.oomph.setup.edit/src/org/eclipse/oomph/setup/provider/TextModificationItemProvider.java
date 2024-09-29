@@ -14,10 +14,19 @@ import org.eclipse.oomph.base.provider.ModelElementItemProvider;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.TextModification;
 
+import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.command.CommandParameter;
+import org.eclipse.emf.edit.command.CreateChildCommand;
+import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.emf.edit.provider.AttributeValueWrapperItemProvider;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.IWrapperItemProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
@@ -91,6 +100,54 @@ public class TextModificationItemProvider extends ModelElementItemProvider
   }
 
   /**
+   * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
+   * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
+   * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object)
+  {
+    if (childrenFeatures == null)
+    {
+      super.getChildrenFeatures(object);
+      childrenFeatures.add(SetupPackage.Literals.TEXT_MODIFICATION__SUBSTITUTIONS);
+    }
+    return childrenFeatures;
+  }
+
+  @Override
+  protected Object createWrapper(EObject object, EStructuralFeature feature, Object value, int index)
+  {
+    return feature == SetupPackage.Literals.TEXT_MODIFICATION__SUBSTITUTIONS
+        ? new AttributeValueWrapperItemProvider(value, object, (EAttribute)feature, index, adapterFactory, getResourceLocator())
+        {
+          @Override
+          public Object getImage(Object object)
+          {
+            return getResourceLocator().getImage("full/obj16/Substitution.png"); //$NON-NLS-1$
+          }
+        }
+        : super.createWrapper(object, feature, value, index);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  protected EStructuralFeature getChildFeature(Object object, Object child)
+  {
+    // Check the type of the specified child object and return the proper feature to use for
+    // adding (see {@link AddCommand}) it as a child.
+
+    return super.getChildFeature(object, child);
+  }
+
+  /**
    * This returns TextModification.gif.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -142,11 +199,24 @@ public class TextModificationItemProvider extends ModelElementItemProvider
     switch (notification.getFeatureID(TextModification.class))
     {
       case SetupPackage.TEXT_MODIFICATION__PATTERN:
-      case SetupPackage.TEXT_MODIFICATION__SUBSTITUTIONS:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+        return;
+      case SetupPackage.TEXT_MODIFICATION__SUBSTITUTIONS:
+        fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
         return;
     }
     super.notifyChanged(notification);
+  }
+
+  @Override
+  public Object getCreateChildImage(Object owner, Object feature, Object child, Collection<?> selection)
+  {
+    if (feature == SetupPackage.Literals.TEXT_MODIFICATION__SUBSTITUTIONS)
+    {
+      return getResourceLocator().getImage("full/obj16/Substitution.png"); //$NON-NLS-1$
+    }
+
+    return super.getCreateChildImage(owner, feature, child, selection);
   }
 
   /**
@@ -160,6 +230,33 @@ public class TextModificationItemProvider extends ModelElementItemProvider
   protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object)
   {
     super.collectNewChildDescriptors(newChildDescriptors, object);
+
+    newChildDescriptors.add(createChildParameter(SetupPackage.Literals.TEXT_MODIFICATION__SUBSTITUTIONS, "")); //$NON-NLS-1$
+  }
+
+  @Override
+  public Command createCommand(Object object, EditingDomain domain, Class<? extends Command> commandClass, CommandParameter commandParameter)
+  {
+    if (commandParameter.feature == null && commandClass != CreateChildCommand.class)
+    {
+      Collection<?> collection = commandParameter.getCollection();
+      if (collection != null)
+      {
+        for (Object value : collection)
+        {
+          if (value instanceof IWrapperItemProvider)
+          {
+            EStructuralFeature feature = ((IWrapperItemProvider)value).getFeature();
+            if (feature != null)
+            {
+              return super.createCommand(object, domain, commandClass, new CommandParameter(commandParameter.getOwner(), feature, collection));
+            }
+          }
+        }
+      }
+    }
+
+    return super.createCommand(object, domain, commandClass, commandParameter);
   }
 
 }

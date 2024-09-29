@@ -18,7 +18,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
+import org.eclipse.emf.ecore.util.EDataTypeEList;
 
 import java.util.Collection;
 
@@ -126,7 +126,7 @@ public class TextModificationImpl extends ModelElementImpl implements TextModifi
   {
     if (substitutions == null)
     {
-      substitutions = new EDataTypeUniqueEList<>(String.class, this, SetupPackage.TEXT_MODIFICATION__SUBSTITUTIONS);
+      substitutions = new EDataTypeEList<>(String.class, this, SetupPackage.TEXT_MODIFICATION__SUBSTITUTIONS);
     }
     return substitutions;
   }

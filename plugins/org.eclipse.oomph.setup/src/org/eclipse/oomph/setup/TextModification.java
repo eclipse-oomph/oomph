@@ -70,7 +70,8 @@ public interface TextModification extends ModelElement
    * <!-- end-user-doc -->
    * @return the value of the '<em>Substitutions</em>' attribute list.
    * @see org.eclipse.oomph.setup.SetupPackage#getTextModification_Substitutions()
-   * @model extendedMetaData="kind='element' name='substitution'"
+   * @model unique="false"
+   *        extendedMetaData="kind='element' name='substitution'"
    * @generated
    */
   EList<String> getSubstitutions();

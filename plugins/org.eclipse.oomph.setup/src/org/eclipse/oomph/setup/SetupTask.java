@@ -176,7 +176,6 @@ public interface SetupTask extends ModelElement
 
   /**
    * Returns the value of the '<em><b>Excluded Triggers</b></em>' attribute.
-   * The default value is <code>""</code>.
    * <!-- begin-user-doc -->
    * <p>
    * If the meaning of the '<em>Excluded Triggers</em>' attribute isn't clear,
@@ -186,7 +185,7 @@ public interface SetupTask extends ModelElement
    * @return the value of the '<em>Excluded Triggers</em>' attribute.
    * @see #setExcludedTriggers(Set)
    * @see org.eclipse.oomph.setup.SetupPackage#getSetupTask_ExcludedTriggers()
-   * @model default="" dataType="org.eclipse.oomph.setup.TriggerSet" required="true"
+   * @model dataType="org.eclipse.oomph.setup.TriggerSet" required="true"
    * @generated
    */
   Set<Trigger> getExcludedTriggers();

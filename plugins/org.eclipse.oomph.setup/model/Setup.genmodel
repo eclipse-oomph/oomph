@@ -259,7 +259,7 @@
     </genClasses>
     <genClasses ecoreClass="Setup.ecore#//TextModification">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//TextModification/pattern"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//TextModification/substitutions"/>
+      <genFeatures children="true" createChild="true" ecoreFeature="ecore:EAttribute Setup.ecore#//TextModification/substitutions"/>
     </genClasses>
     <genClasses ecoreClass="Setup.ecore#//ProductToProductVersionMapEntry">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Setup.ecore#//ProductToProductVersionMapEntry/key"/>

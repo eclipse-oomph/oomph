@@ -162,6 +162,11 @@
       version="JavaSE-17"
       location="${jre.location-17}"/>
   <setupTask
+      xsi:type="jdt:JRETask"
+      version="JavaSE-21"
+      location="${jre.location-21}"
+      executionEnvironmentDefault="false"/>
+  <setupTask
       xsi:type="setup:EclipseIniTask"
       option="-Doomph.redirection.setups"
       value="=https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/->${github.clone.oomph.location|uri}/setups/"

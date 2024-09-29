@@ -3,26 +3,15 @@
 	<product name="org.eclipse.oomph.setup.installer.product" id="org.eclipse.oomph.setup.installer.product" version="1.34.0">
 		<feature name="org.eclipse.oomph.setup.installer" version="1.34.0"/>
 	</product>
-	<product name="org.eclipse.oomph.setup.installer.product.restricted" id="org.eclipse.oomph.setup.installer.product" version="1.34.0">
-		<feature name="org.eclipse.oomph.setup.installer" version="1.34.0"/>
-	</product>
-	<product name="org.eclipse.oomph.setup.installer.product.with-jre" id="org.eclipse.oomph.setup.installer.product" version="1.34.0">
-		<feature name="org.eclipse.oomph.setup.installer" version="1.34.0"/>
-		<feature name="org.eclipse.justj.openjdk.hotspot.jre.minimal.stripped" version="17.0.12"/>
-	</product>
-	<product name="org.eclipse.oomph.setup.installer.product.with-jre.restricted" id="org.eclipse.oomph.setup.installer.product" version="1.34.0">
-		<feature name="org.eclipse.oomph.setup.installer" version="1.34.0"/>
-		<feature name="org.eclipse.justj.openjdk.hotspot.jre.minimal.stripped" version="17.0.12"/>
-	</product>
 	<feature name="org.eclipse.e4.rcp" version="4.34.0">
 		<plugin name="org.eclipse.e4.core.services" version="2.4.400"/>
 		<plugin name="org.eclipse.e4.ui.workbench.swt" version="0.17.500"/>
 		<plugin name="org.eclipse.e4.core.commands" version="1.1.400"/>
 		<plugin name="org.eclipse.e4.ui.bindings" version="0.14.400"/>
-		<plugin name="org.eclipse.e4.ui.model.workbench" version="2.4.300"/>
+		<plugin name="org.eclipse.e4.ui.model.workbench" version="2.4.400"/>
 		<plugin name="org.eclipse.e4.ui.progress" version="0.4.600"/>
 		<plugin name="org.eclipse.e4.ui.services" version="1.6.300"/>
-		<plugin name="org.eclipse.e4.ui.workbench.renderers.swt" version="0.16.500"/>
+		<plugin name="org.eclipse.e4.ui.workbench.renderers.swt" version="0.16.600"/>
 		<plugin name="org.eclipse.e4.ui.workbench" version="1.15.500"/>
 		<plugin name="org.eclipse.e4.ui.css.core" version="0.14.500"/>
 		<plugin name="org.eclipse.e4.ui.css.swt" version="0.15.400"/>
@@ -47,11 +36,11 @@
 		<plugin name="org.eclipse.core.runtime" version="3.31.100"/>
 		<plugin name="org.eclipse.equinox.app" version="1.7.200"/>
 		<plugin name="org.eclipse.equinox.launcher" version="1.6.900"/>
-		<plugin name="org.eclipse.equinox.preferences" version="3.11.100"/>
+		<plugin name="org.eclipse.equinox.preferences" version="3.11.200"/>
 		<plugin name="org.osgi.service.prefs" version="1.1.2"/>
 		<plugin name="org.eclipse.equinox.registry" version="3.12.100"/>
 		<plugin name="org.eclipse.equinox.simpleconfigurator" version="1.5.300"/>
-		<plugin name="org.eclipse.osgi" version="3.21.0"/>
+		<plugin name="org.eclipse.osgi" version="3.22.0"/>
 		<plugin name="org.eclipse.osgi.compatibility.state" fragment="true" version="1.2.1000"/>
 		<plugin name="org.eclipse.osgi.util" version="3.7.300"/>
 		<plugin name="org.eclipse.equinox.launcher.cocoa.macosx.x86_64" fragment="true" version="1.2.1100"/>
@@ -80,12 +69,12 @@
 		<plugin name="org.eclipse.equinox.bidi" version="1.5.100"/>
 		<plugin name="org.eclipse.e4.ui.dialogs" version="1.5.0"/>
 		<plugin name="org.eclipse.e4.ui.dialogs" version="1.5.0"/>
-		<plugin name="org.eclipse.e4.emf.xpath" version="0.4.300"/>
+		<plugin name="org.eclipse.e4.emf.xpath" version="0.5.0"/>
 		<plugin name="org.eclipse.e4.core.di.annotations" version="1.8.400"/>
 		<plugin name="org.eclipse.e4.ui.swt.gtk" fragment="true" version="1.2.200"/>
 		<plugin name="org.eclipse.e4.ui.swt.win32" fragment="true" version="1.2.300"/>
 		<plugin name="org.eclipse.e4.core.di.extensions.supplier" version="0.17.500"/>
-		<plugin name="org.eclipse.urischeme" version="1.3.400"/>
+		<plugin name="org.eclipse.urischeme" version="1.3.500"/>
 		<plugin name="org.eclipse.jface.notifications" version="0.7.300"/>
 		<plugin name="org.osgi.util.function" version="1.2.0"/>
 		<plugin name="org.osgi.util.promise" version="1.3.0"/>
@@ -102,39 +91,39 @@
 		<plugin name="org.osgi.service.useradmin" version="1.1.1"/>
 		<plugin name="org.osgi.service.wireadmin" version="1.0.2"/>
 	</feature>
-	<feature name="org.eclipse.emf.common" version="2.32.0">
-		<plugin name="org.eclipse.emf.common" version="2.31.0"/>
+	<feature name="org.eclipse.emf.common" version="2.33.0">
+		<plugin name="org.eclipse.emf.common" version="2.40.0"/>
 	</feature>
-	<feature name="org.eclipse.emf.common.ui" version="2.22.0">
-		<plugin name="org.eclipse.emf.common.ui" version="2.23.0"/>
+	<feature name="org.eclipse.emf.common.ui" version="2.23.0">
+		<plugin name="org.eclipse.emf.common.ui" version="2.24.0"/>
 	</feature>
-	<feature name="org.eclipse.emf.ecore" version="2.38.0">
-		<plugin name="org.eclipse.emf.ecore" version="2.37.0"/>
+	<feature name="org.eclipse.emf.ecore" version="2.39.0">
+		<plugin name="org.eclipse.emf.ecore" version="2.38.0"/>
 		<plugin name="org.eclipse.emf.ecore.change" version="2.17.0"/>
 		<plugin name="org.eclipse.emf.ecore.xmi" version="2.38.0"/>
 	</feature>
 	<feature name="org.eclipse.emf.edit" version="2.23.0">
 		<plugin name="org.eclipse.emf.edit" version="2.22.0"/>
 	</feature>
-	<feature name="org.eclipse.emf.edit.ui" version="2.26.0">
-		<plugin name="org.eclipse.emf.edit.ui" version="2.24.0"/>
+	<feature name="org.eclipse.emf.edit.ui" version="2.27.0">
+		<plugin name="org.eclipse.emf.edit.ui" version="2.25.0"/>
 	</feature>
-	<feature name="org.eclipse.equinox.p2.core.feature" version="1.7.300">
-		<plugin name="org.eclipse.equinox.p2.artifact.repository" version="1.5.400"/>
-		<plugin name="org.eclipse.equinox.p2.console" version="1.3.400"/>
-		<plugin name="org.eclipse.equinox.p2.core" version="2.12.100"/>
-		<plugin name="org.eclipse.equinox.p2.director" version="2.6.400"/>
-		<plugin name="org.eclipse.equinox.p2.engine" version="2.10.200"/>
-		<plugin name="org.eclipse.equinox.p2.garbagecollector" version="1.3.300"/>
-		<plugin name="org.eclipse.equinox.p2.metadata" version="2.9.100"/>
+	<feature name="org.eclipse.equinox.p2.core.feature" version="1.7.400">
+		<plugin name="org.eclipse.equinox.p2.artifact.repository" version="1.5.500"/>
+		<plugin name="org.eclipse.equinox.p2.console" version="1.3.500"/>
+		<plugin name="org.eclipse.equinox.p2.core" version="2.12.200"/>
+		<plugin name="org.eclipse.equinox.p2.director" version="2.6.500"/>
+		<plugin name="org.eclipse.equinox.p2.engine" version="2.10.300"/>
+		<plugin name="org.eclipse.equinox.p2.garbagecollector" version="1.3.400"/>
+		<plugin name="org.eclipse.equinox.p2.metadata" version="2.9.200"/>
 		<plugin name="org.eclipse.equinox.p2.metadata.repository" version="1.5.400"/>
-		<plugin name="org.eclipse.equinox.p2.repository" version="2.9.100"/>
+		<plugin name="org.eclipse.equinox.p2.repository" version="2.9.200"/>
 		<plugin name="org.eclipse.equinox.p2.touchpoint.eclipse" version="2.4.300"/>
-		<plugin name="org.eclipse.equinox.p2.touchpoint.natives" version="1.5.300"/>
+		<plugin name="org.eclipse.equinox.p2.touchpoint.natives" version="1.5.400"/>
 		<plugin name="org.eclipse.equinox.simpleconfigurator.manipulator" version="2.3.300"/>
 		<plugin name="org.eclipse.equinox.frameworkadmin" version="2.3.200"/>
 		<plugin name="org.eclipse.equinox.frameworkadmin.equinox" version="1.3.200"/>
-		<plugin name="org.eclipse.equinox.preferences" version="3.11.100"/>
+		<plugin name="org.eclipse.equinox.preferences" version="3.11.200"/>
 		<plugin name="org.osgi.service.prefs" version="1.1.2"/>
 		<plugin name="org.eclipse.equinox.security" version="1.4.400"/>
 		<plugin name="org.eclipse.equinox.p2.jarprocessor" version="1.3.400"/>
@@ -144,15 +133,6 @@
 		<plugin name="org.eclipse.equinox.security.linux" fragment="true" version="1.1.300"/>
 		<plugin name="org.eclipse.equinox.security.win32" fragment="true" version="1.3.0"/>
 		<plugin name="org.eclipse.equinox.concurrent" version="1.3.100"/>
-	</feature>
-	<feature name="org.eclipse.justj.openjdk.hotspot.jre.minimal.stripped" version="17.0.12">
-		<plugin name="org.eclipse.justj.openjdk.hotspot.jre.minimal.stripped" version="17.0.12"/>
-		<plugin name="org.eclipse.justj.openjdk.hotspot.jre.minimal.stripped.linux.ppc64le" fragment="true" version="17.0.12"/>
-		<plugin name="org.eclipse.justj.openjdk.hotspot.jre.minimal.stripped.linux.aarch64" fragment="true" version="17.0.12"/>
-		<plugin name="org.eclipse.justj.openjdk.hotspot.jre.minimal.stripped.linux.x86_64" fragment="true" version="17.0.12"/>
-		<plugin name="org.eclipse.justj.openjdk.hotspot.jre.minimal.stripped.macosx.x86_64" fragment="true" version="17.0.12"/>
-		<plugin name="org.eclipse.justj.openjdk.hotspot.jre.minimal.stripped.macosx.aarch64" fragment="true" version="17.0.12"/>
-		<plugin name="org.eclipse.justj.openjdk.hotspot.jre.minimal.stripped.win32.x86_64" fragment="true" version="17.0.12"/>
 	</feature>
 	<feature name="org.eclipse.oomph.all" version="2.7.0">
 		<feature name="org.eclipse.oomph.license" version="1.6.0" license="true"/>
@@ -170,7 +150,6 @@
 		<feature name="org.eclipse.oomph.util" version="1.29.0"/>
 		<feature name="org.eclipse.oomph.setup.sdk" version="1.32.0"/>
 		<feature name="org.eclipse.oomph.tests" version="1.23.0"/>
-		<feature name="org.eclipse.oomph.maven" version="1.0.0"/>
 		<plugin name="org.eclipse.oomph.util.pde" version="1.12.0"/>
 		<plugin name="org.eclipse.oomph.base" version="1.18.0"/>
 		<plugin name="org.eclipse.oomph.base.edit" version="1.18.0"/>
@@ -193,12 +172,6 @@
 	<feature name="org.eclipse.oomph.manifests" version="1.16.0">
 		<feature name="org.eclipse.oomph.license" version="1.6.0" license="true"/>
 		<plugin name="org.eclipse.oomph.manifests" version="1.14.0"/>
-	</feature>
-	<feature name="org.eclipse.oomph.maven" version="1.0.0">
-		<feature name="org.eclipse.oomph.license" version="1.6.0" license="true"/>
-		<plugin name="org.eclipse.oomph.maven" version="1.0.0"/>
-		<plugin name="org.eclipse.oomph.maven.edit" version="1.0.0"/>
-		<plugin name="org.eclipse.oomph.maven.editor" version="1.0.0"/>
 	</feature>
 	<feature name="org.eclipse.oomph.ostools" version="1.15.0">
 		<feature name="org.eclipse.oomph.license" version="1.6.0" license="true"/>
@@ -258,19 +231,19 @@
 	<feature name="org.eclipse.oomph.setup.installer" version="1.34.0">
 		<feature name="org.eclipse.oomph.license" version="1.6.0" license="true"/>
 		<feature name="org.eclipse.oomph.p2" version="1.31.0"/>
-		<feature name="org.eclipse.emf.common" version="2.32.0"/>
-		<feature name="org.eclipse.emf.common.ui" version="2.22.0"/>
-		<feature name="org.eclipse.emf.ecore" version="2.38.0"/>
+		<feature name="org.eclipse.emf.common" version="2.33.0"/>
+		<feature name="org.eclipse.emf.common.ui" version="2.23.0"/>
+		<feature name="org.eclipse.emf.ecore" version="2.39.0"/>
 		<feature name="org.eclipse.emf.edit" version="2.23.0"/>
-		<feature name="org.eclipse.emf.edit.ui" version="2.26.0"/>
+		<feature name="org.eclipse.emf.edit.ui" version="2.27.0"/>
 		<feature name="org.eclipse.rcp" version="4.34.0"/>
-		<feature name="org.eclipse.equinox.p2.core.feature" version="1.7.300"/>
+		<feature name="org.eclipse.equinox.p2.core.feature" version="1.7.400"/>
 		<plugin name="org.eclipse.oomph.setup" version="1.29.0"/>
 		<plugin name="org.eclipse.oomph.setup.edit" version="1.17.0"/>
 		<plugin name="org.eclipse.oomph.setup.installer" version="1.34.0"/>
-		<plugin name="org.eclipse.ui.views" version="3.12.400"/>
+		<plugin name="org.eclipse.ui.views" version="3.12.500"/>
 		<plugin name="org.eclipse.core.net" version="1.5.500"/>
-		<plugin name="org.eclipse.equinox.p2.updatesite" version="1.3.400"/>
+		<plugin name="org.eclipse.equinox.p2.updatesite" version="1.3.500"/>
 		<plugin name="org.eclipse.ui.net" version="1.5.400"/>
 		<plugin name="org.eclipse.jsch.ui" version="1.5.400"/>
 		<plugin name="org.eclipse.oomph.setup.core" version="1.31.0"/>
@@ -283,7 +256,7 @@
 		<plugin name="org.eclipse.oomph.preferences" version="1.14.0"/>
 		<plugin name="org.eclipse.oomph.ui" version="1.23.0"/>
 		<plugin name="org.eclipse.oomph.util" version="1.23.0"/>
-		<plugin name="org.eclipse.equinox.p2.ui" version="2.8.500"/>
+		<plugin name="org.eclipse.equinox.p2.ui" version="2.8.600"/>
 		<plugin name="org.eclipse.equinox.security.ui" version="1.4.300"/>
 		<plugin name="org.eclipse.oomph.util.doc" version="1.14.0"/>
 		<plugin name="org.eclipse.oomph.setup.doc" version="1.14.0"/>
@@ -416,7 +389,7 @@
 	<feature name="org.eclipse.rcp" version="4.34.0">
 		<feature name="org.eclipse.e4.rcp" version="4.34.0"/>
 		<plugin name="org.eclipse.help" version="3.10.400"/>
-		<plugin name="org.eclipse.ui" version="3.206.100"/>
+		<plugin name="org.eclipse.ui" version="3.206.200"/>
 		<plugin name="org.eclipse.ui.workbench" version="3.133.100"/>
 		<plugin name="org.eclipse.update.configurator" version="3.5.400"/>
 		<plugin name="org.eclipse.rcp" version="4.34.0"/>
@@ -447,14 +420,14 @@
 	<plugin name="org.eclipse.e4.core.di.extensions" version="0.18.300"/>
 	<plugin name="org.eclipse.e4.core.di.extensions.supplier" version="0.17.500"/>
 	<plugin name="org.eclipse.e4.core.services" version="2.4.400"/>
-	<plugin name="org.eclipse.e4.emf.xpath" version="0.4.300"/>
+	<plugin name="org.eclipse.e4.emf.xpath" version="0.5.0"/>
 	<plugin name="org.eclipse.e4.ui.bindings" version="0.14.400"/>
 	<plugin name="org.eclipse.e4.ui.css.core" version="0.14.500"/>
 	<plugin name="org.eclipse.e4.ui.css.swt" version="0.15.400"/>
 	<plugin name="org.eclipse.e4.ui.css.swt.theme" version="0.14.400"/>
 	<plugin name="org.eclipse.e4.ui.di" version="1.5.400"/>
 	<plugin name="org.eclipse.e4.ui.dialogs" version="1.5.0"/>
-	<plugin name="org.eclipse.e4.ui.model.workbench" version="2.4.300"/>
+	<plugin name="org.eclipse.e4.ui.model.workbench" version="2.4.400"/>
 	<plugin name="org.eclipse.e4.ui.progress" version="0.4.600"/>
 	<plugin name="org.eclipse.e4.ui.services" version="1.6.300"/>
 	<plugin name="org.eclipse.e4.ui.swt.gtk" fragment="true" version="1.2.200"/>
@@ -462,17 +435,17 @@
 	<plugin name="org.eclipse.e4.ui.widgets" version="1.4.200"/>
 	<plugin name="org.eclipse.e4.ui.workbench" version="1.15.500"/>
 	<plugin name="org.eclipse.e4.ui.workbench.addons.swt" version="1.5.500"/>
-	<plugin name="org.eclipse.e4.ui.workbench.renderers.swt" version="0.16.500"/>
+	<plugin name="org.eclipse.e4.ui.workbench.renderers.swt" version="0.16.600"/>
 	<plugin name="org.eclipse.e4.ui.workbench.renderers.swt.cocoa" fragment="true" version="0.14.400"/>
 	<plugin name="org.eclipse.e4.ui.workbench.swt" version="0.17.500"/>
 	<plugin name="org.eclipse.e4.ui.workbench3" version="0.17.400"/>
-	<plugin name="org.eclipse.emf.common" version="2.31.0"/>
-	<plugin name="org.eclipse.emf.common.ui" version="2.23.0"/>
-	<plugin name="org.eclipse.emf.ecore" version="2.37.0"/>
+	<plugin name="org.eclipse.emf.common" version="2.40.0"/>
+	<plugin name="org.eclipse.emf.common.ui" version="2.24.0"/>
+	<plugin name="org.eclipse.emf.ecore" version="2.38.0"/>
 	<plugin name="org.eclipse.emf.ecore.change" version="2.17.0"/>
 	<plugin name="org.eclipse.emf.ecore.xmi" version="2.38.0"/>
 	<plugin name="org.eclipse.emf.edit" version="2.22.0"/>
-	<plugin name="org.eclipse.emf.edit.ui" version="2.24.0"/>
+	<plugin name="org.eclipse.emf.edit.ui" version="2.25.0"/>
 	<plugin name="org.eclipse.equinox.app" version="1.7.200"/>
 	<plugin name="org.eclipse.equinox.bidi" version="1.5.100"/>
 	<plugin name="org.eclipse.equinox.common" version="3.19.100"/>
@@ -489,24 +462,24 @@
 	<plugin name="org.eclipse.equinox.launcher.gtk.linux.x86_64" fragment="true" version="1.2.1100"/>
 	<plugin name="org.eclipse.equinox.launcher.win32.win32.aarch64" fragment="true" version="1.2.1100"/>
 	<plugin name="org.eclipse.equinox.launcher.win32.win32.x86_64" fragment="true" version="1.2.1100"/>
-	<plugin name="org.eclipse.equinox.p2.artifact.repository" version="1.5.400"/>
-	<plugin name="org.eclipse.equinox.p2.console" version="1.3.400"/>
-	<plugin name="org.eclipse.equinox.p2.core" version="2.12.100"/>
-	<plugin name="org.eclipse.equinox.p2.director" version="2.6.400"/>
-	<plugin name="org.eclipse.equinox.p2.engine" version="2.10.200"/>
-	<plugin name="org.eclipse.equinox.p2.garbagecollector" version="1.3.300"/>
+	<plugin name="org.eclipse.equinox.p2.artifact.repository" version="1.5.500"/>
+	<plugin name="org.eclipse.equinox.p2.console" version="1.3.500"/>
+	<plugin name="org.eclipse.equinox.p2.core" version="2.12.200"/>
+	<plugin name="org.eclipse.equinox.p2.director" version="2.6.500"/>
+	<plugin name="org.eclipse.equinox.p2.engine" version="2.10.300"/>
+	<plugin name="org.eclipse.equinox.p2.garbagecollector" version="1.3.400"/>
 	<plugin name="org.eclipse.equinox.p2.jarprocessor" version="1.3.400"/>
-	<plugin name="org.eclipse.equinox.p2.metadata" version="2.9.100"/>
+	<plugin name="org.eclipse.equinox.p2.metadata" version="2.9.200"/>
 	<plugin name="org.eclipse.equinox.p2.metadata.repository" version="1.5.400"/>
 	<plugin name="org.eclipse.equinox.p2.operations" version="2.7.400"/>
-	<plugin name="org.eclipse.equinox.p2.repository" version="2.9.100"/>
+	<plugin name="org.eclipse.equinox.p2.repository" version="2.9.200"/>
 	<plugin name="org.eclipse.equinox.p2.touchpoint.eclipse" version="2.4.300"/>
-	<plugin name="org.eclipse.equinox.p2.touchpoint.natives" version="1.5.300"/>
+	<plugin name="org.eclipse.equinox.p2.touchpoint.natives" version="1.5.400"/>
 	<plugin name="org.eclipse.equinox.p2.transport.ecf" version="1.4.300"/>
-	<plugin name="org.eclipse.equinox.p2.ui" version="2.8.500"/>
+	<plugin name="org.eclipse.equinox.p2.ui" version="2.8.600"/>
 	<plugin name="org.eclipse.equinox.p2.ui.sdk" version="1.3.300"/>
-	<plugin name="org.eclipse.equinox.p2.updatesite" version="1.3.400"/>
-	<plugin name="org.eclipse.equinox.preferences" version="3.11.100"/>
+	<plugin name="org.eclipse.equinox.p2.updatesite" version="1.3.500"/>
+	<plugin name="org.eclipse.equinox.preferences" version="3.11.200"/>
 	<plugin name="org.eclipse.equinox.registry" version="3.12.100"/>
 	<plugin name="org.eclipse.equinox.security" version="1.4.400"/>
 	<plugin name="org.eclipse.equinox.security.linux" fragment="true" version="1.1.300"/>
@@ -520,13 +493,6 @@
 	<plugin name="org.eclipse.jface.databinding" version="1.15.300"/>
 	<plugin name="org.eclipse.jface.notifications" version="0.7.300"/>
 	<plugin name="org.eclipse.jsch.ui" version="1.5.400"/>
-	<plugin name="org.eclipse.justj.openjdk.hotspot.jre.minimal.stripped" version="17.0.12"/>
-	<plugin name="org.eclipse.justj.openjdk.hotspot.jre.minimal.stripped.linux.aarch64" fragment="true" version="17.0.12"/>
-	<plugin name="org.eclipse.justj.openjdk.hotspot.jre.minimal.stripped.linux.ppc64le" fragment="true" version="17.0.12"/>
-	<plugin name="org.eclipse.justj.openjdk.hotspot.jre.minimal.stripped.linux.x86_64" fragment="true" version="17.0.12"/>
-	<plugin name="org.eclipse.justj.openjdk.hotspot.jre.minimal.stripped.macosx.aarch64" fragment="true" version="17.0.12"/>
-	<plugin name="org.eclipse.justj.openjdk.hotspot.jre.minimal.stripped.macosx.x86_64" fragment="true" version="17.0.12"/>
-	<plugin name="org.eclipse.justj.openjdk.hotspot.jre.minimal.stripped.win32.x86_64" fragment="true" version="17.0.12"/>
 	<plugin name="org.eclipse.nebula.widgets.tablecombo" version="1.2.0"/>
 	<plugin name="org.eclipse.oomph.base" version="1.18.0"/>
 	<plugin name="org.eclipse.oomph.base.edit" version="1.18.0"/>
@@ -538,9 +504,6 @@
 	<plugin name="org.eclipse.oomph.junit" version="1.4.0"/>
 	<plugin name="org.eclipse.oomph.launches" version="1.13.0"/>
 	<plugin name="org.eclipse.oomph.manifests" version="1.14.0"/>
-	<plugin name="org.eclipse.oomph.maven" version="1.0.0"/>
-	<plugin name="org.eclipse.oomph.maven.edit" version="1.0.0"/>
-	<plugin name="org.eclipse.oomph.maven.editor" version="1.0.0"/>
 	<plugin name="org.eclipse.oomph.ostools" version="1.14.0"/>
 	<plugin name="org.eclipse.oomph.p2" version="1.17.0"/>
 	<plugin name="org.eclipse.oomph.p2.core" version="1.30.0"/>
@@ -618,7 +581,7 @@
 	<plugin name="org.eclipse.oomph.workingsets" version="1.14.0"/>
 	<plugin name="org.eclipse.oomph.workingsets.edit" version="1.13.0"/>
 	<plugin name="org.eclipse.oomph.workingsets.editor" version="1.16.0"/>
-	<plugin name="org.eclipse.osgi" version="3.21.0"/>
+	<plugin name="org.eclipse.osgi" version="3.22.0"/>
 	<plugin name="org.eclipse.osgi.compatibility.state" fragment="true" version="1.2.1000"/>
 	<plugin name="org.eclipse.osgi.util" version="3.7.300"/>
 	<plugin name="org.eclipse.rcp" version="4.34.0"/>
@@ -630,13 +593,13 @@
 	<plugin name="org.eclipse.swt.gtk.linux.x86_64" fragment="true" version="3.128.0"/>
 	<plugin name="org.eclipse.swt.win32.win32.aarch64" fragment="true" version="3.128.0"/>
 	<plugin name="org.eclipse.swt.win32.win32.x86_64" fragment="true" version="3.128.0"/>
-	<plugin name="org.eclipse.ui" version="3.206.100"/>
+	<plugin name="org.eclipse.ui" version="3.206.200"/>
 	<plugin name="org.eclipse.ui.cocoa" fragment="true" version="1.3.200"/>
 	<plugin name="org.eclipse.ui.net" version="1.5.400"/>
-	<plugin name="org.eclipse.ui.views" version="3.12.400"/>
+	<plugin name="org.eclipse.ui.views" version="3.12.500"/>
 	<plugin name="org.eclipse.ui.workbench" version="3.133.100"/>
 	<plugin name="org.eclipse.update.configurator" version="3.5.400"/>
-	<plugin name="org.eclipse.urischeme" version="1.3.400"/>
+	<plugin name="org.eclipse.urischeme" version="1.3.500"/>
 	<plugin name="org.osgi.service.cm" version="1.6.1"/>
 	<plugin name="org.osgi.service.component" version="1.5.1"/>
 	<plugin name="org.osgi.service.device" version="1.1.1"/>

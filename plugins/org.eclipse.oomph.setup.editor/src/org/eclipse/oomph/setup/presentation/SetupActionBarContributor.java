@@ -165,7 +165,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
 {
   private static final String ENABLEMENT_ITEM_PREFIX = EnablementAction.class.getName() + "-"; //$NON-NLS-1$
 
-  private static final Comparator<? super IAction> ACTION_COMPARATOR = new Comparator<IAction>()
+  private static final Comparator<? super IAction> ACTION_COMPARATOR = new Comparator<>()
   {
     @Override
     public int compare(IAction a1, IAction a2)
