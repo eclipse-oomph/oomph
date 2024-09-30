@@ -31,7 +31,11 @@ Eclipse Installer
       location="org.eclipse.oomph.setup.installer" />
    <launcher name="eclipse-inst">
       <linux icon="icons/eclipse-inst.xpm"/>
-      <macosx icon="icons/eclipse-inst.icns"/>
+      <macosx icon="icons/eclipse-inst.icns">
+         <bundleUrlTypes>
+            <bundleUrlType scheme="eclipse+installer" name="Eclipse Installer"/>
+         </bundleUrlTypes>
+      </macosx>
       <win useIco="true">
          <ico path="icons/eclipse-inst.ico"/>
          <bmp/>
