@@ -24,7 +24,7 @@ for i in $named_releases $numbered_releases; do
     cd $root/$i/$j
     #echo $i/$j
     #ls eclipse-inst*
-    for b in 32 64 aarch64; do
+    for b in 32 64 aarch64 riscv64; do
       for os in win mac linux; do
         for jre in "true" "false"; do
           if [ "$jre" == "false" ]; then

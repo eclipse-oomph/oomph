@@ -334,6 +334,7 @@ public abstract class OS
     result.add(new Mac(Platform.WS_COCOA, Platform.ARCH_AARCH64));
     result.add(new Linux(Platform.WS_GTK, Platform.ARCH_X86_64));
     result.add(new Linux(Platform.WS_GTK, Platform.ARCH_AARCH64));
+    result.add(new Linux(Platform.WS_GTK, "riscv64"));
 
     return Collections.unmodifiableList(result);
   }
