@@ -483,6 +483,9 @@ public class ProductCatalogGenerator implements IApplication
           requirements.add(P2Factory.eINSTANCE.createRequirement(rootInstallIU));
         }
 
+        String configurationFilter = getConfigurationFilter(latestRepository, "tooling" + BIRT_ALL_IN_ONE_PRODUCT_ID + ".configuration");
+        p2Task.getRequirements().get(0).setFilter(configurationFilter);
+
         EList<Repository> repositories = p2Task.getRepositories();
         repositories.add(P2Factory.eINSTANCE.createRepository(repositoryLocation.toString()));
 
@@ -1880,10 +1883,10 @@ public class ProductCatalogGenerator implements IApplication
       maxJavaVersion = Version.create("1.8.0");
     }
 
-    IMetadataRepository metadDataRepository = ECLIPSE_PLATFORM_SDK_PRODUCT_ID.equals(productName) ? platformMetaDataRepositories.get(train)
+    IMetadataRepository metadataRepository = ECLIPSE_PLATFORM_SDK_PRODUCT_ID.equals(productName) ? platformMetaDataRepositories.get(train)
         : eppMetaDataRepositories.get(train);
     {
-      Version javaVersion = getRequiredJavaVersion(metadDataRepository, idPrefix);
+      Version javaVersion = getRequiredJavaVersion(metadataRepository, idPrefix);
       if (maxJavaVersion == null || javaVersion != null && maxJavaVersion.compareTo(javaVersion) < 0)
       {
         maxJavaVersion = javaVersion;
@@ -1936,7 +1939,27 @@ public class ProductCatalogGenerator implements IApplication
 
     String configurationID = "tooling" + (SPECIAL_PRODUCT_IDS.contains(productName) || ALL_PRODUCT_ID.equals(productName) ? "epp.package.java"
         : ECLIPSE_PLATFORM_SDK_PRODUCT_ID.equals(productName) ? "org.eclipse.platform.ide" : productName) + ".configuration";
-    Iterator<IInstallableUnit> configurationIUs = P2Util.asIterable(metadDataRepository.query(QueryUtil.createIUQuery(configurationID), null)).iterator();
+    String applicationFilter = getConfigurationFilter(metadataRepository, configurationID);
+    p2Task.getRequirements().get(0).setFilter(applicationFilter);
+
+    if (siteURI != null)
+    {
+      BaseUtil.setAnnotation(productVersion, AnnotationConstants.ANNOTATION_BRANDING_INFO, AnnotationConstants.KEY_SITE_URI, siteURI.toString());
+      if (isIncubating(siteURI))
+      {
+        BaseUtil.setAnnotation(productVersion, AnnotationConstants.ANNOTATION_BRANDING_INFO, AnnotationConstants.KEY_INCUBATING, "true");
+      }
+    }
+
+    BaseUtil.setAnnotation(productVersion, AnnotationConstants.ANNOTATION_BRANDING_INFO, AnnotationConstants.SHORTCUT,
+        product.getLabel().replaceAll(" \\(.+\\)", "").replace("/", " and ") + " - " + label.replaceAll(" \\(.+\\)", ""));
+
+    log.append('\n');
+  }
+
+  private String getConfigurationFilter(IMetadataRepository metadataRepository, String configurationID)
+  {
+    Iterator<IInstallableUnit> configurationIUs = P2Util.asIterable(metadataRepository.query(QueryUtil.createIUQuery(configurationID), null)).iterator();
     if (configurationIUs.hasNext())
     {
       IInstallableUnit configurationIU = configurationIUs.next();
@@ -1964,39 +1987,21 @@ public class ProductCatalogGenerator implements IApplication
         }
 
         String applicationFilter = compositeFilter.append(')').toString();
-        p2Task.getRequirements().get(0).setFilter(applicationFilter);
+        return applicationFilter;
       }
-      else
-      {
-        throw new RuntimeException("Configuration " + configurationID + " filters not found in " + metadDataRepository.getLocation());
-      }
-    }
-    else
-    {
-      throw new RuntimeException("Configuration " + configurationID + " not found in " + metadDataRepository.getLocation());
+
+      throw new RuntimeException("Configuration " + configurationID + " filters not found in " + metadataRepository.getLocation());
     }
 
-    if (siteURI != null)
-    {
-      BaseUtil.setAnnotation(productVersion, AnnotationConstants.ANNOTATION_BRANDING_INFO, AnnotationConstants.KEY_SITE_URI, siteURI.toString());
-      if (isIncubating(siteURI))
-      {
-        BaseUtil.setAnnotation(productVersion, AnnotationConstants.ANNOTATION_BRANDING_INFO, AnnotationConstants.KEY_INCUBATING, "true");
-      }
-    }
-
-    BaseUtil.setAnnotation(productVersion, AnnotationConstants.ANNOTATION_BRANDING_INFO, AnnotationConstants.SHORTCUT,
-        product.getLabel().replaceAll(" \\(.+\\)", "").replace("/", " and ") + " - " + label.replaceAll(" \\(.+\\)", ""));
-
-    log.append('\n');
+    throw new RuntimeException("Configuration " + configurationID + " not found in " + metadataRepository.getLocation());
   }
 
-  private Version getRequiredJavaVersion(IMetadataRepository metadDataRepository, String idPrefix)
+  private Version getRequiredJavaVersion(IMetadataRepository metadataRepository, String idPrefix)
   {
     Version maxJavaVersion = null;
-    if (metadDataRepository != null)
+    if (metadataRepository != null)
     {
-      for (IInstallableUnit iu : P2Util.asIterable(metadDataRepository.query(QueryUtil.createIUAnyQuery(), null)))
+      for (IInstallableUnit iu : P2Util.asIterable(metadataRepository.query(QueryUtil.createIUAnyQuery(), null)))
       {
         String id = iu.getId();
         if (id.startsWith(idPrefix))

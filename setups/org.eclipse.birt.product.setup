@@ -36,7 +36,8 @@
         xsi:type="setup.p2:P2Task"
         label="BIRT - Release (4.17)">
       <requirement
-          name="org.eclipse.birt.report.designer.all"/>
+          name="org.eclipse.birt.report.designer.all"
+          filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
       <requirement
           name="org.eclipse.birt.chart.cshelp.feature.group"/>
       <requirement
@@ -155,7 +156,8 @@
         xsi:type="setup.p2:P2Task"
         label="BIRT - Milestone (4.18)">
       <requirement
-          name="org.eclipse.birt.report.designer.all"/>
+          name="org.eclipse.birt.report.designer.all"
+          filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
       <requirement
           name="org.eclipse.birt.chart.cshelp.feature.group"/>
       <requirement
@@ -274,7 +276,8 @@
         xsi:type="setup.p2:P2Task"
         label="BIRT - Nightly (4.18)">
       <requirement
-          name="org.eclipse.birt.report.designer.all"/>
+          name="org.eclipse.birt.report.designer.all"
+          filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
       <requirement
           name="org.eclipse.birt.chart.cshelp.feature.group"/>
       <requirement
