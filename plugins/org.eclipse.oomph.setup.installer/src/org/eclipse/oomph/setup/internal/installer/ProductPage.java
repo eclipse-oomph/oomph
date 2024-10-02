@@ -685,6 +685,28 @@ public class ProductPage extends SetupWizardPage
       }
 
       @Override
+      public boolean hasChildren(Object object)
+      {
+        return getChildren(object).length != 0;
+      }
+
+      @Override
+      public Object[] getChildren(Object object)
+      {
+        Object[] children = super.getChildren(object);
+        List<Object> filteredChildren = new ArrayList<>();
+        for (Object child : children)
+        {
+          if (!(child instanceof Product) || !getValidProductVersions((Product)child, null).isEmpty())
+          {
+            filteredChildren.add(child);
+          }
+        }
+
+        return filteredChildren.toArray();
+      }
+
+      @Override
       public void notifyChanged(Notification notification)
       {
         super.notifyChanged(notification);
@@ -1489,6 +1511,11 @@ public class ProductPage extends SetupWizardPage
 
   public static List<ProductVersion> getValidProductVersions(Product product, Pattern filter, OS os)
   {
+    if (os != null && !matchesFilterContext(product, os))
+    {
+      return Collections.emptyList();
+    }
+
     List<ProductVersion> versions = new ArrayList<ProductVersion>(product.getVersions());
     if (OS.INSTANCE.isMac())
     {
@@ -1519,32 +1546,41 @@ public class ProductPage extends SetupWizardPage
 
     if (os != null)
     {
-      LOOP: //
       for (Iterator<ProductVersion> it = versions.iterator(); it.hasNext();)
       {
         ProductVersion version = it.next();
-        for (SetupTask setupTask : version.getSetupTasks())
+        if (!matchesFilterContext(version, os))
         {
-          if (setupTask instanceof P2Task)
+          it.remove();
+        }
+      }
+    }
+
+    return versions;
+  }
+
+  private static boolean matchesFilterContext(Scope scope, OS os)
+  {
+    for (SetupTask setupTask : scope.getSetupTasks())
+    {
+      if (setupTask instanceof P2Task)
+      {
+        P2Task p2Task = (P2Task)setupTask;
+        for (Requirement requirement : p2Task.getRequirements())
+        {
+          if (!requirement.isOptional())
           {
-            P2Task p2Task = (P2Task)setupTask;
-            for (Requirement requirement : p2Task.getRequirements())
+            String requirementFilter = requirement.getFilter();
+            if (requirementFilter != null && requirementFilter.contains("osgi.arch=") && !SetupWizard.matchesFilterContext(requirementFilter, os)) //$NON-NLS-1$
             {
-              if (!requirement.isOptional())
-              {
-                String requirementFilter = requirement.getFilter();
-                if (requirementFilter != null && requirementFilter.contains("osgi.arch=") && !SetupWizard.matchesFilterContext(requirementFilter, os)) //$NON-NLS-1$
-                {
-                  it.remove();
-                  continue LOOP;
-                }
-              }
+              return false;
             }
           }
         }
       }
     }
-    return versions;
+
+    return true;
   }
 
   /**
