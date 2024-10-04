@@ -144,10 +144,7 @@ Eike Stepper - initial API and implementation
                   <classifier>org.eclipse.oomph.tp</classifier>
                 </artifact>
               </target>
-              <executionEnvironment>org.eclipse.justj.openjdk.hotspot.jre.minimal-17</executionEnvironment>
-              <!--  This is needed for Tycho 2.0.0, but breaks 1.7.0 because the compiler source/target levels are not set properly.
-              <executionEnvironmentDefault>org.eclipse.justj.openjdk.hotspot.jre.minimal-17</executionEnvironmentDefault>
-              -->
+              <executionEnvironment>org.eclipse.justj.openjdk.hotspot.jre.minimal-21</executionEnvironment>
               <environments>
                 <environment>
                   <os>win32</os>
