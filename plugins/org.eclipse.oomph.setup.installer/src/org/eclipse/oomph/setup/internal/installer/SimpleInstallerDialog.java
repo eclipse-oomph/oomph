@@ -309,7 +309,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
     notificationContainer.setLayout(notificationContainerLayout);
     notificationContainer.setLayoutData(GridDataFactory.swtDefaults().grab(true, true).align(SWT.END, SWT.BEGINNING).create());
 
-    notificationButton = new NotifictionButton(notificationContainer)
+    notificationButton = new NotifictionButton(notificationContainer, getInstaller())
     {
       @Override
       protected void handleWidgetSelected()
@@ -438,7 +438,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
     {
       for (ProductCatalog productCatalog : productCatalogs)
       {
-        if (SimpleProductPage.isIncluded(productCatalog))
+        if (SimpleProductPage.isIncluded(productCatalog, installer.getOS()))
         {
           ++count;
         }
@@ -1419,6 +1419,8 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
      */
     private int offset = MAX_OFFSET;
 
+    private final Installer installer;
+
     /**
      * Whether the button should be animated.
      */
@@ -1445,9 +1447,10 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
 
     private String scopeLabel;
 
-    public NotifictionButton(Composite parent)
+    public NotifictionButton(Composite parent, Installer installer)
     {
       super(parent, SWT.PUSH);
+      this.installer = installer;
 
       setShowButtonDownState(false);
       setCornerWidth(CORNER_WIDTH);
@@ -1605,7 +1608,7 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
         ProductCatalog targetProductCatalog = null;
         for (ProductCatalog productCatalog : productCatalogs)
         {
-          if (SimpleProductPage.isIncluded(productCatalog))
+          if (SimpleProductPage.isIncluded(productCatalog, installer.getOS()))
           {
             int priority = getBrandingNotificationPriority(productCatalog);
             if (priority < targetPriority || targetProductCatalog == null && getBrandingNotificationURI(productCatalog) != null)

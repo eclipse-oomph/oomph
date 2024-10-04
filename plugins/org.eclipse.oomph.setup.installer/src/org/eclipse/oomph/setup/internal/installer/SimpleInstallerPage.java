@@ -18,6 +18,7 @@ import org.eclipse.oomph.setup.Product;
 import org.eclipse.oomph.setup.ProductCatalog;
 import org.eclipse.oomph.setup.internal.core.util.SelfProductCatalogURIHandlerImpl;
 import org.eclipse.oomph.ui.UIUtil;
+import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.StringUtil;
 
@@ -230,7 +231,7 @@ public abstract class SimpleInstallerPage extends Composite
     dialog.backSelected();
   }
 
-  public static boolean isIncluded(ProductCatalog productCatalog)
+  public static boolean isIncluded(ProductCatalog productCatalog, OS os)
   {
     if (productCatalog.eIsProxy())
     {
@@ -247,7 +248,7 @@ public abstract class SimpleInstallerPage extends Composite
     {
       for (Product product : productCatalog.getProducts())
       {
-        if (isIncluded(product))
+        if (isIncluded(product, os))
         {
           return true;
         }
@@ -257,12 +258,12 @@ public abstract class SimpleInstallerPage extends Composite
     return false;
   }
 
-  public static boolean isIncluded(Product product)
+  public static boolean isIncluded(Product product, OS os)
   {
     String name = product.getQualifiedName();
     if (name == null || StringUtil.isEmpty(PRODUCT_FILTER.pattern()) || PRODUCT_FILTER.matcher(name).matches())
     {
-      return !ProductPage.getValidProductVersions(product, PRODUCT_VERSION_FILTER).isEmpty();
+      return !ProductPage.getValidProductVersions(product, PRODUCT_VERSION_FILTER, os).isEmpty();
     }
 
     return false;

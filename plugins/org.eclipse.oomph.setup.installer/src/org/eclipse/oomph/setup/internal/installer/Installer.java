@@ -27,6 +27,7 @@ import org.eclipse.oomph.setup.ui.wizards.ExtensionsDialog;
 import org.eclipse.oomph.setup.ui.wizards.ProjectPage;
 import org.eclipse.oomph.setup.ui.wizards.ProjectPage.ConfigurationListener;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
+import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.PropertiesUtil;
 
 import org.eclipse.emf.common.util.URI;
@@ -92,6 +93,19 @@ public class Installer extends SetupWizard
     Display display = Display.getDefault();
     display.addListener(SWT.OpenDocument, openListener);
     display.addListener(SWT.OpenUrl, openListener);
+
+    String targetOS = PropertiesUtil.getProperty("oomph.setup.target.osgi.os", OS.INSTANCE.getOsgiOS()); //$NON-NLS-1$
+    String targetWS = PropertiesUtil.getProperty("oomph.setup.target.osgi.ws", OS.INSTANCE.getOsgiWS()); //$NON-NLS-1$
+    String targetArch = PropertiesUtil.getProperty("oomph.setup.target.osgi.arch", OS.INSTANCE.getOsgiArch()); //$NON-NLS-1$
+
+    for (OS os : OS.INSTANCES)
+    {
+      if (targetOS.equals(os.getOsgiOS()) && targetWS.equals(os.getOsgiWS()) && targetArch.equals(os.getOsgiArch()))
+      {
+        setOS(os);
+        break;
+      }
+    }
   }
 
   public void handleArgument(String argument)

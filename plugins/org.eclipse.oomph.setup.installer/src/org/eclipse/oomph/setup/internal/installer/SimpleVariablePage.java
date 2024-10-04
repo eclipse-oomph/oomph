@@ -872,8 +872,8 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
   public void setProduct(Product product)
   {
-    ProductVersion defaultProductVersion = ProductPage.getDefaultProductVersion(installer.getCatalogManager(), product);
-    List<ProductVersion> validProductVersions = ProductPage.getValidProductVersions(product, PRODUCT_VERSION_FILTER);
+    ProductVersion defaultProductVersion = ProductPage.getDefaultProductVersion(installer.getCatalogManager(), product, installer.getOS());
+    List<ProductVersion> validProductVersions = ProductPage.getValidProductVersions(product, PRODUCT_VERSION_FILTER, installer.getOS());
     if (defaultProductVersion != null && AnnotationConstants.VALUE_STATUS_OUTDATED
         .equals(BaseUtil.getAnnotation(defaultProductVersion, AnnotationConstants.ANNOTATION_BRANDING_INFO, AnnotationConstants.KEY_STATUS)))
     {
@@ -909,7 +909,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
     int i = 0;
     int selection = -1;
-    List<ProductVersion> validProductVersions = ProductPage.getValidProductVersions(product, PRODUCT_VERSION_FILTER);
+    List<ProductVersion> validProductVersions = ProductPage.getValidProductVersions(product, PRODUCT_VERSION_FILTER, installer.getOS());
     for (ProductVersion version : validProductVersions)
     {
       String label = SetupCoreUtil.getLabel(version);

@@ -279,16 +279,17 @@ public class SimpleProductPage extends SimpleInstallerPage implements FilterHand
     }
 
     List<Product> products = new ArrayList<Product>();
+    OS os = installer.getOS();
     for (Scope scope : catalogSelector.getSelectedCatalogs())
     {
       if (scope instanceof ProductCatalog)
       {
         ProductCatalog productCatalog = (ProductCatalog)scope;
-        if (isIncluded(productCatalog))
+        if (isIncluded(productCatalog, os))
         {
           for (Product product : productCatalog.getProducts())
           {
-            if (isIncluded(product) && (noFilter || isFiltered(product.getName(), filter) || isFiltered(product.getLabel(), filter)
+            if (isIncluded(product, os) && (noFilter || isFiltered(product.getName(), filter) || isFiltered(product.getLabel(), filter)
                 || isFiltered(product.getDescription(), filter)))
             {
               products.add(product);

@@ -12,6 +12,8 @@ package org.eclipse.oomph.jreinfo;
 
 import org.eclipse.oomph.util.StringUtil;
 
+import org.eclipse.core.runtime.Platform;
+
 import java.io.File;
 
 /**
@@ -52,7 +54,7 @@ public final class JRE implements Comparable<JRE>
     this.minor = minor;
     this.micro = micro;
     this.bitness = bitness;
-    this.arch = arch;
+    this.arch = toCanoncialArch(arch);
     this.jdk = jdk;
     this.lastModified = lastModified;
   }
@@ -78,7 +80,7 @@ public final class JRE implements Comparable<JRE>
     minor = info.minor;
     micro = info.micro;
     bitness = info.bitness;
-    arch = info.arch;
+    arch = toCanoncialArch(info.arch);
     jdk = info.jdk;
     lastModified = info.lastModified;
   }
@@ -94,7 +96,23 @@ public final class JRE implements Comparable<JRE>
     bitness = Integer.parseInt(tokens[4]);
     jdk = Boolean.parseBoolean(tokens[5]);
     lastModified = Long.parseLong(tokens[6]);
-    arch = tokens.length > 7 ? tokens[7] : ""; //$NON-NLS-1$
+    arch = tokens.length > 7 ? toCanoncialArch(tokens[7]) : ""; //$NON-NLS-1$
+  }
+
+  @SuppressWarnings({ "deprecation", "nls" })
+  private String toCanoncialArch(String arch)
+  {
+    if (Platform.ARCH_AMD64.equals(arch))
+    {
+      return Platform.ARCH_X86_64;
+    }
+
+    if ("i386".equals(arch))
+    {
+      return Platform.ARCH_X86;
+    }
+
+    return arch;
   }
 
   public File getJavaHome()
@@ -150,7 +168,7 @@ public final class JRE implements Comparable<JRE>
     }
 
     File executable = getJavaExecutable();
-    if (!executable.isFile() || (executable.lastModified() != lastModified))
+    if (!executable.isFile() || executable.lastModified() != lastModified)
     {
       return false;
     }
@@ -259,7 +277,7 @@ public final class JRE implements Comparable<JRE>
       return true;
     }
 
-    if ((obj == null) || (getClass() != obj.getClass()))
+    if (obj == null || getClass() != obj.getClass())
     {
       return false;
     }

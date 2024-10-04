@@ -33,6 +33,9 @@ import java.util.Map;
  */
 public abstract class OS
 {
+  @SuppressWarnings("deprecation")
+  private static final String ARCH_X86 = Platform.ARCH_X86;
+
   public static final OS INSTANCE = create();
 
   public static final List<OS> INSTANCES = createAll();
@@ -98,7 +101,7 @@ public abstract class OS
   public int getBitness()
   {
     String osgiArch = getOsgiArch();
-    if (Platform.ARCH_X86.equals(osgiArch))
+    if (ARCH_X86.equals(osgiArch))
     {
       return 32;
     }
@@ -303,9 +306,14 @@ public abstract class OS
 
     if (Platform.OS_WIN32.equals(os))
     {
+      if (Platform.ARCH_AARCH64.equals(arch))
+      {
+        return new Win64(ws, Platform.ARCH_AARCH64);
+      }
+
       if (Platform.ARCH_X86_64.equals(arch))
       {
-        return new Win64(ws);
+        return new Win64(ws, Platform.ARCH_X86_64);
       }
 
       return new Win32(ws, arch);
@@ -328,13 +336,18 @@ public abstract class OS
   {
     List<OS> result = new ArrayList<>();
 
-    result.add(Win64.INSTANCE);
-    result.add(Win32.INSTANCE);
+    result.add(new Win64(Platform.WS_WIN32, Platform.ARCH_X86_64));
+    result.add(new Win64(Platform.WS_WIN32, Platform.ARCH_AARCH64));
+    result.add(new Win32(Platform.WS_WIN32, ARCH_X86));
+
     result.add(new Mac(Platform.WS_COCOA, Platform.ARCH_X86_64));
     result.add(new Mac(Platform.WS_COCOA, Platform.ARCH_AARCH64));
+
     result.add(new Linux(Platform.WS_GTK, Platform.ARCH_X86_64));
     result.add(new Linux(Platform.WS_GTK, Platform.ARCH_AARCH64));
-    result.add(new Linux(Platform.WS_GTK, "riscv64"));
+    result.add(new Linux(Platform.WS_GTK, Platform.ARCH_RISCV64));
+    result.add(new Linux(Platform.WS_GTK, Platform.ARCH_PPC64LE));
+    result.add(new Linux(Platform.WS_GTK, ARCH_X86));
 
     return Collections.unmodifiableList(result);
   }
@@ -350,8 +363,6 @@ public abstract class OS
    */
   private static class Win32 extends OS
   {
-    private static final Win32 INSTANCE = new Win32(Platform.WS_WIN32, Platform.ARCH_X86);
-
     // Don't use "explorer" as it forks another process and returns a confusing exit value.
     private static final String[] OPEN_COMMANDS = {};
 
@@ -401,7 +412,7 @@ public abstract class OS
     {
       if (bitness == 64)
       {
-        return Win64.INSTANCE;
+        return new Win64(getOsgiWS(), Platform.ARCH_X86_64);
       }
 
       return this;
@@ -435,11 +446,9 @@ public abstract class OS
    */
   private static class Win64 extends Win32
   {
-    private static final Win64 INSTANCE = new Win64(Platform.WS_WIN32);
-
-    public Win64(String osgiWS)
+    public Win64(String osgiWS, String osgiArch)
     {
-      super(osgiWS, Platform.ARCH_X86_64);
+      super(osgiWS, osgiArch);
     }
 
     @Override
@@ -449,11 +458,17 @@ public abstract class OS
     }
 
     @Override
+    public boolean is32BitAvailable()
+    {
+      return Platform.ARCH_X86_64.equals(getOsgiArch());
+    }
+
+    @Override
     public OS getForBitness(int bitness)
     {
       if (bitness == 32)
       {
-        return Win32.INSTANCE;
+        return new Win32(getOsgiWS(), ARCH_X86);
       }
 
       return this;
@@ -601,6 +616,12 @@ public abstract class OS
     }
 
     @Override
+    public boolean is32BitAvailable()
+    {
+      return Platform.ARCH_X86_64.equals(getOsgiArch());
+    }
+
+    @Override
     public OS getForBitness(int bitness)
     {
       String osgiArch = getOsgiArch();
@@ -608,12 +629,12 @@ public abstract class OS
       {
         if (Platform.ARCH_X86_64.equals(osgiArch))
         {
-          return createLinux(Platform.ARCH_X86);
+          return createLinux(ARCH_X86);
         }
       }
       else
       {
-        if (Platform.ARCH_X86.equals(osgiArch))
+        if (ARCH_X86.equals(osgiArch))
         {
           return createLinux(Platform.ARCH_X86_64);
         }

@@ -75,6 +75,10 @@
           key="/instance/org.eclipse.oomph.setup.ui/showToolBarContributions">
         <value>record</value>
       </detail>
+      <detail
+          key="/instance/org.eclipse.m2e.core/eclipse.m2.downloadSources">
+        <value>record</value>
+      </detail>
     </annotation>
     <setupTask
         xsi:type="setup:CompoundTask"
@@ -134,6 +138,14 @@
     </setupTask>
     <setupTask
         xsi:type="setup:CompoundTask"
+        name="org.eclipse.m2e.core">
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.m2e.core/eclipse.m2.downloadSources"
+          value="false"/>
+    </setupTask>
+    <setupTask
+        xsi:type="setup:CompoundTask"
         name="org.eclipse.oomph.setup.ui">
       <setupTask
           xsi:type="setup:PreferenceTask"
@@ -159,13 +171,8 @@
   </setupTask>
   <setupTask
       xsi:type="jdt:JRETask"
-      version="JavaSE-17"
-      location="${jre.location-17}"/>
-  <setupTask
-      xsi:type="jdt:JRETask"
       version="JavaSE-21"
-      location="${jre.location-21}"
-      executionEnvironmentDefault="false"/>
+      location="${jre.location-21}"/>
   <setupTask
       xsi:type="setup:EclipseIniTask"
       option="-Doomph.redirection.setups"
@@ -321,7 +328,7 @@
   <setupTask
       xsi:type="setup:StringSubstitutionTask"
       name="maven.build.java.home"
-      value="${jre.location-17}">
+      value="${jre.location-21}">
     <description>The location used to specify JAVA_HOME in the External Tools Configurations.</description>
   </setupTask>
   <setupTask
@@ -571,11 +578,15 @@
         <repository
             url="https://download.eclipse.org/technology/m2e/snapshots/latest"/>
         <repository
+            url="https://download.eclipse.org/wildwebdeveloper/releases/latest"/>
+        <repository
+            url="https://download.eclipse.org/tm4e/releases/latest"/>
+        <repository
             url="${swtbot.p2}"/>
         <repository
             url="https://download.eclipse.org/tools/orbit/simrel/orbit-aggregation/nightly/latest"/>
         <repository
-            url="https://download.eclipse.org/justj/jres/17/updates/milestone/latest"/>
+            url="https://download.eclipse.org/justj/jres/21/updates/milestone/latest"/>
         <repository
             url="https://download.eclipse.org/usssdk/updates/latest"/>
         <repository

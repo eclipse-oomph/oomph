@@ -6,5 +6,5 @@
     xmlns:targlets="http://www.eclipse.org/oomph/targlets/1.0"
     xsi:schemaLocation="http://www.eclipse.org/oomph/targlets/1.0 https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/models/Targlets.ecore">
   <requirement
-      name="org.eclipse.m2e.feature.feature.group"/>
+      name="org.eclipse.m2e.sdk.feature.feature.group"/>
 </targlets:ComponentExtension>

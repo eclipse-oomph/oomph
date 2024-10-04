@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.8"?>
-<target name="Generated from Oomph" sequenceNumber="149">
+<target name="Generated from Oomph" sequenceNumber="150">
   <locations>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
       <unit id="org.apache.commons.collections" version="3.2.2"/>
@@ -10,8 +10,7 @@
       <unit id="org.eclipse.emf.sdk.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.equinox.executable.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.justj.openjdk.hotspot.jre.minimal.stripped.feature.group" version="0.0.0"/>
-      <unit id="org.eclipse.m2e.feature.feature.group" version="0.0.0"/>
-      <unit id="org.eclipse.m2e.pde.feature.feature.group" version="0.0.0"/>
+      <unit id="org.eclipse.m2e.sdk.feature.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.mylyn.bugzilla.feature.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.mylyn.builds.feature.feature.group" version="0.0.0"/>
       <unit id="org.eclipse.nebula.widgets.tablecombo" version="0.0.0"/>
@@ -25,9 +24,11 @@
       <repository location="https://download.eclipse.org/mylyn/updates/nightly/latest"/>
       <repository location="https://download.eclipse.org/nebula/updates/release/3.1.1"/>
       <repository location="https://download.eclipse.org/technology/m2e/snapshots/latest"/>
+      <repository location="https://download.eclipse.org/wildwebdeveloper/releases/latest"/>
+      <repository location="https://download.eclipse.org/tm4e/releases/latest"/>
       <repository location="https://download.eclipse.org/technology/swtbot/releases/4.1.0"/>
       <repository location="https://download.eclipse.org/tools/orbit/simrel/orbit-aggregation/nightly/latest"/>
-      <repository location="https://download.eclipse.org/justj/jres/17/updates/nightly/latest"/>
+      <repository location="https://download.eclipse.org/justj/jres/21/updates/milestone/latest"/>
       <repository location="https://download.eclipse.org/usssdk/updates/latest"/>
       <repository location="https://download.eclipse.org/webtools/downloads/drops/R3.35.0/R-3.35.0-20240825085431/repository"/>
       <repository location="https://download.eclipse.org/eclipse/updates/4.34-I-builds"/>

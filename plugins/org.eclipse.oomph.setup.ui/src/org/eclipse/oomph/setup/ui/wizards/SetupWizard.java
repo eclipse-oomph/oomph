@@ -554,6 +554,7 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
   public void setOS(OS os)
   {
     this.os = os;
+    updateJREs(getCatalogManager().getIndex());
   }
 
   @Override
@@ -931,6 +932,65 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     setSetupContext(SetupContext.createInstallationWorkspaceAndUser(resourceSet));
     ECFURIHandlerImpl.saveProxies();
     resourceSet.getLoadOptions().put(ECFURIHandlerImpl.OPTION_CACHE_HANDLING, ECFURIHandlerImpl.CacheHandling.CACHE_WITH_ETAG_CHECKING);
+    updateJREs(index);
+  }
+
+  protected void updateJREs(Index index)
+  {
+    if (index != null)
+    {
+      List<JRE.Descriptor> jreDescriptors = new ArrayList<>();
+      Annotation jresAnnotation = index.getAnnotation(AnnotationConstants.ANNOTATION_JRE);
+      if (jresAnnotation != null)
+      {
+        OS os = getOS();
+        EList<EObject> references = jresAnnotation.getReferences();
+        for (EObject eObject : references)
+        {
+          if (eObject instanceof Macro)
+          {
+            Macro jresMacro = (Macro)eObject;
+            EList<SetupTask> setupTasks = jresMacro.getSetupTasks();
+            LOOP: //
+            for (SetupTask setupTask : setupTasks)
+            {
+              if (setupTask instanceof P2Task)
+              {
+                P2Task jreP2Task = (P2Task)setupTask;
+                String label = jreP2Task.getLabel();
+                Matcher matcher = Pattern.compile("([1-9][0-9]*)\\.([0-9]+)\\.([0-9]+)").matcher(label); //$NON-NLS-1$
+                if (matcher.find())
+                {
+                  EList<Repository> repositories = jreP2Task.getRepositories();
+                  for (Requirement requirement : jreP2Task.getRequirements())
+                  {
+                    // The requirements capture filter information about arch/os combinations for which JREs are available.
+                    // We should not offer a JRE feature for which there isn't really an actual JRE fragment for the current arch/os available.
+                    String filter = requirement.getFilter();
+                    if (!matchesFilterContext(filter, os))
+                    {
+                      continue LOOP;
+                    }
+                  }
+
+                  Repository repository = repositories.get(0);
+                  JRE.Descriptor descriptor = new JRE.Descriptor(label + " - " + repository.getURL(), //$NON-NLS-1$
+                      Integer.parseInt(matcher.group(1)), //
+                      Integer.parseInt(matcher.group(2)), //
+                      Integer.parseInt(matcher.group(3)), //
+                      64, //
+                      false, //
+                      jreP2Task);
+                  jreDescriptors.add(descriptor);
+                }
+              }
+            }
+          }
+        }
+      }
+
+      JREManager.INSTANCE.setJREs(jreDescriptors);
+    }
   }
 
   @Override
@@ -1406,60 +1466,6 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
     protected void indexLoaded(final Index index)
     {
       wizard.indexLoaded(index);
-
-      if (index != null)
-      {
-        List<JRE.Descriptor> jreDescriptors = new ArrayList<>();
-        Annotation jresAnnotation = index.getAnnotation(AnnotationConstants.ANNOTATION_JRE);
-        if (jresAnnotation != null)
-        {
-          EList<EObject> references = jresAnnotation.getReferences();
-          for (EObject eObject : references)
-          {
-            if (eObject instanceof Macro)
-            {
-              Macro jresMacro = (Macro)eObject;
-              EList<SetupTask> setupTasks = jresMacro.getSetupTasks();
-              LOOP: //
-              for (SetupTask setupTask : setupTasks)
-              {
-                if (setupTask instanceof P2Task)
-                {
-                  P2Task jreP2Task = (P2Task)setupTask;
-                  String label = jreP2Task.getLabel();
-                  Matcher matcher = Pattern.compile("([1-9][0-9]*)\\.([0-9]+)\\.([0-9]+)").matcher(label); //$NON-NLS-1$
-                  if (matcher.find())
-                  {
-                    EList<Repository> repositories = jreP2Task.getRepositories();
-                    for (Requirement requirement : jreP2Task.getRequirements())
-                    {
-                      // The requirements capture filter information about arch/os combinations for which JREs are available.
-                      // We should not offer a JRE feature for which there isn't really an actual JRE fragment for the current arch/os available.
-                      String filter = requirement.getFilter();
-                      if (!matchesFilterContext(filter, wizard.getOS()))
-                      {
-                        continue LOOP;
-                      }
-                    }
-
-                    Repository repository = repositories.get(0);
-                    JRE.Descriptor descriptor = new JRE.Descriptor(label + " - " + repository.getURL(), //$NON-NLS-1$
-                        Integer.parseInt(matcher.group(1)), //
-                        Integer.parseInt(matcher.group(2)), //
-                        Integer.parseInt(matcher.group(3)), //
-                        64, //
-                        false, //
-                        jreP2Task);
-                    jreDescriptors.add(descriptor);
-                  }
-                }
-              }
-            }
-          }
-        }
-
-        JREManager.INSTANCE.setJREs(jreDescriptors);
-      }
     }
 
     protected boolean shouldReload(EClass eClass)

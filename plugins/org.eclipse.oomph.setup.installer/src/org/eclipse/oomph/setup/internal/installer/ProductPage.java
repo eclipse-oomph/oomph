@@ -313,14 +313,7 @@ public class ProductPage extends SetupWizardPage
 
       osComboViewer.setInput(OS.INSTANCES);
 
-      for (OS os : OS.INSTANCES)
-      {
-        if (os.isCurrent())
-        {
-          osComboViewer.setSelection(new StructuredSelection(os));
-          break;
-        }
-      }
+      osComboViewer.setSelection(new StructuredSelection(getWizard().getOS()));
 
       osComboViewer.addSelectionChangedListener(new ISelectionChangedListener()
       {
@@ -331,6 +324,7 @@ public class ProductPage extends SetupWizardPage
           OS os = (OS)selection.getFirstElement();
           getWizard().setOS(os);
           javaController.setBitness(os.getBitness());
+          productViewer.refresh();
         }
       });
 
@@ -416,8 +410,7 @@ public class ProductPage extends SetupWizardPage
       @Override
       protected String getArch()
       {
-        OS os = getWizard().getOS();
-        return os.isMac() ? os.getOsgiArch() : super.getArch();
+        return getWizard().getOS().getOsgiArch();
       }
 
       @Override
@@ -697,7 +690,7 @@ public class ProductPage extends SetupWizardPage
         List<Object> filteredChildren = new ArrayList<>();
         for (Object child : children)
         {
-          if (!(child instanceof Product) || !getValidProductVersions((Product)child, null).isEmpty())
+          if (!(child instanceof Product) || !getValidProductVersions((Product)child, null, getWizard().getOS()).isEmpty())
           {
             filteredChildren.add(child);
           }
@@ -1352,11 +1345,6 @@ public class ProductPage extends SetupWizardPage
     return null;
   }
 
-  public static ProductVersion getDefaultProductVersion(CatalogManager catalogManager, Product product)
-  {
-    return getDefaultProductVersion(catalogManager, product, OS.INSTANCE);
-  }
-
   public static ProductVersion getDefaultProductVersion(CatalogManager catalogManager, Product product, OS os)
   {
     ProductVersion version = catalogManager.getSelection().getDefaultProductVersions().get(product);
@@ -1504,20 +1492,15 @@ public class ProductPage extends SetupWizardPage
     return new File(javaHome, "bin").toString(); //$NON-NLS-1$
   }
 
-  public static List<ProductVersion> getValidProductVersions(Product product, Pattern filter)
-  {
-    return getValidProductVersions(product, filter, OS.INSTANCE);
-  }
-
   public static List<ProductVersion> getValidProductVersions(Product product, Pattern filter, OS os)
   {
-    if (os != null && !matchesFilterContext(product, os))
+    if (!matchesFilterContext(product, os))
     {
       return Collections.emptyList();
     }
 
     List<ProductVersion> versions = new ArrayList<ProductVersion>(product.getVersions());
-    if (OS.INSTANCE.isMac())
+    if (os.isMac())
     {
       // Filter out the older releases because the latest p2, with it's layout changes for the Mac, can't install a correct image from older repositories.
       for (Iterator<ProductVersion> it = versions.iterator(); it.hasNext();)
@@ -1544,15 +1527,12 @@ public class ProductPage extends SetupWizardPage
       }
     }
 
-    if (os != null)
+    for (Iterator<ProductVersion> it = versions.iterator(); it.hasNext();)
     {
-      for (Iterator<ProductVersion> it = versions.iterator(); it.hasNext();)
+      ProductVersion version = it.next();
+      if (!matchesFilterContext(version, os))
       {
-        ProductVersion version = it.next();
-        if (!matchesFilterContext(version, os))
-        {
-          it.remove();
-        }
+        it.remove();
       }
     }
 
