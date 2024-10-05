@@ -322,6 +322,7 @@
   <project href="https://raw.githubusercontent.com/groovy/groovy-eclipse/master/groovy-eclipse.setup#/"/>
   <project href="https://raw.githubusercontent.com/LorenzoBettini/javamm/master/javamm.workspace/Javamm.setup#/"/>
   <project href="https://raw.githubusercontent.com/LorenzoBettini/jbase/master/jbase.workspace/Jbase.setup#/"/>
+  <project href="https://raw.githubusercontent.com/ssi-schaefer/lcdsl/master/oomph/LaunchConfigDSL.setup#/"/>
   <project href="https://raw.githubusercontent.com/m2e-code-quality/m2e-code-quality/develop/m2e-code-quality.setup#/"/>
   <project href="https://raw.githubusercontent.com/openhab/openhab-distro/master/launch/openHAB2.setup#/"/>
   <project href="https://raw.githubusercontent.com/tlaplus/tlaplus/master/general/ide/TLA.setup#/"/>
