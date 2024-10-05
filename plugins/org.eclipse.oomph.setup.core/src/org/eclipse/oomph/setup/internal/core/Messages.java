@@ -13,6 +13,8 @@ public class Messages extends NLS
 {
   private static final String BUNDLE_NAME = "org.eclipse.oomph.setup.internal.core.messages"; //$NON-NLS-1$
 
+  public static String AbstractSetupTaskContext_FilterOverridePatternProblem_message;
+
   public static String AbstractSetupTaskContext_NoLauncherName_message;
 
   public static String SetupArchiver_Aborting_message;

@@ -63,6 +63,8 @@ import java.util.regex.Pattern;
  */
 public abstract class AbstractSetupTaskContext extends StringExpander implements SetupTaskContext
 {
+  private static final Pattern FILTER_OVERRIDE_PATTERN = Pattern.compile(".*\\.([^.]+)\\.filter\\.override\\.pattern"); //$NON-NLS-1$
+
   private static final Pattern setLauncherNamePattern = Pattern.compile("setLauncherName\\(name:([^)]*)\\)"); //$NON-NLS-1$
 
   private SetupPrompter prompter;
@@ -82,6 +84,8 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
   private URIConverter uriConverter;
 
   private Map<Object, Object> map = new LinkedHashMap<>();
+
+  private final Map<String, Map<Pattern, String>> filterOverridePatternReplacements = new LinkedHashMap<>();
 
   private String launcherName;
 
@@ -546,7 +550,33 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
   @Override
   public Object put(Object key, Object value)
   {
+    if (key instanceof String && value instanceof String)
+    {
+      handleFilterOverridePattern(key.toString(), value.toString());
+    }
+
     return map.put(key, value);
+  }
+
+  private void handleFilterOverridePattern(String key, String value)
+  {
+    Matcher matcher = FILTER_OVERRIDE_PATTERN.matcher(key);
+    if (matcher.matches())
+    {
+      String filterName = matcher.group(1);
+      String[] pair = value.split("->"); //$NON-NLS-1$
+      if (pair.length == 2)
+      {
+        try
+        {
+          filterOverridePatternReplacements.computeIfAbsent(filterName, it -> new LinkedHashMap<>()).put(Pattern.compile(pair[0]), pair[1]);
+        }
+        catch (RuntimeException ex)
+        {
+          SetupCorePlugin.INSTANCE.log(new RuntimeException(NLS.bind(Messages.AbstractSetupTaskContext_FilterOverridePatternProblem_message, key, value), ex));
+        }
+      }
+    }
   }
 
   @Override
@@ -569,6 +599,19 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
   @Override
   protected String filter(String value, String filterName)
   {
+    Map<Pattern, String> replacements = filterOverridePatternReplacements.get(filterName);
+    if (replacements != null)
+    {
+      for (Map.Entry<Pattern, String> entry : replacements.entrySet())
+      {
+        Matcher matcher = entry.getKey().matcher(value);
+        if (matcher.matches())
+        {
+          return matcher.replaceAll(entry.getValue());
+        }
+      }
+    }
+
     return StringFilterRegistry.INSTANCE.filter(value, filterName);
   }
 }
