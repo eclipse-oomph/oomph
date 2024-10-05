@@ -846,7 +846,8 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
       dialog.setBrandingNotificationScope(productVersion);
 
-      String requiredJavaVersion = productVersion.getRequiredJavaVersion();
+      SetupContext setupContext = SetupContext.create(getResourceSet(), productVersion);
+      String requiredJavaVersion = ProductPage.getRequiredJavaVersion(productVersion, setupContext);
       javaController.setJavaVersion(requiredJavaVersion);
 
       ProductPage.saveProductVersionSelection(installer.getCatalogManager(), selectedProductVersion);

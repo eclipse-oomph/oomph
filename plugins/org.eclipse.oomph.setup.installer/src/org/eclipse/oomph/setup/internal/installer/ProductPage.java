@@ -28,6 +28,8 @@ import org.eclipse.oomph.p2.internal.ui.P2LabelProvider;
 import org.eclipse.oomph.p2.internal.ui.P2UIPlugin;
 import org.eclipse.oomph.setup.AnnotationConstants;
 import org.eclipse.oomph.setup.CatalogSelection;
+import org.eclipse.oomph.setup.EclipseIniTask;
+import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.Product;
 import org.eclipse.oomph.setup.ProductCatalog;
 import org.eclipse.oomph.setup.ProductVersion;
@@ -173,6 +175,9 @@ public class ProductPage extends SetupWizardPage
   private static final Pattern RELEASE_LABEL_PATTERN = Pattern.compile(".*\\(([^)]*)\\)[^)]*"); //$NON-NLS-1$
 
   private static final boolean OS_CHOOSE = PropertiesUtil.isProperty("oomph.setup.os.choose"); //$NON-NLS-1$
+
+  private static final Pattern OSGI_REQUIRED_JAVA_VERSION_VM_ARGUMENT_PATTERN = Pattern
+      .compile("-Dosgi\\.requiredJavaVersion=([1-9][0-9]+(\\.[0-9]+(\\.[0-9]+)?)?)"); //$NON-NLS-1$
 
   private final SelectionMemento selectionMemento;
 
@@ -534,7 +539,7 @@ public class ProductPage extends SetupWizardPage
         ProductVersion version = getSelectedProductVersion();
         if (version != null)
         {
-          String requiredJavaVersion = version.getRequiredJavaVersion();
+          String requiredJavaVersion = getRequiredJavaVersion(version, getWizard().getSetupContext());
           javaController.setJavaVersion(requiredJavaVersion);
 
           saveProductVersionSelection(catalogManager, version);
@@ -547,6 +552,45 @@ public class ProductPage extends SetupWizardPage
     updateProductDetails(true);
 
     return mainComposite;
+  }
+
+  public static String getRequiredJavaVersion(ProductVersion productVersion, SetupContext setupContext)
+  {
+    Installation installation = setupContext.getInstallation();
+    String requiredJavaVersion = installation == null ? null : getRequiredJavaVersion(installation.getSetupTasks());
+    if (requiredJavaVersion == null)
+    {
+      Workspace workspace = setupContext.getWorkspace();
+      requiredJavaVersion = workspace == null ? null : getRequiredJavaVersion(workspace.getSetupTasks());
+      if (requiredJavaVersion == null)
+      {
+        requiredJavaVersion = productVersion.getRequiredJavaVersion();
+      }
+    }
+
+    return requiredJavaVersion;
+  }
+
+  private static String getRequiredJavaVersion(List<? extends SetupTask> setupTasks)
+  {
+    for (SetupTask setupTask : setupTasks)
+    {
+      if (setupTask instanceof EclipseIniTask)
+      {
+        EclipseIniTask eclipseIniTask = (EclipseIniTask)setupTask;
+        if (eclipseIniTask.isVm())
+        {
+          String vmArgument = eclipseIniTask.getOption() + eclipseIniTask.getValue();
+          Matcher matcher = OSGI_REQUIRED_JAVA_VERSION_VM_ARGUMENT_PATTERN.matcher(vmArgument);
+          if (matcher.matches())
+          {
+            return matcher.group(1);
+          }
+        }
+      }
+    }
+
+    return null;
   }
 
   private SashForm createProductSash(Composite composite, final AdapterFactoryEditingDomain editingDomain)
