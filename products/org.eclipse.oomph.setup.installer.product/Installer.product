@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="Eclipse Installer" uid="org.eclipse.oomph.setup.installer.product" id="org.eclipse.oomph.setup.installer.product" application="org.eclipse.oomph.setup.installer.application" version="1.35.0.qualifier" useFeatures="true" includeLaunchers="true" autoIncludeRequirements="false">
+<product name="Eclipse Installer" uid="org.eclipse.oomph.setup.installer.product" id="org.eclipse.oomph.setup.installer.product" application="org.eclipse.oomph.setup.installer.application" version="1.35.0.qualifier" type="features" includeLaunchers="true" autoIncludeRequirements="false">
 
    <configIni use="">
    </configIni>
@@ -23,6 +23,9 @@ Eclipse Installer
       <vmArgsMac>-XstartOnFirstThread
 -Dorg.eclipse.swt.internal.carbon.smallFonts
       </vmArgsMac>
+      <vmArgsWin>-Djavax.net.ssl.trustStoreType=Windows-ROOT
+-Djavax.net.ssl.trustStore=NONE
+      </vmArgsWin>
    </launcherArgs>
 
    <windowImages/>
