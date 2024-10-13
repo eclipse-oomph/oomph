@@ -11,6 +11,7 @@
  */
 package org.eclipse.oomph.setup.ui;
 
+import org.eclipse.oomph.base.BaseFactory;
 import org.eclipse.oomph.jreinfo.JRE;
 import org.eclipse.oomph.jreinfo.JREFilter;
 import org.eclipse.oomph.jreinfo.JREManager;
@@ -71,6 +72,7 @@ import org.eclipse.swt.widgets.ToolItem;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -593,6 +595,8 @@ public abstract class PropertyField
    */
   public static class TextField extends PropertyField
   {
+    protected static final String DEFAULT_MARKER = "default"; //$NON-NLS-1$
+
     private final boolean secret;
 
     private PropertyField linkField;
@@ -651,7 +655,20 @@ public abstract class PropertyField
     @Override
     public String getDefaultValue()
     {
-      return choices == null || choices.isEmpty() ? "" : choices.get(0).getValue(); //$NON-NLS-1$
+      if (choices == null || choices.isEmpty())
+      {
+        return ""; //$NON-NLS-1$
+      }
+
+      for (VariableChoice choice : choices)
+      {
+        if (choice.getAnnotation(DEFAULT_MARKER) != null)
+        {
+          return choice.getValue();
+        }
+      }
+
+      return choices.get(0).getValue();
     }
 
     public final PropertyField getLinkField()
@@ -1320,15 +1337,28 @@ public abstract class PropertyField
     {
       List<VariableChoice> choices = new ArrayList<>();
       Map<File, JRE> jres = JREManager.INSTANCE.getJREs(jreFilter);
-      for (Map.Entry<File, JRE> entry : jres.entrySet())
+      if (!jres.isEmpty())
       {
-        VariableChoice choice = SetupFactory.eINSTANCE.createVariableChoice();
-        String folder = entry.getKey().toString();
-        choice.setValue(folder);
-        JRE jre = entry.getValue();
-        choice.setLabel((jre.isJDK() ? "JDK " : "JRE ") + jre.getMajor() + "." + jre.getMinor() + "." + jre.getMicro() + " " //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-            + NLS.bind(Messages.PropertyField_jreField_bitness, jre.getBitness()) + " -- " + folder); //$NON-NLS-1$
-        choices.add(choice);
+        Map<Integer, VariableChoice> majorChoices = jreFilter == null ? null : new LinkedHashMap<>();
+        for (Map.Entry<File, JRE> entry : jres.entrySet())
+        {
+          VariableChoice choice = SetupFactory.eINSTANCE.createVariableChoice();
+          String folder = entry.getKey().toString();
+          choice.setValue(folder);
+          JRE jre = entry.getValue();
+          choice.setLabel((jre.isJDK() ? "JDK " : "JRE ") + jre.getMajor() + "." + jre.getMinor() + "." + jre.getMicro() + " " //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+              + NLS.bind(Messages.PropertyField_jreField_bitness, jre.getBitness()) + " -- " + folder); //$NON-NLS-1$
+          choices.add(choice);
+          if (majorChoices != null)
+          {
+            majorChoices.putIfAbsent(jre.getMajor(), choice);
+          }
+        }
+
+        if (majorChoices != null)
+        {
+          new ArrayList<>(majorChoices.values()).get(majorChoices.size() - 1).getAnnotations().add(BaseFactory.eINSTANCE.createAnnotation(DEFAULT_MARKER));
+        }
       }
 
       return choices;
