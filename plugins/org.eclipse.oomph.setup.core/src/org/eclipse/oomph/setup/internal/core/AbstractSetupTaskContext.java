@@ -28,6 +28,7 @@ import org.eclipse.oomph.setup.User;
 import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.setup.impl.InstallationTaskImpl;
 import org.eclipse.oomph.setup.util.StringExpander;
+import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.OfflineMode;
 import org.eclipse.oomph.util.StringUtil;
@@ -49,7 +50,10 @@ import org.eclipse.osgi.service.datalocation.Location;
 import org.eclipse.osgi.util.NLS;
 
 import java.io.File;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -90,6 +94,8 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
   private String launcherName;
 
   private InstallableUnit filterContextIU;
+
+  private final Map<String, String> filterContentCache = new HashMap<>();
 
   protected AbstractSetupTaskContext(URIConverter uriConverter, SetupPrompter prompter, Trigger trigger, SetupContext setupContext)
   {
@@ -610,8 +616,42 @@ public abstract class AbstractSetupTaskContext extends StringExpander implements
           return matcher.replaceAll(entry.getValue());
         }
       }
+
+      return ""; //$NON-NLS-1$
+    }
+
+    if ("content".equalsIgnoreCase(filterName)) //$NON-NLS-1$
+    {
+      return filterContentCache.computeIfAbsent(value, key -> getContent(key));
     }
 
     return StringFilterRegistry.INSTANCE.filter(value, filterName);
+  }
+
+  private String getContent(String value)
+  {
+    try
+    {
+      byte[] bytes = uriConverter.createInputStream(URI.createURI(value)).readAllBytes();
+      for (Charset charset : new Charset[] { StandardCharsets.UTF_8, StandardCharsets.ISO_8859_1, StandardCharsets.UTF_16 })
+      {
+        try
+        {
+          return new String(bytes, charset);
+        }
+        catch (Exception ex)
+        {
+          //$FALL-THROUGH$
+        }
+      }
+
+      return new String(bytes, IOUtil.getNativeEncoding());
+    }
+    catch (Exception ex)
+    {
+      //$FALL-THROUGH$
+    }
+
+    return ""; //$NON-NLS-1$
   }
 }
