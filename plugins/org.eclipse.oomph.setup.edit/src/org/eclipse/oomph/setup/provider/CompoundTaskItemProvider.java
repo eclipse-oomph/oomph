@@ -165,8 +165,7 @@ public class CompoundTaskItemProvider extends SetupTaskItemProvider
    * <!-- end-user-doc -->
    * @generated
    */
-  @Override
-  public void notifyChanged(Notification notification)
+  public void notifyChangedGen(Notification notification)
   {
     updateChildren(notification);
 
@@ -180,6 +179,20 @@ public class CompoundTaskItemProvider extends SetupTaskItemProvider
         return;
     }
     super.notifyChanged(notification);
+  }
+
+  @Override
+  public void notifyChanged(Notification notification)
+  {
+    switch (notification.getFeatureID(CompoundTask.class))
+    {
+      case SetupPackage.COMPOUND_TASK__FILTER:
+        fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+        return;
+      default:
+        notifyChangedGen(notification);
+        return;
+    }
   }
 
   /**
