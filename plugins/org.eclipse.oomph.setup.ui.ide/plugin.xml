@@ -32,6 +32,9 @@
    <extension
          point="org.eclipse.debug.ui.stringVariablePresentations">
       <variablePresentation
+            argumentSelector="org.eclipse.oomph.setup.ui.internal.ide.FileExtractMatchingPatternArgumentSelector$ExtensionFactory"
+            variableName="file_extract_matching_pattern"/>
+      <variablePresentation
             argumentSelector="org.eclipse.oomph.setup.ui.internal.ide.URIArgumentSelector$ExtensionFactory"
             variableName="file_uri"/>
       <variablePresentation

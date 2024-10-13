@@ -10,10 +10,6 @@
  */
 package org.eclipse.oomph.setup.ui.internal.ide;
 
-import org.eclipse.emf.common.CommonPlugin;
-
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IExecutableExtensionFactory;
 import org.eclipse.core.variables.IStringVariable;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -21,19 +17,16 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-
 /**
  * @author Eike Stepper
  */
-public class ActiveMylynTaskArgumentSelector
+public class ActiveMylynTaskArgumentSelector extends AbstractArgumentSelector
 {
   @SuppressWarnings("nls")
   private static final String[] ATTRIBUTES = { "Id", "Key", "Url", "Kind", "Owner", "OwnerId", "Priority", "RepositoryUrl", "Summary", "ConnectorKind",
       "HandleIdentifier", "CreationDate", "CreationTime", "CompletionDate", "CompletionTime", "DueDate", "DueTime", "ModificationDate", "ModificationTime" };
 
+  @Override
   public String selectArgument(IStringVariable variable, Shell shell)
   {
     ILabelProvider labelProvider = new LabelProvider()
@@ -73,41 +66,12 @@ public class ActiveMylynTaskArgumentSelector
   /**
    * @author Ed Merks
    */
-  public static class ExtensionFactory implements IExecutableExtensionFactory
+  public static class ExtensionFactory extends AbstractExtensionFactory
   {
     @Override
-    public Object create() throws CoreException
+    protected AbstractArgumentSelector createSelector()
     {
-      Class<?> argumentSelectorInterface = null;
-
-      try
-      {
-        argumentSelectorInterface = CommonPlugin.loadClass("org.eclipse.debug.ui", "org.eclipse.debug.internal.ui.stringsubstitution.IArgumentSelector"); //$NON-NLS-1$ //$NON-NLS-2$
-      }
-      catch (ClassNotFoundException ex)
-      {
-        try
-        {
-          argumentSelectorInterface = CommonPlugin.loadClass("org.eclipse.debug.ui", "org.eclipse.debug.ui.stringsubstitution.IArgumentSelector"); //$NON-NLS-1$ //$NON-NLS-2$
-        }
-        catch (ClassNotFoundException ex1)
-        {
-          SetupUIIDEPlugin.INSTANCE.coreException(ex);
-        }
-      }
-
-      InvocationHandler invocationHandler = new InvocationHandler()
-      {
-        private final ActiveMylynTaskArgumentSelector activeMylynTaskArgumentSelector = new ActiveMylynTaskArgumentSelector();
-
-        @Override
-        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable
-        {
-          return activeMylynTaskArgumentSelector.selectArgument((IStringVariable)args[0], (Shell)args[1]);
-        }
-      };
-
-      return Proxy.newProxyInstance(getClass().getClassLoader(), new Class[] { argumentSelectorInterface }, invocationHandler);
+      return new ActiveMylynTaskArgumentSelector();
     }
   }
 }

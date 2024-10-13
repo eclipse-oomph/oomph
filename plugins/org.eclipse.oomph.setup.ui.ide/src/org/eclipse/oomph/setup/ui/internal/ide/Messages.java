@@ -25,6 +25,34 @@ public class Messages extends NLS
 
   public static String ActiveMylynTaskArgumentSelector_elementDialog_message;
 
+  public static String FileExtractMatchingPatternArgumentSelector_Configure_label;
+
+  public static String FileExtractMatchingPatternArgumentSelector_ConfigureCommandParameters_title;
+
+  public static String FileExtractMatchingPatternArgumentSelector_DefaultValue_label;
+
+  public static String FileExtractMatchingPatternArgumentSelector_Encoding_label;
+
+  public static String FileExtractMatchingPatternArgumentSelector_File_label;
+
+  public static String FileExtractMatchingPatternArgumentSelector_FileExtractMatchingPattern_title;
+
+  public static String FileExtractMatchingPatternArgumentSelector_FileUnspecified_message;
+
+  public static String FileExtractMatchingPatternArgumentSelector_InvalidEncoding_message;
+
+  public static String FileExtractMatchingPatternArgumentSelector_InvalidPattern_message;
+
+  public static String FileExtractMatchingPatternArgumentSelector_MissingPattern_message;
+
+  public static String FileExtractMatchingPatternArgumentSelector_MissingSubstitution_message;
+
+  public static String FileExtractMatchingPatternArgumentSelector_Pattern_label;
+
+  public static String FileExtractMatchingPatternArgumentSelector_Subsitutions_label;
+
+  public static String FileExtractMatchingPatternArgumentSelector_TitleArea_description;
+
   public static String SetupTaskWizard_errorDialog_title;
 
   public static String SetupTaskWizard_fileGenerateTask_name;
