@@ -1060,7 +1060,7 @@ public abstract class OomphTransferDelegate
         if (start != -1)
         {
           int end = value.lastIndexOf('>');
-          if (end != -1)
+          if (end > start)
           {
             Collection<? extends EObject> eObjects = fromXML(domain, value.substring(start, end + 1));
             if (eObjects != null)
