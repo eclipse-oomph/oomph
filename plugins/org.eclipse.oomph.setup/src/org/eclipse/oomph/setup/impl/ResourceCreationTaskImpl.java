@@ -26,6 +26,7 @@ import org.eclipse.osgi.util.NLS;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.Objects;
 
 /**
  * <!-- begin-user-doc -->
@@ -408,7 +409,27 @@ public class ResourceCreationTaskImpl extends SetupTaskImpl implements ResourceC
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
     URI targetURI = createResolvedURI(getTargetURL());
-    return targetURI != null && (isForce() || !context.getURIConverter().exists(targetURI, null));
+    return targetURI != null && (isForceAndHasContentChange(context, targetURI) || !context.getURIConverter().exists(targetURI, null));
+  }
+
+  private boolean isForceAndHasContentChange(SetupTaskContext context, URI targetURI)
+  {
+    if (isForce())
+    {
+      try
+      {
+        URIConverter uriConverter = context.getURIConverter();
+        byte[] bytes = uriConverter.createInputStream(targetURI).readAllBytes();
+        String existingContent = "base64".equals(encoding) ? XMLTypeFactory.eINSTANCE.convertBase64Binary(bytes) : new String(bytes, encoding); //$NON-NLS-1$
+        return !Objects.equals(content, existingContent);
+      }
+      catch (Exception ex)
+      {
+        //$FALL-THROUGH$
+      }
+    }
+
+    return false;
   }
 
   @Override
