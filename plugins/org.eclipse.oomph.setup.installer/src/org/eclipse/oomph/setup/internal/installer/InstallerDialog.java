@@ -454,6 +454,13 @@ public final class InstallerDialog extends SetupWizardDialog implements Installe
     setReturnCode(RETURN_ADVANCED);
   }
 
+  public void switchToNewUserHome(String userHome)
+  {
+    close();
+    setReturnCode(RETURN_OK);
+    getInstaller().switchToNewUserHome(userHome);
+  }
+
   /**
    * @author Eike Stepper
    */

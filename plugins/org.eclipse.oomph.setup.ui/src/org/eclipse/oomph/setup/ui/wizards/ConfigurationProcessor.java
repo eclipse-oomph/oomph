@@ -11,6 +11,7 @@
 package org.eclipse.oomph.setup.ui.wizards;
 
 import org.eclipse.oomph.base.util.BaseUtil;
+import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.setup.Configuration;
 import org.eclipse.oomph.setup.EclipseIniTask;
 import org.eclipse.oomph.setup.Index;
@@ -32,6 +33,8 @@ import org.eclipse.oomph.setup.WorkspaceTask;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.util.CatalogManager;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
+import org.eclipse.oomph.util.OS;
+import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.util.EList;
@@ -52,6 +55,7 @@ import org.eclipse.osgi.util.NLS;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -59,6 +63,9 @@ import java.util.List;
  */
 public class ConfigurationProcessor
 {
+  @SuppressWarnings("nls")
+  public static final String SETUP_USER_HOME_REDIRECT_COMMAND_LINE_ARGUMENT = "-D" + SetupProperties.PROP_SETUP_USER_HOME_REDIRECT + "=true";
+
   protected final SetupWizard setupWizard;
 
   protected final Configuration configuration;
@@ -119,6 +126,32 @@ public class ConfigurationProcessor
     }
 
     return status;
+  }
+
+  public boolean shouldSwitchUserHome()
+  {
+    if (configuration != null && !"false".equals(PropertiesUtil.getProperty(SetupProperties.PROP_INSTALLER_SWITCH_USER_HOME)) //$NON-NLS-1$
+        && OS.getCurrentLauncher(false) != null)
+    {
+      for (Iterator<EObject> it = configuration.eAllContents(); it.hasNext();)
+      {
+        EObject eObject = it.next();
+        if (eObject instanceof EclipseIniTask)
+        {
+          EclipseIniTask eclipseIniTask = (EclipseIniTask)eObject;
+          if (eclipseIniTask.isVm())
+          {
+            String vmArg = "" + eclipseIniTask.getOption() + eclipseIniTask.getValue(); //$NON-NLS-1$
+            if (SETUP_USER_HOME_REDIRECT_COMMAND_LINE_ARGUMENT.equals(vmArg))
+            {
+              return true;
+            }
+          }
+        }
+      }
+    }
+
+    return false;
   }
 
   public boolean processInstallation()

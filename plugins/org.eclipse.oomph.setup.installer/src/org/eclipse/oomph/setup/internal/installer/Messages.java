@@ -459,6 +459,12 @@ public class Messages extends NLS
 
   public static String SimpleVariablePage_UndefinedVersiables_message;
 
+  public static String SwitchUserHomeDialog_Title_description;
+
+  public static String SwitchUserHomeDialog_Title_text;
+
+  public static String SwitchUserHomeDialog_UserHomeFolder_label;
+
   public static String TrustDialog_description;
 
   public static String TrustDialog_title;

@@ -49,6 +49,8 @@ public class SetupProperties
 
   public static final String PROP_SETUP_USER_HOME_REDIRECT = "oomph.setup.user.home.redirect"; //$NON-NLS-1$
 
+  public static final String PROP_SETUP_USER_HOME_ORIGINAL = "oomph.setup.user.home.original"; //$NON-NLS-1$
+
   public static final String PROP_SETUP_SYNC_SKIP = "oomph.setup.sync.skip"; //$NON-NLS-1$
 
   public static final String PROP_SETUP_SYNC_TIMEOUT = "oomph.setup.sync.timeout"; //$NON-NLS-1$
@@ -88,6 +90,8 @@ public class SetupProperties
   public static final String PROP_SETUP_ECF_READ_TIMEOUT = "oomph.setup.ecf.read.timeout"; //$NON-NLS-1$
 
   public static final String PROP_INSTALLER_UPDATE_URL = "oomph.installer.update.url"; //$NON-NLS-1$
+
+  public static final String PROP_INSTALLER_SWITCH_USER_HOME = "oomph.installer.switch.user.home"; //$NON-NLS-1$
 
   public static final String PROP_SETUP_USER_AGENT = "oomph.userAgent"; //$NON-NLS-1$
 

@@ -268,6 +268,17 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
 
       if (configurationProcessor.processWorkspace())
       {
+        // Do this after checking if a workspace is needed because then we will generally switch to advanced mode and will be prompted there.
+        if (configurationProcessor.shouldSwitchUserHome())
+        {
+          SwitchUserHomeDialog switchUserHomeDialog = new SwitchUserHomeDialog(getShell());
+          if (switchUserHomeDialog.open() == Window.OK)
+          {
+            switchToNewUserHome(switchUserHomeDialog.getUserHomeLocation());
+            return;
+          }
+        }
+
         configurationProcessor.processInstallation();
       }
 
@@ -1047,6 +1058,13 @@ public final class SimpleInstallerDialog extends AbstractSimpleDialog implements
   public void restart()
   {
     setReturnCode(RETURN_RESTART);
+    exitSelected();
+  }
+
+  public void switchToNewUserHome(String userHome)
+  {
+    setReturnCode(RETURN_OK);
+    installer.switchToNewUserHome(userHome);
     exitSelected();
   }
 

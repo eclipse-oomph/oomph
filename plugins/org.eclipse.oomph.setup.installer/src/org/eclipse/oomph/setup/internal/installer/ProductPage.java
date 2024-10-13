@@ -114,6 +114,8 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.window.Window;
+import org.eclipse.jface.wizard.IWizardContainer;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
@@ -974,6 +976,23 @@ public class ProductPage extends SetupWizardPage
             return true;
           }
         };
+
+        IWizardContainer container = getContainer();
+        if (container instanceof InstallerDialog)
+        {
+          if (configurationProcessor.shouldSwitchUserHome())
+          {
+            SwitchUserHomeDialog switchUserHomeDialog = new SwitchUserHomeDialog(getShell());
+            if (switchUserHomeDialog.open() == Window.OK)
+            {
+              UIUtil.asyncExec(() -> {
+                ((InstallerDialog)container).switchToNewUserHome(switchUserHomeDialog.getUserHomeLocation());
+              });
+
+              return;
+            }
+          }
+        }
 
         configurationProcessor.processInstallation();
         IStatus status = configurationProcessor.getStatus();

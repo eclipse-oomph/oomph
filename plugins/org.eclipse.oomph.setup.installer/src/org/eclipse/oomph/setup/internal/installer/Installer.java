@@ -10,8 +10,10 @@
  */
 package org.eclipse.oomph.setup.internal.installer;
 
+import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.internal.ui.AccessUtil;
 import org.eclipse.oomph.p2.internal.ui.P2UIPlugin;
+import org.eclipse.oomph.setup.Configuration;
 import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.Macro;
@@ -23,6 +25,7 @@ import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl;
 import org.eclipse.oomph.setup.p2.P2Task;
 import org.eclipse.oomph.setup.p2.util.MarketPlaceListing;
+import org.eclipse.oomph.setup.ui.wizards.ConfigurationProcessor;
 import org.eclipse.oomph.setup.ui.wizards.ExtensionsDialog;
 import org.eclipse.oomph.setup.ui.wizards.ProjectPage;
 import org.eclipse.oomph.setup.ui.wizards.ProjectPage.ConfigurationListener;
@@ -35,6 +38,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.equinox.p2.core.UIServices;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
@@ -50,11 +54,15 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -401,4 +409,42 @@ public class Installer extends SetupWizard
     display.removeListener(SWT.OpenDocument, openListener);
     display.removeListener(SWT.OpenUrl, openListener);
   }
+
+  public void switchToNewUserHome(String userHome)
+  {
+    String launcher = OS.getCurrentLauncher(false);
+    if (launcher != null)
+    {
+      List<String> command = new ArrayList<>();
+      command.add(new File(launcher).getAbsolutePath());
+
+      command.addAll(Arrays.asList(Platform.getApplicationArgs()));
+
+      Configuration configuration = getConfiguration();
+      if (configuration != null)
+      {
+        Resource resource = configuration.eResource();
+        if (resource != null)
+        {
+          command.add(resource.getURI().toString());
+        }
+      }
+
+      command.add("-vmargs"); //$NON-NLS-1$
+      command.add("-Duser.home=" + userHome); //$NON-NLS-1$
+      command.add("-D" + SetupProperties.PROP_SETUP_USER_HOME_ORIGINAL + "=" + PropertiesUtil.getUserHome()); //$NON-NLS-1$ //$NON-NLS-2$
+      command.add("-D" + SetupProperties.PROP_INSTALLER_SWITCH_USER_HOME + "=false"); //$NON-NLS-1$ //$NON-NLS-2$
+      command.add(ConfigurationProcessor.SETUP_USER_HOME_REDIRECT_COMMAND_LINE_ARGUMENT);
+
+      try
+      {
+        Runtime.getRuntime().exec(command.toArray(new String[command.size()]));
+      }
+      catch (Exception ex)
+      {
+        SetupInstallerPlugin.INSTANCE.log(ex);
+      }
+    }
+  }
+
 }
