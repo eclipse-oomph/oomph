@@ -30,6 +30,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTError;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.browser.Browser;
+import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
@@ -49,6 +50,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IViewReference;
@@ -67,6 +70,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -1169,6 +1173,99 @@ public final class UIUtil
   public static <T> T getService(IServiceLocator serviceLocator, Class<T> api)
   {
     return api.cast(serviceLocator.getService(api));
+  }
+
+  public static void toggleExpandOneLevel(Tree tree, boolean expand, int timeoutMillis)
+  {
+    TreeItem[] selection = tree.getSelection();
+    TreeItem topItem = tree.getTopItem();
+
+    List<TreeItem> items = new ArrayList<>();
+    if (expand)
+    {
+      collectUnexpandedLeaves(items, selection);
+    }
+    else
+    {
+      collectParentsToCollapse(items, selection);
+    }
+
+    BusyIndicator.showWhile(tree.getDisplay(), new Runnable()
+    {
+      @Override
+      public void run()
+      {
+        try
+        {
+          tree.setRedraw(false);
+          long start = System.currentTimeMillis();
+          for (TreeItem treeItem : items)
+          {
+            if (expand)
+            {
+
+              if (!treeItem.getExpanded())
+              {
+                Event expandEvent = new Event();
+                expandEvent.item = treeItem;
+                tree.notifyListeners(SWT.Expand, expandEvent);
+                treeItem.setExpanded(true);
+              }
+            }
+            else
+            {
+              treeItem.setExpanded(false);
+            }
+
+            if (System.currentTimeMillis() - start > timeoutMillis)
+            {
+              break;
+            }
+          }
+        }
+        finally
+        {
+          tree.setTopItem(topItem);
+          if (selection.length != 0)
+          {
+            tree.setSelection(selection);
+          }
+
+          tree.setRedraw(true);
+        }
+      }
+    });
+  }
+
+  private static void collectParentsToCollapse(Collection<TreeItem> parentsToCollapse, TreeItem[] treeItems)
+  {
+    for (TreeItem treeItem : treeItems)
+    {
+      if (treeItem.getExpanded())
+      {
+        int size = parentsToCollapse.size();
+        collectParentsToCollapse(parentsToCollapse, treeItem.getItems());
+        if (parentsToCollapse.size() == size)
+        {
+          parentsToCollapse.add(treeItem);
+        }
+      }
+    }
+  }
+
+  private static void collectUnexpandedLeaves(Collection<TreeItem> unexpandedLeaves, TreeItem[] treeItems)
+  {
+    for (TreeItem treeItem : treeItems)
+    {
+      if (treeItem.getExpanded())
+      {
+        collectUnexpandedLeaves(unexpandedLeaves, treeItem.getItems());
+      }
+      else
+      {
+        unexpandedLeaves.add(treeItem);
+      }
+    }
   }
 
   /**
