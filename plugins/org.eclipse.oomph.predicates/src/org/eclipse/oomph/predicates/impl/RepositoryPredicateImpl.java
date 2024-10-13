@@ -243,12 +243,12 @@ public class RepositoryPredicateImpl extends PredicateImpl implements Repository
   {
     if (referenceMainRepoAbsolutPath == null)
     {
-      referenceMainRepoAbsolutPath = getRepoDirAbsolutePath(getProject());
+      referenceMainRepoAbsolutPath = getRepositoryLocation(getProject());
     }
     return referenceMainRepoAbsolutPath;
   }
 
-  private Path getRepoDirAbsolutePath(IProject project)
+  public static Path getRepositoryLocation(IProject project)
   {
     if (project != null)
     {
@@ -343,7 +343,7 @@ public class RepositoryPredicateImpl extends PredicateImpl implements Repository
     }
 
     Path prototypeRepoDir = getReferenceMainRepoAbsolutPath();
-    Path repoDir = getRepoDirAbsolutePath(resource.getProject());
+    Path repoDir = getRepositoryLocation(resource.getProject());
 
     if (prototypeRepoDir == null || repoDir == null
         || !repoDir.equals(prototypeRepoDir) && (!isIncludeNestedRepositories() || !repoDir.startsWith(prototypeRepoDir)))
