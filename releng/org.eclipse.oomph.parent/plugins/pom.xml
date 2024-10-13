@@ -36,6 +36,9 @@ Eike Stepper - initial API and implementation
     <module>../../../plugins/org.eclipse.oomph.junit</module>
     <module>../../../plugins/org.eclipse.oomph.launches</module>
     <module>../../../plugins/org.eclipse.oomph.manifests</module>
+    <module>../../../plugins/org.eclipse.oomph.maven</module>
+    <module>../../../plugins/org.eclipse.oomph.maven.edit</module>
+    <module>../../../plugins/org.eclipse.oomph.maven.editor</module>
     <module>../../../plugins/org.eclipse.oomph.ostools</module>
     <module>../../../plugins/org.eclipse.oomph.p2</module>
     <module>../../../plugins/org.eclipse.oomph.p2.core</module>

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="maven" nsURI="https://www.eclipse.org/Oomph/maven/1.0" nsPrefix="maven">
+  <eAnnotations source="http://www.eclipse.org/oomph/base/LabelProvider">
+    <eAnnotations source="http://www.eclipse.org/oomph/base/LabelProvider">
+      <details key="imageBaseURI" value="https://raw.githubusercontent.com/eclipse-oomph/oomph/master/plugins/org.eclipse.oomph.maven.edit/icons/full/obj16"/>
+    </eAnnotations>
+    <details key="imageBaseURI" value="https://raw.githubusercontent.com/eclipse-oomph/oomph/master/plugins/org.eclipse.oomph.maven.edit/icons/full/obj16"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="Realm" eSuperTypes="../../org.eclipse.oomph.base/model/Base.ecore#//ModelElement">
+    <eOperations name="reconcile"/>
+    <eOperations name="getProject" eType="#//Project">
+      <eParameters name="coordinate" lowerBound="1" eType="#//Coordinate"/>
+    </eOperations>
+    <eOperations name="getProjectIgnoreVersion" eType="#//Project">
+      <eParameters name="coordinate" lowerBound="1" eType="#//Coordinate"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sourceLocators" upperBound="-1"
+        eType="ecore:EClass ../../org.eclipse.oomph.resources/model/Resources.ecore#//SourceLocator"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="projects" upperBound="-1"
+        eType="#//Project" transient="true" containment="true" resolveProxies="false"
+        eOpposite="#//Project/realm"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DOMElement" abstract="true" eSuperTypes="../../org.eclipse.oomph.base/model/Base.ecore#//ModelElement">
+    <eOperations name="getElement" eType="#//Element">
+      <eParameters name="xpath" lowerBound="1" eType="#//XPath"/>
+    </eOperations>
+    <eOperations name="getElementEdits">
+      <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+        <eTypeArguments eClassifier="#//Document"/>
+        <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="#//TextRegion"/>
+          <eTypeArguments eClassifier="#//ElementEdit"/>
+        </eTypeArguments>
+      </eGenericType>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="element" lowerBound="1"
+        eType="#//Element"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="propertyReferences" upperBound="-1"
+        eType="#//PropertyReference" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Coordinate" abstract="true" eSuperTypes="#//DOMElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="groupId" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" changeable="false"
+        transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="artifactId" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" changeable="false"
+        transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        changeable="false" transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expandedGroupId" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" changeable="false"
+        transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expandedVersion" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        changeable="false" derived="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Project" eSuperTypes="#//Coordinate">
+    <eOperations name="getProperty" eType="#//Property">
+      <eParameters name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getManagedDependency" eType="#//Dependency">
+      <eParameters name="dependency" lowerBound="1" eType="#//Dependency"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="location" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="realm" eType="#//Realm"
+        changeable="false" transient="true" resolveProxies="false" eOpposite="#//Realm/projects"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//Parent"
+        transient="true" containment="true" resolveProxies="false" eOpposite="#//Parent/project"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dependencies" upperBound="-1"
+        eType="#//Dependency" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="managedDependencies" upperBound="-1"
+        eType="#//Dependency" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
+        eType="#//Property" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="incomingParentReferences"
+        upperBound="-1" eType="#//Parent" eOpposite="#//Parent/resolvedProject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="incomingDependencyReferences"
+        upperBound="-1" eType="#//Dependency" eOpposite="#//Dependency/resolvedProject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Parent" eSuperTypes="#//Coordinate">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="ResolvesInRealm ValidRelativePath"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="project" eType="#//Project"
+        changeable="false" transient="true" resolveProxies="false" eOpposite="#//Project/parent"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="relativePath" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        changeable="false" transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resolvedProject" lowerBound="1"
+        eType="#//Project" eOpposite="#//Project/incomingParentReferences"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Dependency" eSuperTypes="#//Coordinate">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="ResolvesInRealm"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resolvedProject" eType="#//Project"
+        eOpposite="#//Project/incomingDependencyReferences"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resolvedManagedDependency"
+        eType="#//Dependency" eOpposite="#//Dependency/incomingResolvedManagedDependencies"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="incomingResolvedManagedDependencies"
+        upperBound="-1" eType="#//Dependency" eOpposite="#//Dependency/resolvedManagedDependency"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Property" eSuperTypes="#//DOMElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        changeable="false" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        changeable="false" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expandedValue" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" changeable="false"
+        derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="incomingResolvedPropertyReferences"
+        upperBound="-1" eType="#//PropertyReference" eOpposite="#//PropertyReference/resolvedProperty"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PropertyReference" eSuperTypes="#//DOMElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resolvedProperty" lowerBound="1"
+        eType="#//Property" eOpposite="#//Property/incomingResolvedPropertyReferences"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="Document" instanceClassName="org.w3c.dom.Document"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Element" instanceClassName="org.w3c.dom.Element"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="ElementEdit" instanceClassName="org.eclipse.oomph.maven.util.MavenValidator$ElementEdit"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="TextRegion" instanceClassName="org.eclipse.oomph.maven.util.POMXMLUtil$TextRegion"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="XPath" instanceClassName="org.eclipse.emf.common.util.SegmentSequence"/>
+</ecore:EPackage>

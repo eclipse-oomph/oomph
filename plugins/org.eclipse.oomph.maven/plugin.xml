@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<!--
+  Copyright (c) 2024 ACTICO GmbH, Germany and others.
+  All rights reserved. This program and the accompanying materials
+  are made available under the terms of the Eclipse Public License v2.0
+  which accompanies this distribution, and is available at
+  http://www.eclipse.org/legal/epl-v20.html
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated Maven -->
+      <package
+            uri="https://www.eclipse.org/Oomph/maven/1.0"
+            class="org.eclipse.oomph.maven.MavenPackage"
+            genModel="model/POM.genmodel"/>
+   </extension>
+
+</plugin>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.eclipse.oomph.maven/src" creationIcons="false"
+    modelPluginID="org.eclipse.oomph.maven" modelName="Maven" modelPluginClass="org.eclipse.oomph.maven.MavenPlugin"
+    updateClasspath="false" nonNLSMarkers="true" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    testsDirectory="" importerID="org.eclipse.emf.importer.ecore" complianceLevel="17.0"
+    copyrightFields="false" usedGenPackages="../../org.eclipse.oomph.base/model/Base.genmodel#//base ../../org.eclipse.oomph.predicates/model/Predicates.genmodel#//predicates ../../org.eclipse.oomph.resources/model/Resources.genmodel#//resources"
+    operationReflection="true" decoration="Live" styleProviders="true" cleanup="true"
+    autoResizeProperties="true" findAction="true" expandAllAction="true" collapseAllAction="true"
+    revertAction="true">
+  <foreignModel>POM.ecore</foreignModel>
+  <genPackages prefix="Maven" basePackage="org.eclipse.oomph" disposableProviderFactory="true"
+      dataTypeConverters="true" multipleEditorPages="false" generateModelWizard="false"
+      ecorePackage="POM.ecore#/">
+    <genDataTypes ecoreDataType="POM.ecore#//Document"/>
+    <genDataTypes ecoreDataType="POM.ecore#//Element"/>
+    <genDataTypes ecoreDataType="POM.ecore#//ElementEdit"/>
+    <genDataTypes ecoreDataType="POM.ecore#//TextRegion"/>
+    <genDataTypes ecoreDataType="POM.ecore#//XPath"/>
+    <genClasses ecoreClass="POM.ecore#//Realm">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference POM.ecore#//Realm/sourceLocators"/>
+      <genFeatures property="None" children="true" createChild="false" ecoreFeature="ecore:EReference POM.ecore#//Realm/projects"/>
+      <genOperations ecoreOperation="POM.ecore#//Realm/reconcile"/>
+      <genOperations ecoreOperation="POM.ecore#//Realm/getProject">
+        <genParameters ecoreParameter="POM.ecore#//Realm/getProject/coordinate"/>
+      </genOperations>
+      <genOperations ecoreOperation="POM.ecore#//Realm/getProjectIgnoreVersion">
+        <genParameters ecoreParameter="POM.ecore#//Realm/getProjectIgnoreVersion/coordinate"/>
+      </genOperations>
+    </genClasses>
+    <genClasses image="false" ecoreClass="POM.ecore#//DOMElement">
+      <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute POM.ecore#//DOMElement/element"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference POM.ecore#//DOMElement/propertyReferences"/>
+      <genOperations ecoreOperation="POM.ecore#//DOMElement/getElement">
+        <genParameters ecoreParameter="POM.ecore#//DOMElement/getElement/xpath"/>
+      </genOperations>
+      <genOperations ecoreOperation="POM.ecore#//DOMElement/getElementEdits"/>
+    </genClasses>
+    <genClasses ecoreClass="POM.ecore#//Coordinate">
+      <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute POM.ecore#//Coordinate/groupId"/>
+      <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute POM.ecore#//Coordinate/artifactId"/>
+      <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute POM.ecore#//Coordinate/version"/>
+      <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute POM.ecore#//Coordinate/expandedGroupId"/>
+      <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute POM.ecore#//Coordinate/expandedVersion"/>
+    </genClasses>
+    <genClasses ecoreClass="POM.ecore#//Project" labelFeature="#//maven/Project/location">
+      <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute POM.ecore#//Project/location"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference POM.ecore#//Project/realm"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference POM.ecore#//Project/parent"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference POM.ecore#//Project/dependencies"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference POM.ecore#//Project/managedDependencies"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference POM.ecore#//Project/properties"/>
+      <genFeatures property="Readonly" notify="false" createChild="false" propertySortChoices="true"
+          ecoreFeature="ecore:EReference POM.ecore#//Project/incomingParentReferences"/>
+      <genFeatures property="Readonly" notify="false" createChild="false" propertySortChoices="true"
+          ecoreFeature="ecore:EReference POM.ecore#//Project/incomingDependencyReferences"/>
+      <genOperations ecoreOperation="POM.ecore#//Project/getProperty">
+        <genParameters ecoreParameter="POM.ecore#//Project/getProperty/key"/>
+      </genOperations>
+      <genOperations ecoreOperation="POM.ecore#//Project/getManagedDependency">
+        <genParameters ecoreParameter="POM.ecore#//Project/getManagedDependency/dependency"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="POM.ecore#//Parent">
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference POM.ecore#//Parent/project"/>
+      <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute POM.ecore#//Parent/relativePath"/>
+      <genFeatures property="Readonly" notify="false" createChild="false" propertySortChoices="true"
+          ecoreFeature="ecore:EReference POM.ecore#//Parent/resolvedProject"/>
+    </genClasses>
+    <genClasses ecoreClass="POM.ecore#//Dependency">
+      <genFeatures property="Readonly" notify="false" createChild="false" propertySortChoices="true"
+          ecoreFeature="ecore:EReference POM.ecore#//Dependency/resolvedProject"/>
+      <genFeatures property="Readonly" notify="false" createChild="false" propertySortChoices="true"
+          ecoreFeature="ecore:EReference POM.ecore#//Dependency/resolvedManagedDependency"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference POM.ecore#//Dependency/incomingResolvedManagedDependencies"/>
+    </genClasses>
+    <genClasses ecoreClass="POM.ecore#//Property">
+      <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute POM.ecore#//Property/key"/>
+      <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute POM.ecore#//Property/value"/>
+      <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute POM.ecore#//Property/expandedValue"/>
+      <genFeatures property="Readonly" notify="false" createChild="false" propertySortChoices="true"
+          ecoreFeature="ecore:EReference POM.ecore#//Property/incomingResolvedPropertyReferences"/>
+    </genClasses>
+    <genClasses ecoreClass="POM.ecore#//PropertyReference">
+      <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute POM.ecore#//PropertyReference/name"/>
+      <genFeatures property="Readonly" notify="false" createChild="false" propertySortChoices="true"
+          ecoreFeature="ecore:EReference POM.ecore#//PropertyReference/resolvedProperty"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

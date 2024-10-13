@@ -31,6 +31,7 @@ Eike Stepper - initial API and implementation
     <module>../../../features/org.eclipse.oomph.launches-feature</module>
     <module>../../../features/org.eclipse.oomph.license-feature</module>
     <module>../../../features/org.eclipse.oomph.manifests-feature</module>
+    <module>../../../features/org.eclipse.oomph.maven-feature</module>
     <module>../../../features/org.eclipse.oomph.ostools-feature</module>
     <module>../../../features/org.eclipse.oomph.p2-feature</module>
     <module>../../../features/org.eclipse.oomph.preferences-feature</module>

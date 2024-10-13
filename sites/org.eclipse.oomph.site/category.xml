@@ -72,6 +72,9 @@
    <feature id="org.eclipse.oomph.manifests" version="0.0.0">
       <category name="org.eclipse.oomph.tools.category"/>
    </feature>
+   <feature id="org.eclipse.oomph.maven">
+      <category name="org.eclipse.oomph.tools.category"/>
+   </feature>
    <feature id="org.eclipse.oomph.p2" version="0.0.0">
       <category name="org.eclipse.oomph.tools.category"/>
    </feature>
