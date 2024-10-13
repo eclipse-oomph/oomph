@@ -17,7 +17,10 @@ import org.eclipse.oomph.base.ModelElement;
 import org.eclipse.oomph.base.provider.BaseEditUtil.IconReflectiveItemProvider;
 import org.eclipse.oomph.base.provider.ModelElementItemProvider;
 import org.eclipse.oomph.base.util.EAnnotations;
+import org.eclipse.oomph.internal.ui.GeneralDragAdapter;
 import org.eclipse.oomph.internal.ui.OomphEditingDomainActionBarContributor;
+import org.eclipse.oomph.internal.ui.OomphTransferDelegate;
+import org.eclipse.oomph.resources.ResourcesUtil;
 import org.eclipse.oomph.setup.AnnotationConstants;
 import org.eclipse.oomph.setup.CompoundTask;
 import org.eclipse.oomph.setup.EAnnotationConstants;
@@ -28,7 +31,9 @@ import org.eclipse.oomph.setup.ProductVersion;
 import org.eclipse.oomph.setup.Project;
 import org.eclipse.oomph.setup.ProjectCatalog;
 import org.eclipse.oomph.setup.RedirectionTask;
+import org.eclipse.oomph.setup.ResourceCreationTask;
 import org.eclipse.oomph.setup.Scope;
+import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.SetupPackage;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.VariableChoice;
@@ -42,6 +47,7 @@ import org.eclipse.oomph.setup.ui.SetupEditorSupport;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.recorder.RecorderManager;
 import org.eclipse.oomph.setup.ui.recorder.RecorderTransaction;
+import org.eclipse.oomph.setup.util.SetupUtil;
 import org.eclipse.oomph.ui.DockableDialog;
 import org.eclipse.oomph.ui.DockableDialog.Factory;
 import org.eclipse.oomph.ui.UIUtil;
@@ -50,8 +56,11 @@ import org.eclipse.oomph.util.StringUtil;
 import org.eclipse.oomph.workingsets.WorkingSet;
 import org.eclipse.oomph.workingsets.WorkingSetsPackage;
 import org.eclipse.oomph.workingsets.presentation.WorkingSetsActionBarContributor;
+import org.eclipse.oomph.workingsets.presentation.WorkingSetsActionBarContributor.PreviewDialog;
+import org.eclipse.oomph.workingsets.presentation.WorkingSetsActionBarContributor.PreviewDialog.Previewable;
 import org.eclipse.oomph.workingsets.presentation.WorkingSetsActionBarContributor.ShowPreviewAction;
 
+import org.eclipse.emf.common.CommonPlugin;
 import org.eclipse.emf.common.command.AbstractCommand;
 import org.eclipse.emf.common.ui.viewer.IViewerProvider;
 import org.eclipse.emf.common.util.EList;
@@ -80,7 +89,11 @@ import org.eclipse.emf.edit.ui.provider.DiagnosticDecorator;
 import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.ParameterizedCommand;
 import org.eclipse.core.commands.common.NotDefinedException;
+import org.eclipse.core.filesystem.EFS;
+import org.eclipse.core.filesystem.IFileStore;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IStorage;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -104,13 +117,24 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.AbstractTreeViewer;
+import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider;
+import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider;
+import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Tree;
@@ -139,7 +163,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Constructor;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -289,6 +316,8 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
 
   protected final DeleteUnrecognizedContentAction deleteUnrecognizedContentAction = new DeleteUnrecognizedContentAction();
 
+  protected final ShowLaunchConfigurationsAction showLaunchConfigurationAction = new ShowLaunchConfigurationsAction();
+
   private int lastSubMenuID;
 
   /**
@@ -437,6 +466,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
     // toolBarManager.add(testInstallAction);
     toolBarManager.add(showInformationBrowserAction);
     toolBarManager.add(showPreviewAction);
+    toolBarManager.add(showLaunchConfigurationAction);
     toolBarManager.add(toggleViewerInputAction);
     super.contributeToToolBar(toolBarManager);
     toolBarManager.add(new Separator("setup-additions")); //$NON-NLS-1$
@@ -514,6 +544,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
     capturePreferencesAction.setActiveWorkbenchPart(part);
     importPreferencesAction.setActiveWorkbenchPart(part);
     showPreviewAction.setActiveWorkbenchPart(part);
+    showLaunchConfigurationAction.setActiveWorkbenchPart(part);
     showInformationBrowserAction.setActiveWorkbenchPart(part);
     deleteUnrecognizedContentAction.setActiveWorkbenchPart(part);
 
@@ -1287,6 +1318,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
     menuManager.insertAfter("live", new ActionContributionItem(showTooltipsAction)); //$NON-NLS-1$
     menuManager.insertBefore("properties", new ActionContributionItem(showInformationBrowserAction)); //$NON-NLS-1$
     menuManager.insertBefore("properties", showPreviewAction); //$NON-NLS-1$
+    menuManager.insertBefore("properties", showLaunchConfigurationAction); //$NON-NLS-1$
     menuManager.insertBefore("load", menuManager.remove("control")); //$NON-NLS-1$ //$NON-NLS-2$
   }
 
@@ -1336,6 +1368,13 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
   public void openInPropertiesView(SetupEditor setupEditor, Object object, String property)
   {
     showPropertiesViewAction.open(setupEditor, object, property);
+  }
+
+  @Override
+  public void dispose()
+  {
+    showLaunchConfigurationAction.dispose();
+    super.dispose();
   }
 
   /**
@@ -2375,6 +2414,248 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
       }
 
       return null;
+    }
+  }
+
+  public static class LaunchConfigurationsDialog extends Dialog
+  {
+    private static final Class<?> LAUNCH_VIEW_MODEL_CLASS;
+
+    private static final Constructor<IContentProvider> LAUNCH_VIEW_CONTENT_PROVIDER_CONSTRUCTOR;
+
+    private static final Constructor<IStyledLabelProvider> LAUNCH_VIEW_LABEL_PROVIDER_CONSTRUCTOR;
+
+    static
+    {
+      Class<?> launchViewModelClass = null;
+      Constructor<IContentProvider> launchViewContentProviderConstructor = null;
+      Constructor<IStyledLabelProvider> launchViewLabelProviderConstructor = null;
+
+      try
+      {
+        @SuppressWarnings({ "unchecked", "nls", "unused" })
+        Object it = new Object[] {
+            launchViewModelClass = CommonPlugin.loadClass("org.eclipse.debug.ui.launchview", "org.eclipse.debug.ui.launchview.internal.model.LaunchViewModel"),
+            launchViewContentProviderConstructor = (Constructor<IContentProvider>)CommonPlugin
+                .loadClass("org.eclipse.debug.ui.launchview", "org.eclipse.debug.ui.launchview.internal.view.LaunchViewContentProvider").getConstructor(),
+            launchViewLabelProviderConstructor = (Constructor<IStyledLabelProvider>)CommonPlugin
+                .loadClass("org.eclipse.debug.ui.launchview", "org.eclipse.debug.ui.launchview.internal.view.LaunchViewLabelProvider").getConstructor() //
+        };
+      }
+      catch (ClassNotFoundException | NoSuchMethodException | SecurityException ex)
+      {
+        //$FALL-THROUGH$
+      }
+
+      LAUNCH_VIEW_MODEL_CLASS = launchViewModelClass;
+      LAUNCH_VIEW_CONTENT_PROVIDER_CONSTRUCTOR = launchViewContentProviderConstructor;
+      LAUNCH_VIEW_LABEL_PROVIDER_CONSTRUCTOR = launchViewLabelProviderConstructor;
+    }
+
+    public static boolean IS_AVAILBLE = LAUNCH_VIEW_MODEL_CLASS != null && LAUNCH_VIEW_CONTENT_PROVIDER_CONSTRUCTOR != null
+        && LAUNCH_VIEW_LABEL_PROVIDER_CONSTRUCTOR != null;
+
+    protected TreeViewer tree;
+
+    protected ISelectionProvider activePart;
+
+    public LaunchConfigurationsDialog(IWorkbenchWindow workbenchWindow)
+    {
+      super(workbenchWindow);
+      setShellStyle(SWT.MODELESS | SWT.DIALOG_TRIM | SWT.RESIZE);
+    }
+
+    @Override
+    protected IDialogSettings getDialogBoundsSettings()
+    {
+      return SetupEditorPlugin.INSTANCE.getDialogSettings("LaunchConfigurations"); //$NON-NLS-1$
+    }
+
+    @Override
+    protected Control createDialogArea(Composite parent)
+    {
+      getShell().setText(Messages.SetupActionBarContributor_LaunchConfiguration_title);
+
+      tree = new TreeViewer(parent);
+      tree.setAutoExpandLevel(AbstractTreeViewer.ALL_LEVELS);
+
+      List<? extends OomphTransferDelegate> dndDelegates = Arrays
+          .asList(new OomphTransferDelegate[] { new OomphTransferDelegate.URLTransferDelegate(), new OomphTransferDelegate.TextTransferDelegate() });
+      Transfer[] dndTransfers = new Transfer[] { dndDelegates.get(0).getTransfer(), dndDelegates.get(1).getTransfer() };
+      tree.addDragSupport(DND.DROP_COPY | DND.DROP_MOVE | DND.DROP_LINK, dndTransfers,
+          new GeneralDragAdapter(tree, new GeneralDragAdapter.DraggedObjectsFactory()
+          {
+            @Override
+            public List<Object> createDraggedObjects(ISelection selection) throws Exception
+            {
+              List<Object> result = new ArrayList<>();
+              for (Object object : ((IStructuredSelection)selection).toArray())
+              {
+                Object convertedObject = convertLaunchViewObject(object);
+                if (convertedObject != null)
+                {
+                  result.add(convertedObject);
+                }
+              }
+
+              return result;
+            }
+          }, dndDelegates));
+
+      init();
+
+      GridLayout layout = new GridLayout();
+      layout.marginHeight = convertVerticalDLUsToPixels(IDialogConstants.VERTICAL_MARGIN);
+      layout.marginWidth = convertHorizontalDLUsToPixels(IDialogConstants.HORIZONTAL_MARGIN);
+      layout.verticalSpacing = convertVerticalDLUsToPixels(IDialogConstants.VERTICAL_SPACING);
+      layout.horizontalSpacing = convertHorizontalDLUsToPixels(IDialogConstants.HORIZONTAL_SPACING);
+
+      Tree treeControl = tree.getTree();
+      treeControl.setLayout(layout);
+
+      GridData layoutData = new GridData(GridData.FILL_BOTH);
+      layoutData.heightHint = 800;
+      layoutData.widthHint = 400;
+      treeControl.setLayoutData(layoutData);
+
+      applyDialogFont(treeControl);
+
+      return treeControl;
+    }
+
+    @SuppressWarnings("nls")
+    protected Object convertLaunchViewObject(Object object)
+    {
+      try
+      {
+        Object launchObject = ReflectUtil.invokeMethod("getObject", object);
+        if (launchObject != null)
+        {
+          Object value = ReflectUtil.getValue("config", launchObject);
+          IFileStore fileStore = ReflectUtil.invokeMethod("getFileStore", value);
+
+          // Load the contents and escape and string substitutions.
+          String content = new String(fileStore.openInputStream(EFS.NONE, null).readAllBytes(), StandardCharsets.UTF_8);
+          String escapedContent = SetupUtil.escape(content);
+          ResourceCreationTask resourceCreationTask = SetupFactory.eINSTANCE.createResourceCreationTask();
+          resourceCreationTask.setContent(escapedContent);
+
+          java.net.URI uri = fileStore.toURI();
+          IFile[] filesForLocationURI = ResourcesUtil.findFilesForLocationURI(uri);
+          if (filesForLocationURI.length != 0)
+          {
+            resourceCreationTask.setTargetURL(URI.createPlatformResourceURI(filesForLocationURI[0].getFullPath().toString(), true).toString());
+          }
+          else
+          {
+            java.net.URI workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocationURI();
+            java.net.URI workspaceRelativeLocation = workspaceLocation.relativize(uri);
+            if (workspaceRelativeLocation.toString().startsWith(".metadata"))
+            {
+              resourceCreationTask.setTargetURL("${workspace.location|uri}/" + workspaceRelativeLocation);
+            }
+            else
+            {
+              resourceCreationTask.setTargetURL(uri.toString());
+            }
+          }
+
+          return resourceCreationTask;
+        }
+      }
+      catch (Exception ex)
+      {
+        //$FALL-THROUGH$
+      }
+
+      return null;
+    }
+
+    @SuppressWarnings("nls")
+    protected void init()
+    {
+      try
+      {
+        IContentProvider contentProvider = LAUNCH_VIEW_CONTENT_PROVIDER_CONSTRUCTOR.newInstance();
+        IStyledLabelProvider labelProvider = LAUNCH_VIEW_LABEL_PROVIDER_CONSTRUCTOR.newInstance();
+
+        tree.setContentProvider(contentProvider);
+        tree.setLabelProvider(new DelegatingStyledCellLabelProvider(labelProvider));
+        tree.setInput(ReflectUtil.invokeMethod("getModel", ReflectUtil.invokeMethod(ReflectUtil.getMethod(LAUNCH_VIEW_MODEL_CLASS, "getService"), null)));
+      }
+      catch (Exception ex)
+      {
+        SetupEditorPlugin.getPlugin().log(ex);
+      }
+    }
+
+    @Override
+    protected Control createButtonBar(Composite parent)
+    {
+      return null;
+    }
+  }
+
+  public static class ShowLaunchConfigurationsAction extends Action
+  {
+    private IWorkbenchPart activePart;
+
+    private LaunchConfigurationsDialog launchConfigurationsDialog;
+
+    public ShowLaunchConfigurationsAction()
+    {
+      super(Messages.SetupActionBarContributor_LaunchConfigurations_label, IAction.AS_PUSH_BUTTON);
+      setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor("launch_ configurations")); //$NON-NLS-1$
+      setEnabled(LaunchConfigurationsDialog.IS_AVAILBLE);
+    }
+
+    @Override
+    public void run()
+    {
+      if (launchConfigurationsDialog != null)
+      {
+        Shell shell = launchConfigurationsDialog.getShell();
+        if (shell != null && !shell.isDisposed())
+        {
+          shell.setActive();
+          return;
+        }
+      }
+
+      launchConfigurationsDialog = new LaunchConfigurationsDialog(activePart.getSite().getWorkbenchWindow());
+      launchConfigurationsDialog.setBlockOnOpen(false);
+      launchConfigurationsDialog.open();
+    }
+
+    public void setActiveWorkbenchPart(IWorkbenchPart workbenchPart)
+    {
+      if (workbenchPart instanceof Previewable)
+      {
+        activePart = workbenchPart;
+        setEnabled(true);
+        PreviewDialog previewDialog = PreviewDialog.getFor(workbenchPart.getSite().getWorkbenchWindow());
+        if (previewDialog != null)
+        {
+          previewDialog.getDockable().associate(this);
+        }
+      }
+      else
+      {
+        setEnabled(false);
+        activePart = null;
+      }
+    }
+
+    public void dispose()
+    {
+      if (launchConfigurationsDialog != null)
+      {
+        Shell shell = launchConfigurationsDialog.getShell();
+        if (shell != null && !shell.isDisposed())
+        {
+          shell.dispose();
+        }
+      }
     }
   }
 }

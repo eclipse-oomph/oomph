@@ -107,6 +107,10 @@ public class Messages extends NLS
 
   public static String SetupActionBarContributor_action_showInformationBrowser;
 
+  public static String SetupActionBarContributor_LaunchConfiguration_title;
+
+  public static String SetupActionBarContributor_LaunchConfigurations_label;
+
   public static String SetupEditor_loadingResourceInput_text;
 
   public static String SetupEditor_loadingResourceSetInput_text;

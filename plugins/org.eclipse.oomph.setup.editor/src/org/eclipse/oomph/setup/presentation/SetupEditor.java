@@ -194,7 +194,6 @@ import org.eclipse.jface.text.DefaultInformationControl;
 import org.eclipse.jface.text.IInformationControl;
 import org.eclipse.jface.text.TextPresentation;
 import org.eclipse.jface.viewers.CellLabelProvider;
-import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ILabelProvider;
@@ -224,6 +223,8 @@ import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -2160,7 +2161,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
     }
   }
 
-  private void configure(ColumnViewer viewer, final Set<Resource> primaryResources, final Set<EObject> syntheticEObjects)
+  private void configure(TreeViewer viewer, final Set<Resource> primaryResources, final Set<EObject> syntheticEObjects)
   {
     final SetupLocationListener locationListener = new SetupLocationListener(true);
     locationListener.setEditor(this);
@@ -2642,8 +2643,8 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       }
     });
 
-    final Control control = viewer.getControl();
-    control.addMouseListener(new MouseListener()
+    final Tree tree = viewer.getTree();
+    tree.addMouseListener(new MouseListener()
     {
       @Override
       public void mouseDoubleClick(MouseEvent e)
@@ -2684,7 +2685,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
           exitEvent.display = e.display;
           exitEvent.x = -1;
           exitEvent.y = -1;
-          control.notifyListeners(SWT.MouseExit, exitEvent);
+          tree.notifyListeners(SWT.MouseExit, exitEvent);
 
           ReflectUtil.setValue("currentCell", toolTipSupport, null); //$NON-NLS-1$
 
@@ -2692,9 +2693,21 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
           event.display = e.display;
           event.x = e.x;
           event.y = e.y;
-          control.notifyListeners(SWT.MouseHover, event);
+          tree.notifyListeners(SWT.MouseHover, event);
 
           SetupActionBarContributor.setShowTooltips(showTooltips);
+        }
+      }
+    });
+
+    tree.addKeyListener(new KeyAdapter()
+    {
+      @Override
+      public void keyReleased(KeyEvent e)
+      {
+        if (e.keyCode == SWT.CR)
+        {
+          UIUtil.toggleExpandOneLevel(tree, e.stateMask == SWT.NONE, 2000);
         }
       }
     });
