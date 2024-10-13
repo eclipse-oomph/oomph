@@ -10,18 +10,31 @@
  */
 package org.eclipse.oomph.setup.launching.provider;
 
+import org.eclipse.oomph.setup.ResourceCreationTask;
 import org.eclipse.oomph.setup.launching.LaunchTask;
 import org.eclipse.oomph.setup.launching.LaunchingPackage;
 import org.eclipse.oomph.setup.provider.SetupTaskItemProvider;
 
+import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.IdentityCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.ResourceLocator;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.debug.core.ILaunchManager;
+
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -75,6 +88,81 @@ public class LaunchTaskItemProvider extends SetupTaskItemProvider
         getString("_UI_LaunchTask_launcher_feature"), //$NON-NLS-1$
         getString("_UI_LaunchTask_launcher_description"), //$NON-NLS-1$
         LaunchingPackage.Literals.LAUNCH_TASK__LAUNCHER, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+  }
+
+  @Override
+  protected boolean isChoiceArbitrary(EStructuralFeature feature, Object object)
+  {
+    return feature == LaunchingPackage.Literals.LAUNCH_TASK__LAUNCHER || super.isChoiceArbitrary(feature, object);
+  }
+
+  @Override
+  protected Collection<?> filterChoices(Collection<?> choices, EStructuralFeature feature, Object object)
+  {
+    if (feature == LaunchingPackage.Literals.LAUNCH_TASK__LAUNCHER)
+    {
+      ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
+      try
+      {
+        List<String> result = new ArrayList<>();
+        for (ILaunchConfiguration launchConfiguration : launchManager.getLaunchConfigurations())
+        {
+          result.add(launchConfiguration.getName());
+        }
+
+        return result;
+      }
+      catch (CoreException ex)
+      {
+        //$FALL-THROUGH$
+      }
+    }
+
+    return super.filterChoices(choices, feature, object);
+  }
+
+  @SuppressWarnings("nls")
+  @Override
+  protected Command createPrimaryDragAndDropCommand(EditingDomain domain, Object owner, float location, int operations, int operation, Collection<?> collection)
+  {
+    if (owner instanceof EObject)
+    {
+      for (Object object : collection)
+      {
+        if (object instanceof ResourceCreationTask)
+        {
+          ResourceCreationTask resourceCreationTask = (ResourceCreationTask)object;
+          String content = resourceCreationTask.getContent();
+          if (content != null && content.startsWith("<?xml ") && content.contains("<launchConfiguration"))
+          {
+            String targetURL = resourceCreationTask.getTargetURL();
+            if (targetURL != null)
+            {
+              URI uri = URI.createURI(targetURL);
+              if ("launch".equals(uri.fileExtension()))
+              {
+                String name = uri.trimFileExtension().lastSegment();
+                if (name != null)
+                {
+                  return new BaseDragAndDropCommand(domain, owner, location, operations, operation, collection)
+                  {
+                    @Override
+                    protected boolean prepareDropLinkOn()
+                    {
+                      dragCommand = IdentityCommand.INSTANCE;
+                      dropCommand = createSetCommand(domain, (EObject)owner, LaunchingPackage.Literals.LAUNCH_TASK__LAUNCHER, URI.decode(name));
+                      return dropCommand.canExecute();
+                    }
+                  };
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    return super.createPrimaryDragAndDropCommand(domain, owner, location, operations, operation, collection);
   }
 
   /**
