@@ -12,14 +12,23 @@ package org.eclipse.oomph.setup.provider;
 
 import org.eclipse.oomph.setup.ResourceCreationTask;
 import org.eclipse.oomph.setup.SetupPackage;
+import org.eclipse.oomph.setup.util.SetupUtil;
 
+import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.IdentityCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.edit.command.CommandParameter;
+import org.eclipse.emf.edit.command.DragAndDropCommand;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.List;
 
@@ -193,4 +202,47 @@ public class ResourceCreationTaskItemProvider extends SetupTaskItemProvider
     super.collectNewChildDescriptors(newChildDescriptors, object);
   }
 
+  @Override
+  public Command createCommand(Object object, EditingDomain domain, Class<? extends Command> commandClass, CommandParameter commandParameter)
+  {
+    if (commandClass == DragAndDropCommand.class && object instanceof ResourceCreationTask && domain != null)
+    {
+      Collection<?> collection = commandParameter.getCollection();
+      if (collection != null)
+      {
+        for (Object value : collection)
+        {
+          if (value instanceof URI)
+          {
+            URI uri = (URI)value;
+            if (!"setup".equals(uri.fileExtension())) //$NON-NLS-1$
+            {
+              try
+              {
+                String content = new String(domain.getResourceSet().getURIConverter().createInputStream(uri).readAllBytes(), StandardCharsets.UTF_8);
+
+                DragAndDropCommand.Detail detail = (DragAndDropCommand.Detail)commandParameter.getFeature();
+                return new BaseDragAndDropCommand(domain, object, detail.location, detail.operations, detail.operation, collection)
+                {
+                  @Override
+                  protected boolean prepareDropMoveOn()
+                  {
+                    dragCommand = IdentityCommand.INSTANCE;
+                    dropCommand = createSetCommand(domain, (EObject)owner, SetupPackage.Literals.RESOURCE_CREATION_TASK__CONTENT, SetupUtil.escape(content));
+                    return dropCommand.canExecute();
+                  }
+                };
+              }
+              catch (Exception ex)
+              {
+                //$FALL-THROUGH$
+              }
+            }
+          }
+        }
+      }
+    }
+
+    return super.createCommand(object, domain, commandClass, commandParameter);
+  }
 }
