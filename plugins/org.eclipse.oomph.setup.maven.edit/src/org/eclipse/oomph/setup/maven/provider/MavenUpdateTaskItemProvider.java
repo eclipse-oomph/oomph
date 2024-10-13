@@ -59,11 +59,26 @@ public class MavenUpdateTaskItemProvider extends SetupTaskItemProvider
     {
       super.getPropertyDescriptors(object);
 
+      addLabelPropertyDescriptor(object);
       addProjectNamePatternsPropertyDescriptor(object);
       addOfflinePropertyDescriptor(object);
       addUpdateSnapshotsPropertyDescriptor(object);
     }
     return itemPropertyDescriptors;
+  }
+
+  /**
+   * This adds a property descriptor for the Label feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addLabelPropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_MavenUpdateTask_label_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_MavenUpdateTask_label_feature", "_UI_MavenUpdateTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        MavenPackage.Literals.MAVEN_UPDATE_TASK__LABEL, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
   /**
@@ -142,27 +157,33 @@ public class MavenUpdateTaskItemProvider extends SetupTaskItemProvider
   {
     MavenUpdateTask mavenUpdateTask = (MavenUpdateTask)object;
     EList<String> projectNamePatterns = mavenUpdateTask.getProjectNamePatterns();
-    StringBuilder label = new StringBuilder(getString("_UI_MavenUpdateTask_type")); //$NON-NLS-1$
+    String label = mavenUpdateTask.getLabel();
+    if (StringUtil.isEmpty(label))
+    {
+      label = getString("_UI_MavenUpdateTask_type"); //$NON-NLS-1$
+    }
+
+    StringBuilder result = new StringBuilder(label);
     if (projectNamePatterns.isEmpty())
     {
-      label.append(" all"); //$NON-NLS-1$
+      result.append(" all"); //$NON-NLS-1$
     }
     else
     {
-      label.append(" (").append(StringUtil.implode(projectNamePatterns, '|')).append(')'); //$NON-NLS-1$
+      result.append(" (").append(StringUtil.implode(projectNamePatterns, '|')).append(')'); //$NON-NLS-1$
     }
 
     if (mavenUpdateTask.isOffline())
     {
-      label.append(" - offline"); //$NON-NLS-1$
+      result.append(" - offline"); //$NON-NLS-1$
     }
 
     if (mavenUpdateTask.isUpdateSnapshots())
     {
-      label.append(" - snapshots"); //$NON-NLS-1$
+      result.append(" - snapshots"); //$NON-NLS-1$
     }
 
-    return label.toString();
+    return result.toString();
   }
 
   /**
@@ -179,6 +200,7 @@ public class MavenUpdateTaskItemProvider extends SetupTaskItemProvider
 
     switch (notification.getFeatureID(MavenUpdateTask.class))
     {
+      case MavenPackage.MAVEN_UPDATE_TASK__LABEL:
       case MavenPackage.MAVEN_UPDATE_TASK__PROJECT_NAME_PATTERNS:
       case MavenPackage.MAVEN_UPDATE_TASK__OFFLINE:
       case MavenPackage.MAVEN_UPDATE_TASK__UPDATE_SNAPSHOTS:

@@ -66,6 +66,7 @@ import java.util.Set;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link org.eclipse.oomph.setup.maven.impl.MavenImportTaskImpl#getLabel <em>Label</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.maven.impl.MavenImportTaskImpl#getSourceLocators <em>Source Locators</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.maven.impl.MavenImportTaskImpl#getProjectNameTemplate <em>Project Name Template</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.maven.impl.MavenImportTaskImpl#getProfiles <em>Profiles</em>}</li>
@@ -75,6 +76,26 @@ import java.util.Set;
  */
 public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTask
 {
+  /**
+   * The default value of the '{@link #getLabel() <em>Label</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getLabel()
+   * @generated
+   * @ordered
+   */
+  protected static final String LABEL_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getLabel() <em>Label</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getLabel()
+   * @generated
+   * @ordered
+   */
+  protected String label = LABEL_EDEFAULT;
+
   private static final IWorkspaceRoot ROOT = ResourcesPlugin.getWorkspace().getRoot();
 
   /**
@@ -136,6 +157,33 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
   protected EClass eStaticClass()
   {
     return MavenPackage.Literals.MAVEN_IMPORT_TASK;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String getLabel()
+  {
+    return label;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void setLabel(String newLabel)
+  {
+    String oldLabel = label;
+    label = newLabel;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, MavenPackage.MAVEN_IMPORT_TASK__LABEL, oldLabel, label));
+    }
   }
 
   /**
@@ -222,6 +270,8 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
   {
     switch (featureID)
     {
+      case MavenPackage.MAVEN_IMPORT_TASK__LABEL:
+        return getLabel();
       case MavenPackage.MAVEN_IMPORT_TASK__SOURCE_LOCATORS:
         return getSourceLocators();
       case MavenPackage.MAVEN_IMPORT_TASK__PROJECT_NAME_TEMPLATE:
@@ -243,6 +293,9 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
   {
     switch (featureID)
     {
+      case MavenPackage.MAVEN_IMPORT_TASK__LABEL:
+        setLabel((String)newValue);
+        return;
       case MavenPackage.MAVEN_IMPORT_TASK__SOURCE_LOCATORS:
         getSourceLocators().clear();
         getSourceLocators().addAll((Collection<? extends SourceLocator>)newValue);
@@ -268,6 +321,9 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
   {
     switch (featureID)
     {
+      case MavenPackage.MAVEN_IMPORT_TASK__LABEL:
+        setLabel(LABEL_EDEFAULT);
+        return;
       case MavenPackage.MAVEN_IMPORT_TASK__SOURCE_LOCATORS:
         getSourceLocators().clear();
         return;
@@ -291,6 +347,8 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
   {
     switch (featureID)
     {
+      case MavenPackage.MAVEN_IMPORT_TASK__LABEL:
+        return LABEL_EDEFAULT == null ? label != null : !LABEL_EDEFAULT.equals(label);
       case MavenPackage.MAVEN_IMPORT_TASK__SOURCE_LOCATORS:
         return sourceLocators != null && !sourceLocators.isEmpty();
       case MavenPackage.MAVEN_IMPORT_TASK__PROJECT_NAME_TEMPLATE:
@@ -315,7 +373,9 @@ public class MavenImportTaskImpl extends SetupTaskImpl implements MavenImportTas
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (projectNameTemplate: "); //$NON-NLS-1$
+    result.append(" (label: "); //$NON-NLS-1$
+    result.append(label);
+    result.append(", projectNameTemplate: "); //$NON-NLS-1$
     result.append(projectNameTemplate);
     result.append(", profiles: "); //$NON-NLS-1$
     result.append(profiles);

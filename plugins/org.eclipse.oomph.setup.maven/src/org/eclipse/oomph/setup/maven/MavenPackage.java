@@ -172,13 +172,22 @@ public interface MavenPackage extends EPackage
   int MAVEN_IMPORT_TASK__FILTER = SetupPackage.SETUP_TASK__FILTER;
 
   /**
+   * The feature id for the '<em><b>Label</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MAVEN_IMPORT_TASK__LABEL = SetupPackage.SETUP_TASK_FEATURE_COUNT + 0;
+
+  /**
    * The feature id for the '<em><b>Source Locators</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MAVEN_IMPORT_TASK__SOURCE_LOCATORS = SetupPackage.SETUP_TASK_FEATURE_COUNT + 0;
+  int MAVEN_IMPORT_TASK__SOURCE_LOCATORS = SetupPackage.SETUP_TASK_FEATURE_COUNT + 1;
 
   /**
    * The feature id for the '<em><b>Project Name Template</b></em>' attribute.
@@ -187,7 +196,7 @@ public interface MavenPackage extends EPackage
    * @generated
    * @ordered
    */
-  int MAVEN_IMPORT_TASK__PROJECT_NAME_TEMPLATE = SetupPackage.SETUP_TASK_FEATURE_COUNT + 1;
+  int MAVEN_IMPORT_TASK__PROJECT_NAME_TEMPLATE = SetupPackage.SETUP_TASK_FEATURE_COUNT + 2;
 
   /**
    * The feature id for the '<em><b>Profiles</b></em>' attribute list.
@@ -196,7 +205,7 @@ public interface MavenPackage extends EPackage
    * @generated
    * @ordered
    */
-  int MAVEN_IMPORT_TASK__PROFILES = SetupPackage.SETUP_TASK_FEATURE_COUNT + 2;
+  int MAVEN_IMPORT_TASK__PROFILES = SetupPackage.SETUP_TASK_FEATURE_COUNT + 3;
 
   /**
    * The number of structural features of the '<em>Import Task</em>' class.
@@ -205,7 +214,7 @@ public interface MavenPackage extends EPackage
    * @generated
    * @ordered
    */
-  int MAVEN_IMPORT_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 3;
+  int MAVEN_IMPORT_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 4;
 
   /**
    * The meta object id for the '{@link org.eclipse.oomph.setup.maven.impl.MavenUpdateTaskImpl <em>Update Task</em>}' class.
@@ -308,13 +317,22 @@ public interface MavenPackage extends EPackage
   int MAVEN_UPDATE_TASK__FILTER = SetupPackage.SETUP_TASK__FILTER;
 
   /**
+   * The feature id for the '<em><b>Label</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int MAVEN_UPDATE_TASK__LABEL = SetupPackage.SETUP_TASK_FEATURE_COUNT + 0;
+
+  /**
    * The feature id for the '<em><b>Project Name Patterns</b></em>' attribute list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int MAVEN_UPDATE_TASK__PROJECT_NAME_PATTERNS = SetupPackage.SETUP_TASK_FEATURE_COUNT + 0;
+  int MAVEN_UPDATE_TASK__PROJECT_NAME_PATTERNS = SetupPackage.SETUP_TASK_FEATURE_COUNT + 1;
 
   /**
    * The feature id for the '<em><b>Offline</b></em>' attribute.
@@ -323,7 +341,7 @@ public interface MavenPackage extends EPackage
    * @generated
    * @ordered
    */
-  int MAVEN_UPDATE_TASK__OFFLINE = SetupPackage.SETUP_TASK_FEATURE_COUNT + 1;
+  int MAVEN_UPDATE_TASK__OFFLINE = SetupPackage.SETUP_TASK_FEATURE_COUNT + 2;
 
   /**
    * The feature id for the '<em><b>Update Snapshots</b></em>' attribute.
@@ -332,7 +350,7 @@ public interface MavenPackage extends EPackage
    * @generated
    * @ordered
    */
-  int MAVEN_UPDATE_TASK__UPDATE_SNAPSHOTS = SetupPackage.SETUP_TASK_FEATURE_COUNT + 2;
+  int MAVEN_UPDATE_TASK__UPDATE_SNAPSHOTS = SetupPackage.SETUP_TASK_FEATURE_COUNT + 3;
 
   /**
    * The number of structural features of the '<em>Update Task</em>' class.
@@ -341,7 +359,7 @@ public interface MavenPackage extends EPackage
    * @generated
    * @ordered
    */
-  int MAVEN_UPDATE_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 3;
+  int MAVEN_UPDATE_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 4;
 
   /**
    * Returns the meta object for class '{@link org.eclipse.oomph.setup.maven.MavenImportTask <em>Import Task</em>}'.
@@ -352,6 +370,17 @@ public interface MavenPackage extends EPackage
    * @generated
    */
   EClass getMavenImportTask();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.maven.MavenImportTask#getLabel <em>Label</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Label</em>'.
+   * @see org.eclipse.oomph.setup.maven.MavenImportTask#getLabel()
+   * @see #getMavenImportTask()
+   * @generated
+   */
+  EAttribute getMavenImportTask_Label();
 
   /**
    * Returns the meta object for the containment reference list '{@link org.eclipse.oomph.setup.maven.MavenImportTask#getSourceLocators <em>Source Locators</em>}'.
@@ -395,6 +424,17 @@ public interface MavenPackage extends EPackage
    * @generated
    */
   EClass getMavenUpdateTask();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.maven.MavenUpdateTask#getLabel <em>Label</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Label</em>'.
+   * @see org.eclipse.oomph.setup.maven.MavenUpdateTask#getLabel()
+   * @see #getMavenUpdateTask()
+   * @generated
+   */
+  EAttribute getMavenUpdateTask_Label();
 
   /**
    * Returns the meta object for the attribute list '{@link org.eclipse.oomph.setup.maven.MavenUpdateTask#getProjectNamePatterns <em>Project Name Patterns</em>}'.
@@ -463,6 +503,14 @@ public interface MavenPackage extends EPackage
     EClass MAVEN_IMPORT_TASK = eINSTANCE.getMavenImportTask();
 
     /**
+     * The meta object literal for the '<em><b>Label</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute MAVEN_IMPORT_TASK__LABEL = eINSTANCE.getMavenImportTask_Label();
+
+    /**
      * The meta object literal for the '<em><b>Source Locators</b></em>' containment reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -495,6 +543,14 @@ public interface MavenPackage extends EPackage
      * @generated
      */
     EClass MAVEN_UPDATE_TASK = eINSTANCE.getMavenUpdateTask();
+
+    /**
+     * The meta object literal for the '<em><b>Label</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute MAVEN_UPDATE_TASK__LABEL = eINSTANCE.getMavenUpdateTask_Label();
 
     /**
      * The meta object literal for the '<em><b>Project Name Patterns</b></em>' attribute list feature.

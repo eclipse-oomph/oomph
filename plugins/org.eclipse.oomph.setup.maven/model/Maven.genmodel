@@ -10,11 +10,13 @@
   <genPackages prefix="Maven" basePackage="org.eclipse.oomph.setup" disposableProviderFactory="true"
       childCreationExtenders="true" ecorePackage="Maven.ecore#/" publicationLocation="/setups/models/Maven.ecore">
     <genClasses ecoreClass="Maven.ecore#//MavenImportTask">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Maven.ecore#//MavenImportTask/label"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Maven.ecore#//MavenImportTask/sourceLocators"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Maven.ecore#//MavenImportTask/projectNameTemplate"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Maven.ecore#//MavenImportTask/profiles"/>
     </genClasses>
     <genClasses ecoreClass="Maven.ecore#//MavenUpdateTask">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Maven.ecore#//MavenUpdateTask/label"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Maven.ecore#//MavenUpdateTask/projectNamePatterns"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Maven.ecore#//MavenUpdateTask/offline"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Maven.ecore#//MavenUpdateTask/updateSnapshots"/>

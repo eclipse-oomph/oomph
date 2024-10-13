@@ -23,6 +23,7 @@ import org.eclipse.emf.common.util.EList;
  * The following features are supported:
  * </p>
  * <ul>
+ *   <li>{@link org.eclipse.oomph.setup.maven.MavenUpdateTask#getLabel <em>Label</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.maven.MavenUpdateTask#getProjectNamePatterns <em>Project Name Patterns</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.maven.MavenUpdateTask#isOffline <em>Offline</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.maven.MavenUpdateTask#isUpdateSnapshots <em>Update Snapshots</em>}</li>
@@ -34,6 +35,28 @@ import org.eclipse.emf.common.util.EList;
  */
 public interface MavenUpdateTask extends SetupTask
 {
+  /**
+   * Returns the value of the '<em><b>Label</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Label</em>' attribute.
+   * @see #setLabel(String)
+   * @see org.eclipse.oomph.setup.maven.MavenPackage#getMavenUpdateTask_Label()
+   * @model
+   * @generated
+   */
+  String getLabel();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.setup.maven.MavenUpdateTask#getLabel <em>Label</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Label</em>' attribute.
+   * @see #getLabel()
+   * @generated
+   */
+  void setLabel(String value);
+
   /**
    * Returns the value of the '<em><b>Project Name Patterns</b></em>' attribute list.
    * The list contents are of type {@link java.lang.String}.

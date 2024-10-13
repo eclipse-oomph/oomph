@@ -14,6 +14,7 @@ import org.eclipse.oomph.resources.ResourcesFactory;
 import org.eclipse.oomph.setup.maven.MavenImportTask;
 import org.eclipse.oomph.setup.maven.MavenPackage;
 import org.eclipse.oomph.setup.provider.SetupTaskItemProvider;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
@@ -59,10 +60,25 @@ public class MavenImportTaskItemProvider extends SetupTaskItemProvider
     {
       super.getPropertyDescriptors(object);
 
+      addLabelPropertyDescriptor(object);
       addProjectNameTemplatePropertyDescriptor(object);
       addProfilesPropertyDescriptor(object);
     }
     return itemPropertyDescriptors;
+  }
+
+  /**
+   * This adds a property descriptor for the Label feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addLabelPropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_MavenImportTask_label_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_MavenImportTask_label_feature", "_UI_MavenImportTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        MavenPackage.Literals.MAVEN_IMPORT_TASK__LABEL, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
   /**
@@ -158,6 +174,13 @@ public class MavenImportTaskItemProvider extends SetupTaskItemProvider
   @Override
   public String getText(Object object)
   {
+    MavenImportTask mavenImportTask = (MavenImportTask)object;
+    String label = mavenImportTask.getLabel();
+    if (!StringUtil.isEmpty(label))
+    {
+      return label;
+    }
+
     return getString("_UI_MavenImportTask_type"); //$NON-NLS-1$
   }
 
@@ -175,6 +198,7 @@ public class MavenImportTaskItemProvider extends SetupTaskItemProvider
 
     switch (notification.getFeatureID(MavenImportTask.class))
     {
+      case MavenPackage.MAVEN_IMPORT_TASK__LABEL:
       case MavenPackage.MAVEN_IMPORT_TASK__PROJECT_NAME_TEMPLATE:
       case MavenPackage.MAVEN_IMPORT_TASK__PROFILES:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));

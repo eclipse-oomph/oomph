@@ -40,6 +40,7 @@ import java.util.regex.Pattern;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link org.eclipse.oomph.setup.maven.impl.MavenUpdateTaskImpl#getLabel <em>Label</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.maven.impl.MavenUpdateTaskImpl#getProjectNamePatterns <em>Project Name Patterns</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.maven.impl.MavenUpdateTaskImpl#isOffline <em>Offline</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.maven.impl.MavenUpdateTaskImpl#isUpdateSnapshots <em>Update Snapshots</em>}</li>
@@ -49,6 +50,26 @@ import java.util.regex.Pattern;
  */
 public class MavenUpdateTaskImpl extends SetupTaskImpl implements MavenUpdateTask
 {
+
+  /**
+   * The default value of the '{@link #getLabel() <em>Label</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getLabel()
+   * @generated
+   * @ordered
+   */
+  protected static final String LABEL_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getLabel() <em>Label</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getLabel()
+   * @generated
+   * @ordered
+   */
+  protected String label = LABEL_EDEFAULT;
 
   /**
    * The cached value of the '{@link #getProjectNamePatterns() <em>Project Name Patterns</em>}' attribute list.
@@ -119,6 +140,33 @@ public class MavenUpdateTaskImpl extends SetupTaskImpl implements MavenUpdateTas
   protected EClass eStaticClass()
   {
     return MavenPackage.Literals.MAVEN_UPDATE_TASK;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String getLabel()
+  {
+    return label;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void setLabel(String newLabel)
+  {
+    String oldLabel = label;
+    label = newLabel;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, MavenPackage.MAVEN_UPDATE_TASK__LABEL, oldLabel, label));
+    }
   }
 
   /**
@@ -200,6 +248,8 @@ public class MavenUpdateTaskImpl extends SetupTaskImpl implements MavenUpdateTas
   {
     switch (featureID)
     {
+      case MavenPackage.MAVEN_UPDATE_TASK__LABEL:
+        return getLabel();
       case MavenPackage.MAVEN_UPDATE_TASK__PROJECT_NAME_PATTERNS:
         return getProjectNamePatterns();
       case MavenPackage.MAVEN_UPDATE_TASK__OFFLINE:
@@ -221,6 +271,9 @@ public class MavenUpdateTaskImpl extends SetupTaskImpl implements MavenUpdateTas
   {
     switch (featureID)
     {
+      case MavenPackage.MAVEN_UPDATE_TASK__LABEL:
+        setLabel((String)newValue);
+        return;
       case MavenPackage.MAVEN_UPDATE_TASK__PROJECT_NAME_PATTERNS:
         getProjectNamePatterns().clear();
         getProjectNamePatterns().addAll((Collection<? extends String>)newValue);
@@ -245,6 +298,9 @@ public class MavenUpdateTaskImpl extends SetupTaskImpl implements MavenUpdateTas
   {
     switch (featureID)
     {
+      case MavenPackage.MAVEN_UPDATE_TASK__LABEL:
+        setLabel(LABEL_EDEFAULT);
+        return;
       case MavenPackage.MAVEN_UPDATE_TASK__PROJECT_NAME_PATTERNS:
         getProjectNamePatterns().clear();
         return;
@@ -268,6 +324,8 @@ public class MavenUpdateTaskImpl extends SetupTaskImpl implements MavenUpdateTas
   {
     switch (featureID)
     {
+      case MavenPackage.MAVEN_UPDATE_TASK__LABEL:
+        return LABEL_EDEFAULT == null ? label != null : !LABEL_EDEFAULT.equals(label);
       case MavenPackage.MAVEN_UPDATE_TASK__PROJECT_NAME_PATTERNS:
         return projectNamePatterns != null && !projectNamePatterns.isEmpty();
       case MavenPackage.MAVEN_UPDATE_TASK__OFFLINE:
@@ -292,7 +350,9 @@ public class MavenUpdateTaskImpl extends SetupTaskImpl implements MavenUpdateTas
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (projectNamePatterns: "); //$NON-NLS-1$
+    result.append(" (label: "); //$NON-NLS-1$
+    result.append(label);
+    result.append(", projectNamePatterns: "); //$NON-NLS-1$
     result.append(projectNamePatterns);
     result.append(", offline: "); //$NON-NLS-1$
     result.append(offline);

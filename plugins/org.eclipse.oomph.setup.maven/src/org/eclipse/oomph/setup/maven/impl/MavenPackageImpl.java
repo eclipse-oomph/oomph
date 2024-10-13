@@ -136,9 +136,20 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
    * @generated
    */
   @Override
+  public EAttribute getMavenImportTask_Label()
+  {
+    return (EAttribute)mavenImportTaskEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public EReference getMavenImportTask_SourceLocators()
   {
-    return (EReference)mavenImportTaskEClass.getEStructuralFeatures().get(0);
+    return (EReference)mavenImportTaskEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -149,7 +160,7 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
   @Override
   public EAttribute getMavenImportTask_ProjectNameTemplate()
   {
-    return (EAttribute)mavenImportTaskEClass.getEStructuralFeatures().get(1);
+    return (EAttribute)mavenImportTaskEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -160,7 +171,7 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
   @Override
   public EAttribute getMavenImportTask_Profiles()
   {
-    return (EAttribute)mavenImportTaskEClass.getEStructuralFeatures().get(2);
+    return (EAttribute)mavenImportTaskEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -180,7 +191,7 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
    * @generated
    */
   @Override
-  public EAttribute getMavenUpdateTask_ProjectNamePatterns()
+  public EAttribute getMavenUpdateTask_Label()
   {
     return (EAttribute)mavenUpdateTaskEClass.getEStructuralFeatures().get(0);
   }
@@ -191,7 +202,7 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
    * @generated
    */
   @Override
-  public EAttribute getMavenUpdateTask_Offline()
+  public EAttribute getMavenUpdateTask_ProjectNamePatterns()
   {
     return (EAttribute)mavenUpdateTaskEClass.getEStructuralFeatures().get(1);
   }
@@ -202,9 +213,20 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
    * @generated
    */
   @Override
-  public EAttribute getMavenUpdateTask_UpdateSnapshots()
+  public EAttribute getMavenUpdateTask_Offline()
   {
     return (EAttribute)mavenUpdateTaskEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EAttribute getMavenUpdateTask_UpdateSnapshots()
+  {
+    return (EAttribute)mavenUpdateTaskEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -242,11 +264,13 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
 
     // Create classes and their features
     mavenImportTaskEClass = createEClass(MAVEN_IMPORT_TASK);
+    createEAttribute(mavenImportTaskEClass, MAVEN_IMPORT_TASK__LABEL);
     createEReference(mavenImportTaskEClass, MAVEN_IMPORT_TASK__SOURCE_LOCATORS);
     createEAttribute(mavenImportTaskEClass, MAVEN_IMPORT_TASK__PROJECT_NAME_TEMPLATE);
     createEAttribute(mavenImportTaskEClass, MAVEN_IMPORT_TASK__PROFILES);
 
     mavenUpdateTaskEClass = createEClass(MAVEN_UPDATE_TASK);
+    createEAttribute(mavenUpdateTaskEClass, MAVEN_UPDATE_TASK__LABEL);
     createEAttribute(mavenUpdateTaskEClass, MAVEN_UPDATE_TASK__PROJECT_NAME_PATTERNS);
     createEAttribute(mavenUpdateTaskEClass, MAVEN_UPDATE_TASK__OFFLINE);
     createEAttribute(mavenUpdateTaskEClass, MAVEN_UPDATE_TASK__UPDATE_SNAPSHOTS);
@@ -294,6 +318,8 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
 
     // Initialize classes and features; add operations and parameters
     initEClass(mavenImportTaskEClass, MavenImportTask.class, "MavenImportTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getMavenImportTask_Label(), ecorePackage.getEString(), "label", null, 0, 1, MavenImportTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getMavenImportTask_SourceLocators(), theResourcesPackage.getSourceLocator(), null, "sourceLocators", null, 1, -1, MavenImportTask.class, //$NON-NLS-1$
         !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getMavenImportTask_ProjectNameTemplate(), ecorePackage.getEString(), "projectNameTemplate", null, 0, 1, MavenImportTask.class, !IS_TRANSIENT, //$NON-NLS-1$
@@ -302,6 +328,8 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(mavenUpdateTaskEClass, MavenUpdateTask.class, "MavenUpdateTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getMavenUpdateTask_Label(), ecorePackage.getEString(), "label", null, 0, 1, MavenUpdateTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getMavenUpdateTask_ProjectNamePatterns(), ecorePackage.getEString(), "projectNamePatterns", null, 0, -1, MavenUpdateTask.class, //$NON-NLS-1$
         !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getMavenUpdateTask_Offline(), ecorePackage.getEBoolean(), "offline", null, 0, 1, MavenUpdateTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$

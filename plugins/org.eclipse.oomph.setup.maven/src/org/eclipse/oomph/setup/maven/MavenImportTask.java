@@ -24,6 +24,7 @@ import org.eclipse.emf.common.util.EList;
  * The following features are supported:
  * </p>
  * <ul>
+ *   <li>{@link org.eclipse.oomph.setup.maven.MavenImportTask#getLabel <em>Label</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.maven.MavenImportTask#getSourceLocators <em>Source Locators</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.maven.MavenImportTask#getProjectNameTemplate <em>Project Name Template</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.maven.MavenImportTask#getProfiles <em>Profiles</em>}</li>
@@ -35,6 +36,28 @@ import org.eclipse.emf.common.util.EList;
  */
 public interface MavenImportTask extends SetupTask
 {
+  /**
+   * Returns the value of the '<em><b>Label</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Label</em>' attribute.
+   * @see #setLabel(String)
+   * @see org.eclipse.oomph.setup.maven.MavenPackage#getMavenImportTask_Label()
+   * @model
+   * @generated
+   */
+  String getLabel();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.setup.maven.MavenImportTask#getLabel <em>Label</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Label</em>' attribute.
+   * @see #getLabel()
+   * @generated
+   */
+  void setLabel(String value);
+
   /**
    * Returns the value of the '<em><b>Source Locators</b></em>' containment reference list.
    * The list contents are of type {@link org.eclipse.oomph.resources.SourceLocator}.
