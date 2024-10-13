@@ -61,12 +61,27 @@ public class ProjectsBuildTaskItemProvider extends SetupTaskItemProvider
     {
       super.getPropertyDescriptors(object);
 
+      addLabelPropertyDescriptor(object);
       addOnlyNewProjectsPropertyDescriptor(object);
       addRefreshPropertyDescriptor(object);
       addCleanPropertyDescriptor(object);
       addBuildPropertyDescriptor(object);
     }
     return itemPropertyDescriptors;
+  }
+
+  /**
+   * This adds a property descriptor for the Label feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addLabelPropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_ProjectsBuildTask_label_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_ProjectsBuildTask_label_feature", "_UI_ProjectsBuildTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        ProjectsPackage.Literals.PROJECTS_BUILD_TASK__LABEL, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
   /**
@@ -191,7 +206,12 @@ public class ProjectsBuildTaskItemProvider extends SetupTaskItemProvider
   public String getText(Object object)
   {
     ProjectsBuildTask projectsBuildTask = (ProjectsBuildTask)object;
-    String label = getString("_UI_ProjectsBuildTask_type"); //$NON-NLS-1$
+    String label = projectsBuildTask.getLabel();
+    if (StringUtil.isEmpty(label))
+    {
+      label = getString("_UI_ProjectsBuildTask_type"); //$NON-NLS-1$
+    }
+
     List<String> tags = new ArrayList<>();
     if (projectsBuildTask.isOnlyNewProjects())
     {
@@ -235,6 +255,7 @@ public class ProjectsBuildTaskItemProvider extends SetupTaskItemProvider
 
     switch (notification.getFeatureID(ProjectsBuildTask.class))
     {
+      case ProjectsPackage.PROJECTS_BUILD_TASK__LABEL:
       case ProjectsPackage.PROJECTS_BUILD_TASK__ONLY_NEW_PROJECTS:
       case ProjectsPackage.PROJECTS_BUILD_TASK__REFRESH:
       case ProjectsPackage.PROJECTS_BUILD_TASK__CLEAN:

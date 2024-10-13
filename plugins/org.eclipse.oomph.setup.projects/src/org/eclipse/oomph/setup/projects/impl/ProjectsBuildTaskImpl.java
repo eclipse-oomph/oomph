@@ -54,6 +54,7 @@ import java.util.Set;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link org.eclipse.oomph.setup.projects.impl.ProjectsBuildTaskImpl#getLabel <em>Label</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.projects.impl.ProjectsBuildTaskImpl#getPredicates <em>Predicates</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.projects.impl.ProjectsBuildTaskImpl#isOnlyNewProjects <em>Only New Projects</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.projects.impl.ProjectsBuildTaskImpl#isRefresh <em>Refresh</em>}</li>
@@ -65,6 +66,26 @@ import java.util.Set;
  */
 public class ProjectsBuildTaskImpl extends SetupTaskImpl implements ProjectsBuildTask
 {
+  /**
+   * The default value of the '{@link #getLabel() <em>Label</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getLabel()
+   * @generated
+   * @ordered
+   */
+  protected static final String LABEL_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getLabel() <em>Label</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getLabel()
+   * @generated
+   * @ordered
+   */
+  protected String label = LABEL_EDEFAULT;
+
   /**
    * The cached value of the '{@link #getPredicates() <em>Predicates</em>}' containment reference list.
    * <!-- begin-user-doc -->
@@ -178,6 +199,33 @@ public class ProjectsBuildTaskImpl extends SetupTaskImpl implements ProjectsBuil
   protected EClass eStaticClass()
   {
     return ProjectsPackage.Literals.PROJECTS_BUILD_TASK;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String getLabel()
+  {
+    return label;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void setLabel(String newLabel)
+  {
+    String oldLabel = label;
+    label = newLabel;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, ProjectsPackage.PROJECTS_BUILD_TASK__LABEL, oldLabel, label));
+    }
   }
 
   /**
@@ -329,6 +377,8 @@ public class ProjectsBuildTaskImpl extends SetupTaskImpl implements ProjectsBuil
   {
     switch (featureID)
     {
+      case ProjectsPackage.PROJECTS_BUILD_TASK__LABEL:
+        return getLabel();
       case ProjectsPackage.PROJECTS_BUILD_TASK__PREDICATES:
         return getPredicates();
       case ProjectsPackage.PROJECTS_BUILD_TASK__ONLY_NEW_PROJECTS:
@@ -354,6 +404,9 @@ public class ProjectsBuildTaskImpl extends SetupTaskImpl implements ProjectsBuil
   {
     switch (featureID)
     {
+      case ProjectsPackage.PROJECTS_BUILD_TASK__LABEL:
+        setLabel((String)newValue);
+        return;
       case ProjectsPackage.PROJECTS_BUILD_TASK__PREDICATES:
         getPredicates().clear();
         getPredicates().addAll((Collection<? extends Predicate>)newValue);
@@ -384,6 +437,9 @@ public class ProjectsBuildTaskImpl extends SetupTaskImpl implements ProjectsBuil
   {
     switch (featureID)
     {
+      case ProjectsPackage.PROJECTS_BUILD_TASK__LABEL:
+        setLabel(LABEL_EDEFAULT);
+        return;
       case ProjectsPackage.PROJECTS_BUILD_TASK__PREDICATES:
         getPredicates().clear();
         return;
@@ -413,6 +469,8 @@ public class ProjectsBuildTaskImpl extends SetupTaskImpl implements ProjectsBuil
   {
     switch (featureID)
     {
+      case ProjectsPackage.PROJECTS_BUILD_TASK__LABEL:
+        return LABEL_EDEFAULT == null ? label != null : !LABEL_EDEFAULT.equals(label);
       case ProjectsPackage.PROJECTS_BUILD_TASK__PREDICATES:
         return predicates != null && !predicates.isEmpty();
       case ProjectsPackage.PROJECTS_BUILD_TASK__ONLY_NEW_PROJECTS:
@@ -441,7 +499,9 @@ public class ProjectsBuildTaskImpl extends SetupTaskImpl implements ProjectsBuil
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (onlyNewProjects: "); //$NON-NLS-1$
+    result.append(" (label: "); //$NON-NLS-1$
+    result.append(label);
+    result.append(", onlyNewProjects: "); //$NON-NLS-1$
     result.append(onlyNewProjects);
     result.append(", refresh: "); //$NON-NLS-1$
     result.append(refresh);

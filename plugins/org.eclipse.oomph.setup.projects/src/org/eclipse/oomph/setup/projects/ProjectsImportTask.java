@@ -24,6 +24,7 @@ import org.eclipse.emf.common.util.EList;
  * The following features are supported:
  * </p>
  * <ul>
+ *   <li>{@link org.eclipse.oomph.setup.projects.ProjectsImportTask#getLabel <em>Label</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.projects.ProjectsImportTask#isForce <em>Force</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.projects.ProjectsImportTask#getSourceLocators <em>Source Locators</em>}</li>
  * </ul>
@@ -34,6 +35,28 @@ import org.eclipse.emf.common.util.EList;
  */
 public interface ProjectsImportTask extends SetupTask
 {
+
+  /**
+   * Returns the value of the '<em><b>Label</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Label</em>' attribute.
+   * @see #setLabel(String)
+   * @see org.eclipse.oomph.setup.projects.ProjectsPackage#getProjectsImportTask_Label()
+   * @model
+   * @generated
+   */
+  String getLabel();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.setup.projects.ProjectsImportTask#getLabel <em>Label</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Label</em>' attribute.
+   * @see #getLabel()
+   * @generated
+   */
+  void setLabel(String value);
 
   /**
    * Returns the value of the '<em><b>Force</b></em>' attribute.

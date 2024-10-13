@@ -13,12 +13,14 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Projects.ecore#//PathVariableTask/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Projects.ecore#//PathVariableTask/uRI"/>
     </genClasses>
-    <genClasses ecoreClass="Projects.ecore#//ProjectsImportTask" labelFeature="../../org.eclipse.oomph.setup/model/Setup.genmodel#//setup/SetupTask/description">
+    <genClasses ecoreClass="Projects.ecore#//ProjectsImportTask" labelFeature="#//projects/ProjectsImportTask/label">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Projects.ecore#//ProjectsImportTask/label"/>
       <genFeatures createChild="false" propertyDescription="Force the task to perform on startup trigger even if the task has previously performed"
           ecoreFeature="ecore:EAttribute Projects.ecore#//ProjectsImportTask/force"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Projects.ecore#//ProjectsImportTask/sourceLocators"/>
     </genClasses>
-    <genClasses ecoreClass="Projects.ecore#//ProjectsBuildTask" labelFeature="../../org.eclipse.oomph.setup/model/Setup.genmodel#//setup/SetupTask/description">
+    <genClasses ecoreClass="Projects.ecore#//ProjectsBuildTask" labelFeature="#//projects/ProjectsBuildTask/label">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Projects.ecore#//ProjectsBuildTask/label"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Projects.ecore#//ProjectsBuildTask/predicates"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Projects.ecore#//ProjectsBuildTask/onlyNewProjects"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Projects.ecore#//ProjectsBuildTask/refresh"/>

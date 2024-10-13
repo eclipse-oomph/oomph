@@ -24,6 +24,7 @@ import org.eclipse.emf.common.util.EList;
  * The following features are supported:
  * </p>
  * <ul>
+ *   <li>{@link org.eclipse.oomph.setup.projects.ProjectsBuildTask#getLabel <em>Label</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.projects.ProjectsBuildTask#getPredicates <em>Predicates</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.projects.ProjectsBuildTask#isOnlyNewProjects <em>Only New Projects</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.projects.ProjectsBuildTask#isRefresh <em>Refresh</em>}</li>
@@ -37,6 +38,28 @@ import org.eclipse.emf.common.util.EList;
  */
 public interface ProjectsBuildTask extends SetupTask
 {
+  /**
+   * Returns the value of the '<em><b>Label</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Label</em>' attribute.
+   * @see #setLabel(String)
+   * @see org.eclipse.oomph.setup.projects.ProjectsPackage#getProjectsBuildTask_Label()
+   * @model
+   * @generated
+   */
+  String getLabel();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.setup.projects.ProjectsBuildTask#getLabel <em>Label</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Label</em>' attribute.
+   * @see #getLabel()
+   * @generated
+   */
+  void setLabel(String value);
+
   /**
    * Returns the value of the '<em><b>Predicates</b></em>' containment reference list.
    * The list contents are of type {@link org.eclipse.oomph.predicates.Predicate}.

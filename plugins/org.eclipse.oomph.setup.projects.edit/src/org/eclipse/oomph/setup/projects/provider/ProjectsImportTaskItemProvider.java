@@ -14,6 +14,7 @@ import org.eclipse.oomph.resources.ResourcesFactory;
 import org.eclipse.oomph.setup.projects.ProjectsImportTask;
 import org.eclipse.oomph.setup.projects.ProjectsPackage;
 import org.eclipse.oomph.setup.provider.SetupTaskItemProvider;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
@@ -59,9 +60,24 @@ public class ProjectsImportTaskItemProvider extends SetupTaskItemProvider
     {
       super.getPropertyDescriptors(object);
 
+      addLabelPropertyDescriptor(object);
       addForcePropertyDescriptor(object);
     }
     return itemPropertyDescriptors;
+  }
+
+  /**
+   * This adds a property descriptor for the Label feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addLabelPropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_ProjectsImportTask_label_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_ProjectsImportTask_label_feature", "_UI_ProjectsImportTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        ProjectsPackage.Literals.PROJECTS_IMPORT_TASK__LABEL, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
   }
 
   /**
@@ -143,6 +159,13 @@ public class ProjectsImportTaskItemProvider extends SetupTaskItemProvider
   @Override
   public String getText(Object object)
   {
+    ProjectsImportTask projectsImportTask = (ProjectsImportTask)object;
+    String label = projectsImportTask.getLabel();
+    if (!StringUtil.isEmpty(label))
+    {
+      return label;
+    }
+
     return getString("_UI_ProjectsImportTask_type"); //$NON-NLS-1$
   }
 
@@ -160,6 +183,7 @@ public class ProjectsImportTaskItemProvider extends SetupTaskItemProvider
 
     switch (notification.getFeatureID(ProjectsImportTask.class))
     {
+      case ProjectsPackage.PROJECTS_IMPORT_TASK__LABEL:
       case ProjectsPackage.PROJECTS_IMPORT_TASK__FORCE:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
         return;

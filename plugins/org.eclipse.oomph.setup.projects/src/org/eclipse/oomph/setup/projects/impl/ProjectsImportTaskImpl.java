@@ -72,6 +72,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link org.eclipse.oomph.setup.projects.impl.ProjectsImportTaskImpl#getLabel <em>Label</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.projects.impl.ProjectsImportTaskImpl#isForce <em>Force</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.projects.impl.ProjectsImportTaskImpl#getSourceLocators <em>Source Locators</em>}</li>
  * </ul>
@@ -80,6 +81,26 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class ProjectsImportTaskImpl extends SetupTaskImpl implements ProjectsImportTask
 {
+  /**
+   * The default value of the '{@link #getLabel() <em>Label</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getLabel()
+   * @generated
+   * @ordered
+   */
+  protected static final String LABEL_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getLabel() <em>Label</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getLabel()
+   * @generated
+   * @ordered
+   */
+  protected String label = LABEL_EDEFAULT;
+
   /**
    * The default value of the '{@link #isForce() <em>Force</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -133,6 +154,33 @@ public class ProjectsImportTaskImpl extends SetupTaskImpl implements ProjectsImp
   protected EClass eStaticClass()
   {
     return ProjectsPackage.Literals.PROJECTS_IMPORT_TASK;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String getLabel()
+  {
+    return label;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void setLabel(String newLabel)
+  {
+    String oldLabel = label;
+    label = newLabel;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, ProjectsPackage.PROJECTS_IMPORT_TASK__LABEL, oldLabel, label));
+    }
   }
 
   /**
@@ -203,6 +251,8 @@ public class ProjectsImportTaskImpl extends SetupTaskImpl implements ProjectsImp
   {
     switch (featureID)
     {
+      case ProjectsPackage.PROJECTS_IMPORT_TASK__LABEL:
+        return getLabel();
       case ProjectsPackage.PROJECTS_IMPORT_TASK__FORCE:
         return isForce();
       case ProjectsPackage.PROJECTS_IMPORT_TASK__SOURCE_LOCATORS:
@@ -222,6 +272,9 @@ public class ProjectsImportTaskImpl extends SetupTaskImpl implements ProjectsImp
   {
     switch (featureID)
     {
+      case ProjectsPackage.PROJECTS_IMPORT_TASK__LABEL:
+        setLabel((String)newValue);
+        return;
       case ProjectsPackage.PROJECTS_IMPORT_TASK__FORCE:
         setForce((Boolean)newValue);
         return;
@@ -243,6 +296,9 @@ public class ProjectsImportTaskImpl extends SetupTaskImpl implements ProjectsImp
   {
     switch (featureID)
     {
+      case ProjectsPackage.PROJECTS_IMPORT_TASK__LABEL:
+        setLabel(LABEL_EDEFAULT);
+        return;
       case ProjectsPackage.PROJECTS_IMPORT_TASK__FORCE:
         setForce(FORCE_EDEFAULT);
         return;
@@ -263,6 +319,8 @@ public class ProjectsImportTaskImpl extends SetupTaskImpl implements ProjectsImp
   {
     switch (featureID)
     {
+      case ProjectsPackage.PROJECTS_IMPORT_TASK__LABEL:
+        return LABEL_EDEFAULT == null ? label != null : !LABEL_EDEFAULT.equals(label);
       case ProjectsPackage.PROJECTS_IMPORT_TASK__FORCE:
         return force != FORCE_EDEFAULT;
       case ProjectsPackage.PROJECTS_IMPORT_TASK__SOURCE_LOCATORS:
@@ -285,7 +343,9 @@ public class ProjectsImportTaskImpl extends SetupTaskImpl implements ProjectsImp
     }
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (force: "); //$NON-NLS-1$
+    result.append(" (label: "); //$NON-NLS-1$
+    result.append(label);
+    result.append(", force: "); //$NON-NLS-1$
     result.append(force);
     result.append(')');
     return result.toString();

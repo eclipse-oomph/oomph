@@ -145,7 +145,7 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
    * @generated
    */
   @Override
-  public EAttribute getProjectsImportTask_Force()
+  public EAttribute getProjectsImportTask_Label()
   {
     return (EAttribute)projectsImportTaskEClass.getEStructuralFeatures().get(0);
   }
@@ -156,9 +156,20 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
    * @generated
    */
   @Override
+  public EAttribute getProjectsImportTask_Force()
+  {
+    return (EAttribute)projectsImportTaskEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public EReference getProjectsImportTask_SourceLocators()
   {
-    return (EReference)projectsImportTaskEClass.getEStructuralFeatures().get(1);
+    return (EReference)projectsImportTaskEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -178,9 +189,20 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
    * @generated
    */
   @Override
+  public EAttribute getProjectsBuildTask_Label()
+  {
+    return (EAttribute)projectsBuildTaskEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public EReference getProjectsBuildTask_Predicates()
   {
-    return (EReference)projectsBuildTaskEClass.getEStructuralFeatures().get(0);
+    return (EReference)projectsBuildTaskEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -191,7 +213,7 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
   @Override
   public EAttribute getProjectsBuildTask_OnlyNewProjects()
   {
-    return (EAttribute)projectsBuildTaskEClass.getEStructuralFeatures().get(1);
+    return (EAttribute)projectsBuildTaskEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -202,7 +224,7 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
   @Override
   public EAttribute getProjectsBuildTask_Refresh()
   {
-    return (EAttribute)projectsBuildTaskEClass.getEStructuralFeatures().get(2);
+    return (EAttribute)projectsBuildTaskEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -213,7 +235,7 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
   @Override
   public EAttribute getProjectsBuildTask_Clean()
   {
-    return (EAttribute)projectsBuildTaskEClass.getEStructuralFeatures().get(3);
+    return (EAttribute)projectsBuildTaskEClass.getEStructuralFeatures().get(4);
   }
 
   /**
@@ -224,7 +246,7 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
   @Override
   public EAttribute getProjectsBuildTask_Build()
   {
-    return (EAttribute)projectsBuildTaskEClass.getEStructuralFeatures().get(4);
+    return (EAttribute)projectsBuildTaskEClass.getEStructuralFeatures().get(5);
   }
 
   /**
@@ -299,10 +321,12 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
     createEAttribute(pathVariableTaskEClass, PATH_VARIABLE_TASK__URI);
 
     projectsImportTaskEClass = createEClass(PROJECTS_IMPORT_TASK);
+    createEAttribute(projectsImportTaskEClass, PROJECTS_IMPORT_TASK__LABEL);
     createEAttribute(projectsImportTaskEClass, PROJECTS_IMPORT_TASK__FORCE);
     createEReference(projectsImportTaskEClass, PROJECTS_IMPORT_TASK__SOURCE_LOCATORS);
 
     projectsBuildTaskEClass = createEClass(PROJECTS_BUILD_TASK);
+    createEAttribute(projectsBuildTaskEClass, PROJECTS_BUILD_TASK__LABEL);
     createEReference(projectsBuildTaskEClass, PROJECTS_BUILD_TASK__PREDICATES);
     createEAttribute(projectsBuildTaskEClass, PROJECTS_BUILD_TASK__ONLY_NEW_PROJECTS);
     createEAttribute(projectsBuildTaskEClass, PROJECTS_BUILD_TASK__REFRESH);
@@ -360,6 +384,8 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(projectsImportTaskEClass, ProjectsImportTask.class, "ProjectsImportTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getProjectsImportTask_Label(), ecorePackage.getEString(), "label", null, 0, 1, ProjectsImportTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getProjectsImportTask_Force(), ecorePackage.getEBoolean(), "force", null, 0, 1, ProjectsImportTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getProjectsImportTask_SourceLocators(), theResourcesPackage.getSourceLocator(), null, "sourceLocators", null, 1, -1, //$NON-NLS-1$
@@ -367,6 +393,8 @@ public class ProjectsPackageImpl extends EPackageImpl implements ProjectsPackage
         IS_ORDERED);
 
     initEClass(projectsBuildTaskEClass, ProjectsBuildTask.class, "ProjectsBuildTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getProjectsBuildTask_Label(), ecorePackage.getEString(), "label", null, 0, 1, ProjectsBuildTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getProjectsBuildTask_Predicates(), thePredicatesPackage.getPredicate(), null, "predicates", null, 0, -1, ProjectsBuildTask.class, //$NON-NLS-1$
         !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getProjectsBuildTask_OnlyNewProjects(), ecorePackage.getEBoolean(), "onlyNewProjects", null, 0, 1, ProjectsBuildTask.class, !IS_TRANSIENT, //$NON-NLS-1$

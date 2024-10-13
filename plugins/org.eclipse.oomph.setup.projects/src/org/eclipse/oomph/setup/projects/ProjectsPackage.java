@@ -307,13 +307,22 @@ public interface ProjectsPackage extends EPackage
   int PROJECTS_IMPORT_TASK__FILTER = SetupPackage.SETUP_TASK__FILTER;
 
   /**
+   * The feature id for the '<em><b>Label</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PROJECTS_IMPORT_TASK__LABEL = SetupPackage.SETUP_TASK_FEATURE_COUNT + 0;
+
+  /**
    * The feature id for the '<em><b>Force</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int PROJECTS_IMPORT_TASK__FORCE = SetupPackage.SETUP_TASK_FEATURE_COUNT + 0;
+  int PROJECTS_IMPORT_TASK__FORCE = SetupPackage.SETUP_TASK_FEATURE_COUNT + 1;
 
   /**
    * The feature id for the '<em><b>Source Locators</b></em>' containment reference list.
@@ -322,7 +331,7 @@ public interface ProjectsPackage extends EPackage
    * @generated
    * @ordered
    */
-  int PROJECTS_IMPORT_TASK__SOURCE_LOCATORS = SetupPackage.SETUP_TASK_FEATURE_COUNT + 1;
+  int PROJECTS_IMPORT_TASK__SOURCE_LOCATORS = SetupPackage.SETUP_TASK_FEATURE_COUNT + 2;
 
   /**
    * The number of structural features of the '<em>Import Task</em>' class.
@@ -331,7 +340,7 @@ public interface ProjectsPackage extends EPackage
    * @generated
    * @ordered
    */
-  int PROJECTS_IMPORT_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 2;
+  int PROJECTS_IMPORT_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 3;
 
   /**
    * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
@@ -424,13 +433,22 @@ public interface ProjectsPackage extends EPackage
   int PROJECTS_BUILD_TASK__FILTER = SetupPackage.SETUP_TASK__FILTER;
 
   /**
+   * The feature id for the '<em><b>Label</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PROJECTS_BUILD_TASK__LABEL = SetupPackage.SETUP_TASK_FEATURE_COUNT + 0;
+
+  /**
    * The feature id for the '<em><b>Predicates</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int PROJECTS_BUILD_TASK__PREDICATES = SetupPackage.SETUP_TASK_FEATURE_COUNT + 0;
+  int PROJECTS_BUILD_TASK__PREDICATES = SetupPackage.SETUP_TASK_FEATURE_COUNT + 1;
 
   /**
    * The feature id for the '<em><b>Only New Projects</b></em>' attribute.
@@ -439,7 +457,7 @@ public interface ProjectsPackage extends EPackage
    * @generated
    * @ordered
    */
-  int PROJECTS_BUILD_TASK__ONLY_NEW_PROJECTS = SetupPackage.SETUP_TASK_FEATURE_COUNT + 1;
+  int PROJECTS_BUILD_TASK__ONLY_NEW_PROJECTS = SetupPackage.SETUP_TASK_FEATURE_COUNT + 2;
 
   /**
    * The feature id for the '<em><b>Refresh</b></em>' attribute.
@@ -448,7 +466,7 @@ public interface ProjectsPackage extends EPackage
    * @generated
    * @ordered
    */
-  int PROJECTS_BUILD_TASK__REFRESH = SetupPackage.SETUP_TASK_FEATURE_COUNT + 2;
+  int PROJECTS_BUILD_TASK__REFRESH = SetupPackage.SETUP_TASK_FEATURE_COUNT + 3;
 
   /**
    * The feature id for the '<em><b>Clean</b></em>' attribute.
@@ -457,7 +475,7 @@ public interface ProjectsPackage extends EPackage
    * @generated
    * @ordered
    */
-  int PROJECTS_BUILD_TASK__CLEAN = SetupPackage.SETUP_TASK_FEATURE_COUNT + 3;
+  int PROJECTS_BUILD_TASK__CLEAN = SetupPackage.SETUP_TASK_FEATURE_COUNT + 4;
 
   /**
    * The feature id for the '<em><b>Build</b></em>' attribute.
@@ -466,7 +484,7 @@ public interface ProjectsPackage extends EPackage
    * @generated
    * @ordered
    */
-  int PROJECTS_BUILD_TASK__BUILD = SetupPackage.SETUP_TASK_FEATURE_COUNT + 4;
+  int PROJECTS_BUILD_TASK__BUILD = SetupPackage.SETUP_TASK_FEATURE_COUNT + 5;
 
   /**
    * The number of structural features of the '<em>Build Task</em>' class.
@@ -475,7 +493,7 @@ public interface ProjectsPackage extends EPackage
    * @generated
    * @ordered
    */
-  int PROJECTS_BUILD_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 5;
+  int PROJECTS_BUILD_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 6;
 
   /**
    * Returns the meta object for class '{@link org.eclipse.oomph.setup.projects.ProjectsImportTask <em>Import Task</em>}'.
@@ -486,6 +504,17 @@ public interface ProjectsPackage extends EPackage
    * @generated
    */
   EClass getProjectsImportTask();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.projects.ProjectsImportTask#getLabel <em>Label</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Label</em>'.
+   * @see org.eclipse.oomph.setup.projects.ProjectsImportTask#getLabel()
+   * @see #getProjectsImportTask()
+   * @generated
+   */
+  EAttribute getProjectsImportTask_Label();
 
   /**
    * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.projects.ProjectsImportTask#isForce <em>Force</em>}'.
@@ -518,6 +547,17 @@ public interface ProjectsPackage extends EPackage
    * @generated
    */
   EClass getProjectsBuildTask();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.projects.ProjectsBuildTask#getLabel <em>Label</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Label</em>'.
+   * @see org.eclipse.oomph.setup.projects.ProjectsBuildTask#getLabel()
+   * @see #getProjectsBuildTask()
+   * @generated
+   */
+  EAttribute getProjectsBuildTask_Label();
 
   /**
    * Returns the meta object for the containment reference list '{@link org.eclipse.oomph.setup.projects.ProjectsBuildTask#getPredicates <em>Predicates</em>}'.
@@ -640,6 +680,14 @@ public interface ProjectsPackage extends EPackage
     EClass PROJECTS_IMPORT_TASK = eINSTANCE.getProjectsImportTask();
 
     /**
+     * The meta object literal for the '<em><b>Label</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute PROJECTS_IMPORT_TASK__LABEL = eINSTANCE.getProjectsImportTask_Label();
+
+    /**
      * The meta object literal for the '<em><b>Force</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -664,6 +712,14 @@ public interface ProjectsPackage extends EPackage
      * @generated
      */
     EClass PROJECTS_BUILD_TASK = eINSTANCE.getProjectsBuildTask();
+
+    /**
+     * The meta object literal for the '<em><b>Label</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute PROJECTS_BUILD_TASK__LABEL = eINSTANCE.getProjectsBuildTask_Label();
 
     /**
      * The meta object literal for the '<em><b>Predicates</b></em>' containment reference list feature.
