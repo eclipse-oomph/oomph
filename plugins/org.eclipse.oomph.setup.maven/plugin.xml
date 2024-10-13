@@ -21,4 +21,18 @@
             genModel="model/Maven.genmodel"/>
    </extension>
 
+   <extension
+         point="org.eclipse.ui.commands">
+      <category
+            name="%OomphCommand_category"
+            id="org.eclipse.oomph">
+      </category>
+      <command
+            categoryId="org.eclipse.oomph"
+            defaultHandler="org.eclipse.oomph.setup.maven.util.ConvertM2RepositoryToUTF8Handler"
+            id="org.eclipse.oomph.setup.maven.ConvertM2RepositoryToUTF8"
+            name="%command.convertM2RepositoryToUTF8.name">
+      </command>
+   </extension>
+
 </plugin>
