@@ -195,7 +195,12 @@ public abstract class OomphDialog extends TitleAreaDialog implements HelpProvide
     shell.setText(getShellText());
 
     setTitle(title);
-    setTitleImage(getDefaultImage(getImagePath()));
+    String imagePath = getImagePath();
+    if (imagePath != null)
+    {
+      setTitleImage(getDefaultImage(imagePath));
+    }
+
     setMessage(getDefaultMessage());
 
     Composite area = (Composite)super.createDialogArea(parent);
