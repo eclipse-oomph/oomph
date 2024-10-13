@@ -50,7 +50,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -59,6 +61,15 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public final class ResourcesUtil
 {
+  public static final Comparator<IResource> RESOURCE_PATH_LENGTH_COMPARATOR = new Comparator<IResource>()
+  {
+    @Override
+    public int compare(IResource o1, IResource o2)
+    {
+      return Integer.compare(o1.getFullPath().segmentCount(), o2.getFullPath().segmentCount());
+    }
+  };
+
   private ResourcesUtil()
   {
   }
@@ -372,6 +383,13 @@ public final class ResourcesUtil
   public static boolean matchesPredicates(IProject project, EList<Predicate> predicates)
   {
     return PredicatesUtil.matchesPredicates(project, predicates);
+  }
+
+  public static IFile[] findFilesForLocationURI(URI location)
+  {
+    IFile[] files = getWorkspace().getRoot().findFilesForLocationURI(location);
+    Arrays.sort(files, ResourcesUtil.RESOURCE_PATH_LENGTH_COMPARATOR);
+    return files;
   }
 
   /**

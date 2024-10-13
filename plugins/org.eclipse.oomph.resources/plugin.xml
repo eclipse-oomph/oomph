@@ -30,6 +30,11 @@
             name="workspace_project_locations"
             resolver="org.eclipse.oomph.internal.resources.WorkspaceProjectLocationsResolver">
       </variable>
+      <variable
+            description="Returns content extract from the specified resource. The argument consists of 5 comma-separated parts.  The path of the resource, the encoding for reading it, the pattern to to search, the replacement to extra groups of the pattern match, and the default value if the pattern doesn't match."
+            name="file_extract_matching_pattern"
+            resolver="org.eclipse.oomph.internal.resources.FileExtractMatchingPatternResolver">
+      </variable>
    </extension>
 
 </plugin>
