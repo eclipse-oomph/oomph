@@ -11,12 +11,15 @@
  */
 package org.eclipse.oomph.util;
 
+import org.eclipse.emf.common.CommonPlugin;
 import org.eclipse.emf.common.util.URI;
 
 import org.eclipse.osgi.util.NLS;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,6 +30,39 @@ import java.util.regex.Pattern;
  */
 public final class StringUtil
 {
+  private static final Function<String, String> STRING_VARIABLE_SUBSTITUTOR = getStringSubstitutor();
+
+  @SuppressWarnings("nls")
+  private static Function<String, String> getStringSubstitutor()
+  {
+    Function<String, String> stringSubstitutor = Function.identity();
+    try
+    {
+      Class<?> variablesPluginClass = CommonPlugin.loadClass("org.eclipse.core.variables", "org.eclipse.core.variables.VariablesPlugin");
+      Object variablesPlugin = ReflectUtil.invokeMethod("getDefault", variablesPluginClass);
+      Object stringVariableManager = ReflectUtil.invokeMethod("getStringVariableManager", variablesPlugin);
+      Method performStringSubsitutionMethod = ReflectUtil.getMethod(stringVariableManager, "performStringSubstitution", String.class, boolean.class);
+      stringSubstitutor = text -> {
+        try
+        {
+          return (String)performStringSubsitutionMethod.invoke(stringVariableManager, text, false);
+        }
+        catch (Exception ex)
+        {
+          return text;
+        }
+      };
+    }
+    catch (Exception e)
+    {
+      //$FALL-THROUGH$
+    }
+
+    return stringSubstitutor;
+  }
+
+  private static final Pattern STRING_EXPANSION_PATTERN = Pattern.compile("\\$\\{([^${}|/]+)\\}"); //$NON-NLS-1$
+
   public static final String EMPTY = ""; //$NON-NLS-1$
 
   public static final String NL = PropertiesUtil.getProperty("line.separator"); //$NON-NLS-1$
@@ -683,5 +719,39 @@ public final class StringUtil
     pattern.append("\\E)"); //$NON-NLS-1$
 
     return Pattern.compile(pattern.toString(), Pattern.CASE_INSENSITIVE);
+  }
+
+  /**
+   * Replaces <code>${foo.bar}</code> with the runtime string substitution for {@code foo.bar}
+   * or with the value of the system property {@code foo.bar}
+   */
+  public static String performStringSubstitution(String text)
+  {
+    if (text == null)
+    {
+      return null;
+    }
+
+    // First apply the platform's substitutions so that it can override any system properties.
+    String substitutedString = STRING_VARIABLE_SUBSTITUTOR.apply(text.toString());
+
+    StringBuilder result = new StringBuilder();
+    Matcher matcher = STRING_EXPANSION_PATTERN.matcher(substitutedString);
+    while (matcher.find())
+    {
+      String propertyName = matcher.group(1);
+      String replacement = System.getProperty(propertyName);
+      if (replacement != null)
+      {
+        matcher.appendReplacement(result, Matcher.quoteReplacement(replacement));
+      }
+      else
+      {
+        matcher.appendReplacement(result, Matcher.quoteReplacement(matcher.group()));
+      }
+    }
+
+    matcher.appendTail(result);
+    return result.toString();
   }
 }
