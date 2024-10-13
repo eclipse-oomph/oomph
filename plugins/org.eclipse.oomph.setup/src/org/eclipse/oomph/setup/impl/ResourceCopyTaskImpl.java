@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Collections;
+import java.util.Objects;
 
 /**
  * <!-- begin-user-doc -->
@@ -366,6 +367,11 @@ public class ResourceCopyTaskImpl extends SetupTaskImpl implements ResourceCopyT
     URI targetURI = createResolvedURI(getTargetURL());
 
     if (sourceURI == null || targetURI == null)
+    {
+      return false;
+    }
+
+    if (Objects.equals(sourceURI, targetURI))
     {
       return false;
     }
