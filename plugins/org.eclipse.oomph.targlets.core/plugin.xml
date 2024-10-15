@@ -34,7 +34,7 @@
    <extension
          point="org.eclipse.emf.ecore.protocol_parser">
       <parser
-            class="org.eclipse.oomph.targlets.internal.core.TargletContainerResourceFactory"
+            class="org.eclipse.oomph.targlets.internal.core.TargletContainerResource$Factory"
             protocolName="targlet_container">
       </parser>
    </extension>

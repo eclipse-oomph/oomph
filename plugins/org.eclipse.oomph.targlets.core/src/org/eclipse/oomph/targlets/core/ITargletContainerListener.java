@@ -17,6 +17,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 /**
  * @author Eike Stepper
  */
+@FunctionalInterface
 public interface ITargletContainerListener
 {
   public void handleTargletContainerEvent(TargletContainerEvent event, IProgressMonitor monitor) throws Exception;

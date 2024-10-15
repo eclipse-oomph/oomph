@@ -14,7 +14,6 @@ import org.eclipse.oomph.p2.core.AgentManager;
 import org.eclipse.oomph.p2.core.BundlePool;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.Profile;
-import org.eclipse.oomph.p2.core.ProfileCreator;
 import org.eclipse.oomph.targlets.core.ITargletContainerDescriptor;
 import org.eclipse.oomph.targlets.core.WorkspaceIUInfo;
 import org.eclipse.oomph.util.IORuntimeException;
@@ -26,6 +25,7 @@ import org.eclipse.emf.ecore.resource.impl.BinaryResourceImpl.EObjectOutputStrea
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.equinox.p2.core.ProvisionException;
 import org.eclipse.equinox.p2.engine.IProfile;
 import org.eclipse.osgi.util.NLS;
@@ -272,11 +272,29 @@ public final class TargletContainerDescriptor implements ITargletContainerDescri
     return NLS.bind("TargletContainerDescriptor[id={0}, workingDigest={1}]", id, workingDigest); //$NON-NLS-1$
   }
 
-  Profile startUpdateTransaction(String environmentProperties, String nlProperty, String digest, IProgressMonitor monitor) throws CoreException
+  synchronized Profile startUpdateTransaction(String environmentProperties, String nlProperty, String digest, IProgressMonitor monitor) throws CoreException
   {
     if (transactionProfile != null)
     {
-      throw new ProvisionException(Messages.TargletContainerDescriptor_ConflictingTransaction_exception);
+      monitor.setTaskName(NLS.bind(Messages.TargletContainerDescriptor_ConflictingTransaction, id));
+
+      while (transactionProfile != null)
+      {
+        if (monitor.isCanceled())
+        {
+          throw new OperationCanceledException();
+        }
+
+        try
+        {
+          wait();
+        }
+        catch (InterruptedException ex)
+        {
+          Thread.currentThread().interrupt();
+          throw new OperationCanceledException();
+        }
+      }
     }
 
     transactionProfile = getOrCreateProfile(id, poolLocation, environmentProperties, nlProperty, digest, monitor);
@@ -284,7 +302,7 @@ public final class TargletContainerDescriptor implements ITargletContainerDescri
     return transactionProfile;
   }
 
-  void commitUpdateTransaction(String digest, Collection<WorkspaceIUInfo> workspaceIUInfos, IProgressMonitor monitor) throws CoreException
+  synchronized void commitUpdateTransaction(String digest, Collection<WorkspaceIUInfo> workspaceIUInfos, IProgressMonitor monitor) throws CoreException
   {
     if (transactionProfile == null)
     {
@@ -303,9 +321,10 @@ public final class TargletContainerDescriptor implements ITargletContainerDescri
     resetUpdateProblem();
 
     saveDescriptors(monitor);
+    notifyAll();
   }
 
-  void rollbackUpdateTransaction(Throwable t, IProgressMonitor monitor) throws CoreException
+  synchronized void rollbackUpdateTransaction(Throwable t, IProgressMonitor monitor) throws CoreException
   {
     if (restoreBundlePoolTimestamps != null)
     {
@@ -321,6 +340,8 @@ public final class TargletContainerDescriptor implements ITargletContainerDescri
 
       saveDescriptors(monitor);
     }
+
+    notifyAll();
   }
 
   void resetUpdateProblem()
@@ -357,29 +378,14 @@ public final class TargletContainerDescriptor implements ITargletContainerDescri
     return bundlePool.getProfile(profileID);
   }
 
-  private Profile getOrCreateProfile(String id, File poolLocation, String environmentProperties, String nlProperty, String digest, IProgressMonitor monitor)
-      throws CoreException
+  private static Profile getOrCreateProfile(String id, File poolLocation, String environmentProperties, String nlProperty, String digest,
+      IProgressMonitor monitor) throws CoreException
   {
     AgentManager agentManager = P2Util.getAgentManager();
     BundlePool bundlePool = agentManager.getBundlePool(poolLocation);
-
     String profileID = getProfileID(digest);
 
-    Profile profile = bundlePool.getProfile(profileID);
-    if (profile != null)
-    {
-      File installFolder = profile.getInstallFolder();
-      if (installFolder == null)
-      {
-        // TODO Remove this code after a while (install folder property is set for all profiles below).
-        profile.delete(true);
-        profile = null;
-      }
-    }
-
-    if (profile == null)
-    {
-      ProfileCreator creator = bundlePool.addProfile(profileID, Profile.TYPE_TARGLET);
+    return bundlePool.getOrAddProfile(profileID, Profile.TYPE_TARGLET, creator -> {
       creator.set(PROP_TARGLET_CONTAINER_WORKSPACE, TargletContainerDescriptorManager.WORKSPACE_LOCATION);
       creator.set(PROP_TARGLET_CONTAINER_ID, id);
       creator.set(PROP_TARGLET_CONTAINER_DIGEST, digest);
@@ -388,10 +394,7 @@ public final class TargletContainerDescriptor implements ITargletContainerDescri
       creator.setLanguages(nlProperty);
       creator.setInstallFeatures(true);
       creator.setReferencer(TargletContainerDescriptorManager.WORKSPACE_REFERENCER_FILE);
-      profile = creator.create();
-    }
-
-    return profile;
+    });
   }
 
   private static String getProfileID(String suffix)

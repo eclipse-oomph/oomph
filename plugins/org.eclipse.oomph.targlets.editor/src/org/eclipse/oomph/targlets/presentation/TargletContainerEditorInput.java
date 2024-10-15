@@ -12,7 +12,7 @@ package org.eclipse.oomph.targlets.presentation;
 
 import org.eclipse.oomph.targlets.core.ITargletContainer;
 import org.eclipse.oomph.targlets.internal.core.TargletContainerDescriptorManager;
-import org.eclipse.oomph.targlets.internal.core.TargletContainerResourceFactory;
+import org.eclipse.oomph.targlets.internal.core.TargletContainerResource;
 import org.eclipse.oomph.util.pde.TargetPlatformUtil;
 
 import org.eclipse.emf.common.ui.URIEditorInput;
@@ -28,7 +28,7 @@ public final class TargletContainerEditorInput extends URIEditorInput
 {
   public TargletContainerEditorInput(String containerID)
   {
-    super(URI.createGenericURI(TargletContainerResourceFactory.PROTOCOL_NAME, containerID, null), containerID);
+    super(URI.createGenericURI(TargletContainerResource.PROTOCOL_NAME, containerID, null), containerID);
   }
 
   public TargletContainerEditorInput(IMemento memento)

@@ -972,7 +972,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
           List<Resource> removedResources = new ArrayList<>(this.removedResources);
           if (!removedResources.remove(resourceSet.getResources().get(0)))
           {
-            // Only the first resource is modifiable, so if other resources are removed, we can just unload them, an ignore them form further dirty handling.
+            // Only the first resource is modifiable, so if other resources are removed, we can just unload them, an ignore them from further dirty handling.
             for (Resource resource : removedResources)
             {
               this.removedResources.remove(resource);
@@ -983,7 +983,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
 
         if (!changedResources.isEmpty())
         {
-          // Only the first resource is modifiable, so if other resources are removed, we can just unload them, an ignore them from further dirty handling.
+          // Only the first resource is modifiable, so if other resources are changed, we can just unload them, an ignore them from further dirty handling.
           List<Resource> changedResources = new ArrayList<>(this.changedResources);
           if (!changedResources.remove(resourceSet.getResources().get(0)))
           {
