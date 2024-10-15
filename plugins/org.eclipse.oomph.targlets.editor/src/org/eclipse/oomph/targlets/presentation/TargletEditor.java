@@ -18,9 +18,12 @@ import org.eclipse.oomph.p2.provider.P2ItemProviderAdapterFactory;
 import org.eclipse.oomph.predicates.provider.PredicatesItemProviderAdapterFactory;
 import org.eclipse.oomph.resources.provider.ResourcesItemProviderAdapterFactory;
 import org.eclipse.oomph.targlets.TargletContainer;
+import org.eclipse.oomph.targlets.core.ITargletContainer;
 import org.eclipse.oomph.targlets.core.ITargletContainerListener;
-import org.eclipse.oomph.targlets.core.TargletContainerEvent;
 import org.eclipse.oomph.targlets.core.TargletContainerEvent.IDChangedEvent;
+import org.eclipse.oomph.targlets.internal.core.TargletContainerDescriptorManager;
+import org.eclipse.oomph.targlets.internal.core.TargletContainerResource;
+import org.eclipse.oomph.targlets.internal.core.TargletsCorePlugin;
 import org.eclipse.oomph.targlets.provider.TargletItemProviderAdapterFactory;
 import org.eclipse.oomph.ui.ErrorDialog;
 import org.eclipse.oomph.ui.UIUtil;
@@ -78,6 +81,9 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.e4.core.contexts.EclipseContextFactory;
+import org.eclipse.e4.core.contexts.IEclipseContext;
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IStatusLineManager;
@@ -96,7 +102,8 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.pde.core.target.ITargetDefinition;
+import org.eclipse.pde.core.target.ITargetHandle;
+import org.eclipse.pde.core.target.TargetEvents;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.events.ControlAdapter;
@@ -130,6 +137,8 @@ import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheet;
 import org.eclipse.ui.views.properties.PropertySheetPage;
 
+import org.osgi.service.event.EventHandler;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -141,6 +150,8 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.function.Consumer;
 
 /**
  * This is an example of a Targlet model editor.
@@ -506,7 +517,7 @@ public class TargletEditor extends MultiPageEditorPart
               removedResources.addAll(visitor.getRemovedResources());
               if (!isDirty())
               {
-                getSite().getPage().closeEditor(TargletEditor.this, false);
+                closeEditor();
               }
             }
           });
@@ -535,54 +546,71 @@ public class TargletEditor extends MultiPageEditorPart
     }
   };
 
-  private TargetPlatformListener targetPlatformListener = new TargetPlatformListener()
-  {
-    @Override
-    public void targetDefinitionActivated(ITargetDefinition oldTargetDefinition, ITargetDefinition newTargetDefinition) throws Exception
+  private TargetConflict targetConflict = TargetConflict.None;
+
+  private final EventHandler targetPlatformEventHandler = event -> {
+    TargletContainerResource targletContainerResource = getTargletContainerResource();
+    if (targletContainerResource != null)
     {
-      TargletContainer targletContainer = getTargletContainer();
-      if (targletContainer != null)
+      Object data = event.getProperty(IEventBroker.DATA);
+      if (data instanceof ITargetHandle)
       {
-        UIUtil.asyncExec(new Runnable()
+        ITargetHandle handle = (ITargetHandle)data;
+
+        if (Objects.equals(handle, targletContainerResource.getTargetHandle()))
         {
-          @Override
-          public void run()
+          if (TargetEvents.TOPIC_TARGET_DELETED.equals(event.getTopic()))
           {
-            firePropertyChange(IWorkbenchPart.PROP_TITLE);
+            targetConflict = TargetConflict.Deleted;
           }
-        });
-      }
-    }
-  };
-
-  private ITargletContainerListener targletContainerListener = new ITargletContainerListener()
-  {
-    @Override
-    public void handleTargletContainerEvent(TargletContainerEvent event, IProgressMonitor monitor) throws Exception
-    {
-      TargletContainer targletContainer = getTargletContainer();
-      if (targletContainer != null)
-      {
-        String id = targletContainer.getID();
-
-        if (event instanceof IDChangedEvent)
-        {
-          IDChangedEvent idChangedEvent = (IDChangedEvent)event;
-          if (ObjectUtil.equals(idChangedEvent.getOldID(), id))
+          else if (targetConflict != TargetConflict.Deleted)
           {
-            IWorkbenchPage page = getEditorSite().getPage();
-            page.closeEditor(TargletEditor.this, false);
+            if (!isModelContainerEqualToCoreContainer(targletContainerResource))
+            {
+              targetConflict = TargetConflict.Modified;
+            }
           }
         }
       }
     }
+  };
 
-    @Override
-    public String toString()
+  private final TargetPlatformListener targetPlatformListener = (oldTargetDefinition, newTargetDefinition) -> {
+    TargletContainer targletContainer = getTargletContainer();
+    if (targletContainer != null)
     {
-      return TargletEditor.class.getSimpleName();
+      UIUtil.asyncExec(() -> firePropertyChange(IWorkbenchPart.PROP_TITLE));
     }
   };
+
+  private final ITargletContainerListener targletContainerListener = (event, monitor) -> {
+    TargletContainer targletContainer = getTargletContainer();
+    if (targletContainer != null)
+    {
+      String id = targletContainer.getID();
+
+      if (event instanceof IDChangedEvent)
+      {
+        IDChangedEvent idChangedEvent = (IDChangedEvent)event;
+        if (ObjectUtil.equals(idChangedEvent.getOldID(), id))
+        {
+          closeEditor();
+        }
+      }
+    }
+  };
+
+  /**
+   * This creates a model editor.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public TargletEditor()
+  {
+    super();
+    initializeEditingDomain();
+  }
 
   /**
    * Handles activation of the editor or it's associated views.
@@ -590,7 +618,7 @@ public class TargletEditor extends MultiPageEditorPart
    * <!-- end-user-doc -->
    * @generated
    */
-  protected void handleActivate()
+  protected void handleActivateGen()
   {
     // Recompute the read only state.
     //
@@ -607,7 +635,7 @@ public class TargletEditor extends MultiPageEditorPart
     {
       if (handleDirtyConflict())
       {
-        getSite().getPage().closeEditor(TargletEditor.this, false);
+        closeEditor();
       }
       else
       {
@@ -622,6 +650,21 @@ public class TargletEditor extends MultiPageEditorPart
       handleChangedResources();
       changedResources.clear();
       savedResources.clear();
+    }
+  }
+
+  /**
+   * Handles activation of the editor or it's associated views.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated NOT
+   */
+  protected void handleActivate()
+  {
+    if (!targetConflict.handle(this))
+    {
+      targetConflict = TargetConflict.None;
+      handleActivateGen();
     }
   }
 
@@ -750,18 +793,6 @@ public class TargletEditor extends MultiPageEditorPart
   }
 
   /**
-   * This creates a model editor.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public TargletEditor()
-  {
-    super();
-    initializeEditingDomain();
-  }
-
-  /**
    * This sets up the editing domain for the model editor.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -772,7 +803,6 @@ public class TargletEditor extends MultiPageEditorPart
     // Create an adapter factory that yields item providers.
     //
     adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
-
     adapterFactory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
     adapterFactory.addAdapterFactory(new TargletItemProviderAdapterFactory());
     adapterFactory.addAdapterFactory(new BaseItemProviderAdapterFactory());
@@ -1252,9 +1282,8 @@ public class TargletEditor extends MultiPageEditorPart
    * This is how the framework determines which interfaces we implement.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
-  @SuppressWarnings("all")
   @Override
   public <T> T getAdapter(Class<T> key)
   {
@@ -1262,26 +1291,37 @@ public class TargletEditor extends MultiPageEditorPart
     {
       return showOutlineView() ? key.cast(getContentOutlinePage()) : null;
     }
-    else if (key.equals(IPropertySheetPage.class))
+
+    if (key.equals(IPropertySheetPage.class))
     {
       return key.cast(getPropertySheetPage());
     }
-    else if (key.equals(IGotoMarker.class))
+
+    if (key.equals(IGotoMarker.class))
     {
       return key.cast(this);
     }
-    else if (key.equals(IFindReplaceTarget.class))
+
+    if (key.equals(IFindReplaceTarget.class))
     {
       return FindAndReplaceTarget.getAdapter(key, this, TargletEditorPlugin.getPlugin());
     }
-    else if (key.equals(org.eclipse.oomph.targlets.TargletContainer.class))
+
+    if (key.equals(org.eclipse.oomph.targlets.TargletContainer.class))
     {
       return key.cast(getTargletContainer());
     }
-    else
+
+    if (key.equals(ITargetHandle.class))
     {
-      return super.getAdapter(key);
+      TargletContainerResource resource = getTargletContainerResource();
+      if (resource != null)
+      {
+        return key.cast(resource.getTargetHandle());
+      }
     }
+
+    return super.getAdapter(key);
   }
 
   public org.eclipse.oomph.targlets.TargletContainer getTargletContainer()
@@ -1292,6 +1332,24 @@ public class TargletEditor extends MultiPageEditorPart
       if (rootObject instanceof org.eclipse.oomph.targlets.TargletContainer)
       {
         return (org.eclipse.oomph.targlets.TargletContainer)rootObject;
+      }
+    }
+    catch (NullPointerException ex)
+    {
+      //$FALL-THROUGH$
+    }
+
+    return null;
+  }
+
+  public TargletContainerResource getTargletContainerResource()
+  {
+    try
+    {
+      Resource resource = editingDomain.getResourceSet().getResources().get(0);
+      if (resource instanceof TargletContainerResource)
+      {
+        return (TargletContainerResource)resource;
       }
     }
     catch (NullPointerException ex)
@@ -1688,8 +1746,14 @@ public class TargletEditor extends MultiPageEditorPart
   public void init(IEditorSite site, IEditorInput editorInput)
   {
     initGen(site, editorInput);
+
     TargetPlatformUtil.addListener(targetPlatformListener);
     ITargletContainerListener.Registry.INSTANCE.addListener(targletContainerListener);
+
+    withEventBroker(broker -> {
+      broker.subscribe(TargetEvents.TOPIC_TARGET_SAVED, targetPlatformEventHandler);
+      broker.subscribe(TargetEvents.TOPIC_TARGET_DELETED, targetPlatformEventHandler);
+    });
   }
 
   /**
@@ -1900,8 +1964,10 @@ public class TargletEditor extends MultiPageEditorPart
   @Override
   public void dispose()
   {
+    withEventBroker(broker -> broker.unsubscribe(targetPlatformEventHandler));
     ITargletContainerListener.Registry.INSTANCE.removeListener(targletContainerListener);
     TargetPlatformUtil.removeListener(targetPlatformListener);
+
     disposeGen();
   }
 
@@ -1916,23 +1982,42 @@ public class TargletEditor extends MultiPageEditorPart
     return false;
   }
 
-  public static void open(final IWorkbenchPage page, final String targletContainerID)
+  private void closeEditor()
   {
-    UIUtil.asyncExec(new Runnable()
+    getSite().getPage().closeEditor(TargletEditor.this, false);
+  }
+
+  private boolean isModelContainerEqualToCoreContainer(TargletContainerResource targletContainerResource)
+  {
+    String targletContainerID = targletContainerResource.getTargletContainerID();
+    ITargletContainer coreContainer = TargletContainerDescriptorManager.getContainer(targletContainerID);
+    if (coreContainer == null)
     {
-      @Override
-      public void run()
+      return false;
+    }
+
+    TargletContainer modelContainer = getTargletContainer();
+    if (modelContainer == null)
+    {
+      return false;
+    }
+
+    return EcoreUtil.equals(modelContainer.getTarglets(), coreContainer.getTarglets()) //
+        && Objects.equals(modelContainer.getComposedTargets(), coreContainer.getComposedTargets());
+  }
+
+  public static void open(IWorkbenchPage page, String targletContainerID)
+  {
+    UIUtil.asyncExec(() -> {
+      try
       {
-        try
-        {
-          IEditorInput input = new TargletContainerEditorInput(targletContainerID);
-          IDE.openEditor(page, input, EDITOR_ID);
-        }
-        catch (PartInitException ex)
-        {
-          TargletEditorPlugin.INSTANCE.log(ex);
-          ErrorDialog.open(ex);
-        }
+        IEditorInput input = new TargletContainerEditorInput(targletContainerID);
+        IDE.openEditor(page, input, EDITOR_ID);
+      }
+      catch (PartInitException ex)
+      {
+        TargletEditorPlugin.INSTANCE.log(ex);
+        ErrorDialog.open(ex);
       }
     });
   }
@@ -1963,5 +2048,46 @@ public class TargletEditor extends MultiPageEditorPart
     }
 
     return null;
+  }
+
+  private static void withEventBroker(Consumer<IEventBroker> consumer)
+  {
+    IEclipseContext context = EclipseContextFactory.getServiceContext(TargletsCorePlugin.INSTANCE.getBundleContext());
+    IEventBroker broker = context.get(IEventBroker.class);
+    if (broker != null)
+    {
+      consumer.accept(broker);
+    }
+  }
+
+  /**
+   * @author Eike Stepper
+   */
+  private enum TargetConflict
+  {
+    None(null, null), //
+    Modified(getString("_WARN_TargetModified"), TargletEditor::doRevert), //$NON-NLS-1$
+    Deleted(getString("_WARN_TargetDeleted"), TargletEditor::closeEditor); //$NON-NLS-1$
+
+    private final String msg;
+
+    private final Consumer<TargletEditor> handler;
+
+    private TargetConflict(String msg, Consumer<TargletEditor> handler)
+    {
+      this.msg = msg;
+      this.handler = handler;
+    }
+
+    public boolean handle(TargletEditor editor)
+    {
+      if (msg != null && MessageDialog.openQuestion(editor.getSite().getShell(), getString("_UI_TargetConflict_label"), msg)) //$NON-NLS-1$
+      {
+        handler.accept(editor);
+        return true;
+      }
+
+      return false;
+    }
   }
 }

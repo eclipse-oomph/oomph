@@ -99,6 +99,10 @@
          version="0.0.0"/>
 
    <plugin
+         id="org.eclipse.oomph.ui.pde"
+         version="0.0.0"/>
+
+   <plugin
          id="org.eclipse.oomph.base"
          version="0.0.0"/>
 

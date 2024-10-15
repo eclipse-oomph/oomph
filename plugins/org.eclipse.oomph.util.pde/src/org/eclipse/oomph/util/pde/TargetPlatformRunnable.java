@@ -16,6 +16,7 @@ import org.eclipse.pde.core.target.ITargetPlatformService;
 /**
  * @author Eike Stepper
  */
+@FunctionalInterface
 public interface TargetPlatformRunnable<T>
 {
   public T run(ITargetPlatformService service) throws CoreException;

@@ -13,6 +13,7 @@ package org.eclipse.oomph.p2.core;
 import java.io.File;
 import java.util.Collection;
 import java.util.Set;
+import java.util.function.Consumer;
 
 /**
  * @author Eike Stepper
@@ -28,4 +29,20 @@ public interface ProfileContainer
   public Profile getProfile(File installFolder);
 
   public ProfileCreator addProfile(String id, String type);
+
+  public default Profile getOrAddProfile(String id, String type, Consumer<ProfileCreator> creatorConsumer)
+  {
+    synchronized (this)
+    {
+      Profile profile = getProfile(id);
+      if (profile == null)
+      {
+        ProfileCreator creator = addProfile(id, type);
+        creatorConsumer.accept(creator);
+        profile = creator.create();
+      }
+
+      return profile;
+    }
+  }
 }

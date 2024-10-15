@@ -575,15 +575,18 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     boolean force = Boolean.TRUE.equals(oldForce);
     if (!force)
     {
-      for (StackTraceElement stackTraceElement : Thread.currentThread().getStackTrace())
+      StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+      for (int i = 2; i < stackTrace.length; i++)
       {
-        String className = stackTraceElement.getClassName();
-        // System.err.println(className + '.' + stackTraceElement.getMethodName());
+        String className = stackTrace[i].getClassName();
+        // System.err.println(className + '.' + stackTrace[i].getMethodName());
 
-        // This is kind of a hack because some of the actions like Update and Reload from the preference dialog and the editor are supposed to clean up the
-        // profiles but for targlets they don't do that so the expected updates don't really happen.
+        // This is kind of a hack because some of the actions like Update and Reload
+        // from the preference dialog and the editor are supposed to clean up the profiles,
+        // but for targlets they don't do that so the expected updates don't really happen.
         if (className.equals("org.eclipse.pde.internal.ui.preferences.TargetPlatformPreferencePage") || //$NON-NLS-1$
-            className.startsWith("org.eclipse.pde.internal.ui.editor.targetdefinition.TargetEditor$TargetChangedListener")) //$NON-NLS-1$
+            className.startsWith("org.eclipse.pde.internal.ui.editor.targetdefinition.TargetEditor$TargetChangedListener") || //$NON-NLS-1$
+            className.startsWith("org.eclipse.oomph.ui.internal.pde.model.TargetSnapshot")) //$NON-NLS-1$
         {
           force = true;
           break;
@@ -591,23 +594,8 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
       }
     }
 
-    try
-    {
-      FORCE_UPDATE.set(force);
-      resolveUnits(monitor);
-      return fBundles;
-    }
-    finally
-    {
-      if (oldForce == null)
-      {
-        FORCE_UPDATE.remove();
-      }
-      else
-      {
-        FORCE_UPDATE.set(oldForce);
-      }
-    }
+    resolveUnits(force, monitor);
+    return fBundles;
   }
 
   @Override
@@ -617,7 +605,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     return fFeatures;
   }
 
-  private void resolveUnits(IProgressMonitor monitor) throws CoreException
+  private void resolveUnits(boolean force, IProgressMonitor monitor) throws CoreException
   {
     try
     {
@@ -634,35 +622,25 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
       boolean canResolve = canResolve();
       Profile profile = descriptor.getWorkingProfile();
       if (profile == null || //
-          !descriptor.getWorkingDigest().equals(digest) && canResolve && descriptor.getUpdateProblem() == null || //
-          FORCE_UPDATE.get() == Boolean.TRUE)
+          force || //
+          !descriptor.getWorkingDigest().equals(digest) && canResolve && descriptor.getUpdateProblem() == null)
       {
-        try
+        if (!canResolve)
         {
-          if (!canResolve)
-          {
-            // Defer resolution to a Job that happens on a background thread later in the lifecyle.
-            LoadTargetDefinitionJob.load(targetDefinition);
-            throw new CoreException(Status.CANCEL_STATUS);
-          }
-
-          Profile newProfile = updateProfile(environmentProperties, nlProperty, digest, progress.newChild(86));
-          if (newProfile != null)
-          {
-            if (profile != null && !profile.getProfileId().equals(newProfile.getProfileId()))
-            {
-              profile.delete();
-            }
-
-            profile = newProfile;
-          }
+          // Defer resolution to a Job that happens on a background thread later in the lifecyle.
+          LoadTargetDefinitionJob.load(targetDefinition);
+          throw new CoreException(Status.CANCEL_STATUS);
         }
-        catch (CoreException ex)
+
+        Profile newProfile = updateProfile(environmentProperties, nlProperty, digest, progress.newChild(86));
+        if (newProfile != null)
         {
-          if (profile == null)
+          if (profile != null && !profile.getProfileId().equals(newProfile.getProfileId()))
           {
-            throw ex;
+            profile.delete();
           }
+
+          profile = newProfile;
         }
       }
       else

@@ -501,7 +501,7 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
       @Override
       protected Profile doCreateProfile()
       {
-        return AgentImpl.this.createProfile(this);
+        return createProfile(this);
       }
     };
   }

@@ -25,7 +25,7 @@ public class Messages extends NLS
 
   public static String TargletContainer_UpdateComplete_task;
 
-  public static String TargletContainerDescriptor_ConflictingTransaction_exception;
+  public static String TargletContainerDescriptor_ConflictingTransaction;
 
   public static String TargletContainerDescriptor_NoTransaction_exception;
 

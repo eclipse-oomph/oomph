@@ -15,6 +15,7 @@ import org.eclipse.pde.core.target.ITargetDefinition;
 /**
  * @author Eike Stepper
  */
+@FunctionalInterface
 public interface TargetPlatformListener
 {
   public void targetDefinitionActivated(ITargetDefinition oldTargetDefinition, ITargetDefinition newTargetDefinition) throws Exception;
