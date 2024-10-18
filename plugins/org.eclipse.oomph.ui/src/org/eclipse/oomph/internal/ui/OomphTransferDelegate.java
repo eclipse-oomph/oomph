@@ -920,7 +920,7 @@ public abstract class OomphTransferDelegate
     {
       if (data instanceof String)
       {
-        String value = data.toString().trim();
+        String value = data.toString().replaceAll("\n.*$", "").trim(); //$NON-NLS-1$ //$NON-NLS-2$
         try
         {
           return Collections.singleton(URI.createURI(value));
