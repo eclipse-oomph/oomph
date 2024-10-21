@@ -29,7 +29,11 @@ import org.eclipse.oomph.util.Request;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.ui.dialogs.WorkspaceResourceDialog;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EAnnotation;
+import org.eclipse.emf.ecore.EClassifier;
+import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.eclipse.emf.edit.provider.IItemFontProvider;
 import org.eclipse.emf.edit.ui.provider.ExtendedFontRegistry;
@@ -120,7 +124,32 @@ public abstract class PropertyField
       case JRE:
         if (choices.isEmpty())
         {
-          JREField jreField = new JREField(new JREFilter(9, 0, null), choices);
+          EPackage ePackage = EPackage.Registry.INSTANCE.getEPackage("http://www.eclipse.org/oomph/setup/jdt/1.0"); //$NON-NLS-1$
+          if (ePackage != null)
+          {
+            EClassifier eClassifier = ePackage.getEClassifier("JRETask"); //$NON-NLS-1$
+            if (eClassifier != null)
+            {
+              EList<EAnnotation> eAnnotations = eClassifier.getEAnnotations();
+              if (!eAnnotations.isEmpty())
+              {
+                String version = eAnnotations.get(eAnnotations.size() - 1).getDetails().get("version"); //$NON-NLS-1$
+                if (version != null && version.startsWith("JavaSE-")) //$NON-NLS-1$
+                {
+                  try
+                  {
+                    return new JREField(new JREFilter(Integer.parseInt(version.substring("JavaSE-".length())), 0, null), choices); //$NON-NLS-1$
+                  }
+                  catch (RuntimeException ex)
+                  {
+                    //$FALL-THROUGH$
+                  }
+                }
+              }
+            }
+          }
+
+          JREField jreField = new JREField(new JREFilter(24, 0, null), choices);
           return jreField;
         }
 
