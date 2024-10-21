@@ -25,6 +25,7 @@ import org.eclipse.oomph.setup.internal.core.SetupCorePlugin;
 import org.eclipse.oomph.setup.internal.core.util.Authenticator;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OS;
+import org.eclipse.oomph.util.Request;
 import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.ui.dialogs.WorkspaceResourceDialog;
@@ -212,6 +213,8 @@ public abstract class PropertyField
 
   private boolean enabled = true;
 
+  private OS os = OS.INSTANCE;
+
   public PropertyField()
   {
     this(null);
@@ -312,6 +315,16 @@ public abstract class PropertyField
         notifyValueListeners(oldValue, value);
       }
     }
+  }
+
+  public OS getOS()
+  {
+    return os;
+  }
+
+  public void setOS(OS os)
+  {
+    this.os = os;
   }
 
   public final void addValueListener(ValueListener listener)
@@ -1367,7 +1380,7 @@ public abstract class PropertyField
     @Override
     protected void helperButtonSelected(SelectionEvent e)
     {
-      JREController jreController = new JREController(null, null, null)
+      JREController jreController = new JREController(null, null, Request.Handler.SYSTEM_BROWSER)
       {
         @Override
         protected Shell getShell()
@@ -1398,6 +1411,7 @@ public abstract class PropertyField
         }
       };
 
+      jreController.setOS(getOS());
       jreController.refresh();
       jreController.configureJREs();
     }

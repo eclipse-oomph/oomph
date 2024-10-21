@@ -55,6 +55,8 @@ public final class EAnnotationConstants
 
   public static final String KEY_DEFAULT_VALUE = "defaultValue"; //$NON-NLS-1$
 
+  public static final String KEY_LINK = "link"; //$NON-NLS-1$
+
   public static final String KEY_VALUE = "value"; //$NON-NLS-1$
 
   public static final String KEY_STORAGE_URI = "storageURI"; //$NON-NLS-1$

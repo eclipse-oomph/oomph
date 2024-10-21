@@ -1246,6 +1246,11 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     variable.setLabel(expandAttributeReferences(setupTask, details.get(EAnnotationConstants.KEY_LABEL)));
     variable.setDescription(expandAttributeReferences(setupTask, details.get(EAnnotationConstants.KEY_DESCRIPTION)));
     variable.setDefaultValue(expandAttributeReferences(setupTask, details.get(EAnnotationConstants.KEY_DEFAULT_VALUE)));
+    String link = expandAttributeReferences(setupTask, details.get(EAnnotationConstants.KEY_LINK));
+    if (link != null)
+    {
+      variable.setLink(URI.createURI(link));
+    }
 
     // The storageURI remains the default unless there is an explicit key to specify it be null or whatever else is specified.
     if (details.containsKey(EAnnotationConstants.KEY_STORAGE_URI))

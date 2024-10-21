@@ -15,6 +15,7 @@ import org.eclipse.oomph.jreinfo.JRE;
 import org.eclipse.oomph.jreinfo.JREFilter;
 import org.eclipse.oomph.jreinfo.JREManager;
 import org.eclipse.oomph.ui.UIUtil;
+import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.ObjectUtil;
 import org.eclipse.oomph.util.Request;
 import org.eclipse.oomph.util.StringUtil;
@@ -61,6 +62,8 @@ public abstract class JREController implements ISelectionChangedListener
 
   private JRE jre;
 
+  private OS os = OS.INSTANCE;
+
   private boolean refreshing;
 
   public JREController(Label label, StructuredViewer viewer, Request.Handler downloadHandler)
@@ -78,6 +81,16 @@ public abstract class JREController implements ISelectionChangedListener
   public final StructuredViewer getViewer()
   {
     return viewer;
+  }
+
+  public OS getOS()
+  {
+    return os;
+  }
+
+  public void setOS(OS os)
+  {
+    this.os = os;
   }
 
   public final String getJavaVersion()
@@ -187,6 +200,7 @@ public abstract class JREController implements ISelectionChangedListener
     };
 
     dialog.setJREFilter(jreFilter);
+    dialog.setOS(getOS());
 
     JRE jre = getDefaultSelection();
     if (jre != null)

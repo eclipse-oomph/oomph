@@ -26,6 +26,7 @@ import org.eclipse.emf.edit.provider.IItemFontProvider;
 import org.eclipse.emf.edit.ui.provider.ExtendedFontRegistry;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.TreeColumnLayout;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -108,6 +109,8 @@ public class JREComposite extends Composite
   private Button removeButton;
 
   private Button refreshButton;
+
+  private OS os = OS.INSTANCE;
 
   public JREComposite(Composite parent, int style, Request.Handler downloadHandler, JREFilter filter, final Object selection)
   {
@@ -308,6 +311,16 @@ public class JREComposite extends Composite
     });
   }
 
+  public OS getOS()
+  {
+    return os;
+  }
+
+  public void setOs(OS os)
+  {
+    this.os = os;
+  }
+
   public Object getSelectedElement()
   {
     return selectedElement;
@@ -407,12 +420,47 @@ public class JREComposite extends Composite
 
   protected void downloadPressed()
   {
-    Request request = new Request("https://download.eclipse.org/oomph/jre/"); //$NON-NLS-1$
+    Request request = new Request("https://adoptium.net/temurin/releases/"); //$NON-NLS-1$
 
-    JREFilter filter = getJREFilter();
     if (filter != null)
     {
-      request.put("vm", filter.getQuery()); //$NON-NLS-1$
+      Integer major = filter.getMajor();
+      if (major > 1)
+      {
+        request.put("version", Integer.toString(major)); //$NON-NLS-1$
+      }
+      else
+      {
+        if (filter.getMinor() == 8)
+        {
+          request.put("version", "8"); //$NON-NLS-1$ //$NON-NLS-2$
+        }
+      }
+    }
+
+    OS os = getOS();
+    String osgiOS = os.getOsgiOS();
+    if (Platform.OS_WIN32.equals(osgiOS))
+    {
+      request.put("os", "windows"); //$NON-NLS-1$ //$NON-NLS-2$
+    }
+    else if (Platform.OS_MACOSX.equals(osgiOS))
+    {
+      request.put("os", "mac"); //$NON-NLS-1$ //$NON-NLS-2$
+    }
+    else
+    {
+      request.put("os", osgiOS); //$NON-NLS-1$
+    }
+
+    String osgiArch = os.getOsgiArch();
+    if (Platform.ARCH_X86_64.equals(osgiArch))
+    {
+      request.put("arch", "x64"); //$NON-NLS-1$ //$NON-NLS-2$
+    }
+    else
+    {
+      request.put("arch", osgiArch); //$NON-NLS-1$
     }
 
     downloadHandler.handleRequest(request);

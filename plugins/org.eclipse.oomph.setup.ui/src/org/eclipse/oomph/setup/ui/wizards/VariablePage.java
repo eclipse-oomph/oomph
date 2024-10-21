@@ -896,9 +896,15 @@ public class VariablePage extends SetupWizardPage implements SetupPrompter
       variables.add(variable);
     }
 
+    public OS getOS()
+    {
+      return getWizard().getOS();
+    }
+
     protected void init(VariableTask variable)
     {
       field = PropertyField.createField(variable);
+      field.setOS(getOS());
       field.fill(composite);
       field.addValueListener(this);
       field.getControl().addFocusListener(focusListener);

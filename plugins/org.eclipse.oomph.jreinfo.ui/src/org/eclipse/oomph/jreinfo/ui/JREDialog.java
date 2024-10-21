@@ -14,6 +14,7 @@ import org.eclipse.oomph.jreinfo.JRE;
 import org.eclipse.oomph.jreinfo.JREFilter;
 import org.eclipse.oomph.ui.OomphDialog;
 import org.eclipse.oomph.ui.UIUtil;
+import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.Request;
 
 import org.eclipse.osgi.util.NLS;
@@ -36,6 +37,8 @@ public class JREDialog extends OomphDialog
   private Object selectedElement;
 
   private JREComposite composite;
+
+  private OS os = OS.INSTANCE;
 
   public JREDialog(Shell parentShell, Request.Handler downloadHandler)
   {
@@ -61,6 +64,16 @@ public class JREDialog extends OomphDialog
         setMessage(getDefaultMessage());
       }
     });
+  }
+
+  public OS getOS()
+  {
+    return os;
+  }
+
+  public void setOS(OS os)
+  {
+    this.os = os;
   }
 
   public Object getSelectedElement()
@@ -132,6 +145,7 @@ public class JREDialog extends OomphDialog
       }
     };
 
+    composite.setOs(getOS());
     composite.setLayoutData(new GridData(GridData.FILL_BOTH));
   }
 
