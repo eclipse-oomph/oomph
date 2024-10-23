@@ -55,6 +55,12 @@ public class OomphDropAdapter extends EditingDomainViewerDropAdapter
     if (!HAS_EARLY_DRAG_SOURCE)
     {
       unavailableDelegates = null;
+
+      // On macos, event detail may be DROP_NONE
+      if (event.detail == DND.DROP_NONE)
+      {
+        event.detail = DND.DROP_COPY;
+      }
     }
     else
     {
