@@ -576,11 +576,11 @@ public class MylynPackageImpl extends EPackageImpl implements MylynPackage
         "installableUnits", "org.eclipse.oomph.setup.mylyn.feature.group" //$NON-NLS-1$ //$NON-NLS-2$
     });
     addAnnotation(this, source, new String[] { "variableName", "setup.mylyn.updates.p2", //$NON-NLS-1$ //$NON-NLS-2$
-        "repository", "https://download.eclipse.org/mylyn/releases/latest" //$NON-NLS-1$ //$NON-NLS-2$
+        "repository", "https://download.eclipse.org/mylyn/updates/release/latest" //$NON-NLS-1$ //$NON-NLS-2$
     });
-    addAnnotation(mylynQueriesTaskEClass, source,
-        new String[] { "installableUnits", "org.eclipse.mylyn.tasks.core org.eclipse.mylyn.tasks.ui org.eclipse.mylyn.bugzilla_feature.feature.group" //$NON-NLS-1$ //$NON-NLS-2$
-        });
+    addAnnotation(mylynQueriesTaskEClass, source, new String[] { "installableUnits", //$NON-NLS-1$
+        "org.eclipse.mylyn.tasks.core org.eclipse.mylyn.tasks.ui org.eclipse.mylyn.bugzilla.core org.eclipse.mylyn.bugzilla.ui" //$NON-NLS-1$
+    });
     addAnnotation(mylynBuildsTaskEClass, source, new String[] { "installableUnits", "org.eclipse.mylyn.tasks.core org.eclipse.mylyn.tasks.ui" //$NON-NLS-1$ //$NON-NLS-2$
     });
   }

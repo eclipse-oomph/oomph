@@ -33,7 +33,7 @@ import org.eclipse.emf.ecore.EReference;
  * @model kind="package"
  *        annotation="http://www.eclipse.org/emf/2002/Ecore schemaLocation='https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/models/Mylyn.ecore'"
  *        annotation="http://www.eclipse.org/oomph/setup/Enablement variableName='setup.mylyn.p2' repository='${oomph.update.url}' installableUnits='org.eclipse.oomph.setup.mylyn.feature.group'"
- *        annotation="http://www.eclipse.org/oomph/setup/Enablement variableName='setup.mylyn.updates.p2' repository='https://download.eclipse.org/mylyn/releases/latest'"
+ *        annotation="http://www.eclipse.org/oomph/setup/Enablement variableName='setup.mylyn.updates.p2' repository='https://download.eclipse.org/mylyn/updates/release/latest'"
  *        annotation="http://www.eclipse.org/oomph/base/LabelProvider imageBaseURI='https://raw.githubusercontent.com/eclipse-oomph/oomph/master/plugins/org.eclipse.oomph.setup.mylyn.edit/icons/full/obj16'"
  * @generated
  */
