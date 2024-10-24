@@ -58,7 +58,7 @@
       <requirement
           name="org.eclipse.platform.ide"
           versionRange="[4.34.0,5.0.0)"
-          filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
+          filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=riscv64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
       <requirement
           name="Application Development Frameworks"/>
       <requirement

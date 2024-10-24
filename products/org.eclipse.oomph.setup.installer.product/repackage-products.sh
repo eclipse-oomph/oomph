@@ -24,8 +24,13 @@ for i in $(ls); do
 
   if [[ $i == *.zip ]]; then
     if [[ $i == *with-jre* ]]; then
-      cp $i ../repackaged-products/eclipse-inst-jre$restricted-win64.zip
-      extractor=eclipse-inst-jre$restricted-win64.exe
+      if [[ $i == *aarch64* ]]; then
+        arch=win-aarch64
+      else
+        arch=win64
+      fi
+      cp $i ../repackaged-products/eclipse-inst-jre$restricted-$arch.zip
+      extractor=eclipse-inst-jre$restricted-$arch.exe
       descriptor=descriptor-tar-64.txt
       mkdir -p tmp
       cd tmp
@@ -35,8 +40,8 @@ for i in $(ls); do
       rm -rf tmp
       product=${i%.zip}.tar
     else
-      cp $i ../repackaged-products/eclipse-inst$restricted-win64.zip
-      extractor=eclipse-inst$restricted-win64.exe
+      cp $i ../repackaged-products/eclipse-inst$restricted-$arch.zip
+      extractor=eclipse-inst$restricted-$arch.exe
       descriptor=descriptor-64.txt
       product=$i
     fi
