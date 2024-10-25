@@ -35,6 +35,8 @@ for i in $named_releases $numbered_releases; do
 
           if [ -f $prefix$os$b.exe ]; then
             candidate=$prefix$os$b.exe
+          elif [ -f $prefix$os-$b.exe ]; then
+            candidate=$prefix$os-$b.exe
           elif [ -f $prefix$os-$b.dmg ]; then
             candidate=$prefix$os-$b.dmg
           elif [ -f $prefix$os$b.dmg ]; then
