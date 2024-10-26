@@ -17,10 +17,22 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.attribute.PosixFileAttributeView;
+import java.nio.file.attribute.PosixFilePermission;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
@@ -146,9 +158,63 @@ public final class ZIPUtil
     }
   }
 
+  @SuppressWarnings("nls")
   public static void unzip(File zipFile, File targetFolder) throws IORuntimeException
   {
-    unzip(zipFile, new FileSystemUnzipHandler(targetFolder, DEFAULT_BUFFER_SIZE));
+    URI uri = URI.create("jar:" + zipFile.toURI() + "!/");
+    Path targetRoot = targetFolder.toPath();
+    Map<String, String> options = Map.of("enablePosixFileAttributes", "true");
+    try (FileSystem fileSystem = FileSystems.newFileSystem(uri, options))
+    {
+      Path jarRoot = fileSystem.getPath("/");
+      Files.walkFileTree(jarRoot, new SimpleFileVisitor<Path>()
+      {
+        @Override
+        public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException
+        {
+          Path targetFile = getTarget(file);
+          Files.copy(file, targetFile);
+          setPosixFilePermissions(file, targetFile);
+          return FileVisitResult.CONTINUE;
+        }
+
+        @Override
+        public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException
+        {
+          Path targetDir = getTarget(dir);
+          Files.createDirectories(targetDir);
+          setPosixFilePermissions(dir, targetDir);
+          return FileVisitResult.CONTINUE;
+        }
+
+        private Path getTarget(Path source)
+        {
+          return targetRoot.resolve(jarRoot.relativize(source).toString());
+        }
+
+        private void setPosixFilePermissions(Path source, Path target)
+        {
+          try
+          {
+            PosixFileAttributeView sourceFileAttributeView = Files.getFileAttributeView(source, PosixFileAttributeView.class);
+            PosixFileAttributeView targetFileAttributeView = Files.getFileAttributeView(target, PosixFileAttributeView.class);
+            if (sourceFileAttributeView != null && targetFileAttributeView != null)
+            {
+              Set<PosixFilePermission> perms = Files.getPosixFilePermissions(source);
+              Files.setPosixFilePermissions(target, perms);
+            }
+          }
+          catch (RuntimeException | IOException ex)
+          {
+            //$FALL-THROUGH$
+          }
+        }
+      });
+    }
+    catch (IOException ex)
+    {
+      throw new IORuntimeException(ex);
+    }
   }
 
   /**
