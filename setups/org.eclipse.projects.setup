@@ -1361,8 +1361,8 @@
   <project href="https://raw.githubusercontent.com/eclipse-packaging/packages/master/releng/org.eclipse.epp.config/oomph/EPP.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse/epsilon/main/releng/org.eclipse.epsilon.releng/epsilonDev.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-equinox/equinox/master/releng/org.eclipse.equinox.releng/Equinox.setup#/"/>
-  <project href="https://raw.githubusercontent.com/eclipse/gef-classic/master/setup/GEF.setup#/"/>
-  <project href="https://raw.githubusercontent.com/eclipse/gef/master/org.eclipse.gef.releng/GEF.setup#/"/>
+  <project href="https://raw.githubusercontent.com/eclipse-gef/gef-classic/master/setup/GEF.setup#/"/>
+  <project href="https://raw.githubusercontent.com/eclipse-gef/gef/master/org.eclipse.gef.releng/GEF.setup#/"/>
   <project href="interim/GMFNotation.setup#/"/>
   <project href="interim/GMFRuntime.setup#/"/>
   <project href="https://gitlab.eclipse.org/eclipse/graphiti/graphiti/-/raw/master/parent/Graphiti.setup#/"/>
