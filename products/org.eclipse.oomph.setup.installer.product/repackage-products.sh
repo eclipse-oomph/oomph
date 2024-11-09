@@ -23,12 +23,12 @@ for i in $(ls); do
   fi
 
   if [[ $i == *.zip ]]; then
+    if [[ $i == *aarch64* ]]; then
+      arch=win-aarch64
+    else
+      arch=win64
+    fi
     if [[ $i == *with-jre* ]]; then
-      if [[ $i == *aarch64* ]]; then
-        arch=win-aarch64
-      else
-        arch=win64
-      fi
       cp $i ../repackaged-products/eclipse-inst-jre$restricted-$arch.zip
       extractor=eclipse-inst-jre$restricted-$arch.exe
       descriptor=descriptor-tar-64.txt
