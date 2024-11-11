@@ -51,6 +51,9 @@
    <feature id="org.eclipse.oomph.targlets" version="0.0.0">
       <category name="org.eclipse.oomph.tools.category"/>
    </feature>
+   <feature id="org.eclipse.oomph.ui.pde" version="0.0.0">
+      <category name="org.eclipse.oomph.tools.category"/>
+   </feature>
    <feature id="org.eclipse.oomph.version" version="0.0.0">
       <category name="org.eclipse.oomph.tools.category"/>
    </feature>
