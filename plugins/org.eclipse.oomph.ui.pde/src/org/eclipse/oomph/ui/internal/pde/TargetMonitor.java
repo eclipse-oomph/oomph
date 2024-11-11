@@ -505,7 +505,7 @@ public class TargetMonitor extends ViewPart implements ISelectionProvider
         snapshotsViewer.collapseAll();
         snapshotsViewer.expandToLevel(snapshot, AbstractTreeViewer.ALL_LEVELS);
 
-        ITreeSelection oldSelection = snapshotsViewer.getStructuredSelection();
+        IStructuredSelection oldSelection = snapshotsViewer.getStructuredSelection();
         StructuredSelection newSelection = new StructuredSelection(snapshot);
         if (!Objects.equals(newSelection, oldSelection))
         {
