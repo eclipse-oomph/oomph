@@ -83,6 +83,10 @@
          version="0.0.0"/>
 
    <includes
+         id="org.eclipse.oomph.ui.pde"
+         version="0.0.0"/>
+
+   <includes
          id="org.eclipse.oomph.setup.sdk"
          version="0.0.0"/>
 
@@ -92,14 +96,6 @@
 
    <includes
          id="org.eclipse.oomph.maven"
-         version="0.0.0"/>
-
-   <plugin
-         id="org.eclipse.oomph.util.pde"
-         version="0.0.0"/>
-
-   <plugin
-         id="org.eclipse.oomph.ui.pde"
          version="0.0.0"/>
 
    <plugin
