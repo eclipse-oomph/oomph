@@ -1467,6 +1467,12 @@
           pattern="org\.eclipse\.oomph\.targlets.*"/>
     </workingSet>
     <workingSet
+        name="Oomph Maven">
+      <predicate
+          xsi:type="predicates:NamePredicate"
+          pattern="org\.eclipse\.oomph\.maven.*"/>
+    </workingSet>
+    <workingSet
         name="Oomph P2 Management">
       <predicate
           xsi:type="predicates:NamePredicate"
