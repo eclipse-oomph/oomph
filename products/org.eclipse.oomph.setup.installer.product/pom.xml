@@ -428,6 +428,7 @@
                 <linux>tar.gz</linux>
                 <macosx>tar.gz</macosx>
               </formats>
+              <storeCreationTime>false</storeCreationTime>
             </configuration>
           </execution>
         </executions>
