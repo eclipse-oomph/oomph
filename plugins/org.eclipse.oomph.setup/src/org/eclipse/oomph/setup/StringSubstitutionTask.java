@@ -66,7 +66,7 @@ public interface StringSubstitutionTask extends SetupTask
    * @return the value of the '<em>Value</em>' attribute.
    * @see #setValue(String)
    * @see org.eclipse.oomph.setup.SetupPackage#getStringSubstitutionTask_Value()
-   * @model required="true"
+   * @model
    * @generated
    */
   String getValue();

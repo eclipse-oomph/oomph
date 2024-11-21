@@ -2802,7 +2802,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     initEClass(stringSubstitutionTaskEClass, StringSubstitutionTask.class, "StringSubstitutionTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
     initEAttribute(getStringSubstitutionTask_Name(), ecorePackage.getEString(), "name", null, 1, 1, StringSubstitutionTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getStringSubstitutionTask_Value(), ecorePackage.getEString(), "value", null, 1, 1, StringSubstitutionTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
+    initEAttribute(getStringSubstitutionTask_Value(), ecorePackage.getEString(), "value", null, 0, 1, StringSubstitutionTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(redirectionTaskEClass, RedirectionTask.class, "RedirectionTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
