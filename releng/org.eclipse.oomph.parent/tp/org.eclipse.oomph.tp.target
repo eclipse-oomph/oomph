@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.8"?>
-<target name="Generated from Oomph" sequenceNumber="152">
+<target name="Generated from Oomph" sequenceNumber="153">
   <locations>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
       <unit id="org.apache.commons.collections" version="3.2.2"/>
@@ -26,7 +26,7 @@
       <repository location="https://download.eclipse.org/technology/m2e/snapshots/latest"/>
       <repository location="https://download.eclipse.org/wildwebdeveloper/releases/latest"/>
       <repository location="https://download.eclipse.org/tm4e/releases/latest"/>
-      <repository location="https://download.eclipse.org/technology/swtbot/releases/4.1.0"/>
+      <repository location="https://download.eclipse.org/technology/swtbot/releases/4.2.1"/>
       <repository location="https://download.eclipse.org/tools/orbit/simrel/orbit-aggregation/nightly/latest"/>
       <repository location="https://download.eclipse.org/justj/jres/21/updates/milestone/latest"/>
       <repository location="https://download.eclipse.org/usssdk/updates/latest"/>

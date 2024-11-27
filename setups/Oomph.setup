@@ -34,7 +34,7 @@
   <setupTask
       xsi:type="setup:VariableTask"
       name="swtbot.p2"
-      value="https://download.eclipse.org/technology/swtbot/releases/4.1.0"/>
+      value="https://download.eclipse.org/technology/swtbot/releases/4.2.1"/>
   <setupTask
       xsi:type="setup.p2:P2Task"
       label="Oomph">
