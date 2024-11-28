@@ -1373,7 +1373,7 @@
   <project href="https://raw.githubusercontent.com/eclipse/mwe/master/releng/MWE.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-m2e/m2e-core/master/setup/m2e.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-nattable/nattable/master/setup/NatTable.setup#/"/>
-  <project href="https://raw.githubusercontent.com/eclipse/nebula/master/oomph.setup#/"/>
+  <project href="https://raw.githubusercontent.com/EclipseNebula/nebula/master/oomph.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse/n4js/master/releng/org.eclipse.n4js.targetplatform/N4JS.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-ocl/org.eclipse.ocl/master/releng/org.eclipse.ocl.oomph/setups/ocl.setup#/"/>
   <project href="Oomph.setup#/"/>
