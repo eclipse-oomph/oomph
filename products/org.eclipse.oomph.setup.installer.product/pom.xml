@@ -380,14 +380,6 @@
                   </rootFolders>
                 </product>
                 <product>
-                  <id>org.eclipse.oomph.setup.installer.product.restricted</id>
-                  <attachId>restricted</attachId>
-                  <rootFolders>
-                    <macosx>Eclipse Installer.app</macosx>
-                    <linux>eclipse-installer</linux>
-                  </rootFolders>
-                </product>
-                <product>
                   <id>org.eclipse.oomph.setup.installer.product.with-jre.restricted</id>
                   <attachId>with-jre-restricted</attachId>
                   <rootFolders>
@@ -413,10 +405,6 @@
                 <product>
                   <id>org.eclipse.oomph.setup.installer.product.with-jre</id>
                   <attachId>with-jre</attachId>
-                </product>
-                <product>
-                  <id>org.eclipse.oomph.setup.installer.product.restricted</id>
-                  <attachId>restricted</attachId>
                 </product>
                 <product>
                   <id>org.eclipse.oomph.setup.installer.product.with-jre.restricted</id>
