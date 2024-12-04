@@ -467,6 +467,18 @@
     </content>
   </setupTask>
   <setupTask
+      xsi:type="setup:ResourceCreationTask"
+      excludedTriggers="BOOTSTRAP"
+      targetURL="${github.clone.oomph.github.location|uri}/.settings/org.eclipse.core.resources.prefs"
+      encoding="UTF-8">
+    <description>Create a .gitignore file in the Oomph's .github repository</description>
+    <content>
+      eclipse.preferences.version=1
+      encoding/&lt;project>=UTF-8
+
+    </content>
+  </setupTask>
+  <setupTask
       xsi:type="setup.targlets:TargletTask">
     <targlet
         name="Oomph"

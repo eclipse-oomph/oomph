@@ -340,7 +340,7 @@ public class MarketplaceCatalogGenerator implements IApplication
     // platformVersions.put("platform.version=4.18", "2020-12");
     // platformVersions.put("platform.version=4.19", "2021-03");
     // platformVersions.put("platform.version=4.20", "2021-06");
-    platformVersions.put("platform.version=4.21", "2021-09");
+    // platformVersions.put("platform.version=4.21", "2021-09");
     platformVersions.put("platform.version=4.22", "2021-12");
     platformVersions.put("platform.version=4.23", "2022-03");
     platformVersions.put("platform.version=4.24", "2022-06");
@@ -354,6 +354,7 @@ public class MarketplaceCatalogGenerator implements IApplication
     platformVersions.put("platform.version=4.32", "2024-06");
     platformVersions.put("platform.version=4.33", "2024-09");
     platformVersions.put("platform.version=4.34", "2024-12");
+    platformVersions.put("platform.version=4.35", "2025-03");
 
     Set<URI> nodeQueryURIs = new LinkedHashSet<URI>();
     {
