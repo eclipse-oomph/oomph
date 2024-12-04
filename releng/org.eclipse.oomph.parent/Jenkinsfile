@@ -3,7 +3,7 @@ def boolean useCredentials = false
 pipeline {
 
   agent {
-    label "centos-latest"
+    label "ubuntu-latest"
   }
 
   triggers {
