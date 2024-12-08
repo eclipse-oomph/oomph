@@ -33,8 +33,7 @@ import java.util.Map;
  */
 public abstract class OS
 {
-  @SuppressWarnings("deprecation")
-  private static final String ARCH_X86 = Platform.ARCH_X86;
+  private static final String ARCH_X86 = "x86"; //$NON-NLS-1$
 
   public static final OS INSTANCE = create();
 
