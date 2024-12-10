@@ -23,7 +23,7 @@
     </detail>
   </annotation>
   <version name="release"
-      label="Release (4.17)"
+      label="Release (4.18)"
       requiredJavaVersion="21">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
@@ -34,7 +34,7 @@
     </annotation>
     <setupTask
         xsi:type="setup.p2:P2Task"
-        label="BIRT - Release (4.17)">
+        label="BIRT - Release (4.18)">
       <requirement
           name="org.eclipse.birt.report.designer.all"
           filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
@@ -143,7 +143,7 @@
     </setupTask>
   </version>
   <version name="milestone"
-      label="Milestone (4.18)"
+      label="Milestone (4.19)"
       requiredJavaVersion="21">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
@@ -154,7 +154,7 @@
     </annotation>
     <setupTask
         xsi:type="setup.p2:P2Task"
-        label="BIRT - Milestone (4.18)">
+        label="BIRT - Milestone (4.19)">
       <requirement
           name="org.eclipse.birt.report.designer.all"
           filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
@@ -263,7 +263,7 @@
     </setupTask>
   </version>
   <version name="nightly"
-      label="Nightly (4.18)"
+      label="Nightly (4.19)"
       requiredJavaVersion="21">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
@@ -274,7 +274,7 @@
     </annotation>
     <setupTask
         xsi:type="setup.p2:P2Task"
-        label="BIRT - Nightly (4.18)">
+        label="BIRT - Nightly (4.19)">
       <requirement
           name="org.eclipse.birt.report.designer.all"
           filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>

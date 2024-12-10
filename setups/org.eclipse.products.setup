@@ -80,14 +80,14 @@
           label="Eclipse IDE for Java Developers (Staging)">
         <requirement
             name="epp.package.java"
-            versionRange="[4.34.0,5.0.0)"
+            versionRange="[4.35.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=aarch64)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=riscv64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.34.0,5.0.0)"/>
+            versionRange="[4.35.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.34.0,5.0.0)"/>
+            versionRange="[4.35.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -240,7 +240,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-12/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-12/r/eclipse-ide-java-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -414,7 +414,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-12/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-12/r/eclipse-ide-java-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -2902,14 +2902,14 @@
           label="Eclipse IDE for Enterprise Java and Web Developers (Staging)">
         <requirement
             name="epp.package.jee"
-            versionRange="[4.34.0,5.0.0)"
+            versionRange="[4.35.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=aarch64)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=riscv64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.34.0,5.0.0)"/>
+            versionRange="[4.35.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.34.0,5.0.0)"/>
+            versionRange="[4.35.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -3326,7 +3326,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-12/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-12/r/eclipse-ide-enterprise-java-and-web-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -3764,7 +3764,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-12/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-12/r/eclipse-ide-enterprise-java-and-web-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -10038,14 +10038,14 @@
           label="Eclipse IDE for C/C++ Developers (Staging)">
         <requirement
             name="epp.package.cpp"
-            versionRange="[4.34.0,5.0.0)"
+            versionRange="[4.35.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=aarch64)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=riscv64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.34.0,5.0.0)"/>
+            versionRange="[4.35.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.34.0,5.0.0)"/>
+            versionRange="[4.35.0,5.0.0)"/>
         <requirement
             name="org.eclipse.cdt.autotools.feature.group"/>
         <requirement
@@ -10270,7 +10270,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-12/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-12/r/eclipse-ide-cc-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -10516,7 +10516,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-12/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-12/r/eclipse-ide-cc-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -13965,14 +13965,14 @@
           label="Eclipse IDE for Embedded C/C++ Developers (Staging)">
         <requirement
             name="epp.package.embedcpp"
-            versionRange="[4.34.0,5.0.0)"
+            versionRange="[4.35.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=aarch64)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=riscv64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.34.0,5.0.0)"/>
+            versionRange="[4.35.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.34.0,5.0.0)"/>
+            versionRange="[4.35.0,5.0.0)"/>
         <requirement
             name="org.eclipse.cdt.autotools.feature.group"/>
         <requirement
@@ -14257,7 +14257,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-12/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-12/r/eclipse-ide-embedded-cc-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -14563,7 +14563,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-12/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-12/r/eclipse-ide-embedded-cc-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -17057,14 +17057,14 @@
           label="Eclipse IDE for PHP Developers (Staging)">
         <requirement
             name="epp.package.php"
-            versionRange="[4.34.0,5.0.0)"
+            versionRange="[4.35.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=aarch64)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=riscv64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.34.0,5.0.0)"/>
+            versionRange="[4.35.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.34.0,5.0.0)"/>
+            versionRange="[4.35.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -17217,7 +17217,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-12/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-12/r/eclipse-ide-php-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -17391,7 +17391,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-12/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-12/r/eclipse-ide-php-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -19850,14 +19850,14 @@
           label="Eclipse IDE for Eclipse Committers (Staging)">
         <requirement
             name="epp.package.committers"
-            versionRange="[4.34.0,5.0.0)"
+            versionRange="[4.35.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=aarch64)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=riscv64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.34.0,5.0.0)"/>
+            versionRange="[4.35.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.34.0,5.0.0)"/>
+            versionRange="[4.35.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -20058,7 +20058,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-12/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-12/r/eclipse-ide-eclipse-committers</value>
         </detail>
         <detail
             key="shortcut">
@@ -20280,7 +20280,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-12/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-12/r/eclipse-ide-eclipse-committers</value>
         </detail>
         <detail
             key="shortcut">
@@ -23614,14 +23614,14 @@
           label="Eclipse DSL Tools (Staging)">
         <requirement
             name="epp.package.dsl"
-            versionRange="[4.34.0,5.0.0)"
+            versionRange="[4.35.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=aarch64)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=riscv64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.34.0,5.0.0)"/>
+            versionRange="[4.35.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.34.0,5.0.0)"/>
+            versionRange="[4.35.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -23754,7 +23754,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-12/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-12/r/eclipse-ide-java-and-dsl-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -23908,7 +23908,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-12/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-12/r/eclipse-ide-java-and-dsl-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -25992,14 +25992,14 @@
           label="Eclipse for RCP and RAP Developers (Staging)">
         <requirement
             name="epp.package.rcp"
-            versionRange="[4.34.0,5.0.0)"
+            versionRange="[4.35.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=aarch64)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=riscv64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.34.0,5.0.0)"/>
+            versionRange="[4.35.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.34.0,5.0.0)"/>
+            versionRange="[4.35.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
             versionRange="[3.20.0,4.0.0)"/>
@@ -26209,7 +26209,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-12/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-12/r/eclipse-ide-rcp-and-rap-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -26435,7 +26435,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-12/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-12/r/eclipse-ide-rcp-and-rap-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -29431,14 +29431,14 @@
           label="Eclipse Modeling Tools (Staging)">
         <requirement
             name="epp.package.modeling"
-            versionRange="[4.34.0,5.0.0)"
+            versionRange="[4.35.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=aarch64)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=riscv64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.34.0,5.0.0)"/>
+            versionRange="[4.35.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.34.0,5.0.0)"/>
+            versionRange="[4.35.0,5.0.0)"/>
         <requirement
             name="org.eclipse.e4.core.tools.feature.feature.group"/>
         <requirement
@@ -29651,7 +29651,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-12/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-12/r/eclipse-modeling-tools</value>
         </detail>
         <detail
             key="shortcut">
@@ -29885,7 +29885,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-12/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-12/r/eclipse-modeling-tools</value>
         </detail>
         <detail
             key="shortcut">
@@ -33209,14 +33209,14 @@
           label="Eclipse for Scout Developers (Staging)">
         <requirement
             name="epp.package.scout"
-            versionRange="[4.34.0,5.0.0)"
+            versionRange="[4.35.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=aarch64)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=riscv64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.34.0,5.0.0)"/>
+            versionRange="[4.35.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.34.0,5.0.0)"/>
+            versionRange="[4.35.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -33373,7 +33373,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-12/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-12/r/eclipse-ide-scout-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -33551,7 +33551,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2024-12/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2024-12/r/eclipse-ide-scout-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -36035,14 +36035,14 @@
           label="Eclipse Platform (Staging)">
         <requirement
             name="org.eclipse.platform.ide"
-            versionRange="[4.34.0,5.0.0)"
+            versionRange="[4.35.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=aarch64)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=riscv64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.34.0,5.0.0)"/>
+            versionRange="[4.35.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.34.0,5.0.0)"/>
+            versionRange="[4.35.0,5.0.0)"/>
         <repository
             url="https://download.eclipse.org/staging/2025-03">
           <annotation
@@ -36091,7 +36091,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://download.eclipse.org/eclipse/downloads/</value>
+          <value>https://archive.eclipse.org/eclipse/downloads/drops4/R-4.34-202411201800/</value>
         </detail>
         <detail
             key="shortcut">
@@ -36161,7 +36161,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://download.eclipse.org/eclipse/downloads/</value>
+          <value>https://archive.eclipse.org/eclipse/downloads/drops4/R-4.34-202411201800/</value>
         </detail>
         <detail
             key="shortcut">
