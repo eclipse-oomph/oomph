@@ -22,7 +22,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
@@ -119,14 +119,13 @@ public final class SwitchUserHomeDialog extends AbstractSetupDialog
       @Override
       public void widgetSelected(SelectionEvent e)
       {
-        FileDialog dialog = new FileDialog(shell, SWT.APPLICATION_MODAL | SWT.SAVE);
+        DirectoryDialog dialog = new DirectoryDialog(shell, SWT.APPLICATION_MODAL | SWT.SAVE);
         dialog.setText(locationLabel.getText());
 
         if (!StringUtil.isEmpty(location))
         {
           final File file = new File(location).getAbsoluteFile();
-          dialog.setFilterPath(file.getParent());
-          dialog.setFileName(file.getName());
+          dialog.setFilterPath(file.getPath());
         }
 
         String dir = dialog.open();
