@@ -91,6 +91,8 @@ public class SetupProperties
 
   public static final String PROP_INSTALLER_UPDATE_URL = "oomph.installer.update.url"; //$NON-NLS-1$
 
+  public static final String PROP_INSTALLER_KEEP = "oomph.installer.keep"; //$NON-NLS-1$
+
   public static final String PROP_INSTALLER_SWITCH_USER_HOME = "oomph.installer.switch.user.home"; //$NON-NLS-1$
 
   public static final String PROP_SETUP_USER_AGENT = "oomph.userAgent"; //$NON-NLS-1$

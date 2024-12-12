@@ -271,7 +271,7 @@ public class InstallerApplication implements IApplication
 
       if (mode == Mode.ADVANCED)
       {
-        if (KeepInstallerUtil.canKeepInstaller())
+        if (KeepInstallerUtil.canKeepInstaller() && !"false".equals(PropertiesUtil.getProperty(SetupProperties.PROP_INSTALLER_KEEP))) //$NON-NLS-1$
         {
           Shell shell = new Shell(display);
           if (MessageDialog.openQuestion(shell, PropertiesUtil.getProductName(), Messages.InstallerApplication_KeepInstaller_message))

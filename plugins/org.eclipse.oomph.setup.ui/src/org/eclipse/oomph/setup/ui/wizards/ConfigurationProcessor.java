@@ -431,14 +431,21 @@ public class ConfigurationProcessor
   {
     if (setupWizard.isSimple())
     {
-      int answer = new MessageDialog(setupWizard.getShell(), Messages.ConfigurationProcessor_configHandlingDialog_title, null,
-          Messages.ConfigurationProcessor_configHandlingDialog_message, MessageDialog.WARNING, installation == null ? //
-              new String[] { Messages.ConfigurationProcessor_configHandlingDialog_button_advancedMode,
-                  Messages.ConfigurationProcessor_configHandlingDialog_button_cancel }
-              : new String[] { Messages.ConfigurationProcessor_configHandlingDialog_button_advancedMode,
-                  Messages.ConfigurationProcessor_configHandlingDialog_button_applyOnlyInstallation,
-                  Messages.ConfigurationProcessor_configHandlingDialog_button_cancel },
-          0).open();
+      boolean shouldSwitchUserHome = shouldSwitchUserHome();
+      if (shouldSwitchUserHome)
+      {
+        System.setProperty(SetupProperties.PROP_INSTALLER_KEEP, "false"); //$NON-NLS-1$
+      }
+
+      int answer = shouldSwitchUserHome ? 0
+          : new MessageDialog(setupWizard.getShell(), Messages.ConfigurationProcessor_configHandlingDialog_title, null,
+              Messages.ConfigurationProcessor_configHandlingDialog_message, MessageDialog.WARNING, installation == null ? //
+                  new String[] { Messages.ConfigurationProcessor_configHandlingDialog_button_advancedMode,
+                      Messages.ConfigurationProcessor_configHandlingDialog_button_cancel }
+                  : new String[] { Messages.ConfigurationProcessor_configHandlingDialog_button_advancedMode,
+                      Messages.ConfigurationProcessor_configHandlingDialog_button_applyOnlyInstallation,
+                      Messages.ConfigurationProcessor_configHandlingDialog_button_cancel },
+              0).open();
       switch (answer)
       {
         case 0:

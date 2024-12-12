@@ -1925,6 +1925,10 @@ public class FindAndReplaceTarget implements IFindReplaceTarget, IFindReplaceTar
 
           // Add an item for the label.
           String label = labelProvider.getText(object);
+          if (label == null)
+          {
+            label = ""; //$NON-NLS-1$
+          }
           items.add(new Data.Item(data, index, null, 0, label));
           index += label.length();
 

@@ -30,6 +30,7 @@ import org.eclipse.oomph.setup.ui.wizards.ExtensionsDialog;
 import org.eclipse.oomph.setup.ui.wizards.ProjectPage;
 import org.eclipse.oomph.setup.ui.wizards.ProjectPage.ConfigurationListener;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
+import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.PropertiesUtil;
 
@@ -430,10 +431,29 @@ public class Installer extends SetupWizard
         }
       }
 
+      File newUserHome = new File(userHome);
+      File oldUserHome = new File(PropertiesUtil.getUserHome());
+      if (!newUserHome.equals(oldUserHome))
+      {
+        for (String fileToCopy : List.of(".eclipse/org.eclipse.equinox.security/secure_storage")) //$NON-NLS-1$
+        {
+          File newFile = new File(userHome, fileToCopy);
+          if (!newFile.isFile())
+          {
+            File oldFile = new File(oldUserHome, fileToCopy);
+            if (oldFile.isFile())
+            {
+              IOUtil.copyFile(oldFile, newFile);
+            }
+          }
+        }
+      }
+
       command.add("-vmargs"); //$NON-NLS-1$
       command.add("-Duser.home=" + userHome); //$NON-NLS-1$
       command.add("-D" + SetupProperties.PROP_SETUP_USER_HOME_ORIGINAL + "=" + PropertiesUtil.getUserHome()); //$NON-NLS-1$ //$NON-NLS-2$
       command.add("-D" + SetupProperties.PROP_INSTALLER_SWITCH_USER_HOME + "=false"); //$NON-NLS-1$ //$NON-NLS-2$
+      command.add("-D" + SetupProperties.PROP_INSTALLER_KEEP + "=false"); //$NON-NLS-1$ //$NON-NLS-2$
       command.add(ConfigurationProcessor.SETUP_USER_HOME_REDIRECT_COMMAND_LINE_ARGUMENT);
 
       try
