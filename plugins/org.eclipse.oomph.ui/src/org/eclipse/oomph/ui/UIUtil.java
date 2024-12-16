@@ -209,28 +209,26 @@ public final class UIUtil
         @Override
         public void run()
         {
-          Shell shell = null;
-
           try
           {
-            shell = new Shell();
+            Shell shell = new Shell();
+            shell.getDisplay().asyncExec(() -> {
+              try
+              {
+                shell.dispose();
+              }
+              catch (Exception ex)
+              {
+                // Ignore.
+              }
+            });
+
             new Browser(shell, SWT.NONE);
             browserAvailable = true;
           }
           catch (SWTError ex)
           {
             browserAvailable = false;
-          }
-          finally
-          {
-            try
-            {
-              shell.dispose();
-            }
-            catch (Exception ex)
-            {
-              // Ignore.
-            }
           }
         }
       });
