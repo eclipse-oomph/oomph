@@ -61,7 +61,7 @@ public final class JREManager
 
   public static final JREManager INSTANCE = new JREManager();
 
-  public static final int CURRENT_LTS_VERSION = Integer.valueOf(17).intValue();
+  public static final int CURRENT_LTS_VERSION = Integer.valueOf(21).intValue();
 
   private static final String PROP_DEFAULT_JRE = "oomph.default.jres"; //$NON-NLS-1$
 

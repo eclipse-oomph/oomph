@@ -278,11 +278,19 @@ public abstract class JREController implements ISelectionChangedListener
 
             if (selection == null || !jres.contains(selection))
             {
+              boolean matchingMajorVersion = false;
               for (JRE jre : jres)
               {
                 if (selection == null || selection.getDescriptor() != null && selection.getMajor() > JREManager.CURRENT_LTS_VERSION
                     && jre.getMajor() <= JREManager.CURRENT_LTS_VERSION)
                 {
+                  selection = jre;
+                }
+                else if (!matchingMajorVersion && jre.getMajor() == jreFilter.getMajor() && jre.getMajor() >= JREManager.CURRENT_LTS_VERSION
+                    && (jreFilter.getMinor() == null || jre.getMinor() >= jreFilter.getMinor())
+                    && (jreFilter.getMicro() == null || jre.getMicro() >= jreFilter.getMicro()))
+                {
+                  matchingMajorVersion = true;
                   selection = jre;
                 }
                 else if (jre.isCurrent())
