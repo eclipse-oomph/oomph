@@ -33,7 +33,7 @@ public class ProgressLogFilter
       "Generating cspec from PDE artifacts", //$NON-NLS-1$
       "Reporting encoding changes", //$NON-NLS-1$
       "Saving", //$NON-NLS-1$
-      "Downloading software", //$NON-NLS-1$
+      "Downloading ", //$NON-NLS-1$
       "Java indexing...", //$NON-NLS-1$
       "Computing Git status for ", //$NON-NLS-1$
       "Configuring ", //$NON-NLS-1$
