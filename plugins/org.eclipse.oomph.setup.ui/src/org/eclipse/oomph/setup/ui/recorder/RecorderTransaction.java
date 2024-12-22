@@ -654,7 +654,7 @@ public abstract class RecorderTransaction
     EList<SetupTask> setupTasks = container.getSetupTasks();
     for (SetupTask task : setupTasks.toArray(new SetupTask[setupTasks.size()]))
     {
-      if (task.getRestrictions().isEmpty())
+      if (task.getRestrictions().isEmpty() && StringUtil.isEmpty(task.getFilter()))
       {
         if (task instanceof PreferenceTask)
         {
