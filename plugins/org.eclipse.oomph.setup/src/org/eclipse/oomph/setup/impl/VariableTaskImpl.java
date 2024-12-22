@@ -677,7 +677,10 @@ public class VariableTaskImpl extends SetupTaskImpl implements VariableTask
       setDescription(overriddenSetupTask.getDescription());
     }
 
-    getChoices().addAll(variableTask.getChoices());
+    if (getChoices().isEmpty())
+    {
+      getChoices().addAll(variableTask.getChoices());
+    }
 
     if (variableTask.getType() == VariableType.JRE)
     {
