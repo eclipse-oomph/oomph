@@ -122,6 +122,7 @@ import org.eclipse.pde.core.target.LoadTargetDefinitionJob;
 import org.eclipse.pde.core.target.TargetBundle;
 import org.eclipse.pde.core.target.TargetFeature;
 import org.eclipse.pde.internal.core.target.AbstractBundleContainer;
+import org.eclipse.pde.internal.core.target.P2TargetUtils;
 
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
@@ -1392,6 +1393,21 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
         }
 
         IStatus resolve = targetDefinition.resolve(progress.newChild());
+        if (!resolve.isOK())
+        {
+          P2TargetUtils.forceCheckTarget(targetDefinition);
+          try
+          {
+            P2TargetUtils.deleteProfile(targetDefinition.getHandle());
+          }
+          catch (CoreException ex)
+          {
+            TargletsCorePlugin.INSTANCE.log(ex);
+          }
+
+          resolve = targetDefinition.resolve(progress.newChild());
+        }
+
         if (!resolve.isOK())
         {
           childStatus.add(resolve);
