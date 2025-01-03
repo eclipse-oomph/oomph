@@ -195,12 +195,6 @@ public class RemoteDataProvider implements DataProvider
     try
     {
       InputStream contents = blob.getContents();
-
-      if (Boolean.TRUE)
-      {
-        throw new org.eclipse.userstorage.util.NoServiceException();
-      }
-
       boolean cached = contents instanceof FileInputStream;
 
       uncompressContents(contents, file);
