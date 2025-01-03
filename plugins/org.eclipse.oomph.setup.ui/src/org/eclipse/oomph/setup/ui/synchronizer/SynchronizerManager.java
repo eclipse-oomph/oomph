@@ -31,10 +31,13 @@ import org.eclipse.oomph.setup.ui.SetupPropertyTester;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.LockFile;
+import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.PropertyFile;
 
 import org.eclipse.emf.common.util.EMap;
+import org.eclipse.emf.ecore.EcoreFactory;
+import org.eclipse.emf.ecore.EcorePackage;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -42,9 +45,18 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.osgi.util.NLS;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.userstorage.IStorage;
 import org.eclipse.userstorage.IStorageService;
@@ -56,6 +68,7 @@ import org.eclipse.userstorage.spi.StorageCache;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -68,6 +81,7 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Consumer;
 
 /**
  * @author Eike Stepper
@@ -88,21 +102,15 @@ public final class SynchronizerManager
 
   private static final String CONFIG_SYNC_ENABLED = "sync.enabled"; //$NON-NLS-1$
 
-  private static final String CONFIG_CONNECTION_OFFERED = "connection.offered"; //$NON-NLS-1$
+  private static final String CONFIG_CONNECTION_SERVICE_DISCONTINUE = "connection.service.discontinue"; //$NON-NLS-1$
 
-  /**
-   * If set to <code>true</code> the {@link #CONFIG_CONNECTION_OFFERED} property is cleared before each access,
-   * which makes it easier to test/debug the opt-in workflow.
-   * <p>
-   * <b>Should never be committed with a <code>true</code> value!</b>
-   */
-  private static final boolean DEBUG_CONNECTION_OFFERED = false;
+  private static final String CONNECTION_SERVICE_DISCONTINUE_ISSUME = "https://github.com/eclipse-oomph/oomph/issues/123"; //$NON-NLS-1$
 
   private final IStorage storage;
 
   private final RemoteDataProvider remoteDataProvider;
 
-  private Boolean connectionOffered;
+  private Boolean connectionServiceDiscontinue;
 
   private SynchronizerManager()
   {
@@ -312,81 +320,60 @@ public final class SynchronizerManager
     return null;
   }
 
+  public void warnServiceDiscontinue(Shell shell, IStorageService service)
+  {
+    if (connectionServiceDiscontinue == null)
+    {
+      String property = CONFIG.getProperty(CONFIG_CONNECTION_SERVICE_DISCONTINUE, null);
+      if (property != null)
+      {
+        try
+        {
+          Date previousReminder = (Date)EcoreFactory.eINSTANCE.createFromString(EcorePackage.Literals.EDATE, property);
+          long previousReminderTime = previousReminder.getTime();
+          long oneWeekAgo = System.currentTimeMillis() - Duration.ofDays(7).toMillis();
+          if (previousReminderTime > oneWeekAgo)
+          {
+            connectionServiceDiscontinue = true;
+          }
+        }
+        catch (RuntimeException ex)
+        {
+          //$FALL-THROUGH$
+        }
+      }
+    }
+
+    if (Boolean.TRUE.equals(connectionServiceDiscontinue))
+    {
+      return;
+    }
+
+    shell.getDisplay().asyncExec(new Runnable()
+    {
+      @Override
+      public void run()
+      {
+        new ConnectionServiceDiscontinueDialog(shell, service, dialog -> {
+          Boolean answer = dialog.getAnswer();
+          if (answer != null)
+          {
+            CONFIG.setProperty(CONFIG_CONNECTION_SERVICE_DISCONTINUE, getDate());
+            connectionServiceDiscontinue = true;
+            setSyncEnabled(answer);
+          }
+        }).open();
+      }
+    });
+  }
+
   /**
    * Returns <code>true</code> if offered the first time and offer was accepted, <code>false</code> otherwise.
    */
   public boolean offerFirstTimeConnect(Shell shell)
   {
-    if (!ENABLED || isSyncEnabled())
-    {
-      return false;
-    }
-
-    IStorageService service = storage.getService();
-    if (service == null)
-    {
-      return false;
-    }
-
-    if (DEBUG_CONNECTION_OFFERED)
-    {
-      connectionOffered = null;
-      CONFIG.removeProperty(CONFIG_CONNECTION_OFFERED);
-    }
-
-    if (connectionOffered == null)
-    {
-      String property = CONFIG.getProperty(CONFIG_CONNECTION_OFFERED, null);
-      connectionOffered = property != null;
-    }
-
-    if (connectionOffered)
-    {
-      return false;
-    }
-
-    Boolean answer = connect(shell, service);
-    if (answer == null)
-    {
-      return false;
-    }
-
-    setSyncEnabled(answer);
-    return answer;
-  }
-
-  private Boolean connect(final Shell shell, final IStorageService service)
-  {
-    final Boolean[] result = { null };
-
-    try
-    {
-      shell.getDisplay().syncExec(new Runnable()
-      {
-        @Override
-        public void run()
-        {
-          OptInDialog dialog = new OptInDialog(shell, service);
-          dialog.open();
-          result[0] = dialog.getAnswer();
-        }
-      });
-
-      return result[0];
-    }
-    catch (Throwable ex)
-    {
-      SetupUIPlugin.INSTANCE.log(ex);
-      return false;
-    }
-    finally
-    {
-      if (result[0] != null)
-      {
-        CONFIG.setProperty(CONFIG_CONNECTION_OFFERED, new Date().toString());
-        connectionOffered = true;
-      }
-    }
+    // The service is being discontinued so stop offering it.
+    return false;
   }
 
   private static SkipHandler getSkipHandler(Synchronization synchronization)
@@ -405,6 +392,11 @@ public final class SynchronizerManager
   private static ICredentialsProvider createCredentialProvider()
   {
     return new EclipseOAuthCredentialsProvider(new OAuthConstants());
+  }
+
+  private static String getDate()
+  {
+    return EcoreFactory.eINSTANCE.convertToString(EcorePackage.Literals.EDATE, new Date());
   }
 
   /**
@@ -611,6 +603,8 @@ public final class SynchronizerManager
             synchronizerJob.setCredentialsProvider(ICredentialsProvider.CANCEL);
           }
 
+          INSTANCE.warnServiceDiscontinue(UIUtil.getShell(), service);
+
           synchronizerJob.schedule();
         }
       }
@@ -792,6 +786,105 @@ public final class SynchronizerManager
 
     private Availability()
     {
+    }
+  }
+
+  private static class ConnectionServiceDiscontinueDialog extends AbstractServiceDialog
+  {
+    private Boolean answer = false;
+
+    private final Consumer<ConnectionServiceDiscontinueDialog> handler;
+
+    public ConnectionServiceDiscontinueDialog(Shell parentShell, IStorageService service, Consumer<ConnectionServiceDiscontinueDialog> handler)
+    {
+      super(parentShell, service);
+      setBlockOnOpen(false);
+      setShellStyle(SWT.DIALOG_TRIM | getDefaultOrientation());
+      this.handler = handler;
+    }
+
+    @Override
+    protected IDialogSettings getDialogBoundsSettings()
+    {
+      return null;
+    }
+
+    public Boolean getAnswer()
+    {
+      return answer;
+    }
+
+    @Override
+    protected void configureShell(Shell newShell)
+    {
+      super.configureShell(newShell);
+    }
+
+    @Override
+    protected void createUI(Composite parent, String serviceLabel, String shortLabel)
+    {
+      // Do you want to save your preferences on the {0} server so you can share them on other workstations?
+      setMessage(NLS.bind(Messages.SynchronizerManager_ServiceDiscontinue_title, serviceLabel));
+
+      Label label = new Label(parent, SWT.NONE);
+      label.setText(Messages.SynchronizerManager_ServiceDiscontinueFindOutMore_label);
+
+      Link link = new Link(parent, SWT.NONE);
+      link.setText("<a>" + CONNECTION_SERVICE_DISCONTINUE_ISSUME + "</a>"); //$NON-NLS-1$ //$NON-NLS-2$
+      link.addSelectionListener(new SelectionAdapter()
+      {
+        @Override
+        public void widgetSelected(SelectionEvent e)
+        {
+          OS.INSTANCE.openSystemBrowser(CONNECTION_SERVICE_DISCONTINUE_ISSUME);
+        }
+      });
+
+      new Label(parent, SWT.NONE);
+
+      Button noButton = new Button(parent, SWT.RADIO);
+      noButton.setText(NLS.bind(Messages.SynchronizerManager_ServiceDisable_label, shortLabel));
+      noButton.addSelectionListener(new SelectionAdapter()
+      {
+        @Override
+        public void widgetSelected(SelectionEvent e)
+        {
+          answer = false;
+        }
+      });
+
+      Button yesButton = new Button(parent, SWT.RADIO);
+      yesButton.setText(NLS.bind(Messages.SynchronizerManager_ServiceContinue_label, shortLabel));
+      yesButton.addSelectionListener(new SelectionAdapter()
+      {
+        @Override
+        public void widgetSelected(SelectionEvent e)
+        {
+          answer = true;
+        }
+      });
+    }
+
+    @Override
+    protected void createButtonsForButtonBar(Composite parent)
+    {
+      createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
+      createButton(parent, IDialogConstants.CANCEL_ID, Messages.OptInDialog_askMeLaterButton_text, false);
+    }
+
+    @Override
+    protected void cancelPressed()
+    {
+      answer = null;
+      super.cancelPressed();
+      handler.accept(this);
+    }
+
+    @Override
+    protected void okPressed()
+    {
+      super.okPressed();
+      handler.accept(this);
     }
   }
 }

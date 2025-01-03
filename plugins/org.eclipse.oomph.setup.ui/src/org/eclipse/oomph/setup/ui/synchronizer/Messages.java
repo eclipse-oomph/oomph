@@ -83,6 +83,14 @@ public class Messages extends NLS
 
   public static String SynchronizerManager_requestDataTask_name;
 
+  public static String SynchronizerManager_ServiceContinue_label;
+
+  public static String SynchronizerManager_ServiceDisable_label;
+
+  public static String SynchronizerManager_ServiceDiscontinue_title;
+
+  public static String SynchronizerManager_ServiceDiscontinueFindOutMore_label;
+
   public static String SynchronizerPreferencePage_disabledHandler_text;
 
   public static String SynchronizerPreferencePage_noServiceAvailable;

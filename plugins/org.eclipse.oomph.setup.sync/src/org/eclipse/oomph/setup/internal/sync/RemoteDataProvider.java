@@ -17,6 +17,7 @@ import org.eclipse.userstorage.IStorage;
 import org.eclipse.userstorage.IStorageService;
 import org.eclipse.userstorage.util.ConflictException;
 import org.eclipse.userstorage.util.FileStorageCache;
+import org.eclipse.userstorage.util.NoServiceException;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -28,6 +29,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -44,11 +46,114 @@ public class RemoteDataProvider implements DataProvider
 
   private static final int GZIP_MAGIC_LENGTH = GZIP_MAGIC.length;
 
+  // Allows to simulate a broken service.
+  // https://github.com/eclipse-oomph/oomph/issues/123
+  //
+  private static final boolean DISABLE_SERVICE = false;
+
   private final IBlob blob;
 
   public RemoteDataProvider(IStorage storage)
   {
-    blob = storage.getBlob(KEY);
+    if (!DISABLE_SERVICE)
+    {
+      blob = storage.getBlob(KEY);
+    }
+    else
+    {
+      blob = new IBlob()
+      {
+        @Override
+        public void setETag(String eTag) throws IllegalStateException
+        {
+        }
+
+        @Override
+        public boolean setContentsUTF(String value) throws IOException, NoServiceException, ConflictException, IllegalStateException
+        {
+          throw new NoServiceException();
+        }
+
+        @Override
+        public boolean setContentsInt(int value) throws IOException, NoServiceException, ConflictException, IllegalStateException
+        {
+          throw new NoServiceException();
+        }
+
+        @Override
+        public boolean setContentsBoolean(boolean value) throws IOException, NoServiceException, ConflictException, IllegalStateException
+        {
+          throw new NoServiceException();
+        }
+
+        @Override
+        public boolean setContents(InputStream in) throws IOException, NoServiceException, ConflictException, IllegalStateException
+        {
+          throw new NoServiceException();
+        }
+
+        @Override
+        public boolean isDisposed()
+        {
+          return false;
+        }
+
+        @Override
+        public IStorage getStorage()
+        {
+          return storage;
+        }
+
+        @Override
+        public Map<String, String> getProperties() throws IllegalStateException
+        {
+          return Map.of();
+        }
+
+        @Override
+        public String getKey()
+        {
+          return KEY;
+        }
+
+        @Override
+        public String getETag() throws IllegalStateException
+        {
+          return null;
+        }
+
+        @Override
+        public String getContentsUTF() throws IOException, NoServiceException, IllegalStateException, org.eclipse.userstorage.util.NotFoundException
+        {
+          throw new NoServiceException();
+        }
+
+        @Override
+        public int getContentsInt()
+            throws IOException, NoServiceException, org.eclipse.userstorage.util.NotFoundException, IllegalStateException, NumberFormatException
+        {
+          throw new NoServiceException();
+        }
+
+        @Override
+        public boolean getContentsBoolean() throws IOException, NoServiceException, org.eclipse.userstorage.util.NotFoundException, IllegalStateException
+        {
+          throw new NoServiceException();
+        }
+
+        @Override
+        public InputStream getContents() throws IOException, NoServiceException, org.eclipse.userstorage.util.NotFoundException, IllegalStateException
+        {
+          throw new NoServiceException();
+        }
+
+        @Override
+        public boolean delete() throws IOException, NoServiceException, ConflictException, IllegalStateException
+        {
+          throw new NoServiceException();
+        }
+      };
+    }
   }
 
   @Override
@@ -90,6 +195,12 @@ public class RemoteDataProvider implements DataProvider
     try
     {
       InputStream contents = blob.getContents();
+
+      if (Boolean.TRUE)
+      {
+        throw new org.eclipse.userstorage.util.NoServiceException();
+      }
+
       boolean cached = contents instanceof FileInputStream;
 
       uncompressContents(contents, file);
