@@ -404,8 +404,12 @@ public class RecorderPreferencePage extends AbstractPreferencePage
   @Override
   protected void performDefaults()
   {
-    transaction.resetPolicies();
-    policiesComposite.setRecorderTransaction(transaction);
+    if (transaction != null)
+    {
+      transaction.resetPolicies();
+      policiesComposite.setRecorderTransaction(transaction);
+    }
+
     super.performDefaults();
   }
 

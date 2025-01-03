@@ -1510,6 +1510,7 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
         finally
         {
           transaction.close();
+          RecorderManager.INSTANCE.setTemporaryRecorderTarget(null);
         }
       }
     }
