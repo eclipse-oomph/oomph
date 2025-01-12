@@ -141,6 +141,8 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.lang.reflect.Method;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -154,6 +156,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.jar.JarFile;
 import java.util.regex.Pattern;
 
@@ -188,6 +191,8 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
   private static final String IU_FILTER = PropertiesUtil.getProperty("oomph.targlets.iu.filter"); //$NON-NLS-1$
 
   private static final Pattern IU_FILTER_PATTERN = IU_FILTER == null ? null : Pattern.compile(IU_FILTER);
+
+  private static final boolean TARGLET_DEBUG = PropertiesUtil.isProperty("oomph.targlets.debug"); //$NON-NLS-1$
 
   private String id;
 
@@ -649,7 +654,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
         progress.skipped(86);
       }
 
-      generateUnits(descriptor, profile, progress.newChild(10));
+      generateUnits(force, canResolve, descriptor, profile, progress.newChild(10));
       progress.done();
     }
     catch (CoreException ex)
@@ -662,7 +667,8 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     }
   }
 
-  private void generateUnits(TargletContainerDescriptor descriptor, IProfile profile, IProgressMonitor monitor) throws CoreException
+  private void generateUnits(boolean force, boolean canResolve, TargletContainerDescriptor descriptor, Profile profile, IProgressMonitor monitor)
+      throws CoreException
   {
     SubMonitor progress = SubMonitor.convert(monitor, 100).detectCancelation();
 
@@ -685,9 +691,48 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
 
     if (composedTargetContent == null)
     {
-      composedTargetContent = new ComposedTargetContent(targetDefinition, composedTargets);
-      IStatus status = composedTargetContent.resolve(progress.newChild(), false);
-      TargletsCorePlugin.INSTANCE.coreException(status);
+      composedTargetContent = new ComposedTargetContent(profile, targetDefinition, composedTargets);
+      try
+      {
+        // Try to load it first, but fail of some bundle or feature is missing.
+        // Unless we can't resolve right now in which case we should do a best effort load.
+        composedTargetContent.load(!canResolve);
+      }
+      catch (Exception ex)
+      {
+        if (canResolve)
+        {
+          if (TARGLET_DEBUG)
+          {
+            TargletsCorePlugin.INSTANCE.log("Resolving composed target after load failure"); //$NON-NLS-1$
+          }
+
+          // Try to resolve it if we can't just load it.
+          IStatus status = composedTargetContent.resolve(progress.newChild(), false);
+          try
+          {
+            TargletsCorePlugin.INSTANCE.coreException(status);
+          }
+          catch (Exception ex1)
+          {
+            try
+            {
+              // If resolve also fails, try to load bundles on a best effort basis.
+              // It's better to have missing content than no content.
+              if (TARGLET_DEBUG)
+              {
+                TargletsCorePlugin.INSTANCE.log("Loading composed target after resolve failure"); //$NON-NLS-1$
+              }
+
+              composedTargetContent.load(true);
+            }
+            catch (Exception ex2)
+            {
+              //$FALL-THROUGH$
+            }
+          }
+        }
+      }
     }
 
     bundles.addAll(composedTargetContent.getBundles());
@@ -949,7 +994,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     MultiStatus composedTargetContentStatus = null;
     try
     {
-      composedTargetContent = new ComposedTargetContent(targetDefinition, composedTargets);
+      composedTargetContent = new ComposedTargetContent(profile, targetDefinition, composedTargets);
       composedTargetContentStatus = composedTargetContent.resolve(progress.newChild(composedTargets.size(), SubMonitor.SUPPRESS_BEGINTASK), true);
 
       if (cacheUsageConfirmer != null)
@@ -983,6 +1028,8 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
 
       TargletsCorePlugin.INSTANCE.coreException(composedTargetContentStatus);
 
+      composedTargetContent.save();
+
       Map<IInstallableUnit, WorkspaceIUInfo> requiredProjects = getRequiredProjects(profile, workspaceIUAnalyzer.getWorkspaceIUInfos(), progress.newChild());
       descriptor.commitUpdateTransaction(digest, requiredProjects.values(), progress.newChild());
 
@@ -1002,6 +1049,16 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
       }
 
       descriptor.rollbackUpdateTransaction(t, new NullProgressMonitor());
+
+      try
+      {
+        composedTargetContent = new ComposedTargetContent(descriptor.getWorkingProfile(), targetDefinition, composedTargets);
+        composedTargetContent.load(true);
+      }
+      catch (Exception ex)
+      {
+        //$FALL-THROUGH$
+      }
 
       UpdateProblem updateProblem = descriptor.getUpdateProblem();
       if (updateProblem != null)
@@ -1347,6 +1404,15 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
 
   private static final class ComposedTargetContent
   {
+    // The same folder as org.eclipse.equinox.internal.p2.engine.SimpleProfileRegistry.DATA_EXT
+    private static final String DATA = ".data"; //$NON-NLS-1$
+
+    private static final String COMPOSED_BUNDLES = "composed-bundles.txt"; //$NON-NLS-1$
+
+    private static final String COMPOSED_FEATURES = "composed-features.txt"; //$NON-NLS-1$
+
+    private final Profile profile;
+
     private final List<String> composedTargets;
 
     private final ITargetDefinition targetDefinition;
@@ -1357,14 +1423,17 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
 
     private final List<TargetFeature> features = new ArrayList<>();
 
-    public ComposedTargetContent(ITargetDefinition targetDefinition, List<String> composedTargets)
+    public ComposedTargetContent(Profile profile, ITargetDefinition targetDefinition, List<String> composedTargets)
     {
+      this.profile = profile;
       this.targetDefinition = targetDefinition;
       this.composedTargets = composedTargets;
     }
 
     public MultiStatus resolve(SubMonitor progress, boolean publishIUs)
     {
+      clear();
+
       Set<File> bundleFiles = new LinkedHashSet<>();
       Set<File> featureFiles = new LinkedHashSet<>();
 
@@ -1374,6 +1443,11 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
       {
         MultiStatus childStatus = new MultiStatus(TargletsCorePlugin.INSTANCE.getSymbolicName(), 0,
             NLS.bind(Messages.TargletContainer_ComposedTargetResolutionProblem, composedTarget), null);
+
+        if (TARGLET_DEBUG)
+        {
+          TargletsCorePlugin.INSTANCE.log("Resolving composed target " + composedTarget); //$NON-NLS-1$
+        }
 
         ITargetDefinition targetDefinition = TargetPlatformUtil.getTargetDefinition(composedTarget); // $NON-NLS-1$
         if (targetDefinition == null)
@@ -1504,6 +1578,131 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
     public List<TargetFeature> getFeatures()
     {
       return features;
+    }
+
+    public void load(boolean bestEffort) throws IOException, CoreException
+    {
+      clear();
+
+      Path dataFolder = getDataFolder();
+      if (TARGLET_DEBUG)
+      {
+        TargletsCorePlugin.INSTANCE.log("Loading from " + dataFolder); //$NON-NLS-1$
+      }
+
+      Path composedBundles = dataFolder.resolve(COMPOSED_BUNDLES);
+      if (Files.exists(composedBundles))
+      {
+        List<String> bundleLocations = Files.readAllLines(composedBundles);
+        for (String bundleLocation : bundleLocations)
+        {
+          try
+          {
+            bundles.add(new TargetBundle(new File(bundleLocation)));
+          }
+          catch (CoreException ex)
+          {
+            if (!bestEffort)
+            {
+              throw ex;
+            }
+          }
+        }
+      }
+
+      if (TARGLET_DEBUG)
+      {
+        TargletsCorePlugin.INSTANCE.log("Loaded " + bundles.size() + " bundles"); //$NON-NLS-1$ //$NON-NLS-2$
+      }
+
+      Path composedFeatures = dataFolder.resolve(COMPOSED_FEATURES);
+      if (Files.exists(composedFeatures))
+      {
+        List<String> featureLocations = Files.readAllLines(composedFeatures);
+        for (String featureLocation : featureLocations)
+        {
+          try
+          {
+            features.add(new TargetFeature(new File(featureLocation)));
+          }
+          catch (CoreException ex)
+          {
+            if (!bestEffort)
+            {
+              throw ex;
+            }
+          }
+        }
+      }
+
+      if (TARGLET_DEBUG)
+      {
+        TargletsCorePlugin.INSTANCE.log("Loaded " + features.size() + " features"); //$NON-NLS-1$ //$NON-NLS-2$
+      }
+    }
+
+    public void save() throws IOException
+    {
+      Path dataFolder = getDataFolder();
+      if (TARGLET_DEBUG)
+      {
+        TargletsCorePlugin.INSTANCE.log("Saving to " + dataFolder); //$NON-NLS-1$
+      }
+
+      Set<String> bundleLocations = new TreeSet<>();
+      for (TargetBundle targetBundle : bundles)
+      {
+        BundleInfo bundleInfo = targetBundle.getBundleInfo();
+        try
+        {
+          File file = new File(bundleInfo.getLocation());
+          bundleLocations.add(file.toString());
+        }
+        catch (RuntimeException ex)
+        {
+          //$FALL-THROUGH$
+        }
+      }
+
+      Files.write(dataFolder.resolve(COMPOSED_BUNDLES), bundleLocations);
+      if (TARGLET_DEBUG)
+      {
+        TargletsCorePlugin.INSTANCE.log("Saved " + bundleLocations.size() + " bundles"); //$NON-NLS-1$ //$NON-NLS-2$
+      }
+
+      Set<String> featureLocations = new TreeSet<String>();
+      for (TargetFeature targetFeature : features)
+      {
+        String location = targetFeature.getLocation();
+        try
+        {
+          featureLocations.add(new File(location).toString());
+        }
+        catch (RuntimeException ex)
+        {
+          //$FALL-THROUGH$
+        }
+      }
+
+      Files.write(dataFolder.resolve(COMPOSED_FEATURES), featureLocations);
+      if (TARGLET_DEBUG)
+      {
+        TargletsCorePlugin.INSTANCE.log("Saved " + featureLocations.size() + " features"); //$NON-NLS-1$ //$NON-NLS-2$
+      }
+    }
+
+    private void clear()
+    {
+      additionalIUs.clear();
+      features.clear();
+      bundles.clear();
+    }
+
+    private Path getDataFolder() throws IOException
+    {
+      Path dataFolder = new File(profile.getLocation(), DATA).toPath();
+      Files.createDirectories(dataFolder);
+      return dataFolder; // $NON-NLS-1$
     }
   }
 
