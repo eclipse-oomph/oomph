@@ -1,10 +1,10 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.oomph.maven;singleton:=true
-Bundle-Version: 1.0.0.qualifier
-Export-Package: org.eclipse.oomph.maven;version="1.0.0",
- org.eclipse.oomph.maven.impl;version="1.0.0",
- org.eclipse.oomph.maven.util;version="1.0.0"
+Bundle-Version: 1.1.0.qualifier
+Export-Package: org.eclipse.oomph.maven;version="1.1.0",
+ org.eclipse.oomph.maven.impl;version="1.1.0",
+ org.eclipse.oomph.maven.util;version="1.1.0"
 Bundle-ClassPath: .
 Bundle-Name: %pluginName
 Bundle-Vendor: %providerName

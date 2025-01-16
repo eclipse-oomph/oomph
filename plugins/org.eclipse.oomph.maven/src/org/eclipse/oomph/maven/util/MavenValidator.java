@@ -7,6 +7,10 @@
  */
 package org.eclipse.oomph.maven.util;
 
+import static org.eclipse.oomph.maven.ConstraintType.RESOLVES_IN_REALM;
+import static org.eclipse.oomph.maven.ConstraintType.VALID_RELATIVE_PARENT;
+
+import org.eclipse.oomph.maven.ConstraintType;
 import org.eclipse.oomph.maven.Coordinate;
 import org.eclipse.oomph.maven.DOMElement;
 import org.eclipse.oomph.maven.Dependency;
@@ -22,7 +26,9 @@ import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.common.util.SegmentSequence;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EObjectValidator;
 
 import org.w3c.dom.Document;
@@ -128,6 +134,8 @@ public class MavenValidator extends EObjectValidator
         return validateProperty((Property)value, diagnostics, context);
       case MavenPackage.PROPERTY_REFERENCE:
         return validatePropertyReference((PropertyReference)value, diagnostics, context);
+      case MavenPackage.CONSTRAINT_TYPE:
+        return validateConstraintType((ConstraintType)value, diagnostics, context);
       case MavenPackage.DOCUMENT:
         return validateDocument((Document)value, diagnostics, context);
       case MavenPackage.ELEMENT:
@@ -141,6 +149,26 @@ public class MavenValidator extends EObjectValidator
       default:
         return true;
     }
+  }
+
+  @Override
+  protected boolean validate_MultiplicityConforms(EObject eObject, EStructuralFeature eStructuralFeature, DiagnosticChain diagnostics,
+      Map<Object, Object> context)
+  {
+    if (eStructuralFeature == MavenPackage.Literals.PARENT__RESOLVED_PROJECT)
+    {
+      Parent parent = (Parent)eObject;
+      Project project = parent.getProject();
+      if (project != null)
+      {
+        Realm realm = project.getRealm();
+        if (realm != null && realm.getSuppressedConstraints().contains(RESOLVES_IN_REALM))
+        {
+          return true;
+        }
+      }
+    }
+    return super.validate_MultiplicityConforms(eObject, eStructuralFeature, diagnostics, context);
   }
 
   /**
@@ -245,6 +273,12 @@ public class MavenValidator extends EObjectValidator
     Project resolvedProject = parent.getResolvedProject();
     if (resolvedProject != null)
     {
+      Realm realm = resolvedProject.getRealm();
+      if (realm != null && realm.getSuppressedConstraints().contains(RESOLVES_IN_REALM))
+      {
+        return true;
+      }
+
       String version = parent.getExpandedVersion();
       String resolvedVersion = resolvedProject.getVersion();
 
@@ -276,6 +310,12 @@ public class MavenValidator extends EObjectValidator
     Project resolvedProject = parent.getResolvedProject();
     if (resolvedProject != null)
     {
+      Realm realm = resolvedProject.getRealm();
+      if (realm != null && realm.getSuppressedConstraints().contains(VALID_RELATIVE_PARENT))
+      {
+        return true;
+      }
+
       Element relativePathElement = parent.getElement(POMXMLUtil.xpath(Parent.RELATIVE_PATH));
       if (relativePathElement == null)
       {
@@ -288,7 +328,8 @@ public class MavenValidator extends EObjectValidator
       Path projectLocation = POMXMLUtil.getLocation(parent.getProject().getElement()).getParent();
       Path relativePathLocation = projectLocation.relativize(parentLocation);
       String normalizedRelativePath = relativePathLocation.toString().replace('\\', '/');
-      if (!normalizedRelativePath.equals(relativePath) && !(normalizedRelativePath + "/pom.xml").equals(relativePath)) //$NON-NLS-1$
+      if (!normalizedRelativePath.equals(relativePath) && !(normalizedRelativePath + "/").equals(relativePath) //$NON-NLS-1$
+          && !(normalizedRelativePath + "/pom.xml").equals(relativePath)) //$NON-NLS-1$
       {
         if (diagnostics != null)
         {
@@ -361,6 +402,12 @@ public class MavenValidator extends EObjectValidator
     Project resolvedProject = dependency.getResolvedProject();
     if (resolvedProject != null)
     {
+      Realm realm = resolvedProject.getRealm();
+      if (realm != null && realm.getSuppressedConstraints().contains(RESOLVES_IN_REALM))
+      {
+        return true;
+      }
+
       String version = dependency.getExpandedVersion();
       if (!version.isBlank())
       {
@@ -429,6 +476,16 @@ public class MavenValidator extends EObjectValidator
   public boolean validatePropertyReference(PropertyReference propertyReference, DiagnosticChain diagnostics, Map<Object, Object> context)
   {
     return validate_EveryDefaultConstraint(propertyReference, diagnostics, context);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public boolean validateConstraintType(ConstraintType constraintType, DiagnosticChain diagnostics, Map<Object, Object> context)
+  {
+    return true;
   }
 
   /**

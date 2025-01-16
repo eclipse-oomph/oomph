@@ -8,6 +8,7 @@
 package org.eclipse.oomph.maven.impl;
 
 import org.eclipse.oomph.base.impl.ModelElementImpl;
+import org.eclipse.oomph.maven.ConstraintType;
 import org.eclipse.oomph.maven.Coordinate;
 import org.eclipse.oomph.maven.Dependency;
 import org.eclipse.oomph.maven.MavenFactory;
@@ -32,6 +33,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
+import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -68,6 +70,7 @@ import java.util.TreeMap;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link org.eclipse.oomph.maven.impl.RealmImpl#getSuppressedConstraints <em>Suppressed Constraints</em>}</li>
  *   <li>{@link org.eclipse.oomph.maven.impl.RealmImpl#getSourceLocators <em>Source Locators</em>}</li>
  *   <li>{@link org.eclipse.oomph.maven.impl.RealmImpl#getProjects <em>Projects</em>}</li>
  * </ul>
@@ -76,6 +79,16 @@ import java.util.TreeMap;
  */
 public class RealmImpl extends ModelElementImpl implements Realm
 {
+  /**
+   * The cached value of the '{@link #getSuppressedConstraints() <em>Suppressed Constraints</em>}' attribute list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getSuppressedConstraints()
+   * @generated
+   * @ordered
+   */
+  protected EList<ConstraintType> suppressedConstraints;
+
   private static final Set<Path> IGNORED_TARGET_FOLDERS = Set.of(Path.of("target"), Path.of("bin")); //$NON-NLS-1$ //$NON-NLS-2$
 
   /**
@@ -121,6 +134,21 @@ public class RealmImpl extends ModelElementImpl implements Realm
   protected EClass eStaticClass()
   {
     return MavenPackage.Literals.REALM;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EList<ConstraintType> getSuppressedConstraints()
+  {
+    if (suppressedConstraints == null)
+    {
+      suppressedConstraints = new EDataTypeUniqueEList<>(ConstraintType.class, this, MavenPackage.REALM__SUPPRESSED_CONSTRAINTS);
+    }
+    return suppressedConstraints;
   }
 
   /**
@@ -485,6 +513,8 @@ public class RealmImpl extends ModelElementImpl implements Realm
   {
     switch (featureID)
     {
+      case MavenPackage.REALM__SUPPRESSED_CONSTRAINTS:
+        return getSuppressedConstraints();
       case MavenPackage.REALM__SOURCE_LOCATORS:
         return getSourceLocators();
       case MavenPackage.REALM__PROJECTS:
@@ -504,6 +534,10 @@ public class RealmImpl extends ModelElementImpl implements Realm
   {
     switch (featureID)
     {
+      case MavenPackage.REALM__SUPPRESSED_CONSTRAINTS:
+        getSuppressedConstraints().clear();
+        getSuppressedConstraints().addAll((Collection<? extends ConstraintType>)newValue);
+        return;
       case MavenPackage.REALM__SOURCE_LOCATORS:
         getSourceLocators().clear();
         getSourceLocators().addAll((Collection<? extends SourceLocator>)newValue);
@@ -526,6 +560,9 @@ public class RealmImpl extends ModelElementImpl implements Realm
   {
     switch (featureID)
     {
+      case MavenPackage.REALM__SUPPRESSED_CONSTRAINTS:
+        getSuppressedConstraints().clear();
+        return;
       case MavenPackage.REALM__SOURCE_LOCATORS:
         getSourceLocators().clear();
         return;
@@ -546,6 +583,8 @@ public class RealmImpl extends ModelElementImpl implements Realm
   {
     switch (featureID)
     {
+      case MavenPackage.REALM__SUPPRESSED_CONSTRAINTS:
+        return suppressedConstraints != null && !suppressedConstraints.isEmpty();
       case MavenPackage.REALM__SOURCE_LOCATORS:
         return sourceLocators != null && !sourceLocators.isEmpty();
       case MavenPackage.REALM__PROJECTS:
@@ -573,6 +612,26 @@ public class RealmImpl extends ModelElementImpl implements Realm
         return getProjectIgnoreVersion((Coordinate)arguments.get(0));
     }
     return super.eInvoke(operationID, arguments);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String toString()
+  {
+    if (eIsProxy())
+    {
+      return super.toString();
+    }
+
+    StringBuilder result = new StringBuilder(super.toString());
+    result.append(" (suppressedConstraints: "); //$NON-NLS-1$
+    result.append(suppressedConstraints);
+    result.append(')');
+    return result.toString();
   }
 
   private boolean isInProjectTarget(Path path)

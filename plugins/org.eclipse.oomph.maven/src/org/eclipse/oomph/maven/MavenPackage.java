@@ -12,6 +12,7 @@ import org.eclipse.oomph.base.BasePackage;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
+import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
@@ -87,13 +88,22 @@ public interface MavenPackage extends EPackage
   int REALM__ANNOTATIONS = BasePackage.MODEL_ELEMENT__ANNOTATIONS;
 
   /**
+   * The feature id for the '<em><b>Suppressed Constraints</b></em>' attribute list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int REALM__SUPPRESSED_CONSTRAINTS = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
+
+  /**
    * The feature id for the '<em><b>Source Locators</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int REALM__SOURCE_LOCATORS = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
+  int REALM__SOURCE_LOCATORS = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
 
   /**
    * The feature id for the '<em><b>Projects</b></em>' containment reference list.
@@ -102,7 +112,7 @@ public interface MavenPackage extends EPackage
    * @generated
    * @ordered
    */
-  int REALM__PROJECTS = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
+  int REALM__PROJECTS = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 2;
 
   /**
    * The number of structural features of the '<em>Realm</em>' class.
@@ -111,7 +121,7 @@ public interface MavenPackage extends EPackage
    * @generated
    * @ordered
    */
-  int REALM_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 2;
+  int REALM_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 3;
 
   /**
    * The operation id for the '<em>Get Annotation</em>' operation.
@@ -1111,6 +1121,16 @@ public interface MavenPackage extends EPackage
   int PROPERTY_REFERENCE_OPERATION_COUNT = DOM_ELEMENT_OPERATION_COUNT + 0;
 
   /**
+   * The meta object id for the '{@link org.eclipse.oomph.maven.ConstraintType <em>Constraint Type</em>}' enum.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.eclipse.oomph.maven.ConstraintType
+   * @see org.eclipse.oomph.maven.impl.MavenPackageImpl#getConstraintType()
+   * @generated
+   */
+  int CONSTRAINT_TYPE = 8;
+
+  /**
    * The meta object id for the '<em>Document</em>' data type.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1118,7 +1138,7 @@ public interface MavenPackage extends EPackage
    * @see org.eclipse.oomph.maven.impl.MavenPackageImpl#getDocument()
    * @generated
    */
-  int DOCUMENT = 8;
+  int DOCUMENT = 9;
 
   /**
    * The meta object id for the '<em>Element</em>' data type.
@@ -1128,7 +1148,7 @@ public interface MavenPackage extends EPackage
    * @see org.eclipse.oomph.maven.impl.MavenPackageImpl#getElement()
    * @generated
    */
-  int ELEMENT = 9;
+  int ELEMENT = 10;
 
   /**
    * The meta object id for the '<em>Element Edit</em>' data type.
@@ -1138,7 +1158,7 @@ public interface MavenPackage extends EPackage
    * @see org.eclipse.oomph.maven.impl.MavenPackageImpl#getElementEdit()
    * @generated
    */
-  int ELEMENT_EDIT = 10;
+  int ELEMENT_EDIT = 11;
 
   /**
    * The meta object id for the '<em>Text Region</em>' data type.
@@ -1148,7 +1168,7 @@ public interface MavenPackage extends EPackage
    * @see org.eclipse.oomph.maven.impl.MavenPackageImpl#getTextRegion()
    * @generated
    */
-  int TEXT_REGION = 11;
+  int TEXT_REGION = 12;
 
   /**
    * The meta object id for the '<em>XPath</em>' data type.
@@ -1158,7 +1178,7 @@ public interface MavenPackage extends EPackage
    * @see org.eclipse.oomph.maven.impl.MavenPackageImpl#getXPath()
    * @generated
    */
-  int XPATH = 12;
+  int XPATH = 13;
 
   /**
    * Returns the meta object for class '{@link org.eclipse.oomph.maven.Realm <em>Realm</em>}'.
@@ -1169,6 +1189,17 @@ public interface MavenPackage extends EPackage
    * @generated
    */
   EClass getRealm();
+
+  /**
+   * Returns the meta object for the attribute list '{@link org.eclipse.oomph.maven.Realm#getSuppressedConstraints <em>Suppressed Constraints</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute list '<em>Suppressed Constraints</em>'.
+   * @see org.eclipse.oomph.maven.Realm#getSuppressedConstraints()
+   * @see #getRealm()
+   * @generated
+   */
+  EAttribute getRealm_SuppressedConstraints();
 
   /**
    * Returns the meta object for the containment reference list '{@link org.eclipse.oomph.maven.Realm#getSourceLocators <em>Source Locators</em>}'.
@@ -1619,6 +1650,16 @@ public interface MavenPackage extends EPackage
   EReference getPropertyReference_ResolvedProperty();
 
   /**
+   * Returns the meta object for enum '{@link org.eclipse.oomph.maven.ConstraintType <em>Constraint Type</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for enum '<em>Constraint Type</em>'.
+   * @see org.eclipse.oomph.maven.ConstraintType
+   * @generated
+   */
+  EEnum getConstraintType();
+
+  /**
    * Returns the meta object for data type '{@link org.w3c.dom.Document <em>Document</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1717,6 +1758,14 @@ public interface MavenPackage extends EPackage
      * @generated
      */
     EClass REALM = eINSTANCE.getRealm();
+
+    /**
+     * The meta object literal for the '<em><b>Suppressed Constraints</b></em>' attribute list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute REALM__SUPPRESSED_CONSTRAINTS = eINSTANCE.getRealm_SuppressedConstraints();
 
     /**
      * The meta object literal for the '<em><b>Source Locators</b></em>' containment reference list feature.
@@ -2067,6 +2116,16 @@ public interface MavenPackage extends EPackage
      * @generated
      */
     EReference PROPERTY_REFERENCE__RESOLVED_PROPERTY = eINSTANCE.getPropertyReference_ResolvedProperty();
+
+    /**
+     * The meta object literal for the '{@link org.eclipse.oomph.maven.ConstraintType <em>Constraint Type</em>}' enum.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.eclipse.oomph.maven.ConstraintType
+     * @see org.eclipse.oomph.maven.impl.MavenPackageImpl#getConstraintType()
+     * @generated
+     */
+    EEnum CONSTRAINT_TYPE = eINSTANCE.getConstraintType();
 
     /**
      * The meta object literal for the '<em>Document</em>' data type.

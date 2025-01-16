@@ -7,6 +7,7 @@
  */
 package org.eclipse.oomph.maven.impl;
 
+import org.eclipse.oomph.maven.ConstraintType;
 import org.eclipse.oomph.maven.Dependency;
 import org.eclipse.oomph.maven.MavenFactory;
 import org.eclipse.oomph.maven.MavenPackage;
@@ -108,6 +109,8 @@ public class MavenFactoryImpl extends EFactoryImpl implements MavenFactory
   {
     switch (eDataType.getClassifierID())
     {
+      case MavenPackage.CONSTRAINT_TYPE:
+        return createConstraintTypeFromString(eDataType, initialValue);
       case MavenPackage.DOCUMENT:
         return createDocumentFromString(eDataType, initialValue);
       case MavenPackage.ELEMENT:
@@ -133,6 +136,8 @@ public class MavenFactoryImpl extends EFactoryImpl implements MavenFactory
   {
     switch (eDataType.getClassifierID())
     {
+      case MavenPackage.CONSTRAINT_TYPE:
+        return convertConstraintTypeToString(eDataType, instanceValue);
       case MavenPackage.DOCUMENT:
         return convertDocumentToString(eDataType, instanceValue);
       case MavenPackage.ELEMENT:
@@ -218,6 +223,53 @@ public class MavenFactoryImpl extends EFactoryImpl implements MavenFactory
   {
     PropertyReferenceImpl propertyReference = new PropertyReferenceImpl();
     return propertyReference;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public ConstraintType createConstraintType(String literal)
+  {
+    ConstraintType result = ConstraintType.get(literal);
+    if (result == null)
+    {
+      throw new IllegalArgumentException("The value '" + literal + "' is not a valid enumerator of '" + MavenPackage.Literals.CONSTRAINT_TYPE.getName() + "'"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+    }
+    return result;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public ConstraintType createConstraintTypeFromString(EDataType eDataType, String initialValue)
+  {
+    return createConstraintType(initialValue);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String convertConstraintType(ConstraintType instanceValue)
+  {
+    return instanceValue == null ? null : instanceValue.toString();
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String convertConstraintTypeToString(EDataType eDataType, Object instanceValue)
+  {
+    return convertConstraintType((ConstraintType)instanceValue);
   }
 
   /**

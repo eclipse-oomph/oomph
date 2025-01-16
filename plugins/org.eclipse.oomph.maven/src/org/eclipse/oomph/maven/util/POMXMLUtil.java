@@ -111,6 +111,11 @@ public class POMXMLUtil
           result = document.lookupNamespaceURI(null);
         }
 
+        if (result == null && "pom".equals(prefix)) //$NON-NLS-1$
+        {
+          return "http://maven.apache.org/POM/4.0.0"; //$NON-NLS-1$
+        }
+
         return result;
       }
 

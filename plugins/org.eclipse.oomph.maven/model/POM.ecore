@@ -15,6 +15,8 @@
     <eOperations name="getProjectIgnoreVersion" eType="#//Project">
       <eParameters name="coordinate" lowerBound="1" eType="#//Coordinate"/>
     </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="suppressedConstraints"
+        upperBound="-1" eType="#//ConstraintType"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="sourceLocators" upperBound="-1"
         eType="ecore:EClass ../../org.eclipse.oomph.resources/model/Resources.ecore#//SourceLocator"
         containment="true"/>
@@ -116,6 +118,10 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="resolvedProperty" lowerBound="1"
         eType="#//Property" eOpposite="#//Property/incomingResolvedPropertyReferences"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ConstraintType">
+    <eLiterals name="ValidRelativeParent"/>
+    <eLiterals name="ResolvesInRealm" value="1"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="Document" instanceClassName="org.w3c.dom.Document"/>
   <eClassifiers xsi:type="ecore:EDataType" name="Element" instanceClassName="org.w3c.dom.Element"/>

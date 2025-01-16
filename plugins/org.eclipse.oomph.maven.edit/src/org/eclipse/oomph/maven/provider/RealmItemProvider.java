@@ -8,6 +8,7 @@
 package org.eclipse.oomph.maven.provider;
 
 import org.eclipse.oomph.base.provider.ModelElementItemProvider;
+import org.eclipse.oomph.maven.ConstraintType;
 import org.eclipse.oomph.maven.MavenPackage;
 import org.eclipse.oomph.maven.Realm;
 import org.eclipse.oomph.resources.ResourcesFactory;
@@ -16,8 +17,10 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemStyledLabelProvider;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.StyledString;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
@@ -56,8 +59,33 @@ public class RealmItemProvider extends ModelElementItemProvider implements IItem
     {
       super.getPropertyDescriptors(object);
 
+      addSuppressedConstraintsPropertyDescriptor(object);
     }
     return itemPropertyDescriptors;
+  }
+
+  /**
+   * This adds a property descriptor for the Suppressed Constraints feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addSuppressedConstraintsPropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_Realm_suppressedConstraints_feature"), //$NON-NLS-1$
+        getString("_UI_PropertyDescriptor_description", "_UI_Realm_suppressedConstraints_feature", "_UI_Realm_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        MavenPackage.Literals.REALM__SUPPRESSED_CONSTRAINTS, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+  }
+
+  @Override
+  protected Collection<?> filterChoices(Collection<?> choices, EStructuralFeature feature, Object object)
+  {
+    if (feature == MavenPackage.Literals.REALM__SUPPRESSED_CONSTRAINTS)
+    {
+      return List.of(ConstraintType.values());
+    }
+    return super.filterChoices(choices, feature, object);
   }
 
   /**
@@ -166,6 +194,9 @@ public class RealmItemProvider extends ModelElementItemProvider implements IItem
 
     switch (notification.getFeatureID(Realm.class))
     {
+      case MavenPackage.REALM__SUPPRESSED_CONSTRAINTS:
+        fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+        return;
       case MavenPackage.REALM__SOURCE_LOCATORS:
       case MavenPackage.REALM__PROJECTS:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));

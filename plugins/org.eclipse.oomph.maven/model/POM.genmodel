@@ -12,12 +12,17 @@
   <genPackages prefix="Maven" basePackage="org.eclipse.oomph" disposableProviderFactory="true"
       dataTypeConverters="true" multipleEditorPages="false" generateModelWizard="false"
       ecorePackage="POM.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="POM.ecore#//ConstraintType">
+      <genEnumLiterals ecoreEnumLiteral="POM.ecore#//ConstraintType/ValidRelativeParent"/>
+      <genEnumLiterals ecoreEnumLiteral="POM.ecore#//ConstraintType/ResolvesInRealm"/>
+    </genEnums>
     <genDataTypes ecoreDataType="POM.ecore#//Document"/>
     <genDataTypes ecoreDataType="POM.ecore#//Element"/>
     <genDataTypes ecoreDataType="POM.ecore#//ElementEdit"/>
     <genDataTypes ecoreDataType="POM.ecore#//TextRegion"/>
     <genDataTypes ecoreDataType="POM.ecore#//XPath"/>
     <genClasses ecoreClass="POM.ecore#//Realm">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute POM.ecore#//Realm/suppressedConstraints"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference POM.ecore#//Realm/sourceLocators"/>
       <genFeatures property="None" children="true" createChild="false" ecoreFeature="ecore:EReference POM.ecore#//Realm/projects"/>
       <genOperations ecoreOperation="POM.ecore#//Realm/reconcile"/>

@@ -21,6 +21,7 @@ import org.eclipse.emf.common.util.EList;
  * The following features are supported:
  * </p>
  * <ul>
+ *   <li>{@link org.eclipse.oomph.maven.Realm#getSuppressedConstraints <em>Suppressed Constraints</em>}</li>
  *   <li>{@link org.eclipse.oomph.maven.Realm#getSourceLocators <em>Source Locators</em>}</li>
  *   <li>{@link org.eclipse.oomph.maven.Realm#getProjects <em>Projects</em>}</li>
  * </ul>
@@ -31,6 +32,20 @@ import org.eclipse.emf.common.util.EList;
  */
 public interface Realm extends ModelElement
 {
+  /**
+   * Returns the value of the '<em><b>Suppressed Constraints</b></em>' attribute list.
+   * The list contents are of type {@link org.eclipse.oomph.maven.ConstraintType}.
+   * The literals are from the enumeration {@link org.eclipse.oomph.maven.ConstraintType}.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Suppressed Constraints</em>' attribute list.
+   * @see org.eclipse.oomph.maven.ConstraintType
+   * @see org.eclipse.oomph.maven.MavenPackage#getRealm_SuppressedConstraints()
+   * @model
+   * @generated
+   */
+  EList<ConstraintType> getSuppressedConstraints();
+
   /**
    * Returns the value of the '<em><b>Source Locators</b></em>' containment reference list.
    * The list contents are of type {@link org.eclipse.oomph.resources.SourceLocator}.

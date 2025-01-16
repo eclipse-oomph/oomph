@@ -8,6 +8,7 @@
 package org.eclipse.oomph.maven.impl;
 
 import org.eclipse.oomph.base.BasePackage;
+import org.eclipse.oomph.maven.ConstraintType;
 import org.eclipse.oomph.maven.Coordinate;
 import org.eclipse.oomph.maven.DOMElement;
 import org.eclipse.oomph.maven.Dependency;
@@ -27,6 +28,7 @@ import org.eclipse.emf.common.util.SegmentSequence;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
+import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EGenericType;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
@@ -100,6 +102,13 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
    * @generated
    */
   private EClass propertyReferenceEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EEnum constraintTypeEEnum = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -234,9 +243,20 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
    * @generated
    */
   @Override
+  public EAttribute getRealm_SuppressedConstraints()
+  {
+    return (EAttribute)realmEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public EReference getRealm_SourceLocators()
   {
-    return (EReference)realmEClass.getEStructuralFeatures().get(0);
+    return (EReference)realmEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -247,7 +267,7 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
   @Override
   public EReference getRealm_Projects()
   {
-    return (EReference)realmEClass.getEStructuralFeatures().get(1);
+    return (EReference)realmEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -696,6 +716,17 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
    * @generated
    */
   @Override
+  public EEnum getConstraintType()
+  {
+    return constraintTypeEEnum;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public EDataType getDocument()
   {
     return documentEDataType;
@@ -791,6 +822,7 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
 
     // Create classes and their features
     realmEClass = createEClass(REALM);
+    createEAttribute(realmEClass, REALM__SUPPRESSED_CONSTRAINTS);
     createEReference(realmEClass, REALM__SOURCE_LOCATORS);
     createEReference(realmEClass, REALM__PROJECTS);
     createEOperation(realmEClass, REALM___RECONCILE);
@@ -841,6 +873,9 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
     propertyReferenceEClass = createEClass(PROPERTY_REFERENCE);
     createEAttribute(propertyReferenceEClass, PROPERTY_REFERENCE__NAME);
     createEReference(propertyReferenceEClass, PROPERTY_REFERENCE__RESOLVED_PROPERTY);
+
+    // Create enums
+    constraintTypeEEnum = createEEnum(CONSTRAINT_TYPE);
 
     // Create data types
     documentEDataType = createEDataType(DOCUMENT);
@@ -897,6 +932,8 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
 
     // Initialize classes, features, and operations; add parameters
     initEClass(realmEClass, Realm.class, "Realm", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getRealm_SuppressedConstraints(), getConstraintType(), "suppressedConstraints", null, 0, -1, Realm.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getRealm_SourceLocators(), theResourcesPackage.getSourceLocator(), null, "sourceLocators", null, 0, -1, Realm.class, !IS_TRANSIENT, //$NON-NLS-1$
         !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getRealm_Projects(), getProject(), getProject_Realm(), "projects", null, 0, -1, Realm.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
@@ -1002,6 +1039,11 @@ public class MavenPackageImpl extends EPackageImpl implements MavenPackage
     initEReference(getPropertyReference_ResolvedProperty(), getProperty(), getProperty_IncomingResolvedPropertyReferences(), "resolvedProperty", null, 1, 1, //$NON-NLS-1$
         PropertyReference.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED,
         IS_ORDERED);
+
+    // Initialize enums and add enum literals
+    initEEnum(constraintTypeEEnum, ConstraintType.class, "ConstraintType"); //$NON-NLS-1$
+    addEEnumLiteral(constraintTypeEEnum, ConstraintType.VALID_RELATIVE_PARENT);
+    addEEnumLiteral(constraintTypeEEnum, ConstraintType.RESOLVES_IN_REALM);
 
     // Initialize data types
     initEDataType(documentEDataType, Document.class, "Document", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$

@@ -89,6 +89,26 @@ public interface MavenFactory extends EFactory
   PropertyReference createPropertyReference();
 
   /**
+   * Returns an instance of data type '<em>Constraint Type</em>' corresponding the given literal.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param literal a literal of the data type.
+   * @return a new instance value of the data type.
+   * @generated
+   */
+  ConstraintType createConstraintType(String literal);
+
+  /**
+   * Returns a literal representation of an instance of data type '<em>Constraint Type</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param instanceValue an instance value of the data type.
+   * @return a literal representation of the instance value.
+   * @generated
+   */
+  String convertConstraintType(ConstraintType instanceValue);
+
+  /**
    * Returns an instance of data type '<em>Document</em>' corresponding the given literal.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
