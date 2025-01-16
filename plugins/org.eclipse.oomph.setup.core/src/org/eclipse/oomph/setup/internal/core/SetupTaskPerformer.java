@@ -1532,6 +1532,8 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
       for (Scope scope : scopes)
       {
+        Resource scopeResource = scope.eResource();
+        URI location = scopeResource == null ? null : scopeResource.getURI();
         ScopeType type = scope.getType();
         String name = scope.getName();
         String label = scope.getLabel();
@@ -1550,36 +1552,36 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
         {
           case PRODUCT_CATALOG:
           {
-            generateScopeVariables(result, "product.catalog", qualifier, name, label, description); //$NON-NLS-1$
+            generateScopeVariables(result, "product.catalog", qualifier, name, label, description, location); //$NON-NLS-1$
             qualifier = name;
             break;
           }
           case PRODUCT:
           {
-            generateScopeVariables(result, "product", qualifier, name, label, description); //$NON-NLS-1$
+            generateScopeVariables(result, "product", qualifier, name, label, description, location); //$NON-NLS-1$
             qualifier += "." + name; //$NON-NLS-1$
             break;
           }
           case PRODUCT_VERSION:
           {
-            generateScopeVariables(result, "product.version", qualifier, name, label, description); //$NON-NLS-1$
+            generateScopeVariables(result, "product.version", qualifier, name, label, description, location); //$NON-NLS-1$
             qualifier = null;
             break;
           }
           case PROJECT_CATALOG:
           {
-            generateScopeVariables(result, "project.catalog", qualifier, name, label, description); //$NON-NLS-1$
+            generateScopeVariables(result, "project.catalog", qualifier, name, label, description, location); //$NON-NLS-1$
             qualifier = name;
             break;
           }
           case PROJECT:
           {
-            generateScopeVariables(result, "project", qualifier, name, label, description); //$NON-NLS-1$
+            generateScopeVariables(result, "project", qualifier, name, label, description, location); //$NON-NLS-1$
 
-            if (rootProject == null && scope.eResource() == stream.eResource())
+            if (rootProject == null && scopeResource == stream.eResource())
             {
               rootProject = scope;
-              generateScopeVariables(result, "project.root", qualifier, name, label, description); //$NON-NLS-1$
+              generateScopeVariables(result, "project.root", qualifier, name, label, description, location); //$NON-NLS-1$
             }
 
             qualifier += "." + name; //$NON-NLS-1$
@@ -1587,23 +1589,23 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
           }
           case STREAM:
           {
-            generateScopeVariables(result, "project.stream", qualifier, name, label, description); //$NON-NLS-1$
+            generateScopeVariables(result, "project.stream", qualifier, name, label, description, location); //$NON-NLS-1$
             qualifier = null;
             break;
           }
           case INSTALLATION:
           {
-            generateScopeVariables(result, "installation", qualifier, name, label, description); //$NON-NLS-1$
+            generateScopeVariables(result, "installation", qualifier, name, label, description, location); //$NON-NLS-1$
             break;
           }
           case WORKSPACE:
           {
-            generateScopeVariables(result, "workspace", qualifier, name, label, description); //$NON-NLS-1$
+            generateScopeVariables(result, "workspace", qualifier, name, label, description, location); //$NON-NLS-1$
             break;
           }
           case USER:
           {
-            generateScopeVariables(result, "user", qualifier, name, label, description); //$NON-NLS-1$
+            generateScopeVariables(result, "user", qualifier, name, label, description, location); //$NON-NLS-1$
             break;
           }
           case MACRO:
@@ -1697,7 +1699,7 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     result.add(task);
   }
 
-  private void generateScopeVariables(EList<SetupTask> setupTasks, String type, String qualifier, String name, String label, String description)
+  private void generateScopeVariables(EList<SetupTask> setupTasks, String type, String qualifier, String name, String label, String description, URI location)
   {
     setupTasks.add(createVariable(setupTasks, "scope." + type + ".name", name, null)); //$NON-NLS-1$ //$NON-NLS-2$
 
@@ -1708,6 +1710,11 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
     setupTasks.add(createVariable(setupTasks, "scope." + type + ".label", label, null)); //$NON-NLS-1$ //$NON-NLS-2$
     setupTasks.add(createVariable(setupTasks, "scope." + type + ".description", description, null)); //$NON-NLS-1$ //$NON-NLS-2$
+
+    if (location != null)
+    {
+      setupTasks.add(createVariable(setupTasks, "scope." + type + ".location", location.toString(), null)); //$NON-NLS-1$ //$NON-NLS-2$
+    }
   }
 
   private VariableTask createVariable(EList<SetupTask> setupTasks, String name, String value, String description)
