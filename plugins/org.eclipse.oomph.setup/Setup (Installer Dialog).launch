@@ -26,7 +26,7 @@
         <setEntry value="org.eclipse.equinox.p2.repository:2.9.300.v20241213-1505:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.touchpoint.eclipse:2.4.300.v20240511-1722:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.touchpoint.natives:1.5.400.v20240918-1902:default:true:default:default"/>
-        <setEntry value="org.eclipse.equinox.p2.transport.ecf:1.4.400.v20250107-1548:default:true:default:default"/>
+        <setEntry value="org.eclipse.equinox.p2.transport.ecf:1.4.400.v20250109-1301:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.updatesite:1.3.500.v20241022-1057:default:true:default:default"/>
     </setAttribute>
     <booleanAttribute key="append.args" value="true"/>

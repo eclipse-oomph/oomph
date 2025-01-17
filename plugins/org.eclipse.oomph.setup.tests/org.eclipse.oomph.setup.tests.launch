@@ -114,7 +114,6 @@
     <stringAttribute key="product" value="org.eclipse.equinox.p2.director.product"/>
     <booleanAttribute key="run_in_ui_thread" value="true"/>
     <setAttribute key="selected_features">
-        <setEntry value="org.eclipse.core.runtime.feature:default"/>
         <setEntry value="org.eclipse.oomph.tests:default"/>
     </setAttribute>
     <setAttribute key="selected_target_bundles">

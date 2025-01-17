@@ -48,10 +48,10 @@
         <setEntry value="org.eclipse.equinox.p2.touchpoint.eclipse:2.4.300.v20240511-1722:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.touchpoint.natives.source:1.5.400.v20240918-1902:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.touchpoint.natives:1.5.400.v20240918-1902:default:true:default:default"/>
-        <setEntry value="org.eclipse.equinox.p2.transport.ecf.source:1.4.400.v20250107-1548:default:true:default:default"/>
-        <setEntry value="org.eclipse.equinox.p2.transport.ecf:1.4.400.v20250107-1548:default:true:default:default"/>
-        <setEntry value="org.eclipse.equinox.p2.ui.discovery.source:1.3.400.v20240621-1554:default:true:default:default"/>
-        <setEntry value="org.eclipse.equinox.p2.ui.discovery:1.3.400.v20240621-1554:default:true:default:default"/>
+        <setEntry value="org.eclipse.equinox.p2.transport.ecf.source:1.4.400.v20250109-1301:default:true:default:default"/>
+        <setEntry value="org.eclipse.equinox.p2.transport.ecf:1.4.400.v20250109-1301:default:true:default:default"/>
+        <setEntry value="org.eclipse.equinox.p2.ui.discovery.source:1.3.500.v20250108-0931:default:true:default:default"/>
+        <setEntry value="org.eclipse.equinox.p2.ui.discovery:1.3.500.v20250108-0931:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.ui.importexport.source:1.4.500.v20240621-1554:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.ui.importexport:1.4.500.v20240621-1554:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.ui.sdk.scheduler.source:1.6.300.v20240515-1919:default:true:default:default"/>
