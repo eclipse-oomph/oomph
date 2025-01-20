@@ -23,6 +23,7 @@ import org.eclipse.emf.ecore.xml.type.XMLTypeFactory;
 
 import org.eclipse.osgi.util.NLS;
 
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
@@ -419,7 +420,9 @@ public class ResourceCreationTaskImpl extends SetupTaskImpl implements ResourceC
       try
       {
         URIConverter uriConverter = context.getURIConverter();
-        byte[] bytes = uriConverter.createInputStream(targetURI).readAllBytes();
+        InputStream targetStream = uriConverter.createInputStream(targetURI);
+        byte[] bytes = targetStream.readAllBytes();
+        targetStream.close();
         String existingContent = "base64".equals(encoding) ? XMLTypeFactory.eINSTANCE.convertBase64Binary(bytes) : new String(bytes, encoding); //$NON-NLS-1$
         return !Objects.equals(content, existingContent);
       }
