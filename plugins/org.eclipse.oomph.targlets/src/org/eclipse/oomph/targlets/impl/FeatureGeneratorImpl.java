@@ -208,11 +208,12 @@ public class FeatureGeneratorImpl extends ModelElementImpl implements FeatureGen
             final String namespace = capability.getNamespace();
             final String name = capability.getName();
             final IMatchExpression<IInstallableUnit> filter = capability.getFilter();
-            final boolean optional = capability.getMin() == 0;
-            final boolean multiple = capability.getMax() > 1;
+            final int min = capability.getMin();
+            final int max = capability.getMax();
+            final boolean greedy = capability.isGreedy();
             if (adjustedRange != null)
             {
-              requirement = MetadataFactory.createRequirement(namespace, name, adjustedRange, filter, optional, multiple);
+              requirement = MetadataFactory.createRequirement(namespace, name, adjustedRange, filter, min, max, greedy);
             }
             else
             {
@@ -226,7 +227,7 @@ public class FeatureGeneratorImpl extends ModelElementImpl implements FeatureGen
                 {
                   if (delegate == null)
                   {
-                    delegate = MetadataFactory.createRequirement(namespace, name, getRange(), filter, optional, multiple);
+                    delegate = MetadataFactory.createRequirement(namespace, name, getRange(), filter, min, max, greedy);
                   }
 
                   return delegate;
