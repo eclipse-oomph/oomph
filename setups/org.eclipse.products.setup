@@ -224,12 +224,14 @@
         <requirement
             name="org.eclipse.wildwebdeveloper.xml.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2025-03/202501091200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2025-03/202501301200"/>
         <repository
-            url="https://download.eclipse.org/releases/2025-03/202501101000">
+            url="https://download.eclipse.org/releases/2025-03/202501311001">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
+        <repository
+            url="https://download.eclipse.org/mpc/drops/1.11.0/v20250125-1342"/>
       </setupTask>
     </version>
     <version
@@ -394,12 +396,14 @@
         <requirement
             name="org.eclipse.wildwebdeveloper.xml.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2025-03/202501091200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2025-03/202501301200"/>
         <repository
-            url="https://download.eclipse.org/releases/2025-03/202501101000">
+            url="https://download.eclipse.org/releases/2025-03/202501311001">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
+        <repository
+            url="https://download.eclipse.org/mpc/drops/1.11.0/v20250125-1342"/>
       </setupTask>
     </version>
     <version
@@ -3310,12 +3314,14 @@
         <requirement
             name="org.eclipse.wst.xsl.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2025-03/202501091200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2025-03/202501301200"/>
         <repository
-            url="https://download.eclipse.org/releases/2025-03/202501101000">
+            url="https://download.eclipse.org/releases/2025-03/202501311001">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
+        <repository
+            url="https://download.eclipse.org/mpc/drops/1.11.0/v20250125-1342"/>
       </setupTask>
     </version>
     <version
@@ -3744,12 +3750,14 @@
         <requirement
             name="org.eclipse.wst.xsl.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2025-03/202501091200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2025-03/202501301200"/>
         <repository
-            url="https://download.eclipse.org/releases/2025-03/202501101000">
+            url="https://download.eclipse.org/releases/2025-03/202501311001">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
+        <repository
+            url="https://download.eclipse.org/mpc/drops/1.11.0/v20250125-1342"/>
       </setupTask>
     </version>
     <version
@@ -10254,12 +10262,14 @@
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2025-03/202501091200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2025-03/202501301200"/>
         <repository
-            url="https://download.eclipse.org/releases/2025-03/202501101000">
+            url="https://download.eclipse.org/releases/2025-03/202501311001">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
+        <repository
+            url="https://download.eclipse.org/mpc/drops/1.11.0/v20250125-1342"/>
       </setupTask>
     </version>
     <version
@@ -10496,12 +10506,14 @@
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2025-03/202501091200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2025-03/202501301200"/>
         <repository
-            url="https://download.eclipse.org/releases/2025-03/202501101000">
+            url="https://download.eclipse.org/releases/2025-03/202501311001">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
+        <repository
+            url="https://download.eclipse.org/mpc/drops/1.11.0/v20250125-1342"/>
       </setupTask>
     </version>
     <version
@@ -14241,12 +14253,14 @@
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2025-03/202501091200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2025-03/202501301200"/>
         <repository
-            url="https://download.eclipse.org/releases/2025-03/202501101000">
+            url="https://download.eclipse.org/releases/2025-03/202501311001">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
+        <repository
+            url="https://download.eclipse.org/mpc/drops/1.11.0/v20250125-1342"/>
       </setupTask>
     </version>
     <version
@@ -14543,12 +14557,14 @@
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2025-03/202501091200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2025-03/202501301200"/>
         <repository
-            url="https://download.eclipse.org/releases/2025-03/202501101000">
+            url="https://download.eclipse.org/releases/2025-03/202501311001">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
+        <repository
+            url="https://download.eclipse.org/mpc/drops/1.11.0/v20250125-1342"/>
       </setupTask>
     </version>
     <version
@@ -17201,12 +17217,14 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2025-03/202501091200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2025-03/202501301200"/>
         <repository
-            url="https://download.eclipse.org/releases/2025-03/202501101000">
+            url="https://download.eclipse.org/releases/2025-03/202501311001">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
+        <repository
+            url="https://download.eclipse.org/mpc/drops/1.11.0/v20250125-1342"/>
       </setupTask>
     </version>
     <version
@@ -17371,12 +17389,14 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2025-03/202501091200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2025-03/202501301200"/>
         <repository
-            url="https://download.eclipse.org/releases/2025-03/202501101000">
+            url="https://download.eclipse.org/releases/2025-03/202501311001">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
+        <repository
+            url="https://download.eclipse.org/mpc/drops/1.11.0/v20250125-1342"/>
       </setupTask>
     </version>
     <version
@@ -20042,12 +20062,14 @@
         <requirement
             name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2025-03/202501091200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2025-03/202501301200"/>
         <repository
-            url="https://download.eclipse.org/releases/2025-03/202501101000">
+            url="https://download.eclipse.org/releases/2025-03/202501311001">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
+        <repository
+            url="https://download.eclipse.org/mpc/drops/1.11.0/v20250125-1342"/>
       </setupTask>
     </version>
     <version
@@ -20260,12 +20282,14 @@
         <requirement
             name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2025-03/202501091200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2025-03/202501301200"/>
         <repository
-            url="https://download.eclipse.org/releases/2025-03/202501101000">
+            url="https://download.eclipse.org/releases/2025-03/202501311001">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
+        <repository
+            url="https://download.eclipse.org/mpc/drops/1.11.0/v20250125-1342"/>
       </setupTask>
     </version>
     <version
@@ -23738,12 +23762,14 @@
         <requirement
             name="org.eclipse.xtext.sdk.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2025-03/202501091200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2025-03/202501301200"/>
         <repository
-            url="https://download.eclipse.org/releases/2025-03/202501101000">
+            url="https://download.eclipse.org/releases/2025-03/202501311001">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
+        <repository
+            url="https://download.eclipse.org/mpc/drops/1.11.0/v20250125-1342"/>
       </setupTask>
     </version>
     <version
@@ -23888,12 +23914,14 @@
         <requirement
             name="org.eclipse.xtext.sdk.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2025-03/202501091200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2025-03/202501301200"/>
         <repository
-            url="https://download.eclipse.org/releases/2025-03/202501101000">
+            url="https://download.eclipse.org/releases/2025-03/202501311001">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
+        <repository
+            url="https://download.eclipse.org/mpc/drops/1.11.0/v20250125-1342"/>
       </setupTask>
     </version>
     <version
@@ -26193,12 +26221,14 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2025-03/202501091200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2025-03/202501301200"/>
         <repository
-            url="https://download.eclipse.org/releases/2025-03/202501101000">
+            url="https://download.eclipse.org/releases/2025-03/202501311001">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
+        <repository
+            url="https://download.eclipse.org/mpc/drops/1.11.0/v20250125-1342"/>
       </setupTask>
     </version>
     <version
@@ -26415,12 +26445,14 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2025-03/202501091200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2025-03/202501301200"/>
         <repository
-            url="https://download.eclipse.org/releases/2025-03/202501101000">
+            url="https://download.eclipse.org/releases/2025-03/202501311001">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
+        <repository
+            url="https://download.eclipse.org/mpc/drops/1.11.0/v20250125-1342"/>
       </setupTask>
     </version>
     <version
@@ -29635,12 +29667,14 @@
         <requirement
             name="org.eclipse.xsd.sdk.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2025-03/202501091200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2025-03/202501301200"/>
         <repository
-            url="https://download.eclipse.org/releases/2025-03/202501101000">
+            url="https://download.eclipse.org/releases/2025-03/202501311001">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
+        <repository
+            url="https://download.eclipse.org/mpc/drops/1.11.0/v20250125-1342"/>
       </setupTask>
     </version>
     <version
@@ -29865,12 +29899,14 @@
         <requirement
             name="org.eclipse.xsd.sdk.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2025-03/202501091200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2025-03/202501301200"/>
         <repository
-            url="https://download.eclipse.org/releases/2025-03/202501101000">
+            url="https://download.eclipse.org/releases/2025-03/202501311001">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
+        <repository
+            url="https://download.eclipse.org/mpc/drops/1.11.0/v20250125-1342"/>
       </setupTask>
     </version>
     <version
@@ -33357,12 +33393,14 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2025-03/202501091200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2025-03/202501301200"/>
         <repository
-            url="https://download.eclipse.org/releases/2025-03/202501101000">
+            url="https://download.eclipse.org/releases/2025-03/202501311001">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
+        <repository
+            url="https://download.eclipse.org/mpc/drops/1.11.0/v20250125-1342"/>
       </setupTask>
     </version>
     <version
@@ -33531,12 +33569,14 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2025-03/202501091200"/>
+            url="https://download.eclipse.org/technology/epp/packages/2025-03/202501301200"/>
         <repository
-            url="https://download.eclipse.org/releases/2025-03/202501101000">
+            url="https://download.eclipse.org/releases/2025-03/202501311001">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
+        <repository
+            url="https://download.eclipse.org/mpc/drops/1.11.0/v20250125-1342"/>
       </setupTask>
     </version>
     <version
@@ -36059,6 +36099,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
+            key="siteURI">
+          <value>https://download.eclipse.org/eclipse/downloads/</value>
+        </detail>
+        <detail
             key="shortcut">
           <value>Eclipse Platform - Latest</value>
         </detail>
@@ -36077,7 +36121,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.35.0,5.0.0)"/>
         <repository
-            url="https://download.eclipse.org/releases/2025-03/202501101000">
+            url="https://download.eclipse.org/releases/2025-03/202501311001">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -36125,6 +36169,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
+            key="siteURI">
+          <value>https://download.eclipse.org/eclipse/downloads/</value>
+        </detail>
+        <detail
             key="shortcut">
           <value>Eclipse Platform - 2025-03</value>
         </detail>
@@ -36143,7 +36191,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.35.0,5.0.0)"/>
         <repository
-            url="https://download.eclipse.org/releases/2025-03/202501101000">
+            url="https://download.eclipse.org/releases/2025-03/202501311001">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
