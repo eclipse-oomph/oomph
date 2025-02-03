@@ -764,10 +764,13 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
             @Override
             public void run()
             {
-              removedResources.addAll(visitor.getRemovedResources());
-              if (!isDirty())
+              if (!getContainer().isDisposed())
               {
-                getSite().getPage().closeEditor(SetupEditor.this, false);
+                removedResources.addAll(visitor.getRemovedResources());
+                if (!isDirty())
+                {
+                  getSite().getPage().closeEditor(SetupEditor.this, false);
+                }
               }
             }
           });
@@ -780,18 +783,19 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
             @Override
             public void run()
             {
-              changedResources.addAll(visitor.getChangedResources());
-              if (getSite().getPage().getActiveEditor() == SetupEditor.this)
+              if (!getContainer().isDisposed())
               {
-                handleActivate();
+                changedResources.addAll(visitor.getChangedResources());
+                if (getSite().getPage().getActiveEditor() == SetupEditor.this)
+                {
+                  handleActivate();
+                }
               }
             }
           });
         }
       }
-      catch (
-
-      CoreException exception)
+      catch (CoreException exception)
       {
         SetupEditorPlugin.INSTANCE.log(exception);
       }
