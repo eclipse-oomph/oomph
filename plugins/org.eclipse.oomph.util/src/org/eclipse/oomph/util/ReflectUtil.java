@@ -11,6 +11,9 @@
  */
 package org.eclipse.oomph.util;
 
+import org.eclipse.oomph.internal.util.UtilPlugin;
+
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.osgi.util.NLS;
 
 import java.lang.reflect.AccessibleObject;
@@ -19,6 +22,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Various static helper methods for dealing with Java reflection.
@@ -27,6 +32,8 @@ import java.lang.reflect.Modifier;
  */
 public final class ReflectUtil
 {
+  private static final Set<Field> FINAL_FIELDS = ConcurrentHashMap.newKeySet();
+
   private ReflectUtil()
   {
   }
@@ -241,6 +248,13 @@ public final class ReflectUtil
   {
     try
     {
+      if ((field.getModifiers() & Modifier.FINAL) != 0 && FINAL_FIELDS.add(field))
+      {
+        RuntimeException runtimeException = new RuntimeException("Cannot modify a final field: " + field); //$NON-NLS-1$
+        runtimeException.fillInStackTrace();
+        UtilPlugin.INSTANCE.log(runtimeException, IStatus.INFO);
+      }
+
       if ((field.getModifiers() & Modifier.FINAL) != 0 && force)
       {
         AccessUtil.setNonFinal(field);

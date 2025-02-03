@@ -23,9 +23,7 @@ import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.ReflectUtil;
 
 import org.eclipse.emf.common.CommonPlugin;
-import org.eclipse.emf.common.EMFPlugin;
 import org.eclipse.emf.common.ui.EclipseUIPlugin;
-import org.eclipse.emf.common.ui.ImageURIRegistry;
 import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.common.util.URI;
 
@@ -34,6 +32,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.equinox.internal.security.storage.PasswordProviderModuleExt;
 import org.eclipse.equinox.security.storage.provider.PasswordProvider;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
@@ -47,10 +46,10 @@ import org.osgi.framework.BundleContext;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.net.Authenticator;
 import java.net.PasswordAuthentication;
 import java.net.URL;
+import java.util.Map;
 
 /**
  * @author Eike Stepper
@@ -150,21 +149,6 @@ public final class SetupInstallerPlugin extends OomphUIPlugin
             initializeFonts();
           }
         });
-
-        File temporaryIconsFolder = new File(System.getProperty("java.io.tmpdir"), System.currentTimeMillis() + ".oomph.icons"); //$NON-NLS-1$ //$NON-NLS-2$
-        temporaryIconsFolder.mkdir();
-        temporaryIconsFolder.deleteOnExit();
-        ReflectUtil.setValue("imageDirectory", ImageURIRegistry.INSTANCE, temporaryIconsFolder); //$NON-NLS-1$
-
-        try
-        {
-          Field field = ReflectUtil.getField(EMFPlugin.class, "IS_RESOURCES_BUNDLE_AVAILABLE"); //$NON-NLS-1$
-          ReflectUtil.setValue(field, null, false, true);
-        }
-        catch (Throwable throwable)
-        {
-          // We only need this at development time.
-        }
       }
 
       // Replace the default UI Callback Provider with our own because the default one doesn't work when there is no workbench.
@@ -206,6 +190,8 @@ public final class SetupInstallerPlugin extends OomphUIPlugin
           .getInstance();
       try
       {
+        Map<String, org.eclipse.equinox.internal.security.storage.PasswordProviderModuleExt> modules = ReflectUtil.getValue("modules", //$NON-NLS-1$
+            passwordProviderSelector);
         org.eclipse.equinox.internal.security.storage.PasswordProviderModuleExt defaultProvider = passwordProviderSelector
             .findStorageModule("org.eclipse.equinox.security.ui.DefaultPasswordProvider"); //$NON-NLS-1$
         if (defaultProvider != null)
@@ -213,8 +199,10 @@ public final class SetupInstallerPlugin extends OomphUIPlugin
           PasswordProvider passwordProvider = ReflectUtil.getValue("providerModule", defaultProvider); //$NON-NLS-1$
           if (org.eclipse.equinox.internal.security.ui.storage.DefaultPasswordProvider.class.equals(passwordProvider.getClass()))
           {
-            InstallerUIPrompt installerUIPrompt = new InstallerUIPrompt();
-            ReflectUtil.setValue("providerModule", defaultProvider, installerUIPrompt); //$NON-NLS-1$
+            String id = defaultProvider.getID();
+            PasswordProviderModuleExt passwordProviderModuleExt = new org.eclipse.equinox.internal.security.storage.PasswordProviderModuleExt(
+                new InstallerUIPrompt(), id, defaultProvider.getObsoleteID());
+            modules.put(id, passwordProviderModuleExt); // $NON-NLS-1$
           }
         }
       }

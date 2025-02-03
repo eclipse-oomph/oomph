@@ -96,7 +96,6 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -844,6 +843,8 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
 
     private IProgressMonitor monitor;
 
+    private org.apache.hc.client5.http.cookie.CookieStore cookieStore;
+
     public FileTransferListener(String expectedETag, IProgressMonitor monitor)
     {
       this.expectedETag = expectedETag;
@@ -866,7 +867,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
           return;
         }
 
-        applyCookieStore(connectStartEvent);
+        cookieStore = applyCookieStore(connectStartEvent);
       }
       else if (event instanceof IIncomingFileTransferReceiveStartEvent)
       {
@@ -941,6 +942,25 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
           exception = ex;
         }
 
+        if (cookieStore != null)
+        {
+          for (Cookie cookie : cookieStore.getCookies())
+          {
+            try
+            {
+              java.net.URI uri = ((IFileID)done.getSource().getID()).getURI();
+              HttpCookie httpCookie = new HttpCookie(cookie.getName(), cookie.getValue());
+              httpCookie.setDomain(cookie.getDomain());
+              httpCookie.setPath(cookie.getPath());
+              DELEGATING_COOKIE_STORE.add(uri, httpCookie);
+            }
+            catch (Exception ex1)
+            {
+              // Ignore bad information.
+            }
+          }
+        }
+
         receiveLatch.countDown();
       }
     }
@@ -966,7 +986,7 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
       return null;
     }
 
-    private static void applyCookieStore(final IFileTransferConnectStartEvent connectStartEvent)
+    private static org.apache.hc.client5.http.cookie.CookieStore applyCookieStore(final IFileTransferConnectStartEvent connectStartEvent)
     {
       IIncomingFileTransfer fileTransfer = ObjectUtil.adapt(connectStartEvent, IIncomingFileTransfer.class);
       final IFileID fileID = connectStartEvent.getFileID();
@@ -981,70 +1001,13 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
             System.out.println(NLS.bind(Messages.ECFURIHandlerImpl_ManageCookies_message, fileID.getURI(), httpClient));
           }
 
-          ReflectUtil.setValue(ReflectUtil.getField(httpClient.getClass(), "cookieStore"), httpClient, new org.apache.hc.client5.http.cookie.CookieStore() //$NON-NLS-1$
+          org.apache.hc.client5.http.cookie.CookieStore cookieStore = ReflectUtil.getValue("cookieStore", httpClient); //$NON-NLS-1$
+          for (Cookie cookie : COOKIE_STORE.getCookies())
           {
-            @Override
-            @SuppressWarnings("all")
-            public List<Cookie> getCookies()
-            {
-              return COOKIE_STORE.getCookies();
-            }
+            cookieStore.addCookie(cookie);
+          }
 
-            @Override
-            @SuppressWarnings("all")
-            public boolean clearExpired(Date date)
-            {
-              synchronized (COOKIE_STORE)
-              {
-                List<Cookie> originalCookies = new ArrayList<>(COOKIE_STORE.getCookies());
-                COOKIE_STORE.clearExpired(date);
-                List<Cookie> remainingCookies = COOKIE_STORE.getCookies();
-                originalCookies.removeAll(remainingCookies);
-
-                for (Cookie cookie : originalCookies)
-                {
-                  HttpCookie httpCookie = createCookie(cookie);
-                  DELEGATING_COOKIE_STORE.basicRemove(null, new HttpCookie(cookie.getName(), cookie.getValue()));
-                }
-
-                return !originalCookies.isEmpty();
-              }
-            }
-
-            @Override
-            @SuppressWarnings("all")
-            public void clear()
-            {
-              COOKIE_STORE.clear();
-              DELEGATING_COOKIE_STORE.basicRemoveAll();
-            }
-
-            @Override
-            @SuppressWarnings("all")
-            public void addCookie(Cookie cookie)
-            {
-              try
-              {
-                java.net.URI uri = fileID.getURI();
-                HttpCookie httpCookie = createCookie(cookie);
-                DELEGATING_COOKIE_STORE.basicAdd(uri, httpCookie);
-              }
-              catch (Exception ex)
-              {
-                // Ignore bad information.
-              }
-
-              COOKIE_STORE.addCookie(cookie);
-            }
-
-            public HttpCookie createCookie(Cookie cookie)
-            {
-              HttpCookie httpCookie = new HttpCookie(cookie.getName(), cookie.getValue());
-              httpCookie.setDomain(cookie.getDomain());
-              httpCookie.setPath(cookie.getPath());
-              return httpCookie;
-            }
-          }, true);
+          return cookieStore;
         }
       }
       catch (Throwable throwable)
@@ -1061,6 +1024,8 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
           }
         }
       }
+
+      return null;
     }
 
     @Override
