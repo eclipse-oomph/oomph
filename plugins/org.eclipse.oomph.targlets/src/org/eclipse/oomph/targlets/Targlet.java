@@ -38,6 +38,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.eclipse.oomph.targlets.Targlet#isIncludeSources <em>Include Sources</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.Targlet#isIncludeAllPlatforms <em>Include All Platforms</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.Targlet#isIncludeAllRequirements <em>Include All Requirements</em>}</li>
+ *   <li>{@link org.eclipse.oomph.targlets.Targlet#isIncludeNegativeRequirements <em>Include Negative Requirements</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.Targlet#getDropinLocations <em>Dropin Locations</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.Targlet#isIncludeBinaryEquivalents <em>Include Binary Equivalents</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.Targlet#getProfileProperties <em>Profile Properties</em>}</li>
@@ -347,5 +348,28 @@ public interface Targlet extends ModelElement
    * @generated
    */
   void setIncludeAllRequirements(boolean value);
+
+  /**
+   * Returns the value of the '<em><b>Include Negative Requirements</b></em>' attribute.
+   * The default value is <code>"true"</code>.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Include Negative Requirements</em>' attribute.
+   * @see #setIncludeNegativeRequirements(boolean)
+   * @see org.eclipse.oomph.targlets.TargletPackage#getTarglet_IncludeNegativeRequirements()
+   * @model default="true"
+   * @generated
+   */
+  boolean isIncludeNegativeRequirements();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.targlets.Targlet#isIncludeNegativeRequirements <em>Include Negative Requirements</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Include Negative Requirements</em>' attribute.
+   * @see #isIncludeNegativeRequirements()
+   * @generated
+   */
+  void setIncludeNegativeRequirements(boolean value);
 
 } // Targlet

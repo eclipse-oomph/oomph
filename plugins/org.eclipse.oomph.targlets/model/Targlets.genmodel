@@ -32,6 +32,8 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Targlets.ecore#//Targlet/includeAllPlatforms"/>
       <genFeatures createChild="false" propertyDescription="Whether all transitive requirements must be satisfied for target platform resolution to succeed"
           ecoreFeature="ecore:EAttribute Targlets.ecore#//Targlet/includeAllRequirements"/>
+      <genFeatures createChild="false" propertyDescription="Whether negative requirements must be respected for target platform resolution to succeed"
+          ecoreFeature="ecore:EAttribute Targlets.ecore#//Targlet/includeNegativeRequirements"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Targlets.ecore#//Targlet/dropinLocations"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Targlets.ecore#//Targlet/includeBinaryEquivalents"/>
       <genFeatures createChild="false" propertyDescription="A comma-separated list of key=value pairs representing profile properties"

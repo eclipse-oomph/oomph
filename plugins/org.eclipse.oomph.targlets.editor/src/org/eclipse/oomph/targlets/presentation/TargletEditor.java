@@ -517,7 +517,7 @@ public class TargletEditor extends MultiPageEditorPart
               removedResources.addAll(visitor.getRemovedResources());
               if (!isDirty())
               {
-                closeEditor();
+                getSite().getPage().closeEditor(TargletEditor.this, false);
               }
             }
           });
@@ -635,7 +635,7 @@ public class TargletEditor extends MultiPageEditorPart
     {
       if (handleDirtyConflict())
       {
-        closeEditor();
+        getSite().getPage().closeEditor(TargletEditor.this, false);
       }
       else
       {

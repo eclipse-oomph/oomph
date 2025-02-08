@@ -540,8 +540,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
   {
     if (implicitDependencies == null)
     {
-      implicitDependencies = new EObjectContainmentEList<>(ImplicitDependency.class, this,
-          SetupTargletsPackage.TARGLET_TASK__IMPLICIT_DEPENDENCIES);
+      implicitDependencies = new EObjectContainmentEList<>(ImplicitDependency.class, this, SetupTargletsPackage.TARGLET_TASK__IMPLICIT_DEPENDENCIES);
     }
     return implicitDependencies;
   }
@@ -1201,6 +1200,19 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
               for (Targlet targlet : targletContainer.getTarglets())
               {
                 if (!targlet.isIncludeAllRequirements())
+                {
+                  context.log("-> " + targlet.getName()); //$NON-NLS-1$
+                }
+              }
+            }
+
+            boolean includeNegativeRequirements = targletContainer.isIncludeNegativeRequirements();
+            context.log(NLS.bind(Messages.TargletTaskImpl_NegativeRequirements_message, includeNegativeRequirements));
+            if (!includeNegativeRequirements)
+            {
+              for (Targlet targlet : targletContainer.getTarglets())
+              {
+                if (!targlet.isIncludeNegativeRequirements())
                 {
                   context.log("-> " + targlet.getName()); //$NON-NLS-1$
                 }

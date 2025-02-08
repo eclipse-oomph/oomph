@@ -209,6 +209,7 @@ public class TargletFactoryImpl extends EFactoryImpl implements TargletFactory
     targlet.setIncludeSources(source.isIncludeSources());
     targlet.setIncludeAllPlatforms(source.isIncludeAllPlatforms());
     targlet.setIncludeAllRequirements(source.isIncludeAllRequirements());
+    targlet.setIncludeNegativeRequirements(source.isIncludeNegativeRequirements());
     targlet.setIncludeBinaryEquivalents(source.isIncludeBinaryEquivalents());
     targlet.setProfileProperties(source.getProfileProperties());
 

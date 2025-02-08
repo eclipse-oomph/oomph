@@ -2,13 +2,13 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.oomph.targlets.editor;singleton:=true
-Bundle-Version: 1.16.0.qualifier
+Bundle-Version: 1.17.0.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: org.eclipse.oomph.targlets.presentation.TargletEditorPlugin$Implementation
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-11
-Export-Package: org.eclipse.oomph.targlets.presentation;version="1.16.0";x-internal:=true
+Export-Package: org.eclipse.oomph.targlets.presentation;version="1.17.0";x-internal:=true
 Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.24.0,4.0.0)",
  org.eclipse.core.resources;bundle-version="[3.5.0,4.0.0)";visibility:=reexport,
  org.eclipse.pde.core;bundle-version="[3.5.0,4.0.0)",
@@ -17,14 +17,14 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.24.0,4.0.0)",
  org.eclipse.emf.ecore.xmi;bundle-version="[2.10.0,3.0.0)";visibility:=reexport,
  org.eclipse.emf.edit.ui;bundle-version="[2.10.0,3.0.0)";visibility:=reexport,
  org.eclipse.oomph.util.pde;bundle-version="[1.13.0,2.0.0)",
- org.eclipse.oomph.targlets.core;bundle-version="[1.21.0,2.0.0)";visibility:=reexport,
- org.eclipse.oomph.targlets.edit;bundle-version="[1.15.0,2.0.0)";visibility:=reexport,
+ org.eclipse.oomph.targlets.core;bundle-version="[1.22.0,2.0.0)";visibility:=reexport,
+ org.eclipse.oomph.targlets.edit;bundle-version="[1.16.0,2.0.0)";visibility:=reexport,
  org.eclipse.oomph.base.edit;bundle-version="[1.18.0,2.0.0)";visibility:=reexport,
  org.eclipse.oomph.p2.edit;bundle-version="[1.17.0,2.0.0)";visibility:=reexport,
  org.eclipse.oomph.p2.ui;bundle-version="[1.23.0,2.0.0)",
  org.eclipse.oomph.predicates.edit;bundle-version="[1.15.0,2.0.0)";visibility:=reexport,
  org.eclipse.oomph.resources.edit;bundle-version="[1.16.0,2.0.0)";visibility:=reexport,
- org.eclipse.oomph.ui;bundle-version="[1.24.0,2.0.0)",
+ org.eclipse.oomph.ui;bundle-version="[1.25.0,2.0.0)",
  org.eclipse.e4.core.contexts;bundle-version="[1.12.0,2.0.0)",
  org.eclipse.e4.core.services;bundle-version="[2.4.0,3.0.0)",
  org.osgi.service.event;bundle-version="[1.4.0,2.0.0)"

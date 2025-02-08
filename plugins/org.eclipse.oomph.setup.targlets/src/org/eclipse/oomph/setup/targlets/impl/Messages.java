@@ -23,6 +23,8 @@ public class Messages extends NLS
 
   public static String TargletTaskImpl_Mirrors_message;
 
+  public static String TargletTaskImpl_NegativeRequirements_message;
+
   public static String TargletTaskImpl_Offline_message;
 
   public static String TargletTaskImpl_ProfileProperties_message;

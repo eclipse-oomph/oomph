@@ -263,13 +263,22 @@ public interface TargletPackage extends EPackage
   int TARGLET__INCLUDE_ALL_REQUIREMENTS = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 10;
 
   /**
+   * The feature id for the '<em><b>Include Negative Requirements</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TARGLET__INCLUDE_NEGATIVE_REQUIREMENTS = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 11;
+
+  /**
    * The feature id for the '<em><b>Dropin Locations</b></em>' containment reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int TARGLET__DROPIN_LOCATIONS = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 11;
+  int TARGLET__DROPIN_LOCATIONS = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 12;
 
   /**
    * The feature id for the '<em><b>Include Binary Equivalents</b></em>' attribute.
@@ -278,7 +287,7 @@ public interface TargletPackage extends EPackage
    * @generated
    * @ordered
    */
-  int TARGLET__INCLUDE_BINARY_EQUIVALENTS = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 12;
+  int TARGLET__INCLUDE_BINARY_EQUIVALENTS = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 13;
 
   /**
    * The feature id for the '<em><b>Profile Properties</b></em>' attribute.
@@ -287,7 +296,7 @@ public interface TargletPackage extends EPackage
    * @generated
    * @ordered
    */
-  int TARGLET__PROFILE_PROPERTIES = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 13;
+  int TARGLET__PROFILE_PROPERTIES = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 14;
 
   /**
    * The number of structural features of the '<em>Targlet</em>' class.
@@ -296,7 +305,7 @@ public interface TargletPackage extends EPackage
    * @generated
    * @ordered
    */
-  int TARGLET_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 14;
+  int TARGLET_FEATURE_COUNT = BasePackage.MODEL_ELEMENT_FEATURE_COUNT + 15;
 
   /**
    * The operation id for the '<em>Get Annotation</em>' operation.
@@ -1323,6 +1332,17 @@ public interface TargletPackage extends EPackage
   EAttribute getTarglet_IncludeAllRequirements();
 
   /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.targlets.Targlet#isIncludeNegativeRequirements <em>Include Negative Requirements</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Include Negative Requirements</em>'.
+   * @see org.eclipse.oomph.targlets.Targlet#isIncludeNegativeRequirements()
+   * @see #getTarglet()
+   * @generated
+   */
+  EAttribute getTarglet_IncludeNegativeRequirements();
+
+  /**
    * Returns the meta object for class '{@link org.eclipse.oomph.targlets.ComponentExtension <em>Component Extension</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1728,6 +1748,14 @@ public interface TargletPackage extends EPackage
      * @generated
      */
     EAttribute TARGLET__INCLUDE_ALL_REQUIREMENTS = eINSTANCE.getTarglet_IncludeAllRequirements();
+
+    /**
+     * The meta object literal for the '<em><b>Include Negative Requirements</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute TARGLET__INCLUDE_NEGATIVE_REQUIREMENTS = eINSTANCE.getTarglet_IncludeNegativeRequirements();
 
     /**
      * The meta object literal for the '{@link org.eclipse.oomph.targlets.impl.ComponentExtensionImpl <em>Component Extension</em>}' class.

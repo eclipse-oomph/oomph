@@ -359,7 +359,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
   @Override
   public EReference getTarglet_DropinLocations()
   {
-    return (EReference)targletEClass.getEStructuralFeatures().get(11);
+    return (EReference)targletEClass.getEStructuralFeatures().get(12);
   }
 
   /**
@@ -370,7 +370,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
   @Override
   public EAttribute getTarglet_IncludeBinaryEquivalents()
   {
-    return (EAttribute)targletEClass.getEStructuralFeatures().get(12);
+    return (EAttribute)targletEClass.getEStructuralFeatures().get(13);
   }
 
   /**
@@ -381,7 +381,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
   @Override
   public EAttribute getTarglet_ProfileProperties()
   {
-    return (EAttribute)targletEClass.getEStructuralFeatures().get(13);
+    return (EAttribute)targletEClass.getEStructuralFeatures().get(14);
   }
 
   /**
@@ -459,6 +459,17 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
   public EAttribute getTarglet_IncludeAllRequirements()
   {
     return (EAttribute)targletEClass.getEStructuralFeatures().get(10);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EAttribute getTarglet_IncludeNegativeRequirements()
+  {
+    return (EAttribute)targletEClass.getEStructuralFeatures().get(11);
   }
 
   /**
@@ -754,6 +765,7 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
     createEAttribute(targletEClass, TARGLET__INCLUDE_SOURCES);
     createEAttribute(targletEClass, TARGLET__INCLUDE_ALL_PLATFORMS);
     createEAttribute(targletEClass, TARGLET__INCLUDE_ALL_REQUIREMENTS);
+    createEAttribute(targletEClass, TARGLET__INCLUDE_NEGATIVE_REQUIREMENTS);
     createEReference(targletEClass, TARGLET__DROPIN_LOCATIONS);
     createEAttribute(targletEClass, TARGLET__INCLUDE_BINARY_EQUIVALENTS);
     createEAttribute(targletEClass, TARGLET__PROFILE_PROPERTIES);
@@ -884,6 +896,8 @@ public class TargletPackageImpl extends EPackageImpl implements TargletPackage
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getTarglet_IncludeAllRequirements(), ecorePackage.getEBoolean(), "includeAllRequirements", "true", 0, 1, Targlet.class, !IS_TRANSIENT, //$NON-NLS-1$ //$NON-NLS-2$
         !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getTarglet_IncludeNegativeRequirements(), ecorePackage.getEBoolean(), "includeNegativeRequirements", "true", 0, 1, Targlet.class, //$NON-NLS-1$ //$NON-NLS-2$
+        !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getTarglet_DropinLocations(), getDropinLocation(), null, "dropinLocations", null, 0, -1, Targlet.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
         IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getTarglet_IncludeBinaryEquivalents(), ecorePackage.getEBoolean(), "includeBinaryEquivalents", "true", 0, 1, Targlet.class, !IS_TRANSIENT, //$NON-NLS-1$ //$NON-NLS-2$

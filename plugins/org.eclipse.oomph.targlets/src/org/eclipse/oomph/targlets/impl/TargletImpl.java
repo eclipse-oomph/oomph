@@ -51,6 +51,7 @@ import java.util.Collection;
  *   <li>{@link org.eclipse.oomph.targlets.impl.TargletImpl#isIncludeSources <em>Include Sources</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.impl.TargletImpl#isIncludeAllPlatforms <em>Include All Platforms</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.impl.TargletImpl#isIncludeAllRequirements <em>Include All Requirements</em>}</li>
+ *   <li>{@link org.eclipse.oomph.targlets.impl.TargletImpl#isIncludeNegativeRequirements <em>Include Negative Requirements</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.impl.TargletImpl#getDropinLocations <em>Dropin Locations</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.impl.TargletImpl#isIncludeBinaryEquivalents <em>Include Binary Equivalents</em>}</li>
  *   <li>{@link org.eclipse.oomph.targlets.impl.TargletImpl#getProfileProperties <em>Profile Properties</em>}</li>
@@ -199,6 +200,26 @@ public class TargletImpl extends ModelElementImpl implements Targlet
    * @ordered
    */
   protected boolean includeAllRequirements = INCLUDE_ALL_REQUIREMENTS_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #isIncludeNegativeRequirements() <em>Include Negative Requirements</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isIncludeNegativeRequirements()
+   * @generated
+   * @ordered
+   */
+  protected static final boolean INCLUDE_NEGATIVE_REQUIREMENTS_EDEFAULT = true;
+
+  /**
+   * The cached value of the '{@link #isIncludeNegativeRequirements() <em>Include Negative Requirements</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isIncludeNegativeRequirements()
+   * @generated
+   * @ordered
+   */
+  protected boolean includeNegativeRequirements = INCLUDE_NEGATIVE_REQUIREMENTS_EDEFAULT;
 
   /**
    * The cached value of the '{@link #getDropinLocations() <em>Dropin Locations</em>}' containment reference list.
@@ -592,6 +613,34 @@ public class TargletImpl extends ModelElementImpl implements Targlet
    * @generated
    */
   @Override
+  public boolean isIncludeNegativeRequirements()
+  {
+    return includeNegativeRequirements;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void setIncludeNegativeRequirements(boolean newIncludeNegativeRequirements)
+  {
+    boolean oldIncludeNegativeRequirements = includeNegativeRequirements;
+    includeNegativeRequirements = newIncludeNegativeRequirements;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, TargletPackage.TARGLET__INCLUDE_NEGATIVE_REQUIREMENTS, oldIncludeNegativeRequirements,
+          includeNegativeRequirements));
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
     switch (featureID)
@@ -642,6 +691,8 @@ public class TargletImpl extends ModelElementImpl implements Targlet
         return isIncludeAllPlatforms();
       case TargletPackage.TARGLET__INCLUDE_ALL_REQUIREMENTS:
         return isIncludeAllRequirements();
+      case TargletPackage.TARGLET__INCLUDE_NEGATIVE_REQUIREMENTS:
+        return isIncludeNegativeRequirements();
       case TargletPackage.TARGLET__DROPIN_LOCATIONS:
         return getDropinLocations();
       case TargletPackage.TARGLET__INCLUDE_BINARY_EQUIVALENTS:
@@ -694,6 +745,9 @@ public class TargletImpl extends ModelElementImpl implements Targlet
       case TargletPackage.TARGLET__INCLUDE_ALL_REQUIREMENTS:
         setIncludeAllRequirements((Boolean)newValue);
         return;
+      case TargletPackage.TARGLET__INCLUDE_NEGATIVE_REQUIREMENTS:
+        setIncludeNegativeRequirements((Boolean)newValue);
+        return;
       case TargletPackage.TARGLET__DROPIN_LOCATIONS:
         getDropinLocations().clear();
         getDropinLocations().addAll((Collection<? extends DropinLocation>)newValue);
@@ -745,6 +799,9 @@ public class TargletImpl extends ModelElementImpl implements Targlet
       case TargletPackage.TARGLET__INCLUDE_ALL_REQUIREMENTS:
         setIncludeAllRequirements(INCLUDE_ALL_REQUIREMENTS_EDEFAULT);
         return;
+      case TargletPackage.TARGLET__INCLUDE_NEGATIVE_REQUIREMENTS:
+        setIncludeNegativeRequirements(INCLUDE_NEGATIVE_REQUIREMENTS_EDEFAULT);
+        return;
       case TargletPackage.TARGLET__DROPIN_LOCATIONS:
         getDropinLocations().clear();
         return;
@@ -791,6 +848,8 @@ public class TargletImpl extends ModelElementImpl implements Targlet
         return includeAllPlatforms != INCLUDE_ALL_PLATFORMS_EDEFAULT;
       case TargletPackage.TARGLET__INCLUDE_ALL_REQUIREMENTS:
         return includeAllRequirements != INCLUDE_ALL_REQUIREMENTS_EDEFAULT;
+      case TargletPackage.TARGLET__INCLUDE_NEGATIVE_REQUIREMENTS:
+        return includeNegativeRequirements != INCLUDE_NEGATIVE_REQUIREMENTS_EDEFAULT;
       case TargletPackage.TARGLET__DROPIN_LOCATIONS:
         return dropinLocations != null && !dropinLocations.isEmpty();
       case TargletPackage.TARGLET__INCLUDE_BINARY_EQUIVALENTS:
@@ -825,6 +884,8 @@ public class TargletImpl extends ModelElementImpl implements Targlet
     result.append(includeAllPlatforms);
     result.append(", includeAllRequirements: "); //$NON-NLS-1$
     result.append(includeAllRequirements);
+    result.append(", includeNegativeRequirements: "); //$NON-NLS-1$
+    result.append(includeNegativeRequirements);
     result.append(", includeBinaryEquivalents: "); //$NON-NLS-1$
     result.append(includeBinaryEquivalents);
     result.append(", profileProperties: "); //$NON-NLS-1$

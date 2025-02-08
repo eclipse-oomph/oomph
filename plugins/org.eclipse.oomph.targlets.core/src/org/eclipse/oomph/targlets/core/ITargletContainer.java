@@ -78,6 +78,8 @@ public interface ITargletContainer extends ITargetLocation
 
   public boolean isIncludeAllRequirements();
 
+  public boolean isIncludeNegativeRequirements();
+
   public boolean isIncludeBinaryEquivalents();
 
   public String getProfileProperties();

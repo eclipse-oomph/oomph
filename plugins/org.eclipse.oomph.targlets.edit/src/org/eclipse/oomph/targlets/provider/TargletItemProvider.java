@@ -72,6 +72,7 @@ public class TargletItemProvider extends ModelElementItemProvider
       addIncludeSourcesPropertyDescriptor(object);
       addIncludeAllPlatformsPropertyDescriptor(object);
       addIncludeAllRequirementsPropertyDescriptor(object);
+      addIncludeNegativeRequirementsPropertyDescriptor(object);
       addIncludeBinaryEquivalentsPropertyDescriptor(object);
       addProfilePropertiesPropertyDescriptor(object);
     }
@@ -146,6 +147,20 @@ public class TargletItemProvider extends ModelElementItemProvider
         getString("_UI_Targlet_includeAllRequirements_feature"), //$NON-NLS-1$
         getString("_UI_Targlet_includeAllRequirements_description"), //$NON-NLS-1$
         TargletPackage.Literals.TARGLET__INCLUDE_ALL_REQUIREMENTS, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
+  }
+
+  /**
+   * This adds a property descriptor for the Include Negative Requirements feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addIncludeNegativeRequirementsPropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_Targlet_includeNegativeRequirements_feature"), //$NON-NLS-1$
+        getString("_UI_Targlet_includeNegativeRequirements_description"), //$NON-NLS-1$
+        TargletPackage.Literals.TARGLET__INCLUDE_NEGATIVE_REQUIREMENTS, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
   }
 
   /**
@@ -319,6 +334,7 @@ public class TargletItemProvider extends ModelElementItemProvider
       case TargletPackage.TARGLET__INCLUDE_SOURCES:
       case TargletPackage.TARGLET__INCLUDE_ALL_PLATFORMS:
       case TargletPackage.TARGLET__INCLUDE_ALL_REQUIREMENTS:
+      case TargletPackage.TARGLET__INCLUDE_NEGATIVE_REQUIREMENTS:
       case TargletPackage.TARGLET__INCLUDE_BINARY_EQUIVALENTS:
       case TargletPackage.TARGLET__PROFILE_PROPERTIES:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));

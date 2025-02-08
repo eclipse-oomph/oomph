@@ -460,6 +460,20 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
   }
 
   @Override
+  public boolean isIncludeNegativeRequirements()
+  {
+    for (Targlet targlet : targlets)
+    {
+      if (!targlet.isIncludeNegativeRequirements())
+      {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  @Override
   public boolean isIncludeBinaryEquivalents()
   {
     for (Targlet targlet : targlets)
@@ -1023,7 +1037,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
       }
 
       TargletCommitContext commitContext = new TargletCommitContext(profile, workspaceIUAnalyzer, isIncludeAllPlatforms(), isIncludeAllRequirements(),
-          isIncludeBinaryEquivalents(), composedTargetContent.getAdditionalIUs());
+          isIncludeNegativeRequirements(), isIncludeBinaryEquivalents(), composedTargetContent.getAdditionalIUs());
       transaction.commit(commitContext, progress.newChild());
 
       TargletsCorePlugin.INSTANCE.coreException(composedTargetContentStatus);
@@ -1727,17 +1741,20 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
 
     private boolean isIncludeAllRequirements;
 
+    private boolean isIncludeNegativeRequirements;
+
     private boolean isIncludeBinaryEquivalents;
 
     private Set<IInstallableUnit> additionalIUs;
 
     public TargletCommitContext(Profile profile, WorkspaceIUAnalyzer workspaceIUAnalyzer, boolean isIncludeAllPlatforms, boolean isIncludeAllRequirements,
-        boolean isIncludeBinaryEquivalents, Set<IInstallableUnit> additionalIUs)
+        boolean isIncludeNegativeRequirements, boolean isIncludeBinaryEquivalents, Set<IInstallableUnit> additionalIUs)
     {
       this.profile = profile;
       this.workspaceIUAnalyzer = workspaceIUAnalyzer;
       this.isIncludeAllPlatforms = isIncludeAllPlatforms;
       this.isIncludeAllRequirements = isIncludeAllRequirements;
+      this.isIncludeNegativeRequirements = isIncludeNegativeRequirements;
       this.isIncludeBinaryEquivalents = isIncludeBinaryEquivalents;
       this.additionalIUs = additionalIUs;
     }
@@ -1794,7 +1811,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
             {
               TargletsCorePlugin.checkCancelation(monitor);
 
-              ius.add(P2Util.createGeneralizedIU(iu, isIncludeAllPlatforms, isIncludeAllRequirements, true));
+              ius.add(P2Util.createGeneralizedIU(iu, isIncludeAllPlatforms, isIncludeAllRequirements, isIncludeNegativeRequirements));
 
               if (isIncludeBinaryEquivalents)
               {
@@ -1960,7 +1977,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
             TargletsCorePlugin.checkCancelation(monitor);
 
             String id = iu.getId();
-            ius.add(P2Util.createGeneralizedIU(iu, isIncludeAllPlatforms, isIncludeAllRequirements, true));
+            ius.add(P2Util.createGeneralizedIU(iu, isIncludeAllPlatforms, isIncludeAllRequirements, isIncludeNegativeRequirements));
             idToIUMap.put(new IU(iu), iu);
 
             if (id.endsWith(Requirement.PROJECT_SUFFIX))
