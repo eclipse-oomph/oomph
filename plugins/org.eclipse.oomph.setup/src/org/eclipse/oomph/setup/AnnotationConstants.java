@@ -73,6 +73,8 @@ public final class AnnotationConstants
 
   public static final String ANNOTATION_GLOBAL_VARIABLE = "http://www.eclipse.org/oomph/setup/GlobalVariable"; //$NON-NLS-1$
 
+  public static final String ANNOTATION_SIMPLE_MODE_DEFAULT_VARIABLE = "http://www.eclipse.org/oomph/setup/SimpleDefaultVariable"; //$NON-NLS-1$
+
   public static final String ANNOTATION_UNDECLARED_VARIABLE = "http://www.eclipse.org/oomph/setup/UndeclaredVariable"; //$NON-NLS-1$
 
   public static final String KEY_INHERIT = "inherit"; //$NON-NLS-1$

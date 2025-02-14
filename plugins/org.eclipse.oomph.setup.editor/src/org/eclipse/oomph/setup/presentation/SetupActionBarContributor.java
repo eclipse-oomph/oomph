@@ -719,6 +719,19 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
           }
         }
 
+        if (variable.getAnnotation(AnnotationConstants.ANNOTATION_SIMPLE_MODE_DEFAULT_VARIABLE) == null)
+        {
+          String name = variable.getName();
+          if (name != null && !name.startsWith("*") && (variable.getDefaultValue() != null || !variable.getChoices().isEmpty())) //$NON-NLS-1$
+          {
+            Annotation annotation = BaseFactory.eINSTANCE.createAnnotation(AnnotationConstants.ANNOTATION_SIMPLE_MODE_DEFAULT_VARIABLE);
+            CommandParameter descriptor = new CommandParameter(null, BasePackage.Literals.MODEL_ELEMENT__ANNOTATIONS, annotation);
+            Action action = sibling ? new CreateSiblingAction(domain, selection, descriptor) : new CreateChildAction(domain, selection, descriptor);
+            action.setText(action.getText() + " - " + AnnotationConstants.ANNOTATION_SIMPLE_MODE_DEFAULT_VARIABLE); //$NON-NLS-1$
+            actions.add(action);
+          }
+        }
+
         if (variable.getAnnotation(AnnotationConstants.ANNOTATION_INHERITED_CHOICES) == null)
         {
           Annotation annotation = BaseFactory.eINSTANCE.createAnnotation(AnnotationConstants.ANNOTATION_INHERITED_CHOICES);

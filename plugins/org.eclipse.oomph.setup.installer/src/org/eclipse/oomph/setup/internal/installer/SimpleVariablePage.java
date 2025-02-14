@@ -40,6 +40,7 @@ import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.SetupTaskContext;
 import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.User;
+import org.eclipse.oomph.setup.VariableChoice;
 import org.eclipse.oomph.setup.VariableTask;
 import org.eclipse.oomph.setup.internal.core.AbstractSetupTaskContext;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
@@ -1267,6 +1268,11 @@ public class SimpleVariablePage extends SimpleInstallerPage
 
       SimplePrompter prompter = new SimplePrompter(OS.INSTANCE.getForBitness(javaController.getBitness()), vmPath);
       performer = SetupTaskPerformer.create(uriConverter, prompter, Trigger.BOOTSTRAP, setupContext, false);
+      List<VariableTask> resolvedSimpleDefaultVariables = prompter.getResolvedSimpleDefaultVariables();
+      if (performer == null)
+      {
+        performer = SetupTaskPerformer.create(uriConverter, prompter, Trigger.BOOTSTRAP, setupContext, false);
+      }
 
       final List<VariableTask> unresolvedVariables = prompter.getUnresolvedVariables();
       if (!unresolvedVariables.isEmpty())
@@ -1352,6 +1358,7 @@ public class SimpleVariablePage extends SimpleInstallerPage
       performer.log(NLS.bind(Messages.SimpleVariablePage_ExecutingTasks_message, performer.getTrigger().toString().toLowerCase()));
       performer.put(org.eclipse.equinox.internal.provisional.p2.core.eventbus.ProvisioningListener.class, new DownloadArtifactLister());
       performer.perform(progress);
+      performer.getUnresolvedVariables().addAll(resolvedSimpleDefaultVariables);
       performer.recordVariables(installation, null, user);
       performer.savePasswords();
 
@@ -1986,6 +1993,38 @@ public class SimpleVariablePage extends SimpleInstallerPage
     public String getVMPath()
     {
       return vmPath;
+    }
+
+    public List<VariableTask> getResolvedSimpleDefaultVariables()
+    {
+      List<VariableTask> result = new ArrayList<VariableTask>();
+      for (Iterator<VariableTask> it = unresolvedVariables.iterator(); it.hasNext();)
+      {
+        VariableTask variable = it.next();
+        String name = variable.getName();
+        if (variable.getAnnotation(AnnotationConstants.ANNOTATION_SIMPLE_MODE_DEFAULT_VARIABLE) != null)
+        {
+          String value = variable.getDefaultValue();
+          if (value == null)
+          {
+            EList<VariableChoice> choices = variable.getChoices();
+            if (!choices.isEmpty())
+            {
+              value = choices.get(0).getLabel();
+            }
+          }
+
+          if (value != null)
+          {
+            variable.setValue(value);
+            put(name, value);
+            result.add(variable);
+            it.remove();
+          }
+        }
+      }
+
+      return result;
     }
 
     public List<VariableTask> getUnresolvedVariables()
