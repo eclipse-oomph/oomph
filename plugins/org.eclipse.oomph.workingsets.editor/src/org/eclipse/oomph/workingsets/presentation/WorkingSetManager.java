@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.workingsets.presentation;
 
+import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.workingsets.WorkingSet;
 import org.eclipse.oomph.workingsets.WorkingSetGroup;
 import org.eclipse.oomph.workingsets.util.WorkingSetsUtil;
@@ -30,7 +31,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences.PreferenceChangeEvent;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IAggregateWorkingSet;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IViewPart;
@@ -402,7 +402,7 @@ public class WorkingSetManager
   private void updateProjects(final List<IProject> addedProjects, final List<IProject> removedProjects)
   {
     // Do this on the UI thread to avoid problems with JDT's getting out of sync with respect to our updates.
-    Display.getDefault().asyncExec(new Runnable()
+    UIUtil.asyncExec(new Runnable()
     {
       @Override
       public void run()
@@ -525,7 +525,7 @@ public class WorkingSetManager
     // Update the working sets for all the projects in the workspace and apply the result to the real working sets.
     if (!workingSets.isEmpty())
     {
-      Display.getDefault().asyncExec(new Runnable()
+      UIUtil.asyncExec(new Runnable()
       {
         @Override
         public void run()
