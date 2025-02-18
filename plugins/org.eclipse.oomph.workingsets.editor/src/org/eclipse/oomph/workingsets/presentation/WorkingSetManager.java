@@ -402,7 +402,7 @@ public class WorkingSetManager
   private void updateProjects(final List<IProject> addedProjects, final List<IProject> removedProjects)
   {
     // Do this on the UI thread to avoid problems with JDT's getting out of sync with respect to our updates.
-    Display.getDefault().asyncExec(new Runnable()
+    PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable()
     {
       @Override
       public void run()
