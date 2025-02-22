@@ -92,6 +92,8 @@ public class SetupArchiver implements IApplication
     // The default target file is the cache location of the local setup archive.
     final ResourceSet resourceSet = SetupCoreUtil.createResourceSet();
     final URIConverter uriConverter = resourceSet.getURIConverter();
+    uriConverter.getURIMap().put(URI.createURI("https://git.eclipse.org/c/emf/org.eclipse.emf.git/plain/"), //$NON-NLS-1$
+        URI.createURI("https://raw.githubusercontent.com/eclipse-emf/org.eclipse.emf/master/")); //$NON-NLS-1$
 
     final Map<URI, URI> configurationImages = new ConcurrentHashMap<>();
 
