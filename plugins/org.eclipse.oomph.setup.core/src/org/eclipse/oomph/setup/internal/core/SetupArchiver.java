@@ -66,6 +66,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
@@ -92,9 +93,6 @@ public class SetupArchiver implements IApplication
     // The default target file is the cache location of the local setup archive.
     final ResourceSet resourceSet = SetupCoreUtil.createResourceSet();
     final URIConverter uriConverter = resourceSet.getURIConverter();
-    uriConverter.getURIMap().put(URI.createURI("https://git.eclipse.org/c/emf/org.eclipse.emf.git/plain/"), //$NON-NLS-1$
-        URI.createURI("https://raw.githubusercontent.com/eclipse-emf/org.eclipse.emf/master/")); //$NON-NLS-1$
-
     final Map<URI, URI> configurationImages = new ConcurrentHashMap<>();
 
     EList<URIHandler> uriHandlers = uriConverter.getURIHandlers();
@@ -326,6 +324,16 @@ public class SetupArchiver implements IApplication
       @Override
       protected void visit(EObject eObject)
       {
+        if (eObject instanceof Map.Entry<?, ?>)
+        {
+          @SuppressWarnings("unchecked")
+          Map.Entry<Object, Object> entry = (Entry<Object, Object>)eObject;
+          if ("https://git.eclipse.org/c/emf/org.eclipse.emf.git/plain/plugins/org.eclipse.emf/modeling32.png".equals(entry.getValue())) //$NON-NLS-1$
+          {
+            entry.setValue("https://raw.githubusercontent.com/eclipse-emf/org.eclipse.emf/master/plugins/org.eclipse.emf/modeling32.png"); //$NON-NLS-1$
+          }
+        }
+
         if (eObject instanceof EClass)
         {
           EClass eClass = (EClass)eObject;
