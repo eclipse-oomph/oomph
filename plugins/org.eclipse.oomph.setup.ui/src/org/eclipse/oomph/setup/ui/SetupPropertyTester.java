@@ -10,9 +10,12 @@
  */
 package org.eclipse.oomph.setup.ui;
 
+import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.internal.ui.UIPropertyTester;
 import org.eclipse.oomph.setup.ui.synchronizer.SynchronizerManager;
 import org.eclipse.oomph.ui.UIUtil;
+
+import org.eclipse.emf.ecore.util.EcoreUtil;
 
 import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.core.runtime.IStatus;
@@ -22,6 +25,10 @@ import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Shell;
 
 import org.osgi.service.prefs.Preferences;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author Ed Merks
@@ -44,6 +51,8 @@ public class SetupPropertyTester extends PropertyTester
 
   public static final String DONATING = "donating"; //$NON-NLS-1$
 
+  public static final String NOTIFICATIONS = "notifications"; //$NON-NLS-1$
+
   private static final Preferences PREFERENCES = SetupUIPlugin.INSTANCE.getInstancePreferences();
 
   private static boolean starting;
@@ -57,6 +66,8 @@ public class SetupPropertyTester extends PropertyTester
   private static boolean started;
 
   private static String donating;
+
+  private final static List<Annotation> notifications = new ArrayList<>();
 
   static
   {
@@ -274,5 +285,17 @@ public class SetupPropertyTester extends PropertyTester
   public static boolean isShowProgressInWizard()
   {
     return PREFERENCES.getBoolean(SHOW_PROGRESS_IN_WIZARD, false);
+  }
+
+  public static List<Annotation> getNotifications()
+  {
+    return Collections.unmodifiableList(notifications);
+  }
+
+  public static void setNotifications(List<Annotation> notifications)
+  {
+    SetupPropertyTester.notifications.clear();
+    SetupPropertyTester.notifications.addAll(EcoreUtil.copyAll(notifications));
+    UIPropertyTester.requestEvaluation(PREFIX + NOTIFICATIONS, false);
   }
 }

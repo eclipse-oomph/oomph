@@ -21,6 +21,7 @@ import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.core.runtime.URIUtil;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.equinox.internal.p2.metadata.ProvidedCapability;
 import org.eclipse.equinox.p2.core.IAgentLocation;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.engine.ProfileScope;
@@ -36,6 +37,7 @@ import org.eclipse.equinox.p2.metadata.ITouchpointData;
 import org.eclipse.equinox.p2.metadata.IVersionedId;
 import org.eclipse.equinox.p2.metadata.MetadataFactory;
 import org.eclipse.equinox.p2.metadata.MetadataFactory.InstallableUnitDescription;
+import org.eclipse.equinox.p2.metadata.Version;
 import org.eclipse.equinox.p2.metadata.expression.ExpressionUtil;
 import org.eclipse.equinox.p2.metadata.expression.IExpression;
 import org.eclipse.equinox.p2.metadata.expression.IFilterExpression;
@@ -61,6 +63,7 @@ import java.nio.file.Files;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -795,5 +798,35 @@ public final class P2Util
 
       PropertiesUtil.saveProperties(propertiesFile, properties, false);
     }
+  }
+
+  @SuppressWarnings("restriction")
+  public static IInstallableUnit createJREIU(String id)
+  {
+    IInstallableUnit jreIU = org.eclipse.equinox.p2.publisher.actions.JREAction.createJREIU();
+    Runtime.Version version = Runtime.version();
+    Version jreIUVersion = Version.createOSGi(version.feature(), version.interim(), version.update());
+
+    InstallableUnitDescription installableUnitDescription = new InstallableUnitDescription();
+    installableUnitDescription.setId(id);
+    List<IProvidedCapability> providedCapabilities = new ArrayList<>();
+    for (IProvidedCapability providedCapability : jreIU.getProvidedCapabilities())
+    {
+      String namespace = providedCapability.getNamespace();
+      if (IInstallableUnit.NAMESPACE_IU_ID.equals(namespace))
+      {
+        Map<String, Object> properties = new LinkedHashMap<>(providedCapability.getProperties());
+        properties.put(IProvidedCapability.PROPERTY_VERSION, jreIUVersion);
+        properties.put(IInstallableUnit.NAMESPACE_IU_ID, id);
+        providedCapabilities.add(new ProvidedCapability(namespace, properties));
+      }
+      else
+      {
+        providedCapabilities.add(providedCapability);
+      }
+    }
+
+    installableUnitDescription.setCapabilities(providedCapabilities.toArray(IProvidedCapability[]::new));
+    return MetadataFactory.createInstallableUnit(installableUnitDescription);
   }
 }

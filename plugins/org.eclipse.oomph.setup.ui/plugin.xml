@@ -119,7 +119,7 @@
             class="org.eclipse.oomph.setup.ui.SetupPropertyTester"
             id="org.eclipse.oomph.setup.ui.propertyTester"
             namespace="org.eclipse.oomph.setup.ui"
-            properties="starting,performing,handling,showToolBarContributions,syncEnabled,donating"
+            properties="starting,performing,handling,showToolBarContributions,syncEnabled,donating,notifications"
             type="java.lang.Object">
       </propertyTester>
    </extension>

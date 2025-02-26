@@ -92,7 +92,6 @@ public final class DownloadUtil
     }
   }
 
-  @SuppressWarnings("resource")
   private static void downloadURL(String url, File file, ProgressLog progress)
   {
     final byte data[] = new byte[BUFFER_SIZE];

@@ -10,11 +10,13 @@
  */
 package org.eclipse.oomph.setup.internal.core;
 
+import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.base.util.BytesResourceFactoryImpl;
 import org.eclipse.oomph.base.util.EAnnotations;
 import org.eclipse.oomph.setup.AnnotationConstants;
 import org.eclipse.oomph.setup.Configuration;
+import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.Stream;
 import org.eclipse.oomph.setup.Workspace;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl;
@@ -324,6 +326,21 @@ public class SetupArchiver implements IApplication
       @Override
       protected void visit(EObject eObject)
       {
+        if (eObject instanceof Scope)
+        {
+          Scope scope = (Scope)eObject;
+          Annotation annotation = scope.getAnnotation(AnnotationConstants.ANNOTATION_BRANDING_INFO);
+          if (annotation != null)
+          {
+            String detail = annotation.getDetails().get(AnnotationConstants.KEY_IMAGE_URI);
+            if ("https://git.eclipse.org/c/emf/org.eclipse.emf.git/plain/plugins/org.eclipse.emf/modeling32.png".equals(detail)) //$NON-NLS-1$
+            {
+              annotation.getDetails().put(AnnotationConstants.KEY_IMAGE_URI,
+                  "https://raw.githubusercontent.com/eclipse-emf/org.eclipse.emf/master/plugins/org.eclipse.emf/modeling32.png"); //$NON-NLS-1$
+            }
+          }
+        }
+
         if (eObject instanceof Map.Entry<?, ?>)
         {
           @SuppressWarnings("unchecked")

@@ -1823,6 +1823,26 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
       Shell shell = UIUtil.getShell();
       updater.openDialog(shell);
     }
+
+    public static void perform(SetupContext setupContext)
+    {
+      SetupWizard updater = new SetupWizard.Updater(setupContext)
+      {
+        {
+          setTrigger(Trigger.MANUAL);
+        }
+
+        @Override
+        public void createPageControls(Composite pageContainer)
+        {
+          loadIndex();
+          super.createPageControls(pageContainer);
+        }
+      };
+
+      Shell shell = UIUtil.getShell();
+      updater.openDialog(shell);
+    }
   }
 
   /**

@@ -101,6 +101,8 @@ public final class AnnotationConstants
 
   public static final String KEY_FILTER = "filter"; //$NON-NLS-1$
 
+  public static final String ANNOTATION_NOTIFICATION = "http://www.eclipse.org/oomph/setup/Notification"; //$NON-NLS-1$
+
   private AnnotationConstants()
   {
   }

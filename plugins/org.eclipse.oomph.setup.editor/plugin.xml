@@ -180,6 +180,12 @@
             id="org.eclipse.oomph.setup.donate"
             name="%_UI_Donate_label">
       </command>
+      <command
+            defaultHandler="org.eclipse.oomph.setup.presentation.handlers.NotificationsHandler"
+            description="%_UI_Notifications_description"
+            id="org.eclipse.oomph.setup.notifications"
+            name="%_UI_Notifications_label">
+      </command>
    </extension>
 
    <extension
@@ -187,6 +193,10 @@
       <image
             commandId="org.eclipse.oomph.setup.donate"
             icon="icons/heart.png">
+      </image>
+      <image
+            commandId="org.eclipse.oomph.setup.notifications"
+            icon="icons/notification.png">
       </image>
    </extension>
 
@@ -503,6 +513,19 @@
             </visibleWhen>
          </command>
       </menuContribution>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            allowMultiple="true"
+            category="org.eclipse.oomph.views"
+            class="org.eclipse.oomph.setup.presentation.NotificationViewPart"
+            icon="icons/notification.png"
+            id="org.eclipse.oomph.setup.presentation.NotificationViewPart"
+            name="%_UI_NotificationView_label"
+            restorable="false">
+      </view>
    </extension>
 
 </plugin>

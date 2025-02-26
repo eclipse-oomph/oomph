@@ -25,6 +25,8 @@ public class Messages extends NLS
 
   public static String EnablementDialog_installButton_label;
 
+  public static String NotificationViewPart_ApplyConfigureJob_label;
+
   public static String OpenDiscoveredType_title;
 
   public static String OpenDiscoveredType_message;

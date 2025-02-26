@@ -13,6 +13,7 @@ package org.eclipse.oomph.setup.ui;
 import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.base.BaseFactory;
 import org.eclipse.oomph.base.BasePackage;
+import org.eclipse.oomph.base.ModelElement;
 import org.eclipse.oomph.base.util.BaseResourceImpl;
 import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.internal.setup.SetupPrompter;
@@ -20,6 +21,7 @@ import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.internal.ui.OomphPreferencePage;
 import org.eclipse.oomph.internal.ui.TaskItemDecorator;
 import org.eclipse.oomph.jreinfo.ui.JREInfoUIPlugin;
+import org.eclipse.oomph.p2.Requirement;
 import org.eclipse.oomph.p2.core.Agent;
 import org.eclipse.oomph.p2.core.BundlePool;
 import org.eclipse.oomph.p2.core.P2Util;
@@ -84,7 +86,12 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.dynamichelpers.IExtensionTracker;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.equinox.p2.engine.IProfile;
+import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.Version;
+import org.eclipse.equinox.p2.query.CollectionResult;
+import org.eclipse.equinox.p2.query.IQueryResult;
+import org.eclipse.equinox.p2.query.IQueryable;
+import org.eclipse.equinox.p2.query.QueryUtil;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.text.templates.SimpleTemplateVariableResolver;
@@ -336,10 +343,142 @@ public final class SetupUIPlugin extends OomphUIPlugin
                 handleNotificationURI(notificationURI, productLabel, productVersionLabel);
               }
             }
+
+            try
+            {
+              handleNotificationAnnotations(productVersion);
+            }
+            catch (Exception ex)
+            {
+              INSTANCE.log(ex, IStatus.WARNING);
+            }
           }
         }
       }
     }
+  }
+
+  private static void handleNotificationAnnotations(ProductVersion productVersion)
+  {
+    if ("true".equals(PropertiesUtil.getProperty("org.eclipse.oomph.setup.notification", "true"))) //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+    {
+      List<Annotation> notificationAnnotations = new ArrayList<>();
+      notificationAnnotations.addAll(getNotificationAnnotations(productVersion));
+
+      Product product = productVersion.getProduct();
+      notificationAnnotations.addAll(getNotificationAnnotations(product));
+
+      ProductCatalog productCatalog = product.getProductCatalog();
+      notificationAnnotations.addAll(getNotificationAnnotations(productCatalog));
+
+      Index index = productCatalog.getIndex();
+      notificationAnnotations.addAll(getNotificationAnnotations(index));
+
+      Agent agent = P2Util.getAgentManager().getCurrentAgent();
+      Profile profile = agent == null ? null : agent.getCurrentProfile();
+      IQueryable<IInstallableUnit> queriable = null;
+      SetupTaskPerformer performer = null;
+
+      List<Annotation> applicableNotificationAnnotations = new ArrayList<>();
+      LOOP: for (Annotation notificationAnnotation : notificationAnnotations)
+      {
+        // Ensure that the annotation's requirements are all satisfied by the profile.
+        for (EObject eObject : notificationAnnotation.getContents())
+        {
+          if (eObject instanceof Requirement)
+          {
+            if (profile == null)
+            {
+              continue LOOP;
+            }
+
+            if (queriable == null)
+            {
+              IInstallableUnit jreIU = P2Util.createJREIU("jre"); //$NON-NLS-1$
+              queriable = QueryUtil.compoundQueryable(profile, new CollectionResult<>(List.of(jreIU)));
+            }
+
+            Requirement requirement = (Requirement)eObject;
+
+            String filter = requirement.getFilter();
+            if (filter != null)
+            {
+              if (performer == null)
+              {
+                try
+                {
+                  performer = createSetupTaskPerformer(index.eResource().getResourceSet(), Trigger.MANUAL);
+                }
+                catch (Exception ex)
+                {
+                  continue LOOP;
+                }
+              }
+
+              if (!performer.matchesFilterContext(filter))
+              {
+                continue;
+              }
+            }
+
+            // A normal requirement is satisfied if its IU is present while a negative requirement is satisfied if the IU is not present.
+            IQueryResult<IInstallableUnit> result = queriable.query(QueryUtil.createMatchQuery(requirement.toIRequirement().getMatches()), null);
+            if (result.isEmpty() ? requirement.getMin() > 0 : requirement.getMax() == 0)
+            {
+              continue LOOP;
+            }
+          }
+          else
+          {
+            continue LOOP;
+          }
+        }
+
+        applicableNotificationAnnotations.add(notificationAnnotation);
+      }
+
+      if (!applicableNotificationAnnotations.isEmpty())
+      {
+        SetupPropertyTester.setNotifications(applicableNotificationAnnotations);
+        UIUtil.asyncExec(new Runnable()
+        {
+          @Override
+          public void run()
+          {
+            ICommandService commandService = PlatformUI.getWorkbench().getService(ICommandService.class);
+            IHandlerService handlerService = PlatformUI.getWorkbench().getService(IHandlerService.class);
+            Command notificationsCommand = commandService.getCommand("org.eclipse.oomph.setup.notifications"); //$NON-NLS-1$
+            if (notificationsCommand != null)
+            {
+              if (notificationsCommand.isEnabled())
+              {
+                try
+                {
+                  notificationsCommand.executeWithChecks(handlerService.createExecutionEvent(notificationsCommand, null));
+                }
+                catch (Exception ex)
+                {
+                  INSTANCE.log(ex, IStatus.WARNING);
+                }
+              }
+            }
+          }
+        });
+      }
+    }
+  }
+
+  private static List<Annotation> getNotificationAnnotations(ModelElement modelElement)
+  {
+    List<Annotation> result = new ArrayList<>();
+    for (Annotation annotation : modelElement.getAnnotations())
+    {
+      if (AnnotationConstants.ANNOTATION_NOTIFICATION.equals(annotation.getSource()))
+      {
+        result.add(annotation);
+      }
+    }
+    return result;
   }
 
   private static void handleNotificationURI(String notificationURI, String scope, String version)
@@ -715,60 +854,8 @@ public final class SetupUIPlugin extends OomphUIPlugin
         INSTANCE.log(ex);
       }
 
-      // Create a prompter that generally cancels except if all prompted variables are passwords.
-      SetupPrompter prompter = new SetupPrompter()
-      {
-        @Override
-        public OS getOS()
-        {
-          return OS.INSTANCE;
-        }
-
-        @Override
-        public String getVMPath()
-        {
-          return null;
-        }
-
-        @Override
-        public boolean promptVariables(List<? extends SetupTaskContext> contexts)
-        {
-          @SuppressWarnings("unchecked")
-          List<SetupTaskPerformer> performers = (List<SetupTaskPerformer>)contexts;
-          for (SetupTaskPerformer performer : performers)
-          {
-            List<VariableTask> unresolvedVariables = performer.getUnresolvedVariables();
-            for (VariableTask variable : unresolvedVariables)
-            {
-              if (variable.getType() == VariableType.PASSWORD)
-              {
-                variable.setValue(PreferencesUtil.encrypt(" ")); //$NON-NLS-1$
-              }
-              else
-              {
-                return false;
-              }
-            }
-          }
-
-          return true;
-        }
-
-        @Override
-        public String getValue(VariableTask variable)
-        {
-          return null;
-        }
-
-        @Override
-        public UserCallback getUserCallback()
-        {
-          return null;
-        }
-      };
-
       // Create the performer with a fully populated resource set.
-      performer = SetupTaskPerformer.createForIDE(resourceSet, prompter, trigger);
+      performer = createSetupTaskPerformer(resourceSet, trigger);
 
       // If we have a performer...
       if (performer != null)
@@ -884,6 +971,63 @@ public final class SetupUIPlugin extends OomphUIPlugin
     });
 
     monitor.worked(1);
+  }
+
+  private static SetupTaskPerformer createSetupTaskPerformer(ResourceSet resourceSet, Trigger trigger) throws Exception
+  {
+    // Create a prompter that generally cancels except if all prompted variables are passwords.
+    SetupPrompter prompter = new SetupPrompter()
+    {
+      @Override
+      public OS getOS()
+      {
+        return OS.INSTANCE;
+      }
+
+      @Override
+      public String getVMPath()
+      {
+        return null;
+      }
+
+      @Override
+      public boolean promptVariables(List<? extends SetupTaskContext> contexts)
+      {
+        @SuppressWarnings("unchecked")
+        List<SetupTaskPerformer> performers = (List<SetupTaskPerformer>)contexts;
+        for (SetupTaskPerformer performer : performers)
+        {
+          List<VariableTask> unresolvedVariables = performer.getUnresolvedVariables();
+          for (VariableTask variable : unresolvedVariables)
+          {
+            if (variable.getType() == VariableType.PASSWORD)
+            {
+              variable.setValue(PreferencesUtil.encrypt(" ")); //$NON-NLS-1$
+            }
+            else
+            {
+              return false;
+            }
+          }
+        }
+
+        return true;
+      }
+
+      @Override
+      public String getValue(VariableTask variable)
+      {
+        return null;
+      }
+
+      @Override
+      public UserCallback getUserCallback()
+      {
+        return null;
+      }
+    };
+
+    return SetupTaskPerformer.createForIDE(resourceSet, prompter, trigger);
   }
 
   /**
