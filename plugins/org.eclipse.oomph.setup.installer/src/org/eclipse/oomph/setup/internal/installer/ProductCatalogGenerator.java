@@ -24,6 +24,7 @@ import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.impl.RequirementImpl;
 import org.eclipse.oomph.p2.internal.core.AgentImpl;
 import org.eclipse.oomph.setup.AnnotationConstants;
+import org.eclipse.oomph.setup.CompoundTask;
 import org.eclipse.oomph.setup.EclipseIniTask;
 import org.eclipse.oomph.setup.InstallationTask;
 import org.eclipse.oomph.setup.Macro;
@@ -35,6 +36,7 @@ import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.VariableTask;
+import org.eclipse.oomph.setup.VariableType;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.p2.P2Task;
@@ -292,6 +294,8 @@ public class ProductCatalogGenerator implements IApplication
 
   private final Map<String, Product> products = new LinkedHashMap<>();
 
+  private final Map<String, Set<IInstallableUnit>> patches = new TreeMap<>();
+
   private String emfRepositoryLocation;
 
   private final String[] TRAINS = getTrains();
@@ -351,6 +355,13 @@ public class ProductCatalogGenerator implements IApplication
             stagingUseComposite = true;
           }
         }
+        else if ("-patches".equals(option))
+        {
+          if (i + 1 < arguments.length && !arguments[i + 1].startsWith("-"))
+          {
+            patches.put(arguments[++i], new TreeSet<>());
+          }
+        }
         else if ("-brandingNotification".equals(option))
         {
           brandingNotification = true;
@@ -370,6 +381,8 @@ public class ProductCatalogGenerator implements IApplication
         }
       }
     }
+
+    computePatches();
 
     eclipseBrandingNotificationURI = URI.createURI("https://www.eclipse.org/sponsor/ide/?scope=${scope}&campaign=" + getMostRecentReleasedTrain());
 
@@ -830,6 +843,20 @@ public class ProductCatalogGenerator implements IApplication
     }
   }
 
+  private void computePatches() throws Exception
+  {
+    for (Map.Entry<String, Set<IInstallableUnit>> entry : patches.entrySet())
+    {
+      URI uri = URI.createURI(entry.getKey());
+      IMetadataRepository latestRepository = loadLatestRepository(manager, uri, true);
+      for (IInstallableUnit iu : latestRepository
+          .query(QueryUtil.createCompoundQuery(List.of(QueryUtil.createLatestIUQuery(), QueryUtil.createIUPatchQuery()), true), null))
+      {
+        entry.getValue().add(iu);
+      }
+    }
+  }
+
   private void savePGPKeys() throws IOException
   {
     try
@@ -977,9 +1004,12 @@ public class ProductCatalogGenerator implements IApplication
       eclipseVersionPrefix = version.getSegment(0) + "." + version.getSegment(1) + " - ";
     }
 
+    Map<String, Set<IInstallableUnit>> applicablePatches = ECLIPSE_PLATFORM_SDK_PRODUCT_ID.equals(id)
+        ? getApplicablePatches(latestTrainAndVersion.getTrainURI())
+        : Map.of();
     addProductVersion(log, product, latestVersion, VersionSegment.MAJOR, latestTrainAndVersion.getTrainURI(), latestTrainAndVersion.getEPPURI(), latestTrain,
         "latest", "Latest (" + eclipseVersionPrefix + latestTrainLabel + ")", p2TaskLabel + " (" + eclipseVersionPrefix + latestTrainLabel + ")",
-        latestTrainsIUs, emfRepositoryLocation);
+        latestTrainsIUs, emfRepositoryLocation, applicablePatches);
 
     if (!latestUnreleased || size != 1)
     {
@@ -1025,6 +1055,40 @@ public class ProductCatalogGenerator implements IApplication
     }
 
     System.out.println(log);
+  }
+
+  private Map<String, Set<IInstallableUnit>> getApplicablePatches(URI trainURI)
+  {
+    Map<String, Set<IInstallableUnit>> result = new TreeMap<>();
+    try
+    {
+      IMetadataRepository repository = loadLatestRepository(manager, trainURI, false);
+      for (Map.Entry<String, Set<IInstallableUnit>> entry : patches.entrySet())
+      {
+        IMetadataRepository patchRepository = loadLatestRepository(manager, URI.createURI(entry.getKey()), false);
+        for (IInstallableUnit iu : entry.getValue())
+        {
+          for (IRequirement requirement : iu.getRequirements())
+          {
+            IQuery<IInstallableUnit> requirementQuery = QueryUtil.createMatchQuery(requirement.getMatches());
+            if (patchRepository.query(requirementQuery, null).isEmpty())
+            {
+              Set<IInstallableUnit> set = repository.query(requirementQuery, null).toSet();
+              if (!set.isEmpty())
+              {
+                result.computeIfAbsent(entry.getKey(), key -> new TreeSet<>()).add(iu);
+              }
+            }
+          }
+        }
+      }
+    }
+    catch (Exception ex)
+    {
+      throw new RuntimeException(ex);
+    }
+
+    return result;
   }
 
   private void generate(final String train) throws ProvisionException, URISyntaxException
@@ -1130,7 +1194,7 @@ public class ProductCatalogGenerator implements IApplication
         continue;
       }
 
-      String label = iu.getProperty("org.eclipse.equinox.p2.name");
+      String label = iu.getProperty("org.eclipse.equinox.p2.name", null);
       if (label == null || label.startsWith("%") || label.equals("Uncategorized"))
       {
         // Ensure that this is removed later,
@@ -1192,7 +1256,7 @@ public class ProductCatalogGenerator implements IApplication
           .asIterable(releaseMetaDataRepository.query(QueryUtil.createLatestQuery(QueryUtil.createIUQuery(specialProductID)), null)))
       {
         String id = iu.getId();
-        String label = iu.getProperty("org.eclipse.equinox.p2.name");
+        String label = iu.getProperty("org.eclipse.equinox.p2.name", null);
         ius.put(id, iu);
         synchronized (labels)
         {
@@ -1287,13 +1351,14 @@ public class ProductCatalogGenerator implements IApplication
           trainsAndVersions.put(ECLIPSE_PLATFORM_SDK_PRODUCT_ID, list);
         }
 
+        TrainAndVersion newTrainAndVersion = new TrainAndVersion(train, ide.getVersion(), releaseURI, null, versionIUs);
         boolean added = false;
         for (int i = 0, size = list.size(); i < size; ++i)
         {
           TrainAndVersion trainAndVersion = list.get(i);
           if (compareTrains(trainAndVersion.train, train) > 0)
           {
-            list.add(i, new TrainAndVersion(train, ide.getVersion(), releaseURI, null, versionIUs));
+            list.add(i, newTrainAndVersion);
             added = true;
             break;
           }
@@ -1301,7 +1366,7 @@ public class ProductCatalogGenerator implements IApplication
 
         if (!added)
         {
-          list.add(new TrainAndVersion(train, ide.getVersion(), releaseURI, null, versionIUs));
+          list.add(newTrainAndVersion);
         }
       }
     }
@@ -1681,6 +1746,13 @@ public class ProductCatalogGenerator implements IApplication
   private void addProductVersion(StringBuilder log, Product product, Version version, VersionSegment versionSegment, URI trainURI, URI eppURI, String train,
       String name, String label, String p2TaskLabel, Map<String, Set<IInstallableUnit>> ius, String emfRepositoryLocation)
   {
+    addProductVersion(log, product, version, versionSegment, trainURI, eppURI, train, name, label, p2TaskLabel, ius, emfRepositoryLocation, Map.of());
+  }
+
+  private void addProductVersion(StringBuilder log, Product product, Version version, VersionSegment versionSegment, URI trainURI, URI eppURI, String train,
+      String name, String label, String p2TaskLabel, Map<String, Set<IInstallableUnit>> ius, String emfRepositoryLocation,
+      Map<String, Set<IInstallableUnit>> applicablePatches)
+  {
     log.append("  ").append(label);
 
     ProductVersion productVersion = SetupFactory.eINSTANCE.createProductVersion();
@@ -1719,6 +1791,7 @@ public class ProductCatalogGenerator implements IApplication
 
     boolean isFake = fakeNextRelease && getMostRecentTrain().equals(trainURI.lastSegment());
     Repository packageRepository = null;
+    List<Repository> additionalRepositories = new ArrayList<>();
     if (eppURI != null && !isFake)
     {
       packageRepository = P2Factory.eINSTANCE.createRepository();
@@ -1728,6 +1801,12 @@ public class ProductCatalogGenerator implements IApplication
       if (!ECLIPSE_PLATFORM_SDK_PRODUCT_ID.equals(productName) && !ALL_PRODUCT_ID.equals(productName) && !SPECIAL_PRODUCT_IDS.contains(productName)
           && train.equals(stagingTrain))
       {
+        boolean is_2025_03 = compareTrains(train, "2025-03") == 0;
+        if (is_2025_03)
+        {
+          // additionalRepositories.add(P2Factory.eINSTANCE.createRepository("https://download.eclipse.org/mpc/drops/1.11.0/v20250125-1342"));
+        }
+
         try
         {
           IMetadataRepository eppMetadataRepository = manager.loadRepository(new java.net.URI(eppURI.toString()), null);
@@ -1832,6 +1911,8 @@ public class ProductCatalogGenerator implements IApplication
     }
 
     p2Task.getRepositories().add(releaseRepository);
+
+    p2Task.getRepositories().addAll(additionalRepositories);
 
     if (compareTrains(train, "luna") < 0)
     {
@@ -1941,6 +2022,38 @@ public class ProductCatalogGenerator implements IApplication
         : ECLIPSE_PLATFORM_SDK_PRODUCT_ID.equals(productName) ? "org.eclipse.platform.ide" : productName) + ".configuration";
     String applicationFilter = getConfigurationFilter(metadataRepository, configurationID);
     p2Task.getRequirements().get(0).setFilter(applicationFilter);
+
+    for (Map.Entry<String, Set<IInstallableUnit>> entry : applicablePatches.entrySet())
+    {
+      for (IInstallableUnit iu : entry.getValue())
+      {
+        VariableTask variableTask = SetupFactory.eINSTANCE.createVariableTask();
+        variableTask.setType(VariableType.BOOLEAN);
+        variableTask.setStorageURI(VariableTask.INSTALLATION_STORAGE_URI);
+        String iuName = iu.getProperty("org.eclipse.equinox.p2.name", null);
+        String iuDescription = iu.getProperty("org.eclipse.equinox.p2.description", null);
+
+        String shortId = iu.getId().replaceAll("org.eclipse.(.*).feature.group", "$1");
+        variableTask.setName("install." + shortId);
+        variableTask.setDefaultValue("false");
+        variableTask.setLabel("Install " + iuName);
+        variableTask.setDescription(iuDescription);
+        variableTask.getAnnotations().add(BaseFactory.eINSTANCE.createAnnotation(AnnotationConstants.ANNOTATION_SIMPLE_MODE_DEFAULT_VARIABLE));
+        productVersion.getSetupTasks().add(variableTask);
+
+        CompoundTask compoundTask = SetupFactory.eINSTANCE.createCompoundTask();
+        compoundTask.setName(iuName);
+        compoundTask.setFilter("(" + variableTask.getName() + "=true)");
+        productVersion.getSetupTasks().add(compoundTask);
+
+        P2Task patchP2Task = SetupP2Factory.eINSTANCE.createP2Task();
+        patchP2Task.setLabel(iuName);
+        patchP2Task.getRequirements()
+            .add(P2Factory.eINSTANCE.createRequirement(iu.getId(), P2Factory.eINSTANCE.createVersionRange(iu.getVersion(), VersionSegment.MINOR), true, true));
+        patchP2Task.getRepositories().add(P2Factory.eINSTANCE.createRepository(entry.getKey()));
+        compoundTask.getSetupTasks().add(patchP2Task);
+      }
+    }
 
     if (siteURI != null)
     {
