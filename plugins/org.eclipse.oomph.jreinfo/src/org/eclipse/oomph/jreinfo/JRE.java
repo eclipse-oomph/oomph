@@ -99,17 +99,17 @@ public final class JRE implements Comparable<JRE>
     arch = tokens.length > 7 ? toCanoncialArch(tokens[7]) : ""; //$NON-NLS-1$
   }
 
-  @SuppressWarnings({ "deprecation", "nls" })
+  @SuppressWarnings("nls")
   private String toCanoncialArch(String arch)
   {
-    if (Platform.ARCH_AMD64.equals(arch))
+    if ("amd64".equals(arch))
     {
       return Platform.ARCH_X86_64;
     }
 
     if ("i386".equals(arch))
     {
-      return Platform.ARCH_X86;
+      return "x86";
     }
 
     return arch;
