@@ -705,8 +705,8 @@ public class ProgressPage extends SetupWizardPage
                   shell.setData(PROGRESS_STATUS, null);
                   if (trigger != Trigger.BOOTSTRAP)
                   {
-                    if (trigger == Trigger.STARTUP ? !"true".equals(PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_SHOW_INITIAL_PROGRESS)) //$NON-NLS-1$
-                        && !SetupPropertyTester.isShowProgressInWizard() : !SetupPropertyTester.isShowProgressInWizard())
+                    if (!"true".equals(PropertiesUtil.getProperty(SetupProperties.PROP_SETUP_SHOW_INITIAL_PROGRESS)) //$NON-NLS-1$
+                        && !SetupPropertyTester.isShowProgressInWizard())
                     {
                       shell.setVisible(false);
                     }

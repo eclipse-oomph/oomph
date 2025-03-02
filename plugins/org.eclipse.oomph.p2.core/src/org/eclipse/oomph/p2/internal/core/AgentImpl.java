@@ -178,14 +178,14 @@ public class AgentImpl extends AgentManagerElementImpl implements Agent
         File installFolder = size > 2 ? AgentImpl.getFile(tokens.get(2)) : null;
         File referencer = size > 3 ? AgentImpl.getFile(tokens.get(3)) : null;
 
-        return new ProfileImpl(AgentImpl.this, bundlePool, profileID, type, installFolder, referencer);
-      }
+        if ("SelfHostingProfile".equals(profileID) && bundlePool == null) //$NON-NLS-1$
+        {
+          type = "Installation"; //$NON-NLS-1$
+          bundlePool = new BundlePoolImpl(AgentImpl.this, new File(location, "pool")); //$NON-NLS-1$
+          installFolder = location.getParentFile();
+        }
 
-      @Override
-      protected Profile loadElement(String key, String extraInfo)
-      {
-        // TODO
-        return super.loadElement(key, extraInfo);
+        return new ProfileImpl(AgentImpl.this, bundlePool, profileID, type, installFolder, referencer);
       }
 
       @Override

@@ -7,6 +7,8 @@
  */
 package org.eclipse.oomph.setup.presentation;
 
+import org.eclipse.oomph.base.Annotation;
+import org.eclipse.oomph.setup.AnnotationConstants;
 import org.eclipse.oomph.setup.Configuration;
 import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.SetupPackage;
@@ -17,14 +19,17 @@ import org.eclipse.oomph.setup.ui.SetupPropertyTester;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
 import org.eclipse.oomph.ui.UIUtil;
+import org.eclipse.oomph.util.Request;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
+import org.eclipse.core.runtime.IProduct;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.SWT;
@@ -41,39 +46,75 @@ import org.eclipse.ui.browser.IWebBrowser;
 import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
 import org.eclipse.ui.part.ViewPart;
 
+import org.osgi.framework.Bundle;
+import org.osgi.framework.Version;
+
 import java.net.URL;
-import java.nio.file.Path;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
-public class NotificationViewPart extends ViewPart
+public final class NotificationViewPart extends ViewPart
 {
-  public static final String VIEW_ID = "org.eclipse.oomph.setup.presentation.NotificationViewPart"; //$NON-NLS-1$
+  public static final String VIEW_ID = "org.eclipse.oomph.setup.presentation.NotificationView"; //$NON-NLS-1$
 
-  protected Browser browser;
+  private Browser browser;
 
-  protected Path location;
+  private Annotation notification;
 
   public NotificationViewPart()
   {
   }
 
-  public void setUrl(String url)
+  public void setNotification(Annotation notification)
   {
-    URI uri = URI.createURI(url);
+    this.notification = notification;
+    setUrl(getNotificationURI());
+  }
+
+  private String getNotificationURI()
+  {
+    return notification.getDetails().get(AnnotationConstants.KEY_URI);
+  }
+
+  @SuppressWarnings("nls")
+  private void setUrl(String url)
+  {
+    Request request = new Request(url);
+    IProduct product = Platform.getProduct();
+    if (product != null)
+    {
+      request.put("product-id", product.getId());
+      String name = product.getName();
+      if (name != null)
+      {
+        request.put("product-name", name);
+      }
+      String application = product.getApplication();
+      if (application != null)
+      {
+        request.put("application-id", application);
+      }
+
+      Bundle definingBundle = product.getDefiningBundle();
+      if (definingBundle != null)
+      {
+        String symbolicName = definingBundle.getSymbolicName();
+        request.put("bundle-id", symbolicName);
+        Version version = definingBundle.getVersion();
+        request.put("bundle-version", version.toString());
+      }
+    }
+
+    request.put("java.version", System.getProperty("java.version"));
+
     Composite parent = browser.getParent();
     Color foreground = parent.getForeground();
     Color background = parent.getBackground();
-    String colorQueryParameters = //
-        "color=" + URI.encodeQuery(getColor(foreground), true) + '&' + // //$NON-NLS-1$
-            "background-color=" + URI.encodeQuery(getColor(background), true); //$NON-NLS-1$
-    String query = uri.query();
-    uri = uri.trimQuery().appendQuery(query == null ? colorQueryParameters : query + '&' + colorQueryParameters);
-    browser.setUrl(uri.toString());
-  }
+    request.put("color", getColor(foreground));
+    request.put("background-color", getColor(background));
 
-  @Override
-  public void setPartName(String partName)
-  {
-    super.setPartName(partName);
+    URI enhancedURI = request.getURI();
+    browser.setUrl(enhancedURI.toString());
   }
 
   @Override
@@ -166,7 +207,7 @@ public class NotificationViewPart extends ViewPart
                 Shell handlingShell = SetupPropertyTester.getHandlingShell();
                 if (handlingShell != null)
                 {
-                  if (handlingShell.isVisible())
+                  if (!handlingShell.isVisible())
                   {
                     handlingShell.setVisible(true);
                   }
@@ -175,7 +216,34 @@ public class NotificationViewPart extends ViewPart
                 }
                 else
                 {
-                  SetupWizard.Updater.perform(setupContext);
+                  Map<String, String> oldSystemProperties = new LinkedHashMap<>();
+                  Annotation systemPropertiesAnnotation = configuration.getAnnotation(AnnotationConstants.ANNOTATION_SYSTEM_PROPERTIES);
+                  if (systemPropertiesAnnotation != null)
+                  {
+                    for (Map.Entry<String, String> entry : systemPropertiesAnnotation.getDetails())
+                    {
+                      oldSystemProperties.put(entry.getKey(), System.setProperty(entry.getKey(), entry.getValue()));
+                    }
+                  }
+
+                  try
+                  {
+                    SetupWizard.Updater.perform(setupContext);
+                  }
+                  finally
+                  {
+                    for (Map.Entry<String, String> entry : oldSystemProperties.entrySet())
+                    {
+                      if (entry.getValue() == null)
+                      {
+                        System.clearProperty(entry.getKey());
+                      }
+                      else
+                      {
+                        System.setProperty(entry.getKey(), entry.getValue());
+                      }
+                    }
+                  }
                 }
               });
             }
@@ -199,6 +267,40 @@ public class NotificationViewPart extends ViewPart
           SetupUIPlugin.INSTANCE.log(ex, IStatus.WARNING);
         }
       }
+      else if ("eclipse+command".equals(scheme)) //$NON-NLS-1$
+      {
+        String opaquePart = location.opaquePart();
+        if ("close".equals(opaquePart)) //$NON-NLS-1$
+        {
+          hide(null);
+        }
+        else if ("dismiss".equals(opaquePart)) //$NON-NLS-1$
+        {
+          hide(SetupContext.GLOBAL_STATE_LOCATION_URI);
+        }
+        else if ("dismiss-installation".equals(opaquePart)) //$NON-NLS-1$
+        {
+          hide(SetupContext.CONFIGURATION_STATE_LOCATION_URI);
+        }
+        else if ("dismiss-workspace".equals(opaquePart)) //$NON-NLS-1$
+        {
+          hide(SetupContext.WORKSPACE_STATE_LOCATION_URI);
+        }
+      }
+    }
+  }
+
+  private void hide()
+  {
+    getSite().getPage().hideView(this);
+  }
+
+  private void hide(URI uri)
+  {
+    hide();
+    if (uri != null)
+    {
+      SetupUIPlugin.rememberNotificationURI(getNotificationURI(), uri);
     }
   }
 
@@ -250,5 +352,4 @@ public class NotificationViewPart extends ViewPart
     result.append(Integer.toHexString(alpha));
     return result.toString();
   }
-
 }

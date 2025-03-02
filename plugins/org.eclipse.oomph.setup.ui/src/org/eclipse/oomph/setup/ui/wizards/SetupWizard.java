@@ -1829,7 +1829,8 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
       SetupWizard updater = new SetupWizard.Updater(setupContext)
       {
         {
-          setTrigger(Trigger.MANUAL);
+          Trigger trigger = Trigger.get(PropertiesUtil.getProperty("oomph.setup.trigger")); //$NON-NLS-1$
+          setTrigger(trigger == null ? Trigger.MANUAL : trigger);
         }
 
         @Override

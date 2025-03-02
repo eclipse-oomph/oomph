@@ -522,7 +522,7 @@
             category="org.eclipse.oomph.views"
             class="org.eclipse.oomph.setup.presentation.NotificationViewPart"
             icon="icons/notification.png"
-            id="org.eclipse.oomph.setup.presentation.NotificationViewPart"
+            id="org.eclipse.oomph.setup.presentation.NotificationView"
             name="%_UI_NotificationView_label"
             restorable="false">
       </view>

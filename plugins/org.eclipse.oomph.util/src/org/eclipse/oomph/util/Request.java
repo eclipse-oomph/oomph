@@ -12,13 +12,13 @@ package org.eclipse.oomph.util;
 
 import org.eclipse.emf.common.util.URI;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
  * @author Eike Stepper
  */
-public final class Request extends HashMap<String, String>
+public final class Request extends LinkedHashMap<String, String>
 {
   private static final URI DEFAULT_URI = URI.createURI("about:"); //$NON-NLS-1$
 

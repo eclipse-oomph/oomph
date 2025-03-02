@@ -8,7 +8,6 @@
 package org.eclipse.oomph.setup.presentation.handlers;
 
 import org.eclipse.oomph.base.Annotation;
-import org.eclipse.oomph.setup.AnnotationConstants;
 import org.eclipse.oomph.setup.presentation.NotificationViewPart;
 import org.eclipse.oomph.setup.presentation.SetupEditorPlugin;
 import org.eclipse.oomph.setup.ui.SetupPropertyTester;
@@ -27,12 +26,6 @@ public class NotificationsHandler extends AbstractHandler
 {
   public NotificationsHandler()
   {
-  }
-
-  @Override
-  public boolean isEnabled()
-  {
-    return super.isEnabled();
   }
 
   @Override
@@ -55,7 +48,7 @@ public class NotificationsHandler extends AbstractHandler
             NotificationViewPart.VIEW_ID, "ID" + ++count, //$NON-NLS-1$
             IWorkbenchPage.VIEW_VISIBLE);
         notificationView.getSite().getPage().bringToTop(notificationView);
-        notificationView.setUrl(annotation.getDetails().get(AnnotationConstants.KEY_URI));
+        notificationView.setNotification(annotation);
       }
     }
     catch (Exception ex)

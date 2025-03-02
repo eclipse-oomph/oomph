@@ -103,6 +103,8 @@ public final class AnnotationConstants
 
   public static final String ANNOTATION_NOTIFICATION = "http://www.eclipse.org/oomph/setup/Notification"; //$NON-NLS-1$
 
+  public static final String ANNOTATION_SYSTEM_PROPERTIES = "http://www.eclipse.org/oomph/setup/SystemProperties"; //$NON-NLS-1$
+
   private AnnotationConstants()
   {
   }

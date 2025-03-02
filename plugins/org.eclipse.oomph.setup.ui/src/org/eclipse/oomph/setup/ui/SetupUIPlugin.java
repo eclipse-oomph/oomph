@@ -105,6 +105,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.handlers.IHandlerService;
+import org.eclipse.ui.intro.IIntroManager;
 
 import org.osgi.framework.BundleContext;
 
@@ -297,7 +298,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
                       resourceSet.getLoadOptions().put(ECFURIHandlerImpl.OPTION_CACHE_HANDLING, CacheHandling.CACHE_WITHOUT_ETAG_CHECKING);
                       mirror(resourceSet, monitor, 10);
                       SetupContext.setSelf(SetupContext.createSelf(resourceSet));
-                      handleNotificationURI(resourceSet);
+                      handleBrandingNotificationURI(resourceSet);
 
                       return Status.OK_STATUS;
                     }
@@ -317,7 +318,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
     }
   }
 
-  private static void handleNotificationURI(ResourceSet resourceSet)
+  private static void handleBrandingNotificationURI(ResourceSet resourceSet)
   {
     EObject selfProductVersion = resourceSet
         .getEObject(URI.createURI("catalog:/self-product-catalog.setup#//@products[name='product']/@versions[name='version']"), false); //$NON-NLS-1$
@@ -340,7 +341,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
               String productVersionLabel = productVersion.getLabel();
               if (productLabel != null && productLabel.startsWith("Eclipse") && productVersionLabel != null) //$NON-NLS-1$
               {
-                handleNotificationURI(notificationURI, productLabel, productVersionLabel);
+                handleBrandingNotificationURI(notificationURI, productLabel, productVersionLabel);
               }
             }
 
@@ -356,6 +357,86 @@ public final class SetupUIPlugin extends OomphUIPlugin
         }
       }
     }
+  }
+
+  private static void handleBrandingNotificationURI(String notificationURI, String scope, String version)
+  {
+    if ("true".equals(PropertiesUtil.getProperty("org.eclipse.oomph.setup.donate", "true"))) //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+    {
+      try
+      {
+        Version versionValue = Version.create(version);
+        if (versionValue.compareTo(Version.create("4.16")) >= 0) //$NON-NLS-1$
+        {
+          String resolvedURI = notificationURI.toString().replace("${scope.version}", URI.encodeQuery(StringUtil.safe(version), false)).replace("${scope}", //$NON-NLS-1$ //$NON-NLS-2$
+              URI.encodeQuery(StringUtil.safe(scope), false).replace("+", "%2B")); //$NON-NLS-1$ //$NON-NLS-2$
+          SetupPropertyTester.setDonating(resolvedURI);
+          if (rememberBrandingNotificationURI(notificationURI))
+          {
+            UIUtil.asyncExec(new Runnable()
+            {
+              @Override
+              public void run()
+              {
+                ICommandService commandService = PlatformUI.getWorkbench().getService(ICommandService.class);
+                IHandlerService handlerService = PlatformUI.getWorkbench().getService(IHandlerService.class);
+                Command donateCommand = commandService.getCommand("org.eclipse.oomph.setup.donate"); //$NON-NLS-1$
+                if (donateCommand != null)
+                {
+                  if (donateCommand.isEnabled())
+                  {
+                    try
+                    {
+                      donateCommand.executeWithChecks(handlerService.createExecutionEvent(donateCommand, null));
+                    }
+                    catch (Exception ex)
+                    {
+                      INSTANCE.log(ex, IStatus.WARNING);
+                    }
+                  }
+                }
+              }
+            });
+          }
+        }
+      }
+      catch (Exception ex)
+      {
+        INSTANCE.log(ex, IStatus.WARNING);
+      }
+    }
+  }
+
+  private static boolean rememberBrandingNotificationURI(String notificationURI)
+  {
+    File file = new File(SetupContext.GLOBAL_SETUPS_LOCATION_URI.toFileString(), "brandingNotificationURIs.txt"); //$NON-NLS-1$
+    Set<String> brandingNotificationURIs = new LinkedHashSet<>();
+    try
+    {
+      if (file.isFile())
+      {
+        brandingNotificationURIs.addAll(IOUtil.readLines(file, "UTF-8")); //$NON-NLS-1$
+      }
+    }
+    catch (RuntimeException ex)
+    {
+      // Ignore.
+    }
+
+    boolean added = brandingNotificationURIs.add(notificationURI);
+    if (added)
+    {
+      try
+      {
+        IOUtil.writeLines(file, "UTF-8", new ArrayList<>(brandingNotificationURIs)); //$NON-NLS-1$
+      }
+      catch (RuntimeException ex)
+      {
+        // Ignore.
+      }
+    }
+
+    return added;
   }
 
   private static void handleNotificationAnnotations(ProductVersion productVersion)
@@ -382,6 +463,12 @@ public final class SetupUIPlugin extends OomphUIPlugin
       List<Annotation> applicableNotificationAnnotations = new ArrayList<>();
       LOOP: for (Annotation notificationAnnotation : notificationAnnotations)
       {
+        String uri = notificationAnnotation.getDetails().get(AnnotationConstants.KEY_URI);
+        if (uri == null || isRememberedNotificationURI(uri))
+        {
+          continue;
+        }
+
         // Ensure that the annotation's requirements are all satisfied by the profile.
         for (EObject eObject : notificationAnnotation.getContents())
         {
@@ -440,11 +527,12 @@ public final class SetupUIPlugin extends OomphUIPlugin
       if (!applicableNotificationAnnotations.isEmpty())
       {
         SetupPropertyTester.setNotifications(applicableNotificationAnnotations);
-        UIUtil.asyncExec(new Runnable()
-        {
-          @Override
-          public void run()
-          {
+
+        UIUtil.asyncExec(() -> {
+          IIntroManager introManager = PlatformUI.getWorkbench().getIntroManager();
+          introManager.closeIntro(introManager.getIntro());
+
+          UIUtil.asyncExec(() -> {
             ICommandService commandService = PlatformUI.getWorkbench().getService(ICommandService.class);
             IHandlerService handlerService = PlatformUI.getWorkbench().getService(IHandlerService.class);
             Command notificationsCommand = commandService.getCommand("org.eclipse.oomph.setup.notifications"); //$NON-NLS-1$
@@ -462,7 +550,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
                 }
               }
             }
-          }
+          });
         });
       }
     }
@@ -481,63 +569,28 @@ public final class SetupUIPlugin extends OomphUIPlugin
     return result;
   }
 
-  private static void handleNotificationURI(String notificationURI, String scope, String version)
+  public static boolean isRememberedNotificationURI(String notificationURI)
   {
-    if ("true".equals(PropertiesUtil.getProperty("org.eclipse.oomph.setup.donate", "true"))) //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-    {
-      try
-      {
-        Version versionValue = Version.create(version);
-        if (versionValue.compareTo(Version.create("4.16")) >= 0) //$NON-NLS-1$
-        {
-          String resolvedURI = notificationURI.toString().replace("${scope.version}", URI.encodeQuery(StringUtil.safe(version), false)).replace("${scope}", //$NON-NLS-1$ //$NON-NLS-2$
-              URI.encodeQuery(StringUtil.safe(scope), false).replace("+", "%2B")); //$NON-NLS-1$ //$NON-NLS-2$
-          SetupPropertyTester.setDonating(resolvedURI);
-          if (rememberNotificationURI(notificationURI))
-          {
-            UIUtil.asyncExec(new Runnable()
-            {
-              @Override
-              public void run()
-              {
-                ICommandService commandService = PlatformUI.getWorkbench().getService(ICommandService.class);
-                IHandlerService handlerService = PlatformUI.getWorkbench().getService(IHandlerService.class);
-                Command donateCommand = commandService.getCommand("org.eclipse.oomph.setup.donate"); //$NON-NLS-1$
-                if (donateCommand != null)
-                {
-                  if (donateCommand.isEnabled())
-                  {
-                    try
-                    {
-                      donateCommand.executeWithChecks(handlerService.createExecutionEvent(donateCommand, null));
-                    }
-                    catch (Exception ex)
-                    {
-                      INSTANCE.log(ex, IStatus.WARNING);
-                    }
-                  }
-                }
-              }
-            });
-          }
-        }
-      }
-      catch (Exception ex)
-      {
-        INSTANCE.log(ex, IStatus.WARNING);
-      }
-    }
+    return !rememberNotificationURI(notificationURI, SetupContext.GLOBAL_SETUPS_LOCATION_URI, false)
+        || !rememberNotificationURI(notificationURI, SetupContext.CONFIGURATION_STATE_LOCATION_URI, false)
+        || !rememberNotificationURI(notificationURI, SetupContext.WORKSPACE_STATE_LOCATION_URI, false);
+
   }
 
-  private static boolean rememberNotificationURI(String notificationURI)
+  public static void rememberNotificationURI(String notificationURI, URI baseLocation)
   {
-    File file = new File(SetupContext.GLOBAL_SETUPS_LOCATION_URI.toFileString(), "brandingNotificationURIs.txt"); //$NON-NLS-1$
-    Set<String> brandingNotificationURIs = new LinkedHashSet<>();
+    rememberNotificationURI(notificationURI, baseLocation, true);
+  }
+
+  private static boolean rememberNotificationURI(String notificationURI, URI baseLocation, boolean save)
+  {
+    File file = new File(baseLocation.toFileString(), "notificationURIs.txt"); //$NON-NLS-1$
+    Set<String> notifications = new LinkedHashSet<>();
     try
     {
       if (file.isFile())
       {
-        brandingNotificationURIs.addAll(IOUtil.readLines(file, "UTF-8")); //$NON-NLS-1$
+        notifications.addAll(IOUtil.readLines(file, "UTF-8")); //$NON-NLS-1$
       }
     }
     catch (RuntimeException ex)
@@ -545,12 +598,13 @@ public final class SetupUIPlugin extends OomphUIPlugin
       // Ignore.
     }
 
-    boolean added = brandingNotificationURIs.add(notificationURI);
-    if (added)
+    boolean added = notifications.add(notificationURI);
+    if (added && save)
     {
       try
       {
-        IOUtil.writeLines(file, "UTF-8", new ArrayList<>(brandingNotificationURIs)); //$NON-NLS-1$
+        ArrayList<String> lines = new ArrayList<>(notifications);
+        IOUtil.writeLines(file, "UTF-8", lines.subList(0, Math.min(lines.size(), 500))); //$NON-NLS-1$
       }
       catch (RuntimeException ex)
       {
@@ -884,7 +938,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
     finally
     {
       SetupContext.setSelf(SetupContext.createSelf(resourceSet));
-      handleNotificationURI(resourceSet);
+      handleBrandingNotificationURI(resourceSet);
     }
 
     monitor.worked(1);

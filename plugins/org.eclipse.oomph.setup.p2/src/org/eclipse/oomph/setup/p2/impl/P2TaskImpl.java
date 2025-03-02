@@ -118,8 +118,6 @@ import java.util.Set;
  */
 public class P2TaskImpl extends SetupTaskImpl implements P2Task
 {
-  private static final boolean SKIP = PropertiesUtil.isProperty(PROP_SKIP);
-
   // This is used only for documentation capture.
   private static final boolean FORCE = PropertiesUtil.isProperty("oomph.setup.p2.force"); //$NON-NLS-1$
 
@@ -675,7 +673,7 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
   @Override
   public boolean isNeeded(SetupTaskContext context) throws Exception
   {
-    if (SKIP)
+    if (PropertiesUtil.isProperty(PROP_SKIP))
     {
       return FORCE;
     }
