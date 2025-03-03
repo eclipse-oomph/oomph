@@ -276,7 +276,7 @@ public final class NotificationViewPart extends ViewPart
         }
         else if ("dismiss".equals(opaquePart)) //$NON-NLS-1$
         {
-          hide(SetupContext.GLOBAL_STATE_LOCATION_URI);
+          hide(SetupContext.GLOBAL_SETUPS_LOCATION_URI);
         }
         else if ("dismiss-installation".equals(opaquePart)) //$NON-NLS-1$
         {
