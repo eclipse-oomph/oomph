@@ -41,6 +41,7 @@ import org.eclipse.swt.browser.ProgressListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.browser.IWebBrowser;
 import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
@@ -68,6 +69,13 @@ public final class NotificationViewPart extends ViewPart
   public void setNotification(Annotation notification)
   {
     this.notification = notification;
+
+    if ("true".equals(notification.getDetails().get("maximize"))) //$NON-NLS-1$ //$NON-NLS-2$
+    {
+      IWorkbenchPage page = getSite().getPage();
+      page.setPartState(page.getReference(this), IWorkbenchPage.STATE_MAXIMIZED);
+    }
+
     setUrl(getNotificationURI());
   }
 
