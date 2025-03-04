@@ -56,6 +56,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -106,7 +107,11 @@ public class SetupArchiver implements IApplication
       @Override
       public InputStream createInputStream(URI uri, Map<?, ?> options) throws IOException
       {
-        return super.createInputStream(configurationImages.get(uri), options);
+        InputStream inputStream = super.createInputStream(configurationImages.get(uri), options);
+        String content = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+        // The calls are randomly returning results with and without the xlink namespace and prefix on the href.
+        content = content.replace(" xmlns:xlink=\"http://www.w3.org/1999/xlink\"", "").replace("xlink:href", "href"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+        return new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8));
       }
     });
 
