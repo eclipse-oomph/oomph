@@ -87,6 +87,7 @@ import org.eclipse.core.runtime.dynamichelpers.IExtensionTracker;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.equinox.p2.engine.IProfile;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
+import org.eclipse.equinox.p2.metadata.MetadataFactory;
 import org.eclipse.equinox.p2.metadata.Version;
 import org.eclipse.equinox.p2.query.CollectionResult;
 import org.eclipse.equinox.p2.query.IQueryResult;
@@ -110,6 +111,7 @@ import org.eclipse.ui.intro.IIntroManager;
 import org.osgi.framework.BundleContext;
 
 import java.io.File;
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -481,8 +483,10 @@ public final class SetupUIPlugin extends OomphUIPlugin
 
             if (queriable == null)
             {
-              IInstallableUnit jreIU = P2Util.createJREIU("jre"); //$NON-NLS-1$
-              queriable = QueryUtil.compoundQueryable(profile, new CollectionResult<>(List.of(jreIU)));
+              List<IInstallableUnit> extraIUs = new ArrayList<>();
+              extraIUs.add(P2Util.createJREIU("jre")); //$NON-NLS-1$
+              extraIUs.addAll(getInstalledJREs());
+              queriable = QueryUtil.compoundQueryable(profile, new CollectionResult<>(extraIUs));
             }
 
             Requirement requirement = (Requirement)eObject;
@@ -566,6 +570,54 @@ public final class SetupUIPlugin extends OomphUIPlugin
         result.add(annotation);
       }
     }
+    return result;
+  }
+
+  @SuppressWarnings("nls")
+  private static List<IInstallableUnit> getInstalledJREs()
+  {
+    List<IInstallableUnit> result = new ArrayList<>();
+    try
+    {
+      Class<?> javaRuntimeClass = CommonPlugin.loadClass("org.eclipse.jdt.launching", "org.eclipse.jdt.launching.JavaRuntime");
+      Object[] vmInstallTypes = ReflectUtil.invokeMethod("getVMInstallTypes", javaRuntimeClass);
+      for (Object vmInstallType : vmInstallTypes)
+      {
+        String id = ReflectUtil.invokeMethod("getId", vmInstallType);
+        if ("org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType".equals(id))
+        {
+          Object[] vmInstalls = ReflectUtil.invokeMethod("getVMInstalls", vmInstallType);
+          Class<?> vmStandinClass = CommonPlugin.loadClass("org.eclipse.jdt.launching", "org.eclipse.jdt.launching.VMStandin");
+          Constructor<?> constructor = ReflectUtil.getConstructor(vmStandinClass, vmInstalls.getClass().getComponentType());
+          for (Object vmInstall : vmInstalls)
+          {
+            Object vmStandin = constructor.newInstance(vmInstall);
+            String javaVersion = ReflectUtil.invokeMethod("getJavaVersion", vmStandin);
+            if (javaVersion != null)
+            {
+              try
+              {
+                Version version = Version.create(javaVersion);
+                MetadataFactory.InstallableUnitDescription iuDescription = new MetadataFactory.InstallableUnitDescription();
+                iuDescription.setId("installed.jre");
+                iuDescription.setVersion(version);
+                iuDescription.addProvidedCapabilities(List.of(MetadataFactory.createProvidedCapability("org.eclipse.equinox.p2.iu", "installed.jre", version)));
+                result.add(MetadataFactory.createInstallableUnit(iuDescription));
+              }
+              catch (RuntimeException ex)
+              {
+                //$FALL-THROUGH$
+              }
+            }
+          }
+        }
+      }
+    }
+    catch (Throwable ex)
+    {
+      //$FALL-THROUGH$
+    }
+
     return result;
   }
 

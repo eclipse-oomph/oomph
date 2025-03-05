@@ -47,7 +47,11 @@ public class NotificationsHandler extends AbstractHandler
         NotificationViewPart notificationView = (NotificationViewPart)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(
             NotificationViewPart.VIEW_ID, "ID" + ++count, //$NON-NLS-1$
             IWorkbenchPage.VIEW_VISIBLE);
-        notificationView.getSite().getPage().bringToTop(notificationView);
+        if (count == 1)
+        {
+          notificationView.getSite().getPage().bringToTop(notificationView);
+        }
+
         notificationView.setNotification(annotation);
       }
     }
