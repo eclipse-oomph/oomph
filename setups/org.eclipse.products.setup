@@ -240,7 +240,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2025-03/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2025-03/r/eclipse-ide-java-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -414,7 +414,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2025-03/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2025-03/r/eclipse-ide-java-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -3415,7 +3415,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2025-03/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2025-03/r/eclipse-ide-enterprise-java-and-web-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -3853,7 +3853,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2025-03/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2025-03/r/eclipse-ide-enterprise-java-and-web-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -10580,7 +10580,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2025-03/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2025-03/r/eclipse-ide-cc-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -10826,7 +10826,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2025-03/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2025-03/r/eclipse-ide-cc-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -14692,7 +14692,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2025-03/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2025-03/r/eclipse-ide-embedded-cc-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -14998,7 +14998,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2025-03/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2025-03/r/eclipse-ide-embedded-cc-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -17807,7 +17807,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2025-03/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2025-03/r/eclipse-ide-php-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -17981,7 +17981,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2025-03/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2025-03/r/eclipse-ide-php-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -20737,7 +20737,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2025-03/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2025-03/r/eclipse-ide-eclipse-committers</value>
         </detail>
         <detail
             key="shortcut">
@@ -20959,7 +20959,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2025-03/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2025-03/r/eclipse-ide-eclipse-committers</value>
         </detail>
         <detail
             key="shortcut">
@@ -24546,7 +24546,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2025-03/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2025-03/r/eclipse-ide-java-and-dsl-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -24700,7 +24700,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2025-03/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2025-03/r/eclipse-ide-java-and-dsl-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -27080,7 +27080,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2025-03/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2025-03/r/eclipse-ide-rcp-and-rap-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -27306,7 +27306,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2025-03/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2025-03/r/eclipse-ide-rcp-and-rap-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -30637,7 +30637,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2025-03/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2025-03/r/eclipse-modeling-tools</value>
         </detail>
         <detail
             key="shortcut">
@@ -30871,7 +30871,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2025-03/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2025-03/r/eclipse-modeling-tools</value>
         </detail>
         <detail
             key="shortcut">
@@ -34478,7 +34478,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2025-03/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2025-03/r/eclipse-ide-scout-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -34656,7 +34656,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2025-03/r</value>
+          <value>https://www.eclipse.org/downloads/packages/release/2025-03/r/eclipse-ide-scout-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -37287,7 +37287,7 @@
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
             key="siteURI">
-          <value>https://download.eclipse.org/eclipse/downloads/</value>
+          <value>https://archive.eclipse.org/eclipse/downloads/drops4/R-4.35-202502280140/</value>
         </detail>
         <detail
             key="shortcut">
@@ -37357,7 +37357,7 @@
         </detail>
         <detail
             key="siteURI">
-          <value>https://download.eclipse.org/eclipse/downloads/</value>
+          <value>https://archive.eclipse.org/eclipse/downloads/drops4/R-4.35-202502280140/</value>
         </detail>
         <detail
             key="shortcut">
