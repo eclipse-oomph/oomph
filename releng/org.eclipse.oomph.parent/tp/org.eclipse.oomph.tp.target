@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.8"?>
-<target name="Generated from Oomph" sequenceNumber="155">
+<target name="Generated from Oomph" sequenceNumber="156">
   <locations>
     <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
       <unit id="org.apache.commons.collections" version="3.2.2"/>
@@ -30,8 +30,8 @@
       <repository location="https://download.eclipse.org/tools/orbit/simrel/orbit-aggregation/nightly/latest"/>
       <repository location="https://download.eclipse.org/justj/jres/21/updates/milestone/latest"/>
       <repository location="https://download.eclipse.org/usssdk/updates/latest"/>
-      <repository location="https://download.eclipse.org/webtools/downloads/drops/R3.35.0/R-3.35.0-20240825085431/repository"/>
-      <repository location="https://download.eclipse.org/eclipse/updates/4.35-I-builds"/>
+      <repository location="https://download.eclipse.org/webtools/downloads/drops/R3.37.0/R-3.37.0-20250303081219/repository"/>
+      <repository location="https://download.eclipse.org/eclipse/updates/4.36-I-builds"/>
     </location>
   </locations>
 </target>
