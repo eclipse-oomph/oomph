@@ -2,6 +2,8 @@
 <setup:Index
     xmi:version="2.0"
     xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:p2="http://www.eclipse.org/oomph/p2/1.0"
     xmlns:setup="http://www.eclipse.org/oomph/setup/1.0"
     name="Eclipse">
   <annotation
@@ -10,6 +12,48 @@
         key="notificationURI">
       <value>https://www.eclipse.org/sponsor/ide/?scope=${scope}&amp;version=${scope.version}&amp;campaign=2025-03</value>
     </detail>
+  </annotation>
+  <annotation
+      source="http://www.eclipse.org/oomph/setup/Notification">
+    <detail
+        key="uri">
+      <value>https://www.eclipse.org/setups/notification/java24/index.html</value>
+    </detail>
+    <detail
+        key="maximize">
+      <value>false</value>
+    </detail>
+    <content
+        xsi:type="p2:Requirement"
+        name="org.eclipse.jdt.javanextpatch.feature.group"
+        versionRange="[1.24.0,1.25.0)"
+        optional="true"
+        max="0"/>
+    <content
+        xsi:type="p2:Requirement"
+        name="org.eclipse.jdt.feature.group"
+        versionRange="[3.20.100.v20250120-0740,3.20.199)"/>
+  </annotation>
+  <annotation
+      source="http://www.eclipse.org/oomph/setup/Notification">
+    <detail
+        key="uri">
+      <value>https://www.eclipse.org/setups/notification/java24/index.html?jre-only=true</value>
+    </detail>
+    <detail
+        key="maximize">
+      <value>false</value>
+    </detail>
+    <content
+        xsi:type="p2:Requirement"
+        name="org.eclipse.jdt.javanextpatch.feature.group"
+        versionRange="[1.24.0,1.25.0)"/>
+    <content
+        xsi:type="p2:Requirement"
+        name="installed.jre"
+        versionRange="24.0.0"
+        optional="true"
+        max="0"/>
   </annotation>
   <annotation
       source="http://www.eclipse.org/oomph/setup/JRE">
