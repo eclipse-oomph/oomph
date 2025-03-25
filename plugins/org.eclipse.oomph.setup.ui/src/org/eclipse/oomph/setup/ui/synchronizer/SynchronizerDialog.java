@@ -83,7 +83,6 @@ import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.userstorage.IStorageService;
 
 import java.io.File;
 import java.io.IOException;
@@ -256,10 +255,12 @@ public class SynchronizerDialog extends AbstractSetupDialog
         return NLS.bind(Messages.SynchronizerDialog_defaultMessage_selectWhatToRecord_intoRecorderTarget, recorderTargetText) + POLICY_HELP_MESSAGE;
 
       case SYNC:
-        return NLS.bind(Messages.SynchronizerDialog_defaultMessage_selectWhatToSyncWithRemote, getServiceLabel()) + POLICY_HELP_MESSAGE;
+        return NLS.bind(Messages.SynchronizerDialog_defaultMessage_selectWhatToSyncWithRemote, SynchronizerManager.INSTANCE.getServiceLabel())
+            + POLICY_HELP_MESSAGE;
 
       case RECORD_AND_SYNC:
-        return NLS.bind(Messages.SynchronizerDialog_defaultMessage_selectWhatToRecordAndSync, getServiceLabel()) + POLICY_HELP_MESSAGE;
+        return NLS.bind(Messages.SynchronizerDialog_defaultMessage_selectWhatToRecordAndSync, SynchronizerManager.INSTANCE.getServiceLabel())
+            + POLICY_HELP_MESSAGE;
 
       default:
         return null;
@@ -326,7 +327,7 @@ public class SynchronizerDialog extends AbstractSetupDialog
       remoteColumn.setWidth(200);
       remoteColumn.setResizable(true);
 
-      remoteColumnManager = new RemoteColumnManager(this, getServiceLabel());
+      remoteColumnManager = new RemoteColumnManager(this, SynchronizerManager.INSTANCE.getServiceLabel());
       columnManagers[column++] = remoteColumnManager;
     }
 
@@ -882,17 +883,6 @@ public class SynchronizerDialog extends AbstractSetupDialog
     }
 
     validatePage();
-  }
-
-  private static String getServiceLabel()
-  {
-    IStorageService service = SynchronizerManager.INSTANCE.getStorage().getService();
-    if (service == null)
-    {
-      return Messages.SynchronizerDialog_serviceLabel;
-    }
-
-    return service.getServiceLabel();
   }
 
   private static String getTitle(RecorderTransaction recorderTransaction)
