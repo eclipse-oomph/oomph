@@ -363,7 +363,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
 
   private static void handleBrandingNotificationURI(String notificationURI, String scope, String version)
   {
-    if ("true".equals(PropertiesUtil.getProperty("org.eclipse.oomph.setup.donate", "true"))) //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+    if ("true".equals(PropertiesUtil.getProperty("org.eclipse.oomph.setup.donate", Boolean.toString(!Platform.inDevelopmentMode())))) //$NON-NLS-1$//$NON-NLS-2$
     {
       try
       {
@@ -443,7 +443,8 @@ public final class SetupUIPlugin extends OomphUIPlugin
 
   private static void handleNotificationAnnotations(ProductVersion productVersion)
   {
-    if ("true".equals(PropertiesUtil.getProperty("org.eclipse.oomph.setup.notification", "true"))) //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+    // Default to false if we are in development mode.
+    if ("true".equals(PropertiesUtil.getProperty("org.eclipse.oomph.setup.notification", Boolean.toString(!Platform.inDevelopmentMode())))) //$NON-NLS-1$//$NON-NLS-2$
     {
       List<Annotation> notificationAnnotations = new ArrayList<>();
       notificationAnnotations.addAll(getNotificationAnnotations(productVersion));
