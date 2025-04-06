@@ -25,14 +25,14 @@ table {
 	white-space: nowrap;
 }
 
-a {
+.button a {
 	text-decoration: none;
 }
 
-a,
-a:visited,
-a:hover,
-a:active {
+.button a,
+.button a:visited,
+.button a:hover,
+.button a:active {
 	color: inherit;
 }
 
@@ -53,4 +53,19 @@ label {
 .button-section {
 	white-space: nowrap;
 	margin-bottom: 0.7em;
+}
+
+code {
+	font-size: 90%;
+	padding: 1px 4px;
+}
+
+code {
+	background-color: #f9f2f4;
+	border-radius: 0;
+	color: #c7254e;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, Courier New, monospace;
 }

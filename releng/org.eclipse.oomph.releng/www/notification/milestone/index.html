@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<link href="https://eclipseide.org/favicon.ico" rel="icon" type="image/x-icon" />
+	<title>Eclipse IDE 2025-06 M1</title>
+	<link rel="preconnect stylesheet" href="../notification.css" />
+	<style>
+		/* <![CDATA[*/
+		/*]]>*/
+	</style>
+	<script src="../notification.js"></script>
+	<script>
+		//<![CDATA[
+		const version = '2025-06';
+		const milestone = 'M1';
+		const productName = getQueryParameter('product-name', 'Eclipse IDE');
+		document.title = `${getQueryParameter('product-name', 'Eclipse IDE')} ${version} ${milestone}`;
+
+
+
+		function update() {
+			updateInnerInnerHTML('.version', version);
+			updateInnerInnerHTML('.milestone', milestone);
+			updateInnerInnerHTML('.product-name', productName);
+		}
+		//]]>
+	</script>
+</head>
+
+<body id="body">
+	<div class="main">
+		<div id="content">
+			<table style="display: none;">
+				<tbody id="query">
+					<tr>
+						<th>Property</th>
+						<th>Value</th>
+					</tr>
+					<tr>
+						<td>property</td>
+						<td>value</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<div id="general">
+				<div class="section">
+					The <span class="version">version</span> <span class="milestone">milestone</span> milestone
+					for the <span class="product-name">product-name</span> is available.
+				</div>
+				<div class="section">
+					It provides early access to the latest and greatest features for your IDE,
+					though of course there is also the possibility of regressions.
+				</div>
+				<div class="button-section">
+					<label class="button">
+						<a href="eclipse+setup:Milestone.setup">Install in this IDE</a>
+					</label>
+					&nbsp;
+					<label class="button">
+						<a href="https://www.eclipse.org/downloads/packages//">Download</a>
+					</label>
+					&nbsp;
+					<label class="button">
+						<a href="eclipse+command:close">Ask Me Later</a>
+					</label>
+					&nbsp;
+					<label class="button">
+						<a href="eclipse+command:dismiss-installation">No Thank You</a>
+					</label>
+				</div>
+				<div class="section">
+					By testing this version and <a class="copy-query" href="eclipse+external:../../problems/index.html">reporting problems</a> before the release,
+					you will be providing a valuable service for the community,
+					helping to ensure a quality <span class="version"></span> release.
+				</div>
+				<div class="section">
+					The latest version of the IDE provides <code>Help -> Report a Problem</code> for your convenience.
+				</div>
+				<div class="section">
+					Note that you can revert an update if you encounter serious problems.
+				</div>
+				<div class="section">
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		load();
+		update();
+		generate();
+	</script>
+</body>
+
+</html>
