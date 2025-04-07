@@ -113,6 +113,7 @@ public final class NotificationViewPart extends ViewPart
       }
     }
 
+    request.put("java.vendor", System.getProperty("java.vendor"));
     request.put("java.version", System.getProperty("java.version"));
 
     Composite parent = browser.getParent();

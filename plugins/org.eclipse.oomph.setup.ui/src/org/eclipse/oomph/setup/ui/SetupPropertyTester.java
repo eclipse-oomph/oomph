@@ -51,6 +51,8 @@ public class SetupPropertyTester extends PropertyTester
 
   public static final String DONATING = "donating"; //$NON-NLS-1$
 
+  public static final String PROBLEM = "problem"; //$NON-NLS-1$
+
   public static final String NOTIFICATIONS = "notifications"; //$NON-NLS-1$
 
   private static final Preferences PREFERENCES = SetupUIPlugin.INSTANCE.getInstancePreferences();
@@ -66,6 +68,8 @@ public class SetupPropertyTester extends PropertyTester
   private static boolean started;
 
   private static String donating;
+
+  private static String problem;
 
   private final static List<Annotation> notifications = new ArrayList<>();
 
@@ -129,6 +133,11 @@ public class SetupPropertyTester extends PropertyTester
     if (DONATING.equals(property))
     {
       return testDonating(receiver, args, expectedValue);
+    }
+
+    if (PROBLEM.equals(property))
+    {
+      return testProblem(receiver, args, expectedValue);
     }
 
     return false;
@@ -198,6 +207,16 @@ public class SetupPropertyTester extends PropertyTester
     }
 
     return expectedValue.equals(donating != null);
+  }
+
+  private boolean testProblem(Object receiver, Object[] args, Object expectedValue)
+  {
+    if (expectedValue == null)
+    {
+      expectedValue = Boolean.TRUE;
+    }
+
+    return expectedValue.equals(problem != null);
   }
 
   public static void setStarting(boolean starting)
@@ -280,6 +299,17 @@ public class SetupPropertyTester extends PropertyTester
   {
     SetupPropertyTester.donating = donating;
     UIPropertyTester.requestEvaluation(PREFIX + DONATING, false);
+  }
+
+  public static String getProblem()
+  {
+    return problem;
+  }
+
+  public static void setProblem(String problem)
+  {
+    SetupPropertyTester.problem = problem;
+    UIPropertyTester.requestEvaluation(PREFIX + PROBLEM, false);
   }
 
   public static boolean isShowProgressInWizard()

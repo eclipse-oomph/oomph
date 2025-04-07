@@ -119,6 +119,7 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 
 /**
  * @author Eike Stepper
@@ -349,6 +350,15 @@ public final class SetupUIPlugin extends OomphUIPlugin
 
             try
             {
+              handleProblemAnnotations(productVersion);
+            }
+            catch (Exception ex)
+            {
+              INSTANCE.log(ex, IStatus.WARNING);
+            }
+
+            try
+            {
               handleNotificationAnnotations(productVersion);
             }
             catch (Exception ex)
@@ -441,94 +451,53 @@ public final class SetupUIPlugin extends OomphUIPlugin
     return added;
   }
 
+  private static List<Annotation> getAllAnnotations(ProductVersion productVersion, String source)
+  {
+    List<Annotation> annotations = new ArrayList<>();
+    annotations.addAll(getAnnotations(productVersion, source));
+
+    Product product = productVersion.getProduct();
+    annotations.addAll(getAnnotations(product, source));
+
+    ProductCatalog productCatalog = product.getProductCatalog();
+    annotations.addAll(getAnnotations(productCatalog, source));
+
+    Index index = productCatalog.getIndex();
+    annotations.addAll(getAnnotations(index, source));
+    return annotations;
+  }
+
+  private static List<Annotation> getAnnotations(ModelElement modelElement, String source)
+  {
+    List<Annotation> result = new ArrayList<>();
+    for (Annotation annotation : modelElement.getAnnotations())
+    {
+      if (source.equals(annotation.getSource()))
+      {
+        result.add(annotation);
+      }
+    }
+    return result;
+  }
+
+  private static void handleProblemAnnotations(ProductVersion productVersion)
+  {
+    List<Annotation> problemAnnotations = getAllAnnotations(productVersion, AnnotationConstants.ANNOTATION_PROBLEM);
+    List<Annotation> applicableNotificationAnnotations = gatherApplicableAnnotations(productVersion, problemAnnotations, null);
+    if (!applicableNotificationAnnotations.isEmpty())
+    {
+      SetupPropertyTester.setProblem(applicableNotificationAnnotations.get(0).getDetails().get(AnnotationConstants.KEY_URI));
+    }
+  }
+
   private static void handleNotificationAnnotations(ProductVersion productVersion)
   {
     // Default to false if we are in development mode.
     if ("true".equals(PropertiesUtil.getProperty("org.eclipse.oomph.setup.notification", Boolean.toString(!Platform.inDevelopmentMode())))) //$NON-NLS-1$//$NON-NLS-2$
     {
-      List<Annotation> notificationAnnotations = new ArrayList<>();
-      notificationAnnotations.addAll(getNotificationAnnotations(productVersion));
-
-      Product product = productVersion.getProduct();
-      notificationAnnotations.addAll(getNotificationAnnotations(product));
-
-      ProductCatalog productCatalog = product.getProductCatalog();
-      notificationAnnotations.addAll(getNotificationAnnotations(productCatalog));
-
-      Index index = productCatalog.getIndex();
-      notificationAnnotations.addAll(getNotificationAnnotations(index));
-
-      Agent agent = P2Util.getAgentManager().getCurrentAgent();
-      Profile profile = agent == null ? null : agent.getCurrentProfile();
-      IQueryable<IInstallableUnit> queriable = null;
-      SetupTaskPerformer performer = null;
-
-      List<Annotation> applicableNotificationAnnotations = new ArrayList<>();
-      LOOP: for (Annotation notificationAnnotation : notificationAnnotations)
-      {
-        String uri = notificationAnnotation.getDetails().get(AnnotationConstants.KEY_URI);
-        if (uri == null || isRememberedNotificationURI(uri))
-        {
-          continue;
-        }
-
-        // Ensure that the annotation's requirements are all satisfied by the profile.
-        for (EObject eObject : notificationAnnotation.getContents())
-        {
-          if (eObject instanceof Requirement)
-          {
-            if (profile == null)
-            {
-              continue LOOP;
-            }
-
-            if (queriable == null)
-            {
-              List<IInstallableUnit> extraIUs = new ArrayList<>();
-              extraIUs.add(P2Util.createJREIU("jre")); //$NON-NLS-1$
-              extraIUs.addAll(getInstalledJREs());
-              queriable = QueryUtil.compoundQueryable(profile, new CollectionResult<>(extraIUs));
-            }
-
-            Requirement requirement = (Requirement)eObject;
-
-            String filter = requirement.getFilter();
-            if (filter != null)
-            {
-              if (performer == null)
-              {
-                try
-                {
-                  performer = createSetupTaskPerformer(index.eResource().getResourceSet(), Trigger.MANUAL);
-                }
-                catch (Exception ex)
-                {
-                  continue LOOP;
-                }
-              }
-
-              if (!performer.matchesFilterContext(filter))
-              {
-                continue;
-              }
-            }
-
-            // A normal requirement is satisfied if its IU is present while a negative requirement is satisfied if the IU is not present.
-            IQueryResult<IInstallableUnit> result = queriable.query(QueryUtil.createMatchQuery(requirement.toIRequirement().getMatches()), null);
-            if (result.isEmpty() ? requirement.getMin() > 0 : requirement.getMax() == 0)
-            {
-              continue LOOP;
-            }
-          }
-          else
-          {
-            continue LOOP;
-          }
-        }
-
-        applicableNotificationAnnotations.add(notificationAnnotation);
-      }
-
+      List<Annotation> notificationAnnotations = getAllAnnotations(productVersion, AnnotationConstants.ANNOTATION_NOTIFICATION);
+      List<Annotation> applicableNotificationAnnotations = gatherApplicableAnnotations(productVersion, notificationAnnotations,
+          SetupUIPlugin::isRememberedNotificationURI);
       if (!applicableNotificationAnnotations.isEmpty())
       {
         SetupPropertyTester.setNotifications(applicableNotificationAnnotations);
@@ -561,17 +530,80 @@ public final class SetupUIPlugin extends OomphUIPlugin
     }
   }
 
-  private static List<Annotation> getNotificationAnnotations(ModelElement modelElement)
+  private static List<Annotation> gatherApplicableAnnotations(ProductVersion productVersion, List<Annotation> annotations, Predicate<String> ignore)
   {
-    List<Annotation> result = new ArrayList<>();
-    for (Annotation annotation : modelElement.getAnnotations())
+    Agent agent = P2Util.getAgentManager().getCurrentAgent();
+    Profile profile = agent == null ? null : agent.getCurrentProfile();
+    IQueryable<IInstallableUnit> queriable = null;
+    SetupTaskPerformer performer = null;
+
+    List<Annotation> applicableNotificationAnnotations = new ArrayList<>();
+    LOOP: for (Annotation notificationAnnotation : annotations)
     {
-      if (AnnotationConstants.ANNOTATION_NOTIFICATION.equals(annotation.getSource()))
+      String uri = notificationAnnotation.getDetails().get(AnnotationConstants.KEY_URI);
+      if (uri == null || ignore != null && ignore.test(uri))
       {
-        result.add(annotation);
+        continue;
       }
+
+      // Ensure that the annotation's requirements are all satisfied by the profile.
+      for (EObject eObject : notificationAnnotation.getContents())
+      {
+        if (eObject instanceof Requirement)
+        {
+          if (profile == null)
+          {
+            continue LOOP;
+          }
+
+          if (queriable == null)
+          {
+            List<IInstallableUnit> extraIUs = new ArrayList<>();
+            extraIUs.add(P2Util.createJREIU("jre")); //$NON-NLS-1$
+            extraIUs.addAll(getInstalledJREs());
+            queriable = QueryUtil.compoundQueryable(profile, new CollectionResult<>(extraIUs));
+          }
+
+          Requirement requirement = (Requirement)eObject;
+
+          String filter = requirement.getFilter();
+          if (filter != null)
+          {
+            if (performer == null)
+            {
+              try
+              {
+                performer = createSetupTaskPerformer(productVersion.getProduct().getProductCatalog().getIndex().eResource().getResourceSet(), Trigger.MANUAL);
+              }
+              catch (Exception ex)
+              {
+                continue LOOP;
+              }
+            }
+
+            if (!performer.matchesFilterContext(filter))
+            {
+              continue;
+            }
+          }
+
+          // A normal requirement is satisfied if its IU is present while a negative requirement is satisfied if the IU is not present.
+          IQueryResult<IInstallableUnit> result = queriable.query(QueryUtil.createMatchQuery(requirement.toIRequirement().getMatches()), null);
+          if (result.isEmpty() ? requirement.getMin() > 0 : requirement.getMax() == 0)
+          {
+            continue LOOP;
+          }
+        }
+        else
+        {
+          continue LOOP;
+        }
+      }
+
+      applicableNotificationAnnotations.add(notificationAnnotation);
     }
-    return result;
+
+    return applicableNotificationAnnotations;
   }
 
   @SuppressWarnings("nls")

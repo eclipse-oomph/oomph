@@ -181,6 +181,12 @@
             name="%_UI_Donate_label">
       </command>
       <command
+            defaultHandler="org.eclipse.oomph.setup.presentation.handlers.ProblemHandler"
+            description="%_UI_ReportProblem_description"
+            id="org.eclipse.oomph.setup.problem"
+            name="%_UI_ReportProblem_label">
+      </command>
+      <command
             defaultHandler="org.eclipse.oomph.setup.presentation.handlers.NotificationsHandler"
             description="%_UI_Notifications_description"
             id="org.eclipse.oomph.setup.notifications"
@@ -193,6 +199,10 @@
       <image
             commandId="org.eclipse.oomph.setup.donate"
             icon="icons/heart.png">
+      </image>
+      <image
+            commandId="org.eclipse.oomph.setup.problem"
+            icon="icons/problem.png">
       </image>
       <image
             commandId="org.eclipse.oomph.setup.notifications"
@@ -509,6 +519,20 @@
                <test
                      forcePluginActivation="true"
                      property="org.eclipse.oomph.setup.ui.donating">
+               </test>
+            </visibleWhen>
+         </command>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="menu:help?after=about">
+         <command
+               commandId="org.eclipse.oomph.setup.problem"
+               style="push">
+            <visibleWhen>
+               <test
+                     forcePluginActivation="true"
+                     property="org.eclipse.oomph.setup.ui.problem">
                </test>
             </visibleWhen>
          </command>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<setup:Configuration
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:setup="http://www.eclipse.org/oomph/setup/1.0"
+    xmlns:setup.p2="http://www.eclipse.org/oomph/setup/p2/1.0"
+    label="Eclipse IDE Milestone Updates">
+  <annotation
+      source="http://www.eclipse.org/oomph/setup/SystemProperties">
+    <detail
+        key="oomph.setup.p2.skip">
+      <value>false</value>
+    </detail>
+    <detail
+        key="oomph.setup.show.initial.progress">
+      <value>true</value>
+    </detail>
+    <detail
+        key="oomph.setup.trigger">
+      <value>MANUAL</value>
+    </detail>
+  </annotation>
+  <installation
+      name="eclipse.ide.milestone.updates"
+      label="Eclipse IDE Milestone Updates">
+    <setupTask
+        xsi:type="setup.p2:P2Task"
+        label="Eclipse IDE Milestone Updates">
+      <repository
+          url="https://download.eclipse.org/staging/2025-06"/>
+      <repository
+          url="https://download.eclipse.org/technology/epp/staging/repository"/>
+    </setupTask>
+    <productVersion
+        href="index:/org.eclipse.setup#//@productCatalogs[name='self']/@products[name='empty.product']/@versions[name='version']"/>
+    <description>The Eclipse IDE Milestone Updates provides early access to Eclipse IDE milestones as they become available.</description>
+  </installation>
+  <workspace
+      name="eclipse.java.development.tools.support.for.java.24.workspace"
+      label="Eclipse Java Development Tools Support for Java 24 Workspace">
+    <description>The Eclipse Java Development Tools Support for Java 24 workspace provides cool stuff.</description>
+  </workspace>
+  <description>The Eclipse IDE Milestone Updates provides early access to Eclipse IDE milestones as they become available.</description>
+</setup:Configuration>
