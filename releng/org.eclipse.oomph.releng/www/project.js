@@ -5,6 +5,8 @@ window.onscroll = function() {
 	footer.style.display = document.documentElement.scrollTop > 100 ? 'inline' : 'none';
 };
 
+const bannerLogo = `https://eclipse.dev/eclipse.org-common/themes/solstice/public/images/logo/eclipse-ide/eclipse_logo.svg`;
+
 const logo = 'https://projects.eclipse.org/modules/custom/eclipsefdn/eclipsefdn_projects/images/logos/default.png';
 
 const projectBase = new URL(".", document.currentScript.src).href;
@@ -129,6 +131,8 @@ function generate() {
 		document.body.replaceChildren(...generatedBody);
 
 		applyGenerators(document.body.querySelectorAll('[data-generate]'));
+
+		document.getElementById('nav-product-logo').src = getProductImage(getProduct());
 	} catch (exception) {
 		document.body.prepend(...toElements(`<span>Failed to generate content: <span><b style="color: FireBrick">${exception.message}</b><br/>`));
 		console.log(exception);
@@ -281,7 +285,7 @@ function generateHeader() {
 			<div class="header-navbar">
 				<a class="header-navbar-brand" href="https://eclipseide.org/">
 					<div class="logo-wrapper">
-						<img src="https://eclipse.dev/eclipse.org-common/themes/solstice/public/images/logo/eclipse-ide/eclipse_logo.svg" alt="Eclipse Project" width="150"/>
+						<img src="${bannerLogo}" alt="Eclipse IDE" width="150"/>
 					</div>
 				</a>
 				<nav class="header-navbar-nav">
@@ -373,7 +377,7 @@ function generateNav() {
 <div class="header_nav">
 	<div class="col-xs-24 col-md-10 vcenter">
 		<a href="${home}">
-			<img src="${logo}" alt="The Main Index Page" xwidth="50%" xheight="auto" class="img-responsive header_nav_logo"/>
+			<img id='nav-product-logo' src="${logo}" alt="Eclipse IDE" xwidth="50%" xheight="auto" class="img-responsive header_nav_logo"/>
 		</a>
 	</div><!-- NO SPACES
  --><div class="col-xs-24 col-md-14 vcenter">
@@ -441,6 +445,23 @@ function generateAside() {
 </div>
 `;
 }
+
+function generateTableOfContents(target) {
+	if (target instanceof Element) {
+		const headers = document.querySelectorAll('h1, h2, h3, h4');
+
+		for (const header of headers) {
+			if (header.id != '') {
+				const count = Number(header.nodeName.substring(1));
+				const fontSize = 100 + 10 * (4 - count);
+				target.append(...toElements(`
+<div><span style="font-size: ${fontSize}%; padding-left: ${count}em;">&#8226;&nbsp;<a  href="#${header.id}">${header.innerHTML}</a><span></div>
+`))
+			}
+		}
+	}
+}
+
 
 function sendRequest(location, handler) {
 	var request = new XMLHttpRequest();

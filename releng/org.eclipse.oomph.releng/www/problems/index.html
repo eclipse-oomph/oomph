@@ -48,16 +48,23 @@
 		<div style="display: none;" id="links">
 		</div>
 
+		<div style="font-size: 90%">
+			<fieldset data-generate="generateTableOfContents(this)">
+				<legend>Table of Contents</legend>
+			</fieldset>
+		</div>
+
 		<h1 data-generate="setProductName(this)">Eclipse IDE</h1>
 		<p>
 			Each IDE distributed by the Eclipse Foundation is composed from the contents of a number of Eclipse projects.
 			Generally each project contributes its content to the <a href="https://github.com/eclipse-simrel">Eclipse Simultaenous Release</a>.
-			The <a href="">Eclipse Packaging project</a> assembles a subset of that project content into the various IDEs
-			available on the <a href="https://www.eclipse.org/downloads/packages/">download page</a> and in the Eclipse Installer
-			This makes it challenging to report an issue to the project that contributes the faulty component.
-			Moreover, it's not possible to transfer issues across GitHub organizations so ideally one reports problems in the right project organization.
+			The <a href="">Eclipse Packaging project</a> assembles a subset of the project content into the various IDEs
+			making them available on the <a href="https://www.eclipse.org/downloads/packages/">download page</a> and in the Eclipse Installer
+			This diversity of contribution makes it challenging to report an issue to the project that contributes the faulty component.
+			Moreover, it's not possible to transfer issues across GitHub organizations so ideally one reports an issue with the right project's organization.
 		</p>
-		<h1>Problem Reporting</h1>
+
+		<h1 id="problem-reporting">Problem Reporting</h1>
 		<p>
 			This page adapts itself to the product from which it is opened via the <code>Help &rarr; Report a Problem</code> menu.
 			The sidebar to the right lists the projects that are incorporated into the IDE package you are using.
@@ -65,10 +72,10 @@
 			or even from Eclipse Marketplace.
 			In any case, the list on the side bar to the right is a good place to start.
 			Please have a quick read though the description for the project to determine if that is indeed a suitable place to report an issue.
-			Please read also the following advice at least once to ensure that you submit a high-quality problem report.
+			Please also resource the following advice at least once to ensure that you submit a high-quality problem report.
 		</p>
 
-		<h2>Details, Details, Details...</h2>
+		<h2 id="details">Details, Details, Details...</h2>
 		<p>
 			When reporting issues, providing appropriate details is the key to success.
 			The developer will need to know which version of which software you using.
@@ -79,13 +86,12 @@
 			Most important, the developer will need to know how to reproduce the problem that you are seeing.
 			If the developer can't reproduce the problem, it won't be fixed.
 			Better to provide too much detail than not enough.
-			Picture is worth a thousand words.
+			A picture is worth a thousand words.
 			All browsers provide really good support for simply copying a screen capture and pasting it into the issue entry field.
-			It's also easy to drag and drop a short video or a zip file contianing a sample for reprodcing the problem.
+			It's also easy to drag and drop a short video or a zip file containing a sample for reprodcing the problem.
 		</p>
 
-		<h3>The Error Log </h3>
-
+		<h3 id="error-log">The Error Log </h3>
 		<p>
 			Often when things good badly wrong, errors are logged.
 			You can open the <code>Error Log</code>view via quick search.
@@ -109,27 +115,33 @@
 		</div>
 
 		<p>
-			Whenever possible, please include the <code>Exception Stack Trace</code> and the <code>Session Data</code> when reporting an issue
-			using <code>```</code> in the markdown to format it nicely.
+			Whenever available, please include these detail.
+			Simply use the <code>Copy Event Details to the Clipboard</code> button
+			and paste it into the issue
+			surrounced by <code>```</code> in the markdown to format it nicely.
 		</p>
 		<pre>```
-java.lang.Error: SWT Resource was not properly disposed
-	at org.eclipse.swt.graphics.Resource.initNonDisposeTracking(Resource.java:184)
-	at org.eclipse.swt.graphics.Resource.<init>(Resource.java:121)
-	at org.eclipse.swt.graphics.Image.<init>(Image.java:552)
-	...
-```
-
-```
 eclipse.buildId=4.35.0.20250306-0811
 java.version=21.0.2
 java.vendor=Eclipse Adoptium
 BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
 Framework arguments:  -product org.eclipse.epp.package.committers.product
-Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.committers.product -data file:/---
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.committers.product
+
+org.eclipse.ui.ide
+Error
+Fri Apr 04 15:21:14 CEST 2025
+Not properly disposed SWT resource
+
+java.lang.Error: SWT Resource was not properly disposed
+	at org.eclipse.swt.graphics.Resource.initNonDisposeTracking(Resource.java:184)
+	at org.eclipse.swt.graphics.Resource.<init>(Resource.java:121)
+	at org.eclipse.swt.graphics.Image.<init>(Image.java:552)
+	at org.eclipse.jface.resource.URLImageDescriptor.createImage(URLImageDescriptor.java:306)
+...
 ```</pre>
 
-		<h3>Open Discovered Type</h3>
+		<h3 id="open-discovered-type">Open Discovered Type</h3>
 		<p>
 			The Java source code of all Eclipse Foundation projects is indexed.
 			You can use <code>Navigate &rarr; Open Discovered Type</code> to search this index.
@@ -152,7 +164,54 @@ Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.e
 			leaking handles which will eventually force the application to require a restart.
 		</p>
 
-		<h1>Simultaneous Release Projects</h1>
+		<div>
+			<h2 id="spies">Introspection with Plug-in Spies</h2>
+			<p>
+				The IDE includes so-called spies that can be used to introspect what you see in the IDE.
+				This is useful for determine project contribute any particular aspect of the IDE.
+				Here we use quick search to see the convenient keyboard shortcuts for these actions:
+			</p>
+			<div>
+				<img class="box" src="images/QuickSearchPluginSpy.png" />
+			</div>
+
+			<h3 id="selection-spy">Plug-in Selection Spy</h3>
+			<p>
+				Here we have used <code>Help &rarr; Eclipse Marketplace</code> to bring up Marketplace dialog and used the <code>Plug-in Selection Spy</code> key combination to bring up the spy dialog:
+			</p>
+			<div>
+				<img class="box" src="images/PluginSelectionSpy.png" />
+			</div>
+			<p>
+				So we know this dialog is provided by <code>org.eclipse.epp.mpc.ui</code>.
+				In addition,
+				we also see the class names
+				which we can use with <a href="#open-discovered-type"><code>Navigate &rarr; Open Dicovered Type</code></a>.
+				As such if we have issues with this dialog, we know to open the issue with the <a href="#technology.packaging.mpc">Marketplace Client</a> project.
+			</p>
+
+			<h3 id="menu-spy">Plug-in Menu Spy</h3>
+			<p>
+				Here we have used the <code>Plug-in Menu Spy</code> key combination active the menu spy before brining up the context menu:
+			</p>
+			<div>
+				<img style="max-width: 45%" class="box" src="images/PluginMenuSpy.png" />
+			</div>
+			<p>
+				This of course also works for the menu bar.
+				Note that the cursor changes to indicate the menu spy is active.
+				Clicking on a menu item will open the <code>Plug-in Menu Spy</code> dialog.
+			</p>
+			<div>
+				<img style="max-width: 45%" class="box" src="images/PluginMenuSpyDialog.png" />
+			</div>
+			<p>
+				So we know this is provided by <code>org.eclipse.lsp4e.menu.refactorings</code>
+				and can find the <a href="#technology.lsp4e"><code>LSP4E</code></a> project.
+			</p>
+		</div>
+
+		<h1 id="simrel">Simultaneous Release Projects</h1>
 
 		<p>
 			The following is a list of all projects that contribute to the Simultaneous Release.

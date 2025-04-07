@@ -24,6 +24,10 @@
 	padding-left: .3em;
 }
 
+#nav-product-logo {
+	min-width: 3.5em;
+}
+
 .box {
 	border: 1px solid #555;
 	padding: 2px;
@@ -46,4 +50,15 @@
 	border-collapse: collapse;
 	margin-bottom: 2ex;
 	white-space: nowrap;
+}
+
+fieldset {
+	border: 1px solid silver;
+}
+
+legend {
+	margin-left : 1em;
+	margin-bottom: 0;
+	border-bottom: none;
+	width: auto;
 }
