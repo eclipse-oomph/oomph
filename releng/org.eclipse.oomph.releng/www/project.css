@@ -54,6 +54,8 @@
 
 fieldset {
 	border: 1px solid silver;
+	margin-right: 15px;
+	padding: 5px;
 }
 
 legend {
