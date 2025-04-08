@@ -134,14 +134,5 @@
             name="%command.questionnaire.name">
       </command>
    </extension>
-   <extension
-         point="org.eclipse.userstorage.oauth.clients">
-      <client
-            id="Q9TBg1mthjy0wSKVgrXfiBU4Kqz"
-            authURI="https://accounts.eclipse.org/"
-            icon="icons/oomph16.png"
-            name="%oomph">
-      </client>
-   </extension>
 
 </plugin>

@@ -942,6 +942,22 @@ public final class SetupUIPlugin extends OomphUIPlugin
 
     try
     {
+      try
+      {
+        if (synchronizationController != null)
+        {
+          Synchronization synchronization = synchronizationController.await();
+          if (synchronization != null)
+          {
+            SynchronizerManager.INSTANCE.performSynchronization(synchronization, false, false);
+          }
+        }
+      }
+      catch (Exception ex)
+      {
+        INSTANCE.log(ex);
+      }
+
       // Ensure that the demand created resources for the installation, workspace, and user are loaded and created.
       // Load the resource set quickly without doing ETag checking.
       resourceSet.getLoadOptions().put(ECFURIHandlerImpl.OPTION_CACHE_HANDLING, CacheHandling.CACHE_WITHOUT_ETAG_CHECKING);
@@ -975,22 +991,6 @@ public final class SetupUIPlugin extends OomphUIPlugin
       else
       {
         monitor.worked(75);
-      }
-
-      try
-      {
-        if (synchronizationController != null)
-        {
-          Synchronization synchronization = synchronizationController.await();
-          if (synchronization != null)
-          {
-            SynchronizerManager.INSTANCE.performSynchronization(synchronization, false, false);
-          }
-        }
-      }
-      catch (Exception ex)
-      {
-        INSTANCE.log(ex);
       }
 
       // Create the performer with a fully populated resource set.

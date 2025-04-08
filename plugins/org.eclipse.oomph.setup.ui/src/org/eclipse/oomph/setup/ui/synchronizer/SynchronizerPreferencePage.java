@@ -25,10 +25,6 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.preference.PreferenceDialog;
-import org.eclipse.jface.viewers.StructuredViewer;
-import org.eclipse.nebula.jface.tablecomboviewer.TableComboViewer;
-import org.eclipse.nebula.widgets.tablecombo.TableCombo;
-import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
@@ -40,17 +36,12 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.dialogs.PreferenceLinkArea;
-import org.eclipse.ui.preferences.IWorkbenchPreferenceContainer;
-import org.eclipse.userstorage.IStorage;
-import org.eclipse.userstorage.IStorageService;
-import org.eclipse.userstorage.ui.StorageConfigurationComposite;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -156,7 +147,9 @@ public class SynchronizerPreferencePage extends AbstractPreferencePage
   {
     private Button enableButton;
 
-    private StorageConfigurationComposite storageConfigurationComposite;
+    private Text location;
+
+    private Button browseButton;
 
     private Button syncButton;
 
@@ -166,311 +159,244 @@ public class SynchronizerPreferencePage extends AbstractPreferencePage
 
     private boolean initialEnabled;
 
+    private Path initialLocation;
+
     public StorageHandler()
     {
       initialEnabled = SynchronizerManager.INSTANCE.isSyncEnabled();
+      initialLocation = SynchronizerManager.INSTANCE.getSyncLocation();
     }
 
     @Override
     public Control createContents(Composite parent)
     {
-      final IStorage storage = SynchronizerManager.INSTANCE.getStorage();
-      IStorageService service = storage.getService();
-      boolean showServices = StorageConfigurationComposite.isShowServices();
-
-      GridLayout layout = new GridLayout(showServices ? 2 : 1, false);
+      GridLayout layout = new GridLayout(3, false);
       layout.marginWidth = 0;
       layout.marginHeight = 0;
 
       final Composite main = new Composite(parent, SWT.NONE);
       main.setLayout(layout);
 
-      if (service == null && !showServices)
-      {
-        Label label = new Label(main, SWT.NONE);
-        label.setText(Messages.SynchronizerPreferencePage_noServiceAvailable);
-      }
-      else
-      {
-        enableButton = new Button(main, SWT.CHECK);
-        enableButton.setText(showServices ? Messages.SynchronizerPreferencePage_enableButton_syncWith
-            : NLS.bind(Messages.SynchronizerPreferencePage_enableButton_syncWithService, service.getServiceLabel()));
-        enableButton.addSelectionListener(new SelectionAdapter()
-        {
-          @Override
-          public void widgetSelected(SelectionEvent e)
-          {
-            updateEnablement();
-          }
-        });
+      enableButton = new Button(main, SWT.CHECK);
 
-        if (showServices)
+      enableButton.setText(Messages.SynchronizerPreferencePage_synchronizeTo_text);
+      enableButton.addSelectionListener(new SelectionAdapter()
+      {
+        @Override
+        public void widgetSelected(SelectionEvent e)
         {
-          storageConfigurationComposite = new StorageConfigurationComposite(main, SWT.NONE, storage)
+          updateEnablement();
+        }
+      });
+
+      location = new Text(main, SWT.BORDER | SWT.SINGLE);
+      location.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
+
+      browseButton = new Button(main, SWT.PUSH);
+      browseButton.setText(Messages.SynchronizerPreferencePage_Browse_label);
+      browseButton.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, false, 1, 1));
+
+      syncButton = new Button(main, SWT.PUSH);
+      syncButton.setText(Messages.SynchronizerPreferencePage_syncButton_text);
+      syncButton.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, false, layout.numColumns, 1));
+      syncButton.addSelectionListener(new SelectionAdapter()
+      {
+        @Override
+        public void widgetSelected(SelectionEvent e)
+        {
+          performApply();
+
+          final Shell shell = getShell();
+
+          UIUtil.asyncExec(shell, new Runnable()
           {
             @Override
-            protected StructuredViewer createViewer(Composite parent)
+            public void run()
             {
-              TableComboViewer viewer = new TableComboViewer(parent, SWT.BORDER | SWT.READ_ONLY);
-
-              TableCombo tableCombo = viewer.getTableCombo();
-              tableCombo.defineColumns(2);
-              tableCombo.setToolTipText(Messages.SynchronizerPreferencePage_tableCombo_tooltip);
-
-              return viewer;
+              try
+              {
+                Object data = shell.getData();
+                if (data instanceof PreferenceDialog)
+                {
+                  PreferenceDialog preferenceDialog = (PreferenceDialog)data;
+                  ReflectUtil.invokeMethod("okPressed", preferenceDialog); //$NON-NLS-1$
+                }
+              }
+              catch (Throwable ex)
+              {
+                SetupUIPlugin.INSTANCE.log(ex);
+              }
             }
-          };
+          });
+
+          UIUtil.asyncExec(shell.getDisplay(), new Runnable()
+          {
+            @Override
+            public void run()
+            {
+              try
+              {
+                Shell shell = SetupPropertyTester.getHandlingShell();
+                if (shell != null)
+                {
+                  shell.setVisible(true);
+                }
+                else
+                {
+                  Impact impact = SynchronizerManager.INSTANCE.performFullSynchronization();
+                  if (impact != null && impact.hasLocalImpact())
+                  {
+                    SetupWizard.Updater.perform(false);
+                  }
+                }
+              }
+              catch (Throwable ex)
+              {
+                SetupUIPlugin.INSTANCE.log(ex);
+              }
+            }
+          });
         }
+      });
 
-        syncButton = new Button(main, SWT.PUSH);
-        syncButton.setText(Messages.SynchronizerPreferencePage_syncButton_text);
-        syncButton.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, false, layout.numColumns, 1));
-        syncButton.addSelectionListener(new SelectionAdapter()
+      viewButton = new Button(main, SWT.PUSH);
+      viewButton.setText(Messages.SynchronizerPreferencePage_viewButton_text);
+      viewButton.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, false, layout.numColumns, 1));
+      viewButton.addSelectionListener(new SelectionAdapter()
+      {
+        @Override
+        public void widgetSelected(SelectionEvent e)
         {
-          @Override
-          public void widgetSelected(SelectionEvent e)
+          ProgressMonitorDialog dialog = new ProgressMonitorDialog(getShell());
+          try
           {
-            performApply();
-
-            final Shell shell = getShell();
-
-            UIUtil.asyncExec(shell, new Runnable()
+            dialog.run(true, false, new IRunnableWithProgress()
             {
               @Override
-              public void run()
+              public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
               {
                 try
                 {
-                  Object data = shell.getData();
-                  if (data instanceof PreferenceDialog)
+                  File file = File.createTempFile("preference-synchornization-remote", ".xml"); //$NON-NLS-1$ //$NON-NLS-2$
+                  if (SynchronizerManager.INSTANCE.getRemoteDataProvider().retrieve(file))
                   {
-                    PreferenceDialog preferenceDialog = (PreferenceDialog)data;
-                    ReflectUtil.invokeMethod("okPressed", preferenceDialog); //$NON-NLS-1$
                   }
-                }
-                catch (Throwable ex)
-                {
-                  SetupUIPlugin.INSTANCE.log(ex);
-                }
-              }
-            });
 
-            UIUtil.asyncExec(shell.getDisplay(), new Runnable()
-            {
-              @Override
-              public void run()
-              {
-                try
-                {
-                  Shell shell = SetupPropertyTester.getHandlingShell();
-                  if (shell != null)
+                  final String data = IOUtil.readUTF8(file);
+
+                  UIUtil.asyncExec(new Runnable()
                   {
-                    shell.setVisible(true);
-                  }
-                  else
-                  {
-                    Impact impact = SynchronizerManager.INSTANCE.performFullSynchronization();
-                    if (impact != null && impact.hasLocalImpact())
+                    @Override
+                    public void run()
                     {
-                      SetupWizard.Updater.perform(false);
-                    }
-                  }
-                }
-                catch (Throwable ex)
-                {
-                  SetupUIPlugin.INSTANCE.log(ex);
-                }
-              }
-            });
-          }
-        });
-
-        viewButton = new Button(main, SWT.PUSH);
-        viewButton.setText(Messages.SynchronizerPreferencePage_viewButton_text);
-        viewButton.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, false, layout.numColumns, 1));
-        viewButton.addSelectionListener(new SelectionAdapter()
-        {
-          @Override
-          public void widgetSelected(SelectionEvent e)
-          {
-            ProgressMonitorDialog dialog = new ProgressMonitorDialog(getShell());
-            try
-            {
-              dialog.run(true, false, new IRunnableWithProgress()
-              {
-                @Override
-                public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
-                {
-                  try
-                  {
-                    File file = File.createTempFile("preference-synchornization-remote", ".xml"); //$NON-NLS-1$ //$NON-NLS-2$
-                    if (SynchronizerManager.INSTANCE.getRemoteDataProvider().retrieve(file))
-                    {
-                    }
-
-                    final String data = IOUtil.readUTF8(file);
-
-                    UIUtil.asyncExec(new Runnable()
-                    {
-                      @Override
-                      public void run()
+                      final Point size = getShell().getSize();
+                      Dialog dialog = new Dialog(getShell())
                       {
-                        final Point size = getShell().getSize();
-                        Dialog dialog = new Dialog(getShell())
+                        @Override
+                        protected void configureShell(Shell newShell)
                         {
-                          @Override
-                          protected void configureShell(Shell newShell)
-                          {
-                            super.configureShell(newShell);
-                            newShell.setText(Messages.SynchronizerPreferencePage_shellText);
-                          }
+                          super.configureShell(newShell);
+                          newShell.setText(Messages.SynchronizerPreferencePage_shellText);
+                        }
 
-                          @Override
-                          protected boolean isResizable()
-                          {
-                            return true;
-                          }
+                        @Override
+                        protected boolean isResizable()
+                        {
+                          return true;
+                        }
 
-                          @Override
-                          protected void createButtonsForButtonBar(Composite parent)
-                          {
-                            createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CLOSE_LABEL, true);
-                          }
+                        @Override
+                        protected void createButtonsForButtonBar(Composite parent)
+                        {
+                          createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CLOSE_LABEL, true);
+                        }
 
-                          @Override
-                          protected Control createDialogArea(Composite parent)
-                          {
-                            Composite composite = (Composite)super.createDialogArea(parent);
-                            StyledText text = new StyledText(composite, SWT.WRAP | SWT.V_SCROLL | SWT.H_SCROLL | SWT.READ_ONLY | SWT.BORDER);
-                            text.setForeground(composite.getForeground());
-                            text.setBackground(composite.getBackground());
-                            GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
-                            gridData.widthHint = size.x * 3 / 4;
-                            gridData.heightHint = size.y * 3 / 4;
-                            text.setLayoutData(gridData);
-                            text.setText(data);
+                        @Override
+                        protected Control createDialogArea(Composite parent)
+                        {
+                          Composite composite = (Composite)super.createDialogArea(parent);
+                          StyledText text = new StyledText(composite, SWT.WRAP | SWT.V_SCROLL | SWT.H_SCROLL | SWT.READ_ONLY | SWT.BORDER);
+                          text.setForeground(composite.getForeground());
+                          text.setBackground(composite.getBackground());
+                          GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
+                          gridData.widthHint = size.x * 3 / 4;
+                          gridData.heightHint = size.y * 3 / 4;
+                          text.setLayoutData(gridData);
+                          text.setText(data);
 
-                            try
+                          try
+                          {
+                            Pattern xmlPattern = Pattern.compile("<\\??/?[^>]+\\??/?>", Pattern.DOTALL); //$NON-NLS-1$
+                            Pattern attributePattern = Pattern.compile("\\s+([^=\">]+)=\"([^\"]*)\"", Pattern.DOTALL); //$NON-NLS-1$
+                            int index = 0;
+                            List<StyleRange> styleRanges = new ArrayList<>();
+                            for (Matcher xmlMatcher = xmlPattern.matcher(data), attributeMatcher = attributePattern.matcher(data); index != -1
+                                && xmlMatcher.find(index);)
                             {
-                              Pattern xmlPattern = Pattern.compile("<\\??/?[^>]+\\??/?>", Pattern.DOTALL); //$NON-NLS-1$
-                              Pattern attributePattern = Pattern.compile("\\s+([^=\">]+)=\"([^\"]*)\"", Pattern.DOTALL); //$NON-NLS-1$
-                              int index = 0;
-                              List<StyleRange> styleRanges = new ArrayList<>();
-                              for (Matcher xmlMatcher = xmlPattern.matcher(data), attributeMatcher = attributePattern.matcher(data); index != -1
-                                  && xmlMatcher.find(index);)
+                              int xmlEnd = xmlMatcher.end();
+                              if (data.charAt(xmlMatcher.start() + 1) != '?')
                               {
-                                int xmlEnd = xmlMatcher.end();
-                                if (data.charAt(xmlMatcher.start() + 1) != '?')
+                                while (attributeMatcher.find(index) && attributeMatcher.end() < xmlEnd)
                                 {
-                                  while (attributeMatcher.find(index) && attributeMatcher.end() < xmlEnd)
+                                  String attributeName = attributeMatcher.group(1);
+                                  boolean metaAttribute = attributeName.contains(":"); //$NON-NLS-1$
+                                  if (!metaAttribute || attributeName.equals("xsi:type")) //$NON-NLS-1$
                                   {
-                                    String attributeName = attributeMatcher.group(1);
-                                    boolean metaAttribute = attributeName.contains(":"); //$NON-NLS-1$
-                                    if (!metaAttribute || attributeName.equals("xsi:type")) //$NON-NLS-1$
-                                    {
-                                      StyleRange styleRange = new StyleRange();
-                                      styleRange.start = attributeMatcher.start(2);
-                                      styleRange.length = attributeMatcher.end(2) - styleRange.start;
-                                      styleRange.fontStyle = metaAttribute ? SWT.ITALIC | SWT.BOLD : SWT.BOLD;
-                                      styleRanges.add(styleRange);
-                                    }
-
-                                    index = attributeMatcher.end();
+                                    StyleRange styleRange = new StyleRange();
+                                    styleRange.start = attributeMatcher.start(2);
+                                    styleRange.length = attributeMatcher.end(2) - styleRange.start;
+                                    styleRange.fontStyle = metaAttribute ? SWT.ITALIC | SWT.BOLD : SWT.BOLD;
+                                    styleRanges.add(styleRange);
                                   }
-                                }
 
-                                index = data.indexOf('<', xmlEnd);
+                                  index = attributeMatcher.end();
+                                }
                               }
 
-                              text.setStyleRanges(styleRanges.toArray(new StyleRange[styleRanges.size()]));
-                            }
-                            catch (RuntimeException ex)
-                            {
-                              // Ignore styling problems.
+                              index = data.indexOf('<', xmlEnd);
                             }
 
-                            return composite;
+                            text.setStyleRanges(styleRanges.toArray(new StyleRange[styleRanges.size()]));
                           }
-                        };
+                          catch (RuntimeException ex)
+                          {
+                            // Ignore styling problems.
+                          }
 
-                        dialog.setBlockOnOpen(false);
-                        dialog.open();
-                      }
-                    });
-                  }
-                  catch (Exception ex)
-                  {
-                    SetupUIPlugin.INSTANCE.log(ex);
-                  }
+                          return composite;
+                        }
+                      };
+
+                      dialog.setBlockOnOpen(false);
+                      dialog.open();
+                    }
+                  });
                 }
-              });
-            }
-            catch (Exception ex)
-            {
-              SetupUIPlugin.INSTANCE.log(ex);
-            }
+                catch (Exception ex)
+                {
+                  SetupUIPlugin.INSTANCE.log(ex);
+                }
+              }
+            });
           }
-        });
-
-        // USS doesn't yet expose pref page ID
-        PreferenceLinkArea credentialsLink = new PreferenceLinkArea(main, SWT.NONE, "org.eclipse.userstorage.ui.PreferencePage", //$NON-NLS-1$
-            NLS.bind(Messages.SynchronizerPreferencePage_seeLinkforCredentials, "<a>''User Storage Service''</a>"), //$NON-NLS-1$
-            (IWorkbenchPreferenceContainer)getContainer(), null);
-        credentialsLink.getControl().setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, false, layout.numColumns, 1));
-
-        // deleteButton = new Button(main, SWT.PUSH);
-        // deleteButton.setText("Delete Remote Data");
-        // deleteButton.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, false, layout.numColumns, 1));
-        // deleteButton.addSelectionListener(new SelectionAdapter()
-        // {
-        // @Override
-        // public void widgetSelected(SelectionEvent e)
-        // {
-        // Shell shell = UIUtil.getShell();
-        //
-        // try
-        // {
-        // ProgressMonitorDialog dialog = new ProgressMonitorDialog(shell);
-        //
-        // dialog.run(true, true, new IRunnableWithProgress()
-        // {
-        // public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
-        // {
-        // try
-        // {
-        // RemoteDataProvider remoteDataProvider = new RemoteDataProvider(storage);
-        // remoteDataProvider.delete();
-        // }
-        // catch (Throwable ex)
-        // {
-        // throw new InvocationTargetException(ex);
-        // }
-        // }
-        // });
-        // }
-        // catch (InvocationTargetException ex)
-        // {
-        // Throwable cause = ex.getCause();
-        // SetupUIPlugin.INSTANCE.log(cause);
-        // ErrorDialog.open(cause);
-        // }
-        // catch (InterruptedException ex)
-        // {
-        // //$FALL-THROUGH$
-        // }
-        // }
-        // });
-
-        enableButton.setSelection(initialEnabled);
-        UIUtil.asyncExec(new Runnable()
-        {
-          @Override
-          public void run()
+          catch (Exception ex)
           {
-            updateEnablement();
+            SetupUIPlugin.INSTANCE.log(ex);
           }
-        });
-      }
+        }
+      });
+
+      enableButton.setSelection(initialEnabled);
+      location.setText(initialLocation.toString());
+
+      UIUtil.asyncExec(new Runnable()
+      {
+        @Override
+        public void run()
+        {
+          updateEnablement();
+        }
+      });
 
       return main;
     }
@@ -481,12 +407,8 @@ public class SynchronizerPreferencePage extends AbstractPreferencePage
       if (enableButton != null)
       {
         enableButton.setSelection(initialEnabled);
+        location.setText(initialLocation.toString());
         updateEnablement();
-      }
-
-      if (storageConfigurationComposite != null)
-      {
-        storageConfigurationComposite.performDefaults();
       }
     }
 
@@ -504,12 +426,8 @@ public class SynchronizerPreferencePage extends AbstractPreferencePage
     {
       if (enableButton != null)
       {
-        if (storageConfigurationComposite != null)
-        {
-          storageConfigurationComposite.performApply();
-        }
-
         SynchronizerManager.INSTANCE.setSyncEnabled(initialEnabled = enableButton.getSelection());
+        SynchronizerManager.INSTANCE.setSyncLocation(initialLocation = Path.of(location.getText()));
       }
     }
 
@@ -522,9 +440,9 @@ public class SynchronizerPreferencePage extends AbstractPreferencePage
           return true;
         }
 
-        if (storageConfigurationComposite != null)
+        if (location != null && !location.getText().equals(initialLocation.toString()))
         {
-          return storageConfigurationComposite.isDirty();
+          return true;
         }
       }
       catch (Exception ex)
@@ -538,10 +456,10 @@ public class SynchronizerPreferencePage extends AbstractPreferencePage
     private void updateEnablement()
     {
       boolean enabled = enableButton != null ? enableButton.getSelection() : false;
-
-      if (storageConfigurationComposite != null)
+      if (location != null)
       {
-        storageConfigurationComposite.setEnabled(enabled);
+        location.setEnabled(enabled);
+        browseButton.setEnabled(enabled);
       }
 
       if (syncButton != null)

@@ -25,7 +25,6 @@ import org.eclipse.oomph.setup.internal.sync.DataProvider.Location;
 import org.eclipse.oomph.setup.internal.sync.DataProvider.NotCurrentException;
 import org.eclipse.oomph.setup.internal.sync.LocalDataProvider;
 import org.eclipse.oomph.setup.internal.sync.RemoteDataProvider;
-import org.eclipse.oomph.setup.internal.sync.RemoteDataProvider.SyncStorageCache;
 import org.eclipse.oomph.setup.internal.sync.SyncUtil;
 import org.eclipse.oomph.setup.internal.sync.Synchronization;
 import org.eclipse.oomph.setup.internal.sync.Synchronizer;
@@ -50,13 +49,6 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
-import org.eclipse.userstorage.IBlob;
-import org.eclipse.userstorage.IStorage;
-import org.eclipse.userstorage.StorageFactory;
-import org.eclipse.userstorage.spi.ISettings;
-import org.eclipse.userstorage.tests.util.ServerFixture;
-import org.eclipse.userstorage.util.Settings.MemorySettings;
-
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.core.IsNull;
 import org.junit.Assert;
@@ -64,6 +56,8 @@ import org.junit.Assert;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -88,30 +82,26 @@ public final class TestWorkstation
 
   private final File userSetup;
 
+  private final File sharedStorage;
+
   private final TestSynchronizer synchronizer;
 
   private File remoteFile;
 
   private User user;
 
-  public TestWorkstation(ServerFixture serverFixture, Map<Integer, TestWorkstation> workstations, int id) throws Exception
+  public TestWorkstation(File sharedPreferences, Map<Integer, TestWorkstation> workstations, int id) throws Exception
   {
     this.workstations = workstations;
     this.id = id;
 
     userHome = createUserHome();
     userSetup = new File(userHome, "user.setup");
-
-    ISettings settings = new MemorySettings();
-    settings.setValue(RemoteDataProvider.APPLICATION_TOKEN, serverFixture.getService().getServiceURI().toString());
-
-    StorageFactory factory = new StorageFactory(settings);
-    SyncStorageCache cache = new SyncStorageCache(userHome);
-    IStorage storage = factory.create(RemoteDataProvider.APPLICATION_TOKEN, cache);
+    sharedStorage = sharedPreferences;
 
     DataProvider localDataProvider = new LocalDataProvider(userSetup);
-    DataProvider remoteDataProvider = new RemoteDataProvider(storage);
-    synchronizer = new TestSynchronizer(localDataProvider, remoteDataProvider, cache.getFolder());
+    DataProvider remoteDataProvider = new RemoteDataProvider(sharedStorage.toPath());
+    synchronizer = new TestSynchronizer(localDataProvider, remoteDataProvider, new File(userHome, "cache"));
 
     log("Create workstation " + userHome);
   }
@@ -292,10 +282,11 @@ public final class TestWorkstation
       remoteFile = File.createTempFile("remote-data-", ".tmp");
       remoteFile.deleteOnExit();
 
-      IStorage tmpStorage = createTmpStorage();
-      IBlob tmpBlob = tmpStorage.getBlob(RemoteDataProvider.KEY);
-      InputStream tmpContents = tmpBlob.getContents();
-      RemoteDataProvider.uncompressContents(tmpContents, remoteFile);
+      Path tmpStorage = createTmpStorage();
+      try (InputStream tmpContents = Files.newInputStream(tmpStorage))
+      {
+        RemoteDataProvider.saveContents(tmpContents, remoteFile);
+      }
     }
 
     return loadObject(URI.createFileURI(remoteFile.getAbsolutePath()), Location.REMOTE.getDataType());
@@ -326,16 +317,10 @@ public final class TestWorkstation
     return BaseUtil.getObjectByType(resource.getContents(), classifier);
   }
 
-  private IStorage createTmpStorage() throws Exception
+  private Path createTmpStorage() throws Exception
   {
     RemoteDataProvider remoteDataProvider = (RemoteDataProvider)synchronizer.getRemoteSnapshot().getDataProvider();
-    IStorage storage = remoteDataProvider.getStorage();
-
-    ISettings settings = new MemorySettings();
-    settings.setValue(RemoteDataProvider.APPLICATION_TOKEN, storage.getService().getServiceURI().toString());
-
-    StorageFactory factory = new StorageFactory(settings);
-    return factory.create(RemoteDataProvider.APPLICATION_TOKEN);
+    return remoteDataProvider.getStorageLocation();
   }
 
   private File createUserHome()
