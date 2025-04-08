@@ -13,24 +13,6 @@ public class Messages extends NLS
 {
   private static final String BUNDLE_NAME = "org.eclipse.oomph.setup.ui.synchronizer.messages"; //$NON-NLS-1$
 
-  public static String AbstractServiceDialog_title;
-
-  public static String OptInDialog_message;
-
-  public static String OptInDialog_yesButton_text;
-
-  public static String OptInDialog_noButton_text;
-
-  public static String OptInDialog_askMeLaterButton_text;
-
-  public static String OptOutDialog_message;
-
-  public static String OptOutDialog_yesButton_text;
-
-  public static String OptOutDialog_noButton_text;
-
-  public static String OptOutDialog_hint;
-
   public static String SynchronizerDialog_policyHelpMessage;
 
   public static String SynchronizerDialog_defaultMessage_selectWhatToRecord_allWorkspaces;
@@ -91,17 +73,17 @@ public class Messages extends NLS
 
   public static String SynchronizerManager_ServiceDiscontinueFindOutMore_label;
 
+  public static String SynchronizerPreferencePage_Browse_label;
+
   public static String SynchronizerPreferencePage_disabledHandler_text;
 
   public static String SynchronizerPreferencePage_noServiceAvailable;
 
-  public static String SynchronizerPreferencePage_enableButton_syncWith;
-
-  public static String SynchronizerPreferencePage_enableButton_syncWithService;
-
   public static String SynchronizerPreferencePage_tableCombo_tooltip;
 
   public static String SynchronizerPreferencePage_syncButton_text;
+
+  public static String SynchronizerPreferencePage_synchronizeTo_text;
 
   public static String SynchronizerPreferencePage_viewButton_text;
 
