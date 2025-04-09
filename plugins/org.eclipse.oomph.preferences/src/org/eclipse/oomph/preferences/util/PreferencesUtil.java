@@ -1524,6 +1524,11 @@ public final class PreferencesUtil
     @Override
     public void preferenceChange(PreferenceChangeEvent event)
     {
+      if (target == null)
+      {
+        return;
+      }
+
       for (StackTraceElement stackTraceElement : Thread.currentThread().getStackTrace())
       {
         String methodName = stackTraceElement.getMethodName();
