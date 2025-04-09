@@ -5,25 +5,28 @@
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<link href="https://eclipseide.org/favicon.ico" rel="icon" type="image/x-icon" />
 	<title>Eclipse IDE 2025-06 M1</title>
-	<link rel="preconnect stylesheet" href="../notification.css" />
+	<link rel="preconnect stylesheet" href="../notification.css?v=1.0" />
 	<style>
 		/* <![CDATA[*/
+		#product-logo {
+			max-width: 1.2em;
+			margin-bottom: -0.2em;
+		}
 		/*]]>*/
 	</style>
-	<script src="../notification.js"></script>
+	<script src="../notification.js?v=1.0"></script>
 	<script>
 		//<![CDATA[
 		const version = '2025-06';
 		const milestone = 'M1';
-		const productName = getQueryParameter('product-name', 'Eclipse IDE');
-		document.title = `${getQueryParameter('product-name', 'Eclipse IDE')} ${version} ${milestone}`;
-
-
+		const productName = getProductName();
+		document.title = `${productName} ${version} ${milestone}`;
 
 		function update() {
 			updateInnerInnerHTML('.version', version);
 			updateInnerInnerHTML('.milestone', milestone);
 			updateInnerInnerHTML('.product-name', productName);
+			document.getElementById('product-logo').src = getProductImage();
 		}
 		//]]>
 	</script>
@@ -48,7 +51,10 @@
 			<div id="general">
 				<div class="section">
 					The <span class="version">version</span> <span class="milestone">milestone</span> milestone
-					for the <span class="product-name">product-name</span> is available.
+					for the
+					<img id="product-logo" src="" alt="" />
+					<span class="product-name">product-name</span>
+					is available.
 				</div>
 				<div class="section">
 					It provides early access to the latest and greatest features for your IDE,

@@ -1,3 +1,46 @@
+const productNames = new Map([
+	['org.eclipse.epp.package.committers.product', 'Eclipse IDE for Eclipse Committers'],
+	['org.eclipse.epp.package.cpp.product', 'Eclipse IDE for C/C++ Developers'],
+	['org.eclipse.epp.package.dsl.product', 'Eclipse IDE for Java and DSL Developers'],
+	['org.eclipse.epp.package.embedcpp.product', 'Eclipse IDE for Embedded C/C++ Developers'],
+	['org.eclipse.epp.package.java.product', 'Eclipse IDE for Java Developers'],
+	['org.eclipse.epp.package.jee.product', 'Eclipse IDE for Enterprise Java and Web Developers'],
+	['org.eclipse.epp.package.modeling.product', 'Eclipse Modeling Tools'],
+	['org.eclipse.epp.package.php.product', 'Eclipse IDE for PHP Developers'],
+	['org.eclipse.epp.package.rcp.product', 'Eclipse IDE for RCP and RAP Developers'],
+	['org.eclipse.epp.package.scout.product', 'Eclipse IDE for Scout Developers'],
+	['org.eclipse.sdk.ide', 'Eclipse SDK'],
+	['default', 'Eclipse IDE'],
+]);
+
+function getProductName() {
+	return productNames.get(getQueryParameter('product-id') ?? 'default')
+		?? getQueryParameter('product-id')
+		?? 'Eclipse IDE';
+}
+
+const imagesPrefix = 'https://www.eclipse.org/downloads/images/';
+
+const productImages = new Map([
+	['org.eclipse.epp.package.committers.product', `${imagesPrefix}committers.png`],
+	['org.eclipse.epp.package.cpp.product', `${imagesPrefix}cdt.png`],
+	['org.eclipse.epp.package.dsl.product', `${imagesPrefix}dsl-package_42.png`],
+	['org.eclipse.epp.package.embedcpp.product', `${imagesPrefix}cdt.png`],
+	['org.eclipse.epp.package.java.product', `${imagesPrefix}java.png`],
+	['org.eclipse.epp.package.jee.product', `${imagesPrefix}javaee.png`],
+	['org.eclipse.epp.package.modeling.product', `${imagesPrefix}modeling.png`],
+	['org.eclipse.epp.package.php.product', `${imagesPrefix}php.png`],
+	['org.eclipse.epp.package.rcp.product', `${imagesPrefix}rcp.png`],
+	['org.eclipse.epp.package.scout.product', `${imagesPrefix}scout.jpg`],
+	['org.eclipse.sdk.ide', `${imagesPrefix}committers.png`],
+	['default', `${imagesPrefix}committers.png`],
+]);
+
+function getProductImage() {
+	return productImages.get(getQueryParameter('product-id') ?? 'default')
+		?? productImages.get('default')
+}
+
 function generate() {
 	try {
 		const generators = document.querySelectorAll('[data-generate]');
