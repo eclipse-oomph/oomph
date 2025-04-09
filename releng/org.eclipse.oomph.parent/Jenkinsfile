@@ -228,7 +228,18 @@ pipeline {
                 echo "GIT=$GIT"
                 $BASH releng/org.eclipse.oomph.releng/hudson/repackage.sh
               '''
-              stash includes: 'help/**,installer-products/**,updates/**,releng/org.eclipse.oomph.releng/**', name: 'promote-stash'
+              sshagent (['projects-storage.eclipse.org-bot-ssh']) {
+                sh '''
+                  set -e
+                  set -x
+                  LOGIN="genie.oomph@projects-storage.eclipse.org"
+                  ssh $LOGIN "cd /home/data/httpd/download.eclipse.org/oomph; rm -rf jenkins-stash; mkdir -p jenkins-stash/releng"
+                  scp -r releng/org.eclipse.oomph.releng $LOGIN:/home/data/httpd/download.eclipse.org/oomph/jenkins-stash/releng/
+                  scp -r help $LOGIN:/home/data/httpd/download.eclipse.org/oomph/jenkins-stash/
+                  scp -r installer-products $LOGIN:/home/data/httpd/download.eclipse.org/oomph/jenkins-stash/
+                  scp -r updates $LOGIN:/home/data/httpd/download.eclipse.org/oomph/jenkins-stash/
+                '''
+              }
             }
           } else {
             mvn()
@@ -255,16 +266,19 @@ pipeline {
       tools {
         jdk 'openjdk-jdk17-latest'
       }
+      options {
+        skipDefaultCheckout()
+      }
       steps {
         echoVariables()
         cleanWs()
-        unstash 'promote-stash'
         script {
-          env.GIT=env.WORKSPACE
+          env.GIT = env.WORKSPACE = "/home/data/httpd/download.eclipse.org/oomph/jenkins-stash"
         }
 
         sh '''
           pwd
+          cd $WORKSPACE
 
           BASH=/bin/bash
           if [[ "$SCRIPT_DEBUG" == true ]]; then
@@ -275,8 +289,16 @@ pipeline {
           echo "BUILD_TIMESTAMP=$BUILD_TIMESTAMP"
           echo "GIT_BRANCH=$GIT_BRANCH"
           echo "GIT=$GIT"
+          echo "WORKSPACE=$WORKSPACE"
+
+          ls -sail
+
           $BASH releng/org.eclipse.oomph.releng/hudson/promote.sh
+
+          rm -rf ../jenkins-stash
         '''
+
+        cleanWs()
       }
     }
   }
