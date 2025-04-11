@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="org.eclipse.pde.ui.RuntimeWorkbench">
     <setAttribute key="additional_plugins">
-        <setEntry value="com.sun.jna.platform:5.16.0:default:true:default:default"/>
-        <setEntry value="com.sun.jna:5.16.0.v20241222-1200:default:true:default:default"/>
-        <setEntry value="org.eclipse.core.net:1.5.600.v20241127-0919:default:true:default:default"/>
-        <setEntry value="org.eclipse.equinox.event:1.7.100.v20240321-1445:default:true:default:default"/>
+        <setEntry value="com.sun.jna.platform:5.17.0:default:true:default:default"/>
+        <setEntry value="com.sun.jna:5.17.0.v20250316-1700:default:true:default:default"/>
+        <setEntry value="org.eclipse.core.net:1.5.700.v20250313-0656:default:true:default:default"/>
+        <setEntry value="org.eclipse.equinox.event:1.7.300.v20250306-0514:default:true:default:default"/>
         <setEntry value="org.eclipse.osgi.services:3.12.200.v20241212-0858:default:true:default:default"/>
     </setAttribute>
     <booleanAttribute key="append.args" value="true"/>

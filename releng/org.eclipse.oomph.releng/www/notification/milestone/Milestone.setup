@@ -28,9 +28,7 @@
         xsi:type="setup.p2:P2Task"
         label="Eclipse IDE Milestone Updates">
       <repository
-          url="https://download.eclipse.org/staging/2025-06"/>
-      <repository
-          url="https://download.eclipse.org/technology/epp/staging/repository"/>
+          url="https://download.eclipse.org/releases/milestone"/>
     </setupTask>
     <productVersion
         href="index:/org.eclipse.setup#//@productCatalogs[name='self']/@products[name='empty.product']/@versions[name='version']"/>
