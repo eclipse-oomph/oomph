@@ -32,12 +32,7 @@
     </setupTask>
     <productVersion
         href="index:/org.eclipse.setup#//@productCatalogs[name='self']/@products[name='empty.product']/@versions[name='version']"/>
-    <description>The Eclipse IDE Milestone Updates provides early access to Eclipse IDE milestones as they become available.</description>
+    <description>Eclipse IDE Milestone Updates provides early access to Eclipse IDE milestones as they become available.</description>
   </installation>
-  <workspace
-      name="eclipse.java.development.tools.support.for.java.24.workspace"
-      label="Eclipse Java Development Tools Support for Java 24 Workspace">
-    <description>The Eclipse Java Development Tools Support for Java 24 workspace provides cool stuff.</description>
-  </workspace>
-  <description>The Eclipse IDE Milestone Updates provides early access to Eclipse IDE milestones as they become available.</description>
+  <description>Eclipse IDE Milestone Updates provides early access to Eclipse IDE milestones as they become available.</description>
 </setup:Configuration>

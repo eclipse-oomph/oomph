@@ -14,6 +14,28 @@
     </detail>
   </annotation>
   <annotation
+      source="http://www.eclipse.org/oomph/setup/Problem">
+    <detail
+        key="uri">
+      <value>https://www.eclipse.org/setups/problems/</value>
+    </detail>
+    <content
+        xsi:type="p2:Requirement"
+        name="org.eclipse.epp.package.common"
+        versionRange="4.36.0"/>
+  </annotation>
+  <annotation
+      source="http://www.eclipse.org/oomph/setup/Problem">
+    <detail
+        key="uri">
+      <value>https://www.eclipse.org/setups/problems/</value>
+    </detail>
+    <content
+        xsi:type="p2:Requirement"
+        name="org.eclipse.sdk.ide"
+        versionRange="4.36.0"/>
+  </annotation>
+  <annotation
       source="http://www.eclipse.org/oomph/setup/Notification">
     <detail
         key="uri">
@@ -56,6 +78,21 @@
         max="0"/>
   </annotation>
   <annotation
+      source="http://www.eclipse.org/oomph/setup/Notification">
+    <detail
+        key="maximize">
+      <value>false</value>
+    </detail>
+    <detail
+        key="uri">
+      <value>https://www.eclipse.org/setups/notification/milestone</value>
+    </detail>
+    <content
+        xsi:type="p2:Requirement"
+        name="org.eclipse.epp.package.common"
+        versionRange="[4.35.0,4.36.0)"/>
+  </annotation>
+  <annotation
       source="http://www.eclipse.org/oomph/setup/JRE">
     <reference
         href="org.eclipse.jres.setup#/"/>
@@ -82,7 +119,7 @@
   <discoverablePackage
       href="models/PDE.ecore#/"/>
   <discoverablePackage
-      href="models/Predicates.ecore#/"/>
+      href="https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/models/Predicates.ecore#/"/>
   <discoverablePackage
       href="models/Projects.ecore#/"/>
   <discoverablePackage
