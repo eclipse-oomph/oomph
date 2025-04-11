@@ -161,6 +161,10 @@ public class Messages extends NLS
 
   public static String ProgressPage_description;
 
+  public static String ProgressPage_desktopShortcut_description;
+
+  public static String ProgressPage_desktopShortcut_text;
+
   public static String ProgressPage_scrollLockButton_text;
 
   public static String ProgressPage_scrollLockButton_tooltip;

@@ -614,7 +614,12 @@ public abstract class SetupWizard extends Wizard implements IPageChangedListener
 
     addPage(new VariablePage());
     addPage(new ConfirmationPage());
-    addPage(new ProgressPage());
+    addPage(createProgressPage());
+  }
+
+  protected ProgressPage createProgressPage()
+  {
+    return new ProgressPage();
   }
 
   @Override

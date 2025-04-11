@@ -10,23 +10,31 @@
  */
 package org.eclipse.oomph.setup.internal.installer;
 
+import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.internal.ui.AccessUtil;
 import org.eclipse.oomph.p2.internal.ui.P2UIPlugin;
+import org.eclipse.oomph.setup.AnnotationConstants;
 import org.eclipse.oomph.setup.Configuration;
 import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.Installation;
 import org.eclipse.oomph.setup.Macro;
 import org.eclipse.oomph.setup.MacroTask;
+import org.eclipse.oomph.setup.Product;
+import org.eclipse.oomph.setup.ProductVersion;
+import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.Trigger;
 import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer;
+import org.eclipse.oomph.setup.internal.core.SetupTaskPerformer.ExecutableInfo;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl;
+import org.eclipse.oomph.setup.internal.installer.DesktopSupport.ShortcutType;
 import org.eclipse.oomph.setup.p2.P2Task;
 import org.eclipse.oomph.setup.p2.util.MarketPlaceListing;
 import org.eclipse.oomph.setup.ui.wizards.ConfigurationProcessor;
 import org.eclipse.oomph.setup.ui.wizards.ExtensionsDialog;
+import org.eclipse.oomph.setup.ui.wizards.ProgressPage;
 import org.eclipse.oomph.setup.ui.wizards.ProjectPage;
 import org.eclipse.oomph.setup.ui.wizards.ProjectPage.ConfigurationListener;
 import org.eclipse.oomph.setup.ui.wizards.SetupWizard;
@@ -72,7 +80,7 @@ import java.util.Set;
  */
 public class Installer extends SetupWizard
 {
-  private final SelectionMemento selectionMemento;
+  private final Installer.SelectionMemento selectionMemento;
 
   private final Set<URI> delayedResourceURIs = new LinkedHashSet<URI>();
 
@@ -82,7 +90,7 @@ public class Installer extends SetupWizard
 
   private boolean indexLoaded;
 
-  public Installer(SelectionMemento theSelectionMemento, UIServices serviceUI)
+  public Installer(Installer.SelectionMemento theSelectionMemento, UIServices serviceUI)
   {
     selectionMemento = theSelectionMemento;
     setTrigger(Trigger.BOOTSTRAP);
@@ -147,7 +155,7 @@ public class Installer extends SetupWizard
     return currentPage instanceof ProductPage || currentPage instanceof ProjectPage;
   }
 
-  public SelectionMemento getSelectionMemento()
+  public Installer.SelectionMemento getSelectionMemento()
   {
     return selectionMemento;
   }
@@ -174,6 +182,60 @@ public class Installer extends SetupWizard
         loadIndex();
       }
     });
+  }
+
+  @Override
+  protected ProgressPage createProgressPage()
+  {
+    return new ProgressPage()
+    {
+      @Override
+      protected boolean canCreateDesktopShortcut()
+      {
+        return KeepInstallerUtil.getDesktopSupport() != null;
+      }
+
+      @Override
+      protected void createDesktopShortcut()
+      {
+        try
+        {
+          SetupTaskPerformer performer = getPerformer();
+          ProductVersion productVerison = performer.getSetupContext().getInstallation().getProductVersion();
+          Product product = productVerison.getProduct();
+          ExecutableInfo info = performer.getExecutableInfo();
+          File executable = info.getExecutable();
+          File productFolder = executable.getParentFile();
+          File productContainerFolder = productFolder.getParentFile();
+          File productContainerContainerFolder = productContainerFolder == null ? null : productContainerFolder.getParentFile();
+          String shortcut = productContainerFolder == null || productContainerContainerFolder == null ? IOUtil.encodeFileName(productFolder.toString())
+              : productContainerFolder.getName() + " - " + IOUtil.encodeFileName(productContainerContainerFolder.toString()); //$NON-NLS-1$
+
+          String appName = null;
+          Scope scope = productVerison;
+          while (scope != null)
+          {
+            Annotation annotation = scope.getAnnotation(AnnotationConstants.ANNOTATION_BRANDING_INFO);
+            if (annotation != null)
+            {
+              appName = annotation.getDetails().get(AnnotationConstants.KEY_APP_NAME);
+              if (appName != null)
+              {
+                break;
+              }
+            }
+
+            scope = scope.getParentScope();
+          }
+
+          KeepInstallerUtil.createShortCut(ShortcutType.DESKTOP, null, executable, shortcut, product.getDescription(), product.getName(), appName);
+        }
+        catch (Exception ex)
+        {
+          SetupInstallerPlugin.INSTANCE.log(ex);
+        }
+      }
+    };
   }
 
   @Override
@@ -337,7 +399,7 @@ public class Installer extends SetupWizard
     IGNORE, RETRY, EXIT
   }
 
-  public MissingIndexStatus handleMissingIndex(Shell shell)
+  public Installer.MissingIndexStatus handleMissingIndex(Shell shell)
   {
     int answer = new MessageDialog(shell, Messages.Installer_NetworkProblem_title, null, Messages.Installer_TalogNotLoaded_message, MessageDialog.ERROR,
         new String[] { Messages.Installer_Retry_label, Messages.Installer_Configure_label, Messages.Installer_Exit_label }, 0).open();
@@ -345,7 +407,7 @@ public class Installer extends SetupWizard
     {
       case 2:
       {
-        return MissingIndexStatus.EXIT;
+        return Installer.MissingIndexStatus.EXIT;
       }
 
       case 1:
@@ -360,12 +422,12 @@ public class Installer extends SetupWizard
         URI currentIndexLocation = resourceSet.getURIConverter().normalize(SetupContext.INDEX_SETUP_URI);
         ECFURIHandlerImpl.clearExpectedETags();
         reloadIndex(currentIndexLocation);
-        return MissingIndexStatus.RETRY;
+        return Installer.MissingIndexStatus.RETRY;
       }
 
       default:
       {
-        return MissingIndexStatus.IGNORE;
+        return Installer.MissingIndexStatus.IGNORE;
       }
     }
   }

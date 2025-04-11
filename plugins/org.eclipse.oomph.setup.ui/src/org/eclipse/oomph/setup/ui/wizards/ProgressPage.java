@@ -244,11 +244,15 @@ public class ProgressPage extends SetupWizardPage
 
   private boolean launchAutomatically;
 
+  private boolean desktopShortcut;
+
   private Button scrollLockButton;
 
   private Button dismissButton;
 
   private Button launchButton;
+
+  private Button desktopShortcutButton;
 
   private boolean hasLaunched;
 
@@ -369,6 +373,22 @@ public class ProgressPage extends SetupWizardPage
 
     if (getWizard().getOS().isCurrentOS())
     {
+      if (getTrigger() == Trigger.BOOTSTRAP && canCreateDesktopShortcut())
+      {
+        desktopShortcutButton = buttonBar.addCheckButton(Messages.ProgressPage_desktopShortcut_text, Messages.ProgressPage_desktopShortcut_description, false,
+            "desktopShortcut"); //$NON-NLS-1$
+        desktopShortcut = desktopShortcutButton.getSelection();
+        desktopShortcutButton.addSelectionListener(new SelectionAdapter()
+        {
+          @Override
+          public void widgetSelected(SelectionEvent e)
+          {
+            desktopShortcut = desktopShortcutButton.getSelection();
+          }
+        });
+        AccessUtil.setKey(desktopShortcutButton, "desktop-shortcut"); //$NON-NLS-1$
+      }
+
       // If the property is not set, create a check box for controlling launchAutomatically. Otherwise use the property value directly.
       final Boolean launchAutomaticallyPropertyValue = PropertiesUtil.getBoolean(SetupProperties.PROP_SETUP_LAUNCH_AUTOMATICALLY);
       if (launchAutomaticallyPropertyValue == null)
@@ -914,6 +934,11 @@ public class ProgressPage extends SetupWizardPage
                       @Override
                       public void run()
                       {
+                        if (desktopShortcut)
+                        {
+                          createDesktopShortcut();
+                        }
+
                         IWizardContainer container = getContainer();
                         if (container instanceof WizardDialog)
                         {
@@ -933,14 +958,19 @@ public class ProgressPage extends SetupWizardPage
                   {
                     progressLog.message(Messages.ProgressPage_log_pressFinishToClose, Severity.INFO);
 
-                    if (launchButton != null && !hasLaunched && trigger == Trigger.BOOTSTRAP)
+                    if (launchButton != null && trigger == Trigger.BOOTSTRAP)
                     {
                       wizard.setFinishAction(new Runnable()
                       {
                         @Override
                         public void run()
                         {
-                          if (launchAutomatically)
+                          if (desktopShortcut)
+                          {
+                            createDesktopShortcut();
+                          }
+
+                          if (launchAutomatically && !hasLaunched)
                           {
                             try
                             {
@@ -1092,6 +1122,15 @@ public class ProgressPage extends SetupWizardPage
     }
 
     SetupContext.associate(installation, workspace);
+  }
+
+  protected boolean canCreateDesktopShortcut()
+  {
+    return false;
+  }
+
+  protected void createDesktopShortcut()
+  {
   }
 
   public static boolean launchProduct(SetupTaskPerformer performer) throws Exception
