@@ -4,7 +4,7 @@
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<link href="https://eclipseide.org/favicon.ico" rel="icon" type="image/x-icon" />
-	<title>Eclipse IDE 2025-06 M1</title>
+	<title>Eclipse IDE</title>
 	<link rel="preconnect stylesheet" href="../notification.css?v=1.0" />
 	<style>
 		/* <![CDATA[*/
@@ -27,6 +27,7 @@
 			updateInnerInnerHTML('.milestone', milestone);
 			updateInnerInnerHTML('.product-name', productName);
 			document.getElementById('product-logo').src = getProductImage();
+			document.getElementById('download-link').href = `eclipse+external:https://www.eclipse.org/downloads/packages/release/${version}/${milestone.toLowerCase()}`;
 		}
 		//]]>
 	</script>
@@ -66,7 +67,7 @@
 					</label>
 					&nbsp;
 					<label class="button">
-						<a href="eclipse+external:https://www.eclipse.org/downloads/packages//">Download</a>
+						<a id="download-link" href="eclipse+external:https://www.eclipse.org/downloads/packages/">Download</a>
 					</label>
 					&nbsp;
 					<label class="button">
