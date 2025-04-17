@@ -15,9 +15,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.userstorage.IStorage;
-import org.eclipse.userstorage.IStorageService;
-import org.eclipse.userstorage.spi.ICredentialsProvider;
 
 /**
  * @author Eike Stepper
@@ -27,10 +24,6 @@ public class SynchronizerJob extends Job
   private final Synchronizer synchronizer;
 
   private final boolean deferLocal;
-
-  private IStorageService service;
-
-  private ICredentialsProvider credentialsProvider;
 
   private Throwable exception;
 
@@ -57,26 +50,6 @@ public class SynchronizerJob extends Job
   public boolean isDeferLocal()
   {
     return deferLocal;
-  }
-
-  public IStorageService getService()
-  {
-    return service;
-  }
-
-  public void setService(IStorageService service)
-  {
-    this.service = service;
-  }
-
-  public ICredentialsProvider getCredentialsProvider()
-  {
-    return credentialsProvider;
-  }
-
-  public void setCredentialsProvider(ICredentialsProvider credentialsProvider)
-  {
-    this.credentialsProvider = credentialsProvider;
   }
 
   public FinishHandler getFinishHandler()
@@ -134,14 +107,6 @@ public class SynchronizerJob extends Job
   @Override
   protected IStatus run(IProgressMonitor monitor)
   {
-    RemoteDataProvider remoteDataProvider = (RemoteDataProvider)synchronizer.getRemoteSnapshot().getDataProvider();
-    IStorage storage = remoteDataProvider.getStorage();
-    ICredentialsProvider oldCredentialsProvider = storage.getCredentialsProvider();
-    if (credentialsProvider != null)
-    {
-      storage.setCredentialsProvider(credentialsProvider);
-    }
-
     try
     {
       Synchronization result = synchronizer.synchronize(deferLocal);
@@ -177,13 +142,6 @@ public class SynchronizerJob extends Job
       {
         exception = t;
         notifyAll();
-      }
-    }
-    finally
-    {
-      if (credentialsProvider != null)
-      {
-        storage.setCredentialsProvider(oldCredentialsProvider);
       }
     }
 

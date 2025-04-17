@@ -11,20 +11,20 @@
 package org.eclipse.oomph.setup.sync.tests;
 
 import org.eclipse.oomph.setup.internal.sync.DataProvider.NotCurrentException;
-import org.eclipse.oomph.setup.internal.sync.RemoteDataProvider;
 import org.eclipse.oomph.setup.internal.sync.Synchronization.ConflictException;
 import org.eclipse.oomph.setup.sync.tests.TestWorkstation.FailureHandler;
 import org.eclipse.oomph.setup.sync.tests.TestWorkstation.FailureHandler.Expect;
 import org.eclipse.oomph.setup.sync.tests.TestWorkstation.TestSynchronization;
 import org.eclipse.oomph.tests.AbstractTest;
-
-import org.eclipse.userstorage.IStorageService;
-import org.eclipse.userstorage.tests.util.ServerFixture;
+import org.eclipse.oomph.util.IOUtil;
+import org.eclipse.oomph.util.PropertiesUtil;
 
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,45 +36,34 @@ public class SynchronizerTests extends AbstractTest
 {
   private final Map<Integer, TestWorkstation> workstations = new HashMap<>();
 
-  private ServerFixture serverFixture;
+  private File sharedPreferences;
 
   private TestWorkstation WS(int id) throws Exception
   {
     TestWorkstation workstation = workstations.get(id);
     if (workstation == null)
     {
-      workstation = new TestWorkstation(serverFixture, workstations, id);
+      workstation = new TestWorkstation(sharedPreferences, workstations, id);
       workstations.put(id, workstation);
     }
 
     return workstation;
   }
 
-  @SuppressWarnings("restriction")
   @Override
   public void setUp() throws Exception
   {
     super.setUp();
 
-    System.setProperty(org.eclipse.userstorage.internal.StorageProperties.CREDENTIALS_PROVIDER, "org.eclipse.userstorage.tests.util.FixedCredentialsProvider");
-
+    sharedPreferences = new File(PropertiesUtil.getTmpDir(), "shared-preferences.xml");
+    IOUtil.deleteBestEffort(sharedPreferences, false);
     workstations.clear();
-
-    for (IStorageService service : IStorageService.Registry.INSTANCE.getServices())
-    {
-      if (service instanceof IStorageService.Dynamic && service.getServiceURI().toString().startsWith("http://localhost:"))
-      {
-        ((IStorageService.Dynamic)service).remove();
-      }
-    }
-
-    serverFixture = new ServerFixture(RemoteDataProvider.APPLICATION_TOKEN);
   }
 
   @Override
   public void tearDown() throws Exception
   {
-    serverFixture.dispose();
+    IOUtil.deleteBestEffort(sharedPreferences, true);
     super.tearDown();
   }
 
@@ -127,6 +116,10 @@ public class SynchronizerTests extends AbstractTest
   }
 
   @Test
+  @Ignore
+  /**
+   * This test no longer works because file-bases storage doesn't throw a conflict exception.
+   */
   public void test006_SameKey_SameValue() throws Exception
   {
     TestSynchronization sync1 = WS(1).set("property", "value").save().synchronize();
@@ -146,6 +139,10 @@ public class SynchronizerTests extends AbstractTest
   }
 
   @Test
+  @Ignore
+  /**
+   * This test no longer works because file-bases storage doesn't throw a conflict exception.
+   */
   public void test007_SameKey_Conflict_Sync() throws Exception
   {
     TestSynchronization sync1 = WS(1).set("property", "value1").save().synchronize();

@@ -32,7 +32,6 @@ import org.eclipse.oomph.setup.sync.SyncDelta;
 import org.eclipse.oomph.setup.sync.SyncPolicy;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.setup.ui.recorder.RecorderTransaction.CommitHandler;
-import org.eclipse.oomph.setup.ui.synchronizer.OptOutDialog;
 import org.eclipse.oomph.setup.ui.synchronizer.SynchronizerDialog;
 import org.eclipse.oomph.setup.ui.synchronizer.SynchronizerDialog.PolicyAndValue;
 import org.eclipse.oomph.setup.ui.synchronizer.SynchronizerManager;
@@ -80,11 +79,6 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.dialogs.PreferencesUtil;
-import org.eclipse.userstorage.IStorage;
-import org.eclipse.userstorage.IStorage.Connectedness;
-import org.eclipse.userstorage.IStorageService;
-import org.eclipse.userstorage.spi.ICredentialsProvider;
-import org.eclipse.userstorage.util.ProtocolException;
 
 import java.io.File;
 import java.io.IOException;
@@ -95,7 +89,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -1111,13 +1104,6 @@ public final class RecorderManager
 
       if (synchronizerJob == null && SynchronizerManager.INSTANCE.isSyncEnabled())
       {
-        IStorage storage = SynchronizerManager.INSTANCE.getStorage();
-        IStorageService service = storage.getService();
-        if (service == null || !interactive && storage.getConnectedness() == Connectedness.UNAUTHORIZED)
-        {
-          return false;
-        }
-
         recorderTarget = INSTANCE.getRecorderTargetObject();
         if (recorderTarget instanceof User)
         {
@@ -1162,15 +1148,10 @@ public final class RecorderManager
           synchronizer.copyFilesFrom(SynchronizerManager.SYNC_FOLDER);
 
           synchronizerJob = new SynchronizerJob(synchronizer, true);
-          synchronizerJob.setService(service);
 
           if (interactive)
           {
             synchronizerJob.setFinishHandler(this);
-          }
-          else
-          {
-            synchronizerJob.setCredentialsProvider(ICredentialsProvider.CANCEL);
           }
 
           synchronizerJob.schedule();
@@ -1250,10 +1231,6 @@ public final class RecorderManager
           try
           {
             final AtomicBoolean canceled = new AtomicBoolean();
-            final IStorageService service = synchronizerJob.getService();
-
-            final Semaphore authenticationSemaphore = service.getAuthenticationSemaphore();
-            authenticationSemaphore.acquire();
 
             UIUtil.syncExec(new Runnable()
             {
@@ -1270,10 +1247,7 @@ public final class RecorderManager
                     @Override
                     public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
                     {
-                      authenticationSemaphore.release();
-
-                      String serviceLabel = service.getServiceLabel();
-                      result.synchronization = await(serviceLabel, monitor);
+                      result.synchronization = await(SynchronizerManager.INSTANCE.getServiceLabel(), monitor);
                     }
                   });
                 }
@@ -1328,26 +1302,6 @@ public final class RecorderManager
     @Override
     public void handleFinish(Throwable ex) throws Exception
     {
-      if (ex instanceof ProtocolException)
-      {
-        ProtocolException protocolException = (ProtocolException)ex;
-        if (protocolException.getStatusCode() == 401)
-        {
-          UIUtil.syncExec(new Runnable()
-          {
-            @Override
-            public void run()
-            {
-              OptOutDialog dialog = new OptOutDialog(UIUtil.getShell(), synchronizerJob.getService());
-              dialog.open();
-              if (!dialog.getAnswer())
-              {
-                SynchronizerManager.INSTANCE.setSyncEnabled(false);
-              }
-            }
-          });
-        }
-      }
     }
   }
 

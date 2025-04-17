@@ -31,13 +31,10 @@ import org.eclipse.oomph.setup.ui.SetupPropertyTester;
 import org.eclipse.oomph.setup.ui.SetupUIPlugin;
 import org.eclipse.oomph.ui.UIUtil;
 import org.eclipse.oomph.util.LockFile;
-import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.PropertyFile;
 
 import org.eclipse.emf.common.util.EMap;
-import org.eclipse.emf.ecore.EcoreFactory;
-import org.eclipse.emf.ecore.EcorePackage;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -45,33 +42,17 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.osgi.util.NLS;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.userstorage.IStorage;
-import org.eclipse.userstorage.IStorageService;
-import org.eclipse.userstorage.StorageFactory;
-import org.eclipse.userstorage.oauth.EclipseOAuthCredentialsProvider;
-import org.eclipse.userstorage.spi.ICredentialsProvider;
-import org.eclipse.userstorage.spi.StorageCache;
 
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.time.Duration;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -79,9 +60,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
-import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Consumer;
 
 /**
  * @author Eike Stepper
@@ -90,7 +69,7 @@ public final class SynchronizerManager
 {
   public static final File SYNC_FOLDER = SetupSyncPlugin.INSTANCE.getUserLocation().toFile();
 
-  public static final SynchronizerManager INSTANCE = new SynchronizerManager();
+  public static final SynchronizerManager INSTANCE;
 
   public static final boolean ENABLED = !PropertiesUtil.isProperty(SetupProperties.PROP_SETUP_SYNC_SKIP);
 
@@ -102,36 +81,26 @@ public final class SynchronizerManager
 
   private static final String CONFIG_SYNC_ENABLED = "sync.enabled"; //$NON-NLS-1$
 
-  private static final String CONFIG_CONNECTION_SERVICE_DISCONTINUE = "connection.service.discontinue"; //$NON-NLS-1$
+  private static final String CONFIG_SYNC_LOCATION = "sync.location"; //$NON-NLS-1$
 
-  private static final String CONNECTION_SERVICE_DISCONTINUE_ISSUME = "https://github.com/eclipse-oomph/oomph/issues/123"; //$NON-NLS-1$
+  private static final Path DEFAULT_SYNC_LOCATION = Path.of(PropertiesUtil.getUserHome(), ".eclipse/shared-preferences.xml"); //$NON-NLS-1$
 
-  private final IStorage storage;
+  static
+  {
+    // This must happen after the private constants are initialized.
+    INSTANCE = new SynchronizerManager();
+  }
 
   private final RemoteDataProvider remoteDataProvider;
 
-  private Boolean connectionServiceDiscontinue;
-
   private SynchronizerManager()
   {
-    StorageCache cache = new RemoteDataProvider.SyncStorageCache(SYNC_FOLDER);
-    storage = StorageFactory.DEFAULT.create(RemoteDataProvider.APPLICATION_TOKEN, cache);
-
-    if (!PropertiesUtil.isProperty(SetupProperties.PROP_SETUP_SYNC_CREDENTIAL_PROVIDER_SKIP_DEFAULT))
-    {
-      ICredentialsProvider credentialProvider = createCredentialProvider();
-      if (credentialProvider != null)
-      {
-        storage.setCredentialsProvider(credentialProvider);
-      }
-    }
-
-    remoteDataProvider = new RemoteDataProvider(storage);
+    remoteDataProvider = new RemoteDataProvider(getSyncLocation());
   }
 
-  public IStorage getStorage()
+  public String getServiceLabel()
   {
-    return storage;
+    return remoteDataProvider.getStorageLocation().getFileName().toString();
   }
 
   public RemoteDataProvider getRemoteDataProvider()
@@ -178,6 +147,25 @@ public final class SynchronizerManager
     }
 
     return changed;
+  }
+
+  public Path getSyncLocation()
+  {
+    try
+    {
+      return Path.of(CONFIG.getProperty(CONFIG_SYNC_LOCATION, DEFAULT_SYNC_LOCATION.toString())); // $NON-NLS-1$
+    }
+    catch (Throwable ex)
+    {
+      SetupUIPlugin.INSTANCE.log(ex);
+      return DEFAULT_SYNC_LOCATION;
+    }
+  }
+
+  public boolean setSyncLocation(Path path)
+  {
+    Path storageLocation = remoteDataProvider.getStorageLocation();
+    return CONFIG.compareAndSetProperty(CONFIG_SYNC_ENABLED, path.toString(), storageLocation.toString(), null);
   }
 
   public Synchronizer createSynchronizer(File userSetup, File syncFolder)
@@ -320,53 +308,6 @@ public final class SynchronizerManager
     return null;
   }
 
-  public void warnServiceDiscontinue(Shell shell, IStorageService service)
-  {
-    if (connectionServiceDiscontinue == null)
-    {
-      String property = CONFIG.getProperty(CONFIG_CONNECTION_SERVICE_DISCONTINUE, null);
-      if (property != null)
-      {
-        try
-        {
-          Date previousReminder = (Date)EcoreFactory.eINSTANCE.createFromString(EcorePackage.Literals.EDATE, property);
-          long previousReminderTime = previousReminder.getTime();
-          long oneWeekAgo = System.currentTimeMillis() - Duration.ofDays(7).toMillis();
-          if (previousReminderTime > oneWeekAgo)
-          {
-            connectionServiceDiscontinue = true;
-          }
-        }
-        catch (RuntimeException ex)
-        {
-          //$FALL-THROUGH$
-        }
-      }
-    }
-
-    if (Boolean.TRUE.equals(connectionServiceDiscontinue))
-    {
-      return;
-    }
-
-    shell.getDisplay().asyncExec(new Runnable()
-    {
-      @Override
-      public void run()
-      {
-        new ConnectionServiceDiscontinueDialog(shell, service, dialog -> {
-          Boolean answer = dialog.getAnswer();
-          if (answer != null)
-          {
-            CONFIG.setProperty(CONFIG_CONNECTION_SERVICE_DISCONTINUE, getDate());
-            connectionServiceDiscontinue = true;
-            setSyncEnabled(answer);
-          }
-        }).open();
-      }
-    });
-  }
-
   /**
    * Returns <code>true</code> if offered the first time and offer was accepted, <code>false</code> otherwise.
    */
@@ -387,16 +328,6 @@ public final class SynchronizerManager
     }
 
     return null;
-  }
-
-  private static ICredentialsProvider createCredentialProvider()
-  {
-    return new EclipseOAuthCredentialsProvider(new OAuthConstants());
-  }
-
-  private static String getDate()
-  {
-    return EcoreFactory.eINSTANCE.convertToString(EcorePackage.Literals.EDATE, new Date());
   }
 
   /**
@@ -587,23 +518,9 @@ public final class SynchronizerManager
       {
         if (synchronizerJob == null && INSTANCE.isSyncEnabled())
         {
-          IStorageService service = INSTANCE.getStorage().getService();
-          if (service == null)
-          {
-            return false;
-          }
-
           Synchronizer synchronizer = INSTANCE.createSynchronizer(USER_SETUP, SYNC_FOLDER);
 
           synchronizerJob = new SynchronizerJob(synchronizer, deferLocal);
-          synchronizerJob.setService(service);
-
-          if (!withCredentialsPrompt)
-          {
-            synchronizerJob.setCredentialsProvider(ICredentialsProvider.CANCEL);
-          }
-
-          INSTANCE.warnServiceDiscontinue(UIUtil.getShell(), service);
 
           synchronizerJob.schedule();
         }
@@ -642,14 +559,9 @@ public final class SynchronizerManager
           try
           {
             final AtomicBoolean canceled = new AtomicBoolean();
-            final IStorageService service = synchronizerJob.getService();
-            final String serviceLabel = service.getServiceLabel();
-
+            final String serviceLabel = SynchronizerManager.INSTANCE.getServiceLabel();
             if (withProgressDialog)
             {
-              final Semaphore authenticationSemaphore = service.getAuthenticationSemaphore();
-              authenticationSemaphore.acquire();
-
               UIUtil.syncExec(new Runnable()
               {
                 @Override
@@ -665,7 +577,6 @@ public final class SynchronizerManager
                       @Override
                       public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
                       {
-                        authenticationSemaphore.release();
                         result[0] = await(serviceLabel, monitor);
                       }
                     });
@@ -754,9 +665,7 @@ public final class SynchronizerManager
 
   public static void log(Throwable throwable)
   {
-    final IStorage storage = SynchronizerManager.INSTANCE.getStorage();
-    IStorageService service = storage.getService();
-    String serviceLabel = service == null ? "Unknown" : service.getServiceLabel(); //$NON-NLS-1$
+    String serviceLabel = SynchronizerManager.INSTANCE.getServiceLabel();
     SetupUIPlugin.INSTANCE.log(
         new Status(IStatus.WARNING, SetupUIPlugin.PLUGIN_ID, "Window -> Preferences -> Oomph -> Setup Tasks -> Preference Synchronizer -> 'Synchronize with " //$NON-NLS-1$
             + serviceLabel + "' is enabled and the synchronization has failed for the following reason:", throwable)); //$NON-NLS-1$
@@ -789,102 +698,4 @@ public final class SynchronizerManager
     }
   }
 
-  private static class ConnectionServiceDiscontinueDialog extends AbstractServiceDialog
-  {
-    private Boolean answer = false;
-
-    private final Consumer<ConnectionServiceDiscontinueDialog> handler;
-
-    public ConnectionServiceDiscontinueDialog(Shell parentShell, IStorageService service, Consumer<ConnectionServiceDiscontinueDialog> handler)
-    {
-      super(parentShell, service);
-      setBlockOnOpen(false);
-      setShellStyle(SWT.DIALOG_TRIM | getDefaultOrientation());
-      this.handler = handler;
-    }
-
-    @Override
-    protected IDialogSettings getDialogBoundsSettings()
-    {
-      return null;
-    }
-
-    public Boolean getAnswer()
-    {
-      return answer;
-    }
-
-    @Override
-    protected void configureShell(Shell newShell)
-    {
-      super.configureShell(newShell);
-    }
-
-    @Override
-    protected void createUI(Composite parent, String serviceLabel, String shortLabel)
-    {
-      // Do you want to save your preferences on the {0} server so you can share them on other workstations?
-      setMessage(NLS.bind(Messages.SynchronizerManager_ServiceDiscontinue_title, serviceLabel));
-
-      Label label = new Label(parent, SWT.NONE);
-      label.setText(Messages.SynchronizerManager_ServiceDiscontinueFindOutMore_label);
-
-      Link link = new Link(parent, SWT.NONE);
-      link.setText("<a>" + CONNECTION_SERVICE_DISCONTINUE_ISSUME + "</a>"); //$NON-NLS-1$ //$NON-NLS-2$
-      link.addSelectionListener(new SelectionAdapter()
-      {
-        @Override
-        public void widgetSelected(SelectionEvent e)
-        {
-          OS.INSTANCE.openSystemBrowser(CONNECTION_SERVICE_DISCONTINUE_ISSUME);
-        }
-      });
-
-      new Label(parent, SWT.NONE);
-
-      Button noButton = new Button(parent, SWT.RADIO);
-      noButton.setText(NLS.bind(Messages.SynchronizerManager_ServiceDisable_label, shortLabel));
-      noButton.addSelectionListener(new SelectionAdapter()
-      {
-        @Override
-        public void widgetSelected(SelectionEvent e)
-        {
-          answer = false;
-        }
-      });
-
-      Button yesButton = new Button(parent, SWT.RADIO);
-      yesButton.setText(NLS.bind(Messages.SynchronizerManager_ServiceContinue_label, shortLabel));
-      yesButton.addSelectionListener(new SelectionAdapter()
-      {
-        @Override
-        public void widgetSelected(SelectionEvent e)
-        {
-          answer = true;
-        }
-      });
-    }
-
-    @Override
-    protected void createButtonsForButtonBar(Composite parent)
-    {
-      createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
-      createButton(parent, IDialogConstants.CANCEL_ID, Messages.OptInDialog_askMeLaterButton_text, false);
-    }
-
-    @Override
-    protected void cancelPressed()
-    {
-      answer = null;
-      super.cancelPressed();
-      handler.accept(this);
-    }
-
-    @Override
-    protected void okPressed()
-    {
-      super.okPressed();
-      handler.accept(this);
-    }
-  }
 }
