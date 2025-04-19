@@ -61,8 +61,8 @@ public class ProvisioningAgentProvider extends DefaultAgentProvider
           {
             // If the folder corresponding to this path is not writable, then p2 has computed a bad agent location.
             // This happens in the case of an install that's using a shared pool.
-            File folder = new File(path);
-            if (!IOUtil.canWriteFolder(folder))
+            File folder = findClosestExistingParent(new File(path));
+            if (folder == null || !IOUtil.canWriteFolder(folder))
             {
               try
               {
@@ -128,5 +128,15 @@ public class ProvisioningAgentProvider extends DefaultAgentProvider
 
     // Call super with the potentially corrected location.
     return super.createAgent(location);
+  }
+
+  private static File findClosestExistingParent(File file)
+  {
+    File current = file;
+    while (current != null && !current.exists())
+    {
+      current = current.getParentFile();
+    }
+    return current;
   }
 }
