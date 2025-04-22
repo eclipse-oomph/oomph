@@ -89,6 +89,7 @@ import java.util.regex.Pattern;
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.impl.PreferenceTaskImpl#getKey <em>Key</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.PreferenceTaskImpl#getValue <em>Value</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.impl.PreferenceTaskImpl#isForce <em>Force</em>}</li>
  * </ul>
  *
  * @generated
@@ -134,6 +135,26 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
    * @ordered
    */
   protected String value = VALUE_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #isForce() <em>Force</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isForce()
+   * @generated
+   * @ordered
+   */
+  protected static final boolean FORCE_EDEFAULT = false;
+
+  /**
+   * The cached value of the '{@link #isForce() <em>Force</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isForce()
+   * @generated
+   * @ordered
+   */
+  protected boolean force = FORCE_EDEFAULT;
 
   private transient PreferencesUtil.PreferenceProperty preferenceProperty;
 
@@ -226,6 +247,33 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
    * @generated
    */
   @Override
+  public boolean isForce()
+  {
+    return force;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void setForce(boolean newForce)
+  {
+    boolean oldForce = force;
+    force = newForce;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, SetupPackage.PREFERENCE_TASK__FORCE, oldForce, force));
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType)
   {
     switch (featureID)
@@ -234,6 +282,8 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
         return getKey();
       case SetupPackage.PREFERENCE_TASK__VALUE:
         return getValue();
+      case SetupPackage.PREFERENCE_TASK__FORCE:
+        return isForce();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -253,6 +303,9 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
         return;
       case SetupPackage.PREFERENCE_TASK__VALUE:
         setValue((String)newValue);
+        return;
+      case SetupPackage.PREFERENCE_TASK__FORCE:
+        setForce((Boolean)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -274,6 +327,9 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
       case SetupPackage.PREFERENCE_TASK__VALUE:
         setValue(VALUE_EDEFAULT);
         return;
+      case SetupPackage.PREFERENCE_TASK__FORCE:
+        setForce(FORCE_EDEFAULT);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -292,6 +348,8 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
         return KEY_EDEFAULT == null ? key != null : !KEY_EDEFAULT.equals(key);
       case SetupPackage.PREFERENCE_TASK__VALUE:
         return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
+      case SetupPackage.PREFERENCE_TASK__FORCE:
+        return force != FORCE_EDEFAULT;
     }
     return super.eIsSet(featureID);
   }
@@ -314,6 +372,8 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
     result.append(key);
     result.append(", value: "); //$NON-NLS-1$
     result.append(value);
+    result.append(", force: "); //$NON-NLS-1$
+    result.append(force);
     result.append(')');
     return result.toString();
   }
@@ -369,7 +429,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
 
     preferenceProperty = new PreferencesUtil.PreferenceProperty(key);
 
-    String oldValue = preferenceProperty.getEffectiveProperty().get(null);
+    String oldValue = isForce() ? preferenceProperty.get(null) : preferenceProperty.getEffectiveProperty().get(null);
     String newValue = getValue();
     return getPreferenceHandler().isNeeded(oldValue, newValue);
   }

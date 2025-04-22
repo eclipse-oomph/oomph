@@ -21,6 +21,7 @@ package org.eclipse.oomph.setup;
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.PreferenceTask#getKey <em>Key</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.PreferenceTask#getValue <em>Value</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.PreferenceTask#isForce <em>Force</em>}</li>
  * </ul>
  *
  * @see org.eclipse.oomph.setup.SetupPackage#getPreferenceTask()
@@ -80,5 +81,30 @@ public interface PreferenceTask extends SetupTask
    * @generated
    */
   void setValue(String value);
+
+  /**
+   * Returns the value of the '<em><b>Force</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * <!-- begin-model-doc -->
+   * Whether to force setting the preference value even if it is the same as the effective default value.
+   * <!-- end-model-doc -->
+   * @return the value of the '<em>Force</em>' attribute.
+   * @see #setForce(boolean)
+   * @see org.eclipse.oomph.setup.SetupPackage#getPreferenceTask_Force()
+   * @model
+   * @generated
+   */
+  boolean isForce();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.setup.PreferenceTask#isForce <em>Force</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Force</em>' attribute.
+   * @see #isForce()
+   * @generated
+   */
+  void setForce(boolean value);
 
 } // PreferenceTask

@@ -2157,6 +2157,17 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * @generated
    */
   @Override
+  public EAttribute getPreferenceTask_Force()
+  {
+    return (EAttribute)preferenceTaskEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public EClass getSetupTaskContainer()
   {
     return setupTaskContainerEClass;
@@ -2441,6 +2452,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     preferenceTaskEClass = createEClass(PREFERENCE_TASK);
     createEAttribute(preferenceTaskEClass, PREFERENCE_TASK__KEY);
     createEAttribute(preferenceTaskEClass, PREFERENCE_TASK__VALUE);
+    createEAttribute(preferenceTaskEClass, PREFERENCE_TASK__FORCE);
 
     resourceCopyTaskEClass = createEClass(RESOURCE_COPY_TASK);
     createEAttribute(resourceCopyTaskEClass, RESOURCE_COPY_TASK__FORCE);
@@ -2829,6 +2841,8 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     initEAttribute(getPreferenceTask_Key(), ecorePackage.getEString(), "key", null, 1, 1, PreferenceTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getPreferenceTask_Value(), ecorePackage.getEString(), "value", null, 0, 1, PreferenceTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
+        !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getPreferenceTask_Force(), ecorePackage.getEBoolean(), "force", null, 0, 1, PreferenceTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(resourceCopyTaskEClass, ResourceCopyTask.class, "ResourceCopyTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$

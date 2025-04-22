@@ -80,6 +80,7 @@ public class PreferenceTaskItemProvider extends SetupTaskItemProvider
 
       addKeyPropertyDescriptor(object);
       addValuePropertyDescriptor(object);
+      addForcePropertyDescriptor(object);
     }
     return itemPropertyDescriptors;
   }
@@ -110,6 +111,20 @@ public class PreferenceTaskItemProvider extends SetupTaskItemProvider
         getString("_UI_PreferenceTask_value_feature"), //$NON-NLS-1$
         getString("_UI_PropertyDescriptor_description", "_UI_PreferenceTask_value_feature", "_UI_PreferenceTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.PREFERENCE_TASK__VALUE, true, true, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+  }
+
+  /**
+   * This adds a property descriptor for the Force feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addForcePropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_PreferenceTask_force_feature"), //$NON-NLS-1$
+        getString("_UI_PreferenceTask_force_description"), //$NON-NLS-1$
+        SetupPackage.Literals.PREFERENCE_TASK__FORCE, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
   }
 
   /**
@@ -219,6 +234,7 @@ public class PreferenceTaskItemProvider extends SetupTaskItemProvider
     {
       case SetupPackage.PREFERENCE_TASK__KEY:
       case SetupPackage.PREFERENCE_TASK__VALUE:
+      case SetupPackage.PREFERENCE_TASK__FORCE:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
         return;
     }

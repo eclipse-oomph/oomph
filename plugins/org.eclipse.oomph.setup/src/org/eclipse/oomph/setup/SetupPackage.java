@@ -2812,13 +2812,22 @@ public interface SetupPackage extends EPackage
   int PREFERENCE_TASK__VALUE = SETUP_TASK_FEATURE_COUNT + 1;
 
   /**
+   * The feature id for the '<em><b>Force</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PREFERENCE_TASK__FORCE = SETUP_TASK_FEATURE_COUNT + 2;
+
+  /**
    * The number of structural features of the '<em>Preference Task</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int PREFERENCE_TASK_FEATURE_COUNT = SETUP_TASK_FEATURE_COUNT + 2;
+  int PREFERENCE_TASK_FEATURE_COUNT = SETUP_TASK_FEATURE_COUNT + 3;
 
   /**
    * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
@@ -5449,6 +5458,17 @@ public interface SetupPackage extends EPackage
   EAttribute getPreferenceTask_Value();
 
   /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.PreferenceTask#isForce <em>Force</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Force</em>'.
+   * @see org.eclipse.oomph.setup.PreferenceTask#isForce()
+   * @see #getPreferenceTask()
+   * @generated
+   */
+  EAttribute getPreferenceTask_Force();
+
+  /**
    * Returns the meta object for class '{@link org.eclipse.oomph.setup.SetupTaskContainer <em>Task Container</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -6877,6 +6897,14 @@ public interface SetupPackage extends EPackage
      * @generated
      */
     EAttribute PREFERENCE_TASK__VALUE = eINSTANCE.getPreferenceTask_Value();
+
+    /**
+     * The meta object literal for the '<em><b>Force</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute PREFERENCE_TASK__FORCE = eINSTANCE.getPreferenceTask_Force();
 
     /**
      * The meta object literal for the '{@link org.eclipse.oomph.setup.impl.SetupTaskContainerImpl <em>Task Container</em>}' class.
