@@ -20,6 +20,7 @@ import org.eclipse.core.runtime.Platform;
 
 import org.osgi.framework.Bundle;
 
+import java.awt.Desktop;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.DataOutputStream;
@@ -38,6 +39,10 @@ import java.net.SocketException;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -87,6 +92,8 @@ public final class HTTPServer
   private static final String STATUS_INTERNAL_SERVER_ERROR = "500 Internal Server Error";
 
   private static final String STATUS_NOT_IMPLEMENTED = "501 Not Implemented";
+
+  private final List<Context> orderedContext = new ArrayList<>();
 
   private final List<Context> contexts = new ArrayList<>();
 
@@ -142,12 +149,15 @@ public final class HTTPServer
 
   public synchronized void addContext(Context context)
   {
+    orderedContext.add(context);
+
     contexts.add(context);
     Collections.sort(contexts);
   }
 
   public synchronized void removeContext(Context context)
   {
+    orderedContext.add(context);
     contexts.remove(context);
   }
 
@@ -218,11 +228,55 @@ public final class HTTPServer
   public static void main(String[] args) throws Exception
   {
     HTTPServer server = new HTTPServer(80, 100);
-    server.addContext(new FileContext("/file/c", true, new File("C:")));
-    server.addContext(new FileContext("/file/e", true, new File("E:")));
 
-    System.out.println("http://localhost:" + server.getPort());
+    if (args.length > 0)
+    {
+      List<String> argList = Arrays.asList(args);
+      for (int i = argList.indexOf("-alias"); i++ >= 0 && i < args.length;)
+      {
+        String arg = argList.get(i);
+        if (!arg.startsWith("-"))
+        {
+          String[] parts = arg.split("->");
+          if (parts.length == 2)
+          {
+            String logicalPath = parts[0];
+            String physicalLocation = parts[1];
+            if (Files.isDirectory(Path.of(physicalLocation)))
+            {
+              server.addContext(new FileContext(logicalPath, true, true, new File(physicalLocation).getCanonicalFile()));
+            }
+            else
+            {
+              System.out.println("Folder does not exist: " + physicalLocation);
+            }
+          }
+        }
+      }
+    }
+
+    FileSystem fileSystem = FileSystems.getDefault();
+    File userHome = new File(System.getProperty("user.home")).getCanonicalFile();
+    server.addContext(new FileContext("/user.home", true, userHome));
+    for (Path path : fileSystem.getRootDirectories())
+    {
+      String logicalPath = "/" + path.toString().replaceAll("[\\\\/]", "");
+      server.addContext(new FileContext(logicalPath, true, path.toFile()));
+    }
+
+    String baseURL = "http://localhost:" + server.getPort() + "/";
+    System.out.println(baseURL);
     System.out.println();
+
+    try
+    {
+      Desktop.getDesktop().browse(new URI(baseURL));
+    }
+    catch (Throwable throwable)
+    {
+      throwable.printStackTrace();
+    }
+
     while (System.in.available() == 0)
     {
       Thread.sleep(50);
@@ -420,7 +474,7 @@ public final class HTTPServer
         {
           Context.sendResponse(output, STATUS_OK, "index.html", 0, false);
 
-          for (Context c : contexts)
+          for (Context c : orderedContext)
           {
             if (c != IMAGE_CONTEXT)
             {
@@ -438,7 +492,7 @@ public final class HTTPServer
       }
 
       path = path.substring(context.getPath().length());
-      if (!path.startsWith(PATH_SEPARATOR))
+      if (!path.isEmpty() && !path.startsWith(PATH_SEPARATOR))
       {
         path = PATH_SEPARATOR + path;
       }
@@ -468,7 +522,9 @@ public final class HTTPServer
 
     private final boolean allowDirectory;
 
-    protected Context(String path, boolean allowDirectory)
+    private final boolean redirectDirectoryToIndexAutomatically;
+
+    protected Context(String path, boolean allowDirectory, boolean redirectDirectoryToIndexAutomatically)
     {
       if (!path.startsWith(PATH_SEPARATOR))
       {
@@ -477,6 +533,12 @@ public final class HTTPServer
 
       this.path = path;
       this.allowDirectory = allowDirectory;
+      this.redirectDirectoryToIndexAutomatically = redirectDirectoryToIndexAutomatically;
+    }
+
+    protected Context(String path, boolean allowDirectory)
+    {
+      this(path, allowDirectory, false);
     }
 
     public final String getPath()
@@ -522,7 +584,19 @@ public final class HTTPServer
     {
       if (isDirectory(path))
       {
-        if (!allowDirectory)
+        String indexPath = getIndexPath(path);
+        if (indexPath != null)
+        {
+          if (!path.endsWith(PATH_SEPARATOR))
+          {
+            Context.sendResponse(output, STATUS_SEE_OTHER, (this.path + "/" + path + "/").replace("//", "/"), 0, false);
+          }
+          else
+          {
+            handleFileRequest(indexPath, output, responseBody);
+          }
+        }
+        else if (!allowDirectory)
         {
           Context.sendResponse(output, STATUS_FORBIDDEN, null, 0, false);
         }
@@ -531,7 +605,7 @@ public final class HTTPServer
           if (!path.endsWith(PATH_SEPARATOR))
           {
             path += PATH_SEPARATOR;
-            Context.sendResponse(output, STATUS_SEE_OTHER, path, 0, false);
+            Context.sendResponse(output, STATUS_SEE_OTHER, (this.path + "/" + path).replace("//", "/"), 0, false);
           }
           else
           {
@@ -582,10 +656,15 @@ public final class HTTPServer
             }
           }
         }
-
-        return;
       }
+      else
+      {
+        handleFileRequest(path, output, responseBody);
+      }
+    }
 
+    protected void handleFileRequest(String path, DataOutputStream output, boolean responseBody) throws IOException
+    {
       if (!isFile(path))
       {
         Context.sendResponse(output, STATUS_NOT_FOUND, null, 0, false);
@@ -609,6 +688,28 @@ public final class HTTPServer
           IOUtil.close(stream);
         }
       }
+    }
+
+    protected String getIndexPath(String path)
+    {
+      if (redirectDirectoryToIndexAutomatically)
+      {
+        try
+        {
+          for (String child : getChildren(path))
+          {
+            if ("index.html".equals(child))
+            {
+              return (path + "/" + child).replace("//", "/");
+            }
+          }
+        }
+        catch (IOException ex)
+        {
+          //$FALL-THROUGH$
+        }
+      }
+      return null;
     }
 
     protected abstract boolean isDirectory(String path);
@@ -691,7 +792,7 @@ public final class HTTPServer
 
         if (location != null)
         {
-          output.writeBytes("Location: /file/c");
+          output.writeBytes("Location: ");
           output.writeBytes(location);
           output.writeBytes("\r\n");
           output.writeBytes("\r\n");
@@ -831,10 +932,15 @@ public final class HTTPServer
   {
     private final File root;
 
+    public FileContext(String path, boolean allowDirectory, boolean redirectDirectoryToIndexAutomatically, File root)
+    {
+      super(path, allowDirectory, redirectDirectoryToIndexAutomatically);
+      this.root = root;
+    }
+
     public FileContext(String path, boolean allowDirectory, File root)
     {
-      super(path, allowDirectory);
-      this.root = root;
+      this(path, allowDirectory, false, root);
     }
 
     @Override
