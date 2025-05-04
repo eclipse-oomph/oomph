@@ -616,8 +616,6 @@
         <repository
             url="https://download.eclipse.org/justj/jres/21/updates/milestone/latest"/>
         <repository
-            url="https://download.eclipse.org/usssdk/updates/latest"/>
-        <repository
             url="https://download.eclipse.org/webtools/downloads/drops/R3.37.0/R-3.37.0-20250303081219/repository"/>
       </repositoryList>
       <repositoryList

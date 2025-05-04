@@ -81,7 +81,6 @@
         <setEntry value="org.apache.batik.i18n@default:default"/>
         <setEntry value="org.apache.batik.util@default:default"/>
         <setEntry value="org.apache.commons.httpclient@default:default"/>
-        <setEntry value="org.apache.commons.jxpath@default:default"/>
         <setEntry value="org.apache.commons.logging@default:default"/>
         <setEntry value="org.apache.felix.gogo.runtime@default:default"/>
         <setEntry value="org.apache.felix.scr@1:true"/>
@@ -204,7 +203,6 @@
         <setEntry value="org.eclipse.jdt.junit@default:default"/>
         <setEntry value="org.eclipse.jdt.launching@default:default"/>
         <setEntry value="org.eclipse.jdt.ui@default:default"/>
-        <setEntry value="org.eclipse.jetty.servlet@default:default"/>
         <setEntry value="org.eclipse.jface.databinding@default:default"/>
         <setEntry value="org.eclipse.jface.notifications@default:default"/>
         <setEntry value="org.eclipse.jface.text@default:default"/>
@@ -288,9 +286,6 @@
         <setEntry value="org.eclipse.ui@default:default"/>
         <setEntry value="org.eclipse.update.configurator@3:true"/>
         <setEntry value="org.eclipse.urischeme@default:default"/>
-        <setEntry value="org.eclipse.userstorage.oauth@default:default"/>
-        <setEntry value="org.eclipse.userstorage.ui@default:default"/>
-        <setEntry value="org.eclipse.userstorage@default:default"/>
         <setEntry value="org.hamcrest.core@default:default"/>
         <setEntry value="org.junit@default:default"/>
         <setEntry value="org.objectweb.asm.tree@default:default"/>
