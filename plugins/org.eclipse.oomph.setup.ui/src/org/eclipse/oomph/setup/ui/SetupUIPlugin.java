@@ -558,14 +558,26 @@ public final class SetupUIPlugin extends OomphUIPlugin
 
           if (queriable == null)
           {
-            List<IInstallableUnit> extraIUs = new ArrayList<>();
-            extraIUs.add(P2Util.createJREIU("jre")); //$NON-NLS-1$
-            extraIUs.addAll(getInstalledJREs());
-            queriable = QueryUtil.compoundQueryable(profile, new CollectionResult<>(extraIUs));
+            IInstallableUnit jreIU = null;
+            try
+            {
+              jreIU = P2Util.createJREIU("jre"); //$NON-NLS-1$
+            }
+            catch (Throwable throwable)
+            {
+              //$FALL-THROUGH$
+            }
+
+            if (jreIU != null)
+            {
+              List<IInstallableUnit> extraIUs = new ArrayList<>();
+              extraIUs.add(jreIU);
+              extraIUs.addAll(getInstalledJREs());
+              queriable = QueryUtil.compoundQueryable(profile, new CollectionResult<>(extraIUs));
+            }
           }
 
           Requirement requirement = (Requirement)eObject;
-
           String filter = requirement.getFilter();
           if (filter != null)
           {
