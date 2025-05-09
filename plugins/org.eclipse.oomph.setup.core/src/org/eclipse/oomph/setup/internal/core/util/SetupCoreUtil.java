@@ -602,7 +602,7 @@ public final class SetupCoreUtil
     uriHandlers.add(++insertionPoint, new ECFURIHandlerImpl(AUTHORIZATION_HANDLER));
   }
 
-  static void configureRedirections(Map<URI, URI> uriMap)
+  public static void configureRedirections(Map<URI, URI> uriMap)
   {
     Properties properties = System.getProperties();
     Map<Object, Object> safeProperties;

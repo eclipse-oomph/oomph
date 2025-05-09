@@ -24,6 +24,8 @@ import org.eclipse.oomph.util.Request;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.URIConverter;
+import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
 import org.eclipse.core.runtime.IProduct;
@@ -58,12 +60,15 @@ public final class NotificationViewPart extends ViewPart
 {
   public static final String VIEW_ID = "org.eclipse.oomph.setup.presentation.NotificationView"; //$NON-NLS-1$
 
+  private final URIConverter uriConverter = new ExtensibleURIConverterImpl();
+
   private Browser browser;
 
   private Annotation notification;
 
   public NotificationViewPart()
   {
+    SetupCoreUtil.configureRedirections(uriConverter.getURIMap());
   }
 
   public void setNotification(Annotation notification)
@@ -123,7 +128,7 @@ public final class NotificationViewPart extends ViewPart
     request.put("background-color", getColor(background));
 
     URI enhancedURI = request.getURI();
-    browser.setUrl(enhancedURI.toString());
+    browser.setUrl(uriConverter.normalize(enhancedURI).toString());
   }
 
   @Override
