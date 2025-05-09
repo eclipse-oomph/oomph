@@ -49,6 +49,10 @@ function generate() {
 			const generate = new Function(generator);
 			generate.call(element, element);
 		}
+		const ideWG = document.getElementById('ide-wg');
+		if (ideWG != null) {
+			genenerateLogos(ideWG);
+		}
 	} catch (exception) {
 		document.body.prepend(...toElements(`<span>Failed to generate content: <span><b style="color: FireBrick">${exception.message}</b><br/>`));
 		console.log(exception);
@@ -95,6 +99,31 @@ function load() {
 		}
 		element.href = url.toString();
 	}
+}
+
+async function genenerateLogos(element) {
+	fetch('https://membership.eclipse.org/api/organizations/').
+		then(response => response.text()).
+		then(text => {
+			const organizations = JSON.parse(text);
+			const images = [];
+			if (organizations instanceof Array) {
+				for (const organization of organizations) {
+					const wgpas = organization.wgpas;
+					if (wgpas instanceof Array) {
+						for (const wgpa of wgpas) {
+							if (wgpa.working_group == 'eclipse-ide') {
+								const logo = organization.logos.web;
+								images.push(`<img class="ide-wg-member-logo" src="${logo}"/>`);
+							}
+						}
+					}
+				}
+			}
+
+			element.innerHTML += images.join('');
+			element.style.display = "block";
+		});
 }
 
 function getQueryParameter(id, defaultValue) {

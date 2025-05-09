@@ -70,3 +70,15 @@ code {
 code {
 	font-family: Menlo, Monaco, Consolas, Courier New, monospace;
 }
+
+hr {
+	border: none;
+	height: 1px;
+	background-color: #333
+}
+
+.ide-wg-member-logo {
+	max-width: 7em;
+	max-height: 2em;
+	margin: .3em .3em;
+}
