@@ -50,7 +50,7 @@ function generate() {
 			generate.call(element, element);
 		}
 		const ideWG = document.getElementById('ide-wg');
-		if (ideWG != null) {
+		if (ideWG != null && getQueryParameter('logos', 'false') == 'true') {
 			genenerateLogos(ideWG);
 		}
 	} catch (exception) {
@@ -106,7 +106,7 @@ async function genenerateLogos(element) {
 		then(response => response.text()).
 		then(text => {
 			const organizations = JSON.parse(text);
-			const images = [];
+			const content = [];
 			if (organizations instanceof Array) {
 				for (const organization of organizations) {
 					const wgpas = organization.wgpas;
@@ -114,14 +114,20 @@ async function genenerateLogos(element) {
 						for (const wgpa of wgpas) {
 							if (wgpa.working_group == 'eclipse-ide') {
 								const logo = organization.logos.web;
-								images.push(`<img class="ide-wg-member-logo" src="${logo}"/>`);
+								content.push(`<a href="${organization.website}"><img class="ide-wg-member-logo" src="${logo}"/></a>`);
 							}
 						}
 					}
 				}
 			}
+			content.push(`
+<div style="margin-top: .5em">				
+	<label class="button">	
+		<a href="https://www.eclipse.org/sponsor/ide/">Become a Sponsor</a>
+	</label>
+</div>`);
 
-			element.innerHTML += images.join('');
+			element.innerHTML += content.join('\n');
 			element.style.display = "block";
 		});
 }
