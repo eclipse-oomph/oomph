@@ -293,7 +293,8 @@ public class AnimatedCanvas extends Canvas
 
   protected void doPaint(GC canvasGC)
   {
-    Image buffer = new Image(getDisplay(), getBounds());
+    Point size = getSize();
+    Image buffer = new Image(getDisplay(), size.x, size.y);
 
     GC bufferGC = new GC(buffer);
     bufferGC.setAdvanced(true);
