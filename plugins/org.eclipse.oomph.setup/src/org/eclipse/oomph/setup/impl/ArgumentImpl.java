@@ -207,7 +207,8 @@ public class ArgumentImpl extends ModelElementImpl implements Argument
             if (macroTask != null)
             {
               EObject resolvedMacro = resolveProxy((InternalEObject)macroTask.eGet(SetupPackage.Literals.MACRO_TASK__MACRO, false), demandLoad);
-              if (resolvedMacro instanceof Macro)
+              Resource eResource = resolvedMacro.eResource();
+              if (eResource instanceof Resource.Internal && !((Resource.Internal)eResource).isLoading() && resolvedMacro instanceof Macro)
               {
                 Macro macro = (Macro)resolvedMacro;
                 EList<Parameter> parameters = macro.getParameters();
