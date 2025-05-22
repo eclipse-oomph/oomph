@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<link href="https://eclipseide.org/favicon.ico" rel="icon" type="image/x-icon" />
+	<title>Eclipse IDE</title>
+	<link rel="preconnect stylesheet" href="../notification.css?v=1.0" />
+	<style>
+		/* <![CDATA[*/
+		#product-logo {
+			max-width: 1.2em;
+			margin-bottom: -0.2em;
+		}
+
+		/*]]>*/
+	</style>
+	<script src="../notification.js?v=1.0"></script>
+	<script>
+		//<![CDATA[
+		//]]>
+	</script>
+</head>
+
+<body id="body">
+	<div class="main">
+		<div id="content">
+			<table style="display: none;">
+				<tbody id="query">
+					<tr>
+						<th>Property</th>
+						<th>Value</th>
+					</tr>
+					<tr>
+						<td>property</td>
+						<td>value</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<div id="general">
+				<div class="section">
+					The version of the Darkest Dark Theme feature installed in your IDE is not compatible with Eclipse 2025-06.
+					If you update the IDE, it will fail to start, and you will <b>not</b> be able to revert the update.
+				</div>
+				<div class="section">
+					We are working on <a href="eclipse+external:https://github.com/eclipse-packaging/packages/issues/310">a solution</a>
+					to prevent such an update while verison <code>2024.4.0.202412101111</code> is installed.
+				</div>
+				<div class="button-section">
+					<label class="button">
+						<a id="download-link" href="eclipse+external:https://github.com/eclipse-packaging/packages/issues/310/">Find Out More</a>
+					</label>
+					&nbsp;
+					<label class="button">
+						<a href="eclipse+command:close">Remind Me Later</a>
+					</label>
+					&nbsp;
+					<label class="button">
+						<a href="eclipse+command:dismiss-installation">Don't Remind Me Again</a>
+					</label>
+				</div>
+				<div id="ide-wg" class="section" style="display: none">
+					<hr />
+					Sponsored by <b>people like you</b> and by the <a href="eclipse+external:https://eclipseide.org/working-group/#about">IDE Working Group</a>.
+					<br />
+				</div>
+				<div class="section">
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		load();
+		generate(true);
+	</script>
+</body>
+
+</html>

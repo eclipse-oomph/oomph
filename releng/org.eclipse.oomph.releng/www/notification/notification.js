@@ -41,7 +41,7 @@ function getProductImage() {
 		?? productImages.get('default')
 }
 
-function generate() {
+function generate(showLogos) {
 	try {
 		const generators = document.querySelectorAll('[data-generate]');
 		for (const element of generators) {
@@ -50,7 +50,7 @@ function generate() {
 			generate.call(element, element);
 		}
 		const ideWG = document.getElementById('ide-wg');
-		if (ideWG != null && getQueryParameter('logos', 'false') == 'true') {
+		if (ideWG != null && (showLogos || getQueryParameter('logos', 'false') == 'true')) {
 			genenerateLogos(ideWG);
 		}
 	} catch (exception) {
@@ -114,16 +114,22 @@ async function genenerateLogos(element) {
 						for (const wgpa of wgpas) {
 							if (wgpa.working_group == 'eclipse-ide') {
 								const logo = organization.logos.web;
-								content.push(`<a href="${organization.website}"><img class="ide-wg-member-logo" src="${logo}"/></a>`);
+								content.push(`<span class="ide-wg-member-logo-container"><a href="eclipse+external:${organization.website}"><img class="ide-wg-member-logo" src="${logo}"/></a></span>`);
 							}
 						}
 					}
 				}
 			}
+
+			for (let i = content.length - 1; i > 0; i--) {
+				const j = Math.floor(Math.random() * (i + 1));
+				[content[i], content[j]] = [content[j], content[i]];
+			}
+
 			content.push(`
 <div style="margin-top: .5em">				
 	<label class="button">	
-		<a href="https://www.eclipse.org/sponsor/ide/">Become a Sponsor</a>
+		<a href="eclipse+external:https://www.eclipse.org/sponsor/ide/">Become a Sponsor</a>
 	</label>
 </div>`);
 
