@@ -201,8 +201,8 @@ public class Installer extends SetupWizard
         try
         {
           SetupTaskPerformer performer = getPerformer();
-          ProductVersion productVersison = performer.getSetupContext().getInstallation().getProductVersion();
-          Product product = productVersison.getProduct();
+          ProductVersion productVersion = performer.getSetupContext().getInstallation().getProductVersion();
+          Product product = productVersion.getProduct();
           ExecutableInfo info = performer.getExecutableInfo();
           File executable = info.getExecutable();
           File productFolder = executable.getParentFile();
@@ -212,7 +212,7 @@ public class Installer extends SetupWizard
               : productContainerFolder.getName() + " - " + IOUtil.encodeFileName(productContainerContainerFolder.toString()); //$NON-NLS-1$
 
           String appName = null;
-          Scope scope = productVersison;
+          Scope scope = productVersion;
           while (scope != null)
           {
             Annotation annotation = scope.getAnnotation(AnnotationConstants.ANNOTATION_BRANDING_INFO);
