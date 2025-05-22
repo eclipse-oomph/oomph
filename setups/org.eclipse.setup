@@ -93,6 +93,21 @@
         versionRange="[4.35.0,4.36.0)"/>
   </annotation>
   <annotation
+      source="http://www.eclipse.org/oomph/setup/Notification">
+    <detail
+        key="maximize">
+      <value>false</value>
+    </detail>
+    <detail
+        key="uri">
+      <value>https://www.eclipse.org/setups/notification/devstyle/</value>
+    </detail>
+    <content
+        xsi:type="p2:Requirement"
+        name="com.genuitec.eclipse.theming.core.feature.feature.group"
+        versionRange="[0.0.1,2024.4.0.202412101111]"/>
+  </annotation>
+  <annotation
       source="http://www.eclipse.org/oomph/setup/JRE">
     <reference
         href="org.eclipse.jres.setup#/"/>
