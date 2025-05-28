@@ -154,6 +154,7 @@ public class MarketplaceCatalogGenerator implements IApplication
     String[] arguments = (String[])context.getArguments().get(IApplicationContext.APPLICATION_ARGS);
     Map<String, URI> nodeURIs = new LinkedHashMap<String, URI>();
     outputLocation = File.createTempFile("marketplace", "-report");
+    outputLocation.delete();
     boolean skip = false;
     if (arguments != null)
     {
@@ -288,7 +289,26 @@ public class MarketplaceCatalogGenerator implements IApplication
       {
         System.out.println("Loading " + listingURI);
         Resource listingResource = resourceSet.getResource(listingURI, true);
-        EObject documentRoot = listingResource.getContents().get(0);
+        EList<EObject> contents = listingResource.getContents();
+        if (contents.isEmpty())
+        {
+          System.err.println("The resource is empty" + listingURI);
+          System.err.println("Errors:");
+          for (Resource.Diagnostic diagnostic : listingResource.getErrors())
+          {
+            System.err.println(diagnostic);
+          }
+
+          System.err.println("Warnings:");
+          for (Resource.Diagnostic diagnostic : listingResource.getErrors())
+          {
+            System.err.println(diagnostic);
+          }
+
+          throw new RuntimeException("Loading failed.");
+        }
+
+        EObject documentRoot = contents.get(0);
         List<AnyType> searches = get(documentRoot, "search");
         if (searches == null)
         {
