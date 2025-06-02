@@ -1,3 +1,5 @@
+const scriptBase = new URL(".", document.currentScript.src).href;
+
 const productNames = new Map([
 	['org.eclipse.epp.package.committers.product', 'Eclipse IDE for Eclipse Committers'],
 	['org.eclipse.epp.package.cpp.product', 'Eclipse IDE for C/C++ Developers'],
@@ -126,10 +128,25 @@ async function genenerateLogos(element) {
 				[content[i], content[j]] = [content[j], content[i]];
 			}
 
+			const sponsorURL = new URL("eclipse+external:https://www.eclipse.org/sponsor/ide");
+			const location = window.location;
+			if (location.href.startsWith(scriptBase)) {
+				const url = new URL(location.href);
+				url.search = '';
+				url.hash = '';
+				const relativeLocation = url.href.replace(scriptBase, '').replace(/\/$/, '');
+				sponsorURL.searchParams.set('notification', relativeLocation);
+			}
+			for (const [k, v] of new URLSearchParams(location.search).entries()) {
+				if (k != 'color' && k != 'background-color') {
+					sponsorURL.searchParams.set(k, v);
+				}
+			}
+
 			content.push(`
 <div style="margin-top: .5em">				
 	<label class="button">	
-		<a href="eclipse+external:https://www.eclipse.org/sponsor/ide/">Become a Sponsor</a>
+		<a href="${sponsorURL}">Become a Sponsor</a>
 	</label>
 </div>`);
 
