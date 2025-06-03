@@ -8,7 +8,7 @@
     label="CBI">
   <project href="https://raw.githubusercontent.com/eclipse-cbi/p2repo-aggregator/main/releng/org.eclipse.cbi.p2repo.releng.parent/setup/P2RepoAggregator.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-cbi/p2repo-analyzers/main/releng/org.eclipse.cbi.p2repo.analyzers.parent/setup/P2RepoAnalyzer.setup#/"/>
-  <project href="https://raw.githubusercontent.com/merks/p2repo-sbom/main/releng/org.eclipse.cbi.p2repo.sbom.releng.parent/setup/P2RepoSBOM.setup#/"/>
+  <project href="https://raw.githubusercontent.com/eclipse-cbi/p2repo-sbom/main/releng/org.eclipse.cbi.p2repo.sbom.releng.parent/setup/P2RepoSBOM.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-cbi/targetplatform-dsl/master/TPD.setup#/"/>
   <logicalProjectContainer
       xsi:type="setup:ProjectCatalog"
