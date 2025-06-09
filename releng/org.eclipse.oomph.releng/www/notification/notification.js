@@ -146,13 +146,17 @@ async function genenerateLogos(element) {
 			content.push(`
 <div style="margin-top: .5em">				
 	<label class="button">	
-		<a href="${sponsorURL}">Become a Sponsor</a>
+		<a id="sponsor-link" href="${sponsorURL}">${spanify('Become a Sponsor')}</a>
 	</label>
 </div>`);
 
 			element.innerHTML += content.join('\n');
 			element.style.display = "block";
 		});
+}
+
+function spanify(string) {
+	return string.split('').map(c => `<span>${c == ' ' ? '&nbsp;' : c}</span>`).join('');
 }
 
 function getQueryParameter(id, defaultValue) {
