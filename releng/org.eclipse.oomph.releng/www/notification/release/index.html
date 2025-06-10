@@ -72,7 +72,8 @@
 		}
 
 		#ide-wg label {
-			font-size: 150%;
+			font-size: 140%;
+			font-weight: bolder;
 		}
 
 		#sponsor-link span {
@@ -145,12 +146,11 @@
 			animation-delay: 1.5s;
 		}
 
-
 		@keyframes wave {
 
 			0%,
 			100% {
-				transform: translateY(0);
+				transform: translateY(2px);
 			}
 
 			50% {
@@ -158,6 +158,15 @@
 			}
 		}
 
+		.ide-wg-member-logo-container {
+			height: 1.8em;
+			padding: .2em .3em;
+		}
+
+		.ide-wg-member-logo {
+			max-width: 6em;
+			max-height: 1.8em;
+		}
 
 		/*]]>*/
 	</style>
@@ -223,7 +232,7 @@
 								<a href="eclipse+command:dismiss-installation">No Thank You</a>
 							</label>
 						</div>
-						<div class="section" style="font-size:150%">
+						<div class="section" style="font-size: 150%">
 							Learn about the exciting <a href="https://eclipseide.org/release/noteworthy/">New &amp; Noteworthy</a> features!
 						</div>
 					</div>
