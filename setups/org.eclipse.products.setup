@@ -66,7 +66,7 @@
     </annotation>
     <version
         name="staging"
-        label="Staging (2025-06)"
+        label="Staging (2025-09)"
         requiredJavaVersion="21">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
@@ -139,7 +139,7 @@
         <repository
             url="https://download.eclipse.org/technology/epp/staging/repository"/>
         <repository
-            url="https://download.eclipse.org/staging/2025-06">
+            url="https://download.eclipse.org/staging/2025-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -162,10 +162,6 @@
           <value>Eclipse IDE for Java Developers - Latest</value>
         </detail>
       </annotation>
-      <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2025-09"
-          targetURL="https://download.eclipse.org/releases/2025-06"/>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Java Developers (2025-09)">
@@ -334,10 +330,6 @@
           <value>Eclipse IDE for Java Developers - 2025-09</value>
         </detail>
       </annotation>
-      <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2025-09"
-          targetURL="https://download.eclipse.org/releases/2025-06"/>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Java Developers (2025-09)">
@@ -3070,7 +3062,7 @@
     </annotation>
     <version
         name="staging"
-        label="Staging (2025-06)"
+        label="Staging (2025-09)"
         requiredJavaVersion="21">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
@@ -3275,7 +3267,7 @@
         <repository
             url="https://download.eclipse.org/technology/epp/staging/repository"/>
         <repository
-            url="https://download.eclipse.org/staging/2025-06">
+            url="https://download.eclipse.org/staging/2025-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -3298,10 +3290,6 @@
           <value>Eclipse IDE for Enterprise Java and Web Developers - Latest</value>
         </detail>
       </annotation>
-      <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2025-09"
-          targetURL="https://download.eclipse.org/releases/2025-06"/>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Enterprise Java and Web Developers (2025-09)">
@@ -3734,10 +3722,6 @@
           <value>Eclipse IDE for Enterprise Java and Web Developers - 2025-09</value>
         </detail>
       </annotation>
-      <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2025-09"
-          targetURL="https://download.eclipse.org/releases/2025-06"/>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Enterprise Java and Web Developers (2025-09)">
@@ -10652,7 +10636,7 @@
     </annotation>
     <version
         name="staging"
-        label="Staging (2025-06)"
+        label="Staging (2025-09)"
         requiredJavaVersion="21">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
@@ -10761,7 +10745,7 @@
         <repository
             url="https://download.eclipse.org/technology/epp/staging/repository"/>
         <repository
-            url="https://download.eclipse.org/staging/2025-06">
+            url="https://download.eclipse.org/staging/2025-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -10784,10 +10768,6 @@
           <value>Eclipse IDE for C and C++ Developers - Latest</value>
         </detail>
       </annotation>
-      <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2025-09"
-          targetURL="https://download.eclipse.org/releases/2025-06"/>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for C/C++ Developers (2025-09)">
@@ -11028,10 +11008,6 @@
           <value>Eclipse IDE for C and C++ Developers - 2025-09</value>
         </detail>
       </annotation>
-      <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2025-09"
-          targetURL="https://download.eclipse.org/releases/2025-06"/>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for C/C++ Developers (2025-09)">
@@ -14833,7 +14809,7 @@
     </annotation>
     <version
         name="staging"
-        label="Staging (2025-06)"
+        label="Staging (2025-09)"
         requiredJavaVersion="21">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
@@ -14972,7 +14948,7 @@
         <repository
             url="https://download.eclipse.org/technology/epp/staging/repository"/>
         <repository
-            url="https://download.eclipse.org/staging/2025-06">
+            url="https://download.eclipse.org/staging/2025-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -14995,10 +14971,6 @@
           <value>Eclipse IDE for Embedded C and C++ Developers - Latest</value>
         </detail>
       </annotation>
-      <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2025-09"
-          targetURL="https://download.eclipse.org/releases/2025-06"/>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Embedded C/C++ Developers (2025-09)">
@@ -15299,10 +15271,6 @@
           <value>Eclipse IDE for Embedded C and C++ Developers - 2025-09</value>
         </detail>
       </annotation>
-      <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2025-09"
-          targetURL="https://download.eclipse.org/releases/2025-06"/>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Embedded C/C++ Developers (2025-09)">
@@ -18239,7 +18207,7 @@
     </annotation>
     <version
         name="staging"
-        label="Staging (2025-06)"
+        label="Staging (2025-09)"
         requiredJavaVersion="21">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
@@ -18312,7 +18280,7 @@
         <repository
             url="https://download.eclipse.org/technology/epp/staging/repository"/>
         <repository
-            url="https://download.eclipse.org/staging/2025-06">
+            url="https://download.eclipse.org/staging/2025-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -18335,10 +18303,6 @@
           <value>Eclipse IDE for PHP Developers - Latest</value>
         </detail>
       </annotation>
-      <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2025-09"
-          targetURL="https://download.eclipse.org/releases/2025-06"/>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for PHP Developers (2025-09)">
@@ -18507,10 +18471,6 @@
           <value>Eclipse IDE for PHP Developers - 2025-09</value>
         </detail>
       </annotation>
-      <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2025-09"
-          targetURL="https://download.eclipse.org/releases/2025-06"/>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for PHP Developers (2025-09)">
@@ -21214,7 +21174,7 @@
     </annotation>
     <version
         name="staging"
-        label="Staging (2025-06)"
+        label="Staging (2025-09)"
         requiredJavaVersion="21">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
@@ -21253,8 +21213,6 @@
         <requirement
             name="org.eclipse.jdt.feature.group"/>
         <requirement
-            name="org.eclipse.jdt.source.feature.group"/>
-        <requirement
             name="org.eclipse.jgit.feature.group"/>
         <requirement
             name="org.eclipse.jgit.http.apache.feature.group"/>
@@ -21287,15 +21245,7 @@
         <requirement
             name="org.eclipse.pde.feature.group"/>
         <requirement
-            name="org.eclipse.pde.source.feature.group"/>
-        <requirement
             name="org.eclipse.pde.spies.feature.group"/>
-        <requirement
-            name="org.eclipse.pde.spies.source.feature.group"/>
-        <requirement
-            name="org.eclipse.platform.source.feature.group"/>
-        <requirement
-            name="org.eclipse.rcp.source.feature.group"/>
         <requirement
             name="org.eclipse.swt.tools.feature.feature.group"/>
         <requirement
@@ -21311,7 +21261,7 @@
         <repository
             url="https://download.eclipse.org/technology/epp/staging/repository"/>
         <repository
-            url="https://download.eclipse.org/staging/2025-06">
+            url="https://download.eclipse.org/staging/2025-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -21334,10 +21284,6 @@
           <value>Eclipse IDE for Eclipse Committers - Latest</value>
         </detail>
       </annotation>
-      <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2025-09"
-          targetURL="https://download.eclipse.org/releases/2025-06"/>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Eclipse Committers (2025-09)">
@@ -21554,10 +21500,6 @@
           <value>Eclipse IDE for Eclipse Committers - 2025-09</value>
         </detail>
       </annotation>
-      <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2025-09"
-          targetURL="https://download.eclipse.org/releases/2025-06"/>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Eclipse Committers (2025-09)">
@@ -25208,7 +25150,7 @@
     </annotation>
     <version
         name="staging"
-        label="Staging (2025-06)"
+        label="Staging (2025-09)"
         requiredJavaVersion="21">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
@@ -25271,7 +25213,7 @@
         <repository
             url="https://download.eclipse.org/technology/epp/staging/repository"/>
         <repository
-            url="https://download.eclipse.org/staging/2025-06">
+            url="https://download.eclipse.org/staging/2025-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -25294,10 +25236,6 @@
           <value>Eclipse IDE for Java and DSL Developers - Latest</value>
         </detail>
       </annotation>
-      <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2025-09"
-          targetURL="https://download.eclipse.org/releases/2025-06"/>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse DSL Tools (2025-09)">
@@ -25446,10 +25384,6 @@
           <value>Eclipse IDE for Java and DSL Developers - 2025-09</value>
         </detail>
       </annotation>
-      <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2025-09"
-          targetURL="https://download.eclipse.org/releases/2025-06"/>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse DSL Tools (2025-09)">
@@ -27748,7 +27682,7 @@
     </annotation>
     <version
         name="staging"
-        label="Staging (2025-06)"
+        label="Staging (2025-09)"
         requiredJavaVersion="21">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
@@ -27826,11 +27760,7 @@
         <requirement
             name="org.eclipse.pde.spies.feature.group"/>
         <requirement
-            name="org.eclipse.platform.source.feature.group"/>
-        <requirement
             name="org.eclipse.rap.tools.feature.feature.group"/>
-        <requirement
-            name="org.eclipse.rcp.source.feature.group"/>
         <requirement
             name="org.eclipse.swtbot.eclipse.feature.group"/>
         <requirement
@@ -27852,7 +27782,7 @@
         <repository
             url="https://download.eclipse.org/technology/epp/staging/repository"/>
         <repository
-            url="https://download.eclipse.org/staging/2025-06">
+            url="https://download.eclipse.org/staging/2025-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -27875,10 +27805,6 @@
           <value>Eclipse IDE for RCP and RAP Developers - Latest</value>
         </detail>
       </annotation>
-      <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2025-09"
-          targetURL="https://download.eclipse.org/releases/2025-06"/>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for RCP and RAP Developers (2025-09)">
@@ -28099,10 +28025,6 @@
           <value>Eclipse IDE for RCP and RAP Developers - 2025-09</value>
         </detail>
       </annotation>
-      <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2025-09"
-          targetURL="https://download.eclipse.org/releases/2025-06"/>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for RCP and RAP Developers (2025-09)">
@@ -31421,7 +31343,7 @@
     </annotation>
     <version
         name="staging"
-        label="Staging (2025-06)"
+        label="Staging (2025-09)"
         requiredJavaVersion="21">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
@@ -31450,19 +31372,17 @@
         <requirement
             name="org.eclipse.emf.cdo.sdk.feature.group"/>
         <requirement
-            name="org.eclipse.emf.compare.diagram.sirius.source.feature.group"/>
+            name="org.eclipse.emf.compare.diagram.sirius.feature.group"/>
         <requirement
             name="org.eclipse.emf.compare.egit.feature.group"/>
         <requirement
-            name="org.eclipse.emf.compare.ide.ui.source.feature.group"/>
+            name="org.eclipse.emf.compare.feature.group"/>
         <requirement
-            name="org.eclipse.emf.compare.source.feature.group"/>
+            name="org.eclipse.emf.compare.ide.ui.feature.group"/>
         <requirement
             name="org.eclipse.emf.ecoretools.design.feature.group"/>
         <requirement
             name="org.eclipse.emf.parsley.sdk.feature.group"/>
-        <requirement
-            name="org.eclipse.emf.parsley.sdk.source.feature.group"/>
         <requirement
             name="org.eclipse.emf.sdk.feature.group"/>
         <requirement
@@ -31524,7 +31444,7 @@
         <repository
             url="https://download.eclipse.org/technology/epp/staging/repository"/>
         <repository
-            url="https://download.eclipse.org/staging/2025-06">
+            url="https://download.eclipse.org/staging/2025-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -31547,10 +31467,6 @@
           <value>Eclipse Modeling Tools - Latest</value>
         </detail>
       </annotation>
-      <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2025-09"
-          targetURL="https://download.eclipse.org/releases/2025-06"/>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse Modeling Tools (2025-09)">
@@ -31779,10 +31695,6 @@
           <value>Eclipse Modeling Tools - 2025-09</value>
         </detail>
       </annotation>
-      <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2025-09"
-          targetURL="https://download.eclipse.org/releases/2025-06"/>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse Modeling Tools (2025-09)">
@@ -35441,7 +35353,7 @@
     </annotation>
     <version
         name="staging"
-        label="Staging (2025-06)"
+        label="Staging (2025-09)"
         requiredJavaVersion="21">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
@@ -35468,13 +35380,11 @@
         <requirement
             name="org.eclipse.epp.mpc.feature.group"/>
         <requirement
-            name="org.eclipse.help.source.feature.group"/>
+            name="org.eclipse.help.feature.group"/>
         <requirement
             name="org.eclipse.jdt.bcoview.feature.feature.group"/>
         <requirement
             name="org.eclipse.jdt.feature.group"/>
-        <requirement
-            name="org.eclipse.jdt.source.feature.group"/>
         <requirement
             name="org.eclipse.jgit.feature.group"/>
         <requirement
@@ -35516,7 +35426,7 @@
         <repository
             url="https://download.eclipse.org/technology/epp/staging/repository"/>
         <repository
-            url="https://download.eclipse.org/staging/2025-06">
+            url="https://download.eclipse.org/staging/2025-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -35539,10 +35449,6 @@
           <value>Eclipse IDE for Scout Developers - Latest</value>
         </detail>
       </annotation>
-      <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2025-09"
-          targetURL="https://download.eclipse.org/releases/2025-06"/>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for Scout Developers (2025-09)">
@@ -35715,10 +35621,6 @@
           <value>Eclipse IDE for Scout Developers - 2025-09</value>
         </detail>
       </annotation>
-      <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2025-09"
-          targetURL="https://download.eclipse.org/releases/2025-06"/>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for Scout Developers (2025-09)">
@@ -38453,7 +38355,7 @@
     </annotation>
     <version
         name="staging"
-        label="Staging (2025-06)"
+        label="Staging (2025-09)"
         requiredJavaVersion="21">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
@@ -38476,7 +38378,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.36.0,5.0.0)"/>
         <repository
-            url="https://download.eclipse.org/staging/2025-06">
+            url="https://download.eclipse.org/staging/2025-09">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -38496,10 +38398,6 @@
         </detail>
       </annotation>
       <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2025-09"
-          targetURL="https://download.eclipse.org/releases/2025-06"/>
-      <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse Platform (2025-09)">
         <requirement
@@ -38513,7 +38411,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.36.0,5.0.0)"/>
         <repository
-            url="https://download.eclipse.org/releases/2025-09">
+            url="https://download.eclipse.org/releases/2025-06">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -38565,10 +38463,6 @@
           <value>Eclipse Platform - 2025-09</value>
         </detail>
       </annotation>
-      <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2025-09"
-          targetURL="https://download.eclipse.org/releases/2025-06"/>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse Platform (2025-09)">

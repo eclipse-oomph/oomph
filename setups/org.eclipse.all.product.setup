@@ -43,7 +43,7 @@
       value="5g"
       vm="true"/>
   <version name="staging"
-      label="Staging (2025-06)"
+      label="Staging (2025-09)"
       requiredJavaVersion="21">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
@@ -85,7 +85,7 @@
       <requirement
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
       <repository
-          url="https://download.eclipse.org/staging/2025-06">
+          url="https://download.eclipse.org/staging/2025-09">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
@@ -107,10 +107,6 @@
         <value>Eclipse Eierlegende Wollmilchsau - Latest</value>
       </detail>
     </annotation>
-    <setupTask
-        xsi:type="setup:RedirectionTask"
-        sourceURL="https://download.eclipse.org/releases/2025-09"
-        targetURL="https://download.eclipse.org/releases/2025-06"/>
     <setupTask
         xsi:type="setup.p2:P2Task"
         label="Eclipse Eierlegende Wollmilchsau (2025-09)">
@@ -144,7 +140,7 @@
       <requirement
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
       <repository
-          url="https://download.eclipse.org/releases/2025-09">
+          url="https://download.eclipse.org/releases/2025-06">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
@@ -218,10 +214,6 @@
       </detail>
     </annotation>
     <setupTask
-        xsi:type="setup:RedirectionTask"
-        sourceURL="https://download.eclipse.org/releases/2025-09"
-        targetURL="https://download.eclipse.org/releases/2025-06"/>
-    <setupTask
         xsi:type="setup.p2:P2Task"
         label="Eclipse Eierlegende Wollmilchsau (2025-09)">
       <requirement
@@ -254,7 +246,7 @@
       <requirement
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
       <repository
-          url="https://download.eclipse.org/releases/2025-09">
+          url="https://download.eclipse.org/releases/2025-06">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
