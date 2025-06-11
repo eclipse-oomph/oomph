@@ -108,6 +108,21 @@
         versionRange="[0.0.1,2024.4.0.202412101111]"/>
   </annotation>
   <annotation
+      source="http://www.eclipse.org/oomph/setup/Notification">
+    <detail
+        key="maximize">
+      <value>false</value>
+    </detail>
+    <detail
+        key="uri">
+      <value>https://www.eclipse.org/setups/notification/release/</value>
+    </detail>
+    <content
+        xsi:type="p2:Requirement"
+        name="org.eclipse.epp.package.common"
+        versionRange="[4.35.0,4.36.0.20250529-0657)"/>
+  </annotation>
+  <annotation
       source="http://www.eclipse.org/oomph/setup/JRE">
     <reference
         href="org.eclipse.jres.setup#/"/>
