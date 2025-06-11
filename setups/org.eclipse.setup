@@ -10,7 +10,7 @@
       source="http://www.eclipse.org/oomph/setup/BrandingInfo">
     <detail
         key="notificationURI">
-      <value>https://www.eclipse.org/sponsor/ide/?scope=${scope}&amp;version=${scope.version}&amp;campaign=2025-03</value>
+      <value>https://www.eclipse.org/sponsor/ide/?scope=${scope}&amp;version=${scope.version}&amp;campaign=2025-06</value>
     </detail>
   </annotation>
   <annotation
@@ -36,7 +36,7 @@
         versionRange="4.36.0"/>
   </annotation>
   <annotation
-      source="http://www.eclipse.org/oomph/setup/Notification">
+      source="http://www.eclipse.org/oomph/setup/Notification-Disable">
     <detail
         key="uri">
       <value>https://www.eclipse.org/setups/notification/java24/index.html</value>
@@ -57,7 +57,7 @@
         versionRange="[3.20.100.v20250120-0740,3.20.199)"/>
   </annotation>
   <annotation
-      source="http://www.eclipse.org/oomph/setup/Notification">
+      source="http://www.eclipse.org/oomph/setup/Notification-Disable">
     <detail
         key="uri">
       <value>https://www.eclipse.org/setups/notification/java24/index.html?jre-only=true</value>
@@ -78,7 +78,7 @@
         max="0"/>
   </annotation>
   <annotation
-      source="http://www.eclipse.org/oomph/setup/Notification">
+      source="http://www.eclipse.org/oomph/setup/Notification-Disable">
     <detail
         key="maximize">
       <value>false</value>

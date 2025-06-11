@@ -586,6 +586,39 @@
       <sourceLocator
           rootFolder="${github.clone.oomph.github.location}"/>
       <repositoryList
+          name="2025-09">
+        <repository
+            url="https://download.eclipse.org/modeling/emf/emf/builds/milestone/latest"/>
+        <repository
+            url="https://download.eclipse.org/egit/updates-stable-nightly"/>
+        <repository
+            url="https://download.eclipse.org/mylyn/updates/nightly/latest"/>
+        <repository
+            url="https://download.eclipse.org/nebula/updates/release/3.1.1">
+          <annotation
+              source="Documentation">
+            <detail
+                key="info">
+              <value>This delibarately use a fixed older verion of Nebula because the latest version of Nebula requires SWT from the 2024-06 release</value>
+            </detail>
+          </annotation>
+        </repository>
+        <repository
+            url="https://download.eclipse.org/technology/m2e/snapshots/latest"/>
+        <repository
+            url="https://download.eclipse.org/wildwebdeveloper/releases/latest"/>
+        <repository
+            url="https://download.eclipse.org/tm4e/releases/latest"/>
+        <repository
+            url="${swtbot.p2}"/>
+        <repository
+            url="https://download.eclipse.org/tools/orbit/simrel/orbit-aggregation/nightly/latest"/>
+        <repository
+            url="https://download.eclipse.org/justj/jres/21/updates/milestone/latest"/>
+        <repository
+            url="https://download.eclipse.org/webtools/downloads/drops/R3.38.0/S-3.38RC1-20250601070120/repository"/>
+      </repositoryList>
+      <repositoryList
           name="2025-06">
         <repository
             url="https://download.eclipse.org/modeling/emf/emf/builds/milestone/latest"/>
