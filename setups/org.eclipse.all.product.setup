@@ -99,10 +99,6 @@
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
-          key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/2025-06/r</value>
-      </detail>
-      <detail
           key="shortcut">
         <value>Eclipse Eierlegende Wollmilchsau - Latest</value>
       </detail>
@@ -140,7 +136,7 @@
       <requirement
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
       <repository
-          url="https://download.eclipse.org/releases/2025-06">
+          url="https://download.eclipse.org/releases/2025-09">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
@@ -205,10 +201,6 @@
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
-          key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/2025-06/r</value>
-      </detail>
-      <detail
           key="shortcut">
         <value>Eclipse Eierlegende Wollmilchsau - 2025-09</value>
       </detail>
@@ -246,7 +238,7 @@
       <requirement
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
       <repository
-          url="https://download.eclipse.org/releases/2025-06">
+          url="https://download.eclipse.org/releases/2025-09">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
