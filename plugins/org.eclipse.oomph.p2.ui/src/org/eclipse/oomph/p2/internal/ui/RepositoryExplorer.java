@@ -167,6 +167,8 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -949,7 +951,7 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     try
     {
       IStringVariableManager manager = VariablesPlugin.getDefault().getStringVariableManager();
-      repository = manager.performStringSubstitution(repository);
+      repository = manager.performStringSubstitution(repository).trim();
     }
     catch (Exception ex)
     {
@@ -957,21 +959,24 @@ public class RepositoryExplorer extends ViewPart implements FilterHandler
     }
 
     URI location = null;
-
-    try
+    File folder = new File(repository);
+    if (folder.isDirectory())
     {
-      location = new URI(repository);
+      location = folder.toURI();
     }
-    catch (URISyntaxException ex)
+    else
     {
-      File folder = new File(repository);
-      if (folder.isDirectory())
+      try
       {
-        location = folder.toURI();
+        location = new URI(repository);
+      }
+      catch (URISyntaxException ex)
+      {
+        location = URI.create(URLEncoder.encode(repository, StandardCharsets.UTF_8).replace("%3A", ":").replace("%2F", "/")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$//$NON-NLS-4$
       }
     }
 
-    if (location != null)
+    // if (location != null)
     {
       loadJob.reschedule(location);
     }
