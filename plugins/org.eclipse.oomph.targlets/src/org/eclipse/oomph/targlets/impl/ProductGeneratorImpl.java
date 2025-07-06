@@ -120,11 +120,8 @@ public class ProductGeneratorImpl extends ModelElementImpl implements ProductGen
         componentDefinition.setID(productDescriptor.getId());
         componentDefinition.setVersion(Version.create(productDescriptor.getVersion()));
 
-        if (productDescriptor.useFeatures())
-        {
-          addRequirements(componentDefinition, productDescriptor.getFeatures(IProductDescriptor.INCLUDED_FEATURES | IProductDescriptor.ROOT_FEATURES),
-              Requirement.FEATURE_SUFFIX);
-        }
+        addRequirements(componentDefinition, productDescriptor.getFeatures(IProductDescriptor.INCLUDED_FEATURES | IProductDescriptor.ROOT_FEATURES),
+            Requirement.FEATURE_SUFFIX);
 
         try
         {
