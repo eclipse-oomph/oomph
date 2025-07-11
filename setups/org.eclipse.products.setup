@@ -21380,7 +21380,7 @@
         <requirement
             name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2025-09/202507101000"/>
+            url="https://download.eclipse.org/technology/epp/staging/repository"/>
         <repository
             url="https://download.eclipse.org/releases/2025-09/202507111000">
           <annotation
@@ -21588,7 +21588,7 @@
         <requirement
             name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2025-09/202507101000"/>
+            url="https://download.eclipse.org/technology/epp/staging/repository"/>
         <repository
             url="https://download.eclipse.org/releases/2025-09/202507111000">
           <annotation
@@ -27897,7 +27897,7 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2025-09/202507101000"/>
+            url="https://download.eclipse.org/technology/epp/staging/repository"/>
         <repository
             url="https://download.eclipse.org/releases/2025-09/202507111000">
           <annotation
@@ -28115,7 +28115,7 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2025-09/202507101000"/>
+            url="https://download.eclipse.org/technology/epp/staging/repository"/>
         <repository
             url="https://download.eclipse.org/releases/2025-09/202507111000">
           <annotation
@@ -35515,7 +35515,7 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2025-09/202507101000"/>
+            url="https://download.eclipse.org/technology/epp/staging/repository"/>
         <repository
             url="https://download.eclipse.org/releases/2025-09/202507111000">
           <annotation
@@ -35687,7 +35687,7 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2025-09/202507101000"/>
+            url="https://download.eclipse.org/technology/epp/staging/repository"/>
         <repository
             url="https://download.eclipse.org/releases/2025-09/202507111000">
           <annotation
