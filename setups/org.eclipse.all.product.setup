@@ -57,7 +57,7 @@
         label="Eclipse Eierlegende Wollmilchsau (Staging)">
       <requirement
           name="org.eclipse.platform.ide"
-          versionRange="[4.36.0,5.0.0)"
+          versionRange="[4.37.0,5.0.0)"
           filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=aarch64)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=riscv64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
       <requirement
           name="Application Development Frameworks"/>
@@ -69,9 +69,6 @@
           name="General Purpose Tools"/>
       <requirement
           name="License Management"/>
-      <requirement
-          name="Linux Tools"
-          filter="(osgi.os=linux)"/>
       <requirement
           name="Mobile and Device Development"/>
       <requirement
@@ -99,6 +96,10 @@
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
+          key="siteURI">
+        <value>https://www.eclipse.org/downloads/packages/release/2025-09/m1</value>
+      </detail>
+      <detail
           key="shortcut">
         <value>Eclipse Eierlegende Wollmilchsau - Latest</value>
       </detail>
@@ -108,7 +109,7 @@
         label="Eclipse Eierlegende Wollmilchsau (2025-09)">
       <requirement
           name="org.eclipse.platform.ide"
-          versionRange="[4.36.0,5.0.0)"
+          versionRange="[4.37.0,5.0.0)"
           filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=aarch64)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=riscv64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
       <requirement
           name="Application Development Frameworks"/>
@@ -120,9 +121,6 @@
           name="General Purpose Tools"/>
       <requirement
           name="License Management"/>
-      <requirement
-          name="Linux Tools"
-          filter="(osgi.os=linux)"/>
       <requirement
           name="Mobile and Device Development"/>
       <requirement
@@ -136,7 +134,7 @@
       <requirement
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
       <repository
-          url="https://download.eclipse.org/releases/2025-09">
+          url="https://download.eclipse.org/releases/2025-09/202507111000">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
@@ -201,6 +199,10 @@
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
+          key="siteURI">
+        <value>https://www.eclipse.org/downloads/packages/release/2025-09/m1</value>
+      </detail>
+      <detail
           key="shortcut">
         <value>Eclipse Eierlegende Wollmilchsau - 2025-09</value>
       </detail>
@@ -210,7 +212,7 @@
         label="Eclipse Eierlegende Wollmilchsau (2025-09)">
       <requirement
           name="org.eclipse.platform.ide"
-          versionRange="[4.36.0,5.0.0)"
+          versionRange="[4.37.0,5.0.0)"
           filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=aarch64)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=riscv64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
       <requirement
           name="Application Development Frameworks"/>
@@ -222,9 +224,6 @@
           name="General Purpose Tools"/>
       <requirement
           name="License Management"/>
-      <requirement
-          name="Linux Tools"
-          filter="(osgi.os=linux)"/>
       <requirement
           name="Mobile and Device Development"/>
       <requirement
@@ -238,7 +237,7 @@
       <requirement
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
       <repository
-          url="https://download.eclipse.org/releases/2025-09">
+          url="https://download.eclipse.org/releases/2025-09/202507111000">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
