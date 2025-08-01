@@ -224,9 +224,9 @@
         <requirement
             name="org.eclipse.wildwebdeveloper.xml.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2025-09/202507101000"/>
+            url="https://download.eclipse.org/technology/epp/packages/2025-09/202507311000"/>
         <repository
-            url="https://download.eclipse.org/releases/2025-09/202507111000">
+            url="https://download.eclipse.org/releases/2025-09/202508011000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -394,9 +394,9 @@
         <requirement
             name="org.eclipse.wildwebdeveloper.xml.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2025-09/202507101000"/>
+            url="https://download.eclipse.org/technology/epp/packages/2025-09/202507311000"/>
         <repository
-            url="https://download.eclipse.org/releases/2025-09/202507111000">
+            url="https://download.eclipse.org/releases/2025-09/202508011000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -3488,9 +3488,9 @@
         <requirement
             name="org.eclipse.wst.xsl.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2025-09/202507101000"/>
+            url="https://download.eclipse.org/technology/epp/packages/2025-09/202507311000"/>
         <repository
-            url="https://download.eclipse.org/releases/2025-09/202507111000">
+            url="https://download.eclipse.org/releases/2025-09/202508011000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -3922,9 +3922,9 @@
         <requirement
             name="org.eclipse.wst.xsl.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2025-09/202507101000"/>
+            url="https://download.eclipse.org/technology/epp/packages/2025-09/202507311000"/>
         <repository
-            url="https://download.eclipse.org/releases/2025-09/202507111000">
+            url="https://download.eclipse.org/releases/2025-09/202508011000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -10874,9 +10874,9 @@
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2025-09/202507101000"/>
+            url="https://download.eclipse.org/technology/epp/packages/2025-09/202507311000"/>
         <repository
-            url="https://download.eclipse.org/releases/2025-09/202507111000">
+            url="https://download.eclipse.org/releases/2025-09/202508011000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -11116,9 +11116,9 @@
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2025-09/202507101000"/>
+            url="https://download.eclipse.org/technology/epp/packages/2025-09/202507311000"/>
         <repository
-            url="https://download.eclipse.org/releases/2025-09/202507111000">
+            url="https://download.eclipse.org/releases/2025-09/202508011000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -15111,9 +15111,9 @@
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2025-09/202507101000"/>
+            url="https://download.eclipse.org/technology/epp/packages/2025-09/202507311000"/>
         <repository
-            url="https://download.eclipse.org/releases/2025-09/202507111000">
+            url="https://download.eclipse.org/releases/2025-09/202508011000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -15413,9 +15413,9 @@
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2025-09/202507101000"/>
+            url="https://download.eclipse.org/technology/epp/packages/2025-09/202507311000"/>
         <repository
-            url="https://download.eclipse.org/releases/2025-09/202507111000">
+            url="https://download.eclipse.org/releases/2025-09/202508011000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -18381,9 +18381,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2025-09/202507101000"/>
+            url="https://download.eclipse.org/technology/epp/packages/2025-09/202507311000"/>
         <repository
-            url="https://download.eclipse.org/releases/2025-09/202507111000">
+            url="https://download.eclipse.org/releases/2025-09/202508011000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -18551,9 +18551,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2025-09/202507101000"/>
+            url="https://download.eclipse.org/technology/epp/packages/2025-09/202507311000"/>
         <repository
-            url="https://download.eclipse.org/releases/2025-09/202507111000">
+            url="https://download.eclipse.org/releases/2025-09/202508011000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -21380,9 +21380,9 @@
         <requirement
             name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/staging/repository"/>
+            url="https://download.eclipse.org/technology/epp/packages/2025-09/202507311000"/>
         <repository
-            url="https://download.eclipse.org/releases/2025-09/202507111000">
+            url="https://download.eclipse.org/releases/2025-09/202508011000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -21588,9 +21588,9 @@
         <requirement
             name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/staging/repository"/>
+            url="https://download.eclipse.org/technology/epp/packages/2025-09/202507311000"/>
         <repository
-            url="https://download.eclipse.org/releases/2025-09/202507111000">
+            url="https://download.eclipse.org/releases/2025-09/202508011000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -25292,9 +25292,9 @@
         <requirement
             name="org.eclipse.xtext.sdk.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2025-09/202507101000"/>
+            url="https://download.eclipse.org/technology/epp/packages/2025-09/202507311000"/>
         <repository
-            url="https://download.eclipse.org/releases/2025-09/202507111000">
+            url="https://download.eclipse.org/releases/2025-09/202508011000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -25442,9 +25442,9 @@
         <requirement
             name="org.eclipse.xtext.sdk.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2025-09/202507101000"/>
+            url="https://download.eclipse.org/technology/epp/packages/2025-09/202507311000"/>
         <repository
-            url="https://download.eclipse.org/releases/2025-09/202507111000">
+            url="https://download.eclipse.org/releases/2025-09/202508011000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -27897,9 +27897,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/staging/repository"/>
+            url="https://download.eclipse.org/technology/epp/packages/2025-09/202507311000"/>
         <repository
-            url="https://download.eclipse.org/releases/2025-09/202507111000">
+            url="https://download.eclipse.org/releases/2025-09/202508011000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -28115,9 +28115,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/staging/repository"/>
+            url="https://download.eclipse.org/technology/epp/packages/2025-09/202507311000"/>
         <repository
-            url="https://download.eclipse.org/releases/2025-09/202507111000">
+            url="https://download.eclipse.org/releases/2025-09/202508011000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -31561,9 +31561,9 @@
         <requirement
             name="org.eclipse.xsd.sdk.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2025-09/202507101000"/>
+            url="https://download.eclipse.org/technology/epp/packages/2025-09/202507311000"/>
         <repository
-            url="https://download.eclipse.org/releases/2025-09/202507111000">
+            url="https://download.eclipse.org/releases/2025-09/202508011000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -31789,9 +31789,9 @@
         <requirement
             name="org.eclipse.xsd.sdk.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/packages/2025-09/202507101000"/>
+            url="https://download.eclipse.org/technology/epp/packages/2025-09/202507311000"/>
         <repository
-            url="https://download.eclipse.org/releases/2025-09/202507111000">
+            url="https://download.eclipse.org/releases/2025-09/202508011000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -35515,9 +35515,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/staging/repository"/>
+            url="https://download.eclipse.org/technology/epp/packages/2025-09/202507311000"/>
         <repository
-            url="https://download.eclipse.org/releases/2025-09/202507111000">
+            url="https://download.eclipse.org/releases/2025-09/202508011000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -35687,9 +35687,9 @@
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <repository
-            url="https://download.eclipse.org/technology/epp/staging/repository"/>
+            url="https://download.eclipse.org/technology/epp/packages/2025-09/202507311000"/>
         <repository
-            url="https://download.eclipse.org/releases/2025-09/202507111000">
+            url="https://download.eclipse.org/releases/2025-09/202508011000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -38397,6 +38397,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
+            key="siteURI">
+          <value>https://download.eclipse.org/eclipse/downloads/</value>
+        </detail>
+        <detail
             key="shortcut">
           <value>Eclipse Platform - Latest</value>
         </detail>
@@ -38415,7 +38419,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.37.0,5.0.0)"/>
         <repository
-            url="https://download.eclipse.org/releases/2025-09/202507111000">
+            url="https://download.eclipse.org/releases/2025-09/202508011000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -38463,6 +38467,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
+            key="siteURI">
+          <value>https://download.eclipse.org/eclipse/downloads/</value>
+        </detail>
+        <detail
             key="shortcut">
           <value>Eclipse Platform - 2025-09</value>
         </detail>
@@ -38481,7 +38489,7 @@
             name="org.eclipse.rcp.feature.group"
             versionRange="[4.37.0,5.0.0)"/>
         <repository
-            url="https://download.eclipse.org/releases/2025-09/202507111000">
+            url="https://download.eclipse.org/releases/2025-09/202508011000">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
