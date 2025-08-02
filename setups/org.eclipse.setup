@@ -57,28 +57,7 @@
         versionRange="[3.20.100.v20250120-0740,3.20.199)"/>
   </annotation>
   <annotation
-      source="http://www.eclipse.org/oomph/setup/Notification-Disable">
-    <detail
-        key="uri">
-      <value>https://www.eclipse.org/setups/notification/java24/index.html?jre-only=true</value>
-    </detail>
-    <detail
-        key="maximize">
-      <value>false</value>
-    </detail>
-    <content
-        xsi:type="p2:Requirement"
-        name="org.eclipse.jdt.javanextpatch.feature.group"
-        versionRange="[1.24.0,1.25.0)"/>
-    <content
-        xsi:type="p2:Requirement"
-        name="installed.jre"
-        versionRange="24.0.0"
-        optional="true"
-        max="0"/>
-  </annotation>
-  <annotation
-      source="http://www.eclipse.org/oomph/setup/Notification-Disable">
+      source="http://www.eclipse.org/oomph/setup/Notification">
     <detail
         key="maximize">
       <value>false</value>
@@ -90,7 +69,7 @@
     <content
         xsi:type="p2:Requirement"
         name="org.eclipse.epp.package.common"
-        versionRange="[4.35.0,4.36.0.20250529-0657)"/>
+        versionRange="[4.36.0,4.37.0.20250731-0702)"/>
   </annotation>
   <annotation
       source="http://www.eclipse.org/oomph/setup/Notification">

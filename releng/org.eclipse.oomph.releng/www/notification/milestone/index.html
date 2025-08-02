@@ -13,13 +13,26 @@
 			margin-bottom: -0.2em;
 		}
 
+		.ide-wg-member-logo {
+			vertical-align: bottom;
+			max-width: 4.5em;
+			max-height: 1.5em;
+		}
+
+		.ide-wg-member-logo-container {
+			border-radius: .2em;
+			height: 1.8em;
+			padding: .3em .4em;
+			margin: .15em .1em;
+		}
+
 		/*]]>*/
 	</style>
 	<script src="../notification.js?v=1.2"></script>
 	<script>
 		//<![CDATA[
-		const version = '2025-06';
-		const milestone = 'RC1';
+		const version = '2025-09';
+		const milestone = 'M2';
 		const productName = getProductName();
 		document.title = `${productName} ${version} ${milestone}`;
 
@@ -80,18 +93,22 @@
 					</label>
 				</div>
 				<div class="section">
-					By testing this version and <a class="copy-query" href="eclipse+external:../../problems/index.html">reporting problems</a> before the release,
-					you will be providing a valuable service for the community,
-					helping to ensure a quality <span class="version"></span> release.
+					<details>
+						<summary>How to Report a Problem</summary>
+						By testing this version and <a class="copy-query" href="eclipse+external:../../problems/index.html">reporting problems</a> before the release,
+						you will be providing a valuable service for the community,
+						helping to ensure a quality <span class="version"></span> release.
+						The latest version of the IDE provides <code>Help -> Report a Problem</code> for your convenience.
+					</details>
 				</div>
 				<div class="section">
-					The latest version of the IDE provides <code>Help -> Report a Problem</code> for your convenience.
-				</div>
-				<div class="section">
-					Note that you can easily revert an update if you encounter serious problems.
-					Use <code>Help &rarr; About Eclipse IDE &rarr; Installation Details &rarr; Installation History</code>,
-					select an older configuration in the <code>Previous configuration</code> list,
-					and press <code>Revert</code> go back to that state.
+					<details>
+						<summary>How to Revert an Update</summary>
+						Note that you can easily revert an update if you encounter serious problems.
+						Use <code>Help &rarr; About Eclipse IDE &rarr; Installation Details &rarr; Installation History</code>,
+						select an older configuration in the <code>Previous configuration</code> list,
+						and press <code>Revert</code> go back to that state.
+					</details>
 				</div>
 				<div id="ide-wg" class="section" style="display: none">
 					<hr />
