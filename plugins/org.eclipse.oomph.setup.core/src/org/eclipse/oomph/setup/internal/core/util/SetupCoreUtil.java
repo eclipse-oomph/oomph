@@ -275,6 +275,18 @@ public final class SetupCoreUtil
     final Resource.Factory.Registry specializedResourceFactoryRegistry = new ResourceFactoryRegistryImpl()
     {
       @Override
+      protected Object getFactory(URI uri, Map<String, Object> protocolToFactoryMap, Map<String, Object> extensionToFactoryMap,
+          Map<String, Object> contentTypeIdentifierToFactoryMap, String contentTypeIdentifier, boolean delegate)
+      {
+        if (MarketPlaceListing.isMarketPlaceListing(uri))
+        {
+          return MARKET_PLACE_LISTING_RESOURCE_FACTORY;
+        }
+
+        return super.getFactory(uri, protocolToFactoryMap, extensionToFactoryMap, contentTypeIdentifierToFactoryMap, contentTypeIdentifier, delegate);
+      }
+
+      @Override
       protected Resource.Factory delegatedGetFactory(URI uri, String contentTypeIdentifier)
       {
         if (MarketPlaceListing.isMarketPlaceListing(uri))

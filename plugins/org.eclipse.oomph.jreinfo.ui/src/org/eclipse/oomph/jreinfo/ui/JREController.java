@@ -286,7 +286,7 @@ public abstract class JREController implements ISelectionChangedListener
                 {
                   selection = jre;
                 }
-                else if (!matchingMajorVersion && jreFilter != null && jre.getMajor() == jreFilter.getMajor()
+                else if (!matchingMajorVersion && jreFilter != null && jreFilter.getMajor() != null && jre.getMajor() == jreFilter.getMajor()
                     && jre.getMajor() >= JREManager.CURRENT_LTS_VERSION //
                     && (jreFilter.getMinor() == null || jre.getMinor() >= jreFilter.getMinor())
                     && (jreFilter.getMicro() == null || jre.getMicro() >= jreFilter.getMicro()))
