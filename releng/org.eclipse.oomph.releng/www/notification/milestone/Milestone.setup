@@ -27,6 +27,9 @@
     <setupTask
         xsi:type="setup.p2:P2Task"
         label="Eclipse IDE Milestone Updates">
+      <requirement
+          name="org.eclipse.epp.package.common"
+          versionRange="[4.37.0,5.0.0)"/>
       <repository
           url="https://download.eclipse.org/releases/milestone"/>
     </setupTask>
