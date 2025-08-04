@@ -57,7 +57,7 @@
         versionRange="[3.20.100.v20250120-0740,3.20.199)"/>
   </annotation>
   <annotation
-      source="http://www.eclipse.org/oomph/setup/Notification-Disabled.">
+      source="http://www.eclipse.org/oomph/setup/Notification">
     <detail
         key="maximize">
       <value>false</value>
