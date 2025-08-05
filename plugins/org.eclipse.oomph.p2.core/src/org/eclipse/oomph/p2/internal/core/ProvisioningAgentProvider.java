@@ -15,6 +15,7 @@ import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.ReflectUtil;
 
 import org.eclipse.core.internal.registry.osgi.OSGIUtils;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.URIUtil;
 import org.eclipse.equinox.internal.p2.core.DefaultAgentProvider;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
@@ -50,7 +51,7 @@ public class ProvisioningAgentProvider extends DefaultAgentProvider
     if (location == null)
     {
       // The agent location created by p2 should be non-null at this point.
-      if (org.eclipse.equinox.internal.p2.core.Activator.agentDataLocation != null)
+      if (!Platform.inDevelopmentMode() && org.eclipse.equinox.internal.p2.core.Activator.agentDataLocation != null)
       {
         URI rootLocation = org.eclipse.equinox.internal.p2.core.Activator.agentDataLocation.getRootLocation();
         if (rootLocation != null)
