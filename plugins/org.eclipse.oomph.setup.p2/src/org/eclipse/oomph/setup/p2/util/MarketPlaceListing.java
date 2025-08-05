@@ -228,16 +228,18 @@ public class MarketPlaceListing
 
   private static URI getMarketPlaceListingURI(URI uri)
   {
-    Matcher matcher = MARKET_PLACE_CONTENT_PATTERN.matcher(uri.toString());
-    if (matcher.find())
+    String uriLiteral = uri.toString();
+    Matcher matcher = MARKET_PLACE_CONTENT_PATTERN.matcher(uriLiteral);
+    if (matcher.matches())
     {
       return URI.createURI(matcher.group(1) + "/api/p"); //$NON-NLS-1$
     }
 
-    matcher = MARKET_PLACE_INSTALL_PATTERN.matcher(uri.toString());
+    matcher = MARKET_PLACE_INSTALL_PATTERN.matcher(uriLiteral);
     if (matcher.matches())
     {
-      return URI.createURI("https://marketplace.eclipse.org/node/" + matcher.group(1) + "/api/p"); //$NON-NLS-1$ //$NON-NLS-2$
+      String listing2 = matcher.group(1);
+      return URI.createURI("https://marketplace.eclipse.org/node/" + listing2 + "/api/p"); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     return null;

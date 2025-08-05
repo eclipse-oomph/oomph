@@ -365,10 +365,10 @@ public class MarketplaceCatalogGenerator implements IApplication
     // platformVersions.put("platform.version=4.23", "2022-03");
     // platformVersions.put("platform.version=4.24", "2022-06");
     // platformVersions.put("platform.version=4.25", "2022-09");
-    platformVersions.put("platform.version=4.26", "2022-12");
-    platformVersions.put("platform.version=4.27", "2023-03");
-    platformVersions.put("platform.version=4.28", "2023-06");
-    platformVersions.put("platform.version=4.29", "2023-09");
+    // platformVersions.put("platform.version=4.26", "2022-12");
+    // platformVersions.put("platform.version=4.27", "2023-03");
+    // platformVersions.put("platform.version=4.28", "2023-06");
+    // platformVersions.put("platform.version=4.29", "2023-09");
     platformVersions.put("platform.version=4.30", "2023-12");
     platformVersions.put("platform.version=4.31", "2024-03");
     platformVersions.put("platform.version=4.32", "2024-06");
