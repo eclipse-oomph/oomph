@@ -479,7 +479,75 @@
       excludedTriggers="BOOTSTRAP"
       targetURL="${github.clone.oomph.github.location|uri}/.settings/org.eclipse.core.resources.prefs"
       encoding="UTF-8">
-    <description>Create a .gitignore file in the Oomph's .github repository</description>
+    <description>Create a resource prefs file in the Oomph's .github repository</description>
+    <content>
+      eclipse.preferences.version=1
+      encoding/&lt;project>=UTF-8
+
+    </content>
+  </setupTask>
+  <setupTask
+      xsi:type="git:GitCloneTask"
+      id="github.clone.oomph.website"
+      remoteURI="oomph/oomph-website"
+      checkoutBranch="master">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/InducedChoices">
+      <detail
+          key="inherit">
+        <value>github.remoteURIs</value>
+      </detail>
+      <detail
+          key="label">
+        <value>Oomph Website Repository</value>
+      </detail>
+      <detail
+          key="target">
+        <value>remoteURI</value>
+      </detail>
+    </annotation>
+    <description>Oomph Website</description>
+  </setupTask>
+  <setupTask
+      xsi:type="setup:ResourceCreationTask"
+      excludedTriggers="BOOTSTRAP"
+      targetURL="${github.clone.oomph.website.location|uri}/.project"
+      encoding="UTF-8">
+    <description>Create a .project file in the Oomph's website repository</description>
+    <content>
+      &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>
+      &lt;projectDescription>
+      	&lt;name>org.eclipse.oomph.website&lt;/name>
+      	&lt;comment>&lt;/comment>
+      	&lt;projects>
+      	&lt;/projects>
+      	&lt;buildSpec>
+      	&lt;/buildSpec>
+      	&lt;natures>
+      	&lt;/natures>
+      &lt;/projectDescription>
+
+    </content>
+  </setupTask>
+  <setupTask
+      xsi:type="setup:ResourceCreationTask"
+      excludedTriggers="BOOTSTRAP"
+      targetURL="${github.clone.oomph.website.location|uri}/.gitignore"
+      encoding="UTF-8">
+    <description>Create a .gitignore file in the Oomph's website repository</description>
+    <content>
+      /.project
+      /.settings
+      /.gitignore
+
+    </content>
+  </setupTask>
+  <setupTask
+      xsi:type="setup:ResourceCreationTask"
+      excludedTriggers="BOOTSTRAP"
+      targetURL="${github.clone.oomph.website.location|uri}/.settings/org.eclipse.core.resources.prefs"
+      encoding="UTF-8">
+    <description>Create a resources prefs file in the Oomph's website repository</description>
     <content>
       eclipse.preferences.version=1
       encoding/&lt;project>=UTF-8
@@ -585,6 +653,8 @@
       </sourceLocator>
       <sourceLocator
           rootFolder="${github.clone.oomph.github.location}"/>
+      <sourceLocator
+          rootFolder="${github.clone.oomph.website.location}"/>
       <repositoryList
           name="2025-09">
         <repository
@@ -1702,6 +1772,12 @@
       <predicate
           xsi:type="predicates:NamePredicate"
           pattern="org\.eclipse\.oomph\.github"/>
+    </workingSet>
+    <workingSet
+        name="Oomph Website">
+      <predicate
+          xsi:type="predicates:RepositoryPredicate"
+          project="org.eclipse.oomph.website"/>
     </workingSet>
   </setupTask>
   <stream name="master"
