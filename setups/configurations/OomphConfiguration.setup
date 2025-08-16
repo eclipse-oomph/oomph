@@ -41,7 +41,7 @@
     are available, organized into working sets, and ready for contribution.
     &lt;/p>
     &lt;/p>
-    Please &lt;a href=&quot;https://wiki.eclipse.org/Eclipse_Platform_SDK_Provisioning&quot;>read the analogous tutorial instructions&lt;/a> for the Eclipse Platform SDK's configuration for more details.
+    Please &lt;a href=&quot;https://eclipse.dev/oomph/?file=Eclipse_Platform_SDK_Provisioning.md&quot;>read the analogous tutorial instructions&lt;/a> for the Eclipse Platform SDK's configuration for more details.
     &lt;/p>
   </description>
 </setup:Configuration>
