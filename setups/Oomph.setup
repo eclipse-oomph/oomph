@@ -489,7 +489,7 @@
   <setupTask
       xsi:type="git:GitCloneTask"
       id="github.clone.oomph.website"
-      remoteURI="oomph/oomph-website"
+      remoteURI="eclipse-oomph/oomph-website"
       checkoutBranch="master">
     <annotation
         source="http://www.eclipse.org/oomph/setup/InducedChoices">
