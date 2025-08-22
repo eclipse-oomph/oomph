@@ -69,7 +69,7 @@
     <content
         xsi:type="p2:Requirement"
         name="org.eclipse.epp.package.common"
-        versionRange="[4.36.0,4.37.0.20250731-0702)"/>
+        versionRange="[4.36.0,4.37.0.20250821-0636)"/>
   </annotation>
   <annotation
       source="http://www.eclipse.org/oomph/setup/Notification">
