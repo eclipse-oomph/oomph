@@ -43,7 +43,13 @@ import org.eclipse.swt.browser.ProgressListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IMemento;
+import org.eclipse.ui.IViewSite;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchListener;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPartReference;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.browser.IWebBrowser;
 import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
@@ -66,22 +72,53 @@ public final class NotificationViewPart extends ViewPart
 
   private Annotation notification;
 
+  private WorkbenchListener workbenchListener;
+
   public NotificationViewPart()
   {
     SetupCoreUtil.configureRedirections(uriConverter.getURIMap());
+  }
+
+  @Override
+  public void init(IViewSite site, IMemento memento) throws PartInitException
+  {
+    workbenchListener = new WorkbenchListener(site.getWorkbenchWindow().getWorkbench());
+    super.init(site, memento);
   }
 
   public void setNotification(Annotation notification)
   {
     this.notification = notification;
 
-    if ("true".equals(notification.getDetails().get("maximize"))) //$NON-NLS-1$ //$NON-NLS-2$
+    if (shouldMaximize())
     {
-      IWorkbenchPage page = getSite().getPage();
-      page.setPartState(page.getReference(this), IWorkbenchPage.STATE_MAXIMIZED);
+      setPartState(IWorkbenchPage.STATE_MAXIMIZED);
     }
 
     setUrl(getNotificationURI());
+  }
+
+  private boolean shouldMaximize()
+  {
+    return "true".equals(notification.getDetails().get("maximize")); //$NON-NLS-1$ //$NON-NLS-2$
+  }
+
+  private void restore()
+  {
+    if (shouldMaximize())
+    {
+      setPartState(IWorkbenchPage.STATE_RESTORED);
+    }
+  }
+
+  private void setPartState(int state)
+  {
+    IWorkbenchPage page = getSite().getPage();
+    IWorkbenchPartReference reference = page.getReference(this);
+    if (reference != null)
+    {
+      page.setPartState(reference, state);
+    }
   }
 
   private String getNotificationURI()
@@ -192,6 +229,7 @@ public final class NotificationViewPart extends ViewPart
       event.doit = false;
       if ("eclipse+setup".equals(scheme)) //$NON-NLS-1$
       {
+        restore();
         URI setupURI = resolveEclipseURI(location);
         new Job(Messages.NotificationViewPart_ApplyConfigureJob_label)
         {
@@ -304,8 +342,20 @@ public final class NotificationViewPart extends ViewPart
     }
   }
 
+  @Override
+  public void dispose()
+  {
+    restore();
+    if (workbenchListener != null)
+    {
+      workbenchListener.dispose();
+    }
+    super.dispose();
+  }
+
   private void hide()
   {
+    restore();
     getSite().getPage().hideView(this);
   }
 
@@ -366,4 +416,34 @@ public final class NotificationViewPart extends ViewPart
     result.append(Integer.toHexString(alpha));
     return result.toString();
   }
+
+  private final class WorkbenchListener implements IWorkbenchListener
+  {
+    private final IWorkbench workbench;
+
+    public WorkbenchListener(IWorkbench workbench)
+    {
+      this.workbench = workbench;
+      workbench.addWorkbenchListener(this);
+    }
+
+    @Override
+    public boolean preShutdown(IWorkbench workbench, boolean forced)
+    {
+      restore();
+      return true;
+    }
+
+    @Override
+    public void postShutdown(IWorkbench workbench)
+    {
+    }
+
+    public void dispose()
+    {
+      workbench.removeWorkbenchListener(this);
+
+    }
+  }
+
 }
