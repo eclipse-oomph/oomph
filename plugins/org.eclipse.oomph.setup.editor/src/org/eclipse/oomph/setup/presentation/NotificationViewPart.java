@@ -89,18 +89,20 @@ public final class NotificationViewPart extends ViewPart
   public void setNotification(Annotation notification)
   {
     this.notification = notification;
-
-    if (shouldMaximize())
+    if (notification != null)
     {
-      setPartState(IWorkbenchPage.STATE_MAXIMIZED);
-    }
+      if (shouldMaximize())
+      {
+        setPartState(IWorkbenchPage.STATE_MAXIMIZED);
+      }
 
-    setUrl(getNotificationURI());
+      setUrl(getNotificationURI());
+    }
   }
 
   private boolean shouldMaximize()
   {
-    return "true".equals(notification.getDetails().get("maximize")); //$NON-NLS-1$ //$NON-NLS-2$
+    return notification != null && "true".equals(notification.getDetails().get("maximize")); //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   private void restore()
@@ -362,7 +364,7 @@ public final class NotificationViewPart extends ViewPart
   private void hide(URI uri)
   {
     hide();
-    if (uri != null)
+    if (uri != null && notification != null)
     {
       SetupUIPlugin.rememberNotificationURI(getNotificationURI(), uri);
     }
@@ -442,7 +444,6 @@ public final class NotificationViewPart extends ViewPart
     public void dispose()
     {
       workbench.removeWorkbenchListener(this);
-
     }
   }
 
