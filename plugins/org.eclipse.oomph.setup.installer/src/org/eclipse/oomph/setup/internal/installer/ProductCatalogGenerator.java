@@ -2034,7 +2034,7 @@ public class ProductCatalogGenerator implements IApplication
         String iuDescription = iu.getProperty("org.eclipse.equinox.p2.description", null);
 
         String shortId = iu.getId().replaceAll("org.eclipse.(.*).feature.group", "$1");
-        variableTask.setName("install." + shortId);
+        variableTask.setName("install." + shortId + "." + iu.getVersion().getSegment(1));
         variableTask.setDefaultValue("false");
         variableTask.setLabel("Install " + iuName);
         variableTask.setDescription(iuDescription);
