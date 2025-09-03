@@ -572,7 +572,7 @@ public final class OwnershipMapper
    */
   private static final class PMI
   {
-    private static final Pattern PROJECT_DETAILS_PATTERN = Pattern.compile("\"project_id\":\"([^\"]+)\"[^}]*\"name\":\"([^\"]+)\".*?\"state\":\"([^\"]+)\"");
+    private static final Pattern PROJECT_DETAILS_PATTERN = Pattern.compile("\"project_id\":\"([^\"]+)\"[^}]*?\"name\":\"([^\"]+)\".*?\"state\":\"([^\"]+)\"");
 
     private static final Pattern NEXT_PAGE_PATTERN = Pattern.compile("<([^>]+)>; *rel=\"next\"");
 
