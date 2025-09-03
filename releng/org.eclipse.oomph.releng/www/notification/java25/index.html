@@ -4,10 +4,32 @@
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<link href="https://eclipseide.org/favicon.ico" rel="icon" type="image/x-icon" />
-	<title>Install Java 24 Support</title>
+	<title>Install Java 25 Support</title>
 	<link rel="preconnect stylesheet" href="../notification.css" />
 	<style>
 		/* <![CDATA[*/
+		#product-logo {
+			max-width: 1.2em;
+			margin-bottom: -0.2em;
+		}
+
+		.ide-wg-member-logo {
+			vertical-align: bottom;
+			max-width: 4.5em;
+			max-height: 1.5em;
+		}
+
+		.ide-wg-member-logo-container {
+			border-radius: .2em;
+			height: 1.8em;
+			padding: .3em .4em;
+			margin: .15em .1em;
+		}
+
+		#ide-wg {
+			margin-top: 2em;
+		}
+
 		/*]]>*/
 	</style>
 	<script src="../notification.js?v=1.2"></script>
@@ -16,7 +38,7 @@
 		function handleSections() {
 			const query = new URLSearchParams(window.location.search);
 			if (query.has('jre-only')) {
-				document.title = 'Install a Java 24 JDK';
+				document.title = 'Install a Java 25 JDK';
 				const installJDKSection = document.getElementById('install-jdk');
 				installJDKSection.style.display = 'block';
 				const installPatchSection = document.getElementById('install-patch');
@@ -58,24 +80,24 @@
 			</div>
 			<div id="install-jdk" style="display: none;">
 				<div class="section">
-					You have support for Java 24 installed in the IDE but don't appear to have a Java 24 JDK.
+					You have support for Java 25 installed in the IDE but don't appear to have a Java 25 JDK.
 				</div>
 				<div class="section">
-					Would you like to download a Java 24 JDK?
+					Would you like to download a Java 25 JDK?
 				</div>
 				<div class="button-section">
 					<span class="adoptium">
 						<label class="button">
-							<a href="eclipse+external:https://adoptium.net/temurin/releases/?version=24">
-								Download Temurin JDK 24
+							<a href="eclipse+external:https://adoptium.net/temurin/releases/?version=25">
+								Download Temurin JDK 25
 							</a>
 						</label>
 						&nbsp;
 					</span>
 					<span>
 						<label class="button">
-							<a href="eclipse+external:https://jdk.java.net/24/">
-								Download OpenJDK 24
+							<a href="eclipse+external:https://jdk.java.net/25/">
+								Download OpenJDK 25
 							</a>
 						</label>
 						&nbsp;
@@ -95,14 +117,14 @@
 			</div>
 			<div id="install-patch">
 				<div class="section">
-					Java 24 has been released.
+					Java 25 has been released.
 				</div>
 				<div class="section">
-					Would you like to install Eclipse Java Development Tools support for Java 24 into your IDE?
+					Would you like to install Eclipse Java Development Tools support for Java 25 into your IDE?
 				</div>
 				<div class="button-section">
 					<label class="button">
-						<a href="eclipse+setup:Java24.setup">Install Java 24 Support</a>
+						<a href="eclipse+setup:Java25.setup">Install Java 25 Support</a>
 					</label>
 					&nbsp;
 					<label class="button">
@@ -126,30 +148,42 @@
 					-->
 				</div>
 				<div class="section">
-					Would you like to download a Java 24 JDK?
+					Would you like to download a Java 25 JDK?
 				</div>
 				<div class="section">
 					<span class="adoptium">
 						<label class="button">
-							<a href="eclipse+external:https://adoptium.net/temurin/releases/?version=24">
-								Download Temurin JDK 24
+							<a href="eclipse+external:https://adoptium.net/temurin/releases/?version=25">
+								Download Temurin JDK 25
 							</a>
 						</label>
 						&nbsp;
 					</span>
 					<span>
 						<label class="button">
-							<a href="eclipse+external:https://jdk.java.net/24">
-								Download OpenJDK 24
+							<a href="eclipse+external:https://jdk.java.net/25">
+								Download OpenJDK 25
 							</a>
 						</label>
 					</span>
+				</div>
+				<div id="ide-wg" class="section" style="display: none">
+					<hr />
+					Sponsored by <b>people like you</b> and by the <a href="eclipse+external:https://eclipseide.org/working-group/#about">IDE Working Group</a>.
+					<br />
+				</div>
+				<div class="section">
 				</div>
 				<div class="section">
 				</div>
 			</div>
 		</div>
 	</div>
+
+	<script>
+		load();
+		generate(true);
+	</script>
 </body>
 
 </html>

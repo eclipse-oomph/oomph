@@ -5,7 +5,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:setup="http://www.eclipse.org/oomph/setup/1.0"
     xmlns:setup.p2="http://www.eclipse.org/oomph/setup/p2/1.0"
-    label="Eclipse Java Development Tools Support for Java 24">
+    label="Eclipse Java Development Tools Support for Java 25">
   <annotation
       source="http://www.eclipse.org/oomph/setup/SystemProperties">
     <detail
@@ -22,26 +22,26 @@
     </detail>
   </annotation>
   <installation
-      name="eclipse.java.development.tools.support.for.java.24.installation"
-      label="Eclipse Java Development Tools Support for Java 24 Installation">
+      name="eclipse.java.development.tools.support.for.java.25.installation"
+      label="Eclipse Java Development Tools Support for Java 25 Installation">
     <setupTask
         xsi:type="setup.p2:P2Task"
-        label="Eclipse Java Development Tools update for Java 24">
+        label="Eclipse Java Development Tools update for Java 25">
       <requirement
           name="org.eclipse.jdt.javanextpatch.feature.group"
-          versionRange="[1.24.0,1.25.0)"
+          versionRange="[1.25.0,1.26.0)"
           optional="true"/>
       <repository
-          url="https://download.eclipse.org/jdt/updates/4.35-P-builds"/>
+          url="https://download.eclipse.org/jdt/updates/4.37-P-builds"/>
     </setupTask>
     <productVersion
         href="index:/org.eclipse.setup#//@productCatalogs[name='self']/@products[name='empty.product']/@versions[name='version']"/>
-    <description>The Eclipse Java Development Tools Support for Java 24 installation provides cool stuff.</description>
+    <description>The Eclipse Java Development Tools Support for Java 25 installation provides cool stuff.</description>
   </installation>
   <workspace
-      name="eclipse.java.development.tools.support.for.java.24.workspace"
-      label="Eclipse Java Development Tools Support for Java 24 Workspace">
-    <description>The Eclipse Java Development Tools Support for Java 24 workspace provides cool stuff.</description>
+      name="eclipse.java.development.tools.support.for.java.25.workspace"
+      label="Eclipse Java Development Tools Support for Java 25 Workspace">
+    <description>The Eclipse Java Development Tools Support for Java 25 workspace provides cool stuff.</description>
   </workspace>
-  <description>The Eclipse Java Development Tools Support for Java 24 configuration provides cool stuff.</description>
+  <description>The Eclipse Java Development Tools Support for Java 25 configuration provides cool stuff.</description>
 </setup:Configuration>
