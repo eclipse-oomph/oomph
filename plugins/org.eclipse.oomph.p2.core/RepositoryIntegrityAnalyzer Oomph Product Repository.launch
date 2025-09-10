@@ -3,9 +3,9 @@
     <setAttribute key="additional_plugins">
         <setEntry value="com.sun.jna.platform:5.17.0:default:true:default:default"/>
         <setEntry value="com.sun.jna:5.17.0.v20250316-1700:default:true:default:default"/>
-        <setEntry value="org.eclipse.core.net:1.5.700.v20250313-0656:default:true:default:default"/>
-        <setEntry value="org.eclipse.equinox.event:1.7.300.v20250306-0514:default:true:default:default"/>
-        <setEntry value="org.eclipse.osgi.services:3.12.200.v20241212-0858:default:true:default:default"/>
+        <setEntry value="org.eclipse.core.net:1.5.800.v20250613-1119:default:true:default:default"/>
+        <setEntry value="org.eclipse.equinox.event:1.7.300.v20250518-0609:default:true:default:default"/>
+        <setEntry value="org.eclipse.osgi.services:3.12.300.v20250707-1221:default:true:default:default"/>
     </setAttribute>
     <booleanAttribute key="append.args" value="true"/>
     <stringAttribute key="application" value="org.eclipse.oomph.p2.core.RepositoryIntegrityAnalyzer"/>
