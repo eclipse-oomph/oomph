@@ -66,34 +66,6 @@ Eike Stepper - initial API and implementation
     <plugins>
       <plugin>
         <groupId>org.eclipse.tycho</groupId>
-        <artifactId>tycho-source-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>feature-source</id>
-            <goals>
-              <goal>feature-source</goal>
-            </goals>
-            <configuration>
-              <excludes>
-                <plugin id="org.apache.commons.commons-codec"/>
-                <plugin id="org.apache.commons.logging"/>
-                <plugin id="org.bouncycastle.bcpg"/>
-                <plugin id="org.bouncycastle.bcprov"/>
-                <plugin id="bcpg"/>
-                <plugin id="bcprov"/>
-                <plugin id="bcpg-jdk18on"/>
-                <plugin id="bcprov-jdk18on"/>
-                <plugin id="org.slf4j.api"/>
-                <plugin id="slf4j.api"/>
-                <plugin id="org.eclipse.nebula.widgets.tablecombo"/>
-                <plugin id="org.eclipse.oomph.releng.helpcenter"/>
-              </excludes>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.eclipse.tycho</groupId>
         <artifactId>tycho-p2-plugin</artifactId>
         <executions>
           <execution>
