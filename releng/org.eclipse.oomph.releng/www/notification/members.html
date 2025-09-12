@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<link href="https://eclipseide.org/favicon.ico" rel="icon" type="image/x-icon" />
+	<title>Eclipse IDE</title>
+	<link rel="preconnect stylesheet" href="notification.css?v=1.0" />
+	<style>
+		/* <![CDATA[*/
+		#product-logo {
+			max-width: 1.2em;
+			margin-bottom: -0.2em;
+		}
+
+		.ide-wg-member-logo-container {
+			background-color: rgba(255, 255, 255, 0.40);
+		}
+
+		a,
+		a:visited,
+		a:hover,
+		a:active {
+			color: white;
+		}
+
+		html,
+		body {
+			margin: 0;
+		}
+
+		#main {
+			min-height: 100%;
+		}
+
+		#ide-wg {
+			position: absolute;
+			bottom: 0;
+		}
+
+		hr {
+			display: none;
+		}
+
+		#general {
+			margin: 5px;
+		}
+
+		#message-container {
+			height: 80%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		#ide-wg label {
+			font-size: 140%;
+			font-weight: bolder;
+		}
+
+		#sponsor-link span {
+			display: inline-block;
+			animation: wave 4s ease-in-out infinite;
+		}
+
+		#sponsor-link span:nth-child(1) {
+			animation-delay: 0s;
+		}
+
+		#sponsor-link span:nth-child(2) {
+			animation-delay: .1s;
+		}
+
+		#sponsor-link span:nth-child(3) {
+			animation-delay: .2s;
+		}
+
+		#sponsor-link span:nth-child(4) {
+			animation-delay: .3s;
+		}
+
+		#sponsor-link span:nth-child(5) {
+			animation-delay: .4s;
+		}
+
+		#sponsor-link span:nth-child(6) {
+			animation-delay: .5s;
+		}
+
+		#sponsor-link span:nth-child(7) {
+			animation-delay: .6s;
+		}
+
+		#sponsor-link span:nth-child(8) {
+			animation-delay: .7s;
+		}
+
+		#sponsor-link span:nth-child(9) {
+			animation-delay: .8s;
+		}
+
+		#sponsor-link span:nth-child(10) {
+			animation-delay: .9s;
+		}
+
+		#sponsor-link span:nth-child(11) {
+			animation-delay: 1s;
+		}
+
+		#sponsor-link span:nth-child(12) {
+			animation-delay: 1.1s;
+		}
+
+
+		#sponsor-link span:nth-child(13) {
+			animation-delay: 1.2s;
+		}
+
+		#sponsor-link span:nth-child(14) {
+			animation-delay: 1.3s;
+		}
+
+		#sponsor-link span:nth-child(15) {
+			animation-delay: 1.4s;
+		}
+
+		#sponsor-link span:nth-child(16) {
+			animation-delay: 1.5s;
+		}
+
+		@keyframes wave {
+
+			0%,
+			100% {
+				transform: translateY(2px);
+			}
+
+			50% {
+				transform: translateY(-4px);
+			}
+		}
+
+		.ide-wg-member-logo-container {
+			height: 1.8em;
+			padding: .2em .3em;
+		}
+
+		.ide-wg-member-logo {
+			max-width: 6em;
+			max-height: 1.8em;
+		}
+
+		@media (max-height: 20em) {
+
+			html,
+			body {
+				font-size: 85%;
+			}
+
+			#ide-wg {
+				font-size: 90%;
+			}
+		}
+
+		@media (max-height: 15em) {
+
+			html,
+			body {
+				font-size: 75%;
+			}
+
+			#ide-wg {
+				font-size: 90%;
+			}
+		}
+
+		/*]]>*/
+	</style>
+	<script src="notification.js?v=1.4"></script>
+	<script>
+		//<![CDATA[
+		const version = '2025-09';
+		const milestone = 'R';
+		const productName = getProductName();
+		document.title = `Eclipse Member Organizations`;
+
+		function update() {
+			updateInnerInnerHTML('.version', version);
+			updateInnerInnerHTML('.milestone', milestone);
+			updateInnerInnerHTML('.product-name', productName);
+			document.getElementById('product-logo').src = getProductImage();
+			// document.getElementById('download-link').href = `eclipse+external:https://www.eclipse.org/downloads/packages/release/${version}/${milestone.toLowerCase()}`;
+		}
+
+		async function generateLogosBroken(element) {
+			fetch('https://membership.eclipse.org/api/organizations/').
+				then(response => response.text()).
+				then(text => {
+					const organizations = JSON.parse(text);
+					const content = [];
+					if (organizations instanceof Array) {
+						for (const organization of organizations) {
+							const logo = organization.logos.web;
+							const website = organization.website;
+							const name = organization.name;
+							const orgSite = `https://www.eclipse.org/membership/show-member/?member_id=${organization.organization_id}`;
+							const href = website == null || (!website.startsWith('http:') && !website.startsWith('https:')) ?
+								orgSite :
+								website;
+							const decorator = href != website ? '**' : '';
+							const fixHttp = website != null && website.startsWith('http:') ? ' fix-http ' : '';
+							const fixProtocol = website != null && website != '' && !website.startsWith('http:') && !website.startsWith('https:') ? ' fix-protocol ' : '';
+							const style = href != website || fixHttp || fixProtocol ? ' style="color: firebrick; font-weight: bolder;"' : '';
+							content.push(`
+<span class="ide-wg-member-logo-container">
+	<a href="${orgSite}"> &#x1F517; </a>
+	<a href="${href}"><img class="ide-wg-member-logo" src="${logo}"/></a>
+	${name}
+	'${website}'
+	<span${style}>
+	${decorator}
+	${fixHttp}
+	${fixProtocol}
+	</span>
+</span>
+<br>
+`);
+						}
+					}
+
+					element.innerHTML += content.join('\n');
+					element.style.display = "block";
+				});
+		}
+		//]]>
+	</script>
+</head>
+
+<body id="body">
+	<div class="main">
+		<div id="content">
+			<table style="display: none;">
+				<tbody id="query">
+					<tr>
+						<th>Property</th>
+						<th>Value</th>
+					</tr>
+					<tr>
+						<td>property</td>
+						<td>value</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<div id="general">
+				<div id="message-container">
+					<div id="message">
+						<div class="section" style="font-size: 150%">
+							Members
+						</div>
+					</div>
+				</div>
+				<div id="ide-wg" class="section" style="display: none">
+					<hr />
+					Sponsored by <b>people like you</b> and by the <a href="eclipse+external:https://eclipseide.org/working-group/#about">IDE Working Group</a>.
+					<br />
+				</div>
+				<div class="section">
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		generateLogosBroken(document.getElementById('message'));
+		// load();
+		// update();
+		// generate(true);
+	</script>
+</body>
+
+</html>
