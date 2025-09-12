@@ -116,7 +116,11 @@ async function genenerateLogos(element) {
 						for (const wgpa of wgpas) {
 							if (wgpa.working_group == 'eclipse-ide') {
 								const logo = organization.logos.web;
-								content.push(`<span class="ide-wg-member-logo-container"><a href="eclipse+external:${organization.website}"><img class="ide-wg-member-logo" src="${logo}"/></a></span>`);
+								const website = organization.website;
+								const href = website == null || (!website.startsWith('http:') && !website.startsWith('https:')) ?
+									`https://www.eclipse.org/membership/show-member/?member_id=${organization.organization_id}` :
+									website;
+								content.push(`<span class="ide-wg-member-logo-container"><a href="eclipse+external:${href}"><img class="ide-wg-member-logo" src="${logo}"/></a></span>`);
 							}
 						}
 					}
