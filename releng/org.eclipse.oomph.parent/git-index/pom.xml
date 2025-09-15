@@ -31,11 +31,11 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>org.eclipse.tycho.extras</groupId>
+        <groupId>org.eclipse.tycho</groupId>
         <artifactId>tycho-eclipserun-plugin</artifactId>
         <version>${tycho-version}</version>
         <configuration>
-          <executionEnvironment>JavaSE-17</executionEnvironment>
+          <executionEnvironment>JavaSE-21</executionEnvironment>
           <dependencies>
             <dependency>
               <artifactId>org.eclipse.oomph.setup.git</artifactId>
