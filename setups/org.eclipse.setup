@@ -36,10 +36,31 @@
         versionRange="4.36.0"/>
   </annotation>
   <annotation
-      source="http://www.eclipse.org/oomph/setup/Notification-Disable">
+      source="http://www.eclipse.org/oomph/setup/Notification">
+    <detail
+        key="maximize">
+      <value>false</value>
+    </detail>
     <detail
         key="uri">
-      <value>https://www.eclipse.org/setups/notification/java24/index.html</value>
+      <value>https://www.eclipse.org/setups/notification/java25/</value>
+    </detail>
+    <content
+        xsi:type="p2:Requirement"
+        name="org.eclipse.jdt.javanextpatch.feature.group"
+        versionRange="[1.25.0,1.26.0)"
+        optional="true"
+        max="0"/>
+    <content
+        xsi:type="p2:Requirement"
+        name="org.eclipse.jdt.feature.group"
+        versionRange="[3.20.300.v20250828-0630,3.20.399)"/>
+  </annotation>
+  <annotation
+      source="http://www.eclipse.org/oomph/setup/Notification">
+    <detail
+        key="uri">
+      <value>https://www.eclipse.org/setups/notification/java25/?jre-only=true</value>
     </detail>
     <detail
         key="maximize">
@@ -48,13 +69,13 @@
     <content
         xsi:type="p2:Requirement"
         name="org.eclipse.jdt.javanextpatch.feature.group"
-        versionRange="[1.24.0,1.25.0)"
-        optional="true"
-        max="0"/>
+        versionRange="[1.25.0,1.26.0)"/>
     <content
         xsi:type="p2:Requirement"
-        name="org.eclipse.jdt.feature.group"
-        versionRange="[3.20.100.v20250120-0740,3.20.199)"/>
+        name="installed.jre"
+        versionRange="25.0.0"
+        optional="true"
+        max="0"/>
   </annotation>
   <annotation
       source="http://www.eclipse.org/oomph/setup/Notification-disabled">
