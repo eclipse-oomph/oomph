@@ -58,6 +58,7 @@ import java.util.StringTokenizer;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 /**
  * @author Eike Stepper
@@ -262,7 +263,17 @@ public final class HTTPServer
     for (Path path : fileSystem.getRootDirectories())
     {
       String logicalPath = "/" + path.toString().replaceAll("[\\\\/]", "");
-      server.addContext(new FileContext(logicalPath, true, path.toFile()));
+      if ("/".equals(logicalPath))
+      {
+        for (Path folder : Files.list(path).filter(Files::isDirectory).collect(Collectors.toList()))
+        {
+          server.addContext(new FileContext(folder.toString(), true, folder.toFile()));
+        }
+      }
+      else
+      {
+        server.addContext(new FileContext(logicalPath, true, path.toFile()));
+      }
     }
 
     String baseURL = "http://localhost:" + server.getPort() + "/";
