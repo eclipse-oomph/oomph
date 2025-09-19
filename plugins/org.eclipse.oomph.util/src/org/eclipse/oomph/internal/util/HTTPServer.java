@@ -227,7 +227,8 @@ public final class HTTPServer
 
   public static void main(String[] args) throws Exception
   {
-    HTTPServer server = new HTTPServer(80, 100);
+    int port = Integer.getInteger("HTTPServer.port", 8080);
+    HTTPServer server = new HTTPServer(port, port + 100);
 
     if (args.length > 0)
     {
