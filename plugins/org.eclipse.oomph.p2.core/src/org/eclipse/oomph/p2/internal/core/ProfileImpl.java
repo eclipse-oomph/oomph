@@ -512,6 +512,11 @@ public class ProfileImpl extends AgentManagerElementImpl implements Profile, Per
         Requirement requirement = P2Factory.eINSTANCE.createRequirement(iu.getId());
         requirement.setVersionRange(versionRange);
         requirement.setMatchExpression(iu.getFilter());
+        if ("true".equals(iu.getProperty(QueryUtil.PROP_TYPE_PATCH))) //$NON-NLS-1$
+        {
+          requirement.setOptional(true);
+        }
+
         requirements.add(requirement);
       }
     }
