@@ -1450,6 +1450,7 @@
   <project href="https://raw.githubusercontent.com/eclipse-justj/justj.tools/master/releng/org.eclipse.justj.tools.releng/JustJ.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-kura/kura/develop/kura/setups/kura.setup#/"/>
   <project href="interim/MPC.setup#/"/>
+  <project href="https://raw.githubusercontent.com/eclipse-modeling/modeling-website/refs/heads/master/Modeling.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-modisco/org.eclipse.modisco/master/releng/org.eclipse.modisco.oomph/setups/modisco.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-mylyn/org.eclipse.mylyn/main/org.eclipse.mylyn.releng/oomph/Mylyn.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse/mwe/master/releng/MWE.setup#/"/>
