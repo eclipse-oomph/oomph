@@ -592,7 +592,7 @@ public class TargletContainerComposite extends Composite
       return false;
     }
 
-    @Override
+    @SuppressWarnings("all")
     public void zoomOut()
     {
     }
@@ -917,7 +917,7 @@ public class TargletContainerComposite extends Composite
     @SuppressWarnings("all")
     public boolean hasService(Class api)
     {
-      if ((api == IPartService.class) || (api == org.eclipse.ui.IKeyBindingService.class) || (api == IHandlerService.class))
+      if (api == IPartService.class || api == org.eclipse.ui.IKeyBindingService.class || api == IHandlerService.class)
       {
         return true;
       }
