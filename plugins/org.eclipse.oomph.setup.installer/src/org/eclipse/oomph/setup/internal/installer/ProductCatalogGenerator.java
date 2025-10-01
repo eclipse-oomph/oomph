@@ -2949,7 +2949,23 @@ public class ProductCatalogGenerator implements IApplication
       String description = iu.getProperty(IInstallableUnit.PROP_DESCRIPTION, null);
       p2Task.setDescription(description);
 
-      if (osgiVersion.getMajor() >= 18)
+      if (osgiVersion.getMajor() >= 25)
+      {
+        Annotation jreSpecificTasks = BaseFactory.eINSTANCE.createAnnotation(AnnotationConstants.ANNOTATION_JRE_SPECIFIC_TASKS);
+        EclipseIniTask addOpensJavaLangTask = SetupFactory.eINSTANCE.createEclipseIniTask();
+        addOpensJavaLangTask.setOption("--add-opens=java.base/java.lang=ALL-UNNAMED");
+        addOpensJavaLangTask.setVm(true);
+        jreSpecificTasks.getContents().add(addOpensJavaLangTask);
+
+        EclipseIniTask allowSecurityManagerTask = SetupFactory.eINSTANCE.createEclipseIniTask();
+        allowSecurityManagerTask.setOption("-Djava.security.manager");
+        allowSecurityManagerTask.setValue("=disallow");
+        allowSecurityManagerTask.setVm(true);
+        jreSpecificTasks.getContents().add(allowSecurityManagerTask);
+
+        p2Task.getAnnotations().add(jreSpecificTasks);
+      }
+      else if (osgiVersion.getMajor() >= 18)
       {
         Annotation jreSpecificTasks = BaseFactory.eINSTANCE.createAnnotation(AnnotationConstants.ANNOTATION_JRE_SPECIFIC_TASKS);
         EclipseIniTask addOpensJavaLangTask = SetupFactory.eINSTANCE.createEclipseIniTask();
