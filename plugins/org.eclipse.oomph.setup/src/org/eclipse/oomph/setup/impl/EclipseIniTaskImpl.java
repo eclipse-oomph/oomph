@@ -402,10 +402,11 @@ public class EclipseIniTaskImpl extends SetupTaskImpl implements EclipseIniTask
       String line = option + (value == null ? "" : value); //$NON-NLS-1$
       if (vmargsIndex != -1)
       {
+        String optionPrefix = option + (value != null && value.startsWith("=") ? "=" : ""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         for (int i = vmargsIndex + 1; i < contents.size(); i++)
         {
           String oldLine = contents.get(i);
-          if (oldLine.startsWith(option))
+          if (oldLine.startsWith(optionPrefix))
           {
             contents.set(i, line);
             line = null;
