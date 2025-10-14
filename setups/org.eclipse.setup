@@ -78,7 +78,7 @@
         max="0"/>
   </annotation>
   <annotation
-      source="http://www.eclipse.org/oomph/setup/Notification-disabled">
+      source="http://www.eclipse.org/oomph/setup/Notification">
     <detail
         key="maximize">
       <value>false</value>
@@ -90,7 +90,7 @@
     <content
         xsi:type="p2:Requirement"
         name="org.eclipse.epp.package.common"
-        versionRange="[4.36.0,4.37.0.20250828-0648)"/>
+        versionRange="[4.37.0,4.38.0.20251009-0700)"/>
   </annotation>
   <annotation
       source="http://www.eclipse.org/oomph/setup/Notification">
