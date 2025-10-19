@@ -482,7 +482,7 @@ public class MarketplaceCatalogGenerator implements IApplication
         EList<EObject> contents = listingResource.getContents();
         if (contents.isEmpty())
         {
-          System.err.println("Empty Listing: '" + listingURI);
+          System.err.println("Empty Listing: '" + listingURI + "'");
           continue;
         }
 
@@ -718,7 +718,14 @@ public class MarketplaceCatalogGenerator implements IApplication
             {
               for (String eclipseVersion : StringUtil.explode(eclipseVersions, ","))
               {
-                nodePlatformVersions.add(Version.create(eclipseVersion.trim()));
+                try
+                {
+                  nodePlatformVersions.add(Version.create(eclipseVersion.trim()));
+                }
+                catch (IllegalArgumentException ex)
+                {
+                  System.err.println("Bad version: '" + eclipseVersion + "' for '" + listingURI);
+                }
               }
             }
 
