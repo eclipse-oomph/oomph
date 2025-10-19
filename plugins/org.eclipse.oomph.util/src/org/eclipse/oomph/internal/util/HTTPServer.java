@@ -823,7 +823,7 @@ public final class HTTPServer
       }
       catch (IOException ex)
       {
-        if (ignoreExceptions || ex instanceof SocketException && ex.getMessage().equals("Software caused connection abort: socket write error"))
+        if (ignoreExceptions || ex instanceof SocketException && ex.getMessage().contains("abort"))
         {
           return;
         }
