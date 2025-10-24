@@ -10,7 +10,7 @@
  */
 package org.eclipse.oomph.p2.internal.core;
 
-import org.eclipse.oomph.p2.core.P2Util;
+import org.eclipse.oomph.p2.core.AgentManager;
 import org.eclipse.oomph.util.IOUtil;
 import org.eclipse.oomph.util.OomphPlugin;
 import org.eclipse.oomph.util.ReflectUtil;
@@ -174,7 +174,11 @@ public final class P2CorePlugin extends OomphPlugin
     @Override
     public void stop(BundleContext context) throws Exception
     {
-      ((AgentManagerImpl)P2Util.getAgentManager()).dispose();
+      AgentManager instance = AgentManagerImpl.instance;
+      if (instance != null)
+      {
+        ((AgentManagerImpl)instance).dispose();
+      }
       super.stop(context);
     }
   }
