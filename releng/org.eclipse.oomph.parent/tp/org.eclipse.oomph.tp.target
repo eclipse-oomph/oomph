@@ -28,7 +28,7 @@
       <repository location="https://download.eclipse.org/tools/orbit/simrel/orbit-aggregation/nightly/latest"/>
       <repository location="https://download.eclipse.org/justj/jres/21/updates/milestone/latest"/>
       <repository location="https://download.eclipse.org/webtools/downloads/drops/R3.39.0/S-3.39RC2-20250902093744/repository"/>
-      <repository location="https://download.eclipse.org/eclipse/updates/4.38-I-builds"/>
+      <repository location="https://download.eclipse.org/eclipse/updates/4.38-I-builds/I20251024-0020"/>
     </location>
   </locations>
 </target>
