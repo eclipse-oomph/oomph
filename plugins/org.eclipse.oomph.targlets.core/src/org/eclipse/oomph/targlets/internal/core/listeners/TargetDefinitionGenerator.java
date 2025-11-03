@@ -12,7 +12,9 @@ package org.eclipse.oomph.targlets.internal.core.listeners;
 
 import org.eclipse.oomph.base.Annotation;
 import org.eclipse.oomph.base.util.BaseUtil;
+import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.Repository;
+import org.eclipse.oomph.p2.VersionSegment;
 import org.eclipse.oomph.p2.core.P2Util;
 import org.eclipse.oomph.p2.core.Profile;
 import org.eclipse.oomph.p2.internal.core.ProfileTransactionImpl;
@@ -110,6 +112,8 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
 
   public static final String ANNOTATION_GENERATE_VERSIONS = "generateVersions"; //$NON-NLS-1$
 
+  public static final String ANNOTATION_GENERATE_VERSION_RANGES = "generateVersionRanges"; //$NON-NLS-1$
+
   public static final String ANNOTATION_INCLUDE_ALL_PLATFORMS = "includeAllPlatforms"; //$NON-NLS-1$
 
   public static final String ANNOTATION_INCLUDE_CONFIGURE_PHASE = "includeConfigurePhase"; //$NON-NLS-1$
@@ -200,19 +204,35 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
     final boolean minimizeImplicitUnits = isAnnotationDetail(annotation, ANNOTATION_MINIMIZE_IMPLICIT_UNITS, false);
     final boolean ignoreJavaRequirements = isAnnotationDetail(annotation, ANNOTATION_IGNORE_JAVA_REQUIREMENTS, true);
     final boolean ignorePropertiesMatchRequirements = isAnnotationDetail(annotation, ANNOTATION_IGNORE_PROPERTIES_MATCH_REQUIREMENTS, false);
-    String detail = getAnnotationDetail(annotation, ANNOTATION_GENERATE_VERSIONS, Boolean.toString(false));
+
     final Pattern versionsPattern;
-    if (TRUE.equalsIgnoreCase(detail))
+    String versionsDetail = getAnnotationDetail(annotation, ANNOTATION_GENERATE_VERSIONS, Boolean.toString(false));
+    if (TRUE.equalsIgnoreCase(versionsDetail))
     {
       versionsPattern = Pattern.compile(".*"); //$NON-NLS-1$
     }
-    else if (FALSE.equalsIgnoreCase(detail) || StringUtil.isEmpty(detail))
+    else if (FALSE.equalsIgnoreCase(versionsDetail) || StringUtil.isEmpty(versionsDetail))
     {
       versionsPattern = Pattern.compile(""); //$NON-NLS-1$
     }
     else
     {
-      versionsPattern = Pattern.compile(detail);
+      versionsPattern = Pattern.compile(versionsDetail);
+    }
+
+    final Pattern versionRangesPattern;
+    String versionRangesDetail = getAnnotationDetail(annotation, ANNOTATION_GENERATE_VERSION_RANGES, Boolean.toString(false));
+    if (TRUE.equalsIgnoreCase(versionRangesDetail))
+    {
+      versionRangesPattern = Pattern.compile(".*"); //$NON-NLS-1$
+    }
+    else if (FALSE.equalsIgnoreCase(versionRangesDetail) || StringUtil.isEmpty(versionRangesDetail))
+    {
+      versionRangesPattern = Pattern.compile(""); //$NON-NLS-1$
+    }
+    else
+    {
+      versionRangesPattern = Pattern.compile(versionRangesDetail);
     }
 
     final boolean includeAllPlatforms = isAnnotationDetail(annotation, ANNOTATION_INCLUDE_ALL_PLATFORMS, targlet.isIncludeAllPlatforms());
@@ -311,7 +331,8 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
 
               for (IInstallableUnit iu : list)
               {
-                elements.add(formatElement(iu, versionsPattern.matcher(iu.getId()).matches(), escaper));
+                String id = iu.getId();
+                elements.add(formatElement(iu, versionsPattern.matcher(id).matches(), versionRangesPattern.matcher(id).matches(), escaper));
               }
 
               for (String element : elements)
@@ -363,7 +384,8 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
 
               for (IInstallableUnit iu : list)
               {
-                elements.add(formatElement(iu, versionsPattern.matcher(iu.getId()).matches(), escaper));
+                String id = iu.getId();
+                elements.add(formatElement(iu, versionsPattern.matcher(id).matches(), versionRangesPattern.matcher(id).matches(), escaper));
               }
 
               for (String element : elements)
@@ -407,15 +429,16 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
         super.setContents(uri, encoding, contents);
       }
 
-      private String formatElement(IInstallableUnit iu, boolean withVersion, XML.Escaper escaper)
+      private String formatElement(IInstallableUnit iu, boolean withVersion, boolean withVersionRange, XML.Escaper escaper)
       {
         Version version = iu.getVersion();
-        if (!withVersion || version == null)
+        if (!withVersion && !withVersion || version == null)
         {
           version = Version.emptyVersion;
         }
 
-        return "<unit id=\"" + escaper.escape(iu.getId()) + "\" version=\"" + escaper.escape(version) + "\"/>"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        String versionValue = escaper.escape(withVersionRange ? P2Factory.eINSTANCE.createVersionRange(version, VersionSegment.MAJOR, true) : version);
+        return "<unit id=\"" + escaper.escape(iu.getId()) + "\" version=\"" + versionValue + "\"/>"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
       }
 
     }.update(targetDefinition);
