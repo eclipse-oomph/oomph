@@ -432,7 +432,7 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
       private String formatElement(IInstallableUnit iu, boolean withVersion, boolean withVersionRange, XML.Escaper escaper)
       {
         Version version = iu.getVersion();
-        if (!withVersion && !withVersion || version == null)
+        if (!withVersion && !withVersionRange || version == null)
         {
           version = Version.emptyVersion;
         }
