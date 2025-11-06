@@ -1039,7 +1039,8 @@ public class ProfileTransactionImpl implements ProfileTransaction
         VersionRange versionRange = getCleanVersionRange(rootIU);
         IMatchExpression<IInstallableUnit> filter = rootIU.getFilter();
 
-        IRequirement rootRequirement = MetadataFactory.createRequirement(IInstallableUnit.NAMESPACE_IU_ID, id, versionRange, filter, false, false);
+        boolean isPatch = "true".equals(rootIU.getProperty(QueryUtil.PROP_TYPE_PATCH)); //$NON-NLS-1$
+        IRequirement rootRequirement = MetadataFactory.createRequirement(IInstallableUnit.NAMESPACE_IU_ID, id, versionRange, filter, isPatch, false);
         rootRequirements.add(rootRequirement);
         if (rootIU.isSingleton() || "true".equals(rootIU.getProperty(InstallableUnitDescription.PROP_TYPE_GROUP))) //$NON-NLS-1$
         {
