@@ -6270,7 +6270,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       return toolItem;
     }
 
-    @SuppressWarnings({ "restriction", "deprecation" })
+    @SuppressWarnings("restriction")
     private String getFullHTML(String text)
     {
       if (setupEditor == null)
@@ -6286,7 +6286,7 @@ public class SetupEditor extends MultiPageEditorPart implements IEditingDomainPr
       Color foregroundColor = content.getForeground();
       Color backgroundColor = content.getBackground();
 
-      StringBuffer result = new StringBuffer(text);
+      StringBuilder result = new StringBuilder(text);
       org.eclipse.jface.internal.text.html.HTMLPrinter.insertPageProlog(result, 0, foregroundColor == null ? null : foregroundColor.getRGB(),
           backgroundColor == null ? null : backgroundColor.getRGB(), styleSheet);
       org.eclipse.jface.internal.text.html.HTMLPrinter.addPageEpilog(result);
