@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="org.eclipse.pde.ui.RuntimeWorkbench">
     <setAttribute key="additional_plugins">
-        <setEntry value="com.sun.jna.platform:5.17.0:default:true:default:default"/>
-        <setEntry value="com.sun.jna:5.17.0.v20250316-1700:default:true:default:default"/>
+        <setEntry value="com.sun.jna.platform:5.18.1:default:true:default:default"/>
+        <setEntry value="com.sun.jna:5.18.1.v20251001-0800:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.event:1.7.300.v20250518-0609:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.artifact.repository:1.5.800.v20250620-1926:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.console:1.3.700.v20250515-0507:default:true:default:default"/>
-        <setEntry value="org.eclipse.equinox.p2.core:2.13.100.v20250317-0903:default:true:default:default"/>
+        <setEntry value="org.eclipse.equinox.p2.core:2.13.200.v20251111-1620:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.director.app:1.3.800.v20250720-1057:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.director:2.6.800.v20250714-1236:default:true:default:default"/>
-        <setEntry value="org.eclipse.equinox.p2.directorywatcher:1.4.700.v20250720-1525:default:true:default:default"/>
+        <setEntry value="org.eclipse.equinox.p2.directorywatcher:1.4.800.v20250922-0444:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.discovery.compatibility:1.3.700.v20250516-0530:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.discovery:1.3.700.v20250616-0711:default:true:default:default"/>
-        <setEntry value="org.eclipse.equinox.p2.engine:2.10.600.v20250724-1029:default:true:default:default"/>
+        <setEntry value="org.eclipse.equinox.p2.engine:2.11.0.v20251111-1028:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.extensionlocation:1.5.700.v20250720-1526:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.garbagecollector:1.3.700.v20250715-0459:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.jarprocessor:1.3.600.v20250517-0338:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.metadata.repository:1.5.700.v20250720-0955:default:true:default:default"/>
-        <setEntry value="org.eclipse.equinox.p2.metadata:2.9.500.v20250726-1041:default:true:default:default"/>
+        <setEntry value="org.eclipse.equinox.p2.metadata:2.9.600.v20251108-0408:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.operations:2.7.700.v20250720-1530:default:true:default:default"/>
-        <setEntry value="org.eclipse.equinox.p2.publisher.eclipse:1.6.600.v20250720-1525:default:true:default:default"/>
+        <setEntry value="org.eclipse.equinox.p2.publisher.eclipse:1.6.700.v20251107-1554:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.publisher:1.9.600.v20250720-0951:default:true:default:default"/>
-        <setEntry value="org.eclipse.equinox.p2.reconciler.dropins:1.5.700.v20250623-0536:default:true:default:default"/>
-        <setEntry value="org.eclipse.equinox.p2.repository.tools:2.4.800.v20250720-1525:default:true:default:default"/>
+        <setEntry value="org.eclipse.equinox.p2.reconciler.dropins:1.5.800.v20251111-0852:default:true:default:default"/>
+        <setEntry value="org.eclipse.equinox.p2.repository.tools:2.4.900.v20251108-0407:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.repository:2.9.500.v20250721-0421:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.touchpoint.eclipse:2.4.600.v20250722-0413:default:true:default:default"/>
-        <setEntry value="org.eclipse.equinox.p2.touchpoint.natives:1.5.700.v20250721-0422:default:true:default:default"/>
-        <setEntry value="org.eclipse.equinox.p2.transport.ecf:1.4.500.v20250519-0547:default:true:default:default"/>
+        <setEntry value="org.eclipse.equinox.p2.touchpoint.natives:1.5.800.v20251111-0726:default:true:default:default"/>
+        <setEntry value="org.eclipse.equinox.p2.transport.ecf:1.4.600.v20250922-0640:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.updatesite:1.3.800.v20250606-0550:default:true:default:default"/>
     </setAttribute>
     <booleanAttribute key="append.args" value="true"/>
@@ -57,7 +57,7 @@
     <stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-17"/>
     <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-os ${target.os} -ws ${target.ws} -arch ${target.arch} -nl ${target.nl} -consoleLog"/>
     <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.pde.ui.workbenchClasspathProvider"/>
-    <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xms1024m -Xmx2500m&#13;&#10;-Declipse.p2.max.threads=12&#13;&#10;-Doomph.update.url=${file_uri:${resource_loc:/org.eclipse.oomph.site}}/target/repository/&#13;&#10;-Doomph.redirection.setups=https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/-&gt;${file_uri:${resource_loc:/setups}}/&#13;&#10;-Doomph.setup.remote.debug=maybe&#13;&#10;-Dorg.eclipse.emf.ecore.plugin.EcorePlugin.doNotLoadResourcesPlugin=true&#13;&#10;-Doomph.setup.stats.skip=true&#13;&#10;-Dorg.eclipse.ecf.provider.filetransfer.excludeContributors=org.eclipse.ecf.provider.filetransfer.httpclientjava&#13;&#10;-Dorg.eclipse.swtbot.generator.enable=false&#13;&#10;-Duser.home=${system_property:user.home}&#13;&#10;-Doomph.setup.user.home.redirect=true"/>
+    <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xms1024m -Xmx2500m&#13;&#10;-Declipse.p2.max.threads=12&#13;&#10;-Doomph.update.url=${file_uri:${resource_loc:/org.eclipse.oomph.site}}/target/repository/&#13;&#10;-Doomph.redirection.setups=https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/-&gt;${file_uri:${resource_loc:/setups}}/&#13;&#10;-Doomph.setup.remote.debug=maybe&#13;&#10;-Dorg.eclipse.emf.ecore.plugin.EcorePlugin.doNotLoadResourcesPlugin=true&#13;&#10;-Doomph.setup.stats.skip=true&#13;&#10;-Dorg.eclipse.ecf.provider.filetransfer.excludeContributors=org.eclipse.ecf.provider.filetransfer.httpclientjava&#13;&#10;-Dorg.eclipse.swtbot.generator.enable=false&#13;&#10;-Duser.home=${system_property:user.home}&#13;&#10;-Doomph.setup.user.home.redirect=true&#13;&#10;-Declipse.platform.mergeTrust=true"/>
     <stringAttribute key="pde.version" value="3.3"/>
     <stringAttribute key="product" value="org.eclipse.oomph.setup.installer.product"/>
     <setAttribute key="selected_features">

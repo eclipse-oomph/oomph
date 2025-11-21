@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="org.eclipse.pde.ui.RuntimeWorkbench">
     <setAttribute key="additional_plugins">
-        <setEntry value="com.sun.jna.platform:5.17.0:default:true:default:default"/>
-        <setEntry value="com.sun.jna:5.17.0.v20250316-1700:default:true:default:default"/>
+        <setEntry value="com.sun.jna.platform:5.18.1:default:true:default:default"/>
+        <setEntry value="com.sun.jna:5.18.1.v20251001-0800:default:true:default:default"/>
         <setEntry value="org.eclipse.core.net:1.5.800.v20250613-1119:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.event:1.7.300.v20250518-0609:default:true:default:default"/>
         <setEntry value="org.eclipse.osgi.services:3.12.300.v20250707-1221:default:true:default:default"/>
