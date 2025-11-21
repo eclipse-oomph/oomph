@@ -90,7 +90,7 @@
     <content
         xsi:type="p2:Requirement"
         name="org.eclipse.epp.package.common"
-        versionRange="[4.37.0,4.38.0.20251030-0645)"/>
+        versionRange="[4.37.0,4.38.0.20251120-0739)"/>
   </annotation>
   <annotation
       source="http://www.eclipse.org/oomph/setup/Notification">
@@ -121,6 +121,26 @@
         xsi:type="p2:Requirement"
         name="org.eclipse.epp.package.common"
         versionRange="[4.36.0,4.37.0.20250905-1455)"/>
+  </annotation>
+  <annotation
+      source="http://www.eclipse.org/oomph/setup/Notification-X">
+    <detail
+        key="maximize">
+      <value>true</value>
+    </detail>
+    <detail
+        key="uri">
+      <value>file:/D:/Users/merks/oomph-1.39/git/oomph/releng/org.eclipse.oomph.releng/www/notification/copilot/index.html</value>
+    </detail>
+    <content
+        xsi:type="p2:Requirement"
+        name="org.eclipse.copilot.feature.feature.group"
+        optional="true"
+        max="0"/>
+    <content
+        xsi:type="p2:Requirement"
+        name="org.eclipse.epp.package.common"
+        versionRange="[4.38.0,5.0.0)"/>
   </annotation>
   <annotation
       source="http://www.eclipse.org/oomph/setup/JRE">
