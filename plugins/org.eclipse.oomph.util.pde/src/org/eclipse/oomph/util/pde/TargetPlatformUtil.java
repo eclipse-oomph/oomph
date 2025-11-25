@@ -151,8 +151,6 @@ public final class TargetPlatformUtil
       UtilPDEPlugin.INSTANCE.coreException(resolveStatus);
 
       LoadTargetDefinitionJob job = new LoadTargetDefinitionJob(targetDefinition);
-
-      @SuppressWarnings("restriction")
       IStatus status = job.run(MonitorUtil.create(monitor, 50));
       UtilPDEPlugin.INSTANCE.coreException(status);
     }

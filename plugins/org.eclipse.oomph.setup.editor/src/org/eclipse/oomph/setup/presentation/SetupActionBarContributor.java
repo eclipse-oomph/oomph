@@ -300,9 +300,6 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
 
   private final EditorTableAction editorTableAction = new EditorTableAction();
 
-  @SuppressWarnings("unused")
-  private final TestInstallAction testInstallAction = new TestInstallAction();
-
   private final OpenInSetupEditorAction openInSetupEditorAction = new OpenInSetupEditorAction();
 
   private final OpenInTextEditorAction openInTextEditorAction = new OpenInTextEditorAction();
@@ -1540,65 +1537,6 @@ public class SetupActionBarContributor extends OomphEditingDomainActionBarContri
         setEnabled(false);
         setupEditor = null;
       }
-    }
-  }
-
-  /**
-   * @author Eike Stepper
-   */
-  @Deprecated
-  private class TestInstallAction extends Action
-  {
-    private Project project;
-
-    public TestInstallAction()
-    {
-      super(Messages.SetupActionBarContributor_action_testInstall, AS_PUSH_BUTTON);
-      setImageDescriptor(SetupEditorPlugin.INSTANCE.getImageDescriptor("run")); //$NON-NLS-1$
-      setToolTipText(Messages.SetupActionBarContributor_action_testInstall_tooltip);
-    }
-
-    @SuppressWarnings("unused")
-    public void selectionChanged(SelectionChangedEvent event)
-    {
-      ISelection selection = event.getSelection();
-      if (selection instanceof IStructuredSelection)
-      {
-        IStructuredSelection structuredSelection = (IStructuredSelection)selection;
-        if (structuredSelection.size() == 1)
-        {
-          Object element = structuredSelection.getFirstElement();
-          if (element instanceof EObject)
-          {
-            project = getProject((EObject)element);
-            if (project != null)
-            {
-              setEnabled(true);
-              return;
-            }
-          }
-        }
-      }
-
-      project = null;
-      setEnabled(false);
-    }
-
-    @Override
-    public void run()
-    {
-      // Shell shell = activeEditorPart.getSite().getShell();
-      // new org.eclipse.oomph.internal.setup.ui.InstallerDialog(shell, project).open();
-    }
-
-    private Project getProject(EObject object)
-    {
-      while (object != null && !(object instanceof Project))
-      {
-        object = object.eContainer();
-      }
-
-      return (Project)object;
     }
   }
 

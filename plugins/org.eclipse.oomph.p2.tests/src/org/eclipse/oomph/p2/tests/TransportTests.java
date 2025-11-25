@@ -630,7 +630,7 @@ public class TransportTests extends AbstractP2Test
       return requests;
     }
 
-    @Deprecated
+    @SuppressWarnings("removal")
     @Override
     public IStatus download(URI uri, OutputStream target, long startPos, IProgressMonitor monitor)
     {
