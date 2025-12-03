@@ -237,7 +237,7 @@ public class ProductCatalogGenerator implements IApplication
 
   private static final String JUSTJ_JRES = "https://download.eclipse.org/justj/jres";
 
-  private static final Set<Integer> EXCLUDED_NON_LTS_JUSTJ_VERSIONS = Set.of(12, 13, 14, 15, 16, 18, 19, 20, 22);
+  private static final Set<Integer> EXCLUDED_NON_LTS_JUSTJ_VERSIONS = Set.of(12, 13, 14, 15, 16, 18, 19, 20, 22, 23);
 
   private static final Pattern PUB = Pattern.compile("pub:([^:]+):.*");
 
