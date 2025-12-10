@@ -427,10 +427,15 @@
     <setupTask
         xsi:type="setup:VariableTask"
         name="eclipse.latest.p2"
-        value="https://download.eclipse.org/eclipse/updates/4.38-I-builds"
-        label="Eclipse Latest I-Build p2 Repository - 4.38">
+        value="https://download.eclipse.org/eclipse/updates/4.39-I-builds"
+        label="Eclipse Latest I-Build p2 Repository - 4.39">
       <description>The update site of the latest Eclipse project's builds, typically an I-Build for the next release</description>
     </setupTask>
+    <setupTask
+        xsi:type="setup:VariableTask"
+        name="eclipse.4.38.release.p2"
+        value="https://download.eclipse.org/eclipse/updates/4.38/R-4.38-202512010920"
+        label="Eclipse 4.38 Release p2 Repository"/>
     <setupTask
         xsi:type="setup:VariableTask"
         name="eclipse.4.37.release.p2"
@@ -519,8 +524,8 @@
     <setupTask
         xsi:type="setup:VariableTask"
         name="eclipse.latest.release.p2"
-        value="${eclipse.4.37.release.p2}"
-        label="Eclipse Latest Release p2 Repository - 4.37">
+        value="${eclipse.4.38.release.p2}"
+        label="Eclipse Latest Release p2 Repository - 4.38">
       <description>The update site of the latest released Eclipse project's builds, always an R-Build for the most recent release</description>
     </setupTask>
     <setupTask
@@ -531,6 +536,9 @@
         label="Target Platform">
       <annotation
           source="http://www.eclipse.org/oomph/setup/GlobalVariable"/>
+      <choice
+          value="2026-03"
+          label="Eclipse 2026-03 - 4.39"/>
       <choice
           value="2025-12"
           label="Eclipse 2025-12 - 4.38"/>
@@ -659,7 +667,7 @@
     <setupTask
         xsi:type="setup:VariableTask"
         name="eclipse.target.platform.latest"
-        value="2025-12"
+        value="2026-03"
         storageURI="scope://Workspace"
         label="Target Platform Latest">
       <annotation
@@ -669,7 +677,7 @@
     <setupTask
         xsi:type="setup:VariableTask"
         name="eclipse.target.platform.latest.released"
-        value="2025-09"
+        value="2025-12"
         storageURI="scope://Workspace"
         label="Target Platform Latest Released">
       <annotation
@@ -684,6 +692,9 @@
         label="API Baseline Target Platform">
       <annotation
           source="http://www.eclipse.org/oomph/setup/GlobalVariable"/>
+      <choice
+          value="2025-12"
+          label="Eclipse 2025-12 - 4.38"/>
       <choice
           value="2025-09"
           label="Eclipse 2025-09 - 4.37"/>
@@ -806,7 +817,7 @@
     <setupTask
         xsi:type="setup:VariableTask"
         name="eclipse.api.baseline.target.platform.latest.released"
-        value="2025-09"
+        value="2025-12"
         storageURI="scope://Workspace"
         label="Target Platform Latest Released">
       <annotation
@@ -1002,9 +1013,14 @@
       <repositoryList
           name="None"/>
       <repositoryList
-          name="2025-12">
+          name="2026-03">
         <repository
             url="${eclipse.latest.p2}"/>
+      </repositoryList>
+      <repositoryList
+          name="2025-12">
+        <repository
+            url="${eclipse.4.38.release.p2}"/>
       </repositoryList>
       <repositoryList
           name="2025-09">
@@ -1214,6 +1230,11 @@
         includeSources="false">
       <repositoryList
           name="None"/>
+      <repositoryList
+          name="2025-12">
+        <repository
+            url="${eclipse.4.38.release.p2}"/>
+      </repositoryList>
       <repositoryList
           name="2025-09">
         <repository
@@ -1433,7 +1454,6 @@
   <project href="https://gitlab.eclipse.org/eclipse/ease/ease/-/raw/main/releng/org.eclipse.ease.releng/oomph/ease.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse/ecf/master/releng/org.eclipse.ecf.releng/ECF.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-eclemma/eclemma/master/EclEmma.setup#/"/>
-  <project href="https://raw.githubusercontent.com/eclipse/elk/master/setups/EclipseLayoutKernel.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-egit/egit/master/tools/oomph/EGit.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-emf/org.eclipse.emf/master/releng/org.eclipse.emf.releng/EMF.setup#/"/>
   <project href="interim/EMFCompare.setup#/"/>
@@ -1461,7 +1481,6 @@
   <project href="https://raw.githubusercontent.com/eclipse-ocl/org.eclipse.ocl/master/releng/org.eclipse.ocl.oomph/setups/ocl.setup#/"/>
   <project href="Oomph.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-oomph/oomph.incubator/master/OomphIncubator.setup#/"/>
-  <project href="interim/Orbit.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-orbit/orbit-simrel/main/OrbitSimRel.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-passage/passage/master/releng/org.eclipse.passage.releng/passage.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-pde/eclipse.pde/master/releng/org.eclipse.pde.setup/PDE.setup#/"/>
