@@ -43,7 +43,7 @@
       value="5g"
       vm="true"/>
   <version name="staging"
-      label="Staging (2025-12)"
+      label="Staging (2026-03)"
       requiredJavaVersion="21">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
@@ -82,7 +82,7 @@
       <requirement
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
       <repository
-          url="https://download.eclipse.org/staging/2025-12">
+          url="https://download.eclipse.org/staging/2026-03">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
@@ -96,18 +96,10 @@
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
-          key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/2025-12/r</value>
-      </detail>
-      <detail
           key="shortcut">
         <value>Eclipse Eierlegende Wollmilchsau - Latest</value>
       </detail>
     </annotation>
-    <setupTask
-        xsi:type="setup:RedirectionTask"
-        sourceURL="https://download.eclipse.org/releases/2026-03"
-        targetURL="https://download.eclipse.org/releases/2025-12"/>
     <setupTask
         xsi:type="setup.p2:P2Task"
         label="Eclipse Eierlegende Wollmilchsau (2026-03)">
@@ -149,10 +141,6 @@
       requiredJavaVersion="21">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
-      <detail
-          key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/2025-12/r</value>
-      </detail>
       <detail
           key="shortcut">
         <value>Eclipse Eierlegende Wollmilchsau - Latest Release</value>
@@ -200,18 +188,10 @@
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
-          key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/2025-12/r</value>
-      </detail>
-      <detail
           key="shortcut">
         <value>Eclipse Eierlegende Wollmilchsau - 2026-03</value>
       </detail>
     </annotation>
-    <setupTask
-        xsi:type="setup:RedirectionTask"
-        sourceURL="https://download.eclipse.org/releases/2026-03"
-        targetURL="https://download.eclipse.org/releases/2025-12"/>
     <setupTask
         xsi:type="setup.p2:P2Task"
         label="Eclipse Eierlegende Wollmilchsau (2026-03)">
@@ -256,10 +236,6 @@
       <detail
           key="status">
         <value>current</value>
-      </detail>
-      <detail
-          key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/2025-12/r</value>
       </detail>
       <detail
           key="shortcut">
