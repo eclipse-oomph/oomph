@@ -12,7 +12,7 @@
 <feature
       id="org.eclipse.oomph.setup.projects"
       label="%featureName"
-      version="1.19.0.qualifier"
+      version="1.20.0.qualifier"
       provider-name="%providerName"
       license-feature="org.eclipse.oomph.license"
       license-feature-version="0.0.0">
@@ -36,16 +36,10 @@
 
    <plugin
          id="org.eclipse.oomph.setup.projects"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+         version="0.0.0"/>
 
    <plugin
          id="org.eclipse.oomph.setup.projects.edit"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+         version="0.0.0"/>
 
 </feature>
