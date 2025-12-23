@@ -1937,6 +1937,17 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * @generated
    */
   @Override
+  public EAttribute getEclipseIniTask_Remove()
+  {
+    return (EAttribute)eclipseIniTaskEClass.getEStructuralFeatures().get(3);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public EEnum getTrigger()
   {
     return triggerEEnum;
@@ -2444,6 +2455,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     createEAttribute(eclipseIniTaskEClass, ECLIPSE_INI_TASK__OPTION);
     createEAttribute(eclipseIniTaskEClass, ECLIPSE_INI_TASK__VALUE);
     createEAttribute(eclipseIniTaskEClass, ECLIPSE_INI_TASK__VM);
+    createEAttribute(eclipseIniTaskEClass, ECLIPSE_INI_TASK__REMOVE);
 
     linkLocationTaskEClass = createEClass(LINK_LOCATION_TASK);
     createEAttribute(linkLocationTaskEClass, LINK_LOCATION_TASK__PATH);
@@ -2830,6 +2842,8 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getEclipseIniTask_Vm(), ecorePackage.getEBoolean(), "vm", null, 0, 1, EclipseIniTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getEclipseIniTask_Remove(), ecorePackage.getEBoolean(), "remove", null, 0, 1, EclipseIniTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(linkLocationTaskEClass, LinkLocationTask.class, "LinkLocationTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
     initEAttribute(getLinkLocationTask_Path(), ecorePackage.getEString(), "path", null, 1, 1, LinkLocationTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$

@@ -232,6 +232,8 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//EclipseIniTask/option"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//EclipseIniTask/value"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//EclipseIniTask/vm"/>
+      <genFeatures createChild="false" propertyDescription="Whether to remove the matching option. When set to true, the value will be interpreted as a regular expression to match the option value"
+          ecoreFeature="ecore:EAttribute Setup.ecore#//EclipseIniTask/remove"/>
     </genClasses>
     <genClasses ecoreClass="Setup.ecore#//LinkLocationTask" labelFeature="#//setup/LinkLocationTask/path">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//LinkLocationTask/path"/>

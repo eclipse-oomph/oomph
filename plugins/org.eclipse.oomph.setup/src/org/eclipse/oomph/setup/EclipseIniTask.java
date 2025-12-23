@@ -22,6 +22,7 @@ package org.eclipse.oomph.setup;
  *   <li>{@link org.eclipse.oomph.setup.EclipseIniTask#getOption <em>Option</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.EclipseIniTask#getValue <em>Value</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.EclipseIniTask#isVm <em>Vm</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.EclipseIniTask#isRemove <em>Remove</em>}</li>
  * </ul>
  *
  * @see org.eclipse.oomph.setup.SetupPackage#getEclipseIniTask()
@@ -107,5 +108,30 @@ public interface EclipseIniTask extends SetupTask
    * @generated
    */
   void setVm(boolean value);
+
+  /**
+   * Returns the value of the '<em><b>Remove</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * <!-- begin-model-doc -->
+   * Whether to remove the matching option. When set to true, the value will be interpreted as a regular expression to match the option value
+   * <!-- end-model-doc -->
+   * @return the value of the '<em>Remove</em>' attribute.
+   * @see #setRemove(boolean)
+   * @see org.eclipse.oomph.setup.SetupPackage#getEclipseIniTask_Remove()
+   * @model
+   * @generated
+   */
+  boolean isRemove();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.setup.EclipseIniTask#isRemove <em>Remove</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Remove</em>' attribute.
+   * @see #isRemove()
+   * @generated
+   */
+  void setRemove(boolean value);
 
 } // EclipseIniTask

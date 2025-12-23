@@ -25,6 +25,8 @@ import org.eclipse.osgi.util.NLS;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 /**
  * <!-- begin-user-doc -->
@@ -37,6 +39,7 @@ import java.util.List;
  *   <li>{@link org.eclipse.oomph.setup.impl.EclipseIniTaskImpl#getOption <em>Option</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.EclipseIniTaskImpl#getValue <em>Value</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.EclipseIniTaskImpl#isVm <em>Vm</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.impl.EclipseIniTaskImpl#isRemove <em>Remove</em>}</li>
  * </ul>
  *
  * @generated
@@ -102,6 +105,26 @@ public class EclipseIniTaskImpl extends SetupTaskImpl implements EclipseIniTask
    * @ordered
    */
   protected boolean vm = VM_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #isRemove() <em>Remove</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isRemove()
+   * @generated
+   * @ordered
+   */
+  protected static final boolean REMOVE_EDEFAULT = false;
+
+  /**
+   * The cached value of the '{@link #isRemove() <em>Remove</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isRemove()
+   * @generated
+   * @ordered
+   */
+  protected boolean remove = REMOVE_EDEFAULT;
 
   private transient File file;
 
@@ -215,6 +238,33 @@ public class EclipseIniTaskImpl extends SetupTaskImpl implements EclipseIniTask
    * @generated
    */
   @Override
+  public boolean isRemove()
+  {
+    return remove;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void setRemove(boolean newRemove)
+  {
+    boolean oldRemove = remove;
+    remove = newRemove;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, SetupPackage.ECLIPSE_INI_TASK__REMOVE, oldRemove, remove));
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType)
   {
     switch (featureID)
@@ -225,6 +275,8 @@ public class EclipseIniTaskImpl extends SetupTaskImpl implements EclipseIniTask
         return getValue();
       case SetupPackage.ECLIPSE_INI_TASK__VM:
         return isVm();
+      case SetupPackage.ECLIPSE_INI_TASK__REMOVE:
+        return isRemove();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -247,6 +299,9 @@ public class EclipseIniTaskImpl extends SetupTaskImpl implements EclipseIniTask
         return;
       case SetupPackage.ECLIPSE_INI_TASK__VM:
         setVm((Boolean)newValue);
+        return;
+      case SetupPackage.ECLIPSE_INI_TASK__REMOVE:
+        setRemove((Boolean)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -271,6 +326,9 @@ public class EclipseIniTaskImpl extends SetupTaskImpl implements EclipseIniTask
       case SetupPackage.ECLIPSE_INI_TASK__VM:
         setVm(VM_EDEFAULT);
         return;
+      case SetupPackage.ECLIPSE_INI_TASK__REMOVE:
+        setRemove(REMOVE_EDEFAULT);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -291,6 +349,8 @@ public class EclipseIniTaskImpl extends SetupTaskImpl implements EclipseIniTask
         return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
       case SetupPackage.ECLIPSE_INI_TASK__VM:
         return vm != VM_EDEFAULT;
+      case SetupPackage.ECLIPSE_INI_TASK__REMOVE:
+        return remove != REMOVE_EDEFAULT;
     }
     return super.eIsSet(featureID);
   }
@@ -315,6 +375,8 @@ public class EclipseIniTaskImpl extends SetupTaskImpl implements EclipseIniTask
     result.append(value);
     result.append(", vm: "); //$NON-NLS-1$
     result.append(vm);
+    result.append(", remove: "); //$NON-NLS-1$
+    result.append(remove);
     result.append(')');
     return result.toString();
   }
@@ -327,7 +389,7 @@ public class EclipseIniTaskImpl extends SetupTaskImpl implements EclipseIniTask
 
   public String getLabel(String value)
   {
-    return getOption() + (value == null ? "" : (isVm() ? "" : " ") + value); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+    return getOption() + (value == null ? "" : (isVm() ? "" : " ") + value) + (isRemove() ? " - remove" : ""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
   }
 
   @Override
@@ -367,7 +429,7 @@ public class EclipseIniTaskImpl extends SetupTaskImpl implements EclipseIniTask
       file = new File(context.getProductLocation(), context.getLauncherName() + ".ini"); //$NON-NLS-1$
     }
 
-    if (!file.exists())
+    if (!file.exists() && !context.isSelfHosting())
     {
       context.log(NLS.bind(Messages.EclipseIniTaskImpl_Skipping_message, file));
       return;
@@ -391,6 +453,7 @@ public class EclipseIniTaskImpl extends SetupTaskImpl implements EclipseIniTask
     int vmargsIndex = contents.indexOf("-vmargs"); //$NON-NLS-1$
 
     String option = getOption();
+    boolean remove = isRemove();
     String value = getValue();
     if (value != null && value.trim().isEmpty())
     {
@@ -408,18 +471,38 @@ public class EclipseIniTaskImpl extends SetupTaskImpl implements EclipseIniTask
           String oldLine = contents.get(i);
           if (oldLine.startsWith(optionPrefix))
           {
-            contents.set(i, line);
+            if (remove)
+            {
+              try
+              {
+                Pattern pattern = Pattern.compile(value == null ? ".*" : value); //$NON-NLS-1$
+                if (!pattern.matcher(oldLine.substring(option.length())).matches())
+                {
+                  continue;
+                }
+
+                contents.remove(i);
+              }
+              catch (PatternSyntaxException ex)
+              {
+                context.log(ex);
+              }
+            }
+            else
+            {
+              contents.set(i, line);
+            }
             line = null;
             break;
           }
         }
       }
-      else
+      else if (!remove)
       {
         contents.add("-vmargs"); //$NON-NLS-1$
       }
 
-      if (line != null)
+      if (line != null && !remove)
       {
         contents.add(line);
       }
@@ -429,12 +512,35 @@ public class EclipseIniTaskImpl extends SetupTaskImpl implements EclipseIniTask
       int optionIndex = contents.indexOf(option);
       if (optionIndex != -1)
       {
-        if (value != null)
+        if (remove)
+        {
+          if (value == null)
+          {
+            contents.remove(optionIndex);
+          }
+          else if (optionIndex + 1 < contents.size())
+          {
+            try
+            {
+              Pattern pattern = Pattern.compile(value);
+              if (pattern.matcher(contents.get(optionIndex + 1)).matches())
+              {
+                contents.remove(optionIndex);
+                contents.remove(optionIndex);
+              }
+            }
+            catch (PatternSyntaxException ex)
+            {
+              context.log(ex);
+            }
+          }
+        }
+        else if (value != null)
         {
           contents.set(optionIndex + 1, value);
         }
       }
-      else
+      else if (!remove)
       {
         optionIndex = vmargsIndex != -1 ? vmargsIndex : contents.size();
         contents.add(optionIndex, option);

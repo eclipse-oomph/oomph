@@ -59,6 +59,7 @@ public class EclipseIniTaskItemProvider extends SetupTaskItemProvider
       addOptionPropertyDescriptor(object);
       addValuePropertyDescriptor(object);
       addVmPropertyDescriptor(object);
+      addRemovePropertyDescriptor(object);
     }
     return itemPropertyDescriptors;
   }
@@ -103,6 +104,20 @@ public class EclipseIniTaskItemProvider extends SetupTaskItemProvider
         getString("_UI_EclipseIniTask_vm_feature"), //$NON-NLS-1$
         getString("_UI_PropertyDescriptor_description", "_UI_EclipseIniTask_vm_feature", "_UI_EclipseIniTask_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         SetupPackage.Literals.ECLIPSE_INI_TASK__VM, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
+  }
+
+  /**
+   * This adds a property descriptor for the Remove feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addRemovePropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_EclipseIniTask_remove_feature"), //$NON-NLS-1$
+        getString("_UI_EclipseIniTask_remove_description"), //$NON-NLS-1$
+        SetupPackage.Literals.ECLIPSE_INI_TASK__REMOVE, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
   }
 
   /**
@@ -160,6 +175,7 @@ public class EclipseIniTaskItemProvider extends SetupTaskItemProvider
       case SetupPackage.ECLIPSE_INI_TASK__OPTION:
       case SetupPackage.ECLIPSE_INI_TASK__VALUE:
       case SetupPackage.ECLIPSE_INI_TASK__VM:
+      case SetupPackage.ECLIPSE_INI_TASK__REMOVE:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
         return;
     }

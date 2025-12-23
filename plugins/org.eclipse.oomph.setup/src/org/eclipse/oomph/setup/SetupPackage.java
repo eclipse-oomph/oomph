@@ -2568,13 +2568,22 @@ public interface SetupPackage extends EPackage
   int ECLIPSE_INI_TASK__VM = SETUP_TASK_FEATURE_COUNT + 2;
 
   /**
+   * The feature id for the '<em><b>Remove</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ECLIPSE_INI_TASK__REMOVE = SETUP_TASK_FEATURE_COUNT + 3;
+
+  /**
    * The number of structural features of the '<em>Eclipse Ini Task</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int ECLIPSE_INI_TASK_FEATURE_COUNT = SETUP_TASK_FEATURE_COUNT + 3;
+  int ECLIPSE_INI_TASK_FEATURE_COUNT = SETUP_TASK_FEATURE_COUNT + 4;
 
   /**
    * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
@@ -5246,6 +5255,17 @@ public interface SetupPackage extends EPackage
   EAttribute getEclipseIniTask_Vm();
 
   /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.EclipseIniTask#isRemove <em>Remove</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Remove</em>'.
+   * @see org.eclipse.oomph.setup.EclipseIniTask#isRemove()
+   * @see #getEclipseIniTask()
+   * @generated
+   */
+  EAttribute getEclipseIniTask_Remove();
+
+  /**
    * Returns the meta object for enum '{@link org.eclipse.oomph.setup.Trigger <em>Trigger</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -6721,6 +6741,14 @@ public interface SetupPackage extends EPackage
      * @generated
      */
     EAttribute ECLIPSE_INI_TASK__VM = eINSTANCE.getEclipseIniTask_Vm();
+
+    /**
+     * The meta object literal for the '<em><b>Remove</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute ECLIPSE_INI_TASK__REMOVE = eINSTANCE.getEclipseIniTask_Remove();
 
     /**
      * The meta object literal for the '{@link org.eclipse.oomph.setup.Trigger <em>Trigger</em>}' enum.
