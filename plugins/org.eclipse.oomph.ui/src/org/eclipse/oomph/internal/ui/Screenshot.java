@@ -10,6 +10,7 @@
  */
 package org.eclipse.oomph.internal.ui;
 
+import org.eclipse.oomph.util.OS;
 import org.eclipse.oomph.util.PropertiesUtil;
 import org.eclipse.oomph.util.ReflectUtil;
 
@@ -371,15 +372,23 @@ class Screenshot
 
         // Include the shadow around the top level shell.
         Composite parent = shell.getParent();
-        if (parent == null)
+        if (parent == null || parent instanceof Shell)
         {
-          bounds.x -= 16;
-          bounds.y -= 16;
-          bounds.width += 32;
-          bounds.height += 32;
+          if (OS.INSTANCE.isWin())
+          {
+            bounds.x += 8;
+            bounds.width -= 16;
+            bounds.height -= 8;
+            captureDrawable(composite, bounds, "Parent" + toString(count++) + ".png"); //$NON-NLS-1$ //$NON-NLS-2$
+          }
+
+          bounds.x -= 8;
+          bounds.y -= 8;
+          bounds.width += 16;
+          bounds.height += 16;
         }
 
-        captureDrawable(composite, bounds, "Parent" + toString(count) + ".png"); //$NON-NLS-1$ //$NON-NLS-2$
+        captureDrawable(composite, bounds, "Parent" + toString(count++) + ".png"); //$NON-NLS-1$ //$NON-NLS-2$
 
         // Also take a shot with the borders.
         if (parent != null)
@@ -387,12 +396,12 @@ class Screenshot
           Point clientOffset = parent.toControl(shell.toDisplay(0, 0));
           Point targetPoint = shell.toDisplay(clientOffset);
 
-          bounds.x -= 16;
-          bounds.y -= 16;
-          bounds.width += 32;
-          bounds.height += 32;
+          bounds.x -= 8;
+          bounds.y -= 8;
+          bounds.width += 16;
+          bounds.height += 16;
 
-          captureDrawable(composite, bounds, "Parent" + toString(count) + ".png"); //$NON-NLS-1$ //$NON-NLS-2$
+          captureDrawable(composite, bounds, "Parent" + toString(count++) + ".png"); //$NON-NLS-1$ //$NON-NLS-2$
 
           if (parent.getData() instanceof IWorkbenchWindow)
           {
@@ -428,7 +437,6 @@ class Screenshot
       // Don't capture parents that cover exactly the same area.
       for (Composite parent = composite.getParent(); parent != null; parent = parent.getParent())
       {
-
         if (!parent.getSize().equals(size))
         {
           capture(count + 1, parent);
