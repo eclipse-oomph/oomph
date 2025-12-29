@@ -466,11 +466,11 @@ public class Installer extends SetupWizard
     if (!display.isDisposed())
     {
       display.update();
-    }
 
-    // Clean up out listeners, because we might restart a new installer but with the same display instance.
-    display.removeListener(SWT.OpenDocument, openListener);
-    display.removeListener(SWT.OpenUrl, openListener);
+      // Clean up out listeners, because we might restart a new installer but with the same display instance.
+      display.removeListener(SWT.OpenDocument, openListener);
+      display.removeListener(SWT.OpenUrl, openListener);
+    }
   }
 
   public void switchToNewUserHome(String userHome)
