@@ -1856,7 +1856,12 @@ public class ProductCatalogGenerator implements IApplication
       requirement.setVersionRange(versionRange);
       p2Task.getRequirements().add(requirement);
       addRootIURequirements(p2Task.getRequirements(), versionSegment, ius);
-      addAdditionalInstallRootIURequirements(p2Task.getRequirements(), productName, train);
+      IInstallableUnit productIU = addAdditionalInstallRootIURequirements(p2Task.getRequirements(), productName, train);
+      if (productIU != null && "true".equals(productIU.getProperty("org.eclipse.update.install.sources")))
+      {
+        p2Task.setProfileProperties("org.eclipse.update.install.sources=true");
+      }
+
       for (Requirement additionalRequirement : p2Task.getRequirements())
       {
         String additionalRequirementName = additionalRequirement.getName();
@@ -2344,7 +2349,7 @@ public class ProductCatalogGenerator implements IApplication
     }
   }
 
-  private void addAdditionalInstallRootIURequirements(EList<Requirement> requirements, String productName, String train)
+  private IInstallableUnit addAdditionalInstallRootIURequirements(EList<Requirement> requirements, String productName, String train)
   {
     IMetadataRepository eppMetadataRepository = eppMetaDataRepositories.get(train);
     IInstallableUnit maxProductIU = null;
@@ -2359,12 +2364,12 @@ public class ProductCatalogGenerator implements IApplication
       }
     }
 
-    Set<String> ids = requirements.stream().map(Requirement::getName).collect(Collectors.toSet());
     if (maxProductIU != null)
     {
       Set<String> rootInstallIUs = getRootInstallIUs(maxProductIU);
       if (rootInstallIUs != null)
       {
+        Set<String> ids = requirements.stream().map(Requirement::getName).collect(Collectors.toSet());
         for (String id : rootInstallIUs)
         {
           if (!ids.contains(id))
@@ -2392,6 +2397,8 @@ public class ProductCatalogGenerator implements IApplication
         requirement.setOptional(true);
       }
     }
+
+    return maxProductIU;
   }
 
   private String getTrainLabel(String train)
