@@ -19472,8 +19472,6 @@
         <requirement
             name="org.eclipse.php.profiler.feature.group"/>
         <requirement
-            name="org.eclipse.php.rdt.sync.feature.group"/>
-        <requirement
             name="org.eclipse.terminal.feature.feature.group"/>
         <requirement
             name="org.eclipse.tm4e.feature.feature.group"/>
