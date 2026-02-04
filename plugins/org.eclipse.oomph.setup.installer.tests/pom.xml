@@ -40,7 +40,7 @@
         <artifactId>tycho-surefire-plugin</artifactId>
         <version>${tycho-version}</version>
         <configuration>
-          <argLine>-Doomph.setup.installer.mode=ADVANCED</argLine>
+          <argLine>-Doomph.setup.installer.mode=ADVANCED ${os-jvm-flags}</argLine>
           <useUIHarness>true</useUIHarness>
           <useUIThread>false</useUIThread>
           <product>org.eclipse.oomph.setup.installer.product</product>

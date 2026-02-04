@@ -40,7 +40,7 @@
         <artifactId>tycho-surefire-plugin</artifactId>
         <version>${tycho-version}</version>
         <configuration>
-          <argLine>-Declipse.p2.mirrors=false -Declipse.p2.unsignedPolicy=allow</argLine>
+          <argLine>-Declipse.p2.mirrors=false -Declipse.p2.unsignedPolicy=allow ${os-jvm-flags}</argLine>
           <testClass>org.eclipse.oomph.version.tests.VersionBuilderTest</testClass>
           <forkedProcessTimeoutInSeconds>120</forkedProcessTimeoutInSeconds>
         </configuration>
