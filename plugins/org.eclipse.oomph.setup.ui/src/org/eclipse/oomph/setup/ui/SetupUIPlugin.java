@@ -629,7 +629,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
       for (Object vmInstallType : vmInstallTypes)
       {
         String id = ReflectUtil.invokeMethod("getId", vmInstallType);
-        if ("org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType".equals(id))
+        if ("org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType".equals(id) || "org.eclipse.jdt.internal.launching.macosx.MacOSXType".equals(id))
         {
           Object[] vmInstalls = ReflectUtil.invokeMethod("getVMInstalls", vmInstallType);
           Class<?> vmStandinClass = CommonPlugin.loadClass("org.eclipse.jdt.launching", "org.eclipse.jdt.launching.VMStandin");
