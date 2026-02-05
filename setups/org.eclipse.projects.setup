@@ -1449,10 +1449,9 @@
   <project href="https://raw.githubusercontent.com/eclipse-cdo/cdo.infrastructure/master/org.eclipse.emf.cdo.releng.promotion/CDOPromotion.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-cdt/cdt/main/releng/CDT.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-corrosion/corrosion/master/target-platform/Corrosion.setup#/"/>
-  <project href="https://raw.githubusercontent.com/eclipse/dartboard/master/org.eclipse.dartboard.releng/Dartboard.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-datatools/datatools/master/releng/DataTools.setup#/"/>
   <project href="https://gitlab.eclipse.org/eclipse/ease/ease/-/raw/main/releng/org.eclipse.ease.releng/oomph/ease.setup#/"/>
-  <project href="https://raw.githubusercontent.com/eclipse/ecf/master/releng/org.eclipse.ecf.releng/ECF.setup#/"/>
+  <project href="https://raw.githubusercontent.com/eclipse-ecf/ecf/master/releng/org.eclipse.ecf.releng/ECF.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-eclemma/eclemma/master/EclEmma.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-egit/egit/master/tools/oomph/EGit.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-emf/org.eclipse.emf/master/releng/org.eclipse.emf.releng/EMF.setup#/"/>
@@ -1473,7 +1472,7 @@
   <project href="https://raw.githubusercontent.com/eclipse-modeling/modeling-website/refs/heads/master/Modeling.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-modisco/org.eclipse.modisco/master/releng/org.eclipse.modisco.oomph/setups/modisco.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-mylyn/org.eclipse.mylyn/main/org.eclipse.mylyn.releng/oomph/Mylyn.setup#/"/>
-  <project href="https://raw.githubusercontent.com/eclipse/mwe/master/releng/MWE.setup#/"/>
+  <project href="https://raw.githubusercontent.com/eclipse-mwe/mwe/master/releng/MWE.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-m2e/m2e-core/main/setup/m2e.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-nattable/nattable/master/setup/NatTable.setup#/"/>
   <project href="https://raw.githubusercontent.com/EclipseNebula/nebula/master/oomph.setup#/"/>
@@ -1489,7 +1488,7 @@
   <project href="https://raw.githubusercontent.com/eclipse-qvto/org.eclipse.qvto/master/releng/org.eclipse.qvto.oomph/setups/qvto.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-rcptt/org.eclipse.rcptt/master/releng/RCPTT.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-simrel/simrel.build/main/SimRel.setup#/"/>
-   <project href="https://raw.githubusercontent.com/eclipse-swtbot/org.eclipse.swtbot/master/devtools/oomph/SWTBot.setup#/"/>
+  <project href="https://raw.githubusercontent.com/eclipse-swtbot/org.eclipse.swtbot/master/devtools/oomph/SWTBot.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-tea/tea/master/oomph/EclipseTEA.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-texlipse/texlipse/master/EclipseTeXlipse.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-tracecompass/org.eclipse.tracecompass/master/TraceCompass.setup#/"/>
@@ -1497,8 +1496,8 @@
   <project href="https://raw.githubusercontent.com/eclipse-uml2/uml2/master/releng/org.eclipse.uml2.build-feature/UML2.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-viatra/org.eclipse.viatra/master/releng/org.eclipse.viatra.setup/VIATRAEMF.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-windowbuilder/windowbuilder/master/setups/WindowBuilder.setup#/"/>
-  <project href="https://raw.githubusercontent.com/eclipse/Xpect/master/org.eclipse.xpect.releng/Xpect.setup#/"/>
-  <project href="https://raw.githubusercontent.com/eclipse/xsemantics/master/devtools/org.eclipse.xsemantics.workspace/Xsemantics.setup#/"/>
+  <project href="https://raw.githubusercontent.com/eclipse-xpect/Xpect/master/org.eclipse.xpect.releng/Xpect.setup#/"/>
+  <project href="https://raw.githubusercontent.com/eclipse-xsemantics/xsemantics/master/devtools/org.eclipse.xsemantics.workspace/Xsemantics.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-xtext/xtext/main/releng/org.eclipse.xtext.contributor/Xtext.setup#/"/>
   <description>All the projects at Eclipse.org that provide automated setup support along with additional user-added projects</description>
 </setup:ProjectCatalog>
