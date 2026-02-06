@@ -72,6 +72,12 @@
           name="org.eclipse.sdk.ide"
           versionRange="[4.39.0,5.0.0)"
           filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=aarch64)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=ppc64le)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=riscv64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
+      <requirement
+          name="org.eclipse.e4.core.tools.feature.feature.group"/>
+      <requirement
+          name="org.eclipse.terminal.feature.feature.group"/>
+      <requirement
+          name="org.eclipse.tips.feature.feature.group"/>
       <repository
           url="https://download.eclipse.org/eclipse/updates/4.39-I-builds"/>
       <repository
@@ -124,6 +130,12 @@
           name="org.eclipse.sdk.ide"
           versionRange="[4.39.0,5.0.0)"
           filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=aarch64)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=ppc64le)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=riscv64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
+      <requirement
+          name="org.eclipse.e4.core.tools.feature.feature.group"/>
+      <requirement
+          name="org.eclipse.terminal.feature.feature.group"/>
+      <requirement
+          name="org.eclipse.tips.feature.feature.group"/>
       <repository
           url="https://download.eclipse.org/eclipse/updates/4.39-I-builds"/>
       <repository

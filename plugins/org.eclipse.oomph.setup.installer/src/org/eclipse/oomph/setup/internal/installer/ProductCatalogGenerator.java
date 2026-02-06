@@ -226,8 +226,14 @@ public class ProductCatalogGenerator implements IApplication
 
   private static final Set<String> EXCLUDED_IDS = new HashSet<>(Arrays.asList("epp.package.mobile"));
 
-  private static final Pattern EPP_INSTALL_ROOTS_FILTER_PATTERN = Pattern.compile(
-      "\\((org\\.eclipse\\.epp\\.install\\.roots=true|\\|\\(epp\\.package\\.[^.]+\\.install\\.mode\\.root=true\\)\\(org\\.eclipse\\.equinox\\.p2\\.install\\.mode\\.root=true\\))\\)");
+  private static final Pattern INSTALL_ROOTS_FILTER_PATTERN = Pattern.compile( //
+      "\\(" + //
+          "(" + //
+          "org\\.eclipse\\.epp\\.install\\.roots=true|" + //
+          "\\|\\(epp\\.package\\.[^.]+\\.install\\.mode\\.root=true\\)\\(org\\.eclipse\\.equinox\\.p2\\.install\\.mode\\.root=true\\)|" + //
+          "\\|\\(org\\.eclipse\\.equinox\\.p2\\.install\\.mode\\.root=true\\)\\(org\\.eclipse\\.sdk\\.ide\\.install\\.mode\\.root=true\\)" + //
+          ")" + //
+          "\\)");
 
   private static final Pattern ARCH_OS_FILTER_PATTERN = Pattern.compile("\\(\\&\\(osgi\\.arch=([^)]+)\\)\\(osgi\\.os=([^)]+)\\)\\)");
 
@@ -1233,7 +1239,7 @@ public class ProductCatalogGenerator implements IApplication
           if (filter != null)
           {
             String value = RequirementImpl.formatMatchExpression(filter);
-            if (isEPPInstallRootFilter(value))
+            if (isInstallRootFilter(value))
             {
               continue;
             }
@@ -1326,6 +1332,7 @@ public class ProductCatalogGenerator implements IApplication
     {
       String id = iu.getId();
       CollectionUtil.add(versionIUs, id, iu);
+
       ide = iu;
     }
 
@@ -1709,7 +1716,7 @@ public class ProductCatalogGenerator implements IApplication
           if (filter != null)
           {
             String value = RequirementImpl.formatMatchExpression(filter);
-            if (isEPPInstallRootFilter(value))
+            if (isInstallRootFilter(value))
             {
               continue;
             }
@@ -1906,6 +1913,24 @@ public class ProductCatalogGenerator implements IApplication
       EList<Requirement> requirements = p2Task.getRequirements();
       addAllRootIURequirements(requirements, versionSegment, ius);
       requirements.move(0, requirements.size() - 1);
+
+      if (ECLIPSE_PLATFORM_SDK_PRODUCT_ID.equals(productName))
+      {
+        IInstallableUnit ideIU = ius.values().iterator().next().iterator().next();
+        if (ideIU.getVersion().compareTo(Version.parseVersion("4.39")) >= 0)
+        {
+          Set<String> rootInstallIUs = getRootInstallIUs(ideIU);
+          for (String id : rootInstallIUs)
+          {
+            if (!id.endsWith(".source.feature.group"))
+            {
+              Requirement requirement = P2Factory.eINSTANCE.createRequirement();
+              requirement.setName(id);
+              requirements.add(requirement);
+            }
+          }
+        }
+      }
     }
 
     p2Task.getRequirements().addAll(obsoleteMylynRequirements);
@@ -2832,7 +2857,7 @@ public class ProductCatalogGenerator implements IApplication
         if (filter != null)
         {
           String value = RequirementImpl.formatMatchExpression(filter);
-          if (isEPPInstallRootFilter(value))
+          if (isInstallRootFilter(value))
           {
             String name = capability.getName();
             if (!name.startsWith("org.eclipse.justj.") && !name.equals("org.eclipse.oomph.setup.feature.group")
@@ -3035,9 +3060,9 @@ public class ProductCatalogGenerator implements IApplication
     return repository;
   }
 
-  private boolean isEPPInstallRootFilter(String filter)
+  private boolean isInstallRootFilter(String filter)
   {
-    return filter != null && EPP_INSTALL_ROOTS_FILTER_PATTERN.matcher(filter).matches();
+    return filter != null && INSTALL_ROOTS_FILTER_PATTERN.matcher(filter).matches();
   }
 
   /**
