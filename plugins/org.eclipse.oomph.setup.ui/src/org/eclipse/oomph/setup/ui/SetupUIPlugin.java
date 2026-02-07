@@ -76,6 +76,7 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.XMLHelper;
+import org.eclipse.emf.ecore.xmi.XMLResource;
 
 import org.eclipse.core.commands.Command;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -881,6 +882,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
     Trigger trigger = Trigger.STARTUP;
     boolean restarting = false;
     Set<URI> neededRestartTasks = new HashSet<>();
+    XMLResource restartingResource = null;
 
     try
     {
@@ -888,10 +890,10 @@ public final class SetupUIPlugin extends OomphUIPlugin
       if (restartingFile.exists())
       {
         monitor.setTaskName(NLS.bind(Messages.SetupUIPlugin_loadRestartTasks_taskName, restartingFile));
-        Resource resource = SetupCoreUtil.createResourceSet().getResource(URI.createFileURI(restartingFile.toString()), true);
+        restartingResource = (XMLResource)SetupCoreUtil.createResourceSet().getResource(URI.createFileURI(restartingFile.toString()), true);
 
-        Annotation annotation = (Annotation)EcoreUtil.getObjectByType(resource.getContents(), BasePackage.Literals.ANNOTATION);
-        resource.getContents().remove(annotation);
+        Annotation annotation = (Annotation)EcoreUtil.getObjectByType(restartingResource.getContents(), BasePackage.Literals.ANNOTATION);
+        restartingResource.getContents().remove(annotation);
 
         if (ANNOTATION_SOURCE_INITIAL.equals(annotation.getSource()))
         {
@@ -1046,7 +1048,7 @@ public final class SetupUIPlugin extends OomphUIPlugin
 
       try
       {
-        XMLHelper helper = new BaseResourceImpl.BaseHelperImpl(null);
+        XMLHelper helper = new BaseResourceImpl.BaseHelperImpl(restartingResource);
 
         // At this point we know that no prompt was needed.
         performer.put(P2TaskUISevices.class, new P2TaskUIServicesPrompter());
