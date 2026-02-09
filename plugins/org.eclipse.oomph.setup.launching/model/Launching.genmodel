@@ -14,6 +14,8 @@
           ecoreFeature="ecore:EAttribute Launching.ecore#//LaunchTask/launcher"/>
       <genFeatures createChild="false" propertyDescription="Always run this launcher if triggered by STARTUP"
           ecoreFeature="ecore:EAttribute Launching.ecore#//LaunchTask/runEveryStartup"/>
+      <genFeatures createChild="false" propertyDescription="Terminate the task with an exception if the launched process returns a non-zero exit code"
+          ecoreFeature="ecore:EAttribute Launching.ecore#//LaunchTask/stopOnFailure"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

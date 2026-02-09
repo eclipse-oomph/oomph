@@ -23,6 +23,7 @@ import org.eclipse.oomph.setup.SetupTask;
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.launching.LaunchTask#getLauncher <em>Launcher</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.launching.LaunchTask#isRunEveryStartup <em>Run Every Startup</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.launching.LaunchTask#isStopOnFailure <em>Stop On Failure</em>}</li>
  * </ul>
  *
  * @see org.eclipse.oomph.setup.launching.LaunchingPackage#getLaunchTask()
@@ -79,5 +80,31 @@ public interface LaunchTask extends SetupTask
    * @generated
    */
   void setRunEveryStartup(boolean value);
+
+  /**
+   * Returns the value of the '<em><b>Stop On Failure</b></em>' attribute.
+   * The default value is <code>"false"</code>.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * <!-- begin-model-doc -->
+   * Terminate the task with an exception if the launched process returns a non-zero exit code.
+   * <!-- end-model-doc -->
+   * @return the value of the '<em>Stop On Failure</em>' attribute.
+   * @see #setStopOnFailure(boolean)
+   * @see org.eclipse.oomph.setup.launching.LaunchingPackage#getLaunchTask_StopOnFailure()
+   * @model default="false"
+   * @generated
+   */
+  boolean isStopOnFailure();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.setup.launching.LaunchTask#isStopOnFailure <em>Stop On Failure</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Stop On Failure</em>' attribute.
+   * @see #isStopOnFailure()
+   * @generated
+   */
+  void setStopOnFailure(boolean value);
 
 } // LaunchTask

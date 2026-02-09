@@ -53,6 +53,7 @@ import java.util.regex.Pattern;
  * <ul>
  *   <li>{@link org.eclipse.oomph.setup.launching.impl.LaunchTaskImpl#getLauncher <em>Launcher</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.launching.impl.LaunchTaskImpl#isRunEveryStartup <em>Run Every Startup</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.launching.impl.LaunchTaskImpl#isStopOnFailure <em>Stop On Failure</em>}</li>
  * </ul>
  *
  * @generated
@@ -102,6 +103,26 @@ public class LaunchTaskImpl extends SetupTaskImpl implements LaunchTask
    * @ordered
    */
   protected boolean runEveryStartup = RUN_EVERY_STARTUP_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #isStopOnFailure() <em>Stop On Failure</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isStopOnFailure()
+   * @generated
+   * @ordered
+   */
+  protected static final boolean STOP_ON_FAILURE_EDEFAULT = false;
+
+  /**
+   * The cached value of the '{@link #isStopOnFailure() <em>Stop On Failure</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isStopOnFailure()
+   * @generated
+   * @ordered
+   */
+  protected boolean stopOnFailure = STOP_ON_FAILURE_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -184,6 +205,33 @@ public class LaunchTaskImpl extends SetupTaskImpl implements LaunchTask
    * @generated
    */
   @Override
+  public boolean isStopOnFailure()
+  {
+    return stopOnFailure;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void setStopOnFailure(boolean newStopOnFailure)
+  {
+    boolean oldStopOnFailure = stopOnFailure;
+    stopOnFailure = newStopOnFailure;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, LaunchingPackage.LAUNCH_TASK__STOP_ON_FAILURE, oldStopOnFailure, stopOnFailure));
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType)
   {
     switch (featureID)
@@ -192,6 +240,8 @@ public class LaunchTaskImpl extends SetupTaskImpl implements LaunchTask
         return getLauncher();
       case LaunchingPackage.LAUNCH_TASK__RUN_EVERY_STARTUP:
         return isRunEveryStartup();
+      case LaunchingPackage.LAUNCH_TASK__STOP_ON_FAILURE:
+        return isStopOnFailure();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -211,6 +261,9 @@ public class LaunchTaskImpl extends SetupTaskImpl implements LaunchTask
         return;
       case LaunchingPackage.LAUNCH_TASK__RUN_EVERY_STARTUP:
         setRunEveryStartup((Boolean)newValue);
+        return;
+      case LaunchingPackage.LAUNCH_TASK__STOP_ON_FAILURE:
+        setStopOnFailure((Boolean)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -232,6 +285,9 @@ public class LaunchTaskImpl extends SetupTaskImpl implements LaunchTask
       case LaunchingPackage.LAUNCH_TASK__RUN_EVERY_STARTUP:
         setRunEveryStartup(RUN_EVERY_STARTUP_EDEFAULT);
         return;
+      case LaunchingPackage.LAUNCH_TASK__STOP_ON_FAILURE:
+        setStopOnFailure(STOP_ON_FAILURE_EDEFAULT);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -250,6 +306,8 @@ public class LaunchTaskImpl extends SetupTaskImpl implements LaunchTask
         return LAUNCHER_EDEFAULT == null ? launcher != null : !LAUNCHER_EDEFAULT.equals(launcher);
       case LaunchingPackage.LAUNCH_TASK__RUN_EVERY_STARTUP:
         return runEveryStartup != RUN_EVERY_STARTUP_EDEFAULT;
+      case LaunchingPackage.LAUNCH_TASK__STOP_ON_FAILURE:
+        return stopOnFailure != STOP_ON_FAILURE_EDEFAULT;
     }
     return super.eIsSet(featureID);
   }
@@ -272,6 +330,8 @@ public class LaunchTaskImpl extends SetupTaskImpl implements LaunchTask
     result.append(launcher);
     result.append(", runEveryStartup: "); //$NON-NLS-1$
     result.append(runEveryStartup);
+    result.append(", stopOnFailure: "); //$NON-NLS-1$
+    result.append(stopOnFailure);
     result.append(')');
     return result.toString();
   }
@@ -390,6 +450,18 @@ public class LaunchTaskImpl extends SetupTaskImpl implements LaunchTask
 
           if (launch.isTerminated())
           {
+            if (stopOnFailure)
+            {
+              for (IProcess process : processes)
+              {
+                int exitValue = process.getExitValue();
+                if (exitValue != 0)
+                {
+                  throw new Exception(NLS.bind(Messages.LaunchTaskImpl_NonZeroExitCode, exitValue));
+                }
+              }
+            }
+
             HISTORY.setProperty(launcher, processes.length > 0 ? Integer.toString(processes[0].getExitValue()) : "-1"); //$NON-NLS-1$
             return;
           }

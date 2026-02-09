@@ -187,13 +187,22 @@ public interface LaunchingPackage extends EPackage
   int LAUNCH_TASK__RUN_EVERY_STARTUP = SetupPackage.SETUP_TASK_FEATURE_COUNT + 1;
 
   /**
+   * The feature id for the '<em><b>Stop On Failure</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int LAUNCH_TASK__STOP_ON_FAILURE = SetupPackage.SETUP_TASK_FEATURE_COUNT + 2;
+
+  /**
    * The number of structural features of the '<em>Launch Task</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int LAUNCH_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 2;
+  int LAUNCH_TASK_FEATURE_COUNT = SetupPackage.SETUP_TASK_FEATURE_COUNT + 3;
 
   /**
    * Returns the meta object for class '{@link org.eclipse.oomph.setup.launching.LaunchTask <em>Launch Task</em>}'.
@@ -226,6 +235,17 @@ public interface LaunchingPackage extends EPackage
    * @generated
    */
   EAttribute getLaunchTask_RunEveryStartup();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.launching.LaunchTask#isStopOnFailure <em>Stop On Failure</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Stop On Failure</em>'.
+   * @see org.eclipse.oomph.setup.launching.LaunchTask#isStopOnFailure()
+   * @see #getLaunchTask()
+   * @generated
+   */
+  EAttribute getLaunchTask_StopOnFailure();
 
   /**
    * Returns the factory that creates the instances of the model.
@@ -275,6 +295,14 @@ public interface LaunchingPackage extends EPackage
      * @generated
      */
     EAttribute LAUNCH_TASK__RUN_EVERY_STARTUP = eINSTANCE.getLaunchTask_RunEveryStartup();
+
+    /**
+     * The meta object literal for the '<em><b>Stop On Failure</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute LAUNCH_TASK__STOP_ON_FAILURE = eINSTANCE.getLaunchTask_StopOnFailure();
 
   }
 

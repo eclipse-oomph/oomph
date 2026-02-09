@@ -17,6 +17,8 @@ public class Messages extends NLS
 
   public static String LaunchTaskImpl_LauncherNotFoundWaiting_message;
 
+  public static String LaunchTaskImpl_NonZeroExitCode;
+
   public static String LaunchTaskImpl_RefreshFinished_message;
 
   static

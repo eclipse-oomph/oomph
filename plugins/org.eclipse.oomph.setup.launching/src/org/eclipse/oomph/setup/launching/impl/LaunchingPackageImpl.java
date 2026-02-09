@@ -146,6 +146,17 @@ public class LaunchingPackageImpl extends EPackageImpl implements LaunchingPacka
    * @generated
    */
   @Override
+  public EAttribute getLaunchTask_StopOnFailure()
+  {
+    return (EAttribute)launchTaskEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public LaunchingFactory getLaunchingFactory()
   {
     return (LaunchingFactory)getEFactoryInstance();
@@ -177,6 +188,7 @@ public class LaunchingPackageImpl extends EPackageImpl implements LaunchingPacka
     launchTaskEClass = createEClass(LAUNCH_TASK);
     createEAttribute(launchTaskEClass, LAUNCH_TASK__LAUNCHER);
     createEAttribute(launchTaskEClass, LAUNCH_TASK__RUN_EVERY_STARTUP);
+    createEAttribute(launchTaskEClass, LAUNCH_TASK__STOP_ON_FAILURE);
   }
 
   /**
@@ -222,6 +234,8 @@ public class LaunchingPackageImpl extends EPackageImpl implements LaunchingPacka
     initEAttribute(getLaunchTask_Launcher(), ecorePackage.getEString(), "launcher", null, 1, 1, LaunchTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
         !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getLaunchTask_RunEveryStartup(), ecorePackage.getEBoolean(), "runEveryStartup", "false", 0, 1, LaunchTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$ //$NON-NLS-2$
+        IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getLaunchTask_StopOnFailure(), ecorePackage.getEBoolean(), "stopOnFailure", "false", 0, 1, LaunchTask.class, !IS_TRANSIENT, !IS_VOLATILE, //$NON-NLS-1$ //$NON-NLS-2$
         IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Create resource

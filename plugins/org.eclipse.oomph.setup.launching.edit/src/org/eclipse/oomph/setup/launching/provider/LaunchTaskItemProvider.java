@@ -72,6 +72,7 @@ public class LaunchTaskItemProvider extends SetupTaskItemProvider
 
       addLauncherPropertyDescriptor(object);
       addRunEveryStartupPropertyDescriptor(object);
+      addStopOnFailurePropertyDescriptor(object);
     }
     return itemPropertyDescriptors;
   }
@@ -180,6 +181,20 @@ public class LaunchTaskItemProvider extends SetupTaskItemProvider
   }
 
   /**
+   * This adds a property descriptor for the Stop On Failure feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addStopOnFailurePropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_LaunchTask_stopOnFailure_feature"), //$NON-NLS-1$
+        getString("_UI_LaunchTask_stopOnFailure_description"), //$NON-NLS-1$
+        LaunchingPackage.Literals.LAUNCH_TASK__STOP_ON_FAILURE, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
+  }
+
+  /**
    * This returns LaunchTask.gif.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -232,6 +247,7 @@ public class LaunchTaskItemProvider extends SetupTaskItemProvider
     {
       case LaunchingPackage.LAUNCH_TASK__LAUNCHER:
       case LaunchingPackage.LAUNCH_TASK__RUN_EVERY_STARTUP:
+      case LaunchingPackage.LAUNCH_TASK__STOP_ON_FAILURE:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
         return;
     }
