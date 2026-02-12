@@ -43,18 +43,18 @@
     </detail>
     <detail
         key="uri">
-      <value>https://www.eclipse.org/setups/notification/java25/</value>
+      <value>https://www.eclipse.org/setups/notification/java26/</value>
     </detail>
     <content
         xsi:type="p2:Requirement"
         name="org.eclipse.jdt.javanextpatch.feature.group"
-        versionRange="[1.25.0,1.26.0)"
+        versionRange="[1.26.0,1.27.0)"
         optional="true"
         max="0"/>
     <content
         xsi:type="p2:Requirement"
         name="org.eclipse.jdt.feature.group"
-        versionRange="[3.20.300.v20250828-0630,3.20.399)"/>
+        versionRange="[3.20.500.v20260211-1800,3.20.599)"/>
   </annotation>
   <annotation
       source="http://www.eclipse.org/oomph/setup/Notification-Disabled">

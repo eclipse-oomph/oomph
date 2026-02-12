@@ -4,7 +4,7 @@
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<link href="https://eclipseide.org/favicon.ico" rel="icon" type="image/x-icon" />
-	<title>Install Java 25 Support</title>
+	<title>Install Java 26 Support</title>
 	<link rel="preconnect stylesheet" href="../notification.css" />
 	<style>
 		/* <![CDATA[*/
@@ -38,7 +38,7 @@
 		function handleSections() {
 			const query = new URLSearchParams(window.location.search);
 			if (query.has('jre-only')) {
-				document.title = 'Install a Java 25 JDK';
+				document.title = 'Install a Java 26 JDK';
 				const installJDKSection = document.getElementById('install-jdk');
 				installJDKSection.style.display = 'block';
 				const installPatchSection = document.getElementById('install-patch');
@@ -80,24 +80,24 @@
 			</div>
 			<div id="install-jdk" style="display: none;">
 				<div class="section">
-					You have support for Java 25 installed in the IDE but don't appear to have a Java 25 JDK.
+					You have support for Java 26 installed in the IDE but don't appear to have a Java 26 JDK.
 				</div>
 				<div class="section">
-					Would you like to download a Java 25 JDK?
+					Would you like to download a Java 26 JDK?
 				</div>
 				<div class="button-section">
 					<span class="adoptium">
 						<label class="button">
-							<a href="eclipse+external:https://adoptium.net/temurin/releases/?version=25">
-								Download Temurin JDK 25
+							<a href="eclipse+external:https://adoptium.net/temurin/releases/?version=26">
+								Download Temurin JDK 26
 							</a>
 						</label>
 						&nbsp;
 					</span>
 					<span>
 						<label class="button">
-							<a href="eclipse+external:https://jdk.java.net/25/">
-								Download OpenJDK 25
+							<a href="eclipse+external:https://jdk.java.net/26/">
+								Download OpenJDK 26
 							</a>
 						</label>
 						&nbsp;
@@ -117,14 +117,14 @@
 			</div>
 			<div id="install-patch">
 				<div class="section">
-					Java 25 has been released.
+					Java 26 has been released.
 				</div>
 				<div class="section">
-					Would you like to install Eclipse Java Development Tools support for Java 25 into your IDE?
+					Would you like to install Eclipse Java Development Tools support for Java 26 into your IDE?
 				</div>
 				<div class="button-section">
 					<label class="button">
-						<a href="eclipse+setup:Java25.setup">Install Java 25 Support</a>
+						<a href="eclipse+setup:Java26.setup">Install Java 26 Support</a>
 					</label>
 					&nbsp;
 					<label class="button">
@@ -148,21 +148,21 @@
 					-->
 				</div>
 				<div class="section">
-					Would you like to download a Java 25 JDK?
+					Would you like to download a Java 26 JDK?
 				</div>
 				<div class="section">
 					<span class="adoptium">
 						<label class="button">
-							<a href="eclipse+external:https://adoptium.net/temurin/releases/?version=25">
-								Download Temurin JDK 25
+							<a href="eclipse+external:https://adoptium.net/temurin/releases/?version=26">
+								Download Temurin JDK 26
 							</a>
 						</label>
 						&nbsp;
 					</span>
 					<span>
 						<label class="button">
-							<a href="eclipse+external:https://jdk.java.net/25">
-								Download OpenJDK 25
+							<a href="eclipse+external:https://jdk.java.net/26">
+								Download OpenJDK 26
 							</a>
 						</label>
 					</span>
