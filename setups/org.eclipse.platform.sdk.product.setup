@@ -83,6 +83,32 @@
       <repository
           url="https://download.eclipse.org/oomph/updates/latest"/>
     </setupTask>
+    <setupTask
+        xsi:type="setup:VariableTask"
+        type="BOOLEAN"
+        name="install.jdt.javanextpatch.26"
+        defaultValue="false"
+        storageURI="scope://Installation"
+        label="Install Eclipse Java Development Tools update for Java 26 (BETA)">
+      <annotation
+          source="http://www.eclipse.org/oomph/setup/SimpleDefaultVariable"/>
+      <description>A patch feature that updates JDT with support for Java 26 (BETA)</description>
+    </setupTask>
+    <setupTask
+        xsi:type="setup:CompoundTask"
+        filter="(install.jdt.javanextpatch.26=true)"
+        name="Eclipse Java Development Tools update for Java 26 (BETA)">
+      <setupTask
+          xsi:type="setup.p2:P2Task"
+          label="Eclipse Java Development Tools update for Java 26 (BETA)">
+        <requirement
+            name="org.eclipse.jdt.javanextpatch.feature.group"
+            versionRange="[1.26.0,1.27.0)"
+            optional="true"/>
+        <repository
+            url="https://download.eclipse.org/jdt/updates/4.39-P-builds"/>
+      </setupTask>
+    </setupTask>
   </version>
   <version name="latest.released"
       label="Latest Release (4.38 - 2025-12)"
