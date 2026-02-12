@@ -425,13 +425,14 @@ public class JREComposite extends Composite
     if (filter != null)
     {
       Integer major = filter.getMajor();
-      if (major > 1)
+      if (major != null && major > 1)
       {
         request.put("version", Integer.toString(major)); //$NON-NLS-1$
       }
       else
       {
-        if (filter.getMinor() == 8)
+        Integer minor = filter.getMinor();
+        if (minor != null && minor == 8)
         {
           request.put("version", "8"); //$NON-NLS-1$ //$NON-NLS-2$
         }
