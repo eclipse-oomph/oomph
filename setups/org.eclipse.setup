@@ -78,7 +78,7 @@
         max="0"/>
   </annotation>
   <annotation
-      source="http://www.eclipse.org/oomph/setup/Notification">
+      source="http://www.eclipse.org/oomph/setup/Notification-Disabled">
     <detail
         key="maximize">
       <value>false</value>
@@ -93,7 +93,7 @@
         versionRange="[4.38.0,4.39.0.20260226-0825)"/>
   </annotation>
   <annotation
-      source="http://www.eclipse.org/oomph/setup/Notification">
+      source="http://www.eclipse.org/oomph/setup/Notification-Disabled">
     <detail
         key="maximize">
       <value>false</value>
