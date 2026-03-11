@@ -43,7 +43,7 @@
       value="5g"
       vm="true"/>
   <version name="staging"
-      label="Staging (2026-03)"
+      label="Staging (2026-06)"
       requiredJavaVersion="21">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
@@ -57,7 +57,7 @@
         label="Eclipse Eierlegende Wollmilchsau (Staging)">
       <requirement
           name="org.eclipse.platform.ide"
-          versionRange="[4.39.0,5.0.0)"
+          versionRange="[4.40.0,5.0.0)"
           filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=aarch64)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=riscv64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
       <requirement
           name="Application Development Frameworks"/>
@@ -82,7 +82,7 @@
       <requirement
           name="Web, XML, Java EE and OSGi Enterprise Development"/>
       <repository
-          url="https://download.eclipse.org/staging/2026-03">
+          url="https://download.eclipse.org/staging/2026-06">
         <annotation
             source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
       </repository>
@@ -96,18 +96,10 @@
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
-          key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/2026-03/r</value>
-      </detail>
-      <detail
           key="shortcut">
         <value>Eclipse Eierlegende Wollmilchsau - Latest</value>
       </detail>
     </annotation>
-    <setupTask
-        xsi:type="setup:RedirectionTask"
-        sourceURL="https://download.eclipse.org/releases/2026-06"
-        targetURL="https://download.eclipse.org/releases/2026-03"/>
     <setupTask
         xsi:type="setup.p2:P2Task"
         label="Eclipse Eierlegende Wollmilchsau (2026-06)">
@@ -200,18 +192,10 @@
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
-          key="siteURI">
-        <value>https://www.eclipse.org/downloads/packages/release/2026-03/r</value>
-      </detail>
-      <detail
           key="shortcut">
         <value>Eclipse Eierlegende Wollmilchsau - 2026-06</value>
       </detail>
     </annotation>
-    <setupTask
-        xsi:type="setup:RedirectionTask"
-        sourceURL="https://download.eclipse.org/releases/2026-06"
-        targetURL="https://download.eclipse.org/releases/2026-03"/>
     <setupTask
         xsi:type="setup.p2:P2Task"
         label="Eclipse Eierlegende Wollmilchsau (2026-06)">

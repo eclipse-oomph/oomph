@@ -66,7 +66,7 @@
     </annotation>
     <version
         name="staging"
-        label="Staging (2026-03)"
+        label="Staging (2026-06)"
         requiredJavaVersion="21">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
@@ -80,14 +80,14 @@
           label="Eclipse IDE for Java Developers (Staging)">
         <requirement
             name="epp.package.java"
-            versionRange="[4.39.0,5.0.0)"
+            versionRange="[4.40.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=aarch64)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=riscv64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.39.0,5.0.0)"/>
+            versionRange="[4.40.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.39.0,5.0.0)"/>
+            versionRange="[4.40.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -139,7 +139,7 @@
         <repository
             url="https://download.eclipse.org/technology/epp/staging/repository"/>
         <repository
-            url="https://download.eclipse.org/staging/2026-03">
+            url="https://download.eclipse.org/staging/2026-06">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -154,18 +154,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2026-03/r/eclipse-ide-java-developers</value>
-        </detail>
-        <detail
             key="shortcut">
           <value>Eclipse IDE for Java Developers - Latest</value>
         </detail>
       </annotation>
-      <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2026-06"
-          targetURL="https://download.eclipse.org/releases/2026-03"/>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Java Developers (2026-06)">
@@ -227,6 +219,8 @@
             name="org.eclipse.tm4e.language_pack.feature.feature.group"/>
         <requirement
             name="org.eclipse.wildwebdeveloper.xml.feature.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/technology/epp/packages/2026-06"/>
         <repository
             url="https://download.eclipse.org/releases/2026-06">
           <annotation
@@ -326,18 +320,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2026-03/r/eclipse-ide-java-developers</value>
-        </detail>
-        <detail
             key="shortcut">
           <value>Eclipse IDE for Java Developers - 2026-06</value>
         </detail>
       </annotation>
-      <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2026-06"
-          targetURL="https://download.eclipse.org/releases/2026-03"/>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Java Developers (2026-06)">
@@ -399,6 +385,8 @@
             name="org.eclipse.tm4e.language_pack.feature.feature.group"/>
         <requirement
             name="org.eclipse.wildwebdeveloper.xml.feature.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/technology/epp/packages/2026-06"/>
         <repository
             url="https://download.eclipse.org/releases/2026-06">
           <annotation
@@ -3337,7 +3325,7 @@
     </annotation>
     <version
         name="staging"
-        label="Staging (2026-03)"
+        label="Staging (2026-06)"
         requiredJavaVersion="21">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
@@ -3351,14 +3339,14 @@
           label="Eclipse IDE for Enterprise Java and Web Developers (Staging)">
         <requirement
             name="epp.package.jee"
-            versionRange="[4.39.0,5.0.0)"
+            versionRange="[4.40.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=aarch64)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=riscv64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.39.0,5.0.0)"/>
+            versionRange="[4.40.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.39.0,5.0.0)"/>
+            versionRange="[4.40.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -3542,7 +3530,7 @@
         <repository
             url="https://download.eclipse.org/technology/epp/staging/repository"/>
         <repository
-            url="https://download.eclipse.org/staging/2026-03">
+            url="https://download.eclipse.org/staging/2026-06">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -3557,18 +3545,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2026-03/r/eclipse-ide-enterprise-java-and-web-developers</value>
-        </detail>
-        <detail
             key="shortcut">
           <value>Eclipse IDE for Enterprise Java and Web Developers - Latest</value>
         </detail>
       </annotation>
-      <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2026-06"
-          targetURL="https://download.eclipse.org/releases/2026-03"/>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Enterprise Java and Web Developers (2026-06)">
@@ -3762,6 +3742,8 @@
             name="org.eclipse.wst.server_adapters.feature.feature.group"/>
         <requirement
             name="org.eclipse.wst.xsl.feature.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/technology/epp/packages/2026-06"/>
         <repository
             url="https://download.eclipse.org/releases/2026-06">
           <annotation
@@ -3993,18 +3975,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2026-03/r/eclipse-ide-enterprise-java-and-web-developers</value>
-        </detail>
-        <detail
             key="shortcut">
           <value>Eclipse IDE for Enterprise Java and Web Developers - 2026-06</value>
         </detail>
       </annotation>
-      <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2026-06"
-          targetURL="https://download.eclipse.org/releases/2026-03"/>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Enterprise Java and Web Developers (2026-06)">
@@ -4198,6 +4172,8 @@
             name="org.eclipse.wst.server_adapters.feature.feature.group"/>
         <requirement
             name="org.eclipse.wst.xsl.feature.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/technology/epp/packages/2026-06"/>
         <repository
             url="https://download.eclipse.org/releases/2026-06">
           <annotation
@@ -11582,7 +11558,7 @@
     </annotation>
     <version
         name="staging"
-        label="Staging (2026-03)"
+        label="Staging (2026-06)"
         requiredJavaVersion="21">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
@@ -11596,14 +11572,14 @@
           label="Eclipse IDE for C/C++ Developers (Staging)">
         <requirement
             name="epp.package.cpp"
-            versionRange="[4.39.0,5.0.0)"
+            versionRange="[4.40.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=aarch64)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=riscv64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.39.0,5.0.0)"/>
+            versionRange="[4.40.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.39.0,5.0.0)"/>
+            versionRange="[4.40.0,5.0.0)"/>
         <requirement
             name="org.eclipse.cdt.autotools.feature.group"/>
         <requirement
@@ -11693,7 +11669,7 @@
         <repository
             url="https://download.eclipse.org/technology/epp/staging/repository"/>
         <repository
-            url="https://download.eclipse.org/staging/2026-03">
+            url="https://download.eclipse.org/staging/2026-06">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -11708,18 +11684,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2026-03/r/eclipse-ide-cc-developers</value>
-        </detail>
-        <detail
             key="shortcut">
           <value>Eclipse IDE for C and C++ Developers - Latest</value>
         </detail>
       </annotation>
-      <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2026-06"
-          targetURL="https://download.eclipse.org/releases/2026-03"/>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for C/C++ Developers (2026-06)">
@@ -11819,6 +11787,8 @@
             name="org.eclipse.tracecompass.lttng2.kernel.feature.group"/>
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/technology/epp/packages/2026-06"/>
         <repository
             url="https://download.eclipse.org/releases/2026-06">
           <annotation
@@ -11956,18 +11926,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2026-03/r/eclipse-ide-cc-developers</value>
-        </detail>
-        <detail
             key="shortcut">
           <value>Eclipse IDE for C and C++ Developers - 2026-06</value>
         </detail>
       </annotation>
-      <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2026-06"
-          targetURL="https://download.eclipse.org/releases/2026-03"/>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for C/C++ Developers (2026-06)">
@@ -12067,6 +12029,8 @@
             name="org.eclipse.tracecompass.lttng2.kernel.feature.group"/>
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/technology/epp/packages/2026-06"/>
         <repository
             url="https://download.eclipse.org/releases/2026-06">
           <annotation
@@ -16152,7 +16116,7 @@
     </annotation>
     <version
         name="staging"
-        label="Staging (2026-03)"
+        label="Staging (2026-06)"
         requiredJavaVersion="21">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
@@ -16166,14 +16130,14 @@
           label="Eclipse IDE for Embedded C/C++ Developers (Staging)">
         <requirement
             name="epp.package.embedcpp"
-            versionRange="[4.39.0,5.0.0)"
+            versionRange="[4.40.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=aarch64)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=riscv64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.39.0,5.0.0)"/>
+            versionRange="[4.40.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.39.0,5.0.0)"/>
+            versionRange="[4.40.0,5.0.0)"/>
         <requirement
             name="org.eclipse.cdt.autotools.feature.group"/>
         <requirement
@@ -16291,7 +16255,7 @@
         <repository
             url="https://download.eclipse.org/technology/epp/staging/repository"/>
         <repository
-            url="https://download.eclipse.org/staging/2026-03">
+            url="https://download.eclipse.org/staging/2026-06">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -16306,18 +16270,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2026-03/r/eclipse-ide-embedded-cc-developers</value>
-        </detail>
-        <detail
             key="shortcut">
           <value>Eclipse IDE for Embedded C and C++ Developers - Latest</value>
         </detail>
       </annotation>
-      <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2026-06"
-          targetURL="https://download.eclipse.org/releases/2026-03"/>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Embedded C/C++ Developers (2026-06)">
@@ -16445,6 +16401,8 @@
             name="org.eclipse.tracecompass.lttng2.kernel.feature.group"/>
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/technology/epp/packages/2026-06"/>
         <repository
             url="https://download.eclipse.org/releases/2026-06">
           <annotation
@@ -16610,18 +16568,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2026-03/r/eclipse-ide-embedded-cc-developers</value>
-        </detail>
-        <detail
             key="shortcut">
           <value>Eclipse IDE for Embedded C and C++ Developers - 2026-06</value>
         </detail>
       </annotation>
-      <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2026-06"
-          targetURL="https://download.eclipse.org/releases/2026-03"/>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Embedded C/C++ Developers (2026-06)">
@@ -16749,6 +16699,8 @@
             name="org.eclipse.tracecompass.lttng2.kernel.feature.group"/>
         <requirement
             name="org.eclipse.tracecompass.lttng2.ust.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/technology/epp/packages/2026-06"/>
         <repository
             url="https://download.eclipse.org/releases/2026-06">
           <annotation
@@ -20023,7 +19975,7 @@
     </annotation>
     <version
         name="staging"
-        label="Staging (2026-03)"
+        label="Staging (2026-06)"
         requiredJavaVersion="21">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
@@ -20037,14 +19989,14 @@
           label="Eclipse IDE for PHP Developers (Staging)">
         <requirement
             name="epp.package.php"
-            versionRange="[4.39.0,5.0.0)"
+            versionRange="[4.40.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=aarch64)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=riscv64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.39.0,5.0.0)"/>
+            versionRange="[4.40.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.39.0,5.0.0)"/>
+            versionRange="[4.40.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -20094,7 +20046,7 @@
         <repository
             url="https://download.eclipse.org/technology/epp/staging/repository"/>
         <repository
-            url="https://download.eclipse.org/staging/2026-03">
+            url="https://download.eclipse.org/staging/2026-06">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -20109,18 +20061,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2026-03/r/eclipse-ide-php-developers</value>
-        </detail>
-        <detail
             key="shortcut">
           <value>Eclipse IDE for PHP Developers - Latest</value>
         </detail>
       </annotation>
-      <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2026-06"
-          targetURL="https://download.eclipse.org/releases/2026-03"/>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for PHP Developers (2026-06)">
@@ -20180,6 +20124,8 @@
             name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/technology/epp/packages/2026-06"/>
         <repository
             url="https://download.eclipse.org/releases/2026-06">
           <annotation
@@ -20277,18 +20223,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2026-03/r/eclipse-ide-php-developers</value>
-        </detail>
-        <detail
             key="shortcut">
           <value>Eclipse IDE for PHP Developers - 2026-06</value>
         </detail>
       </annotation>
-      <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2026-06"
-          targetURL="https://download.eclipse.org/releases/2026-03"/>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for PHP Developers (2026-06)">
@@ -20348,6 +20286,8 @@
             name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/technology/epp/packages/2026-06"/>
         <repository
             url="https://download.eclipse.org/releases/2026-06">
           <annotation
@@ -23255,7 +23195,7 @@
     </annotation>
     <version
         name="staging"
-        label="Staging (2026-03)"
+        label="Staging (2026-06)"
         requiredJavaVersion="21">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
@@ -23270,14 +23210,14 @@
           profileProperties="org.eclipse.update.install.sources=true">
         <requirement
             name="epp.package.committers"
-            versionRange="[4.39.0,5.0.0)"
+            versionRange="[4.40.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=aarch64)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=riscv64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.39.0,5.0.0)"/>
+            versionRange="[4.40.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.39.0,5.0.0)"/>
+            versionRange="[4.40.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -23343,7 +23283,7 @@
         <repository
             url="https://download.eclipse.org/technology/epp/staging/repository"/>
         <repository
-            url="https://download.eclipse.org/staging/2026-03">
+            url="https://download.eclipse.org/staging/2026-06">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -23358,18 +23298,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2026-03/r/eclipse-ide-eclipse-committers</value>
-        </detail>
-        <detail
             key="shortcut">
           <value>Eclipse IDE for Eclipse Committers - Latest</value>
         </detail>
       </annotation>
-      <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2026-06"
-          targetURL="https://download.eclipse.org/releases/2026-03"/>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Eclipse Committers (2026-06)"
@@ -23446,6 +23378,8 @@
             name="org.eclipse.wildwebdeveloper.embedder.node.feature.feature.group"/>
         <requirement
             name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/technology/epp/packages/2026-06"/>
         <repository
             url="https://download.eclipse.org/releases/2026-06">
           <annotation
@@ -23560,18 +23494,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2026-03/r/eclipse-ide-eclipse-committers</value>
-        </detail>
-        <detail
             key="shortcut">
           <value>Eclipse IDE for Eclipse Committers - 2026-06</value>
         </detail>
       </annotation>
-      <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2026-06"
-          targetURL="https://download.eclipse.org/releases/2026-03"/>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse IDE for Eclipse Committers (2026-06)"
@@ -23648,6 +23574,8 @@
             name="org.eclipse.wildwebdeveloper.embedder.node.feature.feature.group"/>
         <requirement
             name="org.eclipse.wildwebdeveloper.feature.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/technology/epp/packages/2026-06"/>
         <repository
             url="https://download.eclipse.org/releases/2026-06">
           <annotation
@@ -27523,7 +27451,7 @@
     </annotation>
     <version
         name="staging"
-        label="Staging (2026-03)"
+        label="Staging (2026-06)"
         requiredJavaVersion="21">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
@@ -27538,14 +27466,14 @@
           profileProperties="org.eclipse.update.install.sources=true">
         <requirement
             name="epp.package.dsl"
-            versionRange="[4.39.0,5.0.0)"
+            versionRange="[4.40.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=aarch64)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=riscv64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.39.0,5.0.0)"/>
+            versionRange="[4.40.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.39.0,5.0.0)"/>
+            versionRange="[4.40.0,5.0.0)"/>
         <requirement
             name="org.eclipse.buildship.feature.group"/>
         <requirement
@@ -27587,7 +27515,7 @@
         <repository
             url="https://download.eclipse.org/technology/epp/staging/repository"/>
         <repository
-            url="https://download.eclipse.org/staging/2026-03">
+            url="https://download.eclipse.org/staging/2026-06">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -27602,18 +27530,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2026-03/r/eclipse-ide-java-and-dsl-developers</value>
-        </detail>
-        <detail
             key="shortcut">
           <value>Eclipse IDE for Java and DSL Developers - Latest</value>
         </detail>
       </annotation>
-      <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2026-06"
-          targetURL="https://download.eclipse.org/releases/2026-03"/>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse DSL Tools (2026-06)"
@@ -27666,6 +27586,8 @@
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <requirement
             name="org.eclipse.xtext.sdk.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/technology/epp/packages/2026-06"/>
         <repository
             url="https://download.eclipse.org/releases/2026-06">
           <annotation
@@ -27756,18 +27678,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2026-03/r/eclipse-ide-java-and-dsl-developers</value>
-        </detail>
-        <detail
             key="shortcut">
           <value>Eclipse IDE for Java and DSL Developers - 2026-06</value>
         </detail>
       </annotation>
-      <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2026-06"
-          targetURL="https://download.eclipse.org/releases/2026-03"/>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse DSL Tools (2026-06)"
@@ -27820,6 +27734,8 @@
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
         <requirement
             name="org.eclipse.xtext.sdk.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/technology/epp/packages/2026-06"/>
         <repository
             url="https://download.eclipse.org/releases/2026-06">
           <annotation
@@ -30305,7 +30221,7 @@
     </annotation>
     <version
         name="staging"
-        label="Staging (2026-03)"
+        label="Staging (2026-06)"
         requiredJavaVersion="21">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
@@ -30320,14 +30236,14 @@
           profileProperties="org.eclipse.update.install.sources=true">
         <requirement
             name="epp.package.rcp"
-            versionRange="[4.39.0,5.0.0)"
+            versionRange="[4.40.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=aarch64)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=riscv64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.39.0,5.0.0)"/>
+            versionRange="[4.40.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.39.0,5.0.0)"/>
+            versionRange="[4.40.0,5.0.0)"/>
         <requirement
             name="org.eclipse.jdt.feature.group"
             versionRange="[3.20.0,4.0.0)"/>
@@ -30406,7 +30322,7 @@
         <repository
             url="https://download.eclipse.org/technology/epp/staging/repository"/>
         <repository
-            url="https://download.eclipse.org/staging/2026-03">
+            url="https://download.eclipse.org/staging/2026-06">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -30421,18 +30337,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2026-03/r/eclipse-ide-rcp-and-rap-developers</value>
-        </detail>
-        <detail
             key="shortcut">
           <value>Eclipse IDE for RCP and RAP Developers - Latest</value>
         </detail>
       </annotation>
-      <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2026-06"
-          targetURL="https://download.eclipse.org/releases/2026-03"/>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for RCP and RAP Developers (2026-06)"
@@ -30517,6 +30425,8 @@
             name="org.eclipse.tm4e.language_pack.feature.feature.group"/>
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/technology/epp/packages/2026-06"/>
         <repository
             url="https://download.eclipse.org/releases/2026-06">
           <annotation
@@ -30639,18 +30549,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2026-03/r/eclipse-ide-rcp-and-rap-developers</value>
-        </detail>
-        <detail
             key="shortcut">
           <value>Eclipse IDE for RCP and RAP Developers - 2026-06</value>
         </detail>
       </annotation>
-      <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2026-06"
-          targetURL="https://download.eclipse.org/releases/2026-03"/>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for RCP and RAP Developers (2026-06)"
@@ -30735,6 +30637,8 @@
             name="org.eclipse.tm4e.language_pack.feature.feature.group"/>
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/technology/epp/packages/2026-06"/>
         <repository
             url="https://download.eclipse.org/releases/2026-06">
           <annotation
@@ -34300,7 +34204,7 @@
     </annotation>
     <version
         name="staging"
-        label="Staging (2026-03)"
+        label="Staging (2026-06)"
         requiredJavaVersion="21">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
@@ -34315,14 +34219,14 @@
           profileProperties="org.eclipse.update.install.sources=true">
         <requirement
             name="epp.package.modeling"
-            versionRange="[4.39.0,5.0.0)"
+            versionRange="[4.40.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=aarch64)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=riscv64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.39.0,5.0.0)"/>
+            versionRange="[4.40.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.39.0,5.0.0)"/>
+            versionRange="[4.40.0,5.0.0)"/>
         <requirement
             name="org.eclipse.e4.core.tools.feature.feature.group"/>
         <requirement
@@ -34402,7 +34306,7 @@
         <repository
             url="https://download.eclipse.org/technology/epp/staging/repository"/>
         <repository
-            url="https://download.eclipse.org/staging/2026-03">
+            url="https://download.eclipse.org/staging/2026-06">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -34417,18 +34321,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2026-03/r/eclipse-modeling-tools</value>
-        </detail>
-        <detail
             key="shortcut">
           <value>Eclipse Modeling Tools - Latest</value>
         </detail>
       </annotation>
-      <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2026-06"
-          targetURL="https://download.eclipse.org/releases/2026-03"/>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse Modeling Tools (2026-06)"
@@ -34519,6 +34415,8 @@
             name="org.eclipse.uml2.sdk.feature.group"/>
         <requirement
             name="org.eclipse.xsd.sdk.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/technology/epp/packages/2026-06"/>
         <repository
             url="https://download.eclipse.org/releases/2026-06">
           <annotation
@@ -34647,18 +34545,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2026-03/r/eclipse-modeling-tools</value>
-        </detail>
-        <detail
             key="shortcut">
           <value>Eclipse Modeling Tools - 2026-06</value>
         </detail>
       </annotation>
-      <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2026-06"
-          targetURL="https://download.eclipse.org/releases/2026-03"/>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse Modeling Tools (2026-06)"
@@ -34749,6 +34639,8 @@
             name="org.eclipse.uml2.sdk.feature.group"/>
         <requirement
             name="org.eclipse.xsd.sdk.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/technology/epp/packages/2026-06"/>
         <repository
             url="https://download.eclipse.org/releases/2026-06">
           <annotation
@@ -38668,7 +38560,7 @@
     </annotation>
     <version
         name="staging"
-        label="Staging (2026-03)"
+        label="Staging (2026-06)"
         requiredJavaVersion="21">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
@@ -38682,14 +38574,14 @@
           label="Eclipse for Scout Developers (Staging)">
         <requirement
             name="epp.package.scout"
-            versionRange="[4.39.0,5.0.0)"
+            versionRange="[4.40.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=aarch64)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=riscv64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.39.0,5.0.0)"/>
+            versionRange="[4.40.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.39.0,5.0.0)"/>
+            versionRange="[4.40.0,5.0.0)"/>
         <requirement
             name="org.eclipse.egit.feature.group"/>
         <requirement
@@ -38741,7 +38633,7 @@
         <repository
             url="https://download.eclipse.org/technology/epp/staging/repository"/>
         <repository
-            url="https://download.eclipse.org/staging/2026-03">
+            url="https://download.eclipse.org/staging/2026-06">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -38756,18 +38648,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2026-03/r/eclipse-ide-scout-developers</value>
-        </detail>
-        <detail
             key="shortcut">
           <value>Eclipse IDE for Scout Developers - Latest</value>
         </detail>
       </annotation>
-      <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2026-06"
-          targetURL="https://download.eclipse.org/releases/2026-03"/>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for Scout Developers (2026-06)">
@@ -38829,6 +38713,8 @@
             name="org.eclipse.wst.web_ui.feature.feature.group"/>
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/technology/epp/packages/2026-06"/>
         <repository
             url="https://download.eclipse.org/releases/2026-06">
           <annotation
@@ -38928,18 +38814,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
-            key="siteURI">
-          <value>https://www.eclipse.org/downloads/packages/release/2026-03/r/eclipse-ide-scout-developers</value>
-        </detail>
-        <detail
             key="shortcut">
           <value>Eclipse IDE for Scout Developers - 2026-06</value>
         </detail>
       </annotation>
-      <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2026-06"
-          targetURL="https://download.eclipse.org/releases/2026-03"/>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse for Scout Developers (2026-06)">
@@ -39001,6 +38879,8 @@
             name="org.eclipse.wst.web_ui.feature.feature.group"/>
         <requirement
             name="org.eclipse.wst.xml_ui.feature.feature.group"/>
+        <repository
+            url="https://download.eclipse.org/technology/epp/packages/2026-06"/>
         <repository
             url="https://download.eclipse.org/releases/2026-06">
           <annotation
@@ -41939,7 +41819,7 @@
     </annotation>
     <version
         name="staging"
-        label="Staging (2026-03)"
+        label="Staging (2026-06)"
         requiredJavaVersion="21">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
@@ -41953,16 +41833,16 @@
           label="Eclipse Platform (Staging)">
         <requirement
             name="org.eclipse.platform.ide"
-            versionRange="[4.39.0,5.0.0)"
+            versionRange="[4.40.0,5.0.0)"
             filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=aarch64)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=riscv64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
         <requirement
             name="org.eclipse.platform.feature.group"
-            versionRange="[4.39.0,5.0.0)"/>
+            versionRange="[4.40.0,5.0.0)"/>
         <requirement
             name="org.eclipse.rcp.feature.group"
-            versionRange="[4.39.0,5.0.0)"/>
+            versionRange="[4.40.0,5.0.0)"/>
         <repository
-            url="https://download.eclipse.org/staging/2026-03">
+            url="https://download.eclipse.org/staging/2026-06">
           <annotation
               source="http://www.eclipse.org/oomph/setup/ReleaseTrain"/>
         </repository>
@@ -41981,10 +41861,6 @@
           <value>Eclipse Platform - Latest</value>
         </detail>
       </annotation>
-      <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2026-06"
-          targetURL="https://download.eclipse.org/releases/2026-03"/>
       <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse Platform (2026-06)">
@@ -42011,6 +41887,10 @@
         requiredJavaVersion="21">
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+        <detail
+            key="siteURI">
+          <value>https://archive.eclipse.org/eclipse/downloads/drops4/R-4.39-202602260420/</value>
+        </detail>
         <detail
             key="shortcut">
           <value>Eclipse Platform - Latest Release</value>
@@ -42048,10 +41928,6 @@
         </detail>
       </annotation>
       <setupTask
-          xsi:type="setup:RedirectionTask"
-          sourceURL="https://download.eclipse.org/releases/2026-06"
-          targetURL="https://download.eclipse.org/releases/2026-03"/>
-      <setupTask
           xsi:type="setup.p2:P2Task"
           label="Eclipse Platform (2026-06)">
         <requirement
@@ -42080,6 +41956,10 @@
         <detail
             key="status">
           <value>current</value>
+        </detail>
+        <detail
+            key="siteURI">
+          <value>https://archive.eclipse.org/eclipse/downloads/drops4/R-4.39-202602260420/</value>
         </detail>
         <detail
             key="shortcut">
