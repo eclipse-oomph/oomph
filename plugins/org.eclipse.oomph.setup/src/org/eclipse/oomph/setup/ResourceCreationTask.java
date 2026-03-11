@@ -23,6 +23,7 @@ package org.eclipse.oomph.setup;
  *   <li>{@link org.eclipse.oomph.setup.ResourceCreationTask#getContent <em>Content</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.ResourceCreationTask#getTargetURL <em>Target URL</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.ResourceCreationTask#getEncoding <em>Encoding</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.ResourceCreationTask#getLastModified <em>Last Modified</em>}</li>
  * </ul>
  *
  * @see org.eclipse.oomph.setup.SetupPackage#getResourceCreationTask()
@@ -135,5 +136,57 @@ public interface ResourceCreationTask extends SetupTask
    * @generated
    */
   void setEncoding(String value);
+
+  /**
+   * Returns the value of the '<em><b>Last Modified</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * <!-- begin-model-doc -->
+   * The value used to call File.setLastModified, where negative values are added to the current time in milliseconds.
+   * <!-- end-model-doc -->
+   * @return the value of the '<em>Last Modified</em>' attribute.
+   * @see #isSetLastModified()
+   * @see #unsetLastModified()
+   * @see #setLastModified(long)
+   * @see org.eclipse.oomph.setup.SetupPackage#getResourceCreationTask_LastModified()
+   * @model unsettable="true"
+   * @generated
+   */
+  long getLastModified();
+
+  /**
+   * Sets the value of the '{@link org.eclipse.oomph.setup.ResourceCreationTask#getLastModified <em>Last Modified</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Last Modified</em>' attribute.
+   * @see #isSetLastModified()
+   * @see #unsetLastModified()
+   * @see #getLastModified()
+   * @generated
+   */
+  void setLastModified(long value);
+
+  /**
+   * Unsets the value of the '{@link org.eclipse.oomph.setup.ResourceCreationTask#getLastModified <em>Last Modified</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isSetLastModified()
+   * @see #getLastModified()
+   * @see #setLastModified(long)
+   * @generated
+   */
+  void unsetLastModified();
+
+  /**
+   * Returns whether the value of the '{@link org.eclipse.oomph.setup.ResourceCreationTask#getLastModified <em>Last Modified</em>}' attribute is set.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return whether the value of the '<em>Last Modified</em>' attribute is set.
+   * @see #unsetLastModified()
+   * @see #getLastModified()
+   * @see #setLastModified(long)
+   * @generated
+   */
+  boolean isSetLastModified();
 
 } // ResourceCreationTask

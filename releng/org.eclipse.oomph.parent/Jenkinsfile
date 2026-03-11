@@ -40,7 +40,7 @@ pipeline {
 
     choice(
       name: 'RESTRICTED_VERSION',
-      choices: ['2026-03'],
+      choices: ['2026-06'],
       description: '''
         The product version for the restricted variants of the installer.
       '''

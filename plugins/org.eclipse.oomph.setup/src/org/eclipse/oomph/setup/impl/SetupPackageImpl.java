@@ -1893,6 +1893,17 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
    * @generated
    */
   @Override
+  public EAttribute getResourceCreationTask_LastModified()
+  {
+    return (EAttribute)resourceCreationTaskEClass.getEStructuralFeatures().get(4);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public EClass getEclipseIniTask()
   {
     return eclipseIniTaskEClass;
@@ -2476,6 +2487,7 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
     createEAttribute(resourceCreationTaskEClass, RESOURCE_CREATION_TASK__CONTENT);
     createEAttribute(resourceCreationTaskEClass, RESOURCE_CREATION_TASK__TARGET_URL);
     createEAttribute(resourceCreationTaskEClass, RESOURCE_CREATION_TASK__ENCODING);
+    createEAttribute(resourceCreationTaskEClass, RESOURCE_CREATION_TASK__LAST_MODIFIED);
 
     textModifyTaskEClass = createEClass(TEXT_MODIFY_TASK);
     createEAttribute(textModifyTaskEClass, TEXT_MODIFY_TASK__URL);
@@ -2876,6 +2888,8 @@ public class SetupPackageImpl extends EPackageImpl implements SetupPackage
         !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getResourceCreationTask_Encoding(), ecorePackage.getEString(), "encoding", null, 0, 1, ResourceCreationTask.class, !IS_TRANSIENT, //$NON-NLS-1$
         !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getResourceCreationTask_LastModified(), ecorePackage.getELong(), "lastModified", null, 0, 1, ResourceCreationTask.class, !IS_TRANSIENT, //$NON-NLS-1$
+        !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(textModifyTaskEClass, TextModifyTask.class, "TextModifyTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
     initEAttribute(getTextModifyTask_URL(), ecorePackage.getEString(), "uRL", null, 1, 1, TextModifyTask.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$

@@ -255,6 +255,10 @@
       <genFeatures createChild="false" propertyMultiLine="true" ecoreFeature="ecore:EAttribute Setup.ecore#//ResourceCreationTask/content"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//ResourceCreationTask/targetURL"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//ResourceCreationTask/encoding"/>
+      <genFeatures createChild="false" propertyDescription="The value used to call File.setLastModified, where negative values are added to the current time in milliseconds"
+          ecoreFeature="ecore:EAttribute Setup.ecore#//ResourceCreationTask/lastModified">
+        <propertyFilterFlags>org.eclipse.ui.views.properties.expert</propertyFilterFlags>
+      </genFeatures>
     </genClasses>
     <genClasses ecoreClass="Setup.ecore#//TextModifyTask" labelFeature="#//setup/TextModifyTask/uRL">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Setup.ecore#//TextModifyTask/uRL"/>

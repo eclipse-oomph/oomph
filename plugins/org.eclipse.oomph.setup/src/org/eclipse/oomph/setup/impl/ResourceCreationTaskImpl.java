@@ -23,6 +23,7 @@ import org.eclipse.emf.ecore.xml.type.XMLTypeFactory;
 
 import org.eclipse.osgi.util.NLS;
 
+import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -41,6 +42,7 @@ import java.util.Objects;
  *   <li>{@link org.eclipse.oomph.setup.impl.ResourceCreationTaskImpl#getContent <em>Content</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.ResourceCreationTaskImpl#getTargetURL <em>Target URL</em>}</li>
  *   <li>{@link org.eclipse.oomph.setup.impl.ResourceCreationTaskImpl#getEncoding <em>Encoding</em>}</li>
+ *   <li>{@link org.eclipse.oomph.setup.impl.ResourceCreationTaskImpl#getLastModified <em>Last Modified</em>}</li>
  * </ul>
  *
  * @generated
@@ -126,6 +128,35 @@ public class ResourceCreationTaskImpl extends SetupTaskImpl implements ResourceC
    * @ordered
    */
   protected String encoding = ENCODING_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #getLastModified() <em>Last Modified</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getLastModified()
+   * @generated
+   * @ordered
+   */
+  protected static final long LAST_MODIFIED_EDEFAULT = 0L;
+
+  /**
+   * The cached value of the '{@link #getLastModified() <em>Last Modified</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getLastModified()
+   * @generated
+   * @ordered
+   */
+  protected long lastModified = LAST_MODIFIED_EDEFAULT;
+
+  /**
+   * This is true if the Last Modified attribute has been set.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  protected boolean lastModifiedESet;
 
   /**
    * <!-- begin-user-doc -->
@@ -262,6 +293,66 @@ public class ResourceCreationTaskImpl extends SetupTaskImpl implements ResourceC
    * @generated
    */
   @Override
+  public long getLastModified()
+  {
+    return lastModified;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void setLastModified(long newLastModified)
+  {
+    long oldLastModified = lastModified;
+    lastModified = newLastModified;
+    boolean oldLastModifiedESet = lastModifiedESet;
+    lastModifiedESet = true;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.SET, SetupPackage.RESOURCE_CREATION_TASK__LAST_MODIFIED, oldLastModified, lastModified,
+          !oldLastModifiedESet));
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void unsetLastModified()
+  {
+    long oldLastModified = lastModified;
+    boolean oldLastModifiedESet = lastModifiedESet;
+    lastModified = LAST_MODIFIED_EDEFAULT;
+    lastModifiedESet = false;
+    if (eNotificationRequired())
+    {
+      eNotify(new ENotificationImpl(this, Notification.UNSET, SetupPackage.RESOURCE_CREATION_TASK__LAST_MODIFIED, oldLastModified, LAST_MODIFIED_EDEFAULT,
+          oldLastModifiedESet));
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public boolean isSetLastModified()
+  {
+    return lastModifiedESet;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType)
   {
     switch (featureID)
@@ -274,6 +365,8 @@ public class ResourceCreationTaskImpl extends SetupTaskImpl implements ResourceC
         return getTargetURL();
       case SetupPackage.RESOURCE_CREATION_TASK__ENCODING:
         return getEncoding();
+      case SetupPackage.RESOURCE_CREATION_TASK__LAST_MODIFIED:
+        return getLastModified();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -299,6 +392,9 @@ public class ResourceCreationTaskImpl extends SetupTaskImpl implements ResourceC
         return;
       case SetupPackage.RESOURCE_CREATION_TASK__ENCODING:
         setEncoding((String)newValue);
+        return;
+      case SetupPackage.RESOURCE_CREATION_TASK__LAST_MODIFIED:
+        setLastModified((Long)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -326,6 +422,9 @@ public class ResourceCreationTaskImpl extends SetupTaskImpl implements ResourceC
       case SetupPackage.RESOURCE_CREATION_TASK__ENCODING:
         setEncoding(ENCODING_EDEFAULT);
         return;
+      case SetupPackage.RESOURCE_CREATION_TASK__LAST_MODIFIED:
+        unsetLastModified();
+        return;
     }
     super.eUnset(featureID);
   }
@@ -348,6 +447,8 @@ public class ResourceCreationTaskImpl extends SetupTaskImpl implements ResourceC
         return TARGET_URL_EDEFAULT == null ? targetURL != null : !TARGET_URL_EDEFAULT.equals(targetURL);
       case SetupPackage.RESOURCE_CREATION_TASK__ENCODING:
         return ENCODING_EDEFAULT == null ? encoding != null : !ENCODING_EDEFAULT.equals(encoding);
+      case SetupPackage.RESOURCE_CREATION_TASK__LAST_MODIFIED:
+        return isSetLastModified();
     }
     return super.eIsSet(featureID);
   }
@@ -441,7 +542,8 @@ public class ResourceCreationTaskImpl extends SetupTaskImpl implements ResourceC
     URI targetURI = createResolvedURI(getTargetURL());
     URIConverter uriConverter = context.getURIConverter();
 
-    context.log(NLS.bind(Messages.ResourceCreationTaskImpl_Creating_message, uriConverter.normalize(targetURI)));
+    URI normalizedURI = uriConverter.normalize(targetURI);
+    context.log(NLS.bind(Messages.ResourceCreationTaskImpl_Creating_message, normalizedURI));
 
     String content = getContent();
     OutputStream outputStream = uriConverter.createOutputStream(targetURI);
@@ -461,6 +563,12 @@ public class ResourceCreationTaskImpl extends SetupTaskImpl implements ResourceC
     }
 
     outputStream.close();
+
+    if (isSetLastModified() && normalizedURI.isFile())
+    {
+      File file = new File(normalizedURI.toFileString());
+      file.setLastModified(lastModified < 0 ? System.currentTimeMillis() + lastModified : lastModified);
+    }
   }
 
 } // ResourceCreationTaskImpl

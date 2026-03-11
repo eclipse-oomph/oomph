@@ -3091,13 +3091,22 @@ public interface SetupPackage extends EPackage
   int RESOURCE_CREATION_TASK__ENCODING = SETUP_TASK_FEATURE_COUNT + 3;
 
   /**
+   * The feature id for the '<em><b>Last Modified</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int RESOURCE_CREATION_TASK__LAST_MODIFIED = SETUP_TASK_FEATURE_COUNT + 4;
+
+  /**
    * The number of structural features of the '<em>Resource Creation Task</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int RESOURCE_CREATION_TASK_FEATURE_COUNT = SETUP_TASK_FEATURE_COUNT + 4;
+  int RESOURCE_CREATION_TASK_FEATURE_COUNT = SETUP_TASK_FEATURE_COUNT + 5;
 
   /**
    * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
@@ -5212,6 +5221,17 @@ public interface SetupPackage extends EPackage
   EAttribute getResourceCreationTask_Encoding();
 
   /**
+   * Returns the meta object for the attribute '{@link org.eclipse.oomph.setup.ResourceCreationTask#getLastModified <em>Last Modified</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Last Modified</em>'.
+   * @see org.eclipse.oomph.setup.ResourceCreationTask#getLastModified()
+   * @see #getResourceCreationTask()
+   * @generated
+   */
+  EAttribute getResourceCreationTask_LastModified();
+
+  /**
    * Returns the meta object for class '{@link org.eclipse.oomph.setup.EclipseIniTask <em>Eclipse Ini Task</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -6707,6 +6727,14 @@ public interface SetupPackage extends EPackage
      * @generated
      */
     EAttribute RESOURCE_CREATION_TASK__ENCODING = eINSTANCE.getResourceCreationTask_Encoding();
+
+    /**
+     * The meta object literal for the '<em><b>Last Modified</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute RESOURCE_CREATION_TASK__LAST_MODIFIED = eINSTANCE.getResourceCreationTask_LastModified();
 
     /**
      * The meta object literal for the '{@link org.eclipse.oomph.setup.impl.EclipseIniTaskImpl <em>Eclipse Ini Task</em>}' class.

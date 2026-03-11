@@ -68,6 +68,7 @@ public class ResourceCreationTaskItemProvider extends SetupTaskItemProvider
       addContentPropertyDescriptor(object);
       addTargetURLPropertyDescriptor(object);
       addEncodingPropertyDescriptor(object);
+      addLastModifiedPropertyDescriptor(object);
     }
     return itemPropertyDescriptors;
   }
@@ -129,6 +130,22 @@ public class ResourceCreationTaskItemProvider extends SetupTaskItemProvider
   }
 
   /**
+   * This adds a property descriptor for the Last Modified feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addLastModifiedPropertyDescriptor(Object object)
+  {
+    itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+        getString("_UI_ResourceCreationTask_lastModified_feature"), //$NON-NLS-1$
+        getString("_UI_ResourceCreationTask_lastModified_description"), //$NON-NLS-1$
+        SetupPackage.Literals.RESOURCE_CREATION_TASK__LAST_MODIFIED, true, false, false, ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE, null,
+        new String[] { "org.eclipse.ui.views.properties.expert" //$NON-NLS-1$
+        }));
+  }
+
+  /**
    * This returns ResourceCreationTask.gif.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -183,6 +200,7 @@ public class ResourceCreationTaskItemProvider extends SetupTaskItemProvider
       case SetupPackage.RESOURCE_CREATION_TASK__CONTENT:
       case SetupPackage.RESOURCE_CREATION_TASK__TARGET_URL:
       case SetupPackage.RESOURCE_CREATION_TASK__ENCODING:
+      case SetupPackage.RESOURCE_CREATION_TASK__LAST_MODIFIED:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
         return;
     }
