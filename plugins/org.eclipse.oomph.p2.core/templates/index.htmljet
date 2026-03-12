@@ -524,7 +524,7 @@ span:target {
 <%if (indexReport != null) {%>
            <p>
              This is a generated
-             <a href="https://wiki.eclipse.org/Oomph_Repository_Analyzer#Description" target="oomph_wiki">
+             <a href="https://eclipse.dev/oomph/?file=Repository_Analyzer.md" target="oomph_wiki">
                <img class="fit-image" src="<%=reporter.getHelpImage()%>"/>
                <%=reporter.getHelpText()%></a> report.
            </p>

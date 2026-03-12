@@ -125,7 +125,7 @@ public class RepositoryIndex
   protected static final String _92 = "<a href=\"";
   protected static final String _93 = "<a href=\"#cert_";
   protected static final String _94 = "<a href=\"#pgp_";
-  protected static final String _95 = "<a href=\"https://wiki.eclipse.org/Oomph_Repository_Analyzer#Description\" target=\"oomph_wiki\">";
+  protected static final String _95 = "<a href=\"https://eclipse.dev/oomph/?file=Repository_Analyzer.md\" target=\"oomph_wiki\">";
   protected static final String _96 = "<a href=\"https://www.eclipse.org/\">";
   protected static final String _97 = "<a style=\"float:right; font-size: 200%;\" href=\"";
   protected static final String _98 = "<aside id=\"leftcol\" class=\"col-md-4 font-smaller\">";

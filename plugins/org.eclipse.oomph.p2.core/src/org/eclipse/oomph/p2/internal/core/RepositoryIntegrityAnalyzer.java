@@ -298,6 +298,8 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
   private boolean verbose;
 
+  private boolean debug = Boolean.getBoolean("RepositoryIntegrityAnalyzer.debug");
+
   private boolean aggregator;
 
   private boolean packages;
@@ -3540,8 +3542,16 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         {
           String location = key + '.' + imageURI.fileExtension();
           File locationFile = new File(cache, location);
+          if (debug)
+          {
+            System.out.println("About to save getImage: " + imageURI + " -> " + locationFile);
+          }
           imageOut = new FileOutputStream(locationFile);
           IOUtil.copy(new ByteArrayInputStream(imageBytes), imageOut);
+          if (debug)
+          {
+            System.out.println("Saving getImage: " + imageURI + " -> " + locationFile);
+          }
           result = location;
           images.put(key, result);
           images.put(imageURI, result);

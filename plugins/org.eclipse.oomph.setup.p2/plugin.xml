@@ -22,4 +22,34 @@
             genModel="model/SetupP2.genmodel"/>
    </extension>
 
+   <extension
+        point="org.eclipse.core.contenttype.contentTypes">
+     <content-type
+           base-type="org.eclipse.emf.ecore.xmi"
+           file-extensions="p2f"
+           id="org.eclipse.oomph.p2.core.p2f"
+           name="Installed Software Items File"
+           priority="normal">
+        <describer
+              class="org.eclipse.emf.ecore.xmi.impl.RootXMLContentHandlerImpl$Describer">
+           <parameter
+                 name="elementNames"
+                 value="p2f">
+           </parameter>
+           <parameter
+                 name="kind"
+                 value="xml">
+           </parameter>
+        </describer>
+     </content-type>
+   </extension>
+
+   <extension
+         point="org.eclipse.emf.ecore.content_parser">
+      <parser
+            class="org.eclipse.oomph.setup.p2.impl.P2FResourceFactorImpl"
+            contentTypeIdentifier="org.eclipse.oomph.p2.core.p2f">
+      </parser>
+   </extension>
+
 </plugin>
