@@ -953,7 +953,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         for (File file : outputLocation.listFiles())
         {
           String name = file.getName();
-          if (name.endsWith(".png"))
+          if (name.endsWith(".png") || name.endsWith(".svg"))
           {
             IOUtil.copyFile(file, new File(publishLocation, name));
           }
