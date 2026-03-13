@@ -3550,7 +3550,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
           IOUtil.copy(new ByteArrayInputStream(imageBytes), imageOut);
           if (debug)
           {
-            System.out.println("Saving getImage: " + imageURI + " -> " + locationFile);
+            System.out.println("Saving getImage: " + imageURI + " -> " + locationFile + " -> " + locationFile.isFile());
           }
           result = location;
           images.put(key, result);
