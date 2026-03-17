@@ -90,7 +90,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -135,8 +134,6 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
   public static final String ANNOTATION_GENERATE_SERVER_XML = "generateServerXML"; //$NON-NLS-1$
 
   public static final String NESTED_ANNOTATION_REPOSITORY_IDS = "RepositoryIDs"; //$NON-NLS-1$
-
-  private static final Pattern SEQUENCE_NUMBER_PATTERN = Pattern.compile("sequenceNumber=\"([0-9]+)\""); //$NON-NLS-1$
 
   private static final String TRUE = Boolean.TRUE.toString();
 
@@ -283,20 +280,9 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
 
     new FileUpdater()
     {
-      private int sequenceNumber;
-
       @Override
       protected String createNewContents(String oldContents, String encoding, String nl)
       {
-        if (oldContents != null)
-        {
-          Matcher matcher = SEQUENCE_NUMBER_PATTERN.matcher(oldContents);
-          if (matcher.find())
-          {
-            sequenceNumber = Integer.parseInt(matcher.group(1));
-          }
-        }
-
         XML.Escaper escaper = new XML.Escaper(encoding);
 
         StringBuilder builder = new StringBuilder();
@@ -304,7 +290,7 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
         builder.append(nl);
         builder.append("<?pde version=\"3.8\"?>"); //$NON-NLS-1$
         builder.append(nl);
-        builder.append("<target name=\"" + escaper.escape(name) + "\" sequenceNumber=\"" + sequenceNumber + "\">"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        builder.append("<target name=\"" + escaper.escape(name) + "\">"); //$NON-NLS-1$ //$NON-NLS-2$
         builder.append(nl);
         builder.append("  <locations>"); //$NON-NLS-1$
         builder.append(nl);
@@ -425,7 +411,6 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
       protected void setContents(URI uri, String encoding, String contents) throws IOException
       {
         monitor.subTask(NLS.bind(Messages.TargetDefinitionGenerator_Updating_task, uri.isPlatformResource() ? uri.toPlatformString(true) : uri.toFileString()));
-        contents = contents.replace("sequenceNumber=\"" + sequenceNumber + "\"", "sequenceNumber=\"" + (sequenceNumber + 1) + "\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
         super.setContents(uri, encoding, contents);
       }
 
