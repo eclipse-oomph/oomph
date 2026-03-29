@@ -3631,7 +3631,8 @@ public class RepositoryIntegrityAnalyzer implements IApplication
               if (artifactLocation != null)
               {
                 java.net.URI location = repository.getLocation();
-                java.net.URI relativeLocation = location.relativize(artifactLocation);
+                Matcher matcher = Pattern.compile("jar:.*?!/(.*)").matcher(artifactLocation.toString());
+                java.net.URI relativeLocation = matcher.matches() ? java.net.URI.create(matcher.group(1)) : location.relativize(artifactLocation);
                 File targetLocation = new File(cache, relativeLocation.toString());
                 if (!targetLocation.isFile())
                 {
