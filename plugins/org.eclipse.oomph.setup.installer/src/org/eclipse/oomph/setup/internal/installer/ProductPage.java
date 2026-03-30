@@ -679,6 +679,7 @@ public class ProductPage extends SetupWizardPage
     AccessUtil.setKey(catalogsButton, "catalogs"); //$NON-NLS-1$
 
     final FilteredTreeWithoutWorkbench filteredTree = new FilteredTreeWithoutWorkbench(treeComposite, SWT.BORDER);
+    filteredTree.getPatternFilter().setIncludeLeadingWildcard(true);
     Control filterControl = filteredTree.getChildren()[0];
     filterControl.setParent(filterPlaceholder);
     AccessUtil.setKey(filteredTree.getFilterControl(), "filter"); //$NON-NLS-1$

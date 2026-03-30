@@ -395,6 +395,10 @@ public class ProjectPage extends SetupWizardPage
 
     PatternFilter patternFilter = new PatternFilter()
     {
+      {
+        setIncludeLeadingWildcard(true);
+      }
+
       @Override
       protected boolean isLeafMatch(Viewer viewer, Object element)
       {
