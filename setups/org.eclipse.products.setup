@@ -11601,6 +11601,8 @@
         <requirement
             name="org.eclipse.cdt.launch.serial.feature.feature.group"/>
         <requirement
+            name="org.eclipse.cdt.llvm.dsf.lldb.feature.group"/>
+        <requirement
             name="org.eclipse.cdt.lsp.feature.feature.group"/>
         <requirement
             name="org.eclipse.cdt.managedbuilder.llvm.feature.group"/>
