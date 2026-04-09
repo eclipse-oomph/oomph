@@ -5,6 +5,7 @@
         <setEntry value="com.sun.jna:5.18.1.v20251001-0800:default:true:default:default"/>
         <setEntry value="org.eclipse.core.net:1.5.800.v20250613-1119:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.event:1.7.300.v20250518-0609:default:true:default:default"/>
+        <setEntry value="org.eclipse.oomph.junit:1.4.0.qualifier:default:true:default:default"/>
         <setEntry value="org.eclipse.osgi.services:3.12.300.v20250707-1221:default:true:default:default"/>
     </setAttribute>
     <booleanAttribute key="append.args" value="true"/>
@@ -34,7 +35,7 @@
     <booleanAttribute key="org.eclipse.jdt.launching.ATTR_SHOW_CODEDETAILS_IN_EXCEPTION_MESSAGES" value="true"/>
     <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_START_ON_FIRST_THREAD" value="true"/>
     <stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-21"/>
-    <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-os ${target.os} -ws ${target.ws} -arch ${target.arch} -nl ${target.nl} -consoleLog &#13;&#10;-o ${resource_loc:/org.eclipse.oomph.p2.core}/report/oomph&#13;&#10;https://download.eclipse.org/oomph/products/latest/repository"/>
+    <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-os ${target.os} -ws ${target.ws} -arch ${target.arch} -nl ${target.nl} -consoleLog &#13;&#10;-o ${resource_loc:/org.eclipse.oomph.p2.core}/report/oomph&#13;&#10;https://download.eclipse.org/oomph/products/latest/repository&#13;&#10;-p ${resource_loc:/org.eclipse.oomph.p2.core}/published-reports"/>
     <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.pde.ui.workbenchClasspathProvider"/>
     <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dorg.eclipse.emf.ecore.plugin.EcorePlugin.doNotLoadResourcesPlugin=false&#13;&#10;-Duser.home=${system_property:user.home}"/>
     <stringAttribute key="pde.version" value="3.3"/>

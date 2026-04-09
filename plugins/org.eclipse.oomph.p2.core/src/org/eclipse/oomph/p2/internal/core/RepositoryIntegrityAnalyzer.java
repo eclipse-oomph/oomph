@@ -298,8 +298,6 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
   private boolean verbose;
 
-  private boolean debug = Boolean.getBoolean("RepositoryIntegrityAnalyzer.debug");
-
   private boolean aggregator;
 
   private boolean packages;
@@ -314,6 +312,8 @@ public class RepositoryIntegrityAnalyzer implements IApplication
       File outputLocation = new File(".").getCanonicalFile();
       File publishLocation = null;
       File testsLocation = null;
+      Pattern ignoredSplitPackages = null;
+      Pattern ignoredMajorVersionDuplicates = null;
 
       String reportSource = "https://ci.eclipse.org/oomph/job/repository-analyzer/";
       String reportBranding = "https://wiki.eclipse.org/images/d/dc/Oomph_Project_Logo.png";
@@ -356,6 +356,14 @@ public class RepositoryIntegrityAnalyzer implements IApplication
           {
             File file = new File(arguments[++i]);
             testsLocation = file.getCanonicalFile();
+          }
+          else if ("-ignored-split-packages".equals(option))
+          {
+            ignoredSplitPackages = Pattern.compile(arguments[++i]);
+          }
+          else if ("-ignored-major-version-duplicates".equals(option))
+          {
+            ignoredMajorVersionDuplicates = Pattern.compile(arguments[++i]);
           }
           else
           {
@@ -426,7 +434,8 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         IOUtil.deleteBestEffort(reportLocation);
         createFolders(reportLocation);
 
-        Report report = generateReport(null, uri, outputLocation, uri, reportLocation, artifactCache, artifactCacheLocation, reportSource, reportBranding);
+        Report report = generateReport(null, uri, outputLocation, uri, reportLocation, artifactCache, artifactCacheLocation, reportSource, reportBranding,
+            ignoredMajorVersionDuplicates);
 
         if (verbose)
         {
@@ -435,7 +444,8 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
         shutDownExecutor();
 
-        emitReport(allReports, new HashSet<Report>(), report, reportLocation, testsLocation, repositoryIndex);
+        emitReport(allReports, new HashSet<Report>(), report, reportLocation, testsLocation, ignoredSplitPackages, ignoredMajorVersionDuplicates,
+            repositoryIndex);
 
         if (publishLocation != null)
         {
@@ -972,7 +982,8 @@ public class RepositoryIntegrityAnalyzer implements IApplication
   }
 
   private void emitReport(Map<String, String> allReports, Set<Report> visited, Report report, final File outputLocation, File testsLocation,
-      final RepositoryIndex repositoryIndexEmitter) throws IOException, InterruptedException
+      Pattern ignoredSplitPackages, Pattern ignoredMajorVersionDuplicates, final RepositoryIndex repositoryIndexEmitter)
+      throws IOException, InterruptedException
   {
     if (visited.add(report))
     {
@@ -1129,7 +1140,13 @@ public class RepositoryIntegrityAnalyzer implements IApplication
           Set<IProvidedCapability> inconsistentJarSignatures = report.getInconsistentJarSignatures();
           for (IProvidedCapability splitPackage : splitPackages)
           {
-            TestCaseType testCase = createTestCase(testSuite, "validSplitPackages_" + splitPackage.getName() + "_" + splitPackage.getVersion());
+            String packageName = splitPackage.getName();
+            if (ignoredSplitPackages != null && ignoredSplitPackages.matcher(packageName).matches())
+            {
+              continue;
+            }
+
+            TestCaseType testCase = createTestCase(testSuite, "validSplitPackages_" + packageName + "_" + splitPackage.getVersion());
             if (inconsistentJarSignatures.contains(splitPackage))
             {
               Set<IInstallableUnit> installableUnits = report.getInstallableUnits(splitPackage);
@@ -1154,8 +1171,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
                 }
               }
 
-              addFailure(testCase,
-                  "The package '" + splitPackage.getName() + " " + splitPackage.getVersion() + "' is jar-signed differently by the containing IUs",
+              addFailure(testCase, "The package '" + packageName + " " + splitPackage.getVersion() + "' is jar-signed differently by the containing IUs",
                   message.toString());
             }
           }
@@ -1244,7 +1260,8 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
       for (Report childReport : report.getChildren())
       {
-        emitReport(allReports, visited, childReport, outputLocation, testsLocation, repositoryIndexEmitter);
+        emitReport(allReports, visited, childReport, outputLocation, testsLocation, ignoredSplitPackages, ignoredMajorVersionDuplicates,
+            repositoryIndexEmitter);
       }
     }
 
@@ -1303,7 +1320,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
   public Report generateReport(final Report parentReport, final URI rootURI, final File rootOutputLocation, final URI uri, final File outputLocation,
       final Map<IArtifactKey, Future<Map<IArtifactDescriptor, File>>> artifactCache, final File artifactCacheFolder, final String reportSource,
-      final String reportBranding) throws Exception
+      final String reportBranding, Pattern ignoredMajorVersionDuplicates) throws Exception
   {
     Report report = reports.get(uri);
     if (report == null)
@@ -2821,7 +2838,35 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         @Override
         public boolean isDuplicationExpected(String id)
         {
-          return expectedDuplicates.contains(id);
+          if (expectedDuplicates.contains(id))
+          {
+            return true;
+          }
+
+          if (ignoredMajorVersionDuplicates != null && ignoredMajorVersionDuplicates.matcher(id).matches())
+          {
+            Set<Version> versions = iuIDVersions.get(id);
+            if (versions != null && versions.size() > 1)
+            {
+              Map<Comparable<?>, Set<Version>> majorVersions = new HashMap<>();
+              for (Version version : versions)
+              {
+                if (!version.isOSGiCompatible())
+                {
+                  return false;
+                }
+                Set<Version> associatedVersions = majorVersions.computeIfAbsent(version.getSegment(0), segment -> new HashSet<>());
+                if (associatedVersions.size() > 1)
+                {
+                  return false;
+                }
+              }
+            }
+
+            return true;
+          }
+
+          return false;
         }
 
         @Override
@@ -3238,7 +3283,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         for (java.net.URI child : children)
         {
           Report childReport = generateReport(report, rootURI, rootOutputLocation, toExternalRepositoryLocation(child), outputLocation, artifactCache,
-              artifactCacheFolder, reportSource, reportBranding);
+              artifactCacheFolder, reportSource, reportBranding, ignoredMajorVersionDuplicates);
           childReports.add(childReport);
         }
       }
@@ -3542,16 +3587,8 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         {
           String location = key + '.' + imageURI.fileExtension();
           File locationFile = new File(cache, location);
-          if (debug)
-          {
-            System.out.println("About to save getImage: " + imageURI + " -> " + locationFile);
-          }
           imageOut = new FileOutputStream(locationFile);
           IOUtil.copy(new ByteArrayInputStream(imageBytes), imageOut);
-          if (debug)
-          {
-            System.out.println("Saving getImage: " + imageURI + " -> " + locationFile + " -> " + locationFile.isFile());
-          }
           result = location;
           images.put(key, result);
           images.put(imageURI, result);
