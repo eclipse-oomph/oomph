@@ -12,3 +12,4 @@ Corel Auto-Preserve/
 .DS_Store
 .tycho-consumer-pom.xml
 private
+releng/org.eclipse.oomph.releng/www/marketplace-listings/marketplace.eclipse.org.setup
