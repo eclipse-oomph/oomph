@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Installer Problems | Eclipse Oomph</title>
+	<meta name="keywords" content="eclipse,ide" />
+	<link rel="preconnect stylesheet" href="../../project.css" />
+	<script src="../../project.js"></script>
+	<style>
+		/* <![CDATA[*/
+		/*]]>*/
+	</style>
+	<script>
+		//<![CDATA[
+		//]]>
+	</script>
+</head>
+
+<body>
+
+	<div data-generate="generateDefaultBreadcrumb(this)">
+		<a href="https://eclipse.dev/oomph">Oomph</a>
+		<span>Eclipse Installer Problems</span>
+	</div>
+
+	<div data-generate="generateInstallerDefaults(this)">
+	</div>
+
+	<main>
+		<div id="midcolumnwide">
+			<div data-generate="getEclipseInstallerHeader(this)">
+			</div>
+
+			<p>
+				Before <a data-generate="this.href = getInstallerProblemURL()" href="">reporting a problem</a>,
+				please consider <a data-generate="this.href = getInstallerNavURL('question')" href="">asking a question</a> instead.
+				Of course it's a good idea to read the <a href="https://www.eclipse.org/downloads/packages/installer" target="oomph_instructions">general instructions</a>
+				for how to use the <span data-generate="getEclipseInstaller(this)"></span> before doing either.
+			</p>
+			<p>
+				Keep in mind that we cannot fix the network.
+				Networks and servers can and do fail and this is beyound our control.
+			</p>
+			<p>
+				Please provide as much detail as possible.
+				I.e., include screen captures and/or attach log details by clicking the <b>Show Log</b> link, as well as information about your operating system version.
+			</p>
+			<br>
+			<img src="../InstallerFailure.png" />
+			<br>
+		</div>
+	</main>
+
+	<script>
+		generate();
+	</script>
+</body>
+
+</html>

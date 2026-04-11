@@ -112,6 +112,57 @@ const defaultAside = toElements(`
 <a id="${sideBarProjectId}" href=""></a>
 `);
 
+const installerAside = toElements(`
+<span class="separator"><i class='fa fa-book'></i> Documentation</span>
+<a href="https://eclipse.dev/oomph">Oomph</a>
+<a href="https://eclipse.dev/oomph#installer">Eclipse Installer</a>
+<span class="separator"><i class='fa fa-users'></i> Community</span>
+<a href="${getInstallerNavURL('question')}">Ask a Question</a>
+<a href="${getInstallerNavURL('problem')}">Report a Problem</a>
+<span class="separator"><i class='fa fa-github'></i> GitHub</span>
+<a href="https://github.com/eclipse-oomph/oomph/discussions">Open Discussion</a>
+<a href="${getInstallerProblemURL()}">Open Issue</a>
+`);
+
+function getEclipseInstaller(element) {
+  element.innerHTML = '<span style="color: #2c2255; font-family: Arial, Helvetica, sans-serif;">eclipse</span> <span class="orange">installer</span';
+}
+
+function getEclipseInstallerHeader(element) {
+  element.innerHTML = `
+<div style="font-size: 150%;">
+	<a href="https://eclipse.dev/Oomph" target="oomph_wiki"><img style="width: 3ex; height: 3ex;" src="../oomph256.png" /></a>
+	<img style="max-width: 12em;" src="../EclipseInstaller.png" />
+	<span style="font-size: 66%;"><span>${getInstallerVersion()}</span></span>
+</div>
+<br />
+`;
+}
+
+function getInstallerVersion() {
+  const version = getQueryParameter('version');
+  return version == null ? '' : version;
+}
+
+function getInstallerNavURL(page) {
+  const version = getInstallerVersion();
+  const versionQueryParameter = version == '' ? '' : `?version=${version}`
+  return `../${page}/${versionQueryParameter}`;
+}
+
+function getInstallerProblemURL() {
+  const version = getInstallerVersion();
+  const versionQueryParameter = version == '' ? '' : `?version=${version}`
+  const description = `
+I have first considered [asking a question](https://www.eclipse.org/setups/installer/question/${encodeURI(encodeURI(versionQueryParameter))}).%0A%0A
+I understand that without details about the problem and how to reproduce the problem, no one can fix a problem for me.%0A%0A
+Therefore I have clicked on the ${"`"}Show Log${"`"} link on the red banner and have pasted the log details here:%0A
+${"```"}%0A
+Log Details...%0A
+${"```"}`;
+  return `https://github.com/eclipse-oomph/oomph/issues/new?title=Problem with Installer${version == '' ? '' : " Version " + version}&body=${description}`;
+}
+
 function generate() {
   try {
     const head = document.head;
@@ -128,7 +179,10 @@ function generate() {
 
     applyGenerators(document.body.querySelectorAll('[data-generate]'));
 
-    document.getElementById('nav-product-logo').src = getProductImage(getProduct());
+    const productLogo = document.getElementById('nav-product-logo');
+    if (productLogo != null) {
+      document.getElementById('nav-product-logo').src = getProductImage(getProduct());
+    }
   } catch (exception) {
     document.body.prepend(...toElements(`<span>Failed to generate content: <span><b style="color: FireBrick">${exception.message}</b><br/>`));
     console.log(exception);
@@ -143,6 +197,17 @@ function applyGenerators(generators, exclude) {
       generate.call(element, element);
     }
   }
+}
+
+function generateInstallerDefaults(element) {
+  const parts = [];
+  if (!hasElement('breadcrumb')) {
+    parts.push(generateDefaultBreadcrumb(document.createElement('div')));
+  }
+  if (!hasElement('aside')) {
+    parts.push(generateInstallerAside(document.createElement('div')));
+  }
+  element.prepend(...parts);
 }
 
 function generateDefaults(element) {
@@ -383,6 +448,11 @@ function generateNav() {
 	</div>
 </div>
 `;
+}
+
+function generateInstallerAside(element) {
+  prependChildren(element, 'aside', ...installerAside);
+  return element;
 }
 
 function generateDefaultAside(element) {

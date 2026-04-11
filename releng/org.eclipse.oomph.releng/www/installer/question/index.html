@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Installer Questions | Eclipse Oomph</title>
+	<meta name="keywords" content="eclipse,ide" />
+	<link rel="preconnect stylesheet" href="../../project.css" />
+	<script src="../../project.js"></script>
+	<style>
+		/* <![CDATA[*/
+		/*]]>*/
+	</style>
+	<script>
+		//<![CDATA[
+		//]]>
+	</script>
+</head>
+
+<body>
+
+	<div data-generate="generateDefaultBreadcrumb(this)">
+		<a href="https://eclipse.dev/oomph">Oomph</a>
+		<span>Eclipse Installer Questions</span>
+	</div>
+
+	<div data-generate="generateInstallerDefaults(this)">
+	</div>
+
+	<main>
+		<div id="midcolumnwide">
+			<div data-generate="getEclipseInstallerHeader(this)">
+			</div>
+
+			<p>
+				Before asking a question on the <a href="https://github.com/eclipse-oomph/oomph/discussions/">Oomph Discussions</a>,
+				please read the <a href="https://www.eclipse.org/downloads/packages/installer">general instructions</a> for how to use the <span data-generate="getEclipseInstaller(this)"></span>.
+				While it's true that there's <a href="https://en.wikipedia.org/wiki/No_such_thing_as_a_stupid_question">no such thing as a stupid question</a>,
+				good answers nevertheless depend on the <a href="https://stackoverflow.com/help/how-to-ask">quality of the question</a>.
+				Help us help you by providing details.
+			</p>
+
+			<hr>
+			<h3>Where Should I Install?</h3>
+			<p>
+				Eclipse installations are generally designed for personal use and are self-updating.
+				As such, you should typically install to a location for which you personally have write access.
+				This is why the default location for the installation is in your home folder.
+			</p>
+			<p>
+				While it is possible to use the <span data-generate="getEclipseInstaller(this)"></span> to create a so-called shared, read-only installation,
+				you should read carefully the additional considerations below.
+				In particular, it's important to either disable the use of the shared bundle pool, or to ensure that the shared bundle pool is also located in a read-only location that is accessible to all users. </p>
+			</p>
+
+			<hr>
+			<h3>How is my Network Used?</h3>
+			<p>
+				If you are behind a network proxy, you will likely need to configure your <a href="https://help.eclipse.org/2019-09/index.jsp?topic=%2Forg.eclipse.platform.doc.user%2Freference%2Fref-net-preferences.htm">network connections</a> first.
+				The <span data-generate="getEclipseInstaller(this)"></span> will automatically open a dialog for these settings if the catalog fails to load.
+			</p>
+			<p>
+				The <span data-generate="getEclipseInstaller(this)"></span> relies heavily on the network to load the latest catalog
+				and to fetch information and artifacts from various p2 update sites.
+				Unfortunately many things can go wrong with the network between you and the servers providing this data.
+				It is not entirely a rare occurrence that the download.eclipse.org server itself becomes over loaded.
+				To avoid this, installation artifacts will typically be downloaded from so-called mirror sites; unfortunately the servers for these sites too can fail for various reasons.
+				If you experience a network failure, please try again a short while later.
+			</p>
+
+			<hr>
+			<h3>What Else Should I Consider?</h3>
+			<p>
+				By default the <span data-generate="getEclipseInstaller(this)"></span> uses a shared bundle pool to reuse installation artifacts across multiple installations.
+				This has the advantage of making each individual installation very small so that you can easily and quickly create many specialized installations for different use cases with minimal network traffic and minimal disk footprint.
+			</p>
+			<p>
+				Use the <span data-generate="getEclipseInstaller(this)"></span> <span style="font-variant: small-caps;">Bundle Pools...</span> menu item to manage where this pool is physically located on disk; this location can become large.
+				The <span style="font-variant: small-caps;">Bundle Pool Management</span> dialog supports garbage collecting of unused artifacts,
+				i.e., if you delete an installation, the artifacts it uses can potentially be removed from disk.
+				In addition, if some artifact becomes corrupted, or if a corrupted artifact is downloaded from some mirror site, this dialog can be used to detect the damage and to repair it.
+			</p>
+
+			<hr>
+			<h3>Can't I Just a Download a Package?</h3>
+			<p>
+				If the <span data-generate="getEclipseInstaller(this)"></span> fails to serve its purpose, you can always <a href="https://www.eclipse.org/downloads/packages/">download a pre-packaged installation</a> as an alternative.
+			</p>
+			<br>
+		</div>
+	</main>
+
+	<script>
+		generate();
+	</script>
+</body>
+
+</html>
