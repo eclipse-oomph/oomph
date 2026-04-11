@@ -194,11 +194,11 @@ function generateBody() {
 					<div class="menu-heading">Eclipse Foundation</div>
 					<ul class="nav">
 						<ul class="nav">
-							<li><a href="http://www.eclipse.org/org/">About</a></li>
+							<li><a href="https://www.eclipse.org/org/">About</a></li>
 							<li><a href="https://projects.eclipse.org/">Projects</a></li>
-							<li><a href="http://www.eclipse.org/collaborations/">Collaborations</a></li>
-							<li><a href="http://www.eclipse.org/membership/">Membership</a></li>
-							<li><a href="http://www.eclipse.org/sponsor/">Sponsor</a></li>
+							<li><a href="https://www.eclipse.org/collaborations/">Collaborations</a></li>
+							<li><a href="https://www.eclipse.org/membership/">Membership</a></li>
+							<li><a href="https://www.eclipse.org/sponsor/">Sponsor</a></li>
 						</ul>
 					</ul>
 				</div>
@@ -206,12 +206,12 @@ function generateBody() {
 					<div class="menu-heading">Legal</div>
 					<ul class="nav">
 						<ul class="nav">
-							<li><a href="http://www.eclipse.org/legal/privacy.php">Privacy Policy</a></li>
-							<li><a href="http://www.eclipse.org/legal/termsofuse.php">Terms of Use</a></li>
-							<li><a href="http://www.eclipse.org/legal/compliance/">Compliance</a></li>
-							<li><a href="http://www.eclipse.org/org/documents/Community_Code_of_Conduct.php">Code of
+							<li><a href="https://www.eclipse.org/legal/privacy.php">Privacy Policy</a></li>
+							<li><a href="https://www.eclipse.org/legal/termsofuse.php">Terms of Use</a></li>
+							<li><a href="https://www.eclipse.org/legal/compliance/">Compliance</a></li>
+							<li><a href="https://www.eclipse.org/org/documents/Community_Code_of_Conduct.php">Code of
 									Conduct</a></li>
-							<li><a href="http://www.eclipse.org/legal/">Legal Resources</a></li>
+							<li><a href="https://www.eclipse.org/legal/">Legal Resources</a></li>
 						</ul>
 					</ul>
 				</div>
@@ -219,10 +219,10 @@ function generateBody() {
 					<div class="menu-heading">More</div>
 					<ul class="nav">
 						<ul class="nav">
-							<li><a href="http://www.eclipse.org/security/">Report a Vulnerability</a></li>
+							<li><a href="https://www.eclipse.org/security/">Report a Vulnerability</a></li>
 							<li><a href="https://www.eclipsestatus.io/">Service Status</a></li>
-							<li><a href="http://www.eclipse.org/org/foundation/contact.php">Contact</a></li>
-							<li><a href="http://www.eclipse.org//projects/support/">Support</a></li>
+							<li><a href="https://www.eclipse.org/org/foundation/contact.php">Contact</a></li>
+							<li><a href="https://www.eclipse.org//projects/support/">Support</a></li>
 						</ul>
 					</ul>
 				</div>
