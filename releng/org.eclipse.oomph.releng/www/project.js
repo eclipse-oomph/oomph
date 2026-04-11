@@ -1,17 +1,13 @@
 var eclipse_org_common = { "settings": { "cookies_class": { "name": "eclipse_settings", "enabled": 1 } } };
 
 window.onscroll = function() {
-	const footer = document.querySelector("#footer>div>a");
-	footer.style.display = document.documentElement.scrollTop > 100 ? 'inline' : 'none';
+  const footer = document.querySelector("#footer>div>a");
+  footer.style.display = document.documentElement.scrollTop > 100 ? 'inline' : 'none';
 };
 
 const bannerLogo = `https://eclipse.dev/eclipse.org-common/themes/solstice/public/images/logo/eclipse-ide/eclipse_logo.svg`;
 
 const logo = 'https://projects.eclipse.org/modules/custom/eclipsefdn/eclipsefdn_projects/images/logos/default.png';
-
-const projectBase = new URL(".", document.currentScript.src).href;
-
-const home = `${projectBase}index.html`;
 
 const projectEclipseOrg = "https://projects.eclipse.org/projects/";
 
@@ -24,52 +20,52 @@ const genericProductId = 'generic';
 const imagesPrefix = 'https://www.eclipse.org/downloads/images/';
 
 const productImages = new Map([
-	['committers', `${imagesPrefix}committers.png`],
-	['cpp', `${imagesPrefix}cdt.png`],
-	['dsl', `${imagesPrefix}dsl-package_42.png`],
-	['embedcpp', `${imagesPrefix}cdt.png`],
-	['java', `${imagesPrefix}java.png`],
-	['jee', `${imagesPrefix}javaee.png`],
-	['modeling', `${imagesPrefix}modeling.png`],
-	['php', `${imagesPrefix}php.png`],
-	['rcp', `${imagesPrefix}rcp.png`],
-	['scout', `${imagesPrefix}scout.jpg`],
-	['sdk', `${imagesPrefix}committers.png`],
-	[genericProductId, `${imagesPrefix}committers.png`],
+  ['committers', `${imagesPrefix}committers.png`],
+  ['cpp', `${imagesPrefix}cdt.png`],
+  ['dsl', `${imagesPrefix}dsl-package_42.png`],
+  ['embedcpp', `${imagesPrefix}cdt.png`],
+  ['java', `${imagesPrefix}java.png`],
+  ['jee', `${imagesPrefix}javaee.png`],
+  ['modeling', `${imagesPrefix}modeling.png`],
+  ['php', `${imagesPrefix}php.png`],
+  ['rcp', `${imagesPrefix}rcp.png`],
+  ['scout', `${imagesPrefix}scout.jpg`],
+  ['sdk', `${imagesPrefix}committers.png`],
+  [genericProductId, `${imagesPrefix}committers.png`],
 ]);
 
 function getProductImage(productId) {
-	return productImages.get(productId) ?? productImages.get(genericProductId);
+  return productImages.get(productId) ?? productImages.get(genericProductId);
 }
 
 const productPrimaryProjects = new Map([
-	['committers', ['eclipse.jdt', 'eclipse.pde']],
-	['cpp', ['tools.cdt', 'tools.linuxtools', 'tools.tracecompass']],
-	['dsl', ['modeling.tmf.xtext', 'eclipse.jdt']],
-	['embedcpp', ['iot.embed-cdt', 'tools.linuxtools', 'tools.tracecompass']],
-	['java', ['eclipse.jdt', 'technology.m2e']],
-	['jee', ['eclipse.jdt', 'webtools.servertools', 'webtools.webservices', 'webtools.sourceediting', 'webtools.jsdt', 'webtools.jeetools', 'webtools.jsf', 'webtools.dali', 'technology.m2e', 'eclipse.platform', 'tools.datatools', 'webtools.common']],
-	['modeling', ['modeling.sirius', 'modeling.ecoretools', 'modeling.emf.emf', 'modeling.emfservices', 'modeling.gmf-runtime']],
-	['php', ['tools.pdt']],
-	['rcp', ['rt.rap', 'eclipse.jdt', 'eclipse.platform']],
-	['scout', ['technology.scout', 'eclipse.jdt']],
-	['sdk', []],
-	[genericProductId, []],
+  ['committers', ['eclipse.jdt', 'eclipse.pde']],
+  ['cpp', ['tools.cdt', 'tools.linuxtools', 'tools.tracecompass']],
+  ['dsl', ['modeling.tmf.xtext', 'eclipse.jdt']],
+  ['embedcpp', ['iot.embed-cdt', 'tools.linuxtools', 'tools.tracecompass']],
+  ['java', ['eclipse.jdt', 'technology.m2e']],
+  ['jee', ['eclipse.jdt', 'webtools.servertools', 'webtools.webservices', 'webtools.sourceediting', 'webtools.jsdt', 'webtools.jeetools', 'webtools.jsf', 'webtools.dali', 'technology.m2e', 'eclipse.platform', 'tools.datatools', 'webtools.common']],
+  ['modeling', ['modeling.sirius', 'modeling.ecoretools', 'modeling.emf.emf', 'modeling.emfservices', 'modeling.gmf-runtime']],
+  ['php', ['tools.pdt']],
+  ['rcp', ['rt.rap', 'eclipse.jdt', 'eclipse.platform']],
+  ['scout', ['technology.scout', 'eclipse.jdt']],
+  ['sdk', []],
+  [genericProductId, []],
 ]);
 
 const productNames = new Map([
-	['committers', 'Eclipse IDE for Eclipse Committers'],
-	['cpp', 'Eclipse IDE for C/C++ Developers'],
-	['dsl', 'Eclipse IDE for Java and DSL Developers'],
-	['embedcpp', 'Eclipse IDE for Embedded C/C++ Developers'],
-	['java', 'Eclipse IDE for Java Developers'],
-	['jee', 'Eclipse IDE for Enterprise Java and Web Developers'],
-	['modeling', 'Eclipse Modeling Tools'],
-	['php', 'Eclipse IDE for PHP Developers'],
-	['rcp', 'Eclipse IDE for RCP and RAP Developers'],
-	['scout', 'Eclipse IDE for Scout Developers'],
-	['sdk', 'Eclipse SDK'],
-	[genericProductId, 'Eclipse IDE'],
+  ['committers', 'Eclipse IDE for Eclipse Committers'],
+  ['cpp', 'Eclipse IDE for C/C++ Developers'],
+  ['dsl', 'Eclipse IDE for Java and DSL Developers'],
+  ['embedcpp', 'Eclipse IDE for Embedded C/C++ Developers'],
+  ['java', 'Eclipse IDE for Java Developers'],
+  ['jee', 'Eclipse IDE for Enterprise Java and Web Developers'],
+  ['modeling', 'Eclipse Modeling Tools'],
+  ['php', 'Eclipse IDE for PHP Developers'],
+  ['rcp', 'Eclipse IDE for RCP and RAP Developers'],
+  ['scout', 'Eclipse IDE for Scout Developers'],
+  ['sdk', 'Eclipse SDK'],
+  [genericProductId, 'Eclipse IDE'],
 ]);
 
 
@@ -117,58 +113,58 @@ const defaultAside = toElements(`
 `);
 
 function generate() {
-	try {
-		const head = document.head;
-		var referenceNode = head.querySelector('script');
-		for (const element of [...meta]) {
-			head.insertBefore(element, referenceNode.nextElementSibling)
-			referenceNode = element;
-		}
+  try {
+    const head = document.head;
+    var referenceNode = head.querySelector('script');
+    for (const element of [...meta]) {
+      head.insertBefore(element, referenceNode.nextElementSibling)
+      referenceNode = element;
+    }
 
-		applyGenerators(document.querySelectorAll('[data-generate]'), document.querySelector('main'));
+    applyGenerators(document.querySelectorAll('[data-generate]'), document.querySelector('main'));
 
-		const generatedBody = generateBody();
-		document.body.replaceChildren(...generatedBody);
+    const generatedBody = generateBody();
+    document.body.replaceChildren(...generatedBody);
 
-		applyGenerators(document.body.querySelectorAll('[data-generate]'));
+    applyGenerators(document.body.querySelectorAll('[data-generate]'));
 
-		document.getElementById('nav-product-logo').src = getProductImage(getProduct());
-	} catch (exception) {
-		document.body.prepend(...toElements(`<span>Failed to generate content: <span><b style="color: FireBrick">${exception.message}</b><br/>`));
-		console.log(exception);
-	}
+    document.getElementById('nav-product-logo').src = getProductImage(getProduct());
+  } catch (exception) {
+    document.body.prepend(...toElements(`<span>Failed to generate content: <span><b style="color: FireBrick">${exception.message}</b><br/>`));
+    console.log(exception);
+  }
 }
 
 function applyGenerators(generators, exclude) {
-	for (const element of generators) {
-		if (exclude == null || !exclude.contains(element)) {
-			const generator = element.getAttribute('data-generate');
-			const generate = new Function(generator);
-			generate.call(element, element);
-		}
-	}
+  for (const element of generators) {
+    if (exclude == null || !exclude.contains(element)) {
+      const generator = element.getAttribute('data-generate');
+      const generate = new Function(generator);
+      generate.call(element, element);
+    }
+  }
 }
 
 function generateDefaults(element) {
-	const parts = [];
-	if (!hasElement('header')) {
-		parts.push(generateDefaultHeader(document.createElement('div')));
-	}
-	if (!hasElement('breadcrumb')) {
-		parts.push(generateDefaultBreadcrumb(document.createElement('div')));
-	}
-	if (!hasElement('aside')) {
-		parts.push(generateDefaultAside(document.createElement('div')));
-	}
-	if (!hasElement('nav')) {
-		parts.push(generateDefaultNav(document.createElement('div')));
-	}
-	element.prepend(...parts);
+  const parts = [];
+  if (!hasElement('header')) {
+    parts.push(generateDefaultHeader(document.createElement('div')));
+  }
+  if (!hasElement('breadcrumb')) {
+    parts.push(generateDefaultBreadcrumb(document.createElement('div')));
+  }
+  if (!hasElement('aside')) {
+    parts.push(generateDefaultAside(document.createElement('div')));
+  }
+  if (!hasElement('nav')) {
+    parts.push(generateDefaultNav(document.createElement('div')));
+  }
+  element.prepend(...parts);
 }
 
 function generateBody() {
-	const col = document.getElementById('aside') ? 'col-md-18' : ' col-md-24';
-	return toElements(`
+  const col = document.getElementById('aside') ? 'col-md-18' : ' col-md-24';
+  return toElements(`
 <div>
 	${generateHeader()}
 	<main id="content">
@@ -246,39 +242,39 @@ function generateBody() {
 }
 
 function generateMainContent() {
-	const main = document.body.querySelector('main')
-	if (main != null) {
-		return main.innerHTML;
-	}
-	return `
+  const main = document.body.querySelector('main')
+  if (main != null) {
+    return main.innerHTML;
+  }
+  return `
 <main>The body specifies no content.</main>
 `;
 }
 
 function generateDefaultHeader(element) {
-	return prependChildren(element, 'header', ...defaultHeader);
+  return prependChildren(element, 'header', ...defaultHeader);
 }
 
 function generateHeader() {
-	const elements = document.querySelectorAll('#header>a');
-	const items = Array.from(elements).map(link => {
-		link.classList.add('link-unstyled');
-		return `
+  const elements = document.querySelectorAll('#header>a');
+  const items = Array.from(elements).map(link => {
+    link.classList.add('link-unstyled');
+    return `
 <li class="navbar-nav-links-item">
 	${link.outerHTML}
 </li>
 `;
-	});
-	const mobileItems = Array.from(elements).map(link => {
-		link.className = 'mobile-menu-item mobile-menu-dropdown-toggle';
-		return `
+  });
+  const mobileItems = Array.from(elements).map(link => {
+    link.className = 'mobile-menu-item mobile-menu-dropdown-toggle';
+    return `
 <li class="mobile-menu-dropdown">
 	${link.outerHTML}
 </li>
 `;
-	});
+  });
 
-	return `
+  return `
 <header class="header-wrapper" id="header">
 	<div class="header-navbar-wrapper">
 		<div class="container">
@@ -316,19 +312,19 @@ function generateHeader() {
 }
 
 function generateDefaultBreadcrumb(element) {
-	return prependChildren(element, 'breadcrumb', ...defaultBreadcrumb);
+  return prependChildren(element, 'breadcrumb', ...defaultBreadcrumb);
 }
 
 function generateBreadcrumb() {
-	const breadcumbs = document.getElementById('breadcrumb')
-	if (breadcumbs == null) {
-		return '';
-	}
+  const breadcumbs = document.getElementById('breadcrumb')
+  if (breadcumbs == null) {
+    return '';
+  }
 
-	const elements = breadcumbs.children;
-	const items = Array.from(elements).map(link => `<li>${link.outerHTML}</li>`);
+  const elements = breadcumbs.children;
+  const items = Array.from(elements).map(link => `<li>${link.outerHTML}</li>`);
 
-	return `
+  return `
 <section class="default-breadcrumbs hidden-print breadcrumbs-default-margin"
 	id="breadcrumb">
 	<div class="container">
@@ -346,22 +342,22 @@ function generateBreadcrumb() {
 }
 
 function generateDefaultNav(element) {
-	return prependChildren(element, 'nav', ...defaultNav);
+  return prependChildren(element, 'nav', ...defaultNav);
 }
 
 function generateNav() {
-	const elements = document.body.querySelectorAll('#nav>a');
-	if (elements.length == 0) {
-		return '';
-	}
+  const elements = document.body.querySelectorAll('#nav>a');
+  if (elements.length == 0) {
+    return '';
+  }
 
-	const items = Array.from(elements).map(element => {
-		const href = element.getAttribute('href')
-		const target = element.getAttribute('target') ?? "_self";
-		const title = element.getAttribute('title') ?? '';
-		const className = element.className ?? '';
-		const content = element.innerHTML;
-		return `
+  const items = Array.from(elements).map(element => {
+    const href = element.getAttribute('href')
+    const target = element.getAttribute('target') ?? "_self";
+    const title = element.getAttribute('title') ?? '';
+    const className = element.className ?? '';
+    const content = element.innerHTML;
+    return `
 <li class="col-xs-24 col-md-12">
 	<a class="row" href="${href}" title="${title}"
 		target="${target}">
@@ -371,12 +367,12 @@ function generateNav() {
 	</a>
 </li>
 `;
-	});
+  });
 
-	return `
+  return `
 <div class="header_nav">
 	<div class="col-xs-24 col-md-10 vcenter">
-		<a href="${home}">
+		<a href="#">
 			<img id='nav-product-logo' src="${logo}" alt="Eclipse IDE" xwidth="50%" xheight="auto" class="img-responsive header_nav_logo"/>
 		</a>
 	</div><!-- NO SPACES
@@ -390,53 +386,53 @@ function generateNav() {
 }
 
 function generateDefaultAside(element) {
-	prependChildren(element, 'aside', ...defaultAside);
+  prependChildren(element, 'aside', ...defaultAside);
 
-	if (getQueryParameter('test-products') == 'true') {
-		const elements = [];
-		elements.push(...toElements(`
+  if (getQueryParameter('test-products') == 'true') {
+    const elements = [];
+    elements.push(...toElements(`
 <span class="separator"><i class='fa fa-cube'></i> Products</span>
 		`));
-		for (const [productId, productName] of productNames.entries()) {
-			const fullProductId = genericProductId == productId ? genericProductId : 'sdk' == productId ? 'org.eclipse.sdk.ide' : `org.eclipse.epp.package.${productId}.product`;
-			const img = `<img style="max-width: 1em; max-height:1em; padding:0; background: lightGray;" src="${getProductImage(productId)}"/>`;
-			const shortProductName = productName.replace('Eclipse IDE for ', '');
-			elements.push(...toElements(`
+    for (const [productId, productName] of productNames.entries()) {
+      const fullProductId = genericProductId == productId ? genericProductId : 'sdk' == productId ? 'org.eclipse.sdk.ide' : `org.eclipse.epp.package.${productId}.product`;
+      const img = `<img style="max-width: 1em; max-height:1em; padding:0; background: lightGray;" src="${getProductImage(productId)}"/>`;
+      const shortProductName = productName.replace('Eclipse IDE for ', '');
+      elements.push(...toElements(`
 <a style="justify-content: left;" href="index.html?test-products=true&product-id=${fullProductId}">${img}&nbsp;&nbsp;${shortProductName}</a>`));
-		}
-		element.prepend(...elements);
-	}
-	return element;
+    }
+    element.prepend(...elements);
+  }
+  return element;
 }
 
 function generateAside() {
-	const elements = document.body.querySelectorAll('aside>*,#aside>*');
-	if (elements.length == 0) {
-		return '';
-	}
+  const elements = document.body.querySelectorAll('aside>*,#aside>*');
+  if (elements.length == 0) {
+    return '';
+  }
 
-	const items = Array.from(elements).map(element => {
-		const main = element.classList.contains('separator')
-		const id = element.id;
-		const idAttribute = id == null ? '' : `id="$[id}"`;
-		element.classList.add('link-unstyled');
-		if (main) {
-			element.classList.add('main-sidebar-heading');
-			return `
+  const items = Array.from(elements).map(element => {
+    const main = element.classList.contains('separator')
+    const id = element.id;
+    const idAttribute = id == null ? '' : `id="$[id}"`;
+    element.classList.add('link-unstyled');
+    if (main) {
+      element.classList.add('main-sidebar-heading');
+      return `
 <li ${idAttribute} class="main-sidebar-main-item main-sidebar-item-indented separator">
 	${element.outerHTML}
 </li>
 `
-		} else {
-			return `
+    } else {
+      return `
 <li ${idAttribute} class="main-sidebar-item main-sidebar-item-indented">
 	${element.outerHTML}
 </li>
 `
-		}
-	});
+    }
+  });
 
-	return `
+  return `
 <div class="col-md-6 main-col-sidebar-nav">
 	<aside class="main-sidebar-default-margin" id="main-sidebar">
 		<ul class="ul-left-nav" id="leftnav" role="tablist" aria-multiselectable="true">
@@ -447,268 +443,274 @@ function generateAside() {
 }
 
 function generateTableOfContents(target) {
-	if (target instanceof Element) {
-		const headers = document.querySelectorAll('h1, h2, h3, h4');
+  if (target instanceof Element) {
+    const headers = document.querySelectorAll('h1, h2, h3, h4');
 
-		for (const header of headers) {
-			if (header.id != '') {
-				const count = Number(header.nodeName.substring(1));
-				const fontSize = 100 + 10 * (4 - count);
-				target.append(...toElements(`
+    for (const header of headers) {
+      if (header.id != '') {
+        const count = Number(header.nodeName.substring(1));
+        const fontSize = 100 + 10 * (4 - count);
+        target.append(...toElements(`
 <div><span style="font-size: ${fontSize}%; padding-left: ${count}em;">&#8226;&nbsp;<a  href="#${header.id}">${header.innerHTML}</a><span></div>
 `))
-			}
-		}
-	}
+      }
+    }
+  }
 }
 
 
 function sendRequest(location, handler) {
-	var request = new XMLHttpRequest();
-	request.open('GET', location);
-	request.onloadend = function() {
-		handler(request);
-	};
-	request.send();
+  var request = new XMLHttpRequest();
+  request.open('GET', location);
+  request.onloadend = function() {
+    handler(request);
+  };
+  request.send();
 }
 
 function getText(location, handler) {
-	sendRequest(location, request => {
-		const json = JSON.parse(request.responseText);
-		const binary = window.atob(json.content);
-		const bytes = new Uint8Array(binary.length);
-		for (var i = 0; i < binary.length; i++) {
-			bytes[i] = binary.charCodeAt(i);
-		}
-		const decoder = new TextDecoder();
-		const realText = decoder.decode(bytes);
-		handler(realText);
-	})
+  sendRequest(location, request => {
+    const json = JSON.parse(request.responseText);
+    const binary = window.atob(json.content);
+    const bytes = new Uint8Array(binary.length);
+    for (var i = 0;i < binary.length;i++) {
+      bytes[i] = binary.charCodeAt(i);
+    }
+    const decoder = new TextDecoder();
+    const realText = decoder.decode(bytes);
+    handler(realText);
+  })
 }
 
 function getXML(location, handler) {
-	getText(location, realText => {
-		const parser = new DOMParser();
-		const xmlDoc = parser.parseFromString(realText, "text/xml");
-		handler(xmlDoc);
-	})
+  getText(location, realText => {
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(realText, "text/xml");
+    handler(xmlDoc);
+  })
 }
 
 function getSimRelAggran(handler) {
-	getXML(`${apiGitHubSimRel}simrel.aggran`, handler);
+  getXML(`${apiGitHubSimRel}simrel.aggran`, handler);
 }
 
 function getProduct() {
-	const productId = getQueryParameter('product-id');
-	if (productId != null) {
-		if (productId == 'org.eclipse.sdk.ide') {
-			return 'sdk';
-		}
-		const simpleId = productId.replace(/org.eclipse.epp.package.([^.]+).product/, '$1');
-		if (productNames.has(simpleId)) {
-			return simpleId;
-		}
-	}
-	return genericProductId;
+  const productId = getQueryParameter('product-id');
+  if (productId != null) {
+    if (productId == 'org.eclipse.sdk.ide') {
+      return 'sdk';
+    }
+    const simpleId = productId.replace(/org.eclipse.epp.package.([^.]+).product/, '$1');
+    if (productNames.has(simpleId)) {
+      return simpleId;
+    }
+  }
+  return genericProductId;
 }
 
 function setProductName(element) {
-	element.innerText = productNames.get(getProduct()) ?? productNames.get(genericProductId);
+  element.innerText = productNames.get(getProduct()) ?? productNames.get(genericProductId);
 }
 
 function getContribution(project) {
-	return project.closest('contribution');
+  return project.closest('contribution');
 }
 
 function isExcluded(project) {
-	if (project.querySelectorAll(':scope > repository').length == 0) {
-		return true;
-	}
-	const contribution = getContribution(project);
-	return contribution == null || 'false' == contribution.getAttribute('enabled');
+  if (project.querySelectorAll(':scope > repository').length == 0) {
+    return true;
+  }
+  const contribution = getContribution(project);
+  return contribution == null || 'false' == contribution.getAttribute('enabled');
 }
 
 function getAllTags(project) {
-	const allTags = getTags(project);
-	const tags = [];
-	for (const tag of productNames.keys()) {
-		if (allTags.includes(tag)) {
-			tags.push(tag);
-		}
-	}
-	for (const tag of allTags) {
-		if (!tags.includes(tag)) {
-			tags.push(tag);
-		}
-	}
-	return tags;
+  const allTags = getTags(project);
+  const tags = [];
+  for (const tag of productNames.keys()) {
+    if (allTags.includes(tag)) {
+      tags.push(tag);
+    }
+  }
+  for (const tag of allTags) {
+    if (!tags.includes(tag)) {
+      tags.push(tag);
+    }
+  }
+  return tags;
 }
 
 function getTags(project) {
-	const tags = [];
-	if (project instanceof Element) {
-		for (const element of project.children) {
-			if ('tag' == element.localName) {
-				tags.push(element.textContent);
-			}
-		}
-		if (project.localName != 'contribution') {
-			tags.push(...getTags(project.parentElement));
-		}
-	}
-	return tags;
+  const tags = [];
+  if (project instanceof Element) {
+    for (const element of project.children) {
+      if ('tag' == element.localName) {
+        tags.push(element.textContent);
+      }
+    }
+    if (project.localName != 'contribution') {
+      tags.push(...getTags(project.parentElement));
+    }
+  }
+  return tags;
 }
 
 const projectTags = new Map();
 const projectRanks = new Map();
 
 function getRank(project, projectId, productId) {
-	const primaryProjects = productPrimaryProjects.get(productId) ?? productPrimaryProjects.get(genericProductId);
-	const index = primaryProjects.indexOf(projectId);
-	if (index != -1) {
-		return 100 - index;
-	}
+  const primaryProjects = productPrimaryProjects.get(productId) ?? productPrimaryProjects.get(genericProductId);
+  const index = primaryProjects.indexOf(projectId);
+  if (index != -1) {
+    return 100 - index;
+  }
 
-	let rank = Number(project.getAttribute('rank') ?? '0');
-	if (projectId == 'tools.oomph') {
-		rank = 0;
-	}
-	return rank;
+  let rank = Number(project.getAttribute('rank') ?? '0');
+  if (projectId == 'tools.oomph') {
+    rank = 0;
+  }
+  return rank;
 }
 
 const organizationRepositories = new Map();
 
 function getSimRelProjectIds(handler) {
-	getSimRelAggran(xmlDoc => {
-		const projects = xmlDoc.querySelectorAll('project,subproject');
-		const projectIds = new Map();
-		const productId = getProduct();
-		for (const project of projects) {
-			if (!isExcluded(project)) {
-				const site = project.getAttribute('site')
-				if (site.startsWith(projectEclipseOrg)) {
-					const projectId = site.replace(projectEclipseOrg, '');
-					projectIds.set(project.getAttribute('name'), projectId);
-					let rank = getRank(project, projectId, productId);
-					projectRanks.set(projectId, rank);
-					if (!projectTags.has(projectId)) {
-						projectTags.set(projectId, getAllTags(project));
-					}
-				}
-			}
-		}
+  getSimRelAggran(xmlDoc => {
+    const projects = xmlDoc.querySelectorAll('project,subproject');
+    const projectIds = new Map();
+    const productId = getProduct();
+    for (const project of projects) {
+      if (!isExcluded(project)) {
+        const site = project.getAttribute('site')
+        if (site.startsWith(projectEclipseOrg)) {
+          const projectId = site.replace(projectEclipseOrg, '');
+          projectIds.set(project.getAttribute('name'), projectId);
+          let rank = getRank(project, projectId, productId);
+          projectRanks.set(projectId, rank);
+          if (!projectTags.has(projectId)) {
+            projectTags.set(projectId, getAllTags(project));
+          }
+        }
+      }
+    }
 
-		const entries = [...projectIds].sort((a, b) => {
-			return a[0] > b[0]
-		});
+    const entries = [...projectIds].sort((a, b) => {
+      return a[0] > b[0]
+    });
 
-		const repositories = xmlDoc.querySelectorAll('repository');
-		for (const repository of repositories) {
-			const uri = repository.getAttribute('uri')
-			const org = new URL('.', uri).href;
-			if (!organizationRepositories.has(org)) {
-				organizationRepositories.set(org, []);
-			}
-			const orgRepositories = organizationRepositories.get(org);
-			const repoName = uri.replace(org, '');
-			if (!orgRepositories.includes(repoName))
-				orgRepositories.push(repoName);
-		}
+    const repositories = xmlDoc.querySelectorAll('repository');
+    for (const repository of repositories) {
+      const uri = repository.getAttribute('uri')
+      const org = new URL('.', uri).href;
+      if (!organizationRepositories.has(org)) {
+        organizationRepositories.set(org, []);
+      }
+      const orgRepositories = organizationRepositories.get(org);
+      const repoName = uri.replace(org, '');
+      if (!orgRepositories.includes(repoName))
+        orgRepositories.push(repoName);
+    }
 
-		handler(entries)
-	});
+    handler(entries)
+  });
 }
 
 function getProject(projectId, handler) {
-	sendRequest(apiProjects + projectId, request => {
-		const project = JSON.parse(request.responseText);
-		handler(project[0]);
-	});
+  sendRequest(apiProjects + projectId, request => {
+    const project = JSON.parse(request.responseText);
+    handler(project[0]);
+  });
 }
 
 function generateProjectDetails(target) {
-	const productTag = getProduct();
-	getSimRelProjectIds(projectIds => {
-		const sideBarProjects = [];
-		const elements = [];
-		for (const [projectName, projectId] of projectIds) {
-			const tags = projectTags.get(projectId);
-			if (tags.includes(productTag) || productTag == genericProductId && tags.includes('sdk')) {
-				sideBarProjects.push(projectId);
-			}
-			elements.push(...toElements(`
+  const productTag = getProduct();
+  getSimRelProjectIds(projectIds => {
+    const sideBarProjects = [];
+    const elements = [];
+    for (const [projectName, projectId] of projectIds) {
+      const tags = projectTags.get(projectId);
+      if (tags.includes(productTag) || productTag == genericProductId && tags.includes('sdk')) {
+        sideBarProjects.push(projectId);
+      }
+      if (target != null) {
+        elements.push(...toElements(`
 <hr/>
 <div id="${projectId}">
 Loading ${projectName} ${projectId}
 </div>		
 `));
-			generateProjectDetail(projectId);
-		}
+      }
+      generateProjectDetail(projectId);
+    }
 
-		elements.push(...toElements('<hr/>'))
-		target.replaceChildren(...elements);
+    if (target != null) {
+      elements.push(...toElements('<hr/>'))
+      target.replaceChildren(...elements);
+    }
 
-		const entries = [...sideBarProjects].sort((a, b) => {
-			return projectRanks.get(a) < projectRanks.get(b);
-		});
+    const entries = [...sideBarProjects].sort((a, b) => {
+      return projectRanks.get(a) < projectRanks.get(b);
+    });
 
-		const sideBarItemPlaceholder = document.getElementById(sideBarProjectId);
-		const sideBarItems = [];
-		for (const projectId of entries) {
-			const sideBarItem = sideBarItemPlaceholder.cloneNode(true)
-			sideBarItem.id = `sidebar-${projectId}`;
-			sideBarItem.innerHTML = '&nbsp;'
-			sideBarItem.href = `#${projectId}`;
-			sideBarItems.push(sideBarItem);
-		}
-		sideBarItemPlaceholder.replaceWith(...sideBarItems);
-	});
+    const sideBarItemPlaceholder = document.getElementById(sideBarProjectId);
+    const sideBarItems = [];
+    for (const projectId of entries) {
+      const sideBarItem = sideBarItemPlaceholder.cloneNode(true)
+      sideBarItem.id = `sidebar-${projectId}`;
+      sideBarItem.innerHTML = '&nbsp;'
+      sideBarItem.href = target != null ? `#${projectId}` : `https://projects.eclipse.org/projects/${projectId}`;
+      sideBarItems.push(sideBarItem);
+    }
+    sideBarItemPlaceholder.replaceWith(...sideBarItems);
+  });
 }
 
 function generateProjectDetail(projectId) {
-	getProject(projectId, project => {
-		const target = document.getElementById(projectId);
-		var repo = 'missing';
-		var type = 'fa-github'
-		const gitHubOrg = project.github.org
-		if (gitHubOrg) {
-			repo = `https://github.com/${gitHubOrg}/`;
-		} else {
-			const gitHubRepos = project.github_repos;
-			if (gitHubRepos.length > 0) {
-				repo = gitHubRepos[0].url;
-			} else {
-				const gitLabOrg = project.gitlab.project_group
-				if (gitLabOrg) {
-					type = 'fa-gitlab';
-					repo = `https://gitlab.eclipse.org/${gitLabOrg}/`;
-				}
-			}
-		}
+  getProject(projectId, project => {
+    const target = document.getElementById(projectId);
+    var repo = 'missing';
+    var type = 'fa-github'
+    const gitHubOrg = project.github.org
+    if (gitHubOrg) {
+      repo = `https://github.com/${gitHubOrg}/`;
+    } else {
+      const gitHubRepos = project.github_repos;
+      if (gitHubRepos.length > 0) {
+        repo = gitHubRepos[0].url;
+      } else {
+        const gitLabOrg = project.gitlab.project_group
+        if (gitLabOrg) {
+          type = 'fa-gitlab';
+          repo = `https://gitlab.eclipse.org/${gitLabOrg}/`;
+        }
+      }
+    }
 
-		const projectShortName = project.name.replace(/^Eclipse /, '');
-		const links = document.getElementById('links');
-		if (links != null) {
-			// <a href="${projectBase}projectPages/callgraph/index.html">Callgraph</a>
-			links.appendChild(...toElements(`<span>${projectId} <a href="#">${projectShortName}</a><br/>\n</span>`));
-		}
+    const projectShortName = project.name.replace(/^Eclipse /, '');
+    const links = document.getElementById('links');
+    if (links != null) {
+      links.appendChild(...toElements(`<span>${projectId} <a href="#">${projectShortName}</a><br/>\n</span>`));
+    }
 
-		const sideBarItem = document.getElementById(`sidebar-${projectId}`)
-		if (sideBarItem != null) {
-			sideBarItem.textContent = projectShortName;
-		}
+    const sideBarItem = document.getElementById(`sidebar-${projectId}`)
+    if (sideBarItem != null) {
+      sideBarItem.textContent = projectShortName;
+    }
 
-		const tags = projectTags.get(projectId).map(tag => {
-			return `<img class="product-logo" title="${productNames.get(tag) ?? productNames.get(genericProductId)}" src="${getProductImage(tag)}"/>`;
-		}).join('');
+    if (target == null) {
+      return;
+    }
 
-		const repos = organizationRepositories.get(repo) ?? [];
-		const orgRepos = repos.map(orgRepo => {
-			return `<a target="_out" href="${repo + orgRepo}"><i class="fa fa-git-square"></i>&nbsp;${orgRepo}</a>`;
-		});
+    const tags = projectTags.get(projectId).map(tag => {
+      return `<img class="product-logo" title="${productNames.get(tag) ?? productNames.get(genericProductId)}" src="${getProductImage(tag)}"/>`;
+    }).join('');
 
+    const repos = organizationRepositories.get(repo) ?? [];
+    const orgRepos = repos.map(orgRepo => {
+      return `<a target="_out" href="${repo + orgRepo}"><i class="fa fa-git-square"></i>&nbsp;${orgRepo}</a>`;
+    });
 
-		const item = `
+    const item = `
 <table><tbody><tr>
 <td style="vertical-align: top;">
 <a target="_out" href="${projectEclipseOrg}${projectId}"><img class="logo" src="${project.logo}" alt="${projectId}"/></a>
@@ -723,25 +725,25 @@ ${orgRepos.join('\n')}
 </td>
 </tr></tbody></table>
 `;
-		target.innerHTML = item;
-	});
+    target.innerHTML = item;
+  });
 }
 
 function generateQueryParametersTable(target) {
-	const search = new URLSearchParams(window.location.search);
-	if (search.size > 0) {
-		const items = Array.from(search.entries()).map(entry => {
-			const tr = document.createElement('tr')
-			const propertyTD = document.createElement('td')
-			propertyTD.innerText = entry[0];
-			const valueTD = document.createElement('td')
-			valueTD.innerText = entry[1];
-			tr.appendChild(propertyTD);
-			tr.appendChild(valueTD);
-			return tr.outerHTML
-		});
+  const search = new URLSearchParams(window.location.search);
+  if (search.size > 0) {
+    const items = Array.from(search.entries()).map(entry => {
+      const tr = document.createElement('tr')
+      const propertyTD = document.createElement('td')
+      propertyTD.innerText = entry[0];
+      const valueTD = document.createElement('td')
+      valueTD.innerText = entry[1];
+      tr.appendChild(propertyTD);
+      tr.appendChild(valueTD);
+      return tr.outerHTML
+    });
 
-		const elements = toElements(`
+    const elements = toElements(`
 <table>
 	<tbody>
 		<tr>
@@ -752,53 +754,53 @@ function generateQueryParametersTable(target) {
 	</tbody>
 </table>
 `);
-		replaceChildren(target, 'query-parameter-table', ...elements);
-	}
+    replaceChildren(target, 'query-parameter-table', ...elements);
+  }
 }
 
 function hasElement(id) {
-	return document.getElementById(id) != null;
+  return document.getElementById(id) != null;
 }
 
 function toElements(text) {
-	const wrapper = document.createElement('div');
-	wrapper.innerHTML = text;
-	return wrapper.children
+  const wrapper = document.createElement('div');
+  wrapper.innerHTML = text;
+  return wrapper.children
 }
 
 function replaceChildren(element, id, ...children) {
-	element.id = id;
-	element.replaceChildren(...children);
-	return element;
+  element.id = id;
+  element.replaceChildren(...children);
+  return element;
 }
 
 function prependChildren(element, id, ...children) {
-	element.id = id;
-	element.prepend(...children);
-	return element;
+  element.id = id;
+  element.prepend(...children);
+  return element;
 }
 
 function addBase(htmlDocument, location) {
-	const base = htmlDocument.createElement('base');
-	base.href = location;
-	htmlDocument.head.appendChild(base)
+  const base = htmlDocument.createElement('base');
+  base.href = location;
+  htmlDocument.head.appendChild(base)
 }
 
 function getQueryParameter(id) {
-	const location = new URL(window.location);
-	const search = new URLSearchParams(location.search);
-	return search.get(id);
+  const location = new URL(window.location);
+  const search = new URLSearchParams(location.search);
+  return search.get(id);
 }
 
 function toggleMenu() {
-	const mobileMenu = document.getElementById('mobile-menu')
-	if (mobileMenu.classList.contains('hidden')) {
-		mobileMenu.classList.remove('hidden');
-	} else {
-		mobileMenu.classList.add('hidden');
-	}
+  const mobileMenu = document.getElementById('mobile-menu')
+  if (mobileMenu.classList.contains('hidden')) {
+    mobileMenu.classList.remove('hidden');
+  } else {
+    mobileMenu.classList.add('hidden');
+  }
 }
 
 function scrollToTop() {
-	window.scrollTo({ top: 0, behavior: 'smooth' });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }

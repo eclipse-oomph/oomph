@@ -12,7 +12,7 @@
     <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_CLASSPATH_ONLY_JAR" value="false"/>
     <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.eclipse.oomph.internal.util.HTTPServer"/>
     <stringAttribute key="org.eclipse.jdt.launching.MODULE_NAME" value="org.eclipse.oomph.util"/>
-    <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-alias &#13;&#10;&#13;&#10;/oomph/jre-&gt;${resource_loc:/org.eclipse.oomph.releng/jre/}&#13;&#10;/oomph-&gt;${project_loc:/org.eclipse.oomph.website}&#13;&#10;/setups-&gt;${resource_loc:/org.eclipse.oomph.releng/www/}"/>
+    <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-alias &#13;&#10;&#13;&#10;/download.eclipse.org/oomph-&gt;${resource_loc:/org.eclipse.oomph.releng/}&#13;&#10;/oomph-&gt;${project_loc:/org.eclipse.oomph.website/}&#13;&#10;/setups-&gt;${resource_loc:/org.eclipse.oomph.releng/www/}"/>
     <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="org.eclipse.oomph.util"/>
     <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-DHTTPServer.port=8200"/>
 </launchConfiguration>

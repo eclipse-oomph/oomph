@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Java Required | Eclipse IDE</title>
+	<meta name="keywords" content="eclipse,ide" />
+	<link rel="preconnect stylesheet" href="../www/project.css" />
+	<script src="../www/project.js"></script>
+	<style>
+		/* <![CDATA[*/
+		.button a {
+			text-decoration: none;
+		}
+
+		.button a,
+		.button a:visited,
+		.button a:hover,
+		.button a:active {
+			color: inherit;
+		}
+
+		.button {
+			padding: 0.3em 0.4em;
+			color: white;
+			background: #f06c00;
+		}
+
+		/*]]>*/
+	</style>
+	<script>
+		//<![CDATA[
+		//]]>
+	</script>
+</head>
+
+<body>
+
+	<div data-generate="generateDefaultBreadcrumb(this)">
+		<a href="https://eclipseide.org">Eclipse IDE</a>
+		<span>Java Required</span>
+	</div>
+
+	<div data-generate="generateDefaults(this)">
+	</div>
+
+	<main>
+		<h1>Missing Java Version</h1>
+		<div data-generate="generateProjectDetails(null)">
+		</div>
+		<div data-generate="generateMissingJavaDetails(this)">
+		</div>
+	</main>
+
+	<script>
+		generate();
+
+		function generateMissingJavaDetails(element) {
+			const vm = getQueryParameter('vm');
+			const vmParts = vm == null ? null : /(?<os>[123])_(?<major>[1-9]+)_(?<minor>[0-9]+)_(?<micro>[0-9]+)_(?<bitness>32|64)/.exec(vm);
+			const javaVersion = vmParts == null ? 'a version of Java' : `Java version ${vmParts.groups.major}.${vmParts.groups.minor}.${vmParts.groups.micro}`;
+			const pn = getQueryParameter('pn');
+			const productLabel = document.createElement('span');
+			productLabel.innerText = (pn ?? 'Eclipse');
+			// const pu = getQueryParameter('pu');
+			// const pi = getQueryParameter('pi');
+
+			const parts = [];
+			parts.push(...toElements(`
+<p>				
+The ${productLabel.innerHTML} product you are using requires ${javaVersion} that is not available.
+</p>
+<p>
+<span><img src="https://adoptium.net/images/favicon-32x32.png" style="max-width: 2em;"> Adoptium is an excellent source of JDKs.</span>
+</p>
+<p>
+<span class="button">
+<a href="https://adoptium.net/temurin/">Download...<a/>
+</span>
+</p>
+`));
+			element.prepend(...parts);
+		}
+	</script>
+</body>
+
+</html>
