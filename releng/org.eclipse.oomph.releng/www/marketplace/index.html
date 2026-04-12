@@ -478,7 +478,9 @@
           var project = null;
           if (nodeID == null) {
             project = xmlDoc.querySelector(`project[name="${id}"]`);
-            nodeID = project.getAttribute('name');
+            if (project != null) {
+              nodeID = project.getAttribute('name');
+            }
           } else {
             const listingIDs = xmlDoc.querySelectorAll('detail[key="marketplaceID"]');
             for (const listingID of listingIDs) {
@@ -490,7 +492,17 @@
             }
           }
 
-          createMarketplaceListings([project], style, url);
+          if (project == null) {
+            var progressHTML = document.getElementById('progress');
+            progressHTML.style.display = 'none';
+            
+            var summarySection = document.getElementById('summary');
+            summarySection.style.display = 'block';
+            summarySection.innerHTML = `<hr> Failed to find health status for ${nodeID == null ? id : nodeID}.`;
+          } else {
+            createMarketplaceListings([project], style, url);
+          }
+
           summarize(style);
           var expandButton = document.getElementsByClassName('marketplace-section_arrow')[0];
           expandButton.onclick();

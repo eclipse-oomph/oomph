@@ -272,7 +272,7 @@ public class MarketplaceCatalogGenerator implements IApplication
           searchCount = (String)get(marketplace.eContents().get(0), "count");
         }
 
-        int count = Integer.parseInt(searchCount);
+        int count = Integer.parseInt(searchCount) + 10;
         System.err.println("Listing count: " + count);
         for (int i = 0; i * 10 < count; ++i)
         {
@@ -319,6 +319,11 @@ public class MarketplaceCatalogGenerator implements IApplication
         for (AnyType search : searches)
         {
           List<AnyType> nodes = get(search, "node");
+          if (nodes == null)
+          {
+            continue;
+          }
+
           for (AnyType node : nodes)
           {
             String updateURL = getContent(node, "updateurl");
