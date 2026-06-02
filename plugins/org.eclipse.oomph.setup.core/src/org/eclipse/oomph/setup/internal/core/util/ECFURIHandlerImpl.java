@@ -957,9 +957,22 @@ public class ECFURIHandlerImpl extends URIHandlerImpl implements URIResolver
     }
 
     @SuppressWarnings("rawtypes")
-    private static String getValue(Map responseHeaders, String key)
+    private static String getValue(Map<?, ?> responseHeaders, String key)
     {
       Object value = responseHeaders.get(key);
+      if (value == null)
+      {
+        for (Map.Entry<?, ?> entry : responseHeaders.entrySet())
+        {
+          Object entryKey = entry.getKey();
+          if (entryKey != null && entryKey.toString().equalsIgnoreCase(key))
+          {
+            value = entry.getValue();
+            break;
+          }
+        }
+      }
+
       if (value instanceof String)
       {
         return (String)value;
