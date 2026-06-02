@@ -156,9 +156,24 @@ async function genenerateLogos(element) {
 
 			element.innerHTML += content.join('\n');
 			element.style.display = "block";
+			makeLinksPlain();
+			logoGenerationComplete();
 		});
 }
 
+function logoGenerationComplete() {
+}
+
+function makeLinksPlain() {
+	if (getQueryParameter('plain', 'false') == 'true') {
+		for (const a of document.querySelectorAll('a[href^="eclipse+external:"]')) {
+			a.href = a.href.replace('eclipse+external:', '');
+			if (a.getAttribute('target') == null) {
+				a.setAttribute('target', 'eclipse+external');
+			}
+		}
+	}
+}
 function spanify(string) {
 	return string.split('').map(c => `<span>${c == ' ' ? '&nbsp;' : c}</span>`).join('');
 }
