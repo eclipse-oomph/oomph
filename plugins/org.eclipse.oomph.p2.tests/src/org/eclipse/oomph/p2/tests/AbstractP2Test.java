@@ -143,10 +143,10 @@ public abstract class AbstractP2Test extends AbstractTest
   {
     try
     {
-      mirror("https://download.eclipse.org/modeling/emf/cdo/drops/R20130918-0029", CDO_OLD, CDO_FILTER);
-      mirror("https://download.eclipse.org/modeling/emf/cdo/drops/R20140218-1655", CDO_NEW, CDO_FILTER);
-      mirror("https://download.eclipse.org/eclipse/updates/4.25/R-4.25-202208311800", PLATFORM_OLD, PLATFORM_FILTER);
-      mirror("https://download.eclipse.org/eclipse/updates/4.28/R-4.28-202306050440", PLATFORM_NEW, PLATFORM_FILTER);
+      mirror("https://archive.eclipse.org/modeling/emf/cdo/drops/R20130918-0029", CDO_OLD, CDO_FILTER);
+      mirror("https://archive.eclipse.org/modeling/emf/cdo/drops/R20140218-1655", CDO_NEW, CDO_FILTER);
+      mirror("https://archive.eclipse.org/eclipse/updates/4.25/R-4.25-202208311800", PLATFORM_OLD, PLATFORM_FILTER);
+      mirror("https://archive.eclipse.org/eclipse/updates/4.28/R-4.28-202306050440", PLATFORM_NEW, PLATFORM_FILTER);
     }
     catch (CoreException ex)
     {
