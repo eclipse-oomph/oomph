@@ -36,7 +36,7 @@
         versionRange="4.36.0"/>
   </annotation>
   <annotation
-      source="http://www.eclipse.org/oomph/setup/Notification">
+      source="http://www.eclipse.org/oomph/setup/Notification-X">
     <detail
         key="maximize">
       <value>false</value>
@@ -57,7 +57,7 @@
         versionRange="[3.20.500.v20260226-0420,3.20.599]"/>
   </annotation>
   <annotation
-      source="http://www.eclipse.org/oomph/setup/Notification">
+      source="http://www.eclipse.org/oomph/setup/Notification-X">
     <detail
         key="uri">
       <value>https://www.eclipse.org/setups/notification/java26/?jre-only=true</value>
@@ -78,7 +78,7 @@
         max="0"/>
   </annotation>
   <annotation
-      source="http://www.eclipse.org/oomph/setup/Notification">
+      source="http://www.eclipse.org/oomph/setup/Notification-X">
     <detail
         key="maximize">
       <value>false</value>
@@ -93,7 +93,7 @@
         versionRange="[4.39.0,4.40.0.20260528-0705)"/>
   </annotation>
   <annotation
-      source="http://www.eclipse.org/oomph/setup/Notification">
+      source="http://www.eclipse.org/oomph/setup/Notification-X">
     <detail
         key="maximize">
       <value>false</value>
@@ -115,13 +115,8 @@
     </detail>
     <detail
         key="uri">
-      <value>file:/D:/Users/merks/oomph-1.39/git/oomph/releng/org.eclipse.oomph.releng/www/notification/copilot/index.html</value>
+      <value>file:/D:/Users/merks/oomph-1.41/git/oomph/releng/org.eclipse.oomph.releng/www/notification/sponsor/index.html</value>
     </detail>
-    <content
-        xsi:type="p2:Requirement"
-        name="org.eclipse.copilot.feature.feature.group"
-        optional="true"
-        max="0"/>
     <content
         xsi:type="p2:Requirement"
         name="org.eclipse.epp.package.common"
