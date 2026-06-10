@@ -17,6 +17,7 @@ import org.eclipse.oomph.base.util.BaseUtil;
 import org.eclipse.oomph.internal.setup.SetupProperties;
 import org.eclipse.oomph.p2.P2Factory;
 import org.eclipse.oomph.p2.Repository;
+import org.eclipse.oomph.p2.RepositoryList;
 import org.eclipse.oomph.p2.Requirement;
 import org.eclipse.oomph.p2.VersionSegment;
 import org.eclipse.oomph.p2.core.Agent;
@@ -35,6 +36,7 @@ import org.eclipse.oomph.setup.RedirectionTask;
 import org.eclipse.oomph.setup.Scope;
 import org.eclipse.oomph.setup.SetupFactory;
 import org.eclipse.oomph.setup.SetupTask;
+import org.eclipse.oomph.setup.VariableChoice;
 import org.eclipse.oomph.setup.VariableTask;
 import org.eclipse.oomph.setup.VariableType;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl;
@@ -51,9 +53,12 @@ import org.eclipse.oomph.util.XMLUtil;
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
+import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.common.util.UniqueEList;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
@@ -317,7 +322,8 @@ public class ProductCatalogGenerator implements IApplication
   {
     System.out.println("user.home=" + System.getProperty("user.home"));
 
-    uriConverter = SetupCoreUtil.createResourceSet().getURIConverter();
+    ResourceSet resourceSet = SetupCoreUtil.createResourceSet();
+    uriConverter = resourceSet.getURIConverter();
 
     String[] arguments = (String[])context.getArguments().get(IApplicationContext.APPLICATION_ARGS);
     if (arguments != null)
@@ -325,7 +331,11 @@ public class ProductCatalogGenerator implements IApplication
       for (int i = 0; i < arguments.length; ++i)
       {
         String option = arguments[i];
-        if ("-outputLocation".equals(option))
+        if ("-projectCatalogUpdater".equals(option))
+        {
+          return new ProjectCatalogUpdater(new ArrayList<>(List.of(arguments)), resourceSet).update();
+        }
+        else if ("-outputLocation".equals(option))
         {
           outputLocation = URI.createURI(arguments[++i]);
         }
@@ -583,7 +593,8 @@ public class ProductCatalogGenerator implements IApplication
   {
     return new String[] { "juno", "kepler", "luna", "mars", "neon", "oxygen", "photon", "2018-09", "2018-12", "2019-03", "2019-06", "2019-09", "2019-12",
         "2020-03", "2020-06", "2020-09", "2020-12", "2021-03", "2021-06", "2021-09", "2021-12", "2022-03", "2022-06", "2022-09", "2022-12", "2023-03",
-        "2023-06", "2023-09", "2023-12", "2024-03", "2024-06", "2024-09", "2024-12", "2025-03", "2025-06", "2025-09", "2025-12", "2026-03", "2026-06" };
+        "2023-06", "2023-09", "2023-12", "2024-03", "2024-06", "2024-09", "2024-12", "2025-03", "2025-06", "2025-09", "2025-12", "2026-03", "2026-06",
+        "2026-09" };
   }
 
   private String getStagingTrain()
@@ -3246,6 +3257,251 @@ public class ProductCatalogGenerator implements IApplication
     protected GenerateJob createWorker(String key, int workerID, boolean secondary)
     {
       return new GenerateJob(this, key, workerID, secondary);
+    }
+  }
+
+  private static class ProjectCatalogUpdater
+  {
+    private static final Pattern SDK_VERSION_PATTERN = Pattern.compile(".*/updates/(?<version>[0-9.]+)[-/].*");
+
+    private static final Pattern SIMREL_VERSION_PATTERN = Pattern.compile(".*/releases/(?<version>[0-9-]+)/.*");
+
+    private final ResourceSet resourceSet;
+
+    private final URI output;
+
+    private final URI simrel;
+
+    private final URI sdk;
+
+    private final String simrelVersion;
+
+    private final String nextSimrelVersion;
+
+    private final String sdkVersion;
+
+    private final String nextSDKVersion;
+
+    public ProjectCatalogUpdater(List<String> arguments, ResourceSet resourceSet)
+    {
+      this.resourceSet = resourceSet;
+      output = URI.createURI(getArgument(arguments, "-output"));
+      simrel = URI.createURI(getArgument(arguments, "-simrel"));
+      sdk = URI.createURI(getArgument(arguments, "-sdk"));
+
+      sdkVersion = getVersion(SDK_VERSION_PATTERN, sdk.toString());
+      nextSDKVersion = getNextSDKVersion(sdkVersion);
+
+      simrelVersion = getVersion(SIMREL_VERSION_PATTERN, simrel.toString());
+      nextSimrelVersion = getNextSimrelVersion(simrelVersion);
+    }
+
+    private String getNextSDKVersion(String version)
+    {
+      Matcher matcher = Pattern.compile("(?<major>\\d+)\\.(?<minor>\\d+)").matcher(version);
+      matcher.matches();
+      String major = matcher.group("major");
+      String minor = matcher.group("minor");
+      return major + "." + (Integer.parseInt(minor) + 1);
+    }
+
+    private String getNextSimrelVersion(String version)
+    {
+      Matcher matcher = Pattern.compile("(?<year>\\d+)-(?<quarter>\\d+)").matcher(version);
+      matcher.matches();
+      String year = matcher.group("year");
+      String quarter = matcher.group("quarter");
+      switch (quarter)
+      {
+        case "03":
+        {
+          return year + "-" + "06";
+        }
+        case "06":
+        {
+          return year + "-" + "09";
+        }
+        case "09":
+        {
+          return year + "-" + "12";
+        }
+        default:
+        case "12":
+        {
+          return Integer.parseInt(year) + 1 + "-" + "03";
+        }
+      }
+    }
+
+    private String getVersion(Pattern pattern, String value)
+    {
+      Matcher matcher = pattern.matcher(value);
+      matcher.matches();
+      return matcher.group("version");
+    }
+
+    public Object update() throws IOException
+    {
+      {
+        Resource oomph = resourceSet.getResource(output.appendSegment("Oomph.setup"), true);
+        EcoreUtil.resolveAll(resourceSet);
+        List<EObject> objects = getAllObjects(oomph);
+        for (EObject eObject : objects)
+        {
+          if (eObject instanceof RepositoryList)
+          {
+            RepositoryList repositoryList = (RepositoryList)eObject;
+            EObject eContainer = repositoryList.eContainer();
+            @SuppressWarnings("unchecked")
+            List<EObject> containingList = (List<EObject>)eContainer.eGet(repositoryList.eContainmentFeature());
+            int index = containingList.indexOf(repositoryList);
+            if (index == 0)
+            {
+              String name = repositoryList.getName();
+              if (simrelVersion.equals(name))
+              {
+                RepositoryList copy = EcoreUtil.copy(repositoryList);
+                copy.setName(nextSimrelVersion);
+                containingList.add(0, copy);
+                break;
+              }
+            }
+          }
+        }
+        oomph.save(Map.of());
+      }
+
+      {
+        Resource gitHubProjects = resourceSet.getResource(output.appendSegment("com.github.projects.setup"), true);
+        List<EObject> objects = getAllObjects(gitHubProjects);
+        for (EObject eObject : objects)
+        {
+          if (eObject instanceof VariableTask)
+          {
+            VariableTask variable = (VariableTask)eObject;
+            if ("eclipse.target.platform".equals(variable.getName()))
+            {
+              VariableChoice variableChoice = SetupFactory.eINSTANCE.createVariableChoice();
+              variableChoice.setValue(nextSimrelVersion);
+              variableChoice.setLabel("Eclipse " + nextSimrelVersion + " - " + nextSDKVersion);
+              variable.getChoices().add(0, variableChoice);
+            }
+          }
+        }
+        gitHubProjects.save(Map.of());
+      }
+
+      {
+        Resource eclipseProjects = resourceSet.getResource(output.appendSegment("org.eclipse.projects.setup"), true);
+        List<EObject> objects = getAllObjects(eclipseProjects);
+        for (EObject eObject : objects)
+        {
+          if (eObject instanceof VariableTask)
+          {
+            VariableTask variable = (VariableTask)eObject;
+            if ("eclipse.latest.p2".equals(variable.getName()))
+            {
+              variable.setValue("https://download.eclipse.org/eclipse/updates/" + nextSDKVersion + "-I-builds");
+              variable.setLabel("Eclipse Latest I-Build p2 Repository - " + nextSDKVersion);
+
+              VariableTask releaseSDKVariable = SetupFactory.eINSTANCE.createVariableTask();
+              releaseSDKVariable.setName("eclipse." + sdkVersion + ".release.p2");
+              releaseSDKVariable.setLabel("Eclipse " + sdkVersion + " Release p2 Repository");
+              releaseSDKVariable.setValue(sdk.toString());
+
+              @SuppressWarnings("unchecked")
+              List<EObject> containingList = (List<EObject>)variable.eContainer().eGet(variable.eContainmentFeature());
+              containingList.add(containingList.indexOf(variable) + 1, releaseSDKVariable);
+            }
+            else if ("eclipse.latest.release.p2".equals(variable.getName()))
+            {
+              variable.setValue("${eclipse." + sdkVersion + ".release.p2}");
+              variable.setLabel("Eclipse Latest Release p2 Repository - " + sdkVersion);
+            }
+            else if ("eclipse.target.platform".equals(variable.getName()))
+            {
+              VariableChoice variableChoice = SetupFactory.eINSTANCE.createVariableChoice();
+              variableChoice.setValue(nextSimrelVersion);
+              variableChoice.setLabel("Eclipse " + nextSimrelVersion + " - " + nextSDKVersion);
+              variable.getChoices().add(0, variableChoice);
+            }
+            else if ("eclipse.target.platform.latest".equals(variable.getName()))
+            {
+              variable.setValue(nextSimrelVersion);
+            }
+            else if ("eclipse.target.platform.latest.released".equals(variable.getName()))
+            {
+              variable.setValue(simrelVersion);
+            }
+            else if ("eclipse.api.baseline.target.platform".equals(variable.getName()))
+            {
+              VariableChoice variableChoice = SetupFactory.eINSTANCE.createVariableChoice();
+              variableChoice.setValue(simrelVersion);
+              variableChoice.setLabel("Eclipse " + simrelVersion + " - " + sdkVersion);
+              variable.getChoices().add(0, variableChoice);
+            }
+            else if ("eclipse.api.baseline.target.platform.latest.released".equals(variable.getName()))
+            {
+              variable.setValue(simrelVersion);
+            }
+          }
+          else if (eObject instanceof RepositoryList)
+          {
+            RepositoryList repositoryList = (RepositoryList)eObject;
+            EObject eContainer = repositoryList.eContainer();
+            @SuppressWarnings("unchecked")
+            List<EObject> containingList = (List<EObject>)eContainer.eGet(repositoryList.eContainmentFeature());
+            int index = containingList.indexOf(repositoryList);
+            if (index == 1)
+            {
+              RepositoryList releaseRepositoryList = P2Factory.eINSTANCE.createRepositoryList();
+              releaseRepositoryList.setName(simrelVersion);
+              releaseRepositoryList.getRepositories().add(P2Factory.eINSTANCE.createRepository("${eclipse." + sdkVersion + ".release.p2}"));
+
+              String name = repositoryList.getName();
+              if (simrelVersion.equals(name))
+              {
+                // Modular Target
+                repositoryList.setName(nextSimrelVersion);
+                containingList.add(index + 1, releaseRepositoryList);
+              }
+              else
+              {
+                // Modular API Baseline Target
+                containingList.add(index, releaseRepositoryList);
+              }
+            }
+          }
+        }
+        eclipseProjects.save(Map.of());
+      }
+
+      return null;
+    }
+
+    private List<EObject> getAllObjects(Resource resource)
+    {
+      List<EObject> result = new ArrayList<>();
+      for (TreeIterator<EObject> it = EcoreUtil.getAllProperContents(resource, false); it.hasNext();)
+      {
+        result.add(it.next());
+      }
+      return result;
+    }
+
+    private String getArgument(List<String> arguments, String name)
+    {
+      var index = arguments.indexOf(name);
+      if (index >= 0)
+      {
+        arguments.remove(index);
+        if (index < arguments.size())
+        {
+          return arguments.remove(index);
+        }
+      }
+
+      return null;
     }
   }
 }
