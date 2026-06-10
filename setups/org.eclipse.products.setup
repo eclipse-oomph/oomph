@@ -239,6 +239,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2026-06/r/eclipse-ide-java-developers</value>
+        </detail>
+        <detail
             key="shortcut">
           <value>Eclipse IDE for Java Developers - Latest Release</value>
         </detail>
@@ -407,6 +411,10 @@
         <detail
             key="status">
           <value>current</value>
+        </detail>
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2026-06/r/eclipse-ide-java-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -3851,6 +3859,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2026-06/r/eclipse-ide-enterprise-java-and-web-developers</value>
+        </detail>
+        <detail
             key="shortcut">
           <value>Eclipse IDE for Enterprise Java and Web Developers - Latest Release</value>
         </detail>
@@ -4283,6 +4295,10 @@
         <detail
             key="status">
           <value>current</value>
+        </detail>
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2026-06/r/eclipse-ide-enterprise-java-and-web-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -12121,6 +12137,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2026-06/r/eclipse-ide-cc-developers</value>
+        </detail>
+        <detail
             key="shortcut">
           <value>Eclipse IDE for C and C++ Developers - Latest Release</value>
         </detail>
@@ -12369,6 +12389,10 @@
         <detail
             key="status">
           <value>current</value>
+        </detail>
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2026-06/r/eclipse-ide-cc-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -16868,6 +16892,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2026-06/r/eclipse-ide-embedded-cc-developers</value>
+        </detail>
+        <detail
             key="shortcut">
           <value>Eclipse IDE for Embedded C and C++ Developers - Latest Release</value>
         </detail>
@@ -17168,6 +17196,10 @@
         <detail
             key="status">
           <value>current</value>
+        </detail>
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2026-06/r/eclipse-ide-embedded-cc-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -20746,6 +20778,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2026-06/r/eclipse-ide-php-developers</value>
+        </detail>
+        <detail
             key="shortcut">
           <value>Eclipse IDE for PHP Developers - Latest Release</value>
         </detail>
@@ -20910,6 +20946,10 @@
         <detail
             key="status">
           <value>current</value>
+        </detail>
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2026-06/r/eclipse-ide-php-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -24087,6 +24127,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2026-06/r/eclipse-ide-eclipse-committers</value>
+        </detail>
+        <detail
             key="shortcut">
           <value>Eclipse IDE for Eclipse Committers - Latest Release</value>
         </detail>
@@ -24285,6 +24329,10 @@
         <detail
             key="status">
           <value>current</value>
+        </detail>
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2026-06/r/eclipse-ide-eclipse-committers</value>
         </detail>
         <detail
             key="shortcut">
@@ -28399,6 +28447,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2026-06/r/eclipse-ide-java-and-dsl-developers</value>
+        </detail>
+        <detail
             key="shortcut">
           <value>Eclipse IDE for Java and DSL Developers - Latest Release</value>
         </detail>
@@ -28549,6 +28601,10 @@
         <detail
             key="status">
           <value>current</value>
+        </detail>
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2026-06/r/eclipse-ide-java-and-dsl-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -31318,6 +31374,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2026-06/r/eclipse-ide-rcp-and-rap-developers</value>
+        </detail>
+        <detail
             key="shortcut">
           <value>Eclipse IDE for RCP and RAP Developers - Latest Release</value>
         </detail>
@@ -31532,6 +31592,10 @@
         <detail
             key="status">
           <value>current</value>
+        </detail>
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2026-06/r/eclipse-ide-rcp-and-rap-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -35420,6 +35484,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2026-06/r/eclipse-modeling-tools</value>
+        </detail>
+        <detail
             key="shortcut">
           <value>Eclipse Modeling Tools - Latest Release</value>
         </detail>
@@ -35646,6 +35714,10 @@
         <detail
             key="status">
           <value>current</value>
+        </detail>
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2026-06/r/eclipse-modeling-tools</value>
         </detail>
         <detail
             key="shortcut">
@@ -39836,6 +39908,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2026-06/r/eclipse-ide-scout-developers</value>
+        </detail>
+        <detail
             key="shortcut">
           <value>Eclipse IDE for Scout Developers - Latest Release</value>
         </detail>
@@ -40004,6 +40080,10 @@
         <detail
             key="status">
           <value>current</value>
+        </detail>
+        <detail
+            key="siteURI">
+          <value>https://www.eclipse.org/downloads/packages/release/2026-06/r/eclipse-ide-scout-developers</value>
         </detail>
         <detail
             key="shortcut">
@@ -43080,6 +43160,10 @@
       <annotation
           source="http://www.eclipse.org/oomph/setup/BrandingInfo">
         <detail
+            key="siteURI">
+          <value>https://archive.eclipse.org/eclipse/downloads/drops4/R-4.40-202606010713/</value>
+        </detail>
+        <detail
             key="shortcut">
           <value>Eclipse Platform - Latest Release</value>
         </detail>
@@ -43144,6 +43228,10 @@
         <detail
             key="status">
           <value>current</value>
+        </detail>
+        <detail
+            key="siteURI">
+          <value>https://archive.eclipse.org/eclipse/downloads/drops4/R-4.40-202606010713/</value>
         </detail>
         <detail
             key="shortcut">
