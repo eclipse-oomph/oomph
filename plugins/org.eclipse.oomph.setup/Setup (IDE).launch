@@ -245,7 +245,6 @@
         <setEntry value="org.eclipse.nebula.widgets.cdatetime@default:default"/>
         <setEntry value="org.eclipse.nebula.widgets.tablecombo@default:default"/>
         <setEntry value="org.eclipse.osgi.compatibility.state@default:false"/>
-        <setEntry value="org.eclipse.osgi.services@default:default"/>
         <setEntry value="org.eclipse.osgi.util@default:default"/>
         <setEntry value="org.eclipse.osgi@-1:true"/>
         <setEntry value="org.eclipse.pde.api.tools@default:default"/>
