@@ -25,10 +25,11 @@
 		}
 
 		body {
-			background-image: url("https://gitlab.eclipse.org/-/project/23/uploads/9abeb07d647dba625b25efc6b2b6eb01/EclipseIDE-SplashScreen2025-2000x800.png");
+			background-image: url("../sponsor/splash_2026.png");
 			background-repeat: no-repeat;
-			background-size: 100% 100%;
+			background-size: cover;
 			background-attachment: fixed;
+			background-position: center;
 			color: white;
 		}
 
@@ -190,9 +191,9 @@
 	<script src="../notification.js?v=1.5"></script>
 	<script>
 		//<![CDATA[
-		const version = '2026-03';
+		const version = '2026-06';
 		const milestone = 'R';
-		const productName = getProductName();
+		const productName = getProductName().replace(/Eclipse (IDE for)?/, '');
 		document.title = `${productName} ${version} Release`;
 
 		function update() {
@@ -224,13 +225,11 @@
 
 			<div id="general">
 				<div id="message-container">
-					<div id="message">
-						<div class="section" style="font-size:150%">
-							The <span class="version">version</span>
-							release for the
-							<img id="product-logo" src="" alt="" />
-							<span class="product-name">product-name</span>
-							is available.
+					<div id="message" style="text-align: center; font-size: max(2.0vh,1.2vw); margin-top: 10ex;">
+						<div class="section" style="font-size: 150%;">
+							<img id="product-logo" src="" alt="" /> <span class="product-name">product-name</span>
+							<br>
+							<span class="version" style="font-size: 150%;">version/span
 						</div>
 						<div class="button-section">
 							<label class="button">
@@ -242,15 +241,15 @@
 							</label>
 							&nbsp;
 							<label class="button">
-								<a href="eclipse+command:close">Ask Me Later</a>
+								<a href="eclipse+command:close">Later</a>
 							</label>
 							&nbsp;
 							<label class="button">
-								<a href="eclipse+command:dismiss-installation">No Thank You</a>
+								<a href="eclipse+command:dismiss-installation">No Thanks</a>
 							</label>
 						</div>
-						<div class="section" style="font-size: 150%">
-							Learn about the exciting <a href="eclipse+external:https://eclipseide.org/release/noteworthy/">New &amp; Noteworthy</a> features!
+						<div class="section" style="font-size: 125%">
+							Checkout the <a href="eclipse+external:https://eclipseide.org/release/noteworthy/">New &amp; Noteworthy</a>
 						</div>
 					</div>
 				</div>
