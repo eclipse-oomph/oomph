@@ -1538,6 +1538,7 @@
   <project href="https://raw.githubusercontent.com/eclipse-uml2/uml2/master/releng/org.eclipse.uml2.build-feature/UML2.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-viatra/org.eclipse.viatra/master/releng/org.eclipse.viatra.setup/VIATRAEMF.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-windowbuilder/windowbuilder/master/setups/WindowBuilder.setup#/"/>
+  <project href="https://raw.githubusercontent.com/eclipse-wildwebdeveloper/wildwebdeveloper/master/setup/WWD.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-xpect/Xpect/master/org.eclipse.xpect.releng/Xpect.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-xsemantics/xsemantics/master/devtools/org.eclipse.xsemantics.workspace/Xsemantics.setup#/"/>
   <project href="https://raw.githubusercontent.com/eclipse-xtext/xtext/main/releng/org.eclipse.xtext.contributor/Xtext.setup#/"/>
