@@ -353,9 +353,6 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
               builder.append("location=\"" + escaper.escape(repositoryLocation) + "\"/>"); //$NON-NLS-1$ //$NON-NLS-2$
               builder.append(nl);
             }
-
-            builder.append("    </location>"); //$NON-NLS-1$
-            builder.append(nl);
           };
 
           if (unitsFirst)
@@ -368,6 +365,9 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
             serializeRepositories.run();
             serializeUnits.run();
           }
+
+          builder.append("    </location>"); //$NON-NLS-1$
+          builder.append(nl);
         }
         else
         {
@@ -413,8 +413,6 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
 
                 builder.append("location=\"" + escaper.escape(repositoryLocation) + "\"/>"); //$NON-NLS-1$ //$NON-NLS-2$
                 builder.append(nl);
-                builder.append("    </location>"); //$NON-NLS-1$
-                builder.append(nl);
               };
 
               if (unitsFirst)
@@ -427,6 +425,9 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
                 serializeRepository.run();
                 serializeUnits.run();
               }
+
+              builder.append("    </location>"); //$NON-NLS-1$
+              builder.append(nl);
             }
           }
         }
