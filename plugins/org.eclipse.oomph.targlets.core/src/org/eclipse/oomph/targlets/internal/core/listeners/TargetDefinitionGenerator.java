@@ -129,6 +129,8 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
 
   public static final String ANNOTATION_IGNORE_JAVA_REQUIREMENTS = "ignoreJavaRequirements"; //$NON-NLS-1$
 
+  public static final String ANNOTATION_UNITS_FIRST = "unitsFirst"; //$NON-NLS-1$
+
   public static final String ANNOTATION_IGNORE_PROPERTIES_MATCH_REQUIREMENTS = "ignorePropertiesMatchRequirements"; //$NON-NLS-1$
 
   public static final String ANNOTATION_GENERATE_SERVER_XML = "generateServerXML"; //$NON-NLS-1$
@@ -200,6 +202,7 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
     final boolean generateImplicitUnits = isAnnotationDetail(annotation, ANNOTATION_GENERATE_IMPLICIT_UNITS, false);
     final boolean minimizeImplicitUnits = isAnnotationDetail(annotation, ANNOTATION_MINIMIZE_IMPLICIT_UNITS, false);
     final boolean ignoreJavaRequirements = isAnnotationDetail(annotation, ANNOTATION_IGNORE_JAVA_REQUIREMENTS, true);
+    final boolean unitsFirst = isAnnotationDetail(annotation, ANNOTATION_UNITS_FIRST, true);
     final boolean ignorePropertiesMatchRequirements = isAnnotationDetail(annotation, ANNOTATION_IGNORE_PROPERTIES_MATCH_REQUIREMENTS, false);
 
     final Pattern versionsPattern;
@@ -306,50 +309,65 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
               + "\" includeMode=\"" + includeMode + "\" includeSource=\"" + includeSource + "\" type=\"InstallableUnit\">"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
           builder.append(nl);
 
-          // Only one set will be non-empty, but with sorting it might not be the first one.
-          for (Set<IInstallableUnit> set : repositoryIUs.values())
-          {
-            if (!set.isEmpty())
+          Runnable serializeUnits = () -> {
+            // Only one set will be non-empty, but with sorting it might not be the first one.
+            for (Set<IInstallableUnit> set : repositoryIUs.values())
             {
-              List<IInstallableUnit> list = new ArrayList<>(set);
-              Collection<String> elements = new LinkedHashSet<>();
-              Collections.sort(list);
-
-              for (IInstallableUnit iu : list)
+              if (!set.isEmpty())
               {
-                String id = iu.getId();
-                elements.add(formatElement(iu, versionsPattern.matcher(id).matches(), versionRangesPattern.matcher(id).matches(), escaper));
+                List<IInstallableUnit> list = new ArrayList<>(set);
+                Collection<String> elements = new LinkedHashSet<>();
+                Collections.sort(list);
+
+                for (IInstallableUnit iu : list)
+                {
+                  String id = iu.getId();
+                  elements.add(formatElement(iu, versionsPattern.matcher(id).matches(), versionRangesPattern.matcher(id).matches(), escaper));
+                }
+
+                for (String element : elements)
+                {
+                  builder.append("      "); //$NON-NLS-1$
+                  builder.append(element);
+                  builder.append(nl);
+                }
+
+                break;
+              }
+            }
+          };
+
+          Runnable serializeRepositories = () -> {
+            for (IMetadataRepository repository : repositoryIUs.keySet())
+            {
+              builder.append("      <repository "); //$NON-NLS-1$
+
+              java.net.URI repositoryLocation = repository.getLocation();
+              String repositoryID = repositoryIDs.get(repositoryLocation.toString());
+              if (repositoryID != null)
+              {
+
+                builder.append("id=\"").append(repositoryID).append("\" "); //$NON-NLS-1$ //$NON-NLS-2$
               }
 
-              for (String element : elements)
-              {
-                builder.append("      "); //$NON-NLS-1$
-                builder.append(element);
-                builder.append(nl);
-              }
-
-              break;
-            }
-          }
-
-          for (IMetadataRepository repository : repositoryIUs.keySet())
-          {
-            builder.append("      <repository "); //$NON-NLS-1$
-
-            java.net.URI repositoryLocation = repository.getLocation();
-            String repositoryID = repositoryIDs.get(repositoryLocation.toString());
-            if (repositoryID != null)
-            {
-
-              builder.append("id=\"").append(repositoryID).append("\" "); //$NON-NLS-1$ //$NON-NLS-2$
+              builder.append("location=\"" + escaper.escape(repositoryLocation) + "\"/>"); //$NON-NLS-1$ //$NON-NLS-2$
+              builder.append(nl);
             }
 
-            builder.append("location=\"" + escaper.escape(repositoryLocation) + "\"/>"); //$NON-NLS-1$ //$NON-NLS-2$
+            builder.append("    </location>"); //$NON-NLS-1$
             builder.append(nl);
-          }
+          };
 
-          builder.append("    </location>"); //$NON-NLS-1$
-          builder.append(nl);
+          if (unitsFirst)
+          {
+            serializeUnits.run();
+            serializeRepositories.run();
+          }
+          else
+          {
+            serializeRepositories.run();
+            serializeUnits.run();
+          }
         }
         else
         {
@@ -374,27 +392,41 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
                 elements.add(formatElement(iu, versionsPattern.matcher(id).matches(), versionRangesPattern.matcher(id).matches(), escaper));
               }
 
-              for (String element : elements)
-              {
-                builder.append("      "); //$NON-NLS-1$
-                builder.append(element);
+              Runnable serializeUnits = () -> {
+                for (String element : elements)
+                {
+                  builder.append("      "); //$NON-NLS-1$
+                  builder.append(element);
+                  builder.append(nl);
+                }
+              };
+
+              Runnable serializeRepository = () -> {
+                builder.append("      <repository "); //$NON-NLS-1$
+
+                java.net.URI repositoryLocation = repository.getLocation();
+                String repositoryID = repositoryIDs.get(repositoryLocation.toString());
+                if (repositoryID != null)
+                {
+                  builder.append("id=\"").append(repositoryID).append("\" "); //$NON-NLS-1$ //$NON-NLS-2$
+                }
+
+                builder.append("location=\"" + escaper.escape(repositoryLocation) + "\"/>"); //$NON-NLS-1$ //$NON-NLS-2$
                 builder.append(nl);
-              }
+                builder.append("    </location>"); //$NON-NLS-1$
+                builder.append(nl);
+              };
 
-              builder.append("      <repository "); //$NON-NLS-1$
-
-              java.net.URI repositoryLocation = repository.getLocation();
-              String repositoryID = repositoryIDs.get(repositoryLocation.toString());
-              if (repositoryID != null)
+              if (unitsFirst)
               {
-
-                builder.append("id=\"").append(repositoryID).append("\" "); //$NON-NLS-1$ //$NON-NLS-2$
+                serializeUnits.run();
+                serializeRepository.run();
               }
-
-              builder.append("location=\"" + escaper.escape(repositoryLocation) + "\"/>"); //$NON-NLS-1$ //$NON-NLS-2$
-              builder.append(nl);
-              builder.append("    </location>"); //$NON-NLS-1$
-              builder.append(nl);
+              else
+              {
+                serializeRepository.run();
+                serializeUnits.run();
+              }
             }
           }
         }

@@ -21,4 +21,12 @@
             genModel="model/SetupTarglets.genmodel"/>
    </extension>
 
+   <extension
+         point="org.eclipse.emf.ecore.content_parser">
+      <parser
+            class="org.eclipse.oomph.setup.targlets.impl.TargetResourceFactoryImpl"
+            contentTypeIdentifier="org.eclipse.pde.targetFile">
+      </parser>
+   </extension>
+
 </plugin>
