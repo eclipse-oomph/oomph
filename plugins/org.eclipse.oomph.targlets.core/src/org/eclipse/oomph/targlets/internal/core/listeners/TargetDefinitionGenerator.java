@@ -91,6 +91,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * @author Eike Stepper
@@ -124,6 +125,8 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
   public static final String ANNOTATION_EXTRA_UNITS = "extraUnits"; //$NON-NLS-1$
 
   public static final String ANNOTATION_SINGLE_LOCATION = "singleLocation"; //$NON-NLS-1$
+
+  public static final String ANNOTATION_MINIMIZE_LOCATION_UNITS = "minimizeLocationUnits"; //$NON-NLS-1$
 
   public static final String ANNOTATION_SORT_LOCATIONS = "sortLocations"; //$NON-NLS-1$
 
@@ -198,6 +201,7 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
     final Set<IVersionedId> extraUnits = getExtraUnits(annotation);
     final List<String> preferredURLs = getPreferredRepositories(annotation);
     final boolean singleLocation = isAnnotationDetail(annotation, ANNOTATION_SINGLE_LOCATION, false);
+    final boolean minimizeLocationUnits = !singleLocation && isAnnotationDetail(annotation, ANNOTATION_MINIMIZE_LOCATION_UNITS, false);
     final boolean sortLocations = isAnnotationDetail(annotation, ANNOTATION_SORT_LOCATIONS, false);
     final boolean generateImplicitUnits = isAnnotationDetail(annotation, ANNOTATION_GENERATE_IMPLICIT_UNITS, false);
     final boolean minimizeImplicitUnits = isAnnotationDetail(annotation, ANNOTATION_MINIMIZE_IMPLICIT_UNITS, false);
@@ -253,8 +257,8 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
     }
 
     final Map<IMetadataRepository, Set<IInstallableUnit>> repositoryIUs = analyzeRepositories(targlet, profile, artificialRoot, metadataRepositories,
-        workspaceIUInfos, extraUnits, preferredURLs, generateImplicitUnits, minimizeImplicitUnits, singleLocation, sortLocations, ignoreJavaRequirements,
-        ignorePropertiesMatchRequirements, monitor);
+        workspaceIUInfos, extraUnits, preferredURLs, generateImplicitUnits, minimizeImplicitUnits, singleLocation, minimizeLocationUnits, sortLocations,
+        ignoreJavaRequirements, ignorePropertiesMatchRequirements, monitor);
 
     List<String> targetReferences = new ArrayList<>();
     for (String composedTarget : composedTargets)
@@ -731,8 +735,8 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
 
   private static Map<IMetadataRepository, Set<IInstallableUnit>> analyzeRepositories(Targlet targlet, Profile profile, IInstallableUnit artificialRoot,
       List<IMetadataRepository> metadataRepositories, Map<IInstallableUnit, WorkspaceIUInfo> workspaceIUInfos, Set<IVersionedId> extraUnits,
-      List<String> preferredURLs, boolean generateImplicitUnits, boolean minimizeImplicitUnits, boolean singleLocation, boolean sortLocations,
-      boolean ignoreJavaRequirements, boolean ignorePropertiesMatchRequirements, IProgressMonitor monitor)
+      List<String> preferredURLs, boolean generateImplicitUnits, boolean minimizeImplicitUnits, boolean singleLocation, boolean minimizeLocationIUs,
+      boolean sortLocations, boolean ignoreJavaRequirements, boolean ignorePropertiesMatchRequirements, IProgressMonitor monitor)
   {
     Set<String> workspaceIDs = new LinkedHashSet<>();
     for (IInstallableUnit iu : workspaceIUInfos.keySet())
@@ -775,8 +779,13 @@ public class TargetDefinitionGenerator extends WorkspaceUpdateListener
 
     Map<String, IMetadataRepository> queryables = sortMetadataRepositories(targlet, metadataRepositories, preferredURLs, monitor);
 
+    Set<IInstallableUnit> units = minimizeLocationIUs
+        ? assignUnits(queryables, extraUnits, generateImplicitUnits, minimizeImplicitUnits, true, sortLocations, ignoreJavaRequirements,
+            ignorePropertiesMatchRequirements, profileIUs, monitor).values().stream().flatMap(Collection::stream).collect(Collectors.toSet())
+        : profileIUs;
+
     return assignUnits(queryables, extraUnits, generateImplicitUnits, minimizeImplicitUnits, singleLocation, sortLocations, ignoreJavaRequirements,
-        ignorePropertiesMatchRequirements, profileIUs, monitor);
+        ignorePropertiesMatchRequirements, units, monitor);
   }
 
   private static Map<String, IMetadataRepository> sortMetadataRepositories(Targlet targlet, List<IMetadataRepository> metadataRepositories,

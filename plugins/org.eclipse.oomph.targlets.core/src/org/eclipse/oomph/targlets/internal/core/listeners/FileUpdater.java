@@ -32,6 +32,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Eike Stepper
@@ -40,6 +42,8 @@ public abstract class FileUpdater
 {
   private static final URIConverter URI_CONVERTER = new ExtensibleURIConverterImpl(URIHandler.DEFAULT_HANDLERS,
       Arrays.asList(new ContentHandler[] { new PlatformContentHandlerImpl(), new XMLContentHandlerImpl() }));
+
+  private static final Pattern NL_PATTERN = Pattern.compile("\r?\n"); //$NON-NLS-1$
 
   public FileUpdater()
   {
@@ -81,6 +85,15 @@ public abstract class FileUpdater
     }
 
     String oldContents = URI_CONVERTER.exists(uri, null) ? getContents(uri, encoding) : null;
+    if (oldContents != null)
+    {
+      Matcher matcher = NL_PATTERN.matcher(oldContents);
+      if (matcher.find())
+      {
+        nl = matcher.group();
+      }
+    }
+
     String newContents = createNewContents(oldContents, encoding, nl);
     if (newContents != null && !newContents.equals(oldContents))
     {
