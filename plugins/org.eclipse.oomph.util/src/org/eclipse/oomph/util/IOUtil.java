@@ -152,6 +152,10 @@ public final class IOUtil
   public static File getFromPath(String command)
   {
     String path = System.getenv().get("PATH"); //$NON-NLS-1$
+    if (path == null && OS.INSTANCE.isWin())
+    {
+      path = System.getenv().get("Path"); //$NON-NLS-1$
+    }
 
     StringTokenizer tokenizer = new StringTokenizer(path, File.pathSeparator);
     while (tokenizer.hasMoreTokens())

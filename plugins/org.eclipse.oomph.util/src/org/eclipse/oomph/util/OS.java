@@ -362,8 +362,11 @@ public abstract class OS
    */
   private static class Win32 extends OS
   {
-    // Don't use "explorer" as it forks another process and returns a confusing exit value.
-    private static final String[] OPEN_COMMANDS = {};
+    // We don't want to use "explorer" as it forks another process and returns a confusing exit value.
+    // But the desktop solution doesn't work anymore either.
+    // https://github.com/eclipse-oomph/oomph/issues/200
+    //
+    private static final String[] OPEN_COMMANDS = { "explorer.exe" }; //$NON-NLS-1$
 
     public Win32(String osgiWS, String osgiArch)
     {
