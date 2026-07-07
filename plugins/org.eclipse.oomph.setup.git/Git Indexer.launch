@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="org.eclipse.pde.ui.RuntimeWorkbench">
-    <setAttribute key="additional_plugins"/>
+    <setAttribute key="additional_plugins">
+        <setEntry value="org.apache.commons.logging:1.2.0.v20180409-1502:default:true:default:default"/>
+        <setEntry value="org.apache.httpcomponents.httpclient:4.5.14:default:true:default:default"/>
+    </setAttribute>
     <booleanAttribute key="append.args" value="true"/>
     <stringAttribute key="application" value="org.eclipse.oomph.setup.git.GitIndexer"/>
     <booleanAttribute key="askclear" value="true"/>
