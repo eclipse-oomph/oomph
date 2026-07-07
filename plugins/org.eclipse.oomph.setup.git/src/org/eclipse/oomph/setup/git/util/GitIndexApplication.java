@@ -141,6 +141,9 @@ public class GitIndexApplication implements IApplication
       "https://github.com/eclipse/microprofile-bom", //
       "https://gitlab.eclipse.org/eclipse/papyrus/discussion", //
       "https://gitlab.eclipse.org/eclipse/sagetea/sagetea-smalltalk", //
+      "https://gitlab.eclipse.org/eclipse/technology/dash/dash-maven", //
+      "https://gitlab.eclipse.org/eclipse/technology/dash/eclipse-api-for-java", //
+      "https://gitlab.eclipse.org/eclipse/technology/dash/eclipse-project-code", //
       "https://gitlab.eclipse.org/eclipse/teneo/org.eclipse.emf.teneo", //
       ""));
 
@@ -2677,9 +2680,6 @@ public class GitIndexApplication implements IApplication
       "https://gitlab.eclipse.org/eclipse/statet/statet", //
       "https://gitlab.eclipse.org/eclipse/subversive/subversive", //
       "https://gitlab.eclipse.org/eclipse/tcf/tcf", //
-      "https://gitlab.eclipse.org/eclipse/technology/dash/dash-maven", //
-      "https://gitlab.eclipse.org/eclipse/technology/dash/eclipse-api-for-java", //
-      "https://gitlab.eclipse.org/eclipse/technology/dash/eclipse-project-code", //
       "https://gitlab.eclipse.org/eclipse/titan/titan.EclipsePlug-ins", //
       "https://gitlab.eclipse.org/eclipse/titan/titan.core", //
       "https://gitlab.eclipse.org/eclipse/titan/titan.language-server", //
