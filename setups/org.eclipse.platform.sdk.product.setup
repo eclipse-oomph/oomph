@@ -336,7 +336,7 @@
   </version>
   <version name="4.34"
       label="4.34 - 2024-12"
-      requiredJavaVersion="21">
+      requiredJavaVersion="17">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
@@ -365,7 +365,7 @@
   </version>
   <version name="4.33"
       label="4.33 - 2024-09"
-      requiredJavaVersion="21">
+      requiredJavaVersion="17">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
@@ -394,7 +394,7 @@
   </version>
   <version name="4.32"
       label="4.32 - 2024-06"
-      requiredJavaVersion="21">
+      requiredJavaVersion="17">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail

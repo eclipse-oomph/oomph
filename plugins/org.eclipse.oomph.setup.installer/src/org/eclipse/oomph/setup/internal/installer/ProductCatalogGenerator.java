@@ -1997,7 +1997,7 @@ public class ProductCatalogGenerator implements IApplication
     }
 
     String idPrefix = "tooling" + (SPECIAL_PRODUCT_IDS.contains(productName) || ALL_PRODUCT_ID.equals(productName) ? "epp.package.java"
-        : ECLIPSE_PLATFORM_SDK_PRODUCT_ID.equals(productName) ? "org.eclipse.platform.sdk" : productName) + ".ini.";
+        : ECLIPSE_PLATFORM_SDK_PRODUCT_ID.equals(productName) ? "org.eclipse.platform.ide" : productName) + ".ini.";
 
     Version maxJavaVersion = null;
     if (train.compareTo("neon") >= 0)
