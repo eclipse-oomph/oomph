@@ -587,7 +587,9 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
       }
       else
       {
-        setProfileProperties(profileProperties + "," + overriddenProfileProperties); //$NON-NLS-1$
+        Map<String, String> overriddenProfilePropertiesMap = P2Util.toProfilePropertiesMap(overriddenProfileProperties);
+        overriddenProfilePropertiesMap.putAll(P2Util.toProfilePropertiesMap(profileProperties));
+        setProfileProperties(P2Util.toProfilePropertiesString(overriddenProfilePropertiesMap));
       }
     }
 

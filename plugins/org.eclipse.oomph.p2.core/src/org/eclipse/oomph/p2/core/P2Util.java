@@ -449,7 +449,7 @@ public final class P2Util
       String value = entry.getValue();
       if (value != null)
       {
-        result.append(' ').append(value);
+        result.append('=').append(value);
       }
     }
 
