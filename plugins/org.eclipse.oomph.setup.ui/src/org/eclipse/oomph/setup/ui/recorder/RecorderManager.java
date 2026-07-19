@@ -162,7 +162,6 @@ public final class RecorderManager
 
     PreferenceDialog dialog = PreferencesUtil.createPreferenceDialogOn(null, null, null, null);
     dialog.open();
-    setTemporaryRecorderTarget(null);
   }
 
   public void done()
