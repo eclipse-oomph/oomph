@@ -78,7 +78,11 @@
         max="0"/>
   </annotation>
   <annotation
-      source="http://www.eclipse.org/oomph/setup/Notification-X">
+      source="http://www.eclipse.org/oomph/setup/Notification">
+    <detail
+        key="description">
+      <value>Offer to update to the latest milestone, if we have don't have it installed and have 2026-06 along with EPP JustJ installed, but is broken with older self-product catalog, so ensure the fix is installed too.</value>
+    </detail>
     <detail
         key="maximize">
       <value>false</value>
@@ -90,10 +94,44 @@
     <content
         xsi:type="p2:Requirement"
         name="org.eclipse.epp.package.common"
-        versionRange="[4.39.0,4.40.0.20260528-0705)"/>
+        versionRange="[4.40.0,4.41.0.20260709-0811)"/>
+    <content
+        xsi:type="p2:Requirement"
+        name="org.eclipse.justj.openjdk.hotspot.jre.full"/>
+    <content
+        xsi:type="p2:Requirement"
+        name="org.eclipse.oomph.setup.core"
+        versionRange="1.37.0.v20260720-1056"/>
   </annotation>
   <annotation
       source="http://www.eclipse.org/oomph/setup/Notification">
+    <detail
+        key="description">
+      <value>Offer to update to the latest milestone, if we have don't have it installed and have 2026-06 along with a Java 25 JRE installed.</value>
+    </detail>
+    <detail
+        key="maximize">
+      <value>false</value>
+    </detail>
+    <detail
+        key="uri">
+      <value>https://www.eclipse.org/setups/notification/milestone</value>
+    </detail>
+    <content
+        xsi:type="p2:Requirement"
+        name="org.eclipse.epp.package.common"
+        versionRange="[4.40.0,4.41.0.20260709-0811)"/>
+    <content
+        xsi:type="p2:Requirement"
+        name="jre"
+        versionRange="25.0.0"/>
+  </annotation>
+  <annotation
+      source="http://www.eclipse.org/oomph/setup/Notification">
+    <detail
+        key="description">
+      <value>Offer to update to the latest release, if we currently have 2026-03 installed</value>
+    </detail>
     <detail
         key="maximize">
       <value>false</value>
@@ -110,6 +148,10 @@
   <annotation
       source="http://www.eclipse.org/oomph/setup/Notification">
     <detail
+        key="description">
+      <value>Strongly encourage to sponsor the Eclipse IDE</value>
+    </detail>
+    <detail
         key="maximize">
       <value>true</value>
     </detail>
@@ -121,6 +163,49 @@
         xsi:type="p2:Requirement"
         name="org.eclipse.epp.package.common"
         versionRange="[4.40.0.20260604-0652,5.0.0)"/>
+  </annotation>
+  <annotation
+      source="http://www.eclipse.org/oomph/setup/Notification">
+    <detail
+        key="description">
+      <value>Offer to upgrade the 2026-06 IDE to run with Java 25, but only if a JustJ JRE is not installed and if the IDE is currently running on &lt; Java 25</value>
+    </detail>
+    <detail
+        key="maximize">
+      <value>false</value>
+    </detail>
+    <detail
+        key="uri">
+      <value>https://www.eclipse.org/setups/notification/upgrade/</value>
+    </detail>
+    <content
+        xsi:type="p2:Requirement"
+        name="org.eclipse.epp.package.common"
+        versionRange="[4.40.0.20260604-0652,5.0.0)"/>
+    <content
+        xsi:type="p2:Requirement"
+        name="jre"
+        versionRange="[1.0.0.0,25.0.0)"/>
+    <content
+        xsi:type="p2:Requirement"
+        name="org.eclipse.justj.openjdk.hotspot.jre.minimal"
+        optional="true"
+        max="0"/>
+    <content
+        xsi:type="p2:Requirement"
+        name="org.eclipse.justj.openjdk.hotspot.jre.minimal.stripped"
+        optional="true"
+        max="0"/>
+    <content
+        xsi:type="p2:Requirement"
+        name="org.eclipse.justj.openjdk.hotspot.jre.full"
+        optional="true"
+        max="0"/>
+    <content
+        xsi:type="p2:Requirement"
+        name="org.eclipse.justj.openjdk.hotspot.jre.full.stripped"
+        optional="true"
+        max="0"/>
   </annotation>
   <annotation
       source="http://www.eclipse.org/oomph/setup/JRE">
