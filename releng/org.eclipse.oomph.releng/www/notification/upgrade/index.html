@@ -4,7 +4,7 @@
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<link href="https://eclipseide.org/favicon.ico" rel="icon" type="image/x-icon" />
-	<title>Eclipse IDE</title>
+	<title>Java 25 Upgrade</title>
 	<link rel="preconnect stylesheet" href="../notification.css?v=1.0" />
 	<style>
 		/* <![CDATA[*/
@@ -32,16 +32,15 @@
 	<script>
 		//<![CDATA[
 		const version = '2026-09';
-		const milestone = 'M1';
+		const javaVersion = '25';
 		const productName = getProductName();
-		document.title = `${productName} ${version} ${milestone}`;
+		document.title = `${productName} ${version} - Java ${javaVersion} Upgrade`;
 
 		function update() {
 			updateInnerInnerHTML('.version', version);
-			updateInnerInnerHTML('.milestone', milestone);
+			updateInnerInnerHTML('.javaVersion', javaVersion);
 			updateInnerInnerHTML('.product-name', productName);
 			document.getElementById('product-logo').src = getProductImage();
-			document.getElementById('download-link').href = `eclipse+external:https://www.eclipse.org/downloads/packages/release/${version}/${milestone.toLowerCase()}`;
 		}
 		//]]>
 	</script>
@@ -65,23 +64,19 @@
 
 			<div id="general">
 				<div class="section">
-					The <span class="version">version</span> <span class="milestone">milestone</span> milestone
-					for the
+					The <span class="version">version</span> version
+					of the
 					<img id="product-logo" src="" alt="" />
 					<span class="product-name">product-name</span>
-					is available.
+					will require Java <span class="javaVersion">java version</span> to run.
 				</div>
 				<div class="section">
-					It provides early access to the latest and greatest features for your IDE,
-					though of course there is also the possibility of regressions.
+					Would you like to upgrade this IDE to run with Java 25 now
+					so that you will be able to update to the 2026-09 version?
 				</div>
 				<div class="button-section">
 					<label class="button">
-						<a href="eclipse+setup:Milestone.setup">Install in this IDE</a>
-					</label>
-					&nbsp;
-					<label class="button">
-						<a id="download-link" href="eclipse+external:https://www.eclipse.org/downloads/packages/">Download</a>
+						<a href="eclipse+setup:Upgrade.setup">Upgrade this IDE</a>
 					</label>
 					&nbsp;
 					<label class="button">
@@ -91,24 +86,6 @@
 					<label class="button">
 						<a href="eclipse+command:dismiss-installation">No Thank You</a>
 					</label>
-				</div>
-				<div class="section">
-					<details>
-						<summary>How to Report a Problem</summary>
-						By testing this version and <a class="copy-query" href="eclipse+external:../../problems/index.html">reporting problems</a> before the release,
-						you will be providing a valuable service for the community,
-						helping to ensure a quality <span class="version"></span> release.
-						The latest version of the IDE provides <code>Help -> Report a Problem</code> for your convenience.
-					</details>
-				</div>
-				<div class="section">
-					<details>
-						<summary>How to Revert an Update</summary>
-						Note that you can easily revert an update if you encounter serious problems.
-						Use <code>Help &rarr; About Eclipse IDE &rarr; Installation Details &rarr; Installation History</code>,
-						select an older configuration in the <code>Previous configuration</code> list,
-						and press <code>Revert</code> go back to that state.
-					</details>
 				</div>
 				<div id="ide-wg" class="section" style="display: none">
 					<hr />

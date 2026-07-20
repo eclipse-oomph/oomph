@@ -216,8 +216,16 @@ public class SelfProductCatalogURIHandlerImpl extends URIHandlerImpl
                 org.osgi.framework.Version osgiVersion = new org.osgi.framework.Version(version.toString());
                 int major = osgiVersion.getMajor();
                 int minor = osgiVersion.getMinor();
-                VersionRange versionRange = new VersionRange(Version.createOSGi(major, minor, 0), true, Version.createOSGi(major + 1, 0, 0), false);
-                requirement.setVersionRange(versionRange);
+                if (QueryUtil.isGroup(iu) || QueryUtil.isProduct(iu))
+                {
+                  VersionRange versionRange = new VersionRange(Version.createOSGi(major, minor, 0), true, Version.MAX_VERSION, true);
+                  requirement.setVersionRange(versionRange);
+                }
+                else
+                {
+                  VersionRange versionRange = new VersionRange(Version.createOSGi(major, minor, 0), true, Version.createOSGi(major + 1, 0, 0), false);
+                  requirement.setVersionRange(versionRange);
+                }
               }
 
               requirement.setName(iu.getId());

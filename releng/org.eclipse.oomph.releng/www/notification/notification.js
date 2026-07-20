@@ -40,7 +40,7 @@ const productImages = new Map([
 
 function getProductImage() {
 	return productImages.get(getQueryParameter('product-id') ?? 'default')
-		?? productImages.get('default')
+		?? productImages.get('default');
 }
 
 function generate(showLogos) {
@@ -83,9 +83,9 @@ function load() {
 			for (const [key, value] of query) {
 				const row = lastElement.cloneNode(true);
 				const propertyTD = row.children.item(0);
-				propertyTD.innerText = key
+				propertyTD.innerText = key;
 				const valueTD = row.children.item(1);
-				valueTD.innerText = value
+				valueTD.innerText = value;
 				queryTable.appendChild(row);
 			}
 			lastElement.remove();
@@ -96,7 +96,7 @@ function load() {
 		const url = new URL(element.href);
 		for (let [k, v] of new URLSearchParams(window.location.search).entries()) {
 			if (!url.searchParams.has(k)) {
-				url.searchParams.set(k, v)
+				url.searchParams.set(k, v);
 			}
 		}
 		element.href = url.toString();
@@ -127,7 +127,7 @@ async function genenerateLogos(element) {
 				}
 			}
 
-			for (let i = content.length - 1; i > 0; i--) {
+			for (let i = content.length - 1;i > 0;i--) {
 				const j = Math.floor(Math.random() * (i + 1));
 				[content[i], content[j]] = [content[j], content[i]];
 			}
@@ -172,8 +172,26 @@ function makeLinksPlain() {
 				a.setAttribute('target', 'eclipse+external');
 			}
 		}
+		for (const a of document.querySelectorAll('a[href^="eclipse+command:"]')) {
+			a.onclick = () => {
+				window.alert(`In the IDE this will invoke the following commamd:\n\n\t${a.href}.`);
+				return false;
+			};
+		}
+		for (const a of document.querySelectorAll('a[href^="eclipse+setup:"]')) {
+			const href = a.href;
+			a.href = a.href.replace('eclipse+setup:', '');
+			if (a.getAttribute('target') == null) {
+				a.setAttribute('target', 'eclipse+setup');
+			}
+			a.onclick = () => {
+				window.alert(`In the IDE this will apply the following setup and start the updater:\n\n\t${href}.`);
+				return true;
+			};
+		}
 	}
 }
+
 function spanify(string) {
 	return string.split('').map(c => `<span>${c == ' ' ? '&nbsp;' : c}</span>`).join('');
 }
@@ -195,5 +213,5 @@ function updateInnerInnerHTML(selector, value) {
 function toElements(text) {
 	const wrapper = document.createElement('div');
 	wrapper.innerHTML = text;
-	return wrapper.children
+	return wrapper.children;
 }

@@ -59,6 +59,8 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.Version;
 
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -123,9 +125,39 @@ public final class NotificationViewPart extends ViewPart
     }
   }
 
+  @SuppressWarnings("nls")
   private String getNotificationURI()
   {
-    return notification.getDetails().get(AnnotationConstants.KEY_URI);
+    // When debugging and testing, we redirect the raw GitHub setups to the local clone.
+    // We can reuse this to redirect the notification URIs also to the same local clone.
+    String uri = notification.getDetails().get(AnnotationConstants.KEY_URI);
+    if (uri.startsWith("https://www.eclipse.org/setups/"))
+    {
+      URI localSetups = uriConverter
+          .normalize(URI.createURI("https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/../releng/org.eclipse.oomph.releng/www/"));
+      if (localSetups.isFile())
+      {
+        URI actualURI = URI.createURI(uri);
+        String query = actualURI.fragment();
+        String fragment = actualURI.fragment();
+        URI trimmedURI = actualURI.trimFragment().trimQuery();
+        Path localPath = Path.of(localSetups.toFileString(), trimmedURI.toString().replace("https://www.eclipse.org/setups/", ""));
+        if (Files.isDirectory(localPath))
+        {
+          // The browser does not automatically redirect a folder to the index.html in that folder,
+          // so we can do that manually here.
+          localPath = localPath.resolve("index.html");
+        }
+
+        // Do the redirection only if a file actually exists at this location.
+        if (Files.isRegularFile(localPath))
+        {
+          return URI.createFileURI(localPath.normalize().toString()).appendFragment(fragment).appendQuery(query).toString();
+        }
+      }
+    }
+
+    return uri;
   }
 
   @SuppressWarnings("nls")

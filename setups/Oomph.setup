@@ -79,6 +79,14 @@
           key="/instance/org.eclipse.m2e.core/eclipse.m2.downloadSources">
         <value>record</value>
       </detail>
+      <detail
+          key="/instance/org.eclipse.wildwebdeveloper/javascript.format.convertTabsToSpaces">
+        <value>record</value>
+      </detail>
+      <detail
+          key="/instance/org.eclipse.wildwebdeveloper/javascript.format.semicolons">
+        <value>record</value>
+      </detail>
     </annotation>
     <setupTask
         xsi:type="setup:CompoundTask"
@@ -175,6 +183,14 @@
           xsi:type="setup:PreferenceTask"
           key="/instance/org.eclipse.wildwebdeveloper/html.format.wrapLineLength"
           value="0"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.wildwebdeveloper/javascript.format.convertTabsToSpaces"
+          value="false"/>
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.wildwebdeveloper/javascript.format.semicolons"
+          value="insert"/>
     </setupTask>
     <setupTask
         xsi:type="setup:CompoundTask"

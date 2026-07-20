@@ -29,10 +29,18 @@
         label="Eclipse IDE Milestone Updates">
       <requirement
           name="org.eclipse.epp.package.common"
-          versionRange="[4.40.0,5.0.0)"/>
+          versionRange="[4.41.0,5.0.0)"/>
       <repository
           url="https://download.eclipse.org/releases/milestone"/>
+      <repository
+          url="https://download.eclipse.org/justj/epp/milestone/latest"/>
     </setupTask>
+    <setupTask
+        xsi:type="setup:EclipseIniTask"
+        option="-Djava.security.manager"
+        value="=allow"
+        vm="true"
+        remove="true"/>
     <productVersion
         href="index:/org.eclipse.setup#//@productCatalogs[name='self']/@products[name='empty.product']/@versions[name='version']"/>
     <description>Eclipse IDE Milestone Updates provides early access to Eclipse IDE milestones as they become available.</description>
