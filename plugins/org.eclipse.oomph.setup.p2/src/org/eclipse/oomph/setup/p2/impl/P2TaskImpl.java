@@ -45,6 +45,7 @@ import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.SegmentSequence;
 import org.eclipse.emf.common.util.UniqueEList;
@@ -53,6 +54,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 
@@ -71,6 +73,8 @@ import org.eclipse.equinox.p2.engine.ProvisioningContext;
 import org.eclipse.equinox.p2.metadata.IArtifactKey;
 import org.eclipse.equinox.p2.metadata.IInstallableUnit;
 import org.eclipse.equinox.p2.metadata.ILicense;
+import org.eclipse.equinox.p2.metadata.Version;
+import org.eclipse.equinox.p2.metadata.VersionRange;
 import org.eclipse.equinox.p2.planner.IProfileChangeRequest;
 import org.eclipse.equinox.p2.query.IQueryResult;
 import org.eclipse.equinox.p2.query.IQueryable;
@@ -90,6 +94,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -97,6 +102,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 /**
  * <!-- begin-user-doc -->
@@ -122,6 +128,33 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
   private static final boolean FORCE = PropertiesUtil.isProperty("oomph.setup.p2.force"); //$NON-NLS-1$
 
   private static final Object FIRST_CALL_DETECTION_KEY = new Object();
+
+  private static final Comparator<Requirement> NAMESPACE_NAME_FILTER_COMPARATOR = new Comparator<>()
+  {
+    @Override
+    public int compare(Requirement o1, Requirement o2)
+    {
+      String ns1 = StringUtil.safe(o1.getNamespace());
+      String ns2 = StringUtil.safe(o2.getNamespace());
+
+      int result = ns1.compareTo(ns2);
+      if (result == 0)
+      {
+        String n1 = StringUtil.safe(o1.getName());
+        String n2 = StringUtil.safe(o2.getName());
+
+        result = n1.compareTo(n2);
+        if (result == 0)
+        {
+          String f1 = StringUtil.safe(o1.getFilter());
+          String f2 = StringUtil.safe(o2.getFilter());
+          result = f1.compareTo(f2);
+        }
+      }
+
+      return result;
+    }
+  };
 
   /**
    * The default value of the '{@link #getLabel() <em>Label</em>}' attribute.
@@ -608,19 +641,136 @@ public class P2TaskImpl extends SetupTaskImpl implements P2Task
     }
   }
 
+  private static class Bound implements Comparable<Bound>
+  {
+    public static final Bound MIN = new Bound(Version.emptyVersion, false, true);
+
+    public static final Bound MAX = new Bound(Version.MAX_VERSION, false, false);
+
+    private final Version version;
+
+    private final boolean exclusive;
+
+    private final boolean lower;
+
+    public Bound(Version version, boolean exclusive, boolean lower)
+    {
+      this.version = version;
+      this.exclusive = exclusive;
+      this.lower = lower;
+    }
+
+    @Override
+    public int compareTo(Bound o)
+    {
+      int result = version.compareTo(o.version);
+      if (result == 0)
+      {
+        result = lower ? Boolean.compare(exclusive, o.exclusive) : Boolean.compare(o.exclusive, exclusive);
+      }
+
+      return result;
+    }
+
+    public Bound min(VersionRange versionRange)
+    {
+      Bound other = ofMin(versionRange);
+      return other.compareTo(this) < 0 ? other : this;
+    }
+
+    public Bound max(VersionRange versionRange)
+    {
+      Bound other = ofMax(versionRange);
+      return other.compareTo(this) > 0 ? other : this;
+    }
+
+    public static Bound ofMin(VersionRange versionRange)
+    {
+      return new Bound(versionRange.getMinimum(), !versionRange.getIncludeMinimum(), true);
+    }
+
+    public static Bound ofMax(VersionRange versionRange)
+    {
+      return new Bound(versionRange.getMaximum(), !versionRange.getIncludeMaximum(), false);
+    }
+
+    public static VersionRange versionRange(Bound minBound, Bound maxBound)
+    {
+      return new VersionRange(minBound.version, !minBound.exclusive, maxBound.version, !maxBound.exclusive);
+    }
+
+    @SuppressWarnings("nls")
+    @Override
+    public String toString()
+    {
+      return exclusive ? (lower ? "(" : "") + version + (lower ? "" : ")") : (lower ? "[" : "") + version + (lower ? "" : "]");
+    }
+  }
+
   @Override
   public void consolidate()
   {
-    Set<String> installableUnitKeys = new HashSet<>();
-    for (Iterator<Requirement> it = getRequirements().iterator(); it.hasNext();)
+    Map<Requirement, Set<Requirement>> overlappingRequirements = new TreeMap<>(NAMESPACE_NAME_FILTER_COMPARATOR);
+    List<Requirement> requirements = new ArrayList<>(getRequirements());
+    for (Requirement requirement : requirements)
     {
-      Requirement requirement = it.next();
-      String name = requirement.getName();
-      if (StringUtil.isEmpty(name) || !installableUnitKeys.add(name + "->" + requirement.getVersionRange().toString())) //$NON-NLS-1$
+      overlappingRequirements.computeIfAbsent(requirement, key -> new HashSet<>()).add(requirement);
+    }
+
+    for (var entry : overlappingRequirements.entrySet())
+    {
+      Set<Requirement> overlapping = entry.getValue();
+      if (overlapping.size() > 1)
       {
-        it.remove();
+        // If any requirement is a negative requirement then remove all other overlapping requirements.
+        overlapping.stream().filter(requirement -> requirement.getMax() == 0).findFirst().ifPresent(requirement -> {
+          for (Requirement otherRequirement : overlapping)
+          {
+            if (otherRequirement != requirement)
+            {
+              requirements.remove(otherRequirement);
+            }
+          }
+
+          overlapping.retainAll(Set.of(requirement));
+        });
+
+        // If there is still more than one requirement left after the negative requirement processing...
+        if (overlapping.size() > 1)
+        {
+          Bound minBound = Bound.MAX;
+          Bound maxBound = Bound.MIN;
+          for (Requirement requirement : overlapping)
+          {
+            VersionRange versionRange = requirement.getVersionRange();
+            if (versionRange == null)
+            {
+              versionRange = VersionRange.emptyRange;
+            }
+
+            minBound = minBound.min(versionRange);
+            maxBound = maxBound.max(versionRange);
+          }
+
+          // If any requirement is non-optional then make the composed requirement non-optional.
+          int min = overlapping.stream().anyMatch(requirement -> requirement.getMin() > 0) ? 1 : 0;
+
+          // If any requirement is greedy then make the composed requirement greedy.
+          boolean greedy = overlapping.stream().anyMatch(requirement -> requirement.isGreedy());
+
+          Requirement requirement = EcoreUtil.copy(overlapping.iterator().next());
+          requirement.setVersionRange(Bound.versionRange(minBound, maxBound));
+          requirement.setMin(min);
+          requirement.setGreedy(greedy);
+
+          requirements.removeAll(overlapping);
+          requirements.add(requirement);
+        }
       }
     }
+
+    Collections.sort(requirements, Requirement.COMPARATOR);
+    ECollections.setEList(getRequirements(), requirements);
 
     EList<Repository> repositories = getRepositories();
     Set<String> repositoryKeys = new HashSet<>();
