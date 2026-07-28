@@ -2856,7 +2856,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
                   return false;
                 }
                 Set<Version> associatedVersions = majorVersions.computeIfAbsent(version.getSegment(0), segment -> new HashSet<>());
-                if (associatedVersions.size() > 1)
+                if (associatedVersions.add(version) && associatedVersions.size() > 1)
                 {
                   return false;
                 }
