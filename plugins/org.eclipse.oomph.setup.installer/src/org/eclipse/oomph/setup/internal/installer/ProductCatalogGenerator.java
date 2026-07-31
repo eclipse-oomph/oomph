@@ -2726,9 +2726,8 @@ public class ProductCatalogGenerator implements IApplication
       }
     }
 
-    URI releasePackages = URI.createURI("https://download.eclipse.org/eclipse/downloads/");
-    getPlatformPackageBrandingSites(releasePackages);
-    getPlatformPackageBrandingSites(URI.createURI("https://archive.eclipse.org/eclipse/downloads/"));
+    getPlatformPackageBrandingSites(URI.createURI("https://download.eclipse.org/justj/?file=eclipse/downloads/drops4/"));
+    getPlatformPackageBrandingSites(URI.createURI("https://archive.eclipse.org/justj/?file=eclipse/downloads/drops4/"));
 
     packageLocationLoader.perform(locations);
   }
@@ -2799,23 +2798,19 @@ public class ProductCatalogGenerator implements IApplication
     InputStream inputStream = null;
     try
     {
-      URL releasePackagesURL = new URL(releasePackages.toString());
-      inputStream = releasePackagesURL.openStream();
+      inputStream = uriConverter.createInputStream(releasePackages);
       List<String> lines = IOUtil.readLines(inputStream, "UTF-8");
-      Pattern pattern = Pattern.compile("<a href=\"([^\"]+)\"[^>]*>(4\\.[0-9.]+)[^<]*</a>");
+      Collections.reverse(lines);
+      Pattern pattern = Pattern.compile("<a href=\"//(download|archive).eclipse.org/justj/\\?file=eclipse/downloads/drops4/([RS]-(4[.][0-9][0-9]?)[^\"]+)\">");
       for (String line : lines)
       {
         Matcher matcher = pattern.matcher(line);
         if (matcher.find())
         {
-          String packageVersion = matcher.group(2);
-          URI packageURI = URI.createURI(matcher.group(1));
-          if (packageURI.isRelative())
-          {
-            packageURI = packageURI.resolve(releasePackages);
-          }
+          URI packageURI = URI.createURI("https://" + matcher.group(1) + ".eclipse.org/eclipse/downloads/drops4/" + matcher.group(2) + "/");
 
           // Compute the train from the version number.
+          String packageVersion = matcher.group(3);
           int minorVersionIndex = packageVersion.indexOf('.', 3);
           int version = Integer.parseInt(minorVersionIndex == -1 ? packageVersion.substring(2) : packageVersion.substring(2, minorVersionIndex));
           List<String> trains = Arrays.asList(getTrains());
