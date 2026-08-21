@@ -94,7 +94,7 @@
     <content
         xsi:type="p2:Requirement"
         name="org.eclipse.epp.package.common"
-        versionRange="[4.40.0,4.41.0.20260709-0811)"/>
+        versionRange="[4.40.0,4.41.0.20260820-0629)"/>
     <content
         xsi:type="p2:Requirement"
         name="org.eclipse.justj.openjdk.hotspot.jre.full"/>
@@ -120,7 +120,7 @@
     <content
         xsi:type="p2:Requirement"
         name="org.eclipse.epp.package.common"
-        versionRange="[4.40.0,4.41.0.20260730-0632)"/>
+        versionRange="[4.40.0,4.41.0.20260820-0629)"/>
     <content
         xsi:type="p2:Requirement"
         name="jre"
