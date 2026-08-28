@@ -505,6 +505,14 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
         new String[] { "value", "${jre.location-26}", //$NON-NLS-1$ //$NON-NLS-2$
             "label", "JRE 26 Location" //$NON-NLS-1$ //$NON-NLS-2$
         });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-27}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 27 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-28}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 28 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
     addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-1.2", //$NON-NLS-1$ //$NON-NLS-2$
         "type", "JRE", //$NON-NLS-1$ //$NON-NLS-2$
         "label", "JRE 1.2 Location", //$NON-NLS-1$ //$NON-NLS-2$
@@ -607,6 +615,14 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
         new String[] { "value", "${jre.location-26}", //$NON-NLS-1$ //$NON-NLS-2$
             "label", "JRE 26 Location" //$NON-NLS-1$ //$NON-NLS-2$
         });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-27}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 27 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-28}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 28 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
     addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-1.3", //$NON-NLS-1$ //$NON-NLS-2$
         "type", "JRE", //$NON-NLS-1$ //$NON-NLS-2$
         "label", "JRE 1.3 Location", //$NON-NLS-1$ //$NON-NLS-2$
@@ -705,6 +721,14 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
         new String[] { "value", "${jre.location-26}", //$NON-NLS-1$ //$NON-NLS-2$
             "label", "JRE 26 Location" //$NON-NLS-1$ //$NON-NLS-2$
         });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-27}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 27 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-28}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 28 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
     addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-1.4", //$NON-NLS-1$ //$NON-NLS-2$
         "type", "JRE", //$NON-NLS-1$ //$NON-NLS-2$
         "label", "JRE 1.4 Location", //$NON-NLS-1$ //$NON-NLS-2$
@@ -799,6 +823,14 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
         new String[] { "value", "${jre.location-26}", //$NON-NLS-1$ //$NON-NLS-2$
             "label", "JRE 26 Location" //$NON-NLS-1$ //$NON-NLS-2$
         });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-27}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 27 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-28}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 28 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
     addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-1.5", //$NON-NLS-1$ //$NON-NLS-2$
         "type", "JRE", //$NON-NLS-1$ //$NON-NLS-2$
         "label", "JRE 1.5 Location", //$NON-NLS-1$ //$NON-NLS-2$
@@ -889,6 +921,14 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
         new String[] { "value", "${jre.location-26}", //$NON-NLS-1$ //$NON-NLS-2$
             "label", "JRE 26 Location" //$NON-NLS-1$ //$NON-NLS-2$
         });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-27}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 27 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-28}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 28 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
     addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-1.6", //$NON-NLS-1$ //$NON-NLS-2$
         "type", "JRE", //$NON-NLS-1$ //$NON-NLS-2$
         "label", "JRE 1.6 Location", //$NON-NLS-1$ //$NON-NLS-2$
@@ -975,6 +1015,14 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
         new String[] { "value", "${jre.location-26}", //$NON-NLS-1$ //$NON-NLS-2$
             "label", "JRE 26 Location" //$NON-NLS-1$ //$NON-NLS-2$
         });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-27}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 27 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-28}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 28 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
     addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-1.7", //$NON-NLS-1$ //$NON-NLS-2$
         "type", "JRE", //$NON-NLS-1$ //$NON-NLS-2$
         "label", "JRE 1.7 Location", //$NON-NLS-1$ //$NON-NLS-2$
@@ -1057,6 +1105,14 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
         new String[] { "value", "${jre.location-26}", //$NON-NLS-1$ //$NON-NLS-2$
             "label", "JRE 26 Location" //$NON-NLS-1$ //$NON-NLS-2$
         });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-27}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 27 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-28}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 28 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
     addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-1.8", //$NON-NLS-1$ //$NON-NLS-2$
         "type", "JRE", //$NON-NLS-1$ //$NON-NLS-2$
         "label", "JRE 1.8 Location", //$NON-NLS-1$ //$NON-NLS-2$
@@ -1135,6 +1191,14 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
         new String[] { "value", "${jre.location-26}", //$NON-NLS-1$ //$NON-NLS-2$
             "label", "JRE 26 Location" //$NON-NLS-1$ //$NON-NLS-2$
         });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-27}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 27 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-28}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 28 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
     addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-9", //$NON-NLS-1$ //$NON-NLS-2$
         "type", "JRE", //$NON-NLS-1$ //$NON-NLS-2$
         "label", "JRE 9 Location", //$NON-NLS-1$ //$NON-NLS-2$
@@ -1209,6 +1273,14 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
         new String[] { "value", "${jre.location-26}", //$NON-NLS-1$ //$NON-NLS-2$
             "label", "JRE 26 Location" //$NON-NLS-1$ //$NON-NLS-2$
         });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-27}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 27 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-28}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 28 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
     addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-10", //$NON-NLS-1$ //$NON-NLS-2$
         "type", "JRE", //$NON-NLS-1$ //$NON-NLS-2$
         "label", "JRE 10 Location", //$NON-NLS-1$ //$NON-NLS-2$
@@ -1279,6 +1351,14 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
         new String[] { "value", "${jre.location-26}", //$NON-NLS-1$ //$NON-NLS-2$
             "label", "JRE 26 Location" //$NON-NLS-1$ //$NON-NLS-2$
         });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-27}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 27 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-28}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 28 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
     addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-11", //$NON-NLS-1$ //$NON-NLS-2$
         "type", "JRE", //$NON-NLS-1$ //$NON-NLS-2$
         "label", "JRE 11 Location", //$NON-NLS-1$ //$NON-NLS-2$
@@ -1345,6 +1425,14 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
         new String[] { "value", "${jre.location-26}", //$NON-NLS-1$ //$NON-NLS-2$
             "label", "JRE 26 Location" //$NON-NLS-1$ //$NON-NLS-2$
         });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-27}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 27 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-28}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 28 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
     addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-12", //$NON-NLS-1$ //$NON-NLS-2$
         "type", "JRE", //$NON-NLS-1$ //$NON-NLS-2$
         "label", "JRE 12 Location", //$NON-NLS-1$ //$NON-NLS-2$
@@ -1407,6 +1495,14 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
         new String[] { "value", "${jre.location-26}", //$NON-NLS-1$ //$NON-NLS-2$
             "label", "JRE 26 Location" //$NON-NLS-1$ //$NON-NLS-2$
         });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-27}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 27 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-28}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 28 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
     addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-13", //$NON-NLS-1$ //$NON-NLS-2$
         "type", "JRE", //$NON-NLS-1$ //$NON-NLS-2$
         "label", "JRE 13 Location", //$NON-NLS-1$ //$NON-NLS-2$
@@ -1465,6 +1561,14 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
         new String[] { "value", "${jre.location-26}", //$NON-NLS-1$ //$NON-NLS-2$
             "label", "JRE 26 Location" //$NON-NLS-1$ //$NON-NLS-2$
         });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-27}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 27 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-28}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 28 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
     addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-14", //$NON-NLS-1$ //$NON-NLS-2$
         "type", "JRE", //$NON-NLS-1$ //$NON-NLS-2$
         "label", "JRE 14 Location", //$NON-NLS-1$ //$NON-NLS-2$
@@ -1518,6 +1622,14 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
     addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
         new String[] { "value", "${jre.location-26}", //$NON-NLS-1$ //$NON-NLS-2$
             "label", "JRE 26 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-27}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 27 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-28}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 28 Location" //$NON-NLS-1$ //$NON-NLS-2$
         });
     addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-15", //$NON-NLS-1$ //$NON-NLS-2$
         "type", "JRE", //$NON-NLS-1$ //$NON-NLS-2$
@@ -1589,6 +1701,14 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
         new String[] { "value", "${jre.location-26}", //$NON-NLS-1$ //$NON-NLS-2$
             "label", "JRE 26 Location" //$NON-NLS-1$ //$NON-NLS-2$
         });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-27}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 27 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-28}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 28 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
     addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-16", //$NON-NLS-1$ //$NON-NLS-2$
         "type", "JRE", //$NON-NLS-1$ //$NON-NLS-2$
         "label", "JRE 16 Location", //$NON-NLS-1$ //$NON-NLS-2$
@@ -1635,6 +1755,14 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
         new String[] { "value", "${jre.location-26}", //$NON-NLS-1$ //$NON-NLS-2$
             "label", "JRE 26 Location" //$NON-NLS-1$ //$NON-NLS-2$
         });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-27}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 27 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-28}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 28 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
     addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-17", //$NON-NLS-1$ //$NON-NLS-2$
         "type", "JRE", //$NON-NLS-1$ //$NON-NLS-2$
         "label", "JRE 17 Location", //$NON-NLS-1$ //$NON-NLS-2$
@@ -1677,6 +1805,14 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
         new String[] { "value", "${jre.location-26}", //$NON-NLS-1$ //$NON-NLS-2$
             "label", "JRE 26 Location" //$NON-NLS-1$ //$NON-NLS-2$
         });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-27}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 27 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-28}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 28 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
     addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-18", //$NON-NLS-1$ //$NON-NLS-2$
         "type", "JRE", //$NON-NLS-1$ //$NON-NLS-2$
         "label", "JRE 18 Location", //$NON-NLS-1$ //$NON-NLS-2$
@@ -1715,6 +1851,14 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
         new String[] { "value", "${jre.location-26}", //$NON-NLS-1$ //$NON-NLS-2$
             "label", "JRE 26 Location" //$NON-NLS-1$ //$NON-NLS-2$
         });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-27}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 27 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-28}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 28 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
     addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-19", //$NON-NLS-1$ //$NON-NLS-2$
         "type", "JRE", //$NON-NLS-1$ //$NON-NLS-2$
         "label", "JRE 19 Location", //$NON-NLS-1$ //$NON-NLS-2$
@@ -1749,6 +1893,14 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
         new String[] { "value", "${jre.location-26}", //$NON-NLS-1$ //$NON-NLS-2$
             "label", "JRE 26 Location" //$NON-NLS-1$ //$NON-NLS-2$
         });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-27}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 27 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-28}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 28 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
     addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-20", //$NON-NLS-1$ //$NON-NLS-2$
         "type", "JRE", //$NON-NLS-1$ //$NON-NLS-2$
         "label", "JRE 20 Location", //$NON-NLS-1$ //$NON-NLS-2$
@@ -1779,6 +1931,14 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
         new String[] { "value", "${jre.location-26}", //$NON-NLS-1$ //$NON-NLS-2$
             "label", "JRE 26 Location" //$NON-NLS-1$ //$NON-NLS-2$
         });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-27}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 27 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-28}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 28 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
     addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-21", //$NON-NLS-1$ //$NON-NLS-2$
         "type", "JRE", //$NON-NLS-1$ //$NON-NLS-2$
         "label", "JRE 21 Location", //$NON-NLS-1$ //$NON-NLS-2$
@@ -1805,6 +1965,14 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
         new String[] { "value", "${jre.location-26}", //$NON-NLS-1$ //$NON-NLS-2$
             "label", "JRE 26 Location" //$NON-NLS-1$ //$NON-NLS-2$
         });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-27}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 27 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-28}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 28 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
     addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-22", //$NON-NLS-1$ //$NON-NLS-2$
         "type", "JRE", //$NON-NLS-1$ //$NON-NLS-2$
         "label", "JRE 22 Location", //$NON-NLS-1$ //$NON-NLS-2$
@@ -1827,6 +1995,14 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
         new String[] { "value", "${jre.location-26}", //$NON-NLS-1$ //$NON-NLS-2$
             "label", "JRE 26 Location" //$NON-NLS-1$ //$NON-NLS-2$
         });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-27}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 27 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-28}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 28 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
     addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-23", //$NON-NLS-1$ //$NON-NLS-2$
         "type", "JRE", //$NON-NLS-1$ //$NON-NLS-2$
         "label", "JRE 23 Location", //$NON-NLS-1$ //$NON-NLS-2$
@@ -1845,6 +2021,14 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
         new String[] { "value", "${jre.location-26}", //$NON-NLS-1$ //$NON-NLS-2$
             "label", "JRE 26 Location" //$NON-NLS-1$ //$NON-NLS-2$
         });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-27}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 27 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-28}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 28 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
     addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-24", //$NON-NLS-1$ //$NON-NLS-2$
         "type", "JRE", //$NON-NLS-1$ //$NON-NLS-2$
         "label", "JRE 24 Location", //$NON-NLS-1$ //$NON-NLS-2$
@@ -1859,6 +2043,14 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
         new String[] { "value", "${jre.location-26}", //$NON-NLS-1$ //$NON-NLS-2$
             "label", "JRE 26 Location" //$NON-NLS-1$ //$NON-NLS-2$
         });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-27}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 27 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-28}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 28 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
     addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-25", //$NON-NLS-1$ //$NON-NLS-2$
         "type", "JRE", //$NON-NLS-1$ //$NON-NLS-2$
         "label", "JRE 25 Location", //$NON-NLS-1$ //$NON-NLS-2$
@@ -1869,11 +2061,43 @@ public class JDTPackageImpl extends EPackageImpl implements JDTPackage
         new String[] { "value", "${jre.location-26}", //$NON-NLS-1$ //$NON-NLS-2$
             "label", "JRE 26 Location" //$NON-NLS-1$ //$NON-NLS-2$
         });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-27}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 27 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-28}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 28 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
     addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-26", //$NON-NLS-1$ //$NON-NLS-2$
         "type", "JRE", //$NON-NLS-1$ //$NON-NLS-2$
         "label", "JRE 26 Location", //$NON-NLS-1$ //$NON-NLS-2$
         "description", "The location of a JDK or JRE compatible with Java 26.", //$NON-NLS-1$ //$NON-NLS-2$
         "version", "JavaSE-26" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-27}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 27 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-28}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 28 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-27", //$NON-NLS-1$ //$NON-NLS-2$
+        "type", "JRE", //$NON-NLS-1$ //$NON-NLS-2$
+        "label", "JRE 27 Location", //$NON-NLS-1$ //$NON-NLS-2$
+        "description", "The location of a JDK or JRE compatible with Java 27.", //$NON-NLS-1$ //$NON-NLS-2$
+        "version", "JavaSE-27" //$NON-NLS-1$ //$NON-NLS-2$
+    });
+    addAnnotation(jreTaskEClass, new boolean[] { true }, "Choice", //$NON-NLS-1$
+        new String[] { "value", "${jre.location-28}", //$NON-NLS-1$ //$NON-NLS-2$
+            "label", "JRE 28 Location" //$NON-NLS-1$ //$NON-NLS-2$
+        });
+    addAnnotation(jreTaskEClass, source, new String[] { "name", "jre.location-28", //$NON-NLS-1$ //$NON-NLS-2$
+        "type", "JRE", //$NON-NLS-1$ //$NON-NLS-2$
+        "label", "JRE 28 Location", //$NON-NLS-1$ //$NON-NLS-2$
+        "description", "The location of a JDK or JRE compatible with Java 28.", //$NON-NLS-1$ //$NON-NLS-2$
+        "version", "JavaSE-28" //$NON-NLS-1$ //$NON-NLS-2$
     });
   }
 
