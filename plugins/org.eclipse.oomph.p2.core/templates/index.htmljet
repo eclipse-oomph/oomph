@@ -1243,10 +1243,10 @@ span:target {
            </div>
   <%}%>
 <%-[Packages]-%>
-  <%Collection<IProvidedCapability> packages = report.getAllPackages();
+  <%Collection<String> packages = report.getAllPackages();
     if (!packages.isEmpty()) {
-      Set<IProvidedCapability> splitPackages = report.getSplitPackages();
-      Set<IProvidedCapability> inconsistentJarSignatures = report.getInconsistentJarSignatures();%>
+      Set<String> splitPackages = report.getSplitPackages();
+      Set<String> inconsistentJarSignatures = report.getInconsistentJarSignatures();%>
            <h3 style="font-weight: bold;">
            <button id="packages_arrows" class="orange bb" onclick="expand_collapse('packages'); match('filter-package', 'package-subset', 'package-li'); expand_collapse_inline('packages_all_arrows');">&#x25B7;</button>
            <img class="fit-image" src="<%=report.getPackageImage()%>"/>
@@ -1280,9 +1280,7 @@ span:target {
     <%}%>
              <ul style="list-style-type: none; padding: 0; margin-left: 1em;">
     <%int count = 0;
-      for (IProvidedCapability providedPackage : packages) {
-        String providedCapabilityID = providedPackage.getName();
-        String id = report.getProvidedCapabilityID(providedPackage);
+      for (String providedPackage : packages) {
         String versionStyle = "";
         StringBuilder classNames = new StringBuilder();
         if (splitPackages.contains(providedPackage)) {
@@ -1293,11 +1291,13 @@ span:target {
         }
         String buttonId = "nested_package_providers" + ++count;
         //%>
-               <li id="_iu_<%=id%>" class="package-li<%=classNames%> font-smaller">
+               <li id="_iu_package_<%=providedPackage%>" class="package-li<%=classNames%> font-smaller">
                  <button id="<%=buttonId%>_arrows" class="orange bb" onclick="expand_collapse('<%=buttonId%>');">&#x25B7;</button>
                  <img class="fit-image" src="<%=report.getPackageImage()%>"/>
-                 <span style="font-size:100%;"><%=providedCapabilityID%></span>
-                 <span style="color: DarkOliveGreen;<%=versionStyle%>"><%=report.getVersion(providedPackage)%></span>
+                 <span style="font-size:100%;"><%=providedPackage%></span>
+      <%for (Version version : report.getPackageVersions(providedPackage)) {%>
+                 <span style="color: DarkOliveGreen;<%=versionStyle%>"><%=version%></span>
+      <%}%>
                  <ul id="<%=buttonId%>" style="display:none; margin-left: -2em; list-style-type: none;">
       <%for (IInstallableUnit iu : report.getInstallableUnits(providedPackage)) {%>
                    <li>

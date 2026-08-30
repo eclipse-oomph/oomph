@@ -258,26 +258,6 @@ public class RepositoryIntegrityAnalyzer implements IApplication
     }
   };
 
-  private static final Comparator<IProvidedCapability> PROVIDED_CAPABILITY_COMPARATOR = new Comparator<IProvidedCapability>()
-  {
-    private final Comparator<String> comparator = CommonPlugin.INSTANCE.getComparator();
-
-    @Override
-    public int compare(IProvidedCapability o1, IProvidedCapability o2)
-    {
-      int result = comparator.compare(o1.getNamespace(), o2.getNamespace());
-      if (result == 0)
-      {
-        result = comparator.compare(o1.getName(), o2.getName());
-        if (result == 0)
-        {
-          result = o1.getVersion().compareTo(o2.getVersion());
-        }
-      }
-      return result;
-    }
-  };
-
   private final Map<String, Report.LicenseDetail> details = new LinkedHashMap<>();
 
   private final Map<URI, Report> reports = new LinkedHashMap<>();
@@ -1136,17 +1116,17 @@ public class RepositoryIntegrityAnalyzer implements IApplication
             }
           }
 
-          Set<IProvidedCapability> splitPackages = report.getSplitPackages();
-          Set<IProvidedCapability> inconsistentJarSignatures = report.getInconsistentJarSignatures();
-          for (IProvidedCapability splitPackage : splitPackages)
+          Set<String> splitPackages = report.getSplitPackages();
+          Set<String> inconsistentJarSignatures = report.getInconsistentJarSignatures();
+          for (String splitPackage : splitPackages)
           {
-            String packageName = splitPackage.getName();
+            String packageName = splitPackage;
             if (ignoredSplitPackages != null && ignoredSplitPackages.matcher(packageName).matches())
             {
               continue;
             }
 
-            TestCaseType testCase = createTestCase(testSuite, "validSplitPackages_" + packageName + "_" + splitPackage.getVersion());
+            TestCaseType testCase = createTestCase(testSuite, "validSplitPackages_" + packageName);
             if (inconsistentJarSignatures.contains(splitPackage))
             {
               Set<IInstallableUnit> installableUnits = report.getInstallableUnits(splitPackage);
@@ -1171,8 +1151,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
                 }
               }
 
-              addFailure(testCase, "The package '" + packageName + " " + splitPackage.getVersion() + "' is jar-signed differently by the containing IUs",
-                  message.toString());
+              addFailure(testCase, "The package '" + packageName + "' is jar-signed differently by the containing IUs", message.toString());
             }
           }
         }
@@ -1463,7 +1442,8 @@ public class RepositoryIntegrityAnalyzer implements IApplication
       final Map<List<String>, IRequirement> requiredCapabilities = new HashMap<>();
       Map<IRequirement, Future<Set<IInstallableUnit>>> futures = new HashMap<>();
       Map<IRequirement, Set<IInstallableUnit>> requiringIUs = new HashMap<>();
-      Map<IProvidedCapability, Set<IInstallableUnit>> providedPackageCapabilities = new TreeMap<>(PROVIDED_CAPABILITY_COMPARATOR);
+      Map<String, Set<IInstallableUnit>> providedPackageCapabilities = new TreeMap<>();
+      Map<String, Set<Version>> packageVersions = new TreeMap<>();
       Set<IInstallableUnit> fragments = new HashSet<>();
       for (IInstallableUnit iu : allIUs)
       {
@@ -1502,7 +1482,9 @@ public class RepositoryIntegrityAnalyzer implements IApplication
             String namespace = providedCapability.getNamespace();
             if ("java.package".equals(namespace))
             {
-              providedPackageCapabilities.computeIfAbsent(providedCapability, key -> new TreeSet<>()).add(iu);
+              String name = providedCapability.getName();
+              packageVersions.computeIfAbsent(name, key -> new TreeSet<>()).add(providedCapability.getVersion());
+              providedPackageCapabilities.computeIfAbsent(name, key -> new TreeSet<>()).add(iu);
             }
             else if ("osgi.fragment".equals(namespace))
             {
@@ -1513,19 +1495,17 @@ public class RepositoryIntegrityAnalyzer implements IApplication
       }
 
       // Check for split package and especially for split signing.
-      Set<IProvidedCapability> splitPackages = new LinkedHashSet<IProvidedCapability>();
-      Set<IProvidedCapability> inconsistentJarSignatures = new LinkedHashSet<IProvidedCapability>();
-      for (Map.Entry<IProvidedCapability, Set<IInstallableUnit>> entry : providedPackageCapabilities.entrySet())
+      Set<String> splitPackages = new LinkedHashSet<>();
+      Set<String> inconsistentJarSignatures = new LinkedHashSet<>();
+      for (Map.Entry<String, Set<IInstallableUnit>> entry : providedPackageCapabilities.entrySet())
       {
-        IProvidedCapability key = entry.getKey();
-        String namespace = key.getNamespace();
-        String name = key.getName();
-        Version version = key.getVersion();
+        String name = entry.getKey();
+        // Version version = key.getVersion();
         ArrayList<IInstallableUnit> ius = new ArrayList<>(entry.getValue());
         ius.removeAll(fragments);
         if (ius.size() > 1)
         {
-          splitPackages.add(key);
+          splitPackages.add(name);
 
           Set<Set<List<Certificate>>> signers = new HashSet<>();
           LOOP: for (IInstallableUnit iu : ius)
@@ -1535,8 +1515,8 @@ public class RepositoryIntegrityAnalyzer implements IApplication
               if (requirement instanceof IRequiredCapability)
               {
                 IRequiredCapability requiredCapability = (IRequiredCapability)requirement;
-                if (namespace.equals(requiredCapability.getNamespace()) && name.equals(requiredCapability.getName())
-                    && requiredCapability.getRange().isIncluded(version))
+                if ("java.package".equals(requiredCapability.getNamespace()) && name.equals(requiredCapability.getName()))
+                // && requiredCapability.getRange().isIncluded(version))
                 {
                   continue LOOP;
                 }
@@ -1560,7 +1540,7 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
           if (signers.size() > 1)
           {
-            inconsistentJarSignatures.add(key);
+            inconsistentJarSignatures.add(name);
           }
         }
       }
@@ -2876,27 +2856,33 @@ public class RepositoryIntegrityAnalyzer implements IApplication
         }
 
         @Override
-        public Set<IProvidedCapability> getAllPackages()
+        public Set<String> getAllPackages()
         {
           return providedPackageCapabilities.keySet();
         }
 
         @Override
-        public Set<IProvidedCapability> getSplitPackages()
+        public Set<String> getSplitPackages()
         {
           return splitPackages;
         }
 
         @Override
-        public Set<IProvidedCapability> getInconsistentJarSignatures()
+        public Set<String> getInconsistentJarSignatures()
         {
           return inconsistentJarSignatures;
         }
 
         @Override
-        public Set<IInstallableUnit> getInstallableUnits(IProvidedCapability providedCapability)
+        public Set<IInstallableUnit> getInstallableUnits(String packageName)
         {
-          return providedPackageCapabilities.get(providedCapability);
+          return providedPackageCapabilities.get(packageName);
+        }
+
+        @Override
+        public Set<Version> getPackageVersions(String packageName)
+        {
+          return packageVersions.get(packageName);
         }
 
         @Override
@@ -4621,13 +4607,15 @@ public class RepositoryIntegrityAnalyzer implements IApplication
 
     public abstract Set<IInstallableUnit> getAllIUs();
 
-    public abstract Set<IProvidedCapability> getAllPackages();
+    public abstract Set<String> getAllPackages();
 
-    public abstract Set<IProvidedCapability> getSplitPackages();
+    public abstract Set<String> getSplitPackages();
 
-    public abstract Set<IProvidedCapability> getInconsistentJarSignatures();
+    public abstract Set<String> getInconsistentJarSignatures();
 
-    public abstract Set<IInstallableUnit> getInstallableUnits(IProvidedCapability providedCapability);
+    public abstract Set<IInstallableUnit> getInstallableUnits(String packageName);
+
+    public abstract Set<Version> getPackageVersions(String packageName);
 
     public Set<IInstallableUnit> getSortedByName(Collection<? extends IInstallableUnit> ius)
     {
