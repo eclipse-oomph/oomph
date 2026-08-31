@@ -83,7 +83,6 @@ import org.eclipse.oomph.util.ReflectUtil;
 import org.eclipse.oomph.util.StringUtil;
 import org.eclipse.oomph.util.UserCallback;
 
-import org.eclipse.emf.common.CommonPlugin;
 import org.eclipse.emf.common.EMFPlugin;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
@@ -129,8 +128,11 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.equinox.internal.p2.artifact.repository.simple.SimpleArtifactRepository;
 import org.eclipse.equinox.internal.p2.metadata.InstallableUnit;
 import org.eclipse.equinox.internal.p2.metadata.expression.LDAPFilter;
@@ -153,7 +155,6 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.io.Reader;
 import java.io.Writer;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -5134,47 +5135,38 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
   private static class PDEAPIUtil
   {
-    private static final Field BUILD_DISABLED_FIELD;
+    private static final String PDE_CORE_NODE = "org.eclipse.pde.core"; //$NON-NLS-1$
 
-    static
-    {
-      Field buildDisabledField = null;
-      // Disable API analysis building for the initial build.
-      try
-      {
-        Class<?> apiAnalysisBuilder = CommonPlugin.loadClass("org.eclipse.pde.api.tools", "org.eclipse.pde.api.tools.internal.builder.ApiAnalysisBuilder"); //$NON-NLS-1$ //$NON-NLS-2$
-        buildDisabledField = apiAnalysisBuilder.getDeclaredField("buildDisabled"); //$NON-NLS-1$
-        buildDisabledField.setAccessible(true);
-      }
-      catch (Exception ex)
-      {
-        // Ignore
-      }
+    private static final String DISABLE_API_ANALYSIS_BUILDER = "Preferences.MainPage.disableAPIAnalysisBuilder"; //$NON-NLS-1$
 
-      BUILD_DISABLED_FIELD = buildDisabledField;
-    }
+    private static final boolean API_TOOLS_INSTALLED = Platform.getBundle("org.eclipse.pde.api.tools") != null; //$NON-NLS-1$
 
+    /**
+     * Sets the PDE preference that disables the API analysis builder and returns its previous value.
+     * The builder is considered disabled if API tools aren't installed at all.
+     */
     private static boolean setDisableAPIAnalysisBuilder(boolean disabled)
     {
-      if (BUILD_DISABLED_FIELD != null)
+      if (!API_TOOLS_INSTALLED)
       {
-        try
-        {
-          boolean result = (Boolean)BUILD_DISABLED_FIELD.get(null);
-          if (result != disabled)
-          {
-            BUILD_DISABLED_FIELD.set(null, disabled);
-          }
+        return true;
+      }
 
-          return result;
-        }
-        catch (Exception ex)
+      IEclipsePreferences preferences = InstanceScope.INSTANCE.getNode(PDE_CORE_NODE);
+      boolean result = preferences.getBoolean(DISABLE_API_ANALYSIS_BUILDER, false);
+      if (result != disabled)
+      {
+        if (disabled)
         {
-          // Ignore.
+          preferences.putBoolean(DISABLE_API_ANALYSIS_BUILDER, true);
+        }
+        else
+        {
+          preferences.remove(DISABLE_API_ANALYSIS_BUILDER);
         }
       }
 
-      return true;
+      return result;
     }
   }
 
