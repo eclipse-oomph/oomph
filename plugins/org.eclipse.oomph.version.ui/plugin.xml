@@ -128,24 +128,6 @@
       </page>
    </extension>
 
-   <extension
-         point="org.eclipse.ui.actionSets">
-      <actionSet
-            id="org.eclipse.oomph.version.ui.actions"
-            label="%versionManagementActionSet.label"
-            visible="true">
-         <action
-               class="org.eclipse.oomph.version.ui.actions.ToggleApiBuilderAction"
-               icon="icons/ApiBaseline.gif"
-               id="org.eclipse.oomph.version.ui.ToggleApiBuilderAction"
-               label="%toggleApiBuilderAction.label"
-               style="toggle"
-               toolbarPath="versionManagementGroup"
-               tooltip="%toggleApiBuilderAction.tooltip">
-         </action>
-      </actionSet>
-   </extension>
-
 <!--
    <extension
          point="org.eclipse.ui.views">
