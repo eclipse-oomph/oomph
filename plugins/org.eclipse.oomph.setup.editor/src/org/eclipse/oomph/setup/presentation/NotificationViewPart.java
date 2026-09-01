@@ -138,7 +138,7 @@ public final class NotificationViewPart extends ViewPart
       if (localSetups.isFile())
       {
         URI actualURI = URI.createURI(uri);
-        String query = actualURI.fragment();
+        String query = actualURI.query();
         String fragment = actualURI.fragment();
         URI trimmedURI = actualURI.trimFragment().trimQuery();
         Path localPath = Path.of(localSetups.toFileString(), trimmedURI.toString().replace("https://www.eclipse.org/setups/", ""));
