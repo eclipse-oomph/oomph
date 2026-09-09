@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="org.eclipse.pde.ui.RuntimeWorkbench">
+    <booleanAttribute key="add_console" value="false"/>
     <setAttribute key="additional_plugins"/>
     <booleanAttribute key="append.args" value="true"/>
     <booleanAttribute key="askclear" value="true"/>
@@ -27,7 +28,7 @@
     <booleanAttribute key="org.eclipse.jdt.launching.ATTR_ATTR_USE_ARGFILE" value="false"/>
     <booleanAttribute key="org.eclipse.jdt.launching.ATTR_SHOW_CODEDETAILS_IN_EXCEPTION_MESSAGES" value="true"/>
     <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_START_ON_FIRST_THREAD" value="true"/>
-    <stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-11"/>
+    <stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-25"/>
     <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-os ${target.os} -ws ${target.ws} -arch ${target.arch} -nl ${target.nl} -consoleLog"/>
     <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.pde.ui.workbenchClasspathProvider"/>
     <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-XX:MaxPermSize=512m&#13;&#10;-Xms1024m &#13;&#10;-Xmx2500m &#13;&#10;-Declipse.p2.mirrors=false &#13;&#10;-Declipse.p2.unsignedPolicy=allow &#13;&#10;-Doomph.setup=true&#13;&#10;-Doomph.setup.skip.p2=true&#13;&#10;-Doomph.setup.skip=false&#13;&#10;-Doomph.setup.stats.skip=true&#13;&#10;-Dsubmonitor.probing=off&#13;&#10;-Dsubmonitor.probing.trace=true&#13;&#10;-Dsubmonitor.probing.borders=smooth&#13;&#10;-Doomph.update.url=https://ci.eclipse.org/oomph/job/integration/lastSuccessfulBuild/artifact/updates/&#13;&#10;-Doomph.redirection.local=https://raw.githubusercontent.com/eclipse-oomph/oomph/master/-&gt;${file_uri:${git.clone.oomph}}/&#13;&#10;-Duser.home=${system_property:user.home}&#13;&#10;-Declipse.platform.mergeTrust=true"/>
@@ -72,8 +73,6 @@
         <setEntry value="com.jcraft.jsch@default:default"/>
         <setEntry value="com.sun.jna.platform@default:default"/>
         <setEntry value="com.sun.jna@default:default"/>
-        <setEntry value="com.sun.xml.bind@default:default"/>
-        <setEntry value="javax.activation@default:default"/>
         <setEntry value="org.apache.ant@default:default"/>
         <setEntry value="org.apache.batik.constants@default:default"/>
         <setEntry value="org.apache.batik.css@default:default"/>
@@ -129,7 +128,6 @@
         <setEntry value="org.eclipse.e4.ui.ide@default:default"/>
         <setEntry value="org.eclipse.e4.ui.model.workbench@default:default"/>
         <setEntry value="org.eclipse.e4.ui.services@default:default"/>
-        <setEntry value="org.eclipse.e4.ui.swt.win32@default:false"/>
         <setEntry value="org.eclipse.e4.ui.widgets@default:default"/>
         <setEntry value="org.eclipse.e4.ui.workbench.addons.swt@default:default"/>
         <setEntry value="org.eclipse.e4.ui.workbench.renderers.swt@default:default"/>
