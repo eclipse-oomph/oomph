@@ -130,7 +130,7 @@
       source="http://www.eclipse.org/oomph/setup/Notification">
     <detail
         key="description">
-      <value>Offer to update to the latest release, if we currently have 2026-03 installed</value>
+      <value>Offer to update to the latest release, if we currently have 2026-06 installed, but this time only Java 25 is being used</value>
     </detail>
     <detail
         key="maximize">
@@ -143,7 +143,11 @@
     <content
         xsi:type="p2:Requirement"
         name="org.eclipse.epp.package.common"
-        versionRange="[4.39.0,4.40.0.20260604-0652)"/>
+        versionRange="[4.40.0,4.41.0.20260903-0719)"/>
+    <content
+        xsi:type="p2:Requirement"
+        name="jre"
+        versionRange="25.0.0"/>
   </annotation>
   <annotation
       source="http://www.eclipse.org/oomph/setup/Notification">
