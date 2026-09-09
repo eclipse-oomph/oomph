@@ -95,8 +95,6 @@
       <requirement
           name="org.eclipse.test.feature.group"/>
       <requirement
-          name="org.eclipse.sdk.tests.feature.group"/>
-      <requirement
           name="org.eclipse.emf.sdk.feature.group"/>
       <requirement
           name="org.eclipse.emf.edit.feature.group"/>

@@ -11,7 +11,7 @@
       source="http://www.eclipse.org/oomph/setup/BrandingInfo">
     <detail
         key="notificationURI">
-      <value>https://www.eclipse.org/sponsor/ide/?scope=${scope}&amp;campaign=2026-06</value>
+      <value>https://www.eclipse.org/sponsor/ide/?scope=${scope}&amp;campaign=2026-09</value>
     </detail>
     <detail
         key="notificationLabel">
@@ -52,8 +52,8 @@
       value="3g"
       vm="true"/>
   <version name="latest"
-      label="Latest (4.41 - 2026-09)"
-      requiredJavaVersion="21">
+      label="Latest (4.42 - 2026-12)"
+      requiredJavaVersion="25">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
@@ -63,6 +63,39 @@
       <detail
           key="shortcut">
         <value>Eclipse SDK - Latest</value>
+      </detail>
+    </annotation>
+    <setupTask
+        xsi:type="setup.p2:P2Task"
+        label="Eclipse SDK (4.42 - 2026-12)">
+      <requirement
+          name="org.eclipse.sdk.ide"
+          versionRange="[4.42.0,5.0.0)"
+          filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=aarch64)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=ppc64le)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=riscv64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
+      <requirement
+          name="org.eclipse.e4.core.tools.feature.feature.group"/>
+      <requirement
+          name="org.eclipse.terminal.feature.feature.group"/>
+      <requirement
+          name="org.eclipse.tips.feature.feature.group"/>
+      <repository
+          url="https://download.eclipse.org/eclipse/updates/4.42-I-builds"/>
+      <repository
+          url="https://download.eclipse.org/oomph/updates/latest"/>
+    </setupTask>
+  </version>
+  <version name="latest.released"
+      label="Latest Release (4.41 - 2026-09)"
+      requiredJavaVersion="21">
+    <annotation
+        source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="siteURI">
+        <value>https://download.eclipse.org/eclipse/downloads/</value>
+      </detail>
+      <detail
+          key="shortcut">
+        <value>Eclipse SDK - Latest Release</value>
       </detail>
     </annotation>
     <setupTask
@@ -79,57 +112,29 @@
       <requirement
           name="org.eclipse.tips.feature.feature.group"/>
       <repository
-          url="https://download.eclipse.org/eclipse/updates/4.41-I-builds"/>
-      <repository
-          url="https://download.eclipse.org/oomph/updates/latest"/>
-    </setupTask>
-    <setupTask
-        xsi:type="setup:VariableTask"
-        type="BOOLEAN"
-        name="install.jdt.javanextpatch.27"
-        defaultValue="false"
-        storageURI="scope://Installation"
-        label="Install Eclipse Java Development Tools update for Java 27 (BETA)">
-      <annotation
-          source="http://www.eclipse.org/oomph/setup/SimpleDefaultVariable"/>
-      <description>A patch feature that updates JDT with support for Java 27 (BETA)</description>
-    </setupTask>
-    <setupTask
-        xsi:type="setup:CompoundTask"
-        filter="(install.jdt.javanextpatch.27=true)"
-        name="Eclipse Java Development Tools update for Java 27 (BETA)">
-      <setupTask
-          xsi:type="setup.p2:P2Task"
-          label="Eclipse Java Development Tools update for Java 27 (BETA)">
-        <requirement
-            name="org.eclipse.jdt.javanextpatch.feature.group"
-            versionRange="[1.27.0,1.28.0)"
-            optional="true"/>
-        <repository
-            url="https://download.eclipse.org/jdt/updates/4.41-P-builds"/>
-      </setupTask>
+          url="https://download.eclipse.org/eclipse/updates/4.41/R-4.41-202608281142"/>
     </setupTask>
   </version>
-  <version name="latest.released"
-      label="Latest Release (4.40 - 2026-06)"
-      requiredJavaVersion="21">
+  <version name="4.42"
+      label="4.42 - 2026-12"
+      requiredJavaVersion="25">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="siteURI">
-        <value>https://download.eclipse.org/eclipse/downloads/drops4/R-4.40-202606010713/</value>
+        <value>https://download.eclipse.org/eclipse/downloads/</value>
       </detail>
       <detail
           key="shortcut">
-        <value>Eclipse SDK - Latest Release</value>
+        <value>Eclipse SDK - 4.42 - 2026-12</value>
       </detail>
     </annotation>
     <setupTask
         xsi:type="setup.p2:P2Task"
-        label="Eclipse SDK (4.40 - 2026-06)">
+        label="Eclipse SDK (4.42 - 2026-12)">
       <requirement
           name="org.eclipse.sdk.ide"
-          versionRange="[4.40.0,5.0.0)"
+          versionRange="[4.42.0,5.0.0)"
           filter="(|(&amp;(osgi.arch=aarch64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=aarch64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=aarch64)(osgi.os=win32)(osgi.ws=win32))(&amp;(osgi.arch=ppc64le)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=riscv64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=linux)(osgi.ws=gtk))(&amp;(osgi.arch=x86_64)(osgi.os=macosx)(osgi.ws=cocoa))(&amp;(osgi.arch=x86_64)(osgi.os=win32)(osgi.ws=win32)))"/>
       <requirement
           name="org.eclipse.e4.core.tools.feature.feature.group"/>
@@ -138,7 +143,9 @@
       <requirement
           name="org.eclipse.tips.feature.feature.group"/>
       <repository
-          url="https://download.eclipse.org/eclipse/updates/4.40/R-4.40-202606010713"/>
+          url="https://download.eclipse.org/eclipse/updates/4.42-I-builds"/>
+      <repository
+          url="https://download.eclipse.org/oomph/updates/latest"/>
     </setupTask>
   </version>
   <version name="4.41"
@@ -146,6 +153,10 @@
       requiredJavaVersion="21">
     <annotation
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
+      <detail
+          key="status">
+        <value>current</value>
+      </detail>
       <detail
           key="siteURI">
         <value>https://download.eclipse.org/eclipse/downloads/</value>
@@ -169,9 +180,7 @@
       <requirement
           name="org.eclipse.tips.feature.feature.group"/>
       <repository
-          url="https://download.eclipse.org/eclipse/updates/4.41-I-builds"/>
-      <repository
-          url="https://download.eclipse.org/oomph/updates/latest"/>
+          url="https://download.eclipse.org/eclipse/updates/4.41/R-4.41-202608281142"/>
     </setupTask>
   </version>
   <version name="4.40"
@@ -181,7 +190,7 @@
         source="http://www.eclipse.org/oomph/setup/BrandingInfo">
       <detail
           key="status">
-        <value>current</value>
+        <value>outdated</value>
       </detail>
       <detail
           key="siteURI">

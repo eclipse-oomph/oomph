@@ -27,11 +27,19 @@
           key="/instance/org.eclipse.oomph.setup.ui/showToolBarContributions"
           value="true"/>
     </setupTask>
+    <setupTask
+        xsi:type="setup:CompoundTask"
+        name="org.eclipse.wildwebdeveloper.xml">
+      <setupTask
+          xsi:type="setup:PreferenceTask"
+          key="/instance/org.eclipse.wildwebdeveloper.xml/org.eclipse.wildwebdeveloper.xml.format.maxLineWidth"
+          value="0"/>
+    </setupTask>
   </setupTask>
   <setupTask
       xsi:type="jdt:JRETask"
-      version="JavaSE-21"
-      location="${jre.location-21}">
+      version="JavaSE-25"
+      location="${jre.location-25}">
     <description>Define the JRE needed to compile and run the Java projects of ${scope.project.label}</description>
   </setupTask>
   <setupTask
@@ -62,7 +70,10 @@
     </content>
   </setupTask>
   <setupTask
-      xsi:type="setup.p2:P2Task">
+      xsi:type="setup.p2:P2Task"
+      label="SWT Bot">
+    <repository
+        url="https://download.eclipse.org/technology/swtbot/releases/latest"/>
     <description>Install the tools needed in the IDE to work with the source code for ${scope.project.label}</description>
   </setupTask>
   <setupTask
@@ -107,9 +118,13 @@
     <targlet
         name="${scope.project.label}">
       <requirement
+          name="*"/>
+      <requirement
           name="org.eclipse.sdk.feature.group"/>
       <requirement
-          name="*"/>
+          name="org.eclipse.swtbot.eclipse.feature.group"/>
+      <requirement
+          name="org.eclipse.swtbot.generator.feature.feature.group"/>
       <sourceLocator
           rootFolder="${github.clone.mpc.location}"
           locateNestedProjects="true"/>
@@ -215,6 +230,77 @@
       </predicate>
     </workingSet>
     <description>The dynamic working sets for ${scope.project.label}</description>
+  </setupTask>
+  <setupTask
+      xsi:type="setup:StringSubstitutionTask"
+      name="github.clone.mpc.location"
+      value="${github.clone.mpc.location}"/>
+  <setupTask
+      xsi:type="setup:ResourceCreationTask"
+      targetURL="${workspace.location|uri}/.metadata/.plugins/org.eclipse.debug.core/.launches/build-mpc.launch">
+    <content>
+      &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?>
+      &lt;launchConfiguration type=&quot;org.eclipse.m2e.Maven2LaunchConfigurationType&quot;>
+          &lt;intAttribute key=&quot;M2_COLORS&quot; value=&quot;0&quot;/>
+          &lt;booleanAttribute key=&quot;M2_DEBUG_OUTPUT&quot; value=&quot;false&quot;/>
+          &lt;stringAttribute key=&quot;M2_GOALS&quot; value=&quot;clean verify&quot;/>
+          &lt;booleanAttribute key=&quot;M2_NON_RECURSIVE&quot; value=&quot;false&quot;/>
+          &lt;booleanAttribute key=&quot;M2_OFFLINE&quot; value=&quot;false&quot;/>
+          &lt;stringAttribute key=&quot;M2_PROFILES&quot; value=&quot;&quot;/>
+          &lt;listAttribute key=&quot;M2_PROPERTIES&quot;>
+              &lt;listEntry value=&quot;user.home=$${system_property:user.home}&quot;/>
+              &lt;listEntry value=&quot;org.eclipse.justj.p2.manager.remote=localhost:$${project_loc:/org.eclipse.epp.mpc.site}/mpc/updates.remote&quot;/>
+              &lt;listEntry value=&quot;build.type=nightly&quot;/>
+              &lt;listEntry value=&quot;git.commit=e91cafd892823f11c579b61ac3ce8401b6c01b3e&quot;/>
+          &lt;/listAttribute>
+          &lt;stringAttribute key=&quot;M2_RUNTIME&quot; value=&quot;EMBEDDED&quot;/>
+          &lt;booleanAttribute key=&quot;M2_SKIP_TESTS&quot; value=&quot;false&quot;/>
+          &lt;intAttribute key=&quot;M2_THREADS&quot; value=&quot;1&quot;/>
+          &lt;booleanAttribute key=&quot;M2_UPDATE_SNAPSHOTS&quot; value=&quot;false&quot;/>
+          &lt;stringAttribute key=&quot;M2_USER_SETTINGS&quot; value=&quot;&quot;/>
+          &lt;booleanAttribute key=&quot;M2_WORKSPACE_RESOLUTION&quot; value=&quot;false&quot;/>
+          &lt;booleanAttribute key=&quot;org.eclipse.debug.core.ATTR_FORCE_SYSTEM_CONSOLE_ENCODING&quot; value=&quot;false&quot;/>
+          &lt;stringAttribute key=&quot;org.eclipse.debug.core.terminate.timestamp&quot; value=&quot;1788875992447&quot;/>
+          &lt;stringAttribute key=&quot;org.eclipse.debug.ui.ATTR_CAPTURE_IN_FILE&quot; value=&quot;$${github.clone.mpc.location}/build.log&quot;/>
+          &lt;booleanAttribute key=&quot;org.eclipse.jdt.launching.ATTR_ATTR_USE_ARGFILE&quot; value=&quot;false&quot;/>
+          &lt;booleanAttribute key=&quot;org.eclipse.jdt.launching.ATTR_SHOW_CODEDETAILS_IN_EXCEPTION_MESSAGES&quot; value=&quot;true&quot;/>
+          &lt;booleanAttribute key=&quot;org.eclipse.jdt.launching.ATTR_USE_CLASSPATH_ONLY_JAR&quot; value=&quot;false&quot;/>
+          &lt;stringAttribute key=&quot;org.eclipse.jdt.launching.WORKING_DIRECTORY&quot; value=&quot;$${github.clone.mpc.location}&quot;/>
+      &lt;/launchConfiguration>
+
+    </content>
+  </setupTask>
+  <setupTask
+      xsi:type="setup:ResourceCreationTask"
+      targetURL="${workspace.location|uri}/.metadata/.plugins/org.eclipse.debug.core/.launches/build-mpc-clean.launch">
+    <content>
+      &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?>
+      &lt;launchConfiguration type=&quot;org.eclipse.m2e.Maven2LaunchConfigurationType&quot;>
+          &lt;intAttribute key=&quot;M2_COLORS&quot; value=&quot;0&quot;/>
+          &lt;booleanAttribute key=&quot;M2_DEBUG_OUTPUT&quot; value=&quot;false&quot;/>
+          &lt;stringAttribute key=&quot;M2_GOALS&quot; value=&quot;clean&quot;/>
+          &lt;booleanAttribute key=&quot;M2_NON_RECURSIVE&quot; value=&quot;false&quot;/>
+          &lt;booleanAttribute key=&quot;M2_OFFLINE&quot; value=&quot;false&quot;/>
+          &lt;stringAttribute key=&quot;M2_PROFILES&quot; value=&quot;&quot;/>
+          &lt;listAttribute key=&quot;M2_PROPERTIES&quot;>
+              &lt;listEntry value=&quot;user.home=$${system_property:user.home}&quot;/>
+          &lt;/listAttribute>
+          &lt;stringAttribute key=&quot;M2_RUNTIME&quot; value=&quot;EMBEDDED&quot;/>
+          &lt;booleanAttribute key=&quot;M2_SKIP_TESTS&quot; value=&quot;false&quot;/>
+          &lt;intAttribute key=&quot;M2_THREADS&quot; value=&quot;1&quot;/>
+          &lt;booleanAttribute key=&quot;M2_UPDATE_SNAPSHOTS&quot; value=&quot;false&quot;/>
+          &lt;stringAttribute key=&quot;M2_USER_SETTINGS&quot; value=&quot;&quot;/>
+          &lt;booleanAttribute key=&quot;M2_WORKSPACE_RESOLUTION&quot; value=&quot;false&quot;/>
+          &lt;booleanAttribute key=&quot;org.eclipse.debug.core.ATTR_FORCE_SYSTEM_CONSOLE_ENCODING&quot; value=&quot;false&quot;/>
+          &lt;stringAttribute key=&quot;org.eclipse.debug.core.terminate.timestamp&quot; value=&quot;1788874740289&quot;/>
+          &lt;stringAttribute key=&quot;org.eclipse.debug.ui.ATTR_CAPTURE_IN_FILE&quot; value=&quot;$${github.clone.mpc.location}/build.log&quot;/>
+          &lt;booleanAttribute key=&quot;org.eclipse.jdt.launching.ATTR_ATTR_USE_ARGFILE&quot; value=&quot;false&quot;/>
+          &lt;booleanAttribute key=&quot;org.eclipse.jdt.launching.ATTR_SHOW_CODEDETAILS_IN_EXCEPTION_MESSAGES&quot; value=&quot;true&quot;/>
+          &lt;booleanAttribute key=&quot;org.eclipse.jdt.launching.ATTR_USE_CLASSPATH_ONLY_JAR&quot; value=&quot;false&quot;/>
+          &lt;stringAttribute key=&quot;org.eclipse.jdt.launching.WORKING_DIRECTORY&quot; value=&quot;$${github.clone.mpc.location}&quot;/>
+      &lt;/launchConfiguration>
+
+    </content>
   </setupTask>
   <stream name="master"
       label="Master">
