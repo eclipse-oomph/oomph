@@ -20,14 +20,14 @@
       <repository location="https://download.eclipse.org/modeling/emf/emf/builds/milestone/latest"/>
       <repository location="https://download.eclipse.org/egit/updates-stable-nightly"/>
       <repository location="https://download.eclipse.org/mylyn/updates/nightly/latest"/>
-      <repository location="https://download.eclipse.org/nebula/updates/release/3.1.1"/>
+      <repository location="https://download.eclipse.org/nebula/updates/release/3.4.0"/>
       <repository location="https://download.eclipse.org/technology/m2e/snapshots/latest"/>
       <repository location="https://download.eclipse.org/wildwebdeveloper/releases/latest"/>
       <repository location="https://download.eclipse.org/tm4e/releases/latest"/>
       <repository location="https://download.eclipse.org/technology/swtbot/releases/4.2.1"/>
       <repository location="https://download.eclipse.org/tools/orbit/simrel/orbit-aggregation/nightly/latest"/>
-      <repository location="https://download.eclipse.org/justj/jres/21/updates/milestone/latest"/>
-      <repository location="https://download.eclipse.org/webtools/downloads/drops/R3.41.0/S-3.41RC1-20260225091541/repository"/>
+      <repository location="https://download.eclipse.org/justj/jres/25/updates/milestone/latest"/>
+      <repository location="https://download.eclipse.org/webtools/downloads/drops/R3.43.0/S-3.43RC2-20260901114550/repository"/>
       <repository location="https://download.eclipse.org/eclipse/updates/4.42-I-builds"/>
     </location>
   </locations>

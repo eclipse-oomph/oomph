@@ -680,7 +680,7 @@
         <repository
             url="https://download.eclipse.org/mylyn/updates/nightly/latest"/>
         <repository
-            url="https://download.eclipse.org/nebula/updates/release/3.1.1">
+            url="https://download.eclipse.org/nebula/updates/release/3.4.0">
           <annotation
               source="Documentation">
             <detail
@@ -700,9 +700,9 @@
         <repository
             url="https://download.eclipse.org/tools/orbit/simrel/orbit-aggregation/nightly/latest"/>
         <repository
-            url="https://download.eclipse.org/justj/jres/21/updates/milestone/latest"/>
+            url="https://download.eclipse.org/justj/jres/25/updates/milestone/latest"/>
         <repository
-            url="https://download.eclipse.org/webtools/downloads/drops/R3.41.0/S-3.41RC1-20260225091541/repository"/>
+            url="https://download.eclipse.org/webtools/downloads/drops/R3.43.0/S-3.43RC2-20260901114550/repository"/>
       </repositoryList>
       <repositoryList
           name="2026-09">

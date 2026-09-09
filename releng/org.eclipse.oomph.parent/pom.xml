@@ -22,7 +22,7 @@ Eike Stepper - initial API and implementation
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <tycho.scmUrl>scm:git:https://github.com/eclipse-oomph/oomph.git</tycho.scmUrl>
     <tycho-version>5.0.4</tycho-version>
-    <jarsigner-version>1.5.4</jarsigner-version>
+    <jarsigner-version>1.5.7</jarsigner-version>
     <os-jvm-flags/>
   </properties>
 
@@ -144,7 +144,7 @@ Eike Stepper - initial API and implementation
                   <classifier>org.eclipse.oomph.tp</classifier>
                 </artifact>
               </target>
-              <executionEnvironment>org.eclipse.justj.openjdk.hotspot.jre.minimal-21</executionEnvironment>
+              <executionEnvironment>org.eclipse.justj.openjdk.hotspot.jre.minimal-25</executionEnvironment>
               <environments>
                 <environment>
                   <os>win32</os>
