@@ -57,7 +57,7 @@
         versionRange="[3.20.700.v20260820-0719,3.20.799]"/>
   </annotation>
   <annotation
-      source="http://www.eclipse.org/oomph/setup/Notification">
+      source="http://www.eclipse.org/oomph/setup/Notification-X">
     <detail
         key="uri">
       <value>https://www.eclipse.org/setups/notification/java27/?jre-only=true</value>
@@ -78,7 +78,7 @@
         max="0"/>
   </annotation>
   <annotation
-      source="http://www.eclipse.org/oomph/setup/Notification">
+      source="http://www.eclipse.org/oomph/setup/Notification-X">
     <detail
         key="description">
       <value>Offer to update to the latest milestone, if we have don't have it installed and have 2026-06 along with EPP JustJ installed, but is broken with older self-product catalog, so ensure the fix is installed too.</value>
@@ -104,7 +104,7 @@
         versionRange="1.37.0.v20260720-1056"/>
   </annotation>
   <annotation
-      source="http://www.eclipse.org/oomph/setup/Notification">
+      source="http://www.eclipse.org/oomph/setup/Notification-X">
     <detail
         key="description">
       <value>Offer to update to the latest milestone, if we have don't have it installed and have 2026-06 along with a Java 25 JRE installed.</value>
@@ -169,7 +169,7 @@
         versionRange="[4.40.0.20260604-0652,5.0.0)"/>
   </annotation>
   <annotation
-      source="http://www.eclipse.org/oomph/setup/Notification">
+      source="http://www.eclipse.org/oomph/setup/Notification-X">
     <detail
         key="description">
       <value>Offer to upgrade the 2026-06 IDE to run with Java 25, but only if a JustJ JRE is not installed and if the IDE is currently running on &lt; Java 25</value>
