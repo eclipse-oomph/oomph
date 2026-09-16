@@ -577,7 +577,7 @@
         activeRepositoryList="${eclipse.target.platform}"
         includeAllPlatforms="true">
       <annotation
-          source="http:/www.eclipse.org/oomph/targlets/PomArtifactUpdater">
+          source="http:/www.eclipse.org/oomph/targlets/PomArtifactUpdater-X">
         <detail
             key="skipArtifactIDs">
           <value>true</value>
@@ -588,7 +588,7 @@
         </detail>
       </annotation>
       <annotation
-          source="http:/www.eclipse.org/oomph/targlets/PomModulesUpdater">
+          source="http:/www.eclipse.org/oomph/targlets/PomModulesUpdater-X">
         <detail
             key="location">
           <value>${github.clone.oomph.location/releng/org.eclipse.oomph.parent/plugins/pom.xml}</value>
@@ -599,7 +599,7 @@
         </detail>
       </annotation>
       <annotation
-          source="http:/www.eclipse.org/oomph/targlets/PomModulesUpdater">
+          source="http:/www.eclipse.org/oomph/targlets/PomModulesUpdater-X">
         <detail
             key="location">
           <value>${github.clone.oomph.location/releng/org.eclipse.oomph.parent/features/pom.xml}</value>
