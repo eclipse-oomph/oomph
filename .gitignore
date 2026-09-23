@@ -13,3 +13,8 @@ Corel Auto-Preserve/
 .tycho-consumer-pom.xml
 private
 releng/org.eclipse.oomph.releng/www/marketplace-listings/marketplace.eclipse.org.setup
+
+# Local AI agent configuration
+/AGENTS.md
+/.codex/
+
