@@ -128,11 +128,8 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.equinox.internal.p2.artifact.repository.simple.SimpleArtifactRepository;
 import org.eclipse.equinox.internal.p2.metadata.InstallableUnit;
 import org.eclipse.equinox.internal.p2.metadata.expression.LDAPFilter;
@@ -3908,10 +3905,6 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
 
       if (Boolean.TRUE.equals(autoBuilding))
       {
-        // Disable the PDE's API analysis builder, if it's installed, and remember its previously current state.
-        // It's considered disabled if it's not installed at all.
-        final boolean disabled = PDEAPIUtil.setDisableAPIAnalysisBuilder(true);
-
         Job buildJob = new Job(Messages.SetupTaskPerformer_Build_job)
         {
           @Override
@@ -3935,12 +3928,6 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
               catch (CoreException ex)
               {
                 SetupCorePlugin.INSTANCE.log(ex);
-              }
-
-              if (!disabled)
-              {
-                // Restore it to false if it was true before we set it to false;
-                PDEAPIUtil.setDisableAPIAnalysisBuilder(false);
               }
             }
           }
@@ -5130,43 +5117,6 @@ public class SetupTaskPerformer extends AbstractSetupTaskContext
     public Object createFromString(String literal)
     {
       return BaseFactory.eINSTANCE.createURI(literal);
-    }
-  }
-
-  private static class PDEAPIUtil
-  {
-    private static final String PDE_CORE_NODE = "org.eclipse.pde.core"; //$NON-NLS-1$
-
-    private static final String DISABLE_API_ANALYSIS_BUILDER = "Preferences.MainPage.disableAPIAnalysisBuilder"; //$NON-NLS-1$
-
-    private static final boolean API_TOOLS_INSTALLED = Platform.getBundle("org.eclipse.pde.api.tools") != null; //$NON-NLS-1$
-
-    /**
-     * Sets the PDE preference that disables the API analysis builder and returns its previous value.
-     * The builder is considered disabled if API tools aren't installed at all.
-     */
-    private static boolean setDisableAPIAnalysisBuilder(boolean disabled)
-    {
-      if (!API_TOOLS_INSTALLED)
-      {
-        return true;
-      }
-
-      IEclipsePreferences preferences = InstanceScope.INSTANCE.getNode(PDE_CORE_NODE);
-      boolean result = preferences.getBoolean(DISABLE_API_ANALYSIS_BUILDER, false);
-      if (result != disabled)
-      {
-        if (disabled)
-        {
-          preferences.putBoolean(DISABLE_API_ANALYSIS_BUILDER, true);
-        }
-        else
-        {
-          preferences.remove(DISABLE_API_ANALYSIS_BUILDER);
-        }
-      }
-
-      return result;
     }
   }
 
