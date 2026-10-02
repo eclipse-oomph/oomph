@@ -1081,7 +1081,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
         @Override
         public PreferenceHandler create(URI key)
         {
-          return new JDTProfileChoicePreferenceHandler(key, "formatter"); //$NON-NLS-1$
+          return new JDTProfileChoicePreferenceHandler(key, "org.eclipse.cdt.core.formatter.", "formatter"); //$NON-NLS-1$ //$NON-NLS-2$
         }
       });
 
@@ -1099,7 +1099,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
         @Override
         public PreferenceHandler create(URI key)
         {
-          return new JDTProfileChoicePreferenceHandler(key, "cleanup"); //$NON-NLS-1$
+          return new JDTProfileChoicePreferenceHandler(key, "cleanup.", "cleanup"); //$NON-NLS-1$ //$NON-NLS-2$
         }
       });
 
@@ -1180,7 +1180,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
         @Override
         public PreferenceHandler create(URI key)
         {
-          return new CDTProfileChoicePreferenceHandler(key);
+          return new CDTProfileChoicePreferenceHandler(key, "org.eclipse.cdt.core.formatter."); //$NON-NLS-1$
         }
       });
 
@@ -1652,9 +1652,12 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
   {
     private static final Pattern SETTING_PATTERN = Pattern.compile("<setting id=\"([^\"]+)\" value=\"([^\"]+)\""); //$NON-NLS-1$
 
-    public ProfileChoicePreferenceHandler(URI key)
+    private final String commonKeyPrefix;
+
+    public ProfileChoicePreferenceHandler(URI key, String commonKeyPrefix)
     {
       super(key);
+      this.commonKeyPrefix = commonKeyPrefix;
     }
 
     @Override
@@ -1682,6 +1685,10 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
           for (Matcher settingMatcher = SETTING_PATTERN.matcher(profile); settingMatcher.find();)
           {
             String propertyKey = settingMatcher.group(1);
+            if (!propertyKey.startsWith(commonKeyPrefix))
+            {
+              continue; // skip invalid setting
+            }
             String propertyValue = settingMatcher.group(2);
             PreferenceProperty property = getKeyPreferenceProperty(propertyKey);
             property.set(propertyValue);
@@ -1695,9 +1702,9 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
   {
     private String profileType;
 
-    public JDTProfileChoicePreferenceHandler(URI key, String profileType)
+    public JDTProfileChoicePreferenceHandler(URI key, String commonKeyPrefix, String profileType)
     {
-      super(key);
+      super(key, commonKeyPrefix);
       this.profileType = profileType;
     }
 
@@ -1716,9 +1723,9 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
 
   public static class CDTProfileChoicePreferenceHandler extends ProfileChoicePreferenceHandler
   {
-    public CDTProfileChoicePreferenceHandler(URI key)
+    public CDTProfileChoicePreferenceHandler(URI key, String commonKeyPrefix)
     {
-      super(key);
+      super(key, commonKeyPrefix);
     }
 
     @Override
