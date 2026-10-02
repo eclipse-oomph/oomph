@@ -1081,7 +1081,7 @@ public class PreferenceTaskImpl extends SetupTaskImpl implements PreferenceTask
         @Override
         public PreferenceHandler create(URI key)
         {
-          return new JDTProfileChoicePreferenceHandler(key, "org.eclipse.cdt.core.formatter.", "formatter"); //$NON-NLS-1$ //$NON-NLS-2$
+          return new JDTProfileChoicePreferenceHandler(key, "org.eclipse.jdt.core.formatter.", "formatter"); //$NON-NLS-1$ //$NON-NLS-2$
         }
       });
 
