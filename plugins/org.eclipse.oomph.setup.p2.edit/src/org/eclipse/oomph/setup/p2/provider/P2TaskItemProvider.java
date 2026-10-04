@@ -17,6 +17,7 @@ import org.eclipse.oomph.setup.p2.P2Task;
 import org.eclipse.oomph.setup.p2.SetupP2Package;
 import org.eclipse.oomph.setup.p2.util.MarketPlaceListing;
 import org.eclipse.oomph.setup.provider.SetupTaskItemProvider;
+import org.eclipse.oomph.util.StringUtil;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
@@ -208,8 +209,22 @@ public class P2TaskItemProvider extends SetupTaskItemProvider
   @Override
   public String getText(Object object)
   {
-    String label = ((P2Task)object).getLabel();
-    return label == null || label.length() == 0 ? getString("_UI_P2Task_type") : getString("_UI_P2Task_type") + " (" + label + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+    P2Task p2Task = (P2Task)object;
+    String label = p2Task.getLabel();
+    String profileProperties = p2Task.getProfileProperties();
+
+    StringBuilder details = new StringBuilder(getString("_UI_P2Task_type")); //$NON-NLS-1$
+    if (!StringUtil.isEmpty(label))
+    {
+      details.append(" (" + label + ')'); //$NON-NLS-1$
+    }
+
+    if (!StringUtil.isEmpty(profileProperties))
+    {
+      details.append(" {" + profileProperties + '}'); //$NON-NLS-1$
+    }
+
+    return details.toString();
   }
 
   /**
