@@ -98,7 +98,7 @@ public final class NotificationViewPart extends ViewPart
         setPartState(IWorkbenchPage.STATE_MAXIMIZED);
       }
 
-      setUrl(getNotificationURI());
+      setUrl(getNotificationURI(true));
     }
   }
 
@@ -126,12 +126,12 @@ public final class NotificationViewPart extends ViewPart
   }
 
   @SuppressWarnings("nls")
-  private String getNotificationURI()
+  private String getNotificationURI(boolean redirect)
   {
     // When debugging and testing, we redirect the raw GitHub setups to the local clone.
     // We can reuse this to redirect the notification URIs also to the same local clone.
     String uri = notification.getDetails().get(AnnotationConstants.KEY_URI);
-    if (uri.startsWith("https://www.eclipse.org/setups/"))
+    if (redirect && uri.startsWith("https://www.eclipse.org/setups/"))
     {
       URI localSetups = uriConverter
           .normalize(URI.createURI("https://raw.githubusercontent.com/eclipse-oomph/oomph/master/setups/../releng/org.eclipse.oomph.releng/www/"));
@@ -398,7 +398,7 @@ public final class NotificationViewPart extends ViewPart
     hide();
     if (uri != null && notification != null)
     {
-      SetupUIPlugin.rememberNotificationURI(getNotificationURI(), uri);
+      SetupUIPlugin.rememberNotificationURI(getNotificationURI(false), uri);
     }
   }
 
