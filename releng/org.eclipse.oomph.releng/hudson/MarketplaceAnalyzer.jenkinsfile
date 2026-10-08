@@ -71,6 +71,7 @@ pipeline {
                 -Dsun.zip.disableMemoryMapping=true \
                 -Xmx8G \
                 -Duser.home=$(pwd) \
+                -Dorg.eclipse.ecf.provider.filetransfer.excludeContributors= \
                 -Dorg.eclipse.ecf.provider.filetransfer.httpclient.browse.connectTimeout=120000 \
                 -Dorg.eclipse.ecf.provider.filetransfer.httpclient.retrieve.connectTimeout=120000 \
                 -Dorg.eclipse.ecf.provider.filetransfer.httpclient.retrieve.readTimeout=120000 \
