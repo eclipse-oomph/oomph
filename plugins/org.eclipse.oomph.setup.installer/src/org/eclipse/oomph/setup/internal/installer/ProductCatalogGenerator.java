@@ -27,6 +27,7 @@ import org.eclipse.oomph.p2.internal.core.AgentImpl;
 import org.eclipse.oomph.setup.AnnotationConstants;
 import org.eclipse.oomph.setup.CompoundTask;
 import org.eclipse.oomph.setup.EclipseIniTask;
+import org.eclipse.oomph.setup.Index;
 import org.eclipse.oomph.setup.InstallationTask;
 import org.eclipse.oomph.setup.Macro;
 import org.eclipse.oomph.setup.Product;
@@ -39,6 +40,7 @@ import org.eclipse.oomph.setup.SetupTask;
 import org.eclipse.oomph.setup.VariableChoice;
 import org.eclipse.oomph.setup.VariableTask;
 import org.eclipse.oomph.setup.VariableType;
+import org.eclipse.oomph.setup.internal.core.SetupContext;
 import org.eclipse.oomph.setup.internal.core.util.ECFURIHandlerImpl;
 import org.eclipse.oomph.setup.internal.core.util.SetupCoreUtil;
 import org.eclipse.oomph.setup.p2.P2Task;
@@ -334,6 +336,10 @@ public class ProductCatalogGenerator implements IApplication
         if ("-projectCatalogUpdater".equals(option))
         {
           return new ProjectCatalogUpdater(new ArrayList<>(List.of(arguments)), resourceSet).update();
+        }
+        else if ("-indexNotificationUpdater".equals(option))
+        {
+          return new IndexNotificationUpdater(new ArrayList<>(List.of(arguments)), resourceSet, getMetadataRepositoryManager()).update();
         }
         else if ("-outputLocation".equals(option))
         {
@@ -801,13 +807,14 @@ public class ProductCatalogGenerator implements IApplication
         addBrandingNotificationAnnotations(productCatalog);
       }
 
-      Resource resource = new BaseResourceFactoryImpl().createResource(outputLocation == null ? URI.createURI("org.eclipse.products.setup") : outputLocation);
+      BaseResourceFactoryImpl baseResourceFactoryImpl = new BaseResourceFactoryImpl();
+      Resource resource = baseResourceFactoryImpl.createResource(outputLocation == null ? URI.createURI("org.eclipse.products.setup") : outputLocation);
       resource.getContents().add(productCatalog);
 
       if (outputLocation != null)
       {
         URI jresURI = outputLocation.trimSegments(1).appendSegment("org.eclipse.jres.setup");
-        Resource jresResource = new BaseResourceFactoryImpl().createResource(jresURI);
+        Resource jresResource = baseResourceFactoryImpl.createResource(jresURI);
         Macro jreMacro = getJREs();
         jresResource.getContents().add(jreMacro);
         jresResource.save(Collections.singletonMap(Resource.OPTION_SAVE_ONLY_IF_CHANGED, Resource.OPTION_SAVE_ONLY_IF_CHANGED_MEMORY_BUFFER));
@@ -819,7 +826,7 @@ public class ProductCatalogGenerator implements IApplication
             products.remove(product);
 
             URI allProductURI = outputLocation.trimSegments(1).appendSegment("org.eclipse.all.product.setup");
-            Resource allProductResource = new BaseResourceFactoryImpl().createResource(allProductURI);
+            Resource allProductResource = baseResourceFactoryImpl.createResource(allProductURI);
             EclipseIniTask eclipseIniTask = SetupFactory.eINSTANCE.createEclipseIniTask();
             eclipseIniTask.setVm(true);
             eclipseIniTask.setOption("-Xmx");
@@ -835,7 +842,7 @@ public class ProductCatalogGenerator implements IApplication
             products.remove(product);
 
             URI eclipsePlatformSDKProductURI = outputLocation.trimSegments(1).appendSegment("org.eclipse.platform.sdk.product.setup");
-            Resource eclipsePlatformSDKProductResource = new BaseResourceFactoryImpl().createResource(eclipsePlatformSDKProductURI);
+            Resource eclipsePlatformSDKProductResource = baseResourceFactoryImpl.createResource(eclipsePlatformSDKProductURI);
             EclipseIniTask eclipseIniTask = SetupFactory.eINSTANCE.createEclipseIniTask();
             eclipseIniTask.setVm(true);
             eclipseIniTask.setOption("-Xmx");
@@ -3473,30 +3480,148 @@ public class ProductCatalogGenerator implements IApplication
 
       return null;
     }
+  }
 
-    private List<EObject> getAllObjects(Resource resource)
+  private static class IndexNotificationUpdater
+  {
+    private final ResourceSet resourceSet;
+
+    private final URI output;
+
+    private final String milestoneVersion;
+
+    private IMetadataRepository releaseRepository;
+
+    private final URI releaseURI;
+
+    private final URI milestoneURI;
+
+    private IMetadataRepository milestoneRepository;
+
+    public IndexNotificationUpdater(List<String> arguments, ResourceSet resourceSet, IMetadataRepositoryManager manager) throws Exception
     {
-      List<EObject> result = new ArrayList<>();
-      for (TreeIterator<EObject> it = EcoreUtil.getAllProperContents(resource, false); it.hasNext();)
-      {
-        result.add(it.next());
-      }
-      return result;
+      this.resourceSet = resourceSet;
+      output = URI.createURI(getArgument(arguments, "-output"));
+      releaseURI = URI.createURI(getArgument(arguments, "-release"));
+      releaseRepository = manager.loadRepository(java.net.URI.create(releaseURI.toString()), null);
+      milestoneURI = URI.createURI(getArgument(arguments, "-milestone"));
+      milestoneVersion = getArgument(arguments, "-milestoneVersion");
+      milestoneRepository = manager.loadRepository(java.net.URI.create(milestoneURI.toString()), null);
     }
 
-    private String getArgument(List<String> arguments, String name)
+    public Object update() throws IOException
     {
-      var index = arguments.indexOf(name);
-      if (index >= 0)
+      Resource indexResource = resourceSet.getResource(output.appendSegment(SetupContext.INDEX_SETUP_NAME), true);
+      Index index = (Index)indexResource.getContents().get(0);
+      for (Annotation annotation : index.getAnnotations())
       {
-        arguments.remove(index);
-        if (index < arguments.size())
+        String uri = annotation.getDetails().get(AnnotationConstants.KEY_URI);
+        if ("https://www.eclipse.org/setups/notification/milestone".equals(uri))
         {
-          return arguments.remove(index);
+          for (EObject eObject : annotation.eContents())
+          {
+            if (eObject instanceof Requirement)
+            {
+              Requirement requirement = (Requirement)eObject;
+              if ("org.eclipse.epp.package.common".equals(requirement.getName()))
+              {
+                requirement.setVersionRange(getVersionRange(milestoneRepository, "org.eclipse.epp.package.common"));
+              }
+            }
+          }
+        }
+        else if ("https://www.eclipse.org/setups/notification/release/".equals(uri))
+        {
+          for (EObject eObject : annotation.eContents())
+          {
+            if (eObject instanceof Requirement)
+            {
+              Requirement requirement = (Requirement)eObject;
+              if ("org.eclipse.epp.package.common".equals(requirement.getName()))
+              {
+                requirement.setVersionRange(getVersionRange(releaseRepository, "org.eclipse.epp.package.common"));
+              }
+            }
+          }
         }
       }
 
+      Resource milestoneConfigurationResource = resourceSet
+          .getResource(URI.createURI("releng/org.eclipse.oomph.releng/www/notification/milestone/Milestone.setup").resolve(output), true);
+      for (TreeIterator<EObject> it = milestoneConfigurationResource.getAllContents(); it.hasNext();)
+      {
+        EObject eObject = it.next();
+        if (eObject instanceof Requirement)
+        {
+          Requirement requirement = (Requirement)eObject;
+          if ("org.eclipse.epp.package.common".equals(requirement.getName()))
+          {
+            OSGiVersion version = getVersion(milestoneRepository, "org.eclipse.epp.package.common");
+            requirement.setVersionRange(
+                new VersionRange(Version.createOSGi(version.getMajor(), version.getMinor(), 0), true, Version.createOSGi(version.getMajor() + 1, 0, 0), false));
+            break;
+          }
+        }
+      }
+
+      Path milestoneIndexPath = Path.of(URI.createURI("releng/org.eclipse.oomph.releng/www/notification/milestone/index.html").resolve(output).toFileString());
+      String milestoneIndex = Files.readString(milestoneIndexPath) //
+          .replaceFirst("(version = ')[^']+(')", "$1" + milestoneURI.lastSegment() + "$2")
+          .replaceFirst("(milestone = ')[^']+(')", "$1" + milestoneVersion + "$2");
+
+      Path releaseIndexPath = Path.of(URI.createURI("releng/org.eclipse.oomph.releng/www/notification/release/index.html").resolve(output).toFileString());
+      String releaseIndex = Files.readString(releaseIndexPath) //
+          .replaceFirst("(version = ')[^']+(')", "$1" + releaseURI.lastSegment() + "$2");
+
+      Files.writeString(milestoneIndexPath, milestoneIndex);
+      Files.writeString(releaseIndexPath, releaseIndex);
+      indexResource.save(Map.of());
+      milestoneConfigurationResource.save(Map.of());
+
       return null;
     }
+
+    private OSGiVersion getVersion(IMetadataRepository repository, String id)
+    {
+      IQueryResult<IInstallableUnit> query = repository.query(QueryUtil.createIUQuery("org.eclipse.epp.package.common"), null);
+      IInstallableUnit[] ius = query.toArray(IInstallableUnit.class);
+      if (ius.length != 1)
+      {
+        throw new IllegalStateException("Expecting exactly one result: " + Arrays.asList(ius));
+      }
+      return (OSGiVersion)ius[0].getVersion();
+    }
+
+    private VersionRange getVersionRange(IMetadataRepository repository, String id)
+    {
+      OSGiVersion version = getVersion(repository, id);
+      return new VersionRange(Version.createOSGi(version.getMajor(), version.getMinor() - 1, 0), true, version, false);
+    }
   }
+
+  private static List<EObject> getAllObjects(Resource resource)
+  {
+    List<EObject> result = new ArrayList<>();
+    for (TreeIterator<EObject> it = EcoreUtil.getAllProperContents(resource, false); it.hasNext();)
+    {
+      result.add(it.next());
+    }
+    return result;
+  }
+
+  private static String getArgument(List<String> arguments, String name)
+  {
+    var index = arguments.indexOf(name);
+    if (index >= 0)
+    {
+      arguments.remove(index);
+      if (index < arguments.size())
+      {
+        return arguments.remove(index);
+      }
+    }
+
+    return null;
+  }
+
 }

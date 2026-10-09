@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.pde.ui.RuntimeWorkbench">
+    <booleanAttribute key="add_console" value="false"/>
+    <setAttribute key="additional_plugins"/>
+    <booleanAttribute key="append.args" value="true"/>
+    <stringAttribute key="application" value="org.eclipse.oomph.setup.installer.ProductCatalogGenerator"/>
+    <booleanAttribute key="askclear" value="false"/>
+    <booleanAttribute key="automaticAdd" value="false"/>
+    <booleanAttribute key="automaticValidate" value="false"/>
+    <stringAttribute key="bad_container_name" value="\org.eclipse.oomph.setup.insta"/>
+    <stringAttribute key="bootstrap" value=""/>
+    <stringAttribute key="checked" value="[NONE]"/>
+    <booleanAttribute key="clearConfig" value="true"/>
+    <booleanAttribute key="clearws" value="true"/>
+    <booleanAttribute key="clearwslog" value="false"/>
+    <stringAttribute key="configLocation" value="${workspace_loc}/.metadata/.plugins/org.eclipse.pde.core/IndexNotificationgUpdate"/>
+    <booleanAttribute key="default" value="false"/>
+    <setAttribute key="deselected_workspace_bundles"/>
+    <stringAttribute key="featureDefaultLocation" value="workspace"/>
+    <stringAttribute key="featurePluginResolution" value="workspace"/>
+    <booleanAttribute key="includeOptional" value="false"/>
+    <stringAttribute key="location" value="${workspace_loc}/../ws-index-notificationupdater"/>
+    <booleanAttribute key="org.eclipse.debug.core.ATTR_FORCE_SYSTEM_CONSOLE_ENCODING" value="false"/>
+    <stringAttribute key="org.eclipse.debug.ui.ATTR_CONSOLE_ENCODING" value="UTF-8"/>
+    <listAttribute key="org.eclipse.debug.ui.favoriteGroups">
+        <listEntry value="org.eclipse.debug.ui.launchGroup.debug"/>
+        <listEntry value="org.eclipse.debug.ui.launchGroup.run"/>
+    </listAttribute>
+    <booleanAttribute key="org.eclipse.jdt.launching.ATTR_ATTR_USE_ARGFILE" value="false"/>
+    <booleanAttribute key="org.eclipse.jdt.launching.ATTR_SHOW_CODEDETAILS_IN_EXCEPTION_MESSAGES" value="true"/>
+    <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_START_ON_FIRST_THREAD" value="true"/>
+    <stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-25"/>
+    <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-os ${target.os} -ws ${target.ws} -arch ${target.arch} -nl ${target.nl} -consoleLog &#13;&#10;-indexNotificationUpdater&#13;&#10;-output ${file_uri:${resource_loc:/setups/}}&#13;&#10;-release https://download.eclipse.org/releases/2026-09&#13;&#10;-milestone https://download.eclipse.org/releases/2026-12&#13;&#10;-milestoneVersion M1"/>
+    <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.pde.ui.workbenchClasspathProvider"/>
+    <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Declipse.p2.mirrors=false&#13;&#10;-Dorg.eclipse.ecf.provider.filetransfer.excludeContributors=org.eclipse.ecf.provider.filetransfer.httpclientjava&#13;&#10;-Doomph.p2.repository.retry=2&#13;&#10;-Dxorg.eclipse.ecf.core.util.traceAll=true&#13;&#10;-Dxorg.apache.commons.logging.Log=org.apache.commons.logging.impl.SimpleLog&#13;&#10;-Dxorg.apache.commons.logging.simplelog.showdatetime=true&#13;&#10;-Dxorg.apache.commons.logging.simplelog.log.org.apache.http=DEBUG&#13;&#10;-Dxorg.apache.commons.logging.simplelog.log.org.apache.http.wire=ERROR&#13;&#10;-Duser.home=${system_property:user.home}"/>
+    <stringAttribute key="pde.version" value="3.3"/>
+    <stringAttribute key="product" value="org.eclipse.sdk.ide"/>
+    <setAttribute key="selected_features">
+        <setEntry value="org.eclipse.e4.rcp:default"/>
+        <setEntry value="org.eclipse.emf.common.ui:default"/>
+        <setEntry value="org.eclipse.emf.common:default"/>
+        <setEntry value="org.eclipse.emf.ecore:default"/>
+        <setEntry value="org.eclipse.emf.edit.ui:default"/>
+        <setEntry value="org.eclipse.emf.edit:default"/>
+        <setEntry value="org.eclipse.equinox.p2.core.feature:default"/>
+        <setEntry value="org.eclipse.oomph.p2:default"/>
+        <setEntry value="org.eclipse.oomph.setup.installer:default"/>
+        <setEntry value="org.eclipse.rcp:default"/>
+    </setAttribute>
+    <setAttribute key="selected_target_bundles"/>
+    <setAttribute key="selected_workspace_bundles"/>
+    <booleanAttribute key="show_selected_only" value="true"/>
+    <stringAttribute key="templateConfig" value="${target_home}\configuration\config.ini"/>
+    <booleanAttribute key="tracing" value="false"/>
+    <booleanAttribute key="useCustomFeatures" value="true"/>
+    <booleanAttribute key="useDefaultConfig" value="true"/>
+    <booleanAttribute key="useDefaultConfigArea" value="true"/>
+    <booleanAttribute key="useProduct" value="false"/>
+</launchConfiguration>
