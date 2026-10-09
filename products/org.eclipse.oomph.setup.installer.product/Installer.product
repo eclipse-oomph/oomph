@@ -20,6 +20,7 @@ Eclipse Installer
       <vmArgs>-Xms256M
 -Xmx2048M
 -Declipse.platform.mergeTrust=true
+--enable-native-access=ALL-UNNAMED
       </vmArgs>
       <vmArgsMac>-XstartOnFirstThread
 -Dorg.eclipse.swt.internal.carbon.smallFonts
