@@ -33,8 +33,8 @@
         <setEntry value="org.eclipse.equinox.p2.metadata.repository:1.5.800.v20260304-1232:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.metadata.source:2.9.800.v20260727-1351:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.metadata:2.9.800.v20260727-1351:default:true:default:default"/>
-        <setEntry value="org.eclipse.equinox.p2.operations.source:2.7.800.v20260304-0655:default:true:default:default"/>
-        <setEntry value="org.eclipse.equinox.p2.operations:2.7.800.v20260304-0655:default:true:default:default"/>
+        <setEntry value="org.eclipse.equinox.p2.operations.source:2.7.900.v20261007-0341:default:true:default:default"/>
+        <setEntry value="org.eclipse.equinox.p2.operations:2.7.900.v20261007-0341:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.publisher.eclipse.source:1.6.900.v20260809-0656:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.publisher.eclipse:1.6.900.v20260809-0656:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.publisher.source:1.9.700.v20260512-1529:default:true:default:default"/>
@@ -42,8 +42,8 @@
         <setEntry value="org.eclipse.equinox.p2.reconciler.dropins.source:1.5.800.v20251111-0852:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.reconciler.dropins:1.5.800.v20251111-0852:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.repository.source:2.9.800.v20260730-1413:default:true:default:default"/>
-        <setEntry value="org.eclipse.equinox.p2.repository.tools.source:2.4.1000.v20260304-1232:default:true:default:default"/>
-        <setEntry value="org.eclipse.equinox.p2.repository.tools:2.4.1000.v20260304-1232:default:true:default:default"/>
+        <setEntry value="org.eclipse.equinox.p2.repository.tools.source:2.4.1100.v20260914-0557:default:true:default:default"/>
+        <setEntry value="org.eclipse.equinox.p2.repository.tools:2.4.1100.v20260914-0557:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.repository:2.9.800.v20260730-1413:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.touchpoint.eclipse.source:2.4.600.v20250722-0413:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.touchpoint.eclipse:2.4.600.v20250722-0413:default:true:default:default"/>
@@ -57,10 +57,10 @@
         <setEntry value="org.eclipse.equinox.p2.ui.importexport:1.5.200.v20260728-0949:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.ui.sdk.scheduler.source:1.7.200.v20260730-1701:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.ui.sdk.scheduler:1.7.200.v20260730-1701:default:true:default:default"/>
-        <setEntry value="org.eclipse.equinox.p2.ui.sdk.source:1.4.200.v20260728-0949:default:true:default:default"/>
-        <setEntry value="org.eclipse.equinox.p2.ui.sdk:1.4.200.v20260728-0949:default:true:default:default"/>
-        <setEntry value="org.eclipse.equinox.p2.ui.source:2.9.200.v20260803-1203:default:true:default:default"/>
-        <setEntry value="org.eclipse.equinox.p2.ui:2.9.200.v20260803-1203:default:true:default:default"/>
+        <setEntry value="org.eclipse.equinox.p2.ui.sdk.source:1.4.300.v20261006-1356:default:true:default:default"/>
+        <setEntry value="org.eclipse.equinox.p2.ui.sdk:1.4.300.v20261006-1356:default:true:default:default"/>
+        <setEntry value="org.eclipse.equinox.p2.ui.source:2.9.300.v20261006-1356:default:true:default:default"/>
+        <setEntry value="org.eclipse.equinox.p2.ui:2.9.300.v20261006-1356:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.updatechecker.source:1.4.600.v20250728-0401:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.updatechecker:1.4.600.v20250728-0401:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.updatesite.source:1.3.900.v20260305-0658:default:true:default:default"/>

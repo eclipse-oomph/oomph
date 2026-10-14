@@ -174,4 +174,8 @@
          id="org.eclipse.equinox.p2.ui.sdk"
          version="0.0.0"/>
 
+   <plugin
+         id="slf4j.simple"
+         version="0.0.0"/>
+
 </feature>

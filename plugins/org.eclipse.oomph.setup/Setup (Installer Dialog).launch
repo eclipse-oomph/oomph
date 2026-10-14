@@ -19,11 +19,11 @@
         <setEntry value="org.eclipse.equinox.p2.jarprocessor:1.3.700.v20260304-1232:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.metadata.repository:1.5.800.v20260304-1232:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.metadata:2.9.800.v20260727-1351:default:true:default:default"/>
-        <setEntry value="org.eclipse.equinox.p2.operations:2.7.800.v20260304-0655:default:true:default:default"/>
+        <setEntry value="org.eclipse.equinox.p2.operations:2.7.900.v20261007-0341:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.publisher.eclipse:1.6.900.v20260809-0656:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.publisher:1.9.700.v20260512-1529:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.reconciler.dropins:1.5.800.v20251111-0852:default:true:default:default"/>
-        <setEntry value="org.eclipse.equinox.p2.repository.tools:2.4.1000.v20260304-1232:default:true:default:default"/>
+        <setEntry value="org.eclipse.equinox.p2.repository.tools:2.4.1100.v20260914-0557:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.repository:2.9.800.v20260730-1413:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.touchpoint.eclipse:2.4.600.v20250722-0413:default:true:default:default"/>
         <setEntry value="org.eclipse.equinox.p2.touchpoint.natives:1.5.900.v20260304-0711:default:true:default:default"/>
