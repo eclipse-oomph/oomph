@@ -1025,7 +1025,7 @@ public class TargletTaskImpl extends SetupTaskImpl implements TargletTask
         targetDefinition = getTargetDefinition(service, context.getProgressMonitor(true));
         if (targetDefinition == null)
         {
-          return hasRequirements(copyTarglets);
+          return !composedTargets.isEmpty() || hasRequirements(copyTarglets);
         }
 
         targletContainer = getTargletContainer();
