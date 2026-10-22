@@ -83,6 +83,8 @@ import org.eclipse.equinox.internal.p2.engine.phases.Uninstall;
 import org.eclipse.equinox.internal.p2.metadata.IRequiredCapability;
 import org.eclipse.equinox.internal.p2.metadata.InstallableUnit;
 import org.eclipse.equinox.internal.p2.metadata.ResolvedInstallableUnit;
+import org.eclipse.equinox.internal.p2.publisher.eclipse.FeatureManifestParser;
+import org.eclipse.equinox.internal.p2.publisher.eclipse.FeatureParser;
 import org.eclipse.equinox.internal.p2.touchpoint.natives.NativeTouchpoint;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.engine.IPhaseSet;
@@ -103,6 +105,7 @@ import org.eclipse.equinox.p2.planner.IProfileChangeRequest;
 import org.eclipse.equinox.p2.publisher.PublisherInfo;
 import org.eclipse.equinox.p2.publisher.PublisherResult;
 import org.eclipse.equinox.p2.publisher.eclipse.BundlesAction;
+import org.eclipse.equinox.p2.publisher.eclipse.Feature;
 import org.eclipse.equinox.p2.publisher.eclipse.FeaturesAction;
 import org.eclipse.equinox.p2.query.CollectionResult;
 import org.eclipse.equinox.p2.query.IQueryResult;
@@ -114,6 +117,7 @@ import org.eclipse.equinox.p2.repository.artifact.IFileArtifactRepository;
 import org.eclipse.equinox.p2.repository.metadata.IMetadataRepository;
 import org.eclipse.equinox.spi.p2.publisher.PublisherHelper;
 import org.eclipse.osgi.util.NLS;
+import org.eclipse.pde.core.IWritable;
 import org.eclipse.pde.core.target.ITargetDefinition;
 import org.eclipse.pde.core.target.ITargetLocation;
 import org.eclipse.pde.core.target.ITargetLocationFactory;
@@ -121,11 +125,13 @@ import org.eclipse.pde.core.target.ITargetPlatformService;
 import org.eclipse.pde.core.target.LoadTargetDefinitionJob;
 import org.eclipse.pde.core.target.TargetBundle;
 import org.eclipse.pde.core.target.TargetFeature;
+import org.eclipse.pde.internal.core.ifeature.IFeatureModel;
 import org.eclipse.pde.internal.core.target.AbstractBundleContainer;
 import org.eclipse.pde.internal.core.target.P2TargetUtils;
 
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
@@ -137,10 +143,16 @@ import java.io.File;
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.MessageDigest;
@@ -1449,7 +1461,7 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
       clear();
 
       Set<File> bundleFiles = new LinkedHashSet<>();
-      Set<File> featureFiles = new LinkedHashSet<>();
+      Set<Feature> publisherFeatures = new LinkedHashSet<>();
 
       MultiStatus rootStatus = new MultiStatus(TargletsCorePlugin.INSTANCE.getSymbolicName(), 0, Messages.TargletContainer_ResolutionProblems, null);
 
@@ -1527,7 +1539,25 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
           {
             try
             {
-              featureFiles.add(new File(targetFeature.getLocation()));
+              String location = targetFeature.getLocation();
+              Feature feature;
+              if (location != null)
+              {
+                File featureLocation = new File(location);
+                feature = new FeatureParser().parse(featureLocation);
+                if (feature != null)
+                {
+                  feature.setLocation(featureLocation.getAbsolutePath());
+                }
+              }
+              else
+              {
+                feature = toPublisherFeature(targetFeature);
+              }
+              if (feature != null)
+              {
+                publisherFeatures.add(feature);
+              }
             }
             catch (Exception ex)
             {
@@ -1556,9 +1586,9 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
           }
         }
 
-        if (!featureFiles.isEmpty())
+        if (!publisherFeatures.isEmpty())
         {
-          FeaturesAction featuresAction = new FeaturesAction(featureFiles.toArray(File[]::new));
+          FeaturesAction featuresAction = new FeaturesAction(publisherFeatures.toArray(Feature[]::new));
           IStatus status = featuresAction.perform(publisherInfo, publisherResult, progress.newChild());
           if (!status.isOK())
           {
@@ -1577,6 +1607,28 @@ public class TargletContainer extends AbstractBundleContainer implements ITargle
       }
 
       return rootStatus;
+    }
+
+    private static Feature toPublisherFeature(TargetFeature targetFeature) throws MalformedURLException, IOException, SAXException, URISyntaxException
+    {
+      if (targetFeature.getFeatureModel() instanceof IFeatureModel)
+      {
+        IFeatureModel featureModel = (IFeatureModel)targetFeature.getFeatureModel();
+        IWritable feature = featureModel.getFeature();
+        StringWriter string = new StringWriter();
+        feature.write("", new PrintWriter(string)); //$NON-NLS-1$
+        String featureContent = string.toString();
+        // feature IDs should only contain characters legal for an URL path segment
+        String pseudoPath = "pseudo/" + targetFeature.getId() + "/feature.xml"; //$NON-NLS-1$ //$NON-NLS-2$
+        URL url = new URI("file:/" + pseudoPath).toURL(); //$NON-NLS-1$
+        Feature publisherFeature = new FeatureManifestParser().parse(new ByteArrayInputStream(featureContent.getBytes(StandardCharsets.UTF_8)), url);
+        if (publisherFeature != null)
+        {
+          publisherFeature.setLocation(pseudoPath);
+        }
+        return publisherFeature;
+      }
+      return null;
     }
 
     public Set<IInstallableUnit> getAdditionalIUs()
