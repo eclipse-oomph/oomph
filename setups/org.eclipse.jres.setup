@@ -67,7 +67,7 @@
   </setupTask>
   <setupTask
       xsi:type="setup.p2:P2Task"
-      label="JRE 25.0.4.1">
+      label="JRE 25.0.5">
     <annotation
         source="http://www.eclipse.org/oomph/setup/JRESpecificTasks">
       <content
