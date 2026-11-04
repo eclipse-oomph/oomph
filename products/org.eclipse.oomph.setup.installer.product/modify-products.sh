@@ -6,11 +6,6 @@ exec 2>&1
 set -e
 set -x
 
-for i in $(find . -name "eclipsec.exe"); do
-  echo $i
-  mv "$i" "$(dirname $i)/eclipse-instc.exe"
-done
-
 OLD_IFS=$IFS
 IFS=$'\n'
 for i in $(find . -name "eclipse-inst.ini"); do
