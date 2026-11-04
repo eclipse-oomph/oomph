@@ -173,6 +173,44 @@
       <build>
         <plugins>
           <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>unpack-executables</id>
+                <phase>generate-resources</phase>
+                <goals>
+                  <goal>exec</goal>
+                </goals>
+                <configuration>
+                  <useMavenLogger>true</useMavenLogger>
+                  <executable>bash</executable>
+                  <arguments>
+                    <argument>repackage-executables.sh</argument>
+                    <argument>unpack</argument>
+                    <argument>${project.build.directory}</argument>
+                  </arguments>
+                </configuration>
+              </execution>
+              <execution>
+                <id>repack-signed-executables</id>
+                <phase>process-resources</phase>
+                <goals>
+                  <goal>exec</goal>
+                </goals>
+                <configuration>
+                  <useMavenLogger>true</useMavenLogger>
+                  <executable>bash</executable>
+                  <arguments>
+                    <argument>repackage-executables.sh</argument>
+                    <argument>pack</argument>
+                    <argument>${project.build.directory}</argument>
+                  </arguments>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
             <groupId>org.eclipse.cbi.maven.plugins</groupId>
             <artifactId>eclipse-winsigner-plugin</artifactId>
             <version>${jarsigner-version}</version>
@@ -182,8 +220,9 @@
                 <goals>
                   <goal>sign</goal>
                 </goals>
-                <phase>package</phase>
+                <phase>generate-resources</phase>
                 <configuration>
+                  <baseSearchDir>${project.build.directory}/executables-to-sign/</baseSearchDir>
                   <fileNames>
                     <fileName>eclipse-instc.exe</fileName>
                     <fileName>eclipse-inst.exe</fileName>
@@ -315,6 +354,46 @@
 
   <build>
     <plugins>
+      <!-- Publish before signing the customized Windows launchers, so the p2 repository
+           and all materialized products consume the signed executable archives.
+           Override the default executions outside the signing profile so Maven
+           applies these lifecycle bindings. -->
+      <plugin>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>tycho-p2-publisher-plugin</artifactId>
+        <version>${tycho-version}</version>
+        <executions>
+          <execution>
+            <id>default-publish-osgi-ee</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>publish-osgi-ee</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>default-publish-products</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>publish-products</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>default-publish-categories</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>publish-categories</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>default-attach-artifacts</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>attach-artifacts</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
       <plugin>
          <groupId>org.eclipse.tycho</groupId>
          <artifactId>tycho-p2-repository-plugin</artifactId>
