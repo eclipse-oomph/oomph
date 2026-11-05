@@ -222,6 +222,7 @@
                 </goals>
                 <phase>generate-resources</phase>
                 <configuration>
+                  <replace>true</replace>
                   <baseSearchDir>${project.build.directory}/executables-to-sign/</baseSearchDir>
                   <fileNames>
                     <fileName>eclipse-instc.exe</fileName>
