@@ -1745,7 +1745,6 @@ public class GitIndexApplication implements IApplication
       "https://gitlab.eclipse.org/eclipse/graphene/generic-parallel-orchestrator", //
       "https://gitlab.eclipse.org/eclipse/graphene/graphene-setup", //
       "https://gitlab.eclipse.org/eclipse/graphene/kubernetes-deployer", //
-      "https://gitlab.eclipse.org/eclipse/graphene/nexus-client", //
       "https://gitlab.eclipse.org/eclipse/graphene/tutorials", //
       "https://gitlab.eclipse.org/eclipse/ldt/metalua", //
       "https://gitlab.eclipse.org/eclipse/mdmbl/org.eclipse.mdm.api.uml", //
