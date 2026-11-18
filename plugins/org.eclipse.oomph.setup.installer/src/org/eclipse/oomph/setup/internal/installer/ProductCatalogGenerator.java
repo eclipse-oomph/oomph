@@ -2990,7 +2990,7 @@ public class ProductCatalogGenerator implements IApplication
       // Get the version without the qualifier.
       OSGiVersion osgiVersion = (OSGiVersion)iu.getVersion();
       Version jreVersion = Version.createOSGi(osgiVersion.getMajor(), osgiVersion.getMinor(), osgiVersion.getMicro());
-      p2Task.setLabel("JRE " + (javaRuntimeVersion != null ? Version.create(javaRuntimeVersion) : jreVersion));
+      p2Task.setLabel("JRE " + (javaRuntimeVersion != null ? javaRuntimeVersion : jreVersion));
       String description = iu.getProperty(IInstallableUnit.PROP_DESCRIPTION, null);
       p2Task.setDescription(description);
 

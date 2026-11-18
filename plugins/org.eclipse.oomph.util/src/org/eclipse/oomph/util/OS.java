@@ -441,6 +441,12 @@ public abstract class OS
     {
       return OPEN_COMMANDS;
     }
+
+    @Override
+    public boolean openSystemBrowser(String url)
+    {
+      return super.openSystemBrowser('"' + url + '"');
+    }
   }
 
   /**
