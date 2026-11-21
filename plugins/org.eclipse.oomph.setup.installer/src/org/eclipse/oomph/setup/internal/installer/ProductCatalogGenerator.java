@@ -2982,6 +2982,7 @@ public class ProductCatalogGenerator implements IApplication
       childRepositoryURI = childRepositoryURI.trimSegments(1).appendSegment("latest");
 
       Repository jreChildRepository = P2Factory.eINSTANCE.createRepository(childRepositoryURI.toString());
+      jreChildRepository.getAnnotations().add(BaseFactory.eINSTANCE.createAnnotation(Repository.ANNOTATION_REPOSITORY_REMEMBER));
 
       P2Task p2Task = SetupP2Factory.eINSTANCE.createP2Task();
       p2Task.getRequirements().add(jreRequirement);

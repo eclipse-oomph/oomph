@@ -32,6 +32,11 @@ import org.eclipse.oomph.base.ModelElement;
 public interface Repository extends ModelElement
 {
   /**
+   * An annotation URI to indicate that they repository URI should be recorded in the profile preferences.
+   */
+  String ANNOTATION_REPOSITORY_REMEMBER = "http://www.eclipse.org/oomph/setup/RepositoryRemember"; //$NON-NLS-1$
+
+  /**
    * Returns the value of the '<em><b>URL</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <p>

@@ -13,6 +13,7 @@ package org.eclipse.oomph.p2.internal.core;
 import org.eclipse.oomph.p2.P2Exception;
 import org.eclipse.oomph.p2.ProfileDefinition;
 import org.eclipse.oomph.p2.Repository;
+import org.eclipse.oomph.p2.RepositoryType;
 import org.eclipse.oomph.p2.Requirement;
 import org.eclipse.oomph.p2.core.Agent;
 import org.eclipse.oomph.p2.core.AgentManager;
@@ -61,11 +62,13 @@ import org.eclipse.equinox.internal.p2.engine.PropertyOperand;
 import org.eclipse.equinox.internal.p2.engine.ProvisioningPlan;
 import org.eclipse.equinox.internal.p2.engine.phases.CertificateChecker;
 import org.eclipse.equinox.internal.p2.metadata.IRequiredCapability;
+import org.eclipse.equinox.internal.p2.touchpoint.eclipse.actions.AddRepositoryAction;
 import org.eclipse.equinox.internal.p2.touchpoint.natives.IBackupStore;
 import org.eclipse.equinox.internal.p2.touchpoint.natives.NativeTouchpoint;
 import org.eclipse.equinox.internal.provisional.p2.core.eventbus.IProvisioningEventBus;
 import org.eclipse.equinox.internal.provisional.p2.core.eventbus.SynchronousProvisioningListener;
 import org.eclipse.equinox.internal.provisional.p2.director.PlanExecutionHelper;
+import org.eclipse.equinox.p2.core.IAgentLocation;
 import org.eclipse.equinox.p2.core.IProvisioningAgent;
 import org.eclipse.equinox.p2.core.ProvisionException;
 import org.eclipse.equinox.p2.engine.IEngine;
@@ -951,7 +954,43 @@ public class ProfileTransactionImpl implements ProfileTransaction
         String url = repository.getURL();
         final URI uri = new URI(url);
 
-        if (removeRepositories && !knownRepositories.contains(url))
+        if (repository.getAnnotation(Repository.ANNOTATION_REPOSITORY_REMEMBER) != null)
+        {
+          cleanup.add(new Runnable()
+          {
+            @Override
+            public void run()
+            {
+              new AddRepositoryAction()
+              {
+                public void doit()
+                {
+                  IProvisioningAgent provisioningAgent = agent.getProvisioningAgent();
+                  IProvisioningAgent selfAgent = P2Util.getCurrentProvisioningAgent();
+                  if (selfAgent != provisioningAgent)
+                  {
+                    IAgentLocation agentLocation = agent.getProvisioningAgent().getService(IAgentLocation.class);
+                    RepositoryType type = repository.getType();
+                    IProfile delegate = ((ProfileImpl)profile).getDelegate();
+                    if (type == RepositoryType.COMBINED || type == RepositoryType.METADATA)
+                    {
+                      addRepositoryToProfile(agentLocation, delegate, uri, null, IRepository.TYPE_METADATA, true);
+                    }
+                    if (type == RepositoryType.COMBINED || type == RepositoryType.ARTIFACT)
+                    {
+                      addRepositoryToProfile(agentLocation, delegate, uri, null, IRepository.TYPE_ARTIFACT, true);
+                    }
+                  }
+                  else if (!metadataRepositoryManager.contains(uri))
+                  {
+                    metadataRepositoryManager.addRepository(uri);
+                  }
+                }
+              }.doit();
+            }
+          });
+        }
+        else if (removeRepositories && !knownRepositories.contains(url))
         {
           cleanup.add(new Runnable()
           {
