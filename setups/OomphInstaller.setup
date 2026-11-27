@@ -24,7 +24,7 @@
   </annotation>
   <version name="local"
       label="Local"
-      requiredJavaVersion="1.7">
+      requiredJavaVersion="25">
     <setupTask
         xsi:type="setup.p2:P2Task"
         label="Eclipse Installer">
@@ -36,14 +36,26 @@
   </version>
   <version name="latest"
       label="latest"
-      requiredJavaVersion="11">
+      requiredJavaVersion="25">
     <setupTask
         xsi:type="setup.p2:P2Task"
         label="Eclipse Installer">
       <requirement
           name="org.eclipse.oomph.setup.installer.product"/>
       <repository
-          url="https://download.eclipse.org/oomph/products/repository"/>
+          url="https://download.eclipse.org/oomph/products/latest/repository"/>
+    </setupTask>
+  </version>
+  <version name="milestone"
+      label="milestone"
+      requiredJavaVersion="25">
+    <setupTask
+        xsi:type="setup.p2:P2Task"
+        label="Eclipse Installer">
+      <requirement
+          name="org.eclipse.oomph.setup.installer.product"/>
+      <repository
+          url="https://download.eclipse.org/oomph/products/latest/repository"/>
     </setupTask>
   </version>
   <description>Oomph's Eclipse Installer product</description>
